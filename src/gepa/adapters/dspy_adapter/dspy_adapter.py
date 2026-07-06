@@ -1,3 +1,4 @@
+# /home/jinwoo/gepa-official/src/gepa/adapters/dspy_adapter/dspy_adapter.py
 """
 This file provides an example adapter allowing GEPA to optimize text components of DSPy programs (instructions and prompts).
 The most up-to-date version of this file is in the DSPy repository: https://github.com/stanfordnlp/dspy/blob/main/dspy/teleprompt/gepa/gepa_utils.py
@@ -295,7 +296,7 @@ class DspyAdapter(GEPAAdapter[Example, TraceData, Prediction]):
                 metric=self.metric_fn,
                 num_threads=self.num_threads,
                 return_all_scores=True,
-                return_outputs=True,
+                # return_outputs=True,
                 failure_score=self.failure_score,
                 provide_traceback=True,
                 max_errors=len(batch) * 100,
