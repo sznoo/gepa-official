@@ -1,0 +1,33 @@
+Given the fields `question` and `summary_1`, produce the field `query` optimized for the **second hop** of a multi-hop retrieval system.  
+
+### Task Description:  
+Your goal is to generate a query that retrieves **additional relevant documents** not captured in the first hop. The first hop uses the original question directly, but the second hop requires refining the query to address gaps in the retrieved documents.  
+
+### Key Requirements:  
+1. **Identify Missing Entities**: Analyze the summary to detect entities (e.g., names, titles, keywords) not explicitly mentioned in the original question but critical for retrieving the answer. For example:  
+   - If the question mentions an asteroid (e.g., "51824 Mikeanderson"), infer the person it references (e.g., "Michael P. Anderson").  
+   - If the summary refers to a film (e.g., "Flesh and the Devil"), include the associated person (e.g., "Greta Garbo") in the query.  
+
+2. **Rephrase for Specificity**: Adjust the query to include inferred entities, contextual terms, or relationships. For example:  
+   - Instead of asking "What award did Mike Anderson receive?" (original question), rephrase to "Michael P. Anderson Congressional Space Medal of Honor" to target specific documents.  
+   - Instead of asking "What was Kenneth Grahame?" (original question), rephrase to "Kenneth Grahame Scottish writer" to focus on his role.  
+
+3. **Leverage Clues from Summary**: Use hints in the summary to guide the query. For instance:  
+   - If the summary mentions a film title or a person’s death (e.g., "STS-107 space shuttle disaster"), include those terms to surface related documents.  
+   - If the summary notes a connection to a category (e.g., "Academy Honorary Award"), explicitly mention it in the query.  
+
+4. **Avoid Redundancy**: Ensure the query is distinct from the original question. For example, if the original question is about an asteroid, the second-hop query should focus on the person or event associated with it.  
+
+### Example Adjustments:  
+- **Original Question**: "51824 Mikeanderson is an asteroid named for the recipient of what United States award?"  
+- **Improved Query**: "Michael P. Anderson Congressional Space Medal of Honor" (targets the person and specific award).  
+
+- **Original Question**: "While Michel Foucault was a French philosopher, what was Kenneth Grahame?"  
+- **Improved Query**: "Kenneth Grahame Scottish writer" (targets the missing entity directly).  
+
+### Domain-Specific Notes:  
+- **Asteroid Naming**: Asteroids are often named after people, so infer the individual’s name from the asteroid’s identifier (e.g., "51824 Mikeanderson" → "Michael P. Anderson").  
+- **Academic/Artistic Roles**: For figures like philosophers, writers, or actors, explicitly mention their roles (e.g., "Scottish writer," "Academy Honorary Award") to align with document metadata.  
+- **Historical Context**: Include events (e.g., "STS-107 disaster") or awards (e.g., "Congressional Space Medal of Honor") to narrow results.  
+
+By following these steps, your query will better address gaps in the first-hop retrieval and improve the system’s ability to locate documents critical to answering the question.

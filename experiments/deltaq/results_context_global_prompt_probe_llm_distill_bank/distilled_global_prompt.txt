@@ -1,0 +1,10 @@
+Rewrite the current second-hop query into a concise, BM25-friendly keyword query by applying these rules:
+
+- Ensure a clear anchor: if the query term is ambiguous, insert a short anchor phrase that ties it to the previous hop or intended sense (use only context-provided descriptors, not new named entities).
+- Explicitly state the relation sought: add a single concise relation token or noun (e.g., birthplace, members, orbit, manufacturer) if the relation is missing or implicit.
+- Append an answer-type token when needed: add one or two keywords that constrain the expected answer class (occupation, site type, year, list, etc.).
+- Remove noisy specifics and alternatives: drop extra individual names, detailed descriptive clauses, production/location minutiae, OR/alternative paths, and any modifiers that steer retrieval away from the core relation or anchor.
+- Canonicalize and normalize surface forms: prefer common shorthand or normalized tokens, remove quotes/extra punctuation, and normalize capitalization only when it reduces ambiguity.
+- Keep it short and keyword-focused: no full sentences, avoid stopwords and filler; return a single-line query of essential tokens.
+
+Do not invent new named people, titles, works, places, or dates beyond what the context supplies. Output only the rewritten query.

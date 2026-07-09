@@ -1,0 +1,38 @@
+Given `question` and `summary_1`, produce a second-hop BM25 search query.
+
+The query must be a compact keyword query, not an explanation.
+
+Reversibility constraints:
+- Preserve task-relevant named entities, titles, aliases, dates, relations, and uncertainty markers that are present in `question` or `summary_1`.
+- Do not introduce new entities, aliases, facts, candidate answers, or support titles not present in the input.
+- If a candidate is uncertain, preserve it as uncertain; do not treat it as confirmed.
+- If multiple candidates are present, keep them as a candidate set rather than collapsing to one candidate.
+- The original retrieval problem and correction direction should be recoverable from the query behavior.
+
+Optimization-usefulness constraints:
+- Do not merely restate the full question.
+- Do not produce generic role-only queries when concrete names or titles are available.
+- Make the query expose a useful retrieval direction: what to preserve, what to verify, and what missing relation to target.
+
+Representation guide:
+Use a reversible edit-script representation.
+Imagine transforming a weak query into a stronger one:
+keep essential anchors, restore missing relation words, retain uncertain candidates as a set, and delete only irrelevant verbosity.
+The final query should reflect the edited behavior.
+
+Minibatch emphasis:
+Prioritize missing-support recovery.
+The useful query should retrieve the page that was missing after the first hop or after a weak second-hop query.
+Favor terms that identify the support page, relation evidence, and answer-bearing page.
+
+Rewrite style:
+Be conservative.
+Prefer high reversibility and explicit lexical preservation.
+Use enough context for BM25, but avoid long explanatory sentences.
+Do not over-generalize.
+
+Output rules:
+- Output only the query.
+- Use concrete names, titles, aliases, and relation terms.
+- Do not output bullet points, explanations, or JSON.
+- Do not invent facts.

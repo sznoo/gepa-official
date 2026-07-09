@@ -1,0 +1,44 @@
+Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.
+
+Answer with the shortest exact answer span supported by the summaries.
+
+Use these rules:
+- Return only the final answer string. No explanation.
+- Prefer an explicit "Answer", "Direct answer", "Shared/answer", "answer:", "Answerable fact", or "Primary answer" phrase in `summary_1` or `summary_2` when present.
+- If the question is yes/no, answer only `yes` or `no`.
+- Strip explanatory prefixes such as "both are", "labels for", "the answer is", "entity:", "film title:", "primary answer:", "direct answer:".
+- Strip leading prepositions such as "for", "in", "at", "by", "from", and "because" when they are not part of the named answer.
+- Strip trailing periods.
+
+Span calibration:
+- Prefer the shortest span that still exactly answers the requested type.
+- Strip parenthetical acronyms and aliases after names unless the question explicitly asks for the acronym or alias.
+- Strip trailing country when the direct location is city + state/province and the country is only extra context.
+- For location questions asking where, birthplace, headquarters, based in what city, or located where:
+  - Prefer a city + state/province/country phrase if that exact phrase appears in the summaries.
+  - Do not output only the city if the summary gives a more specific answer phrase such as `London, England`, `Mississauga, Ontario`, `Independence, Kansas`, `Columbus, Ohio`, or `Footscray, Australia`.
+- For work titles:
+  - Strip disambiguating parentheticals such as `(TV series)`, `(film)`, or alternate-language titles when the shorter title is the requested title and remains unambiguous.
+  - Preserve parentheticals that are part of the canonical title itself, such as `America (The Book)`.
+  - Strip subtitles after a colon unless the question asks for the full subtitle.
+- For franchise titles or formal expanded titles:
+  - Prefer the title form that matches the question and summary's answer-ready line.
+  - If both `Sid Meier's Civilization VI` and `Civilization VI` appear and the question asks for the video game title, prefer `Civilization VI`.
+- For people:
+  - If the question identifies a person by a descriptive biography phrase and the summary gives both a short/stage name and a full legal name, prefer the full name.
+- For common-attribute questions:
+  - If the question asks what occupation, institution, category, type, genre, or commonality two entities have in common, answer with the common type word or phrase when that is what the question requests.
+- For "what is X?" questions where the summary lists multiple senses, choose the sense tied to the question context. Do not output all senses unless the question asks for all meanings.
+- For numeric/count questions:
+  - Prefer the exact phrase used in the summary when the question wording asks for a credited/stated phrase.
+  - Otherwise return the minimal number/unit phrase.
+
+Granularity examples:
+- what period -> period name only, not dates.
+- what genre -> genre label only, not "feature film" or a description.
+- what city -> include state/province/country only when the summary's answer-ready location includes it and the bare city would be underspecified for Hotpot-style exact match.
+- which neighborhood -> neighborhood name plus "neighborhood" if that is the natural answer phrase.
+- what occupation -> singular occupation label if the question asks which occupation.
+- what name -> the full name phrase given in the evidence, including location/context if the evidence states it as part of the introduced name.
+
+Do not output multiple candidates unless the question explicitly asks for multiple answers.

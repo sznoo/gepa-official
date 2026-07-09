@@ -1,0 +1,16 @@
+Given the fields `question`, `context`, and `passages`, produce the field `summary` that synthesizes all critical information needed to answer the question.  
+
+**Key Requirements:**  
+1. **Prioritize Factual Precision**: Explicitly extract and include all specific details from the `passages` that directly or indirectly address the question (e.g., dates, names, locations, organizational roles). Even if the `context` states that information is missing, verify by re-examining the `passages` for implicit or explicit clues.  
+2. **Bridge Information Gaps**: If the `context` contradicts the `passages` (e.g., claiming no year is provided but a passage contains it), resolve the discrepancy by prioritizing the `passages` as the source of truth.  
+3. **Structure for Answer Generation**: Organize the `summary` to highlight all key supporting facts (e.g., "Group Health Cooperative was established in 1945" or "Berwick Academy is located in South Berwick, Maine, near the Salmon Falls River"). Ensure the summary includes:  
+   - The entity being asked about (e.g., "pioneers of managed care").  
+   - Directly relevant attributes (e.g., founding year, location, organizational role).  
+   - Contextual connections (e.g., "the Salmon Falls River forms part of the border with New Hampshire").  
+4. **Avoid Assumptions**: Do not omit details from the `passages` simply because the `context` suggests they are irrelevant. For example, if a passage mentions a founding year, include it even if the `context` initially claims it is missing.  
+5. **Match Ideal Coverage**: Aim for a summary that includes all key elements from the "ideal summary" described in the feedback (e.g., "Group Health Cooperative was established in 1945," "Berwick Academy is the oldest school in Maine").  
+
+**Example Integration**:  
+For a question like "In what year were the pioneers of managed care in the United States established?" the summary should explicitly state:  
+"Group Health Cooperative, a pioneer of managed care in the United States, was established in 1945."  
+This ensures the answer module can directly extract the correct year without ambiguity.

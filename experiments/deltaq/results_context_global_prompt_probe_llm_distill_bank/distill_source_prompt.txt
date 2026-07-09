@@ -1,0 +1,55 @@
+You are distilling successful local BM25 query edits into one reusable global prompt.
+
+Below are oracle-derived local query deltas from successful HotpotQA second-hop retrieval transitions.
+Your job is to compress them into general rewrite rules for future current queries.
+
+Important constraints:
+- Do NOT include specific named entities, titles, people, places, organizations, dates, or works from the examples.
+- Do NOT mention the examples.
+- Do NOT assume gold support titles or oracle next queries.
+- Preserve only abstract, reusable BM25-facing rewrite principles.
+- The final prompt should instruct a model how to rewrite a current second-hop query.
+- The final prompt should be concise but operational.
+- Output only the final reusable prompt text.
+
+Local query deltas:
+1. edit_type: remove_noisy_relation
+   changed_context: Replaced the verbose question fragment 'flows through which states' with the concise relation 'passes through' to clarify the relation sought.
+2. edit_type: restore_missing_anchor
+   changed_context: Added the missing anchor phrase 'Capital of the Netherlands' to clarify the intended sense of 'Amsterdam'.
+3. edit_type: restore_missing_relation
+   changed_context: Added the relation 'low Earth orbit' to specify the orbital regime of the launch.
+4. edit_type: restore_missing_anchor
+   changed_context: Inserted the name 'Buddy Valastro' to connect the bakery to a specific person.
+5. edit_type: remove_noisy_entity
+   changed_context: Removed individual names and gang (Jesse James, Archie Clement, James–Younger Gang) to avoid retrieving documents about specific people rather than the term used for the criminals.
+6. edit_type: add_answer_type
+   changed_context: Appended the intent keyword 'pilgrimage site' to specify the type of site being asked about.
+7. edit_type: remove_noisy_relation
+   changed_context: Stripped the descriptive product phrase 'Australian lemon-flavoured carbonated drink' to generalize the query.
+8. edit_type: add_answer_type
+   changed_context: Added the answer-type token 'actress' to focus retrieval on female cast members.
+9. edit_type: add_answer_type
+   changed_context: Normalized '"Selmasongs"' to Selmasongs and appended the list of occupations (singer songwriter actress record producer DJ) to target documents describing the artist's roles.
+10. edit_type: remove_noisy_relation
+   changed_context: Removed the OR alternative clause ("List of World Poker Tour champions") that introduced an alternate query path.
+11. edit_type: remove_noisy_relation
+   changed_context: Removed the generic label 'Germanic goddess' and the stray preposition 'of' to reduce noise.
+12. edit_type: remove_noisy_entity
+   changed_context: Removed specific location/conference/stadium tokens ('Tom Adams Field', 'GLIAC', 'Detroit') that are not needed to link the person to an institution.
+13. edit_type: remove_noisy_relation
+   changed_context: Removed verbose phrases about stunt details, who performed the jump, credits, and filming location.
+14. edit_type: restore_missing_anchor
+   changed_context: Added a parenthetical qualifier noting the band's status as the likely highest-selling Canadian heavy metal group to preserve the original question intent/anchor.
+15. edit_type: remove_noisy_entity
+   changed_context: Removed specific film title entities: "X-Men: Days of Future Past" and "X-Men: Apocalypse".
+16. edit_type: canonicalize_surface_form
+   changed_context: Replaced the full place name 'Guantanamo' with the common shorthand 'Gitmo'.
+17. edit_type: restore_missing_anchor
+   changed_context: Inserted the additional Monolith Soft title 'Xenoblade Chronicles X' into the query.
+18. edit_type: remove_noisy_entity
+   changed_context: Removed extra individual writer names (Kelly Souders, Brian Peterson, Todd Slavkin, Darren Swimmer) and the 'List of Smallville episodes' phrase that added noise.
+19. edit_type: add_answer_type
+   changed_context: Appended the explicit term 'writers' to ensure writer credits are explicitly requested alongside creators.
+20. edit_type: remove_noisy_entity
+   changed_context: Removed the G. K. Chesterton segment so the query only references Henry Green.
