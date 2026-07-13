@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "7f3cb4fbd1dbb94ef30157371e25f9d474781464249d557ffc7fd999b5b29665",
+  "created_at": "2026-07-12T18:38:38.121372+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "Retrieve Third Person (film) — top query: \"Third Person (film) cast\". [[ ## completed ## ]]",
+        "current_output": {
+          "query": "\"Third Person (2013) cast list\" and \"From Here to Eternity (1953) cast list\" — find any actress who appears in both films"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Kim Basinger cast \"Third Person\" \"From Here to Eternity (1979)\""
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Kim Basinger filmography \"Third Person\" \"From Here to Eternity\" 1979"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"Retrieve Third Person (film) — top query: \\\"Third Person (film) cast\\\". [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"\\\"Third Person (2013) cast list\\\" and \\\"From Here to Eternity (1953) cast list\\\" — find any actress who appears in both films\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Kim Basinger cast \\\"Third Person\\\" \\\"From Here to Eternity (1979)\\\"\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Kim Basinger filmography \\\"Third Person\\\" \\\"From Here to Eternity\\\" 1979\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks which actress 'starred in both' two named films OR when the current query already contains an actor name plus both film titles.\",\n    \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query. Preserve any actor name already present in the query and preserve inclusion of both film titles (use quotation marks around titles).\",\n    \"change_rule\": \"Prefer the pivot term 'filmography' instead of 'cast' to target an actor's credit list. If a film title is ambiguous (multiple releases), append the disambiguating year as a separate token (e.g., 1979) not inside parentheses. Keep the query short and token-oriented (actor_name filmography \\\"Title A\\\" \\\"Title B\\\" YEAR).\",\n    \"drop_or_avoid_rule\": \"Do not use 'cast' as the primary pivot keyword for this hop. Avoid enclosing years in parentheses or adding full-sentence instructions or extra connectors (e.g., '— find any actress who appears in both films').\",\n    \"output_contract\": \"Produce a single-line retrieval query string. It must: (1) include the actor name if present in inputs; (2) include the word 'filmography'; (3) include both film titles in quotation marks; (4) include the disambiguating year token (1979) as a separate token if relevant. No explanatory text, no extra instructions, keep it compact.\",\n    \"why_local_transition\": \"Switching from 'cast' to 'filmography' steers the search to actor credit pages (better for verifying a performer appears in multiple films). Adding an explicit year token disambiguates the similarly titled releases (e.g., 1953 vs 1979) without adding verbosity. This is a minimal, focused change to improve retrieval precision for this second-hop.\"\n  },\n  \"rationale\": \"This delta implements the smallest coherent behavioral change needed to turn the source query into the target pattern: keep the same actor anchor and titles while replacing the keyword 'cast' with 'filmography' and making the year a separate token (no parentheses). It preserves the agent's compact single-query output and existing evidence, avoids adding instructions or answers, and specifically narrows retrieval to actor credit lists and the correct film version.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 3,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

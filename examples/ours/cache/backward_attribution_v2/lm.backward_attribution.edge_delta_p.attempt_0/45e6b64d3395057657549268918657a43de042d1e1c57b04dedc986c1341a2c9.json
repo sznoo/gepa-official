@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "45e6b64d3395057657549268918657a43de042d1e1c57b04dedc986c1341a2c9",
+  "created_at": "2026-07-12T17:56:35.253993+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What award did the creator of the HTO receive in the WW?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What award did the creator of the HTO receive in the WW?",
+        "summary_1": "retrieve HTO Park creator — top query: \"HTO Park creator award\" (retrieve the creator of HTO Park and the sentence \"CREATOR_NAME received the <AWARD>\") [[ ## completed ## ]]",
+        "current_output": {
+          "query": "HTO Park creator award"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 2,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Haupttreuhandstelle Ost Hermann Göring award World War I Pour le Mérite"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Haupttreuhandstelle Ost Hermann Göring Pour le Mérite WWI"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What award did the creator of the HTO receive in the WW?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What award did the creator of the HTO receive in the WW?\",\n  \"summary_1\": \"retrieve HTO Park creator — top query: \\\"HTO Park creator award\\\" (retrieve the creator of HTO Park and the sentence \\\"CREATOR_NAME received the <AWARD>\\\") [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"HTO Park creator award\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n2\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Haupttreuhandstelle Ost Hermann Göring award World War I Pour le Mérite\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Haupttreuhandstelle Ost Hermann Göring Pour le Mérite WWI\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the current query (current_output.query) is verbose or contains the spelled-out phrase \\\"World War I\\\" or the generic word \\\"award\\\" together with named entities, apply this delta.\",\n    \"preserve_rule\": \"Keep the essential named tokens already present from the first hop (the park name and the retrieved creator name or other proper nouns) and retain the intent to retrieve an award or war-era attribution. Preserve the keyword-only retrieval style (not full sentences).\",\n    \"change_rule\": \"Compact the query by: (1) replacing any spelled-out war-era phrase (e.g., \\\"World War I\\\") with the standard abbreviation 'WWI'; (2) removing generic filler words such as 'award', 'received', 'did', 'what', and other function words when the award name or creator name is already included; (3) reorder tokens so the creator name and the award/war-context tokens are adjacent; and (4) limit the query to a short sequence of focused keywords (roughly 3–7 tokens).\",\n    \"drop_or_avoid_rule\": \"Avoid full-sentence phrasing and natural-language fillers; do not include both long-form and abbreviated versions of the same phrase; avoid extraneous qualifiers unrelated to retrieval (dates, verbs, stopwords).\",\n    \"output_contract\": \"Return a single-line, keyword-oriented retrieval query (no question sentence), 3–7 tokens long, that includes the known creator name token(s) from the first hop plus the award or war-context expressed compactly (using 'WWI' if the question references World War I). The query must be concise, focused, and suitable for a second-hop retrieval.\",\n    \"why_local_transition\": \"Switching the spelled-out war phrase to 'WWI', removing filler words, and making the creator and award-context adjacent produces a tighter keyword query that better matches index terms for retrieving the supporting sentence about the creator's award.\"\n  },\n  \"rationale\": \"This delta makes the smallest coherent behavioral change needed to move from a verbose, mixed-form query to a compact, effective second-hop query. It preserves useful entity tokens discovered in the first hop while removing noisy function words and standardizing the war-era term to its common abbreviation ('WWI'). These edits are local to the query-generation behavior and increase the likelihood that the retrieval system will return the sentence stating which award the creator received, without changing the agent's role or output interface.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 83,
+    "row_index": 83,
+    "bisection_round": 3,
+    "agent": "query",
+    "edge_index": 2,
+    "delta_attempt": 0
+  }
+}

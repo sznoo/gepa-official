@@ -1,0 +1,3343 @@
+{
+  "name": "qwen3_8b_positive_safety_b10_split_seed0",
+  "seed": 0,
+  "source_rollout": "experiments/prompt_update_qwen3_8b/cache/fixed_prompt_rollout_analysis_20260711_144850/rollout_traces.jsonl",
+  "source_oracle": "experiments/prompt_update/data/oracle_query_downstream_eval.repaired.jsonl",
+  "source_split": "experiments/feedback_distance_v2/cache/dev300_random_seed1.jsonl",
+  "conditions": [
+    "base",
+    "delta_p_neg_only",
+    "delta_p_custom_preserve",
+    "delta_p_custom_signed",
+    "endpoint_delta_neg_only",
+    "endpoint_delta_custom_preserve",
+    "endpoint_delta_custom_signed"
+  ],
+  "bucket_definitions": {
+    "W_retrieval": "score=0, missing_after_hop2 nonempty, and oracle target improves current missing recovery.",
+    "C_clean": "score=1 and missing_after_hop2 empty.",
+    "C_fragile": "score=1 but missing_after_hop2 nonempty.",
+    "W_other": "score=0 but not W_retrieval."
+  },
+  "original_bucket_counts": {
+    "W_retrieval": 22,
+    "C_clean": 140,
+    "W_other": 108,
+    "C_fragile": 30
+  },
+  "original_bucket_weights": {
+    "W_retrieval": 0.07333333333333333,
+    "C_clean": 0.4666666666666667,
+    "W_other": 0.36,
+    "C_fragile": 0.1
+  },
+  "bucket_case_ids": {
+    "W_retrieval": [
+      0,
+      20,
+      49,
+      51,
+      73,
+      88,
+      99,
+      104,
+      108,
+      109,
+      128,
+      149,
+      159,
+      176,
+      182,
+      191,
+      199,
+      211,
+      219,
+      259,
+      265,
+      297
+    ],
+    "C_clean": [
+      1,
+      5,
+      7,
+      10,
+      12,
+      13,
+      17,
+      22,
+      23,
+      25,
+      29,
+      30,
+      34,
+      37,
+      38,
+      39,
+      41,
+      44,
+      45,
+      46,
+      48,
+      50,
+      53,
+      54,
+      55,
+      58,
+      60,
+      61,
+      64,
+      66,
+      67,
+      69,
+      70,
+      71,
+      72,
+      75,
+      76,
+      78,
+      80,
+      81,
+      82,
+      83,
+      86,
+      87,
+      91,
+      92,
+      93,
+      94,
+      95,
+      96,
+      98,
+      101,
+      111,
+      112,
+      114,
+      120,
+      121,
+      123,
+      124,
+      125,
+      126,
+      129,
+      130,
+      132,
+      133,
+      134,
+      136,
+      137,
+      145,
+      146,
+      147,
+      148,
+      151,
+      154,
+      158,
+      163,
+      165,
+      166,
+      168,
+      169,
+      171,
+      172,
+      175,
+      177,
+      179,
+      181,
+      185,
+      186,
+      188,
+      189,
+      193,
+      194,
+      197,
+      200,
+      202,
+      203,
+      205,
+      210,
+      212,
+      214,
+      216,
+      220,
+      221,
+      223,
+      224,
+      227,
+      228,
+      230,
+      231,
+      232,
+      233,
+      235,
+      236,
+      237,
+      241,
+      242,
+      243,
+      244,
+      249,
+      250,
+      251,
+      254,
+      256,
+      257,
+      260,
+      261,
+      262,
+      266,
+      267,
+      271,
+      272,
+      274,
+      277,
+      281,
+      282,
+      283,
+      284,
+      291,
+      293,
+      294
+    ],
+    "W_other": [
+      2,
+      4,
+      8,
+      9,
+      14,
+      15,
+      18,
+      21,
+      24,
+      26,
+      27,
+      31,
+      32,
+      33,
+      36,
+      40,
+      42,
+      47,
+      52,
+      56,
+      57,
+      59,
+      62,
+      63,
+      65,
+      68,
+      74,
+      77,
+      79,
+      84,
+      85,
+      89,
+      90,
+      100,
+      102,
+      103,
+      105,
+      106,
+      107,
+      110,
+      113,
+      116,
+      118,
+      119,
+      122,
+      131,
+      138,
+      139,
+      141,
+      142,
+      143,
+      144,
+      150,
+      152,
+      153,
+      155,
+      156,
+      157,
+      160,
+      161,
+      162,
+      164,
+      167,
+      170,
+      174,
+      178,
+      180,
+      187,
+      190,
+      192,
+      196,
+      198,
+      201,
+      204,
+      207,
+      208,
+      213,
+      215,
+      217,
+      218,
+      222,
+      225,
+      229,
+      234,
+      238,
+      239,
+      246,
+      247,
+      248,
+      252,
+      253,
+      255,
+      258,
+      273,
+      276,
+      278,
+      279,
+      285,
+      286,
+      287,
+      288,
+      289,
+      290,
+      292,
+      295,
+      296,
+      298,
+      299
+    ],
+    "C_fragile": [
+      3,
+      6,
+      11,
+      16,
+      19,
+      28,
+      35,
+      43,
+      97,
+      115,
+      117,
+      127,
+      135,
+      140,
+      173,
+      183,
+      184,
+      195,
+      206,
+      209,
+      226,
+      240,
+      245,
+      263,
+      264,
+      268,
+      269,
+      270,
+      275,
+      280
+    ]
+  },
+  "case_meta": {
+    "0": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What Jamaican boxer won against the author of \"Rocky Ros Muc: Seán Ó Mainnín\"?"
+    },
+    "1": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which university is classified as a research university with the highest research activity by the Carnegie Foundation: Saginaw Valley State University or Florida International University?"
+    },
+    "2": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "When was the American cartoonist who created Greg Heffley in Diary of a Wimpy Kid born? "
+    },
+    "3": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Which band first achieved popularity in the 1990s and wrote a single that has sold 205,000 copies as of July 2010?"
+    },
+    "4": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Where did the director that gave Sally Hawkins her first film debut study?"
+    },
+    "5": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where did the actor playing Melody in The Little Mermaid II: Return to the Sea win an award from?"
+    },
+    "6": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The 22nd, 24th and 28th Presidents of the United States were members of which mainstream political party?"
+    },
+    "7": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Brenda VanLengen is the primary analyst for which basket ball team coached by Brandon Schneider?"
+    },
+    "8": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "American politician Mary Cathcart, served as a Senator in what town in Penobscot County?"
+    },
+    "9": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Where are the studios, where the Muppet Shows were recorded, located ?"
+    },
+    "10": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which author created the Eternals, an offshoot of a race of aliens known as Uranians?"
+    },
+    "11": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Kristofor Brown was the head writer of an MTV show created by who?"
+    },
+    "12": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which song writer do Taylor Swift songs \"State of Grace\" and \"I Knew You Were Trouble\" have in common?"
+    },
+    "13": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which  American vocal group is Emperors of Soul  a 1994 box set compilation for"
+    },
+    "14": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "During the First World War, the 3rd Cavalry Brigade of the British Army served on the Western Front, but where did the German Army first attack them in that main theater of the war?"
+    },
+    "15": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Where was the band formed, in which Darren Leigh Wharton first came to the public's attention ? "
+    },
+    "16": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Inger Stender earned the description of being Denmark's version of what German actress?"
+    },
+    "17": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who's the Hungarian-born US film director renowned for adapting Stephen King novellas to the screen, including The Mist and The Green Mile?"
+    },
+    "18": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What position does Sundar Pichai hold in Google?"
+    },
+    "19": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "France was birthplace to the brother of Claude Christophe who was named?"
+    },
+    "20": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What is the management company of the band that created the song \"The Shock of the Lightning\"?"
+    },
+    "21": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The Mariinsky Theatre Second Stage hosted which Russo-Austrian soprano on May 2, 2013?"
+    },
+    "22": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Quit was a pop punk band that played shows with which American alternative metal band from New York City?"
+    },
+    "23": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are both musicians, Curt Smith and Les Taylor  , from the same country ?"
+    },
+    "24": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Federated States of Micronesia held their Micronesian parliamentary election on?"
+    },
+    "25": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who wrote the theatrical comedy referenced in the subtitle of The Guilty Mother as \"the other\"?"
+    },
+    "26": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The protagonist to the 1949 British film noir was born when?"
+    },
+    "27": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Room No. 382 is an album by the singer who is known for what guitar style?"
+    },
+    "28": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Kathryn Merteuil's rold as Kathryn serves as the primary antagonist in a film released in what year?"
+    },
+    "29": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Jessica Knappett (born 1984) is an English comedy writer and actress, known for playing Lisa in The Inbetweeners Movie, a British coming-of-age comedy film based on the E4 sitcom \"The Inbetweeners\", written by series creators Damon Beesley, and Iain Morris and directed by Ben Palmer, released in what year>"
+    },
+    "30": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who has written more songs, Gene Wilder or Ken Annakin?"
+    },
+    "31": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "A Woman's Revenge was a film starring an actress who was also what kind of dancer?"
+    },
+    "32": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Fazhengnian is a mediation ritual practiced in a spiritual practice whose name translates to what in English?"
+    },
+    "33": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Roger Zelazny and Mark Salzman, have which mutual occupation?"
+    },
+    "34": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Shadow stars the Russian actor who became famous as the lead role in what TV series?"
+    },
+    "35": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who was born first, L. Ron Hubbard or Brad Anderson?"
+    },
+    "36": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What franchise produced by Illumination Entertainment has Dana Gaier as Edith? "
+    },
+    "37": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Suhasini Raj is a journalist based in India, at Cobrapost, an Indian news website and television production house, she conducted what?"
+    },
+    "38": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who directed the movie which earned Marguerite Duras a nomination for Best Original Screenplay at the Academy Awards?"
+    },
+    "39": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which Film, Pete's Dragon or Frozen, is a 3D computer animated musical?"
+    },
+    "40": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "When was the English actress starred in Gone Girl born? "
+    },
+    "41": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which of the two plants. Menziesia or Consolida, can be found in Europe and Asia?"
+    },
+    "42": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What title does George Sanders and Shere Khan have in common?"
+    },
+    "43": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The Aerotrain is an automated transport network that moves people around the main international airport of which Asian country?"
+    },
+    "44": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Sean O'Neal played Sam Anders in a television show created by which person?"
+    },
+    "45": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Quadrant Mountain is a mountain peak in a mountain range that is located in which US states ?"
+    },
+    "46": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Born in 1963, who was a former host of American business analysis program Cashin' In?"
+    },
+    "47": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Clemson Tigers competed in the 2015 Orange Bowl in what city?"
+    },
+    "48": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Adam Brody appeared the 2009 black comedy film written by whom?"
+    },
+    "49": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.5,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Chinese nations can have their names in both simplified and what type of character?"
+    },
+    "50": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which documentary was released first, 16 Days in Afghanistan or Baraka?"
+    },
+    "51": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What American heavy metal band from Los Angeles has Greg Wells produced and written with?"
+    },
+    "52": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": " The Silver City Highway links Buronga to the Queensland border via a small town that lies at the confluenece of what two rivers?"
+    },
+    "53": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What was the population as of the 2010 census of the county in which Pilsen, Kansas is located?"
+    },
+    "54": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which magazine includes the annual Best of Beauty awards-- Allure or Food Network Magazine?"
+    },
+    "55": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Walter Alvarez's father was born in what year?"
+    },
+    "56": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What is the name of a valley located in the Tennessee section of the Great Smoky Mountains National Park where the headwaters of Abrams Creek are located?"
+    },
+    "57": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Bille August and Irving Cummings have both been what?"
+    },
+    "58": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who produced the movie in which \"Always With Me\" is the closing theme for?"
+    },
+    "59": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Donald Murdoch tied what former right winger's record for most goals in one game by a rookie?"
+    },
+    "60": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which national park is situated in the Pyrenees of Huesca province, Aragon, Spain, Ordesa y Monte Perdido National Park or Caldera de Taburiente National Park? "
+    },
+    "61": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Australian women's national soccer team represents Australia in international women's soccer at the senior level, the team's official nickname is the Matildas, their  best-known bush ballad, that has been described as the country's \"unofficial national anthem\", is titled?"
+    },
+    "62": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What is the meaning of the place name where the Legislative Building of Nunavut was built in?"
+    },
+    "63": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Where was the band who released \"Bitter Sweet Symphony\" formed?"
+    },
+    "64": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who has won more ATP titles, Julien Benneteau or Ryan Harrison?"
+    },
+    "65": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What magazine is designed as a members’ publication with a focus on health articles, competitions, and arranging discounts for members on a range of services, Woman's Journal or Candis Magazine ?"
+    },
+    "66": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What consists of multiple themed areas including Lilliput Land, Gully Town and Safari Kingdom that is located in Warrington, England , it has a park that  is now part of the resort, and there are  three locations opened by Gullivers?"
+    },
+    "67": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Yıldız Clock Tower and Ihlamur Palace, are located in Istanbul, in which country?"
+    },
+    "68": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Altay City and Taipei both located in China ?"
+    },
+    "69": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Robert Pollard and Nic Offer both American musicians?"
+    },
+    "70": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which person has had sold more books than the other, Larry Baker or Michael Crichton?"
+    },
+    "71": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Marion M. Ganey relied on a fellow Jesuit who had grown up at the non-profit that is located in which state?"
+    },
+    "72": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who resigned as manager of Bristol City F.C. and is now the head coach of Jamshedpur FC?"
+    },
+    "73": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What was the founding member of The Football League that Willie Almond played for?"
+    },
+    "74": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What American actor who appeared in five films over a period of six years, all of which were nominated for the Academy Award for Best Picture, was part of the company  co-founded by David Wheeler and Naomi Thornton in 1963?"
+    },
+    "75": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The 9th AVN Awards were held at the hotel owned and operated by what company?"
+    },
+    "76": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Craig Cole is the cousin of a former American football running back who scored how many touchdowns in his career?"
+    },
+    "77": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Doug the Pug has a large following on social media and among his celebrity friends is an American singer and songwriter whose work has been recognized with, among other things, two \"Billboard\" what?"
+    },
+    "78": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Jaina Proudmoore is currently voiced by the voice actress who started out in what roles on Dragon Ball Z?"
+    },
+    "79": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which town in northern New South Wales is Walgett Airport located "
+    },
+    "80": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Hiwassee Dam is the third highest dam in the TVA system, behind Watauga and a hydroelectric dam on what river?"
+    },
+    "81": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The National Hockey League evolved from a mono-ethnic and primarily Canadian professional athletic league to span North America, a notable NHL stars of African-American descent are which Canadian professional ice hockey left winger currently playing for the Buffalo Sabres, of which organization?"
+    },
+    "82": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Both Esteban Ocon and Rio Haryanto compete in which racing division?"
+    },
+    "83": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Sea Life Michigan Aquarium is an interactive aquarium located at Great Lakes Crossing Outlets, an enclosed shopping mall, super-regional in size, located in the city of Auburn Hills, a suburb on the northern outskirts of metro Detroit, Michigan, in which country?"
+    },
+    "84": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Carl Akeley contributed photos to the museum located in the Upper West Side of which city?"
+    },
+    "85": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What 2003 American superhero film was X-Men: The Official Game based on?"
+    },
+    "86": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What based in London and was co-founded by Daniel Johnson, Miriam Gross, Jonathan Foreman and Michael Mosbacher had  a columnist for \"The Daily Telegraph\" write a columns for the magazine?"
+    },
+    "87": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What was the registration of the plane on which Annette Snell died?"
+    },
+    "88": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who is the editor-in-chief of a public sea-grant and space-grant research university that is part of the SUNY system?"
+    },
+    "89": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What was the father of Ruth Bryan Owen often called?"
+    },
+    "90": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.5,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "In 2016 how many students were enrolled in the University where, Oscar Jacobson was director of the art department  ? "
+    },
+    "91": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where did Chihiro Noda and Paulo Dybala play together?"
+    },
+    "92": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Letter from a Thief is by a band formed in what Chicago suburb?"
+    },
+    "93": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which 1995 CART Championship winner drove the BAR 004?"
+    },
+    "94": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "When was the University, at which Dave Paulsen was head coach for seven seasons, founded ?"
+    },
+    "95": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The 1962 children's novel Mine for Keeps was written by which  Canadian children's author as a different plot twist after Frances Hodgson Burnett's The Secret Garden?"
+    },
+    "96": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Embeth Jean Davidtz, is an American-South African actress, her screen roles include movies such as \"Army of Darkness\", an American horror comedy film, relesaed in which year, directed and co-written by Sam Raimi, co-produced by Robert Tapert and Bruce Campbell and co-written by Ivan Raimi?"
+    },
+    "97": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What nationality do Wojciech Oczko and Stephen Bathory share?"
+    },
+    "98": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Steve Mcqueen acted alongside whom in 1974 the Irwin Allen produced action drama disaster film?"
+    },
+    "99": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Where is the largest ROTC program in the United States located?"
+    },
+    "100": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Which ruler was the last ruler of the dynasty also known as the Lagids or Lagidae?"
+    },
+    "101": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What Indian playback singer and occasional music composer born 28 September 1929 has a song featured in the 1959 Bollywood movie Ujala?"
+    },
+    "102": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who directed the film that was based on a murder for which Raffaele Sollecito was charged?"
+    },
+    "103": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The Fault in Our Stars had a starring role by which actress and activist from San Bernadino County, California?"
+    },
+    "104": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who was born first, Theodore H. White or Nelson DeMille?"
+    },
+    "105": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Harold Pinter and Carlo Emilio Gadda both poets?"
+    },
+    "106": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "When was the former Australian cricketer born during who's absence Darrin Joseph Ramshaw captained Victoria in several matches during the 1993–94 season?"
+    },
+    "107": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "David Wilson has directed music videos for the Australian psychedelic rock band founded by whom in 2007?"
+    },
+    "108": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "When was the Pearl Jam album which Brendan O'Brien never worked on released? "
+    },
+    "109": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.5,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "A Disney voice actor has won which Emmy award?"
+    },
+    "110": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "\"Come and take it\" was a historic slogan used in the first military engagement of which revolution?"
+    },
+    "111": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Mick Ranger is an Essex, UK based firearms dealer, and previously sold Michael Ryan the Chinese \"Type 56\" copy of AK-47 rifle that he used in 1987 to kill eight people during the Hungerford massacre, was a series of random shootings in Hungerford, Berkshire, United Kingdom, on which date?"
+    },
+    "112": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Fantasies is a 1981 R-rated drama film starring an American actress who has been a widow since what year?"
+    },
+    "113": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Port Subdivision has a northern terminus at the port with facilities on both sides of what river?"
+    },
+    "114": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Bellerose Village Municipal Complex is located in what county?"
+    },
+    "115": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "In what year was Genichiro Sata elected Chief Deputy Secretary of the party also known as Jimintō?"
+    },
+    "116": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who was born September 5, 1946 and was the father of the American singer-songwriter Lucy Wainwright Roche?"
+    },
+    "117": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What film was Oscar Martinez in that was directed by Gaston Duprat and Mariano Cohn?"
+    },
+    "118": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What king to whom Rev James MacGregor was made chaplain died in 1936?"
+    },
+    "119": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Coalition in the Netherlands was led in 1901 and 1905 by a founder of what Dutch religious group?"
+    },
+    "120": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What game has more illustrators, Colt Express or Kill Doctor Lucky?"
+    },
+    "121": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are both Zhuanghe and Chencun, Guangdong under the administration of Dalian? "
+    },
+    "122": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The greatest American men's soccer player of all-time won his last game with what score?"
+    },
+    "123": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which genus has more species Nephrolepis or Plectranthus ?"
+    },
+    "124": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which character does Kristen Schaal play in the American animated sitcom \"Bob's Burgers\"?"
+    },
+    "125": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Mark Henry Belanger, nicknamed \"The Blade\", was an American professional baseball shortstop, he set franchise records for career games, assists and double plays as a shortstop, all of which were later broken by Cal Ripken Jr., nicknamed \"The Iron Man\", is an American former baseball shortstop and third baseman who played 21 seasons, (1981–2001), in Major League Baseball (MLB), for which organization?"
+    },
+    "126": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Cassidy Freeman has a role in which modern Western television series?"
+    },
+    "127": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who did James Caudy host, who also became the father of the country?"
+    },
+    "128": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "The winner of the 13th season of \"Food Network Stars\" also won the 3rd season of a show hosted by who?"
+    },
+    "129": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "\"Quarantine 2: Terminal\" details an infection outbreak in an airport, taking place at the same time as the events of what 2008 found-footage horror film?"
+    },
+    "130": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "When was the senior advisor of the owner of Bethesda Softworks born?"
+    },
+    "131": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What was the original purpose of the Naval air station where the VMA-322 was based?"
+    },
+    "132": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The head coach at Mississippi State University from 1954-1955 won a share in the Southwest Conference championship in what year?"
+    },
+    "133": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where does the author of The True Meaning of Smekday live?"
+    },
+    "134": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the subsidiary company of Sri Venkateswara Creations which has produced a 2010 film starring Varun Sandesh?"
+    },
+    "135": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Are No Doubt and Toad the Wet Sprocket rock bands?"
+    },
+    "136": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What President who had polarizing actions in championing and signing the Kansas–Nebraska Act, has mountains named after him?"
+    },
+    "137": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "How many seats can the stadium originally planned to host the 2017 NBA All-Star Game hold for NBA games?"
+    },
+    "138": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Who is younger Mary Ramsey or Lee Ranaldo ?"
+    },
+    "139": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the birthdate of this American entrepreneur, who is an ownder of this company that is an Italian word meaning fight?"
+    },
+    "140": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The actor that plays the lead role on \"Queer as Folk\" also starred in what 2006 romantic comedy directed by Fay Ann Lee?"
+    },
+    "141": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Was the king of Spain in 1975 given the title \"Marquessate of Samaranch\"?"
+    },
+    "142": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "when did the band with lead vocalist Ed Kowalczyk release their third album ?"
+    },
+    "143": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Stephen Herek and Lester James Peries, have which mutual occupation?"
+    },
+    "144": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "When was the songwriter of the song by The Beach boys refering to the Maraishi born? "
+    },
+    "145": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Bamboko are a Bantu ethnic group of the Republic of Cameroon, Bantu peoples is used as a general label for the 300–600 ethnic groups in which continent, who speak Bantu languages?"
+    },
+    "146": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which of the short films contained in \"How to Train Your Dragon\" franchise is a 2010 animated short film by DreamWorks Animation?"
+    },
+    "147": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who is younger, Dennis Locorriere or Crispian Mills?"
+    },
+    "148": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What English film actress who died in 2003 starred in Clochemerle?"
+    },
+    "149": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Where are the Creswell Gardens located?"
+    },
+    "150": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What radio station is located in MA & is a primary entry point for the emergency alert system?"
+    },
+    "151": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Charles Elliott Perry was born in a city that is located on the large natural bay of Port Philip, and had a population of what as of 2016?"
+    },
+    "152": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Which actor who starred in the English children's television show All Change had the middle name \"Anthony David?\""
+    },
+    "153": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The composer of Allegro de concert was originally from which country?"
+    },
+    "154": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The actress who made her acting debut in \"Swordswallowers and Thin Men\" also portrayed Emily Gardner in a film directed by who?"
+    },
+    "155": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which director was from Chile, László Benedek or Raúl Ruiz?"
+    },
+    "156": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What does the logo of VMAQT-1 mean in Old Irish?"
+    },
+    "157": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "In what city did Lloyd Opal Russell coach in 1958?"
+    },
+    "158": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": " USS Elrod was named after the Captain who enlisted in what part of the armed forces in 1927?"
+    },
+    "159": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What historical fiction drama was did Steven Hartley perform in in 2013?"
+    },
+    "160": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Unlike a certain secretive recipe, Open-source cola is published. Who founded the secret formula?"
+    },
+    "161": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Blue Hills Parkway runs to the north edge of a reservation in the town that was the birthplace of which former President?"
+    },
+    "162": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Johannes Megapolensis served for several years at the first permanent Dutch settlement in what town?"
+    },
+    "163": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What rank did football running back Adrian Peterson receive in the NFL Top 100 Players of 2013?"
+    },
+    "164": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Juan Carlos Sistos won the Silverston Grand Prix Circuit which straddles where?"
+    },
+    "165": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What was Muhammad Ali's name at the time of his capture of the heavyweight title?"
+    },
+    "166": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the birthdate of this American actor, model, and director, who played on \"Lost\" and was honored with a Genesis Award?"
+    },
+    "167": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "This upcoming 2017 British crime thriller was worked on by a man who made books about Inspector Harry Hole."
+    },
+    "168": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Mysterious Origins of Man is a television special that included an interview with an American young earth creationist who claimed to have discovered human footprints alongside dinosaur footprints near a river in what U.S. state?"
+    },
+    "169": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Bowling Green massacre was alluded to by a government official born in what year?"
+    },
+    "170": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The film in which Micah Hauptman plays August Hardwicke is adapted from what novel?"
+    },
+    "171": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Skin Game is a 1971 American independent comedy western starring James Garner and Louis Gossett, Jr., the supporting cast features Susan Clark, a Canadian actress, known for her movie roles such as which?"
+    },
+    "172": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the name of the YouTube Channel that was founded by the Lead Vocalist of the English rock band Asking Alexandria who was featured in the band's fourth studio album \"The Black?\""
+    },
+    "173": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "During which era of French classical music did Marc Antoine Charpentier compose music?"
+    },
+    "174": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Konarka Technologies was a spin off from the college located how far northwest of Boston?"
+    },
+    "175": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The first walk-on true freshman quarterback to start a football season opener at a BCS school beat out an incumbent starter who later transferred to what university?"
+    },
+    "176": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.5,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who produced the American animated television series based on the \"Spider-Man"
+    },
+    "177": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which of Arthur Jones' brothers played college football at Syracuse?"
+    },
+    "178": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Grzegorz Piramowicz was a member of an Education group considered what?"
+    },
+    "179": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Of the only two succeeding series of CN Real block, which one was about two teams destroyed a random object and built vehicles from it?"
+    },
+    "180": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What railway station is north of Drigg railway station on the Cumbrian Coast of England?"
+    },
+    "181": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Amana German, is a dialect of West Central German that is still spoken by several hundred people in Iowa, in which location of seven villages on 26000 acres located in Iowa County in east-central Iowa, United States: Amana (or Main Amana), East Amana, High Amana, Middle Amana, South Amana, West Amana, and Homestead?"
+    },
+    "182": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "K-mart Disco is a parody cover album of The dark side of the moon which is released by which record company?"
+    },
+    "183": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "in what city was the treaty signed by President Charles de Gaulle and Chancellor Konrad Adenauer signed?"
+    },
+    "184": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What sketch comedy series that premiered on June 5, 2011 has a character named Tawni Hart?"
+    },
+    "185": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Tshepo Motsepe is the wife of the trade union leader who has served as Deputy President under which world leader?"
+    },
+    "186": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which division did Oklahoma City Thunder win in 2015-16, their first season under current head coach Billy Donovan?"
+    },
+    "187": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Who were the executive producers of the episode of The Simpsons called \"Lisa's Pony\"?"
+    },
+    "188": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What gaming corporation based in Paradise, Nevada operates Harrah's Resort Southern California?"
+    },
+    "189": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What type of wagon inspired the dominant form of transportation on the improved trail through the Great Appalachian Valley from Pennsylvania to North Carolina?"
+    },
+    "190": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What possession was Chile and Argentina disputing that led to Operation Soberania?"
+    },
+    "191": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What was the 2017 population of the area in which Highgate is located?"
+    },
+    "192": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The song Skin which was included in Rihanna's Loud Tour is by who?"
+    },
+    "193": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "In what year was the competition held that inspired the design of the only acknowledged aircraft that can carry large air-to-surface standoff weapons in stealth configuration?"
+    },
+    "194": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who was assistant director on films such as \"The Cat and the Fiddle\", Nick Cassavetes or  Lesley Selander ?"
+    },
+    "195": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.5,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "For what role did the Spanish actor who starred in To the Wonder win the Academy Award for Best Supporting Actor?"
+    },
+    "196": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Sun Wei  involves the field recording of which component of the acoustic environment that can be perceived by humans?"
+    },
+    "197": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which plant is a genus of plants native to Mexico, Neomarica or Trachelium?"
+    },
+    "198": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Who won more awards, Bob Woodward or Jane Gardam?"
+    },
+    "199": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Which squadron ran one of the largest bases of the U.S. Air Force's Strategic Air Command?"
+    },
+    "200": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Bayenthaler SV is part of a current day football club that plays in what city?"
+    },
+    "201": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "how is Tinsley Viaduct and A631 road connected?"
+    },
+    "202": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "In which year were World Aesthetic Gymnastics Championships held in the southern part on the east coast of Streymoy?"
+    },
+    "203": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Pitt & Kantrop is a children's television programme produced by the Eurovision Network and was shown on BBC One and CBBC in the United Kingdom, it is from the creators of which French animated series about an intelligent talking dog, Corneil, and his \"dog-sitter\", Bernie Barges?"
+    },
+    "204": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What South African record producer collaborated with a contemporary Canadian Rapper on the song \"One Dance\"?"
+    },
+    "205": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "On which Expedition did Clayton Anderson replace Sunita Williams? "
+    },
+    "206": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Ennio Morricone composed the score for this 1976 film directed by Bernardo Bertolucci."
+    },
+    "207": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Adi Hasak jointly wrote and produced a movie released on what date?"
+    },
+    "208": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where were both Frederick Schermbrucker and Cecil Rhodes imperialists and politicians?"
+    },
+    "209": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Unforgettable co-starred the actress who had a leading role in what 1985 coming-of-age drama?"
+    },
+    "210": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who invented the submarine abord which Kari Bruwelheide perished?"
+    },
+    "211": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who was the barman that named a drink after the first person to walk on the moon?"
+    },
+    "212": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What American metal band formed in Brooklyn released an eighth studio album name Means to an End?"
+    },
+    "213": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The Jeep Cherokee was originally sold as a variant of the first what?"
+    },
+    "214": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who directed the film, based on the 1915 adventure novel by John Buchan, in which the British actess Peggy Simpson appeared?"
+    },
+    "215": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where was Kearen Pang's first script set?"
+    },
+    "216": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "WCW Nitro Grill was located at a casino owned by what company?"
+    },
+    "217": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What numbered volume would one find the character \"Pelendur\" in the J. R. R Tolkien work?"
+    },
+    "218": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "When did the Australian rail freight operator, whose main commodities included Aluminium oxide, become part of QR National?"
+    },
+    "219": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What type of reading material are TV Guide and Baltimore?"
+    },
+    "220": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the population of this town in Cheshire County, New Hampshire, where Holman & Merriman Machine Shop is located?"
+    },
+    "221": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "In 2013, what was the population of the city in which Diebold Schilling the Younger presented his work, \"Luzerner Schilling,\" 500 years previously?"
+    },
+    "222": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The Electoral district of Reynell includes which industrial suburb of Adelaide?"
+    },
+    "223": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who produced a song that was written by Jay-Z, The Edge and Bono for a live album benefiting the Red Cross and Wyclef Jean's Yele Haiti Foundation?"
+    },
+    "224": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Candy Maldonado was nicknamed \"Candyman\" by the sportscaster with what nickname?"
+    },
+    "225": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is the name of the institute where both M. S. Raghunathan and Homi J. Bhabha were professors?"
+    },
+    "226": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Are Mara Santangelo and Meredith McGrath from the same country?"
+    },
+    "227": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Beast Reawakens, is a 1997 book by investigative journalist Martin A. Lee, in which he tells the story of old-guard fascists' strategy for survival and the revival of fascism since 1944, the book opens with a quotation from T. E. Lawrence's \"Seven Pillars of Wisdom\" (1922), a favorite of Hitler's favorite commando, who,which was an Austrian SS-\"Obersturmbannführer\" (lieutenant colonel) in the German Waffen-SS during World War II?"
+    },
+    "228": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What Celtics player, born November 16, 1946, was named NBA Finals MVP in their 1975-76 season?"
+    },
+    "229": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": " Stipe Miocic has tied the record for most successful title defenses held with Randy Couture, Tim Sylvia, Brock Lesnar an an american mixed martial artists who is ranked what in UFC's official heavyweight rankings?"
+    },
+    "230": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "which visionary leader, and a great diplomat. was the legendary Crow chief of Little People of the Pryor Mountains "
+    },
+    "231": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Yannis Smaragdis and Roland Joffé both film directors ?"
+    },
+    "232": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Shaoyang and Haiyang, are in which country?"
+    },
+    "233": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who was the former CEO and co-founder of the company that makes the phone that Phoebe Ruguru shot her film \"Saidia\"?"
+    },
+    "234": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The first woman elected Attorney General of Minnesota, served under what party?"
+    },
+    "235": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Adrienne Rich and Romain Rolland both from France?"
+    },
+    "236": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which country is home to both S. G. Vasudev and the largest artists' commune? "
+    },
+    "237": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "At what age did the artist, whose ninth studio album was title Sentimento, go blind?"
+    },
+    "238": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Stewart Indian School opened in 1890 with 37 students from Washoe and Shoshone tribes as well as what three closely related groups of indigenous peoples of the Great Basin?"
+    },
+    "239": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Dave Criscione's hometown is a city in which county of New York?"
+    },
+    "240": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What American indie rock band has Robert Pollard as a main member and released it's 24th album in April 2017?"
+    },
+    "241": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Single Guy is an American television sitcom that ran for two seasons on NBC, from September 1995 to April 1997, the series starred Ming-Na Wen as Sam's wife, Ming-Na Wen is an American actress, born when?"
+    },
+    "242": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Golzar Kalay is a village in a province which has a population of about how many people?"
+    },
+    "243": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The lead vocalist of the band Vega4 is from what Northern Irish town?"
+    },
+    "244": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Minuet in G, Op. 14/1, is a short piano composition by which Polish pianist and composer, politician and spokesman for Polish independence?"
+    },
+    "245": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Ed Harris starred in what 2013 film written by Bong Joon-ho and and Kelly Masterson?"
+    },
+    "246": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which novelist, Tom Robbins or Harry Stephen Keeler, was a movie created from on of their books?"
+    },
+    "247": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What cultural heritage does the director of the music videos for The xx most identify with?"
+    },
+    "248": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "How many players usually plays the card game Micheal Keiner was best known for?"
+    },
+    "249": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The actor that played John Kelly on \"NYPD Blue\" also stars with Nicholas Cage in a 1995 crime thriller film directed by who?"
+    },
+    "250": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Nadine Burke Harris, is an American pediatrician, she's an advisory council member for Hillary Rodham Clinton's non-profit organization, named?"
+    },
+    "251": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Frank Bungarten is a classical guitarist from Germany, in 1981, he got noticed in the international guitar scene, when Andrés Segovia Torres, 1st Marquis of Salobreña, a virtuoso Spanish classical guitarist from Linares, Spain, honored him with the first prize at which event?"
+    },
+    "252": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Dievas was the chief deity in which extinct Baltic language?"
+    },
+    "253": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Wild Cat (initially The Joy Ride) was a wooden roller coaster located at Hersheypark in Hershey, Pennsylvania, the roller coaster was constructed in 1923 by which one of the oldest existing roller coaster manufacturing companies in the world, based in Hatfield, Pennsylvania?"
+    },
+    "254": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The 2010 Washington Redskins Trent Williams was considered one of the best tackle prospects available for the 2010 NFL Draft, who was the Head Coach of the team at that time?"
+    },
+    "255": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "How tall is the American retired professional basketball player who was a second year star of 1996–97 Toronto Raptors season and led the team averaging 20.2 points and 8.8 assists per game?"
+    },
+    "256": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Are Die Kreuzen and The LaFontaines both rock bands?"
+    },
+    "257": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Cape Elizabeth Light also known as Two Lights is a lighthouse in Cape Elizabeth, at the southwestern entrance to Casco Bay, s an inlet of the Gulf of Maine on the southern coast of Maine, New England, in which country?"
+    },
+    "258": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which basketball player is the older son of the head coach of Vytautas Prienai-Birštonas of the Lithuanian Basketball League (LKL)?"
+    },
+    "259": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Mounds View Public Schools serves a city in what Minnesota county?"
+    },
+    "260": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which university is a major university, Milwaukee School of Engineering or Xinjiang University?"
+    },
+    "261": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Gary Leib designed a line of popular toys for what chocolate manufacturer?"
+    },
+    "262": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Manfred Reichel taught as a professor at what university located in Basel, Switzerland, that was founded on 4 April 1460?"
+    },
+    "263": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Which band is from a country closer to France, Superdrag or Shed Seven ?"
+    },
+    "264": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The F Word is based on the British series that is of what nationality?"
+    },
+    "265": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.5,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Who played with the 1991–92 San Antonio Spurs and played college basketball at DePaul University?"
+    },
+    "266": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Trayce Nikolas Thompson is an outfielder for an American professional baseball team that was established where in 1883?"
+    },
+    "267": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "A Spanish professional footballer who plays as a central midfielder for the Spain national team marketed what range of football boots?"
+    },
+    "268": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Which network aired the program Samurai Jack where Charlie Bean and Genndy Tartakovsky collaborated?"
+    },
+    "269": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "What network are both Ghostshrimp and Stakes known for?"
+    },
+    "270": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Do Viburnum and Smyrnium belong to the same family?"
+    },
+    "271": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Katherine Elaine Hendrix, is an American actress, model, producer, singer, dancer, and activist, and is best known for her role in What the Bleep Do We Know!?, a film that combines documentary-style interviews, computer-animated graphics, and a narrative that posits a spiritual connection between quantum physics and consciousness, released in what year?"
+    },
+    "272": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Big Daddy was Adam Sandler's highest-grossing film until the film directed by whom, released in 2015?"
+    },
+    "273": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Which \"The Producers\" star was born in 1915?"
+    },
+    "274": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What technology used to be how the school that Adelaide Miethke conducted classes?"
+    },
+    "275": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "What is a peninsular residential neighborhood, beach, and leisure/entertainment destination, that holds an annual American hot dog competitive eating competition on Independence Day at Nathan's Famous Corporation's original?"
+    },
+    "276": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Eneko Satrústegui Plano plays for which Spanish football team based in Lleida?"
+    },
+    "277": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Which Las Vegas casino, owned by MGM and Italian themed, stands on the site of the former Dunes hotel?"
+    },
+    "278": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "The 1991 Grand National race was sponsored bya company headquartered in what city?"
+    },
+    "279": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The 2015 Clemson Tigers football team represented Clemson University in the 2015 NCAA Division I FBS football season, ranked No. 1 throughout the College Football Playoff (CFP) rankings, Clemson defeated the No. 4 Oklahoma Sooners, 37–17, in which college football bowl game that was played on December 31, 2015 at Sun Life Stadium in Miami Gardens, Florida?"
+    },
+    "280": {
+      "bucket": "C_fragile",
+      "score": 1.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "When did the magazine that Wallace Hester illustrate for end publication?"
+    },
+    "281": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who is the namesake of the beetle similar to Dim from the Pixar film directed by John Lasseter about insects?"
+    },
+    "282": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What profession do Eric Ambler and Yevgeny Zamyatin have in common?"
+    },
+    "283": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "The Ironton Railroad became part of which Class 1 Railroad Corporation?"
+    },
+    "284": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Where is the band who released Gummy Song Skull from?"
+    },
+    "285": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "What is a club who's player wears Nike Hypervenom boots?"
+    },
+    "286": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Elizabeth Capell, Countess of Essex's father was a supporter of what cause in the English Civil War?"
+    },
+    "287": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Dangdang has a competitor in the company formerly called what?"
+    },
+    "288": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Who was the widow affected by the Same-sex marriage decision ruled on by the Sixth Circuit from Ohio?"
+    },
+    "289": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "In which conference did Chuck Amato coach in 2002?"
+    },
+    "290": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Shiroi Yoru is a DVD release by a band from which city ?"
+    },
+    "291": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Lois Smith had a supporting role in which film starring Russell Crowe, Ryan Gosling and Kim Basinger?"
+    },
+    "292": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Which fashion brand, whose part company is OTB, was founded in 1993?"
+    },
+    "293": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Toy Soldiers Parachute Drop is a Paratower, a parachute jump-style ride at Walt Disney Studios Park in France and Hong Kong Disneyland, the ride is part of the Toy Story Land in Hong Kong, \"Toy Story\" Land (known as Toy Story\" Playland at Walt Disney Studios Park) is a themed land at Walt Disney Studios Park, Hong Kong Disneyland, and soon-to-be at Disney's Hollywood Studios and which location?"
+    },
+    "294": {
+      "bucket": "C_clean",
+      "score": 1.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "2007–08 Oklahoma Sooners men's basketball team was head coached by this American coach college basketball coach and former player who was born in what year?"
+    },
+    "295": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "John Haase's associate was born in what year?"
+    },
+    "296": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Autolux and Polvo are both types of what?"
+    },
+    "297": {
+      "bucket": "W_retrieval",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": true,
+      "oracle_improves": true,
+      "question": "Penn Central opened Kent Road station to serve what American multinational corporation?"
+    },
+    "298": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 1.0,
+      "oracle_target_missing_recovery_rate": 1.0,
+      "retrieval_fail": false,
+      "oracle_improves": false,
+      "question": "Danish Viking, who ruled over parts of Friesland between 841 and 873 was the uncle of a Viking leader who raided the British Isles, West Francia, Frisia, and Lotharingia in the 860s and 870?"
+    },
+    "299": {
+      "bucket": "W_other",
+      "score": 0.0,
+      "current_missing_recovery_rate": 0.0,
+      "oracle_target_missing_recovery_rate": 0.0,
+      "retrieval_fail": true,
+      "oracle_improves": false,
+      "question": "Husband of Orfeh is best known for performing in what?"
+    }
+  },
+  "update_batches": {
+    "compositions": {
+      "mixed_custom": {
+        "description": "Per batch: 5 W_retrieval, 3 C_clean, 1 C_fragile, 1 W_other.",
+        "batch_bucket_counts": {
+          "W_retrieval": 5,
+          "C_clean": 3,
+          "C_fragile": 1,
+          "W_other": 1
+        },
+        "batches": [
+          {
+            "batch_id": 0,
+            "case_ids_by_bucket": {
+              "W_retrieval": [
+                128,
+                265,
+                219,
+                99,
+                0
+              ],
+              "C_clean": [
+                203,
+                34,
+                158
+              ],
+              "C_fragile": [
+                115
+              ],
+              "W_other": [
+                4
+              ]
+            },
+            "case_ids": [
+              128,
+              265,
+              219,
+              99,
+              0,
+              203,
+              34,
+              158,
+              115,
+              4
+            ],
+            "bucket_counts": {
+              "W_retrieval": 5,
+              "C_clean": 3,
+              "C_fragile": 1,
+              "W_other": 1
+            }
+          },
+          {
+            "batch_id": 1,
+            "case_ids_by_bucket": {
+              "W_retrieval": [
+                259,
+                149,
+                49,
+                51,
+                109
+              ],
+              "C_clean": [
+                66,
+                46,
+                272
+              ],
+              "C_fragile": [
+                270
+              ],
+              "W_other": [
+                144
+              ]
+            },
+            "case_ids": [
+              259,
+              149,
+              49,
+              51,
+              109,
+              66,
+              46,
+              272,
+              270,
+              144
+            ],
+            "bucket_counts": {
+              "W_retrieval": 5,
+              "C_clean": 3,
+              "C_fragile": 1,
+              "W_other": 1
+            }
+          },
+          {
+            "batch_id": 2,
+            "case_ids_by_bucket": {
+              "W_retrieval": [
+                88,
+                104,
+                73,
+                211,
+                182
+              ],
+              "C_clean": [
+                224,
+                38,
+                81
+              ],
+              "C_fragile": [
+                263
+              ],
+              "W_other": [
+                296
+              ]
+            },
+            "case_ids": [
+              88,
+              104,
+              73,
+              211,
+              182,
+              224,
+              38,
+              81,
+              263,
+              296
+            ],
+            "bucket_counts": {
+              "W_retrieval": 5,
+              "C_clean": 3,
+              "C_fragile": 1,
+              "W_other": 1
+            }
+          }
+        ]
+      }
+    }
+  },
+  "eval_split": {
+    "full143": [
+      279,
+      124,
+      8,
+      69,
+      183,
+      257,
+      70,
+      208,
+      114,
+      21,
+      260,
+      2,
+      131,
+      261,
+      171,
+      71,
+      212,
+      180,
+      227,
+      95,
+      85,
+      39,
+      181,
+      190,
+      295,
+      140,
+      17,
+      179,
+      167,
+      89,
+      191,
+      12,
+      172,
+      123,
+      258,
+      6,
+      105,
+      205,
+      271,
+      288,
+      238,
+      264,
+      165,
+      146,
+      10,
+      184,
+      32,
+      267,
+      176,
+      129,
+      63,
+      240,
+      291,
+      201,
+      239,
+      243,
+      125,
+      170,
+      274,
+      275,
+      194,
+      107,
+      292,
+      206,
+      121,
+      216,
+      44,
+      25,
+      251,
+      169,
+      136,
+      253,
+      199,
+      197,
+      35,
+      9,
+      61,
+      135,
+      55,
+      23,
+      217,
+      151,
+      22,
+      237,
+      246,
+      15,
+      277,
+      276,
+      143,
+      153,
+      234,
+      16,
+      93,
+      290,
+      215,
+      160,
+      1,
+      196,
+      175,
+      47,
+      122,
+      228,
+      286,
+      65,
+      210,
+      173,
+      50,
+      289,
+      280,
+      229,
+      214,
+      193,
+      147,
+      155,
+      30,
+      52,
+      91,
+      282,
+      273,
+      231,
+      207,
+      24,
+      54,
+      297,
+      45,
+      106,
+      294,
+      249,
+      163,
+      110,
+      298,
+      27,
+      19,
+      278,
+      204,
+      83,
+      137,
+      285,
+      98,
+      164,
+      59,
+      75,
+      133
+    ],
+    "full143_bucket_allocation": {
+      "W_retrieval": 4,
+      "C_clean": 69,
+      "W_other": 56,
+      "C_fragile": 14
+    },
+    "full143_excludes_update_batches": true
+  },
+  "notes": [
+    "This split is Qwen-native. It is based on Qwen/Qwen3-8B fixed-prompt rollout states.",
+    "Do not compare this as the same split as GPT positive_safety_b10_split_seed0.",
+    "Update batch size is 10; full evaluation scope size is 143; expected eval rows per condition = 153."
+  ]
+}

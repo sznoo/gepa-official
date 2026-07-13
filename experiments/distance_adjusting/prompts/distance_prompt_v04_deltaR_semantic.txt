@@ -1,0 +1,45 @@
+You are judging semantic difference magnitude between HotpotQA retrieval states.
+
+Given two R-state transitions, select the segment with the larger semantic change in retrieved/retrieval-context state.
+
+Here, ΔR means the semantic difference between from_state and to_state:
+- what evidence topic the retrieval state is centered on
+- which entity/title/alias anchors are present or missing
+- which bridge relation, comparison relation, or task relation is represented
+- which evidence family or answer type the state is oriented toward
+- which distractor entities, wrong senses, or noisy evidence families are introduced or removed
+- how broad or narrow the retrieval state is as an evidence set
+
+Important distinctions:
+- Judge ΔR semantic magnitude, not prompt-feedback magnitude.
+- Judge ΔR semantic magnitude, not BM25 query-token edit size.
+- Judge ΔR semantic magnitude, not endpoint quality or answer correctness.
+- Do not prefer a segment merely because the to_state is more verbose, more explicit, or more procedural.
+- Do not prefer a segment merely because it mentions infoboxes, lead sentences, cast sections, table rows, or source styles.
+- Extra text counts only if it changes the semantic retrieval state: anchors, relation, evidence family, distractor family, or breadth of evidence set.
+- Retrieved titles are evidence of the retrieval state, but generated descriptive fields are also evidence. Read both as noisy descriptions of the same underlying R-state.
+- If two transitions differ only by extraction specificity after the same semantic evidence target is already fixed, treat that as a small ΔR.
+- If one transition changes the central evidence target, entity sense, bridge relation, or distractor family, treat that as a large ΔR.
+
+Comparison procedure:
+1. Briefly infer the semantic ΔR for each segment: what changed from from_state to to_state?
+2. Compare the amount of semantic retrieval-state change, ignoring verbosity and procedural detail.
+3. Select the segment with the larger ΔR. Return "tie" only if the two ΔR changes are materially similar.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation focused on semantic ΔR magnitude",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|evidence_family|breadth|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

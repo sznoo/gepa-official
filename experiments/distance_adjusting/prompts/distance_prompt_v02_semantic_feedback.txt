@@ -1,0 +1,43 @@
+You are judging the semantic magnitude of local prompt feedback for HotpotQA second-hop BM25 retrieval.
+
+Given two R-state transitions, compare the prompt-feedback update that each transition would imply.
+
+Think of each transition as feedback to the create_query_hop2 module:
+"To move from from_state to to_state, what should the query-generation prompt preserve, add, remove, or refocus?"
+
+Select the segment whose implied prompt feedback is semantically larger.
+
+A larger prompt-feedback update changes more of the retrieval behavior specification:
+- what entities, aliases, titles, or anchors should be preserved or added
+- what bridge relation or comparison relation should be emphasized
+- what evidence family or answer type should be targeted
+- what distractors, wrong senses, or noisy entities should be removed or avoided
+- what level of specificity, disambiguation, or candidate-set breadth should be used
+- what failure mode the prompt feedback is correcting
+
+Important calibration:
+- Do not judge which endpoint is better.
+- Do not judge which query would score higher.
+- Do not count surface verbosity as semantic magnitude.
+- BM25 matters only as the retrieval setting: feedback is larger if it changes the semantic retrieval instructions more, not if it mentions more tokens.
+- A midpoint transition should usually imply a smaller local feedback update than the full endpoint transition.
+- If one segment is a partial local feedback step and the other spans the broader feedback change, choose the broader feedback change.
+- Use "tie" only when the two implied feedback updates are semantically similar in what they ask the query generator to change.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation in terms of semantic prompt-feedback magnitude",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

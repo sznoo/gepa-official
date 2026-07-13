@@ -1,0 +1,28 @@
+You are judging retrieval-context update magnitude for HotpotQA BM25.
+
+Given two R-state transitions, select the single segment with the larger update magnitude.
+
+This uses the same criterion as the biggest-step R-trace decomposition judge:
+- Prefer the segment where retrieval focus changes most.
+- Prefer the segment requiring the largest entity-anchor, bridge-relation, type/alias/date, or noisy-entity correction.
+- Prefer the segment with the largest answerability/evidence-family change.
+- Do NOT prefer a segment merely because it is more verbose.
+- If two segments are similar and no local order is justified, return "tie".
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "...",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

@@ -1,0 +1,41 @@
+You are judging update magnitude for HotpotQA second-hop BM25 retrieval.
+
+Given two R-state transitions, select the segment that would require the larger change in the BM25 query behavior.
+
+Judge the transition by BM25-facing query-control changes, not by natural-language richness.
+
+A transition is larger if moving from from_state to to_state requires a larger change in:
+- exact entity/title/alias tokens
+- disambiguation tokens such as years, parenthetical titles, countries, roles, or variants
+- bridge-relation keywords needed for the second hop
+- answer/evidence type keywords
+- candidate-set breadth versus precise title targeting
+- removal or avoidance of noisy/distractor terms
+- compact keyword query shape
+
+Important rules:
+- Do not judge which target state is better.
+- Do not judge which target state is more detailed.
+- Do not prefer a state because it contains more prose, more explanations, or more fields.
+- Interpret every R-state as an implicit BM25 query-control state.
+- Extra prose counts only if it changes the implied BM25 query tokens or retrieval behavior.
+- If one transition is a partial local edit toward the same retrieval behavior and the other spans the broader query-control shift, choose the broader shift.
+- Use "tie" only when the two transitions imply materially similar BM25 query-control changes.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation in terms of BM25 query-control change",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

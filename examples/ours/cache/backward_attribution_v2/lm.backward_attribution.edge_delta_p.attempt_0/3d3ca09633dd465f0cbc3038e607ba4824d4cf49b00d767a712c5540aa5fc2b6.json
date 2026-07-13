@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "3d3ca09633dd465f0cbc3038e607ba4824d4cf49b00d767a712c5540aa5fc2b6",
+  "created_at": "2026-07-12T17:04:26.047048+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "retrieve Baz Luhrmann — top query: \"Baz Luhrmann birthplace\" [[ ## completed ## ]]",
+        "current_output": {
+          "query": "Baz Luhrmann birthplace"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Baz Luhrmann Herons Creek born"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Baz Luhrmann Herons Creek New South Wales born"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"retrieve Baz Luhrmann — top query: \\\"Baz Luhrmann birthplace\\\" [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"Baz Luhrmann birthplace\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Baz Luhrmann Herons Creek born\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Baz Luhrmann Herons Creek New South Wales born\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When producing the second-hop retrieval `query` for a person's birthplace (the inputs or draft query contain words like \\\"birth\\\", \\\"born\\\", or \\\"birthplace\\\") and the draft query already names a small town/locality after the person's name.\",\n    \"preserve_rule\": \"Preserve the person's full name and the birthplace keyword; keep the query as a single short retrieval phrase (no full sentences).\",\n    \"change_rule\": \"If the draft query includes a town/locality, append the corresponding larger administrative unit (state/province or country) immediately after the town name to disambiguate it (format: Person Town Region born). Only add a region that is confidently known from visible inputs or from widely known facts; otherwise leave the town as-is.\",\n    \"drop_or_avoid_rule\": \"Do not add multiple alternative regions, explanatory text, questions, or answer content. Do not replace/reorder the person's name. Avoid inventing obscure region names unless confident.\",\n    \"output_contract\": \"Produce one compact retrieval query string in the form: <PersonName> <TownName> <StateOrProvinceOrCountry> born (or 'birthplace') — no punctuation or sentence framing, single-line.\",\n    \"why_local_transition\": \"This edge refines a birthplace query that already cites a small town by adding its higher-level region, which disambiguates the town and improves retrieval for second-hop supporting evidence.\"\n  },\n  \"rationale\": \"Adding the administrative region is a minimal, targeted behavior change: it preserves the original person and 'born' focus but makes the locality unambiguous for search. The rule only triggers for birthplace queries that already name a town and avoids introducing extra verbosity or answer content, keeping the agent's original concise query-generation behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 2,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

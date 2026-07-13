@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "0a973f9e8bb39125f98cd539c819a46a97c5ed328194c3ee6eea36a481fb3301",
+  "created_at": "2026-07-12T18:16:10.954394+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Where are the studios, where the Muppet Shows were recorded, located ?",
+      "current_output": "They are at Elstree/Borehamwood in Hertfordshire, England (the Elstree Studios film and TV facilities).",
+      "upstream_context": {
+        "question": "Where are the studios, where the Muppet Shows were recorded, located ?",
+        "summary_1": "Elstree Studios, England — Passage [2]",
+        "hop2_query": "Where were the studios where The Muppet Show was recorded located? \"Elstree Studios\" location Borehamwood Hertfordshire England",
+        "hop2_titles": [
+          "Elstree Studios",
+          "Elstree University Technical College",
+          "BBC Elstree Centre",
+          "Borehamwood",
+          "Elstree and Borehamwood",
+          "British and Dominions Imperial Studios",
+          "Elstree Studios (Shenley Road)"
+        ],
+        "hop2_docs": [
+          "Elstree Studios | Elstree Studios is a generic term which can refer to several current and defunct British film studios and television studios based in or around the towns of Borehamwood and Elstree in Hertfordshire.  Studios have been located here since film production began in the area during 1914.",
+          "Elstree University Technical College | The Elstree University Technical College (shortened to EUTC) is a university technical college located in Borehamwood, Hertfordshire, England, which opened in September 2013.  The college's lead sponsor is the University of Hertfordshire; other sponsors include Elstree Studios.  The UTC occupies newly developed buildings on Elstree Way.  The conversion was designed by Ellis Williams Architects and was undertaken by Willmott Dixon Interiors.",
+          "BBC Elstree Centre | BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.",
+          "Borehamwood | Borehamwood ( —originally spelt Boreham Wood), is a town in southern Hertfordshire.  It is a commuter town near Watford and London, situated 12 mi from Charing Cross.  Borehamwood has a population of 31,074, and is within the civil parish of Elstree and Borehamwood and the London commuter belt.  There is one weekly newspaper, the \"Borehamwood and Elstree Times\".  The town is perhaps most well known for its film and TV studios, commonly known as Elstree Studios, hence the association with Elstree.",
+          "Elstree and Borehamwood | Elstree and Borehamwood is a civil parish in the Borough of Hertsmere in Hertfordshire, England.  Located approximately 12 mi northwest of central London and adjacent to the Greater London boundary, it is an urbanised parish with suburban residential development, some open land and light industry.  Elstree and Borehamwood is a recent renaming of the ancient parish of Elstree, covering the settlements of Elstree and Borehamwood.  Formed in 1894 as the Elstree Parish Council, the local council is Elstree and Borehamwood Town Council.  One of the most populous civil parishes in England, at the 2011 census it had a population of 37,065.",
+          "British and Dominions Imperial Studios | British and Dominions Imperial Studios was a short-lived British film production company located at Imperial Place, Elstree Way, Borehamwood, Hertfordshire that was active from 1929 to 1936, when it ceased production when the studio facilities were destroyed by fire.",
+          "Elstree Studios (Shenley Road) | Elstree Studios on Shenley Road, Borehamwood, Hertfordshire is a British film and television production facility operated by Elstree Film Studios Limited.  One of several facilities historically referred to as Elstree Studios, the Shenley Road studio site opened in 1925."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "BBC Elstree Centre",
+          "sent_id": 0,
+          "sentence": "BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhere are the studios, where the Muppet Shows were recorded, located ?\n\nCurrent agent output:\n\"They are at Elstree/Borehamwood in Hertfordshire, England (the Elstree Studios film and TV facilities).\"\n\nActual upstream context:\n{\n  \"question\": \"Where are the studios, where the Muppet Shows were recorded, located ?\",\n  \"summary_1\": \"Elstree Studios, England — Passage [2]\",\n  \"hop2_query\": \"Where were the studios where The Muppet Show was recorded located? \\\"Elstree Studios\\\" location Borehamwood Hertfordshire England\",\n  \"hop2_titles\": [\n    \"Elstree Studios\",\n    \"Elstree University Technical College\",\n    \"BBC Elstree Centre\",\n    \"Borehamwood\",\n    \"Elstree and Borehamwood\",\n    \"British and Dominions Imperial Studios\",\n    \"Elstree Studios (Shenley Road)\"\n  ],\n  \"hop2_docs\": [\n    \"Elstree Studios | Elstree Studios is a generic term which can refer to several current and defunct British film studios and television studios based in or around the towns of Borehamwood and Elstree in Hertfordshire.  Studios have been located here since film production began in the area during 1914.\",\n    \"Elstree University Technical College | The Elstree University Technical College (shortened to EUTC) is a university technical college located in Borehamwood, Hertfordshire, England, which opened in September 2013.  The college's lead sponsor is the University of Hertfordshire; other sponsors include Elstree Studios.  The UTC occupies newly developed buildings on Elstree Way.  The conversion was designed by Ellis Williams Architects and was undertaken by Willmott Dixon Interiors.\",\n    \"BBC Elstree Centre | BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.\",\n    \"Borehamwood | Borehamwood ( —originally spelt Boreham Wood), is a town in southern Hertfordshire.  It is a commuter town near Watford and London, situated 12 mi from Charing Cross.  Borehamwood has a population of 31,074, and is within the civil parish of Elstree and Borehamwood and the London commuter belt.  There is one weekly newspaper, the \\\"Borehamwood and Elstree Times\\\".  The town is perhaps most well known for its film and TV studios, commonly known as Elstree Studios, hence the association with Elstree.\",\n    \"Elstree and Borehamwood | Elstree and Borehamwood is a civil parish in the Borough of Hertsmere in Hertfordshire, England.  Located approximately 12 mi northwest of central London and adjacent to the Greater London boundary, it is an urbanised parish with suburban residential development, some open land and light industry.  Elstree and Borehamwood is a recent renaming of the ancient parish of Elstree, covering the settlements of Elstree and Borehamwood.  Formed in 1894 as the Elstree Parish Council, the local council is Elstree and Borehamwood Town Council.  One of the most populous civil parishes in England, at the 2011 census it had a population of 37,065.\",\n    \"British and Dominions Imperial Studios | British and Dominions Imperial Studios was a short-lived British film production company located at Imperial Place, Elstree Way, Borehamwood, Hertfordshire that was active from 1929 to 1936, when it ceased production when the studio facilities were destroyed by fire.\",\n    \"Elstree Studios (Shenley Road) | Elstree Studios on Shenley Road, Borehamwood, Hertfordshire is a British film and television production facility operated by Elstree Film Studios Limited.  One of several facilities historically referred to as Elstree Studios, the Shenley Road studio site opened in 1925.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"BBC Elstree Centre\",\n    \"sent_id\": 0,\n    \"sentence\": \"BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop context identifies the studios as \\\"Elstree Studios\\\" in England. The second-hop supporting sentence confirms a specific Elstree facility: \\\"BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.\\\" Integrate: the studios referred to as Elstree Studios (including BBC Elstree Centre) are located in Borehamwood, Hertfordshire, England (BBC Elstree Centre on Clarendon Road).\",\n  \"rationale\": \"Summary_1 named Elstree Studios in England. The visible second-hop support explicitly locates BBC Elstree Centre (also called BBC Elstree Studios) on Clarendon Road in Borehamwood, Hertfordshire, so the integrated summary links Elstree Studios to Borehamwood, Hertfordshire, England.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 107,
+    "row_index": 107
+  }
+}

@@ -1,0 +1,45 @@
+You are judging the semantic magnitude of local prompt feedback for HotpotQA second-hop BM25 retrieval.
+
+Given two R-state transitions, compare the feedback that each transition would give to the create_query_hop2 prompt.
+
+Select the segment whose implied feedback is a larger failure-mode correction.
+
+A larger feedback update changes the query generator's behavior more fundamentally:
+- correcting the main missing or wrong entity anchor
+- resolving an ambiguous title, alias, year, country, role, or version
+- changing the bridge/comparison relation that the query must express
+- changing the candidate set that must be preserved or explored
+- removing a major distractor, wrong sense, or noisy entity family
+- changing from a wrong retrieval target to the right evidence family
+
+A smaller feedback update usually:
+- asks for a more specific snippet after the correct entity/evidence target is already known
+- narrows from a correct page target to an infobox, lead sentence, cast section, or list row
+- adds source-style details without changing the core failure mode
+- makes the same retrieval behavior more explicit or verbose
+
+Important calibration:
+- Judge semantic failure-correction magnitude, not endpoint quality.
+- Do not choose a segment merely because its target state is more detailed.
+- Do not choose a segment merely because it asks for more specific extraction fields.
+- If one transition fixes the main retrieval failure and the other only refines evidence extraction after that failure is fixed, choose the main failure-correction transition.
+- If one segment is a partial local feedback step and the other spans the broader prompt-feedback change, choose the broader feedback change.
+- Use "tie" only when the two implied feedback updates correct materially similar failure modes.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation in terms of prompt-feedback failure correction magnitude",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

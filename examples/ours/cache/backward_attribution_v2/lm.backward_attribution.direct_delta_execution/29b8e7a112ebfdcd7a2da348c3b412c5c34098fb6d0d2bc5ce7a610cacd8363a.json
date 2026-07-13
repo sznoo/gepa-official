@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "29b8e7a112ebfdcd7a2da348c3b412c5c34098fb6d0d2bc5ce7a610cacd8363a",
+  "created_at": "2026-07-12T17:03:50.137759+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 shows the prior retrieval was about Baz Luhrmann's birthplace (summary_1 contains the person's name plus words like \"birthplace\" or \"born\") and you are asked to produce the second-hop retrieval `query`.",
+            "preserve_rule": "Keep producing exactly one short retrieval query that includes the subject's name (Baz Luhrmann). Preserve concise format (one-line, no explanation).",
+            "change_rule": "Adjust the query to target a more specific locality-level birthplace or hometown by appending or combining the person's name with locality-focused terms such as: \"born in\", \"birthplace\", \"born near\", \"hometown\", \"early life\", or the token \"town\". Keep the query compact and focused on finding a town/village/place of birth rather than broad biographical pages.",
+            "drop_or_avoid_rule": "Do not issue a broad or filmography-focused query (e.g., queries that only retrieve discography/film credits). Avoid long natural-language questions, multi-step instructions, or returning explanatory text. Do not include or invent specific town names that are not present in the visible inputs.",
+            "output_contract": "Return exactly one compact retrieval query string (no surrounding quotes, no extra commentary). The query must contain the person's name and at least one locality-focused term from the change_rule so the retriever prioritizes town-level birthplace evidence.",
+            "why_local_transition": "The initial query retrieved high-level birthplace information; this local change nudges the agent to seek town-level or hometown evidence by explicitly targeting locality phrases so the second-hop can find the missing supporting place-of-birth detail."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If the available inputs (question or summary_1 or current query) are asking about a person's place of birth (contain tokens like 'birth', 'birthplace', or 'born').",
+            "preserve_rule": "Keep using the person's name exactly as it appears in the question or summary_1 and preserve the goal of producing a single second‑hop retrieval query.",
+            "change_rule": "Replace freeform or multi‑clause phrasing with one compact, keyword‑focused query that pairs the person's name with a birthplace indicator. Construct the query by concatenating the person's name (from question/summary_1) and one short birthplace phrase such as 'birthplace', 'born', or 'born in town' (optionally include the word 'town' to bias for town‑level results). Do not append invented place names or long question restatements.",
+            "drop_or_avoid_rule": "Do not introduce any specific location names, candidate towns, long literal spans, or other tokens that do not already appear in the visible agent inputs. Avoid multi‑sentence or verbose queries and avoid copying entire question text beyond the person's name and a brief birthplace token.",
+            "output_contract": "Return a single short query string (2–6 words). It must include the person's name as given in inputs and a birthplace token (e.g., 'birthplace', 'born', or 'born in town'). Example acceptable shapes: 'Baz Luhrmann birthplace', 'Baz Luhrmann born in town'. Do not include explicit place names that are not present in the visible inputs.",
+            "why_local_transition": "The current output risked inserting a specific town name not present in the visible inputs. This change forces production of a concise, evidence‑seeking query that sticks to known tokens (person + birthplace indicator), reducing hallucination while preserving useful retrieval behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "retrieve Baz Luhrmann — top query: \"Baz Luhrmann birthplace\" [[ ## completed ## ]]",
+        "current_output": {
+          "query": "Baz Luhrmann birthplace"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 shows the prior retrieval was about Baz Luhrmann's birthplace (summary_1 contains the person's name plus words like \\\"birthplace\\\" or \\\"born\\\") and you are asked to produce the second-hop retrieval `query`.\",\n      \"preserve_rule\": \"Keep producing exactly one short retrieval query that includes the subject's name (Baz Luhrmann). Preserve concise format (one-line, no explanation).\",\n      \"change_rule\": \"Adjust the query to target a more specific locality-level birthplace or hometown by appending or combining the person's name with locality-focused terms such as: \\\"born in\\\", \\\"birthplace\\\", \\\"born near\\\", \\\"hometown\\\", \\\"early life\\\", or the token \\\"town\\\". Keep the query compact and focused on finding a town/village/place of birth rather than broad biographical pages.\",\n      \"drop_or_avoid_rule\": \"Do not issue a broad or filmography-focused query (e.g., queries that only retrieve discography/film credits). Avoid long natural-language questions, multi-step instructions, or returning explanatory text. Do not include or invent specific town names that are not present in the visible inputs.\",\n      \"output_contract\": \"Return exactly one compact retrieval query string (no surrounding quotes, no extra commentary). The query must contain the person's name and at least one locality-focused term from the change_rule so the retriever prioritizes town-level birthplace evidence.\",\n      \"why_local_transition\": \"The initial query retrieved high-level birthplace information; this local change nudges the agent to seek town-level or hometown evidence by explicitly targeting locality phrases so the second-hop can find the missing supporting place-of-birth detail.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If the available inputs (question or summary_1 or current query) are asking about a person's place of birth (contain tokens like 'birth', 'birthplace', or 'born').\",\n      \"preserve_rule\": \"Keep using the person's name exactly as it appears in the question or summary_1 and preserve the goal of producing a single second‑hop retrieval query.\",\n      \"change_rule\": \"Replace freeform or multi‑clause phrasing with one compact, keyword‑focused query that pairs the person's name with a birthplace indicator. Construct the query by concatenating the person's name (from question/summary_1) and one short birthplace phrase such as 'birthplace', 'born', or 'born in town' (optionally include the word 'town' to bias for town‑level results). Do not append invented place names or long question restatements.\",\n      \"drop_or_avoid_rule\": \"Do not introduce any specific location names, candidate towns, long literal spans, or other tokens that do not already appear in the visible agent inputs. Avoid multi‑sentence or verbose queries and avoid copying entire question text beyond the person's name and a brief birthplace token.\",\n      \"output_contract\": \"Return a single short query string (2–6 words). It must include the person's name as given in inputs and a birthplace token (e.g., 'birthplace', 'born', or 'born in town'). Example acceptable shapes: 'Baz Luhrmann birthplace', 'Baz Luhrmann born in town'. Do not include explicit place names that are not present in the visible inputs.\",\n      \"why_local_transition\": \"The current output risked inserting a specific town name not present in the visible inputs. This change forces production of a concise, evidence‑seeking query that sticks to known tokens (person + birthplace indicator), reducing hallucination while preserving useful retrieval behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"retrieve Baz Luhrmann — top query: \\\"Baz Luhrmann birthplace\\\" [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"Baz Luhrmann birthplace\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Baz Luhrmann born in town\"\n  },\n  \"rationale\": \"Followed deltas: kept the person's name exactly and added a locality-focused birthplace token to produce one compact 2–6 word retrieval query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

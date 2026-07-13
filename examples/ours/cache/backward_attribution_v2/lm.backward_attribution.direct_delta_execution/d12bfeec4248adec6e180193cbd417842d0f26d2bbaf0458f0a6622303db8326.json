@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d12bfeec4248adec6e180193cbd417842d0f26d2bbaf0458f0a6622303db8326",
+  "created_at": "2026-07-12T19:01:35.843526+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current query names a specific person (e.g. contains a full name such as 'Traian Popovici') while the question asks 'When was the man who saved 20,000 Jews hanged?'.",
+            "preserve_rule": "Keep producing exactly one compact second-hop retrieval query as the agent's output (the `query` field). Maintain use of the given `question` and `summary_1` as context for forming that query.",
+            "change_rule": "Instead of anchoring the query to a single named candidate, produce a short query that targets the conjunction of the two properties in the question: the phrase indicating someone 'saved 20,000 Jews' plus the word 'hanged' (and optionally 'date'). Form the query as a compact keyword phrase (examples of the allowed pattern: '\"saved 20,000 Jews\" hanged date' or 'who saved 20,000 Jews hanged date').",
+            "drop_or_avoid_rule": "Do not keep queries that lock onto one named person (e.g., 'Traian Popovici hanged') unless the first-hop evidence explicitly shows that person was hanged. Avoid long natural-language questions; avoid returning full sentences or candidate answers—return a compact retrieval query with keywords only.",
+            "output_contract": "Output exactly one short retrieval query (<=7 words preferred). It must include keywords indicating both the rescue ('saved 20,000 Jews' or 'saved 20000 Jews') and the execution ('hanged' and/or 'date'). Do not output a full answer, summary, or additional commentary.",
+            "why_local_transition": "The base prompt produced a person-specific query. When that candidate's documents do not show a hanging, broaden the second-hop query to find any person described as having 'saved 20,000 Jews' who was also 'hanged' so the retrieval can discover the correct supporting page."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the man who saved 20,000 Jews hanged? ",
+        "summary_1": "Retrieve Traian Popovici — top query: \"Traian Popovici hanged\". [[ ## completed ## ]]",
+        "current_output": {
+          "query": "Traian Popovici hanged"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current query names a specific person (e.g. contains a full name such as 'Traian Popovici') while the question asks 'When was the man who saved 20,000 Jews hanged?'.\",\n      \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query as the agent's output (the `query` field). Maintain use of the given `question` and `summary_1` as context for forming that query.\",\n      \"change_rule\": \"Instead of anchoring the query to a single named candidate, produce a short query that targets the conjunction of the two properties in the question: the phrase indicating someone 'saved 20,000 Jews' plus the word 'hanged' (and optionally 'date'). Form the query as a compact keyword phrase (examples of the allowed pattern: '\\\"saved 20,000 Jews\\\" hanged date' or 'who saved 20,000 Jews hanged date').\",\n      \"drop_or_avoid_rule\": \"Do not keep queries that lock onto one named person (e.g., 'Traian Popovici hanged') unless the first-hop evidence explicitly shows that person was hanged. Avoid long natural-language questions; avoid returning full sentences or candidate answers—return a compact retrieval query with keywords only.\",\n      \"output_contract\": \"Output exactly one short retrieval query (<=7 words preferred). It must include keywords indicating both the rescue ('saved 20,000 Jews' or 'saved 20000 Jews') and the execution ('hanged' and/or 'date'). Do not output a full answer, summary, or additional commentary.\",\n      \"why_local_transition\": \"The base prompt produced a person-specific query. When that candidate's documents do not show a hanging, broaden the second-hop query to find any person described as having 'saved 20,000 Jews' who was also 'hanged' so the retrieval can discover the correct supporting page.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the man who saved 20,000 Jews hanged? \",\n  \"summary_1\": \"Retrieve Traian Popovici — top query: \\\"Traian Popovici hanged\\\". [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"Traian Popovici hanged\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"saved 20000 Jews hanged date\"\n  },\n  \"rationale\": \"Delta triggered because the current query named a person; per change_rule produced a compact conjunctive query containing 'saved 20,000 Jews' and 'hanged/date' to find any matching person.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 142,
+    "row_index": 142,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

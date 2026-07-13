@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "25cbfee4910d79e36d13a6f8559b6835a1bc718bad4a6f4a669854adc7e4b7ae",
+  "created_at": "2026-07-12T15:49:58.457675+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question contrasts Dave Moody and Ransom Riggs and summary_1 already specifies retrieving Dave Moody, apply this edit to the query-generation behavior.",
+            "preserve_rule": "Keep the existing goal of retrieving comprehensive biography/credits for the named person and the preference for authoritative sources (Wikipedia, official site, major press). Preserve the instruction to list credited occupations/roles found in those sources.",
+            "change_rule": "Instead of producing two separate candidate queries, produce one compact single-line second-hop retrieval query that targets Dave Moody's credited occupations. The query should be concise but include keywords to surface biography/credits and a list of roles (e.g., musician, songwriter, producer, composer, filmmaker, director, record label owner). Example phrasing to generate (as the query itself): \"Dave Moody credited occupations musician songwriter producer composer filmmaker director filmography biography (Wikipedia, official site, major press)\".",
+            "drop_or_avoid_rule": "Do not include a separate subquery for Ransom Riggs in this second-hop query and avoid multi-item numbered query lists or long procedural retrieval instructions inside the query. Avoid wording that attempts to answer the comparison—only request sources that list Dave Moody's credited roles.",
+            "output_contract": "Output a single field `query` containing one compact retrieval query (one line) focused on listing Dave Moody's credited occupations and pointing to biography/credits sources (Wikipedia, official site, major press).",
+            "why_local_transition": "Focusing this hop on a concise, single query for Dave Moody's full credited-occupations list directly yields the supporting evidence needed to compare role variety against Ransom Riggs while keeping the query short and targeted."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "retrieve Dave Moody — top query: \"Dave Moody film director producer musician composer\"  (target: Dave Moody; see retrieval plan above).",
+        "current_output": {
+          "query": "1) Dave Moody film director producer musician composer (retrieve Dave Moody biography/credits from Wikipedia, official site, and major press; list all credited occupations such as director, producer, musician, composer, songwriter, actor, record label owner, etc.)\n\n2) Ransom Riggs author filmmaker director screenwriter photographer (retrieve Ransom Riggs biography/credits from Wikipedia, publisher author pages, official site, and major press; list all credited occupations such as author, filmmaker/director, screenwriter, photographer, illustrator, etc.)"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question contrasts Dave Moody and Ransom Riggs and summary_1 already specifies retrieving Dave Moody, apply this edit to the query-generation behavior.\",\n      \"preserve_rule\": \"Keep the existing goal of retrieving comprehensive biography/credits for the named person and the preference for authoritative sources (Wikipedia, official site, major press). Preserve the instruction to list credited occupations/roles found in those sources.\",\n      \"change_rule\": \"Instead of producing two separate candidate queries, produce one compact single-line second-hop retrieval query that targets Dave Moody's credited occupations. The query should be concise but include keywords to surface biography/credits and a list of roles (e.g., musician, songwriter, producer, composer, filmmaker, director, record label owner). Example phrasing to generate (as the query itself): \\\"Dave Moody credited occupations musician songwriter producer composer filmmaker director filmography biography (Wikipedia, official site, major press)\\\".\",\n      \"drop_or_avoid_rule\": \"Do not include a separate subquery for Ransom Riggs in this second-hop query and avoid multi-item numbered query lists or long procedural retrieval instructions inside the query. Avoid wording that attempts to answer the comparison—only request sources that list Dave Moody's credited roles.\",\n      \"output_contract\": \"Output a single field `query` containing one compact retrieval query (one line) focused on listing Dave Moody's credited occupations and pointing to biography/credits sources (Wikipedia, official site, major press).\",\n      \"why_local_transition\": \"Focusing this hop on a concise, single query for Dave Moody's full credited-occupations list directly yields the supporting evidence needed to compare role variety against Ransom Riggs while keeping the query short and targeted.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"retrieve Dave Moody — top query: \\\"Dave Moody film director producer musician composer\\\"  (target: Dave Moody; see retrieval plan above).\",\n  \"current_output\": {\n    \"query\": \"1) Dave Moody film director producer musician composer (retrieve Dave Moody biography/credits from Wikipedia, official site, and major press; list all credited occupations such as director, producer, musician, composer, songwriter, actor, record label owner, etc.)\\n\\n2) Ransom Riggs author filmmaker director screenwriter photographer (retrieve Ransom Riggs biography/credits from Wikipedia, publisher author pages, official site, and major press; list all credited occupations such as author, filmmaker/director, screenwriter, photographer, illustrator, etc.)\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dave Moody credited occupations musician songwriter producer composer filmmaker director record label owner actor biography filmography (Wikipedia, official site, major press)\"\n  },\n  \"rationale\": \"Emitted a single compact one-line query focused on Dave Moody's credited occupations, included authoritative source hints, and omitted any Ransom Riggs subquery or multi-item lists per the ordered delta.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

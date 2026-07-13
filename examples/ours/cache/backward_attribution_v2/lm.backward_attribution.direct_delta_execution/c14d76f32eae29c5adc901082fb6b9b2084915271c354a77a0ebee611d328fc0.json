@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c14d76f32eae29c5adc901082fb6b9b2084915271c354a77a0ebee611d328fc0",
+  "created_at": "2026-07-12T18:34:58.729705+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the draft `query` field contains a long natural-language instruction (e.g. phrases like \"find\", \"find any actress\", or an English clause appended to quoted title searches) or otherwise combines two quoted film-title searches with an English connector",
+            "preserve_rule": "Keep using the exact film-title text that already appears in the agent inputs and retain the intent to search film cast information (preserve tokens like the film title(s) and the word 'cast' or 'cast list'). Continue to produce a single `query` string output.",
+            "change_rule": "Replace verbose, sentence-like queries with a single compact, keyword-style search string: include each film title in quotes, append short cast-keywords such as `cast`, `cast list`, or `starring` for each title, and optionally include a terse marker for alternate versions (e.g. `TV` or a year token) only if that token already appears in the visible inputs. Use Boolean-style connectors (AND, OR) or juxtaposition rather than full English sentences.",
+            "drop_or_avoid_rule": "Avoid long descriptive clauses (no 'find any actress who appears in both films' in natural language), avoid narrative conjunctions like 'and — find...', and avoid broad generic terms that produce list pages. Do not introduce any new actor names or target-specific entities that are not already present in visible inputs.",
+            "output_contract": "Emit one compact, single-line search query (keyword-style, not a sentence). It must contain the quoted film title(s) present in the inputs and at least one cast-related keyword (e.g. `cast`, `cast list`, or `starring`). Keep the string concise (aim for a few keywords/phrases joined with Boolean connectors or juxtaposition).",
+            "why_local_transition": "The current draft is a verbose instruction that yields noisy, unrelated retrievals. Converting to a compact keyword query that preserves the film titles and explicit cast keywords focuses retrieval on cast lists and reduces unrelated list pages, improving the chance of finding overlapping cast members or alternate-version credits."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when the question names two films (here: \"Third Person\" and \"From Here to Eternity\") and the previous step targeted a film cast (summary_1 contains 'Third Person (film) cast').",
+            "preserve_rule": "Keep using both film titles and the 'cast' focus from the current prompt; continue to produce a single second-hop retrieval query (no additional commentary).",
+            "change_rule": "Replace name-guessing or multi-clause searches with one compact, canonical query that asks for a shared actress between the two films. Format the query as a single short question combining the two film titles and the term 'cast' and/or 'actress' (e.g.,: Which actress appears in both \"Third Person (film)\" and \"From Here to Eternity\"?).",
+            "drop_or_avoid_rule": "Do not include actor names, years, multiple alternative queries, long explanatory phrases, internal reasoning, or instructions to perform intersection operations. Avoid extraneous tokens (booleans, filetype hints, long lists).",
+            "output_contract": "Return exactly one single-line retrieval query string (compact, under ~15 words) that: (a) contains the two film titles, (b) includes 'cast' or 'actress' to target cast lists, and (c) explicitly asks for the performer who appears in both films. No other fields or commentary.",
+            "why_local_transition": "The source query wandered into name-guessing and noisy terms; this local edit focuses the second-hop on the missing bridge (intersection of the two films' cast lists) so retrieval will surface pages that state which actress appears in both."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "Retrieve Third Person (film) — top query: \"Third Person (film) cast\". [[ ## completed ## ]]",
+        "current_output": {
+          "query": "\"Third Person (2013) cast list\" and \"From Here to Eternity (1953) cast list\" — find any actress who appears in both films"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the draft `query` field contains a long natural-language instruction (e.g. phrases like \\\"find\\\", \\\"find any actress\\\", or an English clause appended to quoted title searches) or otherwise combines two quoted film-title searches with an English connector\",\n      \"preserve_rule\": \"Keep using the exact film-title text that already appears in the agent inputs and retain the intent to search film cast information (preserve tokens like the film title(s) and the word 'cast' or 'cast list'). Continue to produce a single `query` string output.\",\n      \"change_rule\": \"Replace verbose, sentence-like queries with a single compact, keyword-style search string: include each film title in quotes, append short cast-keywords such as `cast`, `cast list`, or `starring` for each title, and optionally include a terse marker for alternate versions (e.g. `TV` or a year token) only if that token already appears in the visible inputs. Use Boolean-style connectors (AND, OR) or juxtaposition rather than full English sentences.\",\n      \"drop_or_avoid_rule\": \"Avoid long descriptive clauses (no 'find any actress who appears in both films' in natural language), avoid narrative conjunctions like 'and — find...', and avoid broad generic terms that produce list pages. Do not introduce any new actor names or target-specific entities that are not already present in visible inputs.\",\n      \"output_contract\": \"Emit one compact, single-line search query (keyword-style, not a sentence). It must contain the quoted film title(s) present in the inputs and at least one cast-related keyword (e.g. `cast`, `cast list`, or `starring`). Keep the string concise (aim for a few keywords/phrases joined with Boolean connectors or juxtaposition).\",\n      \"why_local_transition\": \"The current draft is a verbose instruction that yields noisy, unrelated retrievals. Converting to a compact keyword query that preserves the film titles and explicit cast keywords focuses retrieval on cast lists and reduces unrelated list pages, improving the chance of finding overlapping cast members or alternate-version credits.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question names two films (here: \\\"Third Person\\\" and \\\"From Here to Eternity\\\") and the previous step targeted a film cast (summary_1 contains 'Third Person (film) cast').\",\n      \"preserve_rule\": \"Keep using both film titles and the 'cast' focus from the current prompt; continue to produce a single second-hop retrieval query (no additional commentary).\",\n      \"change_rule\": \"Replace name-guessing or multi-clause searches with one compact, canonical query that asks for a shared actress between the two films. Format the query as a single short question combining the two film titles and the term 'cast' and/or 'actress' (e.g.,: Which actress appears in both \\\"Third Person (film)\\\" and \\\"From Here to Eternity\\\"?).\",\n      \"drop_or_avoid_rule\": \"Do not include actor names, years, multiple alternative queries, long explanatory phrases, internal reasoning, or instructions to perform intersection operations. Avoid extraneous tokens (booleans, filetype hints, long lists).\",\n      \"output_contract\": \"Return exactly one single-line retrieval query string (compact, under ~15 words) that: (a) contains the two film titles, (b) includes 'cast' or 'actress' to target cast lists, and (c) explicitly asks for the performer who appears in both films. No other fields or commentary.\",\n      \"why_local_transition\": \"The source query wandered into name-guessing and noisy terms; this local edit focuses the second-hop on the missing bridge (intersection of the two films' cast lists) so retrieval will surface pages that state which actress appears in both.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"Retrieve Third Person (film) — top query: \\\"Third Person (film) cast\\\". [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"\\\"Third Person (2013) cast list\\\" and \\\"From Here to Eternity (1953) cast list\\\" — find any actress who appears in both films\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Which actress appears in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\"\n  },\n  \"rationale\": \"Applied the deltas in order: converted the verbose draft to a single compact query, kept both quoted film titles and included 'actress' to target the shared cast.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

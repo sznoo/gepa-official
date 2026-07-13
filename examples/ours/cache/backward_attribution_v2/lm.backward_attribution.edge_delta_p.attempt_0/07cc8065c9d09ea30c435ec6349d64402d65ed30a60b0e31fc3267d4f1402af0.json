@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "07cc8065c9d09ea30c435ec6349d64402d65ed30a60b0e31fc3267d4f1402af0",
+  "created_at": "2026-07-12T19:05:06.262957+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "When was the man who saved 20,000 Jews hanged? ",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "When was the man who saved 20,000 Jews hanged? ",
+        "summary_1": "Retrieve Traian Popovici — top query: \"Traian Popovici hanged\". [[ ## completed ## ]]",
+        "current_output": {
+          "query": "Traian Popovici hanged"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Traian Popovici Hideki Tojo hanged"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Traian Popovici hanged date"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"When was the man who saved 20,000 Jews hanged? \",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"When was the man who saved 20,000 Jews hanged? \",\n  \"summary_1\": \"Retrieve Traian Popovici — top query: \\\"Traian Popovici hanged\\\". [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"Traian Popovici hanged\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Traian Popovici Hideki Tojo hanged\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Traian Popovici hanged date\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question requests a date (e.g., begins with \\\"When\\\") and the current generated query either lacks an explicit date/time indicator (tokens like \\\"date\\\" or \\\"when\\\") or contains extra person names or unrelated tokens, apply this delta.\",\n    \"preserve_rule\": \"Keep the identified subject name exactly as it appears in the agent inputs and retain the action word related to the event (here, forms of 'hanged'). Maintain a compact, retrieval-style query (short phrase, not a full sentence).\",\n    \"change_rule\": \"Modify the compact query to include an explicit date indicator: ensure the query contains the subject's name, the event token 'hanged' (or equivalent), and a short date-focus token such as 'date' or 'when'. Remove any other people's names or unrelated tokens. Produce a single short phrase (about 2–4 words beyond the name) suitable for search.\",\n    \"drop_or_avoid_rule\": \"Do not add other person names, explanatory clauses, full sentences, or answer content. Avoid long literal spans from unseen target material. Do not attempt to answer or summarize—only produce a focused retrieval query.\",\n    \"output_contract\": \"Return one compact retrieval query: the subject's name + an event token ('hanged') + a date indicator ('date' or 'when'), no punctuation or additional clauses, suitable for a second-hop retrieval system.\",\n    \"why_local_transition\": \"The source query contains extraneous tokens and lacks an explicit date focus. The smallest coherent edit is to remove unrelated names and add a date indicator so the retrieval engine targets the execution date.\"\n  },\n  \"rationale\": \"This delta is a minimal behavioral edit that preserves the agent's existing ability to identify the subject and event while steering the query to retrieve a date. It triggers only for 'When' questions or queries missing date tokens, keeps the query compact, instructs adding a single date-focused token, and forbids adding extraneous people or answer content. That small change is sufficient to move the prompt-generated query from a noisy or unfocused form to a targeted second-hop query that will retrieve the hanging date.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 142,
+    "row_index": 142,
+    "bisection_round": 2,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

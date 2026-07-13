@@ -1,0 +1,72 @@
+{
+  "input": "experiments/feedback_distance_v2/results/oracle_query_downstream_eval.repaired.jsonl",
+  "out_traces": "experiments/feedback_distance_v2/results/rtrace_midpoint_validity_v2_traces_hit48_qwen.jsonl",
+  "out_attempts": "experiments/feedback_distance_v2/results/rtrace_midpoint_validity_v2_attempts_hit48_qwen.jsonl",
+  "subset": "oracle_target_hit_48",
+  "model": "openai/Qwen/Qwen3-8B",
+  "retriever_dir": "examples/hotpotqa",
+  "k": 7,
+  "max_iter": 4,
+  "max_retries_per_edge": 1,
+  "strict_insert": true,
+  "metrics": {
+    "n_cases": 48,
+    "n_case_iterations": 192,
+    "n_candidate_attempts": 247,
+    "first_pass_left_valid_rate": 0.7864583333333334,
+    "first_pass_right_valid_rate": 0.75,
+    "first_pass_both_valid_rate": 0.7135416666666666,
+    "first_pass_both_valid_count": 137,
+    "final_insert_rate": 0.875,
+    "final_insert_count": 168,
+    "invalid_first_pass_count": 55,
+    "retry_recovered_count": 31,
+    "retry_recovered_rate_among_invalid_first": 0.5636363636363636,
+    "all_candidate_left_valid_rate": 0.7489878542510121,
+    "all_candidate_right_valid_rate": 0.7165991902834008,
+    "all_candidate_both_valid_rate": 0.680161943319838,
+    "by_iter": {
+      "0": {
+        "iterations": 48,
+        "candidate_attempts": 68,
+        "first_pass_both_valid_rate": 0.5833333333333334,
+        "final_insert_rate": 0.7916666666666666,
+        "retry_recovered_rate": 0.20833333333333334,
+        "retry_attempt_both_valid_rate": 0.5,
+        "inserted_count": 38,
+        "recovered_by_retry_count": 10
+      },
+      "1": {
+        "iterations": 48,
+        "candidate_attempts": 59,
+        "first_pass_both_valid_rate": 0.7708333333333334,
+        "final_insert_rate": 0.9375,
+        "retry_recovered_rate": 0.16666666666666666,
+        "retry_attempt_both_valid_rate": 0.7272727272727273,
+        "inserted_count": 45,
+        "recovered_by_retry_count": 8
+      },
+      "2": {
+        "iterations": 48,
+        "candidate_attempts": 62,
+        "first_pass_both_valid_rate": 0.7083333333333334,
+        "final_insert_rate": 0.8541666666666666,
+        "retry_recovered_rate": 0.14583333333333334,
+        "retry_attempt_both_valid_rate": 0.5,
+        "inserted_count": 41,
+        "recovered_by_retry_count": 7
+      },
+      "3": {
+        "iterations": 48,
+        "candidate_attempts": 58,
+        "first_pass_both_valid_rate": 0.7916666666666666,
+        "final_insert_rate": 0.9166666666666666,
+        "retry_recovered_rate": 0.125,
+        "retry_attempt_both_valid_rate": 0.6,
+        "inserted_count": 44,
+        "recovered_by_retry_count": 6
+      }
+    }
+  },
+  "distance_spec": "You are working with a tool-oriented semantic distance over retrieval states in a multi-hop QA pipeline.\n\nA retrieval state R contains:\n- the second-hop retrieval query,\n- retrieved document titles and passages,\n- summary_2 generated from those passages,\n- final answers produced from summary_1 and summary_2.\n\nThe intended distance is not surface text edit distance. It is a task/tool-oriented semantic distance based on:\n1. Query intent: what missing bridge/support evidence the query is trying to retrieve.\n2. Retrieved evidence: whether the retrieved titles/passages move toward the support facts needed for the question.\n3. Answerability: whether the retrieved evidence and summary_2 make the final answer easier to derive.\n4. State transition utility: whether the state is an intermediate retrieval/answering state between two endpoint states.\n\nA midpoint R_mid between R_left and R_right should be a minimal, meaningful intermediate state:\n- closer to R_left than R_right is to R_left;\n- closer to R_right than R_left is to R_right;\n- not just a copy of either endpoint;\n- preserving useful evidence from the left endpoint while moving toward the missing evidence/retrieval intent of the right endpoint.\n"
+}

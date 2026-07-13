@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "99ed0774ba88551f3337403f2b3bd36bf705374aa3ef35362e7db1bfb261a347",
+  "created_at": "2026-07-12T16:15:38.567217+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "retrieve \"Academic who specialized in Orientalist painting\" — top query: \"Academic who specialized in Orientalist painting taught at university\"",
+        "current_output": {
+          "query": "site:wikipedia.org (\"specialized in Orientalist painting\" OR \"specialised in Orientalist painting\" OR \"specialist in Orientalist painting\" OR \"specialised in Orientalist art\") (\"taught at\" OR \"was a professor at\" OR \"professor of\" OR \"lecturer at\")"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "site:wikipedia.org (\"specialized in Orientalist painting\" OR \"specialised in Orientalist painting\" OR \"specialist in Orientalist painting\" OR \"specialised in Orientalist art\") (\"taught at\" OR \"was a professor at\" OR \"professor of\" OR \"lecturer at\")"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "List of Orientalist artists",
+          "Marc Gotlieb",
+          "Joseph White (orientalist)",
+          "Ernest Normand",
+          "William Thorne (orientalist)",
+          "Camillo Miola",
+          "Eugène Siberdt"
+        ],
+        "retrieved_doc_snippets": [
+          "List of Orientalist artists | This is an incomplete list of artists who have painted in an Orientalist style. Artists listed on this page may have worked across multiple genres, and it should not be assumed that all of their work is necessarily in the Orientalist genre.",
+          "Marc Gotlieb | Marc Gotlieb is an American art historian who specializes in French Romantic art and Orientalist painting.",
+          "Joseph White (orientalist) | Joseph White (1745–1814) was an English orientalist and theologian, Laudian Professor of Arabic and then Regius Professor of Hebrew at the University of Oxford.",
+          "Ernest Normand | Ernest Normand (1857–1923) was a notable painter in Victorian England. He painted history and orientalist paintings, and also undertook portraits. His work was influenced by the Pre-Raphaelites.",
+          "William Thorne (orientalist) | William Thorne (1568? – 1630) was an English clergyman and orientalist, Regius Professor of Hebrew at Oxford in 1598.",
+          "Camillo Miola | Camillo Miola (Biacca, September 14, 1840 – Naples, May 4, 1919) was an Italian painter, often painting exotic Neo-Pompeian and Orientalist subjects. He also painted history and portraits.",
+          "Eugène Siberdt | Eugène Siberdt, Eugeen Siberdt or Eugène François Joseph Siberdt (Antwerp, 21 April 1851 – Antwerp, 6 January 1931) was a Belgian Academic, late-Romantic painter who created portraits, history paintings, genre scenes and Orientalist paintings. He is now mainly known as the professor of drawing at the Antwerp Academy whose conflict with Vincent van Gogh led to van Gogh leaving the Antwerp Academy after only three months of attendance."
+        ],
+        "summary_2": "University of Oxford",
+        "answer": "University of Oxford",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Nigel Leask"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "site:wikipedia.org \"Nigel Leask\" Orientalism \"taught\""
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"retrieve \\\"Academic who specialized in Orientalist painting\\\" — top query: \\\"Academic who specialized in Orientalist painting taught at university\\\"\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org (\\\"specialized in Orientalist painting\\\" OR \\\"specialised in Orientalist painting\\\" OR \\\"specialist in Orientalist painting\\\" OR \\\"specialised in Orientalist art\\\") (\\\"taught at\\\" OR \\\"was a professor at\\\" OR \\\"professor of\\\" OR \\\"lecturer at\\\")\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"site:wikipedia.org (\\\"specialized in Orientalist painting\\\" OR \\\"specialised in Orientalist painting\\\" OR \\\"specialist in Orientalist painting\\\" OR \\\"specialised in Orientalist art\\\") (\\\"taught at\\\" OR \\\"was a professor at\\\" OR \\\"professor of\\\" OR \\\"lecturer at\\\")\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"List of Orientalist artists\",\n    \"Marc Gotlieb\",\n    \"Joseph White (orientalist)\",\n    \"Ernest Normand\",\n    \"William Thorne (orientalist)\",\n    \"Camillo Miola\",\n    \"Eugène Siberdt\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"List of Orientalist artists | This is an incomplete list of artists who have painted in an Orientalist style. Artists listed on this page may have worked across multiple genres, and it should not be assumed that all of their work is necessarily in the Orientalist genre.\",\n    \"Marc Gotlieb | Marc Gotlieb is an American art historian who specializes in French Romantic art and Orientalist painting.\",\n    \"Joseph White (orientalist) | Joseph White (1745–1814) was an English orientalist and theologian, Laudian Professor of Arabic and then Regius Professor of Hebrew at the University of Oxford.\",\n    \"Ernest Normand | Ernest Normand (1857–1923) was a notable painter in Victorian England. He painted history and orientalist paintings, and also undertook portraits. His work was influenced by the Pre-Raphaelites.\",\n    \"William Thorne (orientalist) | William Thorne (1568? – 1630) was an English clergyman and orientalist, Regius Professor of Hebrew at Oxford in 1598.\",\n    \"Camillo Miola | Camillo Miola (Biacca, September 14, 1840 – Naples, May 4, 1919) was an Italian painter, often painting exotic Neo-Pompeian and Orientalist subjects. He also painted history and portraits.\",\n    \"Eugène Siberdt | Eugène Siberdt, Eugeen Siberdt or Eugène François Joseph Siberdt (Antwerp, 21 April 1851 – Antwerp, 6 January 1931) was a Belgian Academic, late-Romantic painter who created portraits, history paintings, genre scenes and Orientalist paintings. He is now mainly known as the professor of drawing at the Antwerp Academy whose conflict with Vincent van Gogh led to van Gogh leaving the Antwerp Academy after only three months of attendance.\"\n  ],\n  \"summary_2\": \"University of Oxford\",\n  \"answer\": \"University of Oxford\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Nigel Leask\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"Nigel Leask\\\" Orientalism \\\"taught\\\"\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question and summary indicate an academic linked to Orientalist art and the next hop must find that person's institutional affiliation (a 'taught at' fact).\",\n    \"preserve_rule\": \"Keep producing a single compact site:wikipedia.org search query string and retain exact-phrase quoting for names or short phrases when available. Preserve use of concise affiliation verbs (e.g., \\\"taught\\\", \\\"professor\\\", \\\"lecturer\\\").\",\n    \"change_rule\": \"If the context lists a candidate person/title (a missing-bridge entity), include that name in quotes plus a concise topical keyword (\\\"Orientalism\\\" or \\\"Orientalist\\\") and an affiliation verb; otherwise, replace broad synonym OR-chains about 'specialized in Orientalist painting' with a focused query combining the topical keyword (\\\"Orientalism\\\"/\\\"Orientalist\\\") and a teaching-affiliation verb. Keep the query short and specific.\",\n    \"drop_or_avoid_rule\": \"Avoid long OR lists of phrasing variants (e.g., many synonyms for 'specialized in' or 'taught at') and avoid generic, wide searches that return lists rather than the individual's page. Do not add explanatory text or produce the answer in the prompt.\",\n    \"output_contract\": \"Return exactly one compact search query string suitable for Wikipedia site search. The string must start with site:wikipedia.org, and must either (a) include a quoted person/title from the context plus 'Orientalism'/'Orientalist' and a teaching-affiliation verb, or (b) include the topical keyword ('Orientalism' or 'Orientalist') together with a teaching-affiliation verb. No extra commentary.\",\n    \"why_local_transition\": \"Narrowing from a broad stylistic-variant OR-chain to a compact query that ties the topic ('Orientalism') to a teaching-affiliation term — and to the candidate name if present — focuses retrieval on the individual's Wikipedia page where the university affiliation is stated.\"\n  },\n  \"rationale\": \"The original query used many OR variants for 'specialized in Orientalist painting', which returns broad lists and artist pages. The smallest effective edit is to replace that sprawling pattern with a focused combination of the topical keyword ('Orientalism'/'Orientalist'), a teaching-affiliation verb, and — when available in context — the candidate person's quoted name. This preserves the existing site:wikipedia.org constraint and the agent's compact single-query output while steering the search toward the individual's page that contains the 'taught at' affiliation.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,39 @@
+You are judging semantic magnitude between two local prompt-feedback updates.
+
+Each candidate segment contains feedback for the HotpotQA second-hop query generator.
+Select the segment whose feedback text represents the larger semantic update.
+
+Here, feedback magnitude means how much the query-generation behavior would need to change:
+- which entity/title/alias anchors to preserve, add, remove, or disambiguate
+- which bridge relation, comparison relation, or task relation to emphasize
+- which evidence family or answer type to target
+- which distractors, wrong senses, or noisy entity families to avoid
+- whether the candidate set should be broadened, narrowed, preserved, or re-centered
+- what kind of retrieval failure the feedback corrects
+
+Important:
+- Judge the semantic difference magnitude of the feedback itself.
+- Do not judge which feedback is more correct or likely to improve retrieval.
+- Do not choose a segment merely because it is longer or more detailed.
+- Do not choose a segment merely because it mentions source style, infoboxes, lead sentences, cast sections, table rows, or list parsing.
+- Extra detail counts only if it changes the semantic instruction to the query generator.
+- A full-edge feedback update should usually be larger than a local sub-edge feedback update if the decomposition is semantically consistent.
+- Return "tie" only when the two feedback updates ask for materially similar semantic changes.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation focused on semantic feedback magnitude",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate feedback segments:
+{segments_json}

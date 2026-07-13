@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "024db85c4daa909499ca783966e482603aa718f987d8f6a73cb48ba56ea247ca",
+  "created_at": "2026-07-12T16:37:30.154067+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 contains a named institution or school (e.g. the phrase 'Royal Academy of Dramatic Art') and the current query is a short/ambiguous geographic token (one word or a generic place name).",
+            "preserve_rule": "Keep producing exactly one compact retrieval query string and continue to prefer tokens already present in question and summary_1 (for example the person name or institution name).",
+            "change_rule": "When triggered, construct a short focused query that includes the institution name as written in summary_1 plus a location-seeking keyword such as 'location', 'based', or 'city' (example form: '<Institution name> location' or '<Institution name> based in which city'). Keep the query concise (preferably ≤8 words) and do not reproduce the full question.",
+            "drop_or_avoid_rule": "Avoid one-word geographic queries (e.g. 'London'), broad city-only queries, or pasting the entire question. Do not add unrelated general tokens that pull generic pages about the city instead of the institution.",
+            "output_contract": "Return a single, short string field `query` that names the institution exactly as in summary_1 and includes a location-seeking term. The query must be concise (<=8 words) and designed to retrieve the institution's page.",
+            "why_local_transition": "The previous one-word query returned generic London pages and missed the institution page. Asking specifically for the institution plus a location keyword focuses retrieval on the Royal Academy of Dramatic Art page, which directly provides the needed city."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "summary_1": "The Royal Academy of Dramatic Art is based in London — Passage [2].",
+        "current_output": {
+          "query": "London"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 contains a named institution or school (e.g. the phrase 'Royal Academy of Dramatic Art') and the current query is a short/ambiguous geographic token (one word or a generic place name).\",\n      \"preserve_rule\": \"Keep producing exactly one compact retrieval query string and continue to prefer tokens already present in question and summary_1 (for example the person name or institution name).\",\n      \"change_rule\": \"When triggered, construct a short focused query that includes the institution name as written in summary_1 plus a location-seeking keyword such as 'location', 'based', or 'city' (example form: '<Institution name> location' or '<Institution name> based in which city'). Keep the query concise (preferably ≤8 words) and do not reproduce the full question.\",\n      \"drop_or_avoid_rule\": \"Avoid one-word geographic queries (e.g. 'London'), broad city-only queries, or pasting the entire question. Do not add unrelated general tokens that pull generic pages about the city instead of the institution.\",\n      \"output_contract\": \"Return a single, short string field `query` that names the institution exactly as in summary_1 and includes a location-seeking term. The query must be concise (<=8 words) and designed to retrieve the institution's page.\",\n      \"why_local_transition\": \"The previous one-word query returned generic London pages and missed the institution page. Asking specifically for the institution plus a location keyword focuses retrieval on the Royal Academy of Dramatic Art page, which directly provides the needed city.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"summary_1\": \"The Royal Academy of Dramatic Art is based in London — Passage [2].\",\n  \"current_output\": {\n    \"query\": \"London\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\": {\"query\": \"The Royal Academy of Dramatic Art location\"}, \"rationale\": \"summary_1 names the institution and the prior query was one-word; per the delta I formed a concise query using the institution name plus a location-seeking term.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 40,
+    "row_index": 40,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

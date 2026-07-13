@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "1a1bdf4e2393a25b767f04d8ade692ea80a5433f440eafc6cbc107ceee0fb6da",
+  "created_at": "2026-07-12T14:55:52.061945+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+      "current_output": "Retrieve Rufus Sewell — top query: \"Rufus Sewell The Holiday\" ([[ ## completed ## ]])",
+      "upstream_context": {
+        "question": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+        "hop1_query": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+        "hop1_titles": [
+          "Borthwood",
+          "Andrzej Fedorowicz (actor)",
+          "Creagen Dow",
+          "Rufus Sewell",
+          "Linda Regan",
+          "Mike Estime",
+          "Frank Campeau"
+        ],
+        "hop1_docs": [
+          "Borthwood | Borthwood is a hamlet on the Isle of Wight, adjacent to Borthwood Copse, the National Trust woodland.  Borthwood includes some holiday cottages and a pet kennel.  At the 2011 Census the Post Office specified that the population of the hamlet was included in the civil parish of Newchurch, Isle of Wight.",
+          "Andrzej Fedorowicz (actor) | Andrzej Fedorowicz (born 21 January 1942) is a Polish actor.  He has made over 10 appearances in film.  He starred in the 1978 comedy film \"What Will You Do When You Catch Me? \".",
+          "Creagen Dow | Creagen Dow (born May 1, 1991) is an American/Canadian actor, writer, producer who had a recurring role as Jeremiah Trottman on the Nickelodeon series \"Zoey 101\".  He has also guest starred on \"The Big Bang Theory\", \"Rizzoli & Isles\", \"Hannah Montana\", \"Castle\", \"Entourage\", \"Hot in Cleveland\" and \"\", to name a few.  Creagen received a Best Supporting Actor award for his role in the feature film \"Hamlet's Ghost\" and also appeared alongside Reese Witherspoon and Vince Vaughn in \"Four Christmases\", with Sean Astin in \"Amazing Love\" and provided the voice of \"Mullet Boy\" in the film \"The Ant Bully\".  Creagen can also be seen in various television commercials including the GEICO Horror Movie - It's What You Do campaign.",
+          "Rufus Sewell | Rufus Frederik Sewell ( ; born 29 October 1967) is an English actor.  In film, he has appeared in Kenneth Branagh's rendition of \"Hamlet\" (1996) playing Fortinbras, \"The Woodlanders\", \"Dangerous Beauty\", \"Dark City\", \"A Knight's Tale\", \"The Illusionist\", \"Tristan and Isolde\", and \"Martha, Meet Frank, Daniel and Laurence\".  On television, he starred as \"Obergruppenführer\" John Smith in \"The Man in the High Castle\", an Italian detective in the BBC's television series \"Zen\" (2011) and also appeared in the mini-series \"The Pillars of the Earth\" (2010).  In 1993 he played the hero, Will Ladislaw, in the BBC's adaptation of George Eliot's \"Middlemarch\".  In 2003, he appeared in the lead role in \"\".  He starred in the CBS drama \"Eleventh Hour\", which was cancelled in April 2009.  On stage, he originated the role of Septimus Hodge in Tom Stoppard's \"Arcadia\" and the role of Jan in Stoppard's \"Rock 'n' Roll\"; the latter earned him an Olivier Award and a Tony Award nomination.",
+          "Linda Regan | Linda Regan (born 1949) is a British author and actress, who has appeared in television and film.  She is best known for her role as Yellowcoat April in the British holiday camp sitcom \"Hi-de-Hi! \".  She is married to the actor Brian Murphy.",
+          "Mike Estime | Mike Estime is an American actor and comedian.  He has made appearances in the film \"Last Holiday\" (2006) and the sitcom \"Talk to Me\" (2000) as well as the hit television series \"Everybody Hates Chris\" as Risky, a street entrepreneur, and on the BET comedy show \"Comic View\".",
+          "Frank Campeau | Frank Campeau (December 14, 1864 – November 5, 1943) was an American actor.  He appeared in 93 films between 1911 and 1940 and made many appearances in films starring Douglas Fairbanks.  He was born in Detroit, Michigan and died in Woodland Hills, Los Angeles."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Rufus Sewell",
+          "sent_id": 0,
+          "sentence": "Rufus Frederik Sewell ( ; born 29 October 1967) is an English actor."
+        },
+        {
+          "title": "Rufus Sewell",
+          "sent_id": 1,
+          "sentence": "In film, he has appeared in Kenneth Branagh's rendition of \"Hamlet\" (1996) playing Fortinbras, \"The Woodlanders\", \"Dangerous Beauty\", \"Dark City\", \"A Knight's Tale\", \"The Illusionist\", \"Tristan and Isolde\", and \"Martha, Meet Frank, Daniel and Laurence\"."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "The Holiday"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhat actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?\n\nCurrent agent output:\n\"Retrieve Rufus Sewell — top query: \\\"Rufus Sewell The Holiday\\\" ([[ ## completed ## ]])\"\n\nActual upstream context:\n{\n  \"question\": \"What actor has appeared in the films \\\"Hamlet\\\", \\\"The Woodlanders\\\" and \\\"The Holiday\\\"?\",\n  \"hop1_query\": \"What actor has appeared in the films \\\"Hamlet\\\", \\\"The Woodlanders\\\" and \\\"The Holiday\\\"?\",\n  \"hop1_titles\": [\n    \"Borthwood\",\n    \"Andrzej Fedorowicz (actor)\",\n    \"Creagen Dow\",\n    \"Rufus Sewell\",\n    \"Linda Regan\",\n    \"Mike Estime\",\n    \"Frank Campeau\"\n  ],\n  \"hop1_docs\": [\n    \"Borthwood | Borthwood is a hamlet on the Isle of Wight, adjacent to Borthwood Copse, the National Trust woodland.  Borthwood includes some holiday cottages and a pet kennel.  At the 2011 Census the Post Office specified that the population of the hamlet was included in the civil parish of Newchurch, Isle of Wight.\",\n    \"Andrzej Fedorowicz (actor) | Andrzej Fedorowicz (born 21 January 1942) is a Polish actor.  He has made over 10 appearances in film.  He starred in the 1978 comedy film \\\"What Will You Do When You Catch Me? \\\".\",\n    \"Creagen Dow | Creagen Dow (born May 1, 1991) is an American/Canadian actor, writer, producer who had a recurring role as Jeremiah Trottman on the Nickelodeon series \\\"Zoey 101\\\".  He has also guest starred on \\\"The Big Bang Theory\\\", \\\"Rizzoli & Isles\\\", \\\"Hannah Montana\\\", \\\"Castle\\\", \\\"Entourage\\\", \\\"Hot in Cleveland\\\" and \\\"\\\", to name a few.  Creagen received a Best Supporting Actor award for his role in the feature film \\\"Hamlet's Ghost\\\" and also appeared alongside Reese Witherspoon and Vince Vaughn in \\\"Four Christmases\\\", with Sean Astin in \\\"Amazing Love\\\" and provided the voice of \\\"Mullet Boy\\\" in the film \\\"The Ant Bully\\\".  Creagen can also be seen in various television commercials including the GEICO Horror Movie - It's What You Do campaign.\",\n    \"Rufus Sewell | Rufus Frederik Sewell ( ; born 29 October 1967) is an English actor.  In film, he has appeared in Kenneth Branagh's rendition of \\\"Hamlet\\\" (1996) playing Fortinbras, \\\"The Woodlanders\\\", \\\"Dangerous Beauty\\\", \\\"Dark City\\\", \\\"A Knight's Tale\\\", \\\"The Illusionist\\\", \\\"Tristan and Isolde\\\", and \\\"Martha, Meet Frank, Daniel and Laurence\\\".  On television, he starred as \\\"Obergruppenführer\\\" John Smith in \\\"The Man in the High Castle\\\", an Italian detective in the BBC's television series \\\"Zen\\\" (2011) and also appeared in the mini-series \\\"The Pillars of the Earth\\\" (2010).  In 1993 he played the hero, Will Ladislaw, in the BBC's adaptation of George Eliot's \\\"Middlemarch\\\".  In 2003, he appeared in the lead role in \\\"\\\".  He starred in the CBS drama \\\"Eleventh Hour\\\", which was cancelled in April 2009.  On stage, he originated the role of Septimus Hodge in Tom Stoppard's \\\"Arcadia\\\" and the role of Jan in Stoppard's \\\"Rock 'n' Roll\\\"; the latter earned him an Olivier Award and a Tony Award nomination.\",\n    \"Linda Regan | Linda Regan (born 1949) is a British author and actress, who has appeared in television and film.  She is best known for her role as Yellowcoat April in the British holiday camp sitcom \\\"Hi-de-Hi! \\\".  She is married to the actor Brian Murphy.\",\n    \"Mike Estime | Mike Estime is an American actor and comedian.  He has made appearances in the film \\\"Last Holiday\\\" (2006) and the sitcom \\\"Talk to Me\\\" (2000) as well as the hit television series \\\"Everybody Hates Chris\\\" as Risky, a street entrepreneur, and on the BET comedy show \\\"Comic View\\\".\",\n    \"Frank Campeau | Frank Campeau (December 14, 1864 – November 5, 1943) was an American actor.  He appeared in 93 films between 1911 and 1940 and made many appearances in films starring Douglas Fairbanks.  He was born in Detroit, Michigan and died in Woodland Hills, Los Angeles.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Rufus Sewell\",\n    \"sent_id\": 0,\n    \"sentence\": \"Rufus Frederik Sewell ( ; born 29 October 1967) is an English actor.\"\n  },\n  {\n    \"title\": \"Rufus Sewell\",\n    \"sent_id\": 1,\n    \"sentence\": \"In film, he has appeared in Kenneth Branagh's rendition of \\\"Hamlet\\\" (1996) playing Fortinbras, \\\"The Woodlanders\\\", \\\"Dangerous Beauty\\\", \\\"Dark City\\\", \\\"A Knight's Tale\\\", \\\"The Illusionist\\\", \\\"Tristan and Isolde\\\", and \\\"Martha, Meet Frank, Daniel and Laurence\\\".\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"The Holiday\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop summary: The retrieved doc for Rufus Sewell confirms he is an English actor and explicitly lists film credits including Kenneth Branagh's Hamlet (1996) and The Woodlanders. Bridge entity / missing relation: Rufus Sewell is the likely bridge for the three-film predicate, but it is not confirmed from this first-hop that he appears in The Holiday. Retrieval direction for next hop: fetch the page titled \\\"The Holiday\\\" (cast list) or run the query \\\"Rufus Sewell The Holiday\\\" to verify whether Rufus Sewell is in that film's cast. Do not conclude the final answer until that cast confirmation is obtained.\",\n  \"rationale\": \"Visible evidence: (1) Rufus Frederik Sewell is an English actor; (2) his film credits explicitly include Hamlet and The Woodlanders. The Holiday is not confirmed in the visible first-hop support, so the next retrieval should target the \\\"The Holiday\\\" page (cast) or a direct Rufus Sewell + The Holiday query to obtain the missing confirmation.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 0,
+    "row_index": 0
+  }
+}

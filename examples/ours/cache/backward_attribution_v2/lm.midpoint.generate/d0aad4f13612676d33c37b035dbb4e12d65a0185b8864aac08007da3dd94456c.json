@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.midpoint.generate",
+  "key": "d0aad4f13612676d33c37b035dbb4e12d65a0185b8864aac08007da3dd94456c",
+  "created_at": "2026-07-12T17:13:42.455039+00:00",
+  "request": {
+    "operation": "midpoint.generate",
+    "signature": "ours.utils.midpoint.GenerateMidpointSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "output_format": "Return `mid_output` as one non-empty string containing a summary1 output.",
+      "task_context": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "left_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "retrieve Baz Luhrmann — top query: \"Baz Luhrmann birthplace\" [[ ## completed ## ]]",
+        "hop2_query": "Baz Luhrmann birthplace",
+        "hop2_titles": [
+          "The Great Gatsby: Music from Baz Luhrmann's Film",
+          "Moulin Rouge! Music from Baz Luhrmann's Film, Vol. 2",
+          "Moulin Rouge! Music from Baz Luhrmann's Film",
+          "Strictly Ballroom (musical)",
+          "Something for Everybody (Baz Luhrmann album)",
+          "Strictly Ballroom",
+          "Baz Luhrmann"
+        ],
+        "hop2_doc_snippets": [
+          "The Great Gatsby: Music from Baz Luhrmann's Film | The Great Gatsby: Music from Baz Luhrmann's Film (also known as Music from Baz Luhrmann's Film The Great Gatsby) is the soundtrack album to the 2013 film \"The Great Gatsby\", an adaptation of F. Scott Fitzgerald's novel of the same name.  Interscope Records released it on May 6, 2013.  The album was produced by Baz Luhrmann and Anton Monsted, with Jay-Z serving as the album's executive producer.  The soundtrack comprises fourteen songs, including ...[truncated]",
+          "Moulin Rouge! Music from Baz Luhrmann's Film, Vol. 2 | Moulin Rouge!  Music from Baz Luhrmann's Film, Vol.  2",
+          "Moulin Rouge! Music from Baz Luhrmann's Film | Moulin Rouge!  Music from Baz Luhrmann's Film is a soundtrack album to Baz Luhrmann's 2001 film \"Moulin Rouge! \".  It was released on May 8, 2001.  The album features most of the songs featured in the film.  However, some of the songs are alternate versions and there are two or three major songs that are left off.  The original film versions and extra songs were featured on the second soundtrack.",
+          "Strictly Ballroom (musical) | Strictly Ballroom the Musical is a musical theatre adaptation of the 1992 film \"Strictly Ballroom\".  It is credited as being created by Baz Luhrmann with book by Baz Luhrmann and Craig Pearce adapted by Terry Johnson.  The score consists of existing music and songs, and new musical numbers by David Foster, Sia Furler, Isaac Hasson, Bernie Herms, Baz Lurhmann, MoZella, Neff-U, Craig Pearce, Eddie Perfect, Linda Thompson and Elliot Wheeler.",
+          "Something for Everybody (Baz Luhrmann album) | Something for Everybody is an album released by Baz Luhrmann in 1998.  It contains new ambient versions (either newly recorded or remixed) of music from his films and plays, including hits from \"William Shakespeare's Romeo + Juliet\", \"Strictly Ballroom\" and \"La bohème\".  The most popular single from the album is the spoken word song \"Everybody's Free (To Wear Sunscreen)\".",
+          "Strictly Ballroom | Strictly Ballroom is a 1992 Australian romantic comedy film directed and co-written by Baz Luhrmann.  The film, Luhrmann's début, is the first in his \"The Red Curtain Trilogy\" of theatre-motif-related films; it was followed by \"Romeo + Juliet\" and \"Moulin Rouge! \".",
+          "Baz Luhrmann | Mark Anthony \"Baz\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \"Red Curtain Trilogy\", comprising his romantic comedy film \"Strictly Ballroom\" (1992), the romantic drama \"Romeo + Juliet\" (1996), and the pastiche-jukebox musical \"Moulin Rouge! \" (2001).  His 2008 film \"Australia\" is an epic historical romantic drama film starring Hugh Jackman and Nicole Kidman.  His 2013 drama \"The Great Gatsby\", based on F. Scott Fit ...[truncated]"
+        ],
+        "new_support_titles_hop2": [],
+        "missing_titles_after_hop2": [
+          "Herons Creek, New South Wales"
+        ],
+        "support_recall_total": 0.5,
+        "missing_recovery_rate": 0.0,
+        "summary_2": "He was born in Sydney, New South Wales, Australia.",
+        "answer": "Sydney",
+        "score": 0.0
+      },
+      "right_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop summary: The visible snippets show Baz Luhrmann as director of the \"Red Curtain Trilogy\" (Strictly Ballroom; Romeo + Juliet; Moulin Rouge!), but they do not state his place of birth. A candidate bridge entity is the page \"Herons Creek, New South Wales,\" which notes Luhrmann was raised there — useful for the next hop but not proof of birthplace. Next retrieval direction: run \"Baz Luhrmann birthplace\" and open Baz Luhrmann's biography page and the \"Herons Creek, New South Wales\" page to confirm the town of birth and distinguish \"born in\" from \"raised in.\"",
+        "hop2_query": null,
+        "hop2_titles": [],
+        "hop2_doc_snippets": [],
+        "new_support_titles_hop2": [],
+        "missing_titles_after_hop2": [],
+        "support_recall_total": null,
+        "missing_recovery_rate": null,
+        "summary_2": "",
+        "answer": null,
+        "score": null
+      },
+      "retry_feedback": null
+    },
+    "rendered_prompt": "You are working with a functional semantic distance over states of one\nagent in a multi-agent pipeline.\n\nEach state contains the selected agent's output and may also contain the\ndownstream consequences produced by that output while the rest of the\npipeline is held fixed. The agent output is the primary object of the\ntransition. Downstream evidence and metrics are supporting evidence about\nits functional effect.\n\nThe distance is not surface text edit distance and is not a correctness\nscore. It measures how much task-relevant behavior and information must\nchange to move from one state to another.\n\nJudge distance using:\n1. Agent-output behavior: what the output is trying to accomplish for the\n   selected agent's role.\n2. Task-relevant information: which entities, relations, evidence,\n   conclusions, or answer constraints are preserved, added, removed, or\n   corrected.\n3. Downstream consequence: how the output changes retrieval, evidence,\n   answerability, or information available to later agents.\n4. Transition utility: whether a state is a meaningful intermediate step\n   between two endpoint states.\n\nDo not infer distance from text length, token count, document count, or\nlexical overlap. Do not treat a state as closer merely because its metric\nor final answer is better. Metrics are evidence of functional consequence,\nnot the distance definition itself.\n\nA midpoint output o_mid between o_left and o_right must:\n- preserve useful task-relevant behavior or information from o_left;\n- make concrete semantic progress toward o_right;\n- differ meaningfully from both endpoint outputs;\n- not merely paraphrase or copy o_left;\n- not simply copy o_right;\n- represent two smaller functional transitions than the original edge.\n\nGenerate one midpoint output between the left and right projected states.\nThe midpoint output will be used directly as the destination output for a\nlocal prompt-update inference step. Do not output a prompt update.\n\nMake the smallest meaningful functional change from the left output toward\nthe right output. Adopt at least one task-relevant entity, relation,\nevidence requirement, conclusion, output property, or behavioral intention\nthat is present in the right state but weak or absent in the left state.\n\nRequired output representation:\nReturn `mid_output` as one non-empty string containing a summary1 output.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nLeft projected state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"retrieve Baz Luhrmann — top query: \\\"Baz Luhrmann birthplace\\\" [[ ## completed ## ]]\",\n  \"hop2_query\": \"Baz Luhrmann birthplace\",\n  \"hop2_titles\": [\n    \"The Great Gatsby: Music from Baz Luhrmann's Film\",\n    \"Moulin Rouge! Music from Baz Luhrmann's Film, Vol. 2\",\n    \"Moulin Rouge! Music from Baz Luhrmann's Film\",\n    \"Strictly Ballroom (musical)\",\n    \"Something for Everybody (Baz Luhrmann album)\",\n    \"Strictly Ballroom\",\n    \"Baz Luhrmann\"\n  ],\n  \"hop2_doc_snippets\": [\n    \"The Great Gatsby: Music from Baz Luhrmann's Film | The Great Gatsby: Music from Baz Luhrmann's Film (also known as Music from Baz Luhrmann's Film The Great Gatsby) is the soundtrack album to the 2013 film \\\"The Great Gatsby\\\", an adaptation of F. Scott Fitzgerald's novel of the same name.  Interscope Records released it on May 6, 2013.  The album was produced by Baz Luhrmann and Anton Monsted, with Jay-Z serving as the album's executive producer.  The soundtrack comprises fourteen songs, including ...[truncated]\",\n    \"Moulin Rouge! Music from Baz Luhrmann's Film, Vol. 2 | Moulin Rouge!  Music from Baz Luhrmann's Film, Vol.  2\",\n    \"Moulin Rouge! Music from Baz Luhrmann's Film | Moulin Rouge!  Music from Baz Luhrmann's Film is a soundtrack album to Baz Luhrmann's 2001 film \\\"Moulin Rouge! \\\".  It was released on May 8, 2001.  The album features most of the songs featured in the film.  However, some of the songs are alternate versions and there are two or three major songs that are left off.  The original film versions and extra songs were featured on the second soundtrack.\",\n    \"Strictly Ballroom (musical) | Strictly Ballroom the Musical is a musical theatre adaptation of the 1992 film \\\"Strictly Ballroom\\\".  It is credited as being created by Baz Luhrmann with book by Baz Luhrmann and Craig Pearce adapted by Terry Johnson.  The score consists of existing music and songs, and new musical numbers by David Foster, Sia Furler, Isaac Hasson, Bernie Herms, Baz Lurhmann, MoZella, Neff-U, Craig Pearce, Eddie Perfect, Linda Thompson and Elliot Wheeler.\",\n    \"Something for Everybody (Baz Luhrmann album) | Something for Everybody is an album released by Baz Luhrmann in 1998.  It contains new ambient versions (either newly recorded or remixed) of music from his films and plays, including hits from \\\"William Shakespeare's Romeo + Juliet\\\", \\\"Strictly Ballroom\\\" and \\\"La bohème\\\".  The most popular single from the album is the spoken word song \\\"Everybody's Free (To Wear Sunscreen)\\\".\",\n    \"Strictly Ballroom | Strictly Ballroom is a 1992 Australian romantic comedy film directed and co-written by Baz Luhrmann.  The film, Luhrmann's début, is the first in his \\\"The Red Curtain Trilogy\\\" of theatre-motif-related films; it was followed by \\\"Romeo + Juliet\\\" and \\\"Moulin Rouge! \\\".\",\n    \"Baz Luhrmann | Mark Anthony \\\"Baz\\\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \\\"Red Curtain Trilogy\\\", comprising his romantic comedy film \\\"Strictly Ballroom\\\" (1992), the romantic drama \\\"Romeo + Juliet\\\" (1996), and the pastiche-jukebox musical \\\"Moulin Rouge! \\\" (2001).  His 2008 film \\\"Australia\\\" is an epic historical romantic drama film starring Hugh Jackman and Nicole Kidman.  His 2013 drama \\\"The Great Gatsby\\\", based on F. Scott Fit ...[truncated]\"\n  ],\n  \"new_support_titles_hop2\": [],\n  \"missing_titles_after_hop2\": [\n    \"Herons Creek, New South Wales\"\n  ],\n  \"support_recall_total\": 0.5,\n  \"missing_recovery_rate\": 0.0,\n  \"summary_2\": \"He was born in Sydney, New South Wales, Australia.\",\n  \"answer\": \"Sydney\",\n  \"score\": 0.0\n}\n\nRight projected state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop summary: The visible snippets show Baz Luhrmann as director of the \\\"Red Curtain Trilogy\\\" (Strictly Ballroom; Romeo + Juliet; Moulin Rouge!), but they do not state his place of birth. A candidate bridge entity is the page \\\"Herons Creek, New South Wales,\\\" which notes Luhrmann was raised there — useful for the next hop but not proof of birthplace. Next retrieval direction: run \\\"Baz Luhrmann birthplace\\\" and open Baz Luhrmann's biography page and the \\\"Herons Creek, New South Wales\\\" page to confirm the town of birth and distinguish \\\"born in\\\" from \\\"raised in.\\\"\",\n  \"hop2_query\": null,\n  \"hop2_titles\": [],\n  \"hop2_doc_snippets\": [],\n  \"new_support_titles_hop2\": [],\n  \"missing_titles_after_hop2\": [],\n  \"support_recall_total\": null,\n  \"missing_recovery_rate\": null,\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"score\": null\n}\n\n\n\nReturn strict JSON only:\n{\n  \"mid_output\": <agent-specific output described above>,\n  \"rationale\": \"<why this output is functionally between the endpoints>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"mid_output\": \"First-hop summary: Snippets show Baz Luhrmann as director of the \\\"Red Curtain Trilogy\\\" (Strictly Ballroom; Romeo + Juliet; Moulin Rouge!) but do not state his place of birth. A candidate bridge is the page \\\"Herons Creek, New South Wales,\\\" which notes Luhrmann was raised there — useful for the next hop but not proof of birthplace. Next retrieval direction: run the query \\\"Baz Luhrmann birthplace\\\" and open Baz Luhrmann's biography page plus the Herons Creek page to confirm the town of birth and distinguish \\\"born in\\\" from \\\"raised in.\\\"\",\n  \"rationale\": \"This midpoint preserves the left state's active retrieval intent (keeps the \\\"Baz Luhrmann birthplace\\\" query) while adopting the right state's missing-fact diagnosis: the visible snippets lack an explicit birthplace and Herons Creek appears as a bridge (raised there). It makes concrete progress by flagging that Herons Creek mentions being raised — prompting the next-step retrieval to confirm birth versus upbringing — without fully asserting a birthplace or already opening the biography page (so it is a smaller, meaningful step toward the right state's more explicit retrieval instructions).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "midpoint.generate",
+    "signature": "ours.utils.midpoint.GenerateMidpointSignature",
+    "agent": "summary1",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 3,
+    "selected_edge_index": 0
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "e8bf2f9940a6f64b4ea4fd89ec0d0c41029ca3e0561fe759aaaa2dc345285922",
+  "created_at": "2026-07-12T16:04:15.378690+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?",
+      "current_output": "John Cassavetes",
+      "upstream_context": {
+        "question": "In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?",
+        "summary_1": "John Cassavetes — Passage [1].",
+        "hop2_query": "John Cassavetes Rosemary's Baby actor filmography",
+        "hop2_titles": [
+          "John Cassavetes",
+          "Rosemary's Baby (film)",
+          "John Cassavetes filmography",
+          "Alexandra Cassavetes",
+          "Katherine Cassavetes",
+          "Independent Spirit John Cassavetes Award",
+          "John Leguizamo filmography"
+        ],
+        "hop2_docs": [
+          "John Cassavetes | John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.  Cassavetes was a pioneer of American independent film, writing and directing over a dozen movies, which he partially self-financed, and pioneered the use of improvisation and a realistic cinéma vérité style.  He also acted in many Hollywood films, notably \"Rosemary's Baby\" (1968) and \"The Dirty Dozen\" (1967).  He studied acting with Don Richardson, using an acting technique based on muscle memory.  His income from acting made it possible for him to direct his own films independently.",
+          "Rosemary's Baby (film) | Rosemary's Baby is a 1968 American psychological horror film written and directed by Roman Polanski, based on the bestselling 1967 novel of the same name by Ira Levin.  The cast features Mia Farrow, John Cassavetes, Ruth Gordon, Sidney Blackmer, Maurice Evans, Ralph Bellamy, Angela Dorian, Clay Tanner, and, in his feature film debut, Charles Grodin.  The film chronicles the story of a pregnant woman who suspects that an evil cult wants to take her baby for use in their rituals.",
+          "John Cassavetes filmography | John Cassavetes began his career in film in 1953 and ended it in 1986, between which times he was involved in every aspect of the film, television, and stage arts, including acting, directing, scoring, shooting, editing, producing, and marketing.",
+          "Alexandra Cassavetes | Alexandra \"Xan\" Cassavetes (born September 21, 1965) is an American actress and director.  She is the daughter of Greek-American actor-director John Cassavetes and actress Gena Rowlands.  She is the granddaughter of actress Katherine Cassavetes.  She is the sister of actor-director Nick Cassavetes and actor-screenwriter-director Zoe Cassavetes.",
+          "Katherine Cassavetes | Katherine Cassavetes (née Demetre; June 24, 1906 – March 29, 1983) was a Greek American actress.  She was the mother of actor-director John Cassavetes and mother-in-law of actress Gena Rowlands.  Her grandchildren are actor-directors Nick Cassavetes, Zoe Cassavetes, and Alexandra Cassavetes.  She appeared in four films, three of which were written and directed by her son, including \"Minnie and Moskowitz\" (1971).",
+          "Independent Spirit John Cassavetes Award | The Independent Spirit John Cassavetes Award is presented to the creative team of a film budgeted at less than $500,000 by the Film Independent, a non-profit organization dedicated to independent film and independent filmmakers.  It is named after actor/screenwriter/director John Cassavetes, a pioneer of American independent film.",
+          "John Leguizamo filmography | The following is the complete list of filmography by American actor, voice actor, producer, stand-up comedian, playwright and screenwriter John Leguizamo."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "John Cassavetes",
+          "sent_id": 0,
+          "sentence": "John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter."
+        },
+        {
+          "title": "John Cassavetes",
+          "sent_id": 2,
+          "sentence": "He also acted in many Hollywood films, notably \"Rosemary's Baby\" (1968) and \"The Dirty Dozen\" (1967)."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nIn between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?\n\nCurrent agent output:\n\"John Cassavetes\"\n\nActual upstream context:\n{\n  \"question\": \"In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \\\"Rosemary's Baby\\\"?\",\n  \"summary_1\": \"John Cassavetes — Passage [1].\",\n  \"hop2_query\": \"John Cassavetes Rosemary's Baby actor filmography\",\n  \"hop2_titles\": [\n    \"John Cassavetes\",\n    \"Rosemary's Baby (film)\",\n    \"John Cassavetes filmography\",\n    \"Alexandra Cassavetes\",\n    \"Katherine Cassavetes\",\n    \"Independent Spirit John Cassavetes Award\",\n    \"John Leguizamo filmography\"\n  ],\n  \"hop2_docs\": [\n    \"John Cassavetes | John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.  Cassavetes was a pioneer of American independent film, writing and directing over a dozen movies, which he partially self-financed, and pioneered the use of improvisation and a realistic cinéma vérité style.  He also acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967).  He studied acting with Don Richardson, using an acting technique based on muscle memory.  His income from acting made it possible for him to direct his own films independently.\",\n    \"Rosemary's Baby (film) | Rosemary's Baby is a 1968 American psychological horror film written and directed by Roman Polanski, based on the bestselling 1967 novel of the same name by Ira Levin.  The cast features Mia Farrow, John Cassavetes, Ruth Gordon, Sidney Blackmer, Maurice Evans, Ralph Bellamy, Angela Dorian, Clay Tanner, and, in his feature film debut, Charles Grodin.  The film chronicles the story of a pregnant woman who suspects that an evil cult wants to take her baby for use in their rituals.\",\n    \"John Cassavetes filmography | John Cassavetes began his career in film in 1953 and ended it in 1986, between which times he was involved in every aspect of the film, television, and stage arts, including acting, directing, scoring, shooting, editing, producing, and marketing.\",\n    \"Alexandra Cassavetes | Alexandra \\\"Xan\\\" Cassavetes (born September 21, 1965) is an American actress and director.  She is the daughter of Greek-American actor-director John Cassavetes and actress Gena Rowlands.  She is the granddaughter of actress Katherine Cassavetes.  She is the sister of actor-director Nick Cassavetes and actor-screenwriter-director Zoe Cassavetes.\",\n    \"Katherine Cassavetes | Katherine Cassavetes (née Demetre; June 24, 1906 – March 29, 1983) was a Greek American actress.  She was the mother of actor-director John Cassavetes and mother-in-law of actress Gena Rowlands.  Her grandchildren are actor-directors Nick Cassavetes, Zoe Cassavetes, and Alexandra Cassavetes.  She appeared in four films, three of which were written and directed by her son, including \\\"Minnie and Moskowitz\\\" (1971).\",\n    \"Independent Spirit John Cassavetes Award | The Independent Spirit John Cassavetes Award is presented to the creative team of a film budgeted at less than $500,000 by the Film Independent, a non-profit organization dedicated to independent film and independent filmmakers.  It is named after actor/screenwriter/director John Cassavetes, a pioneer of American independent film.\",\n    \"John Leguizamo filmography | The following is the complete list of filmography by American actor, voice actor, producer, stand-up comedian, playwright and screenwriter John Leguizamo.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"John Cassavetes\",\n    \"sent_id\": 0,\n    \"sentence\": \"John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.\"\n  },\n  {\n    \"title\": \"John Cassavetes\",\n    \"sent_id\": 2,\n    \"sentence\": \"He also acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967).\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"From summary_1: \\\"John Cassavetes — Passage [1].\\\" Supporting second-hop evidence (John Cassavetes): \\\"John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.\\\" and \\\"He also acted in many Hollywood films, notably \\\\\\\"Rosemary's Baby\\\\\\\" (1968) and \\\\\\\"The Dirty Dozen\\\\\\\" (1967).\\\"\",\n  \"rationale\": \"Integrated the upstream summary identifying John Cassavetes with second-hop sentences from the John Cassavetes article that state his occupations and explicitly that he acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968). These are the exact facts needed for the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 17,
+    "row_index": 17
+  }
+}

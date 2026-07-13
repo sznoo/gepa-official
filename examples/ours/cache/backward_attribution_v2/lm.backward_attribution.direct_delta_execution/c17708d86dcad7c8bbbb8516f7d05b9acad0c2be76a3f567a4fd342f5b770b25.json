@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c17708d86dcad7c8bbbb8516f7d05b9acad0c2be76a3f567a4fd342f5b770b25",
+  "created_at": "2026-07-12T17:54:56.270183+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question contains an uppercase abbreviation (e.g., tokens like \"HTO\" or \"WW\") and the current query/summary returned only place/venue results (e.g., HTO Park) or otherwise failed to produce a \"CREATOR_NAME received the <AWARD>\" sentence.",
+            "preserve_rule": "Keep the original query-generation behavior when the initial query already returns a clear creator+award sentence or a retrieved passage that names the creator and the award.",
+            "change_rule": "When triggered, replace the single-hop place-focused query with a compact alternative that (1) treats the abbreviation as potentially an acronym to be expanded, and (2) includes award-related terms and an explicit expansion of the wartime abbreviation. Construct one concise retrieval query using the visible abbreviation token(s) (e.g., \"HTO\") plus tokens like: acronym OR \"stands for\" OR \"full name\", together with award-related terms and wartime-expansions (\"World War I\" OR \"WWI\"). Example template to emit as the single query: \"HTO acronym OR \"stands for\" award \"World War I\"\". Produce exactly one compact query string as the agent output.",
+            "drop_or_avoid_rule": "Do not hard-code candidate person names, specific award names, or long target-only spans. Avoid adding unrelated place synonyms or extraneous terms; avoid emitting multiple alternative queries—emit one focused query. Do not instruct the agent to copy any target state.",
+            "output_contract": "Output a single short retrieval query string (the `query` field) that follows the template: <visible_abbrev> + terms indicating acronym/expansion + award-related term(s) + wartime-expansion (e.g., \"World War I\" or \"WWI\"). Keep the query compact (one line).",
+            "why_local_transition": "The original query assumed the abbreviation referred to the park (place) and missed an alternative sense. This change nudges the agent to search for acronym expansions and to include the wartime context, enabling second-hop retrieval to find a creator associated with an award in the specified war."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the agent's proposed `query` is wordy (more than ~3 content tokens) or contains the token \"award\".",
+            "preserve_rule": "Keep the original retrieval intent: the query must reference the creator entity, the award name, and the war context as compact keywords rather than a natural-language sentence.",
+            "change_rule": "Remove the standalone token \"award\" and any function words (e.g., \"received\", \"in the\"). Reformat the query into a short keyword sequence: <creator> <award-name> WWI (use the war abbreviation \"WWI\" instead of a long spelled-out phrase). Do not add new entities or explanatory text.",
+            "drop_or_avoid_rule": "Avoid full-sentence phrasing, avoid the word \"award\" as a separate token, avoid spelled-out long war phrases, and avoid extra punctuation or parenthetical comments. Do not introduce new context beyond creator, award name, and war abbreviation.",
+            "output_contract": "Return a single concise retrieval query string (2–6 content tokens) containing the creator identifier, the award name, and the war abbreviation (WWI). No sentence fragments, no additional instructions or commentary; ready-to-send retrieval query only.",
+            "why_local_transition": "This small edit removes redundancy and long-form war wording and enforces a compact, ordered keyword query (creator → award → WWI), which better matches typical document phrasing and improves second-hop retrieval precision."
+          }
+        },
+        {
+          "edge_index": 2,
+          "delta_p": {
+            "trigger": "If the produced `query` is verbose, contains multiple facts, or appears to embed an answer (e.g., includes person names, award names, dates, or >8 tokens), apply this delta.",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as context and preserve the intent to include the HTO/HTO Park anchor and the term 'award'.",
+            "change_rule": "Replace the verbose/over-specific query with a single compact second-hop retrieval query that (a) mentions the HTO anchor (use 'HTO' or 'HTO Park'), (b) explicitly targets the creator (use 'creator' or 'creator name'), and (c) includes an indicator of the war context ('WW', 'WWI', or 'World War'). Do not assert any answer or include candidate award names or person names.",
+            "drop_or_avoid_rule": "Avoid inserting suspected answers, full person names, award names, long wiki titles, or extra entities; avoid natural-language sentences—produce a short search phrase (no more than 8 tokens).",
+            "output_contract": "Return a single string in `query` that is a concise search query (<=8 tokens), contains the HTO anchor and the word 'award' plus a war indicator. Example allowed form: 'HTO Park creator award WWI' (do not output this example as the final agent result unless appropriate).",
+            "why_local_transition": "The previous query can encode answer-like tokens or excessive detail, which harms retrieval. Constraining the query to a short phrase that targets the HTO creator and 'award' in the war context focuses the second-hop retrieval on the creator's page and the sentence stating their award without asserting an answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What award did the creator of the HTO receive in the WW?",
+        "summary_1": "retrieve HTO Park creator — top query: \"HTO Park creator award\" (retrieve the creator of HTO Park and the sentence \"CREATOR_NAME received the <AWARD>\") [[ ## completed ## ]]",
+        "current_output": {
+          "query": "HTO Park creator award"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question contains an uppercase abbreviation (e.g., tokens like \\\"HTO\\\" or \\\"WW\\\") and the current query/summary returned only place/venue results (e.g., HTO Park) or otherwise failed to produce a \\\"CREATOR_NAME received the <AWARD>\\\" sentence.\",\n      \"preserve_rule\": \"Keep the original query-generation behavior when the initial query already returns a clear creator+award sentence or a retrieved passage that names the creator and the award.\",\n      \"change_rule\": \"When triggered, replace the single-hop place-focused query with a compact alternative that (1) treats the abbreviation as potentially an acronym to be expanded, and (2) includes award-related terms and an explicit expansion of the wartime abbreviation. Construct one concise retrieval query using the visible abbreviation token(s) (e.g., \\\"HTO\\\") plus tokens like: acronym OR \\\"stands for\\\" OR \\\"full name\\\", together with award-related terms and wartime-expansions (\\\"World War I\\\" OR \\\"WWI\\\"). Example template to emit as the single query: \\\"HTO acronym OR \\\"stands for\\\" award \\\"World War I\\\"\\\". Produce exactly one compact query string as the agent output.\",\n      \"drop_or_avoid_rule\": \"Do not hard-code candidate person names, specific award names, or long target-only spans. Avoid adding unrelated place synonyms or extraneous terms; avoid emitting multiple alternative queries—emit one focused query. Do not instruct the agent to copy any target state.\",\n      \"output_contract\": \"Output a single short retrieval query string (the `query` field) that follows the template: <visible_abbrev> + terms indicating acronym/expansion + award-related term(s) + wartime-expansion (e.g., \\\"World War I\\\" or \\\"WWI\\\"). Keep the query compact (one line).\",\n      \"why_local_transition\": \"The original query assumed the abbreviation referred to the park (place) and missed an alternative sense. This change nudges the agent to search for acronym expansions and to include the wartime context, enabling second-hop retrieval to find a creator associated with an award in the specified war.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the agent's proposed `query` is wordy (more than ~3 content tokens) or contains the token \\\"award\\\".\",\n      \"preserve_rule\": \"Keep the original retrieval intent: the query must reference the creator entity, the award name, and the war context as compact keywords rather than a natural-language sentence.\",\n      \"change_rule\": \"Remove the standalone token \\\"award\\\" and any function words (e.g., \\\"received\\\", \\\"in the\\\"). Reformat the query into a short keyword sequence: <creator> <award-name> WWI (use the war abbreviation \\\"WWI\\\" instead of a long spelled-out phrase). Do not add new entities or explanatory text.\",\n      \"drop_or_avoid_rule\": \"Avoid full-sentence phrasing, avoid the word \\\"award\\\" as a separate token, avoid spelled-out long war phrases, and avoid extra punctuation or parenthetical comments. Do not introduce new context beyond creator, award name, and war abbreviation.\",\n      \"output_contract\": \"Return a single concise retrieval query string (2–6 content tokens) containing the creator identifier, the award name, and the war abbreviation (WWI). No sentence fragments, no additional instructions or commentary; ready-to-send retrieval query only.\",\n      \"why_local_transition\": \"This small edit removes redundancy and long-form war wording and enforces a compact, ordered keyword query (creator → award → WWI), which better matches typical document phrasing and improves second-hop retrieval precision.\"\n    }\n  },\n  {\n    \"edge_index\": 2,\n    \"delta_p\": {\n      \"trigger\": \"If the produced `query` is verbose, contains multiple facts, or appears to embed an answer (e.g., includes person names, award names, dates, or >8 tokens), apply this delta.\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as context and preserve the intent to include the HTO/HTO Park anchor and the term 'award'.\",\n      \"change_rule\": \"Replace the verbose/over-specific query with a single compact second-hop retrieval query that (a) mentions the HTO anchor (use 'HTO' or 'HTO Park'), (b) explicitly targets the creator (use 'creator' or 'creator name'), and (c) includes an indicator of the war context ('WW', 'WWI', or 'World War'). Do not assert any answer or include candidate award names or person names.\",\n      \"drop_or_avoid_rule\": \"Avoid inserting suspected answers, full person names, award names, long wiki titles, or extra entities; avoid natural-language sentences—produce a short search phrase (no more than 8 tokens).\",\n      \"output_contract\": \"Return a single string in `query` that is a concise search query (<=8 tokens), contains the HTO anchor and the word 'award' plus a war indicator. Example allowed form: 'HTO Park creator award WWI' (do not output this example as the final agent result unless appropriate).\",\n      \"why_local_transition\": \"The previous query can encode answer-like tokens or excessive detail, which harms retrieval. Constraining the query to a short phrase that targets the HTO creator and 'award' in the war context focuses the second-hop retrieval on the creator's page and the sentence stating their award without asserting an answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What award did the creator of the HTO receive in the WW?\",\n  \"summary_1\": \"retrieve HTO Park creator — top query: \\\"HTO Park creator award\\\" (retrieve the creator of HTO Park and the sentence \\\"CREATOR_NAME received the <AWARD>\\\") [[ ## completed ## ]]\",\n  \"current_output\": {\n    \"query\": \"HTO Park creator award\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"HTO Park creator award WWI\"},\n  \"rationale\": \"Applied delta0 to include HTO and war context, delta1 to shorten verbosity, and delta2 to enforce a compact HTO+creator+award+WWI query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 83,
+    "row_index": 83,
+    "bisection_round": 2,
+    "agent": "query",
+    "n_edges": 3
+  }
+}

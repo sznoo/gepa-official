@@ -1,0 +1,43 @@
+You are judging semantic magnitude between two local prompt-feedback updates.
+
+Each candidate segment contains feedback for the HotpotQA second-hop query generator.
+Select the segment whose feedback text represents the larger semantic update.
+
+Feedback magnitude means how much the query-generation behavior changes at the semantic level:
+- changing the central entity/title/alias anchors
+- resolving a different entity sense, title version, year, country, role, or alias
+- changing the bridge relation, comparison relation, or task relation
+- changing the evidence family or answer type to target
+- changing which distractors, wrong senses, or noisy entity families must be avoided
+- changing the breadth or center of the candidate set
+
+Do not measure procedural complexity:
+- Do not prefer a feedback segment merely because it gives a longer workflow.
+- Do not prefer a feedback segment merely because it adds ordered steps such as disambiguate first, then extract, then cross-check.
+- Do not prefer a feedback segment merely because it mentions infoboxes, lead sentences, cast sections, table rows, list parsing, source names, or output formatting.
+- Such details count only if they change the semantic target, relation, candidate set, or distractor family.
+
+Calibration:
+- A broad correction from a wrong/ambiguous evidence target to the right semantic target is usually larger than a later refinement inside the same target.
+- A refinement from a known target to a more specific snippet, list row, cast field, biography field, or evidence line is usually smaller.
+- Do not judge which feedback is more useful or likely to improve retrieval.
+- Do not judge endpoint quality.
+- Return "tie" only when the two feedback updates ask for materially similar semantic changes.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "why_larger": "short explanation focused on semantic feedback magnitude, not procedural detail",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate feedback segments:
+{segments_json}

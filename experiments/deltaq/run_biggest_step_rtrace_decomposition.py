@@ -291,9 +291,9 @@ def make_endpoint_state(name, qrow, expose_query=False):
     }
     return state
 
-
 def compact_state_for_prompt(s):
-    # Do not expose hidden diagnostics to the LLM judge/generator.
+    if not isinstance(s, dict):
+        return {}
     return {
         "name": s.get("name"),
         "kind": s.get("kind"),
@@ -302,9 +302,6 @@ def compact_state_for_prompt(s):
         "retrieval_focus": s.get("retrieval_focus") or "",
         "anchors": s.get("anchors") or [],
         "bridge_clues": s.get("bridge_clues") or [],
-        "noisy_or_distracting_clues": s.get("noisy_or_distracting_clues") or [],
-        "expected_evidence_type": s.get("expected_evidence_type") or "",
-        "query_shape_implication": s.get("query_shape_implication") or "",
     }
 
 

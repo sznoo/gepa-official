@@ -1,0 +1,1166 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+from typing import Any, Iterable, Mapping, Optional, Sequence
+
+
+ROOT = Path(__file__).resolve().parents[3]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from litellm import completion  # noqa: E402
+
+from experiments.method_probe.src.cache import CallCache  # noqa: E402
+from experiments.method_probe.src.hotpot import HotpotRuntime  # noqa: E402
+
+
+DEFAULT_MIDPOINT_SYSTEM_PROMPT = """
+You generate a semantic midpoint query between two second-hop retrieval states
+for a HotpotQA query-writing agent.
+
+The midpoint should represent a partial behavioral move from the source state
+toward the target state. It must not simply copy either endpoint.
+
+Generate one executable second-hop search query that:
+- preserves useful anchors already present in the source,
+- incorporates only part of the target repair,
+- remains grounded in the question and summary_1,
+- is likely to produce a retrieval state semantically between source and target.
+
+Return JSON only:
+{
+  "midpoint_query": "one executable search query",
+  "rationale": "what partial change this query introduces",
+  "expected_progress": "how it should move retrieval toward the target"
+}
+""".strip()
+
+
+DEFAULT_TRANSPORT_MATCH_SYSTEM_PROMPT = """
+You select the W-side query-repair transition that is most transferable to a
+given correct HotpotQA query state.
+
+Match based on query-generation behavior rather than topical similarity alone:
+- entity, title, and alias anchoring,
+- bridge or comparison relation,
+- distractor and wrong-sense behavior,
+- candidate-set breadth,
+- evidence family,
+- query shape.
+
+Return JSON only:
+{
+  "matched_transition_id": "one candidate transition id",
+  "rationale": "why this repair/failure behavior transfers",
+  "confidence": 0.0
+}
+""".strip()
+
+
+DEFAULT_TRANSPORT_ENDPOINT_SYSTEM_PROMPT = """
+You construct a semantic damaged endpoint for a correct HotpotQA second-hop
+query state.
+
+You are given:
+1. a correct reference endpoint,
+2. a W-side failed-to-repaired transition.
+
+Infer the failure behavior removed by the W-side repair, and apply that failure
+behavior to the correct reference endpoint. The result should remain local to
+the reference question but should weaken its retrieval behavior.
+
+This is a semantic endpoint proposal, not an actual BM25 execution result.
+
+Return JSON only:
+{
+  "damaged_query": "a plausible degraded second-hop query",
+  "expected_titles": ["titles or evidence families likely to be retrieved"],
+  "expected_failure_behavior": "the transported failure behavior",
+  "locality_check": "why the damage remains local to the target sample",
+  "rationale": "how the W-side failure was transported"
+}
+""".strip()
+
+
+def _clean_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def _unique_strings(values: Iterable[Any]) -> list[str]:
+    output: list[str] = []
+    seen: set[str] = set()
+
+    for value in values:
+        text = _clean_text(value)
+        if text and text not in seen:
+            seen.add(text)
+            output.append(text)
+
+    return output
+
+
+def _stable_id(prefix: str, payload: Mapping[str, Any]) -> str:
+    serialized = json.dumps(
+        payload,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+
+    digest = hashlib.sha256(
+        serialized.encode("utf-8")
+    ).hexdigest()[:20]
+
+    return f"{prefix}_{digest}"
+
+
+def _parse_json_object(text: Any) -> dict[str, Any]:
+    text = _clean_text(text)
+
+    if not text:
+        raise ValueError("Model returned an empty response.")
+
+    text = re.sub(
+        r"^```(?:json)?\s*",
+        "",
+        text,
+        flags=re.IGNORECASE,
+    )
+    text = re.sub(r"\s*```$", "", text)
+
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        start = text.find("{")
+        end = text.rfind("}")
+
+        if start < 0 or end <= start:
+            raise ValueError(
+                f"No JSON object found in response: {text[:500]}"
+            )
+
+        parsed = json.loads(text[start : end + 1])
+
+    if not isinstance(parsed, dict):
+        raise ValueError(
+            f"Expected JSON object, got {type(parsed).__name__}."
+        )
+
+    return parsed
+
+
+def _completion_text(response: Any) -> str:
+    try:
+        return str(response.choices[0].message.content)
+    except (AttributeError, IndexError, KeyError, TypeError) as exc:
+        raise ValueError(
+            f"Could not extract completion text from {type(response).__name__}"
+        ) from exc
+
+
+def _metric_value(endpoint: Mapping[str, Any], key: str) -> Optional[float]:
+    metrics = endpoint.get("metrics") or {}
+    value = metrics.get(key)
+
+    if value is None:
+        return None
+
+    return float(value)
+
+
+def _metric_delta(
+    source: Mapping[str, Any],
+    target: Mapping[str, Any],
+    key: str,
+) -> Optional[float]:
+    source_value = _metric_value(source, key)
+    target_value = _metric_value(target, key)
+
+    if source_value is None or target_value is None:
+        return None
+
+    return target_value - source_value
+
+
+def make_query_endpoint(
+    rollout: Mapping[str, Any],
+    *,
+    endpoint_type: str,
+    materialization: str = "actual",
+    metadata: Optional[Mapping[str, Any]] = None,
+) -> dict[str, Any]:
+    """
+    Normalize one query-agent state.
+
+    An actual endpoint contains the query, actual BM25 retrieval state,
+    downstream summaries, answer, and local/global metrics.
+    """
+
+    sample_id = _clean_text(
+        rollout.get("sample_id") or rollout.get("id")
+    )
+    question = _clean_text(rollout.get("question"))
+    summary_1 = _clean_text(rollout.get("summary_1"))
+    query = _clean_text(
+        rollout.get("hop2_query") or rollout.get("query")
+    )
+
+    if not sample_id:
+        raise ValueError("Endpoint rollout has no sample_id.")
+    if not question:
+        raise ValueError(
+            f"Endpoint {sample_id} has no question."
+        )
+    if not query:
+        raise ValueError(
+            f"Endpoint {sample_id} has no hop2 query."
+        )
+
+    endpoint_payload = {
+        "sample_id": sample_id,
+        "endpoint_type": endpoint_type,
+        "materialization": materialization,
+        "question": question,
+        "summary_1": summary_1,
+        "query": query,
+        "retrieved_titles": _unique_strings(
+            rollout.get("hop2_titles") or []
+        ),
+        "retrieved_docs": list(
+            rollout.get("hop2_docs") or []
+        ),
+        "summary_2": _clean_text(
+            rollout.get("summary_2")
+        ),
+        "pred_answer": _clean_text(
+            rollout.get("pred_answer")
+        ),
+        "metrics": {
+            "missing_recovery_rate": rollout.get(
+                "missing_recovery_rate"
+            ),
+            "support_recall_hop1": rollout.get(
+                "support_recall_hop1"
+            ),
+            "support_recall_hop2_only": rollout.get(
+                "support_recall_hop2_only"
+            ),
+            "support_recall_total": rollout.get(
+                "support_recall_total"
+            ),
+            "exact_match": int(
+                rollout.get("score", 0)
+            ),
+            "natural_retrieval_failure": bool(
+                rollout.get("natural_retrieval_failure", False)
+            ),
+        },
+        "retrieval": {
+            "gold_support_titles": _unique_strings(
+                rollout.get("gold_support_titles") or []
+            ),
+            "hop1_titles": _unique_strings(
+                rollout.get("hop1_titles") or []
+            ),
+            "hop2_titles": _unique_strings(
+                rollout.get("hop2_titles") or []
+            ),
+            "missing_after_hop1": _unique_strings(
+                rollout.get("missing_after_hop1") or []
+            ),
+            "recovered_missing_titles": _unique_strings(
+                rollout.get("recovered_missing_titles") or []
+            ),
+            "missing_after_hop2": _unique_strings(
+                rollout.get("missing_after_hop2") or []
+            ),
+        },
+        "metadata": dict(metadata or {}),
+    }
+
+    endpoint_payload["endpoint_id"] = _stable_id(
+        "endpoint",
+        {
+            "sample_id": sample_id,
+            "endpoint_type": endpoint_type,
+            "materialization": materialization,
+            "query": query,
+            "retrieved_titles": endpoint_payload[
+                "retrieved_titles"
+            ],
+        },
+    )
+
+    return endpoint_payload
+
+
+def make_semantic_endpoint(
+    *,
+    sample_id: str,
+    endpoint_type: str,
+    question: str,
+    summary_1: str,
+    query: str,
+    expected_titles: Sequence[str],
+    metadata: Optional[Mapping[str, Any]] = None,
+) -> dict[str, Any]:
+    """
+    Construct a semantic, non-executed endpoint.
+
+    Used for transported damaged states that describe an expected output state
+    rather than an actual BM25 result.
+    """
+
+    endpoint = {
+        "sample_id": _clean_text(sample_id),
+        "endpoint_type": endpoint_type,
+        "materialization": "semantic",
+        "question": _clean_text(question),
+        "summary_1": _clean_text(summary_1),
+        "query": _clean_text(query),
+        "retrieved_titles": _unique_strings(expected_titles),
+        "retrieved_docs": [],
+        "summary_2": "",
+        "pred_answer": "",
+        "metrics": {
+            "missing_recovery_rate": None,
+            "support_recall_hop1": None,
+            "support_recall_hop2_only": None,
+            "support_recall_total": None,
+            "exact_match": None,
+            "natural_retrieval_failure": None,
+        },
+        "retrieval": {
+            "gold_support_titles": [],
+            "hop1_titles": [],
+            "hop2_titles": _unique_strings(expected_titles),
+            "missing_after_hop1": [],
+            "recovered_missing_titles": [],
+            "missing_after_hop2": [],
+        },
+        "metadata": dict(metadata or {}),
+    }
+
+    if not endpoint["sample_id"]:
+        raise ValueError("Semantic endpoint has no sample_id.")
+    if not endpoint["query"]:
+        raise ValueError("Semantic endpoint has no query.")
+
+    endpoint["endpoint_id"] = _stable_id(
+        "endpoint",
+        {
+            "sample_id": endpoint["sample_id"],
+            "endpoint_type": endpoint_type,
+            "query": endpoint["query"],
+            "expected_titles": endpoint["retrieved_titles"],
+        },
+    )
+
+    return endpoint
+
+
+def classify_rollout(
+    rollout: Mapping[str, Any],
+    *,
+    success_policy: str = "natural_failure",
+    support_recall_threshold: float = 1.0,
+) -> dict[str, Any]:
+    """
+    Binary C/W classification without manual error subtypes.
+
+    Supported policies:
+
+    natural_failure:
+        W iff at least one gold support title remains missing after hop2.
+
+    full_missing_recovery:
+        C iff every title missing after hop1 is recovered by hop2.
+        Hop1-complete samples are also C.
+
+    positive_missing_recovery:
+        C iff hop1 was already complete or hop2 recovered at least one
+        previously missing support title.
+
+    support_recall_threshold:
+        C iff total support recall meets the supplied threshold.
+
+    exact_match:
+        C iff final answer EM is 1.
+    """
+
+    missing_after_hop1 = list(
+        rollout.get("missing_after_hop1") or []
+    )
+    missing_after_hop2 = list(
+        rollout.get("missing_after_hop2") or []
+    )
+    missing_recovery_rate = rollout.get(
+        "missing_recovery_rate"
+    )
+    support_recall_total = rollout.get(
+        "support_recall_total"
+    )
+    exact_match = int(rollout.get("score", 0))
+
+    if success_policy == "natural_failure":
+        success = not bool(missing_after_hop2)
+
+    elif success_policy == "full_missing_recovery":
+        success = (
+            not missing_after_hop1
+            or not missing_after_hop2
+        )
+
+    elif success_policy == "positive_missing_recovery":
+        success = (
+            not missing_after_hop1
+            or (
+                missing_recovery_rate is not None
+                and float(missing_recovery_rate) > 0.0
+            )
+        )
+
+    elif success_policy == "support_recall_threshold":
+        success = (
+            support_recall_total is not None
+            and float(support_recall_total)
+            >= float(support_recall_threshold)
+        )
+
+    elif success_policy == "exact_match":
+        success = exact_match == 1
+
+    else:
+        raise ValueError(
+            f"Unsupported success policy: {success_policy}"
+        )
+
+    return {
+        "sample_id": _clean_text(
+            rollout.get("sample_id")
+        ),
+        "label": "C" if success else "W",
+        "success": bool(success),
+        "success_policy": success_policy,
+        "support_recall_threshold": support_recall_threshold,
+        "observed": {
+            "missing_after_hop1": _unique_strings(
+                missing_after_hop1
+            ),
+            "missing_after_hop2": _unique_strings(
+                missing_after_hop2
+            ),
+            "missing_recovery_rate": missing_recovery_rate,
+            "support_recall_total": support_recall_total,
+            "exact_match": exact_match,
+        },
+    }
+
+
+def build_oracle_query(
+    rollout: Mapping[str, Any],
+) -> str:
+    """
+    Gold-privileged query used only to construct a repair destination.
+
+    The query contains the gold titles still missing after the current hop2,
+    followed by the original question.
+    """
+
+    missing_titles = _unique_strings(
+        rollout.get("missing_after_hop2") or []
+    )
+    question = _clean_text(rollout.get("question"))
+
+    if not missing_titles:
+        raise ValueError(
+            "Cannot build a repair query: "
+            "no gold title remains missing after hop2."
+        )
+
+    title_part = " ".join(f'"{title}"' for title in missing_titles)
+    return f"{title_part} {question}".strip()
+
+
+def make_transition(
+    *,
+    transition_type: str,
+    polarity: str,
+    source_endpoint: Mapping[str, Any],
+    target_endpoint: Mapping[str, Any],
+    metadata: Optional[Mapping[str, Any]] = None,
+) -> dict[str, Any]:
+    if polarity not in {"encourage", "avoid"}:
+        raise ValueError(
+            f"Unsupported transition polarity: {polarity}"
+        )
+
+    sample_id = _clean_text(
+        source_endpoint.get("sample_id")
+    )
+
+    if sample_id != _clean_text(
+        target_endpoint.get("sample_id")
+    ):
+        raise ValueError(
+            "Source and target endpoint sample IDs differ."
+        )
+
+    transition = {
+        "transition_type": transition_type,
+        "sample_id": sample_id,
+        "polarity": polarity,
+        "source_endpoint": dict(source_endpoint),
+        "target_endpoint": dict(target_endpoint),
+        "delta_q_trace": {
+            "source_query": _clean_text(
+                source_endpoint.get("query")
+            ),
+            "target_query": _clean_text(
+                target_endpoint.get("query")
+            ),
+        },
+        "metric_delta": {
+            "missing_recovery_rate": _metric_delta(
+                source_endpoint,
+                target_endpoint,
+                "missing_recovery_rate",
+            ),
+            "support_recall_total": _metric_delta(
+                source_endpoint,
+                target_endpoint,
+                "support_recall_total",
+            ),
+            "exact_match": _metric_delta(
+                source_endpoint,
+                target_endpoint,
+                "exact_match",
+            ),
+        },
+        "metadata": dict(metadata or {}),
+    }
+
+    transition["transition_id"] = _stable_id(
+        "transition",
+        {
+            "transition_type": transition_type,
+            "polarity": polarity,
+            "sample_id": sample_id,
+            "source_endpoint_id": source_endpoint.get(
+                "endpoint_id"
+            ),
+            "target_endpoint_id": target_endpoint.get(
+                "endpoint_id"
+            ),
+        },
+    )
+
+    return transition
+
+
+def build_repair_transition(
+    *,
+    runtime: HotpotRuntime,
+    row: Mapping[str, Any],
+    rollout: Mapping[str, Any],
+) -> dict[str, Any]:
+    """
+    Build a W-side failed -> oracle-repaired transition.
+
+    The target query is executed through the real BM25 + summarize2 +
+    final-answer pipeline.
+    """
+
+    source_endpoint = make_query_endpoint(
+        rollout,
+        endpoint_type="current_failed",
+    )
+
+    oracle_query = build_oracle_query(rollout)
+
+    oracle_rollout = runtime.run_from_hop2_query(
+        row,
+        hop1_docs=rollout.get("hop1_docs") or [],
+        hop1_titles=rollout.get("hop1_titles") or [],
+        hop1_query=rollout.get("hop1_query"),
+        summary_1=_clean_text(rollout.get("summary_1")),
+        hop2_query=oracle_query,
+    )
+
+    target_endpoint = make_query_endpoint(
+        oracle_rollout,
+        endpoint_type="oracle_repaired",
+        metadata={
+            "gold_privileged": True,
+            "oracle_query_rule": (
+                "missing_after_hop2_titles_plus_question"
+            ),
+        },
+    )
+
+    transition = make_transition(
+        transition_type="repair",
+        polarity="encourage",
+        source_endpoint=source_endpoint,
+        target_endpoint=target_endpoint,
+        metadata={
+            "oracle_query": oracle_query,
+            "target_is_gold_privileged": True,
+        },
+    )
+
+    transition["target_rollout"] = oracle_rollout
+    transition["target_improved"] = {
+        "support_recall_total": (
+            transition["metric_delta"]["support_recall_total"]
+            is not None
+            and transition["metric_delta"][
+                "support_recall_total"
+            ] > 0
+        ),
+        "exact_match": (
+            transition["metric_delta"]["exact_match"]
+            is not None
+            and transition["metric_delta"]["exact_match"] > 0
+        ),
+    }
+
+    return transition
+
+
+def compact_endpoint(
+    endpoint: Mapping[str, Any],
+    *,
+    include_docs: bool = False,
+) -> dict[str, Any]:
+    compact = {
+        "endpoint_id": endpoint.get("endpoint_id"),
+        "sample_id": endpoint.get("sample_id"),
+        "endpoint_type": endpoint.get("endpoint_type"),
+        "materialization": endpoint.get("materialization"),
+        "question": endpoint.get("question"),
+        "summary_1": endpoint.get("summary_1"),
+        "query": endpoint.get("query"),
+        "retrieved_titles": endpoint.get(
+            "retrieved_titles"
+        ),
+        "summary_2": endpoint.get("summary_2"),
+        "pred_answer": endpoint.get("pred_answer"),
+        "metrics": endpoint.get("metrics"),
+        "retrieval": endpoint.get("retrieval"),
+        "metadata": endpoint.get("metadata"),
+    }
+
+    if include_docs:
+        compact["retrieved_docs"] = endpoint.get(
+            "retrieved_docs"
+        )
+
+    return compact
+
+
+def compact_transition(
+    transition: Mapping[str, Any],
+    *,
+    include_docs: bool = False,
+) -> dict[str, Any]:
+    return {
+        "transition_id": transition.get("transition_id"),
+        "transition_type": transition.get(
+            "transition_type"
+        ),
+        "sample_id": transition.get("sample_id"),
+        "polarity": transition.get("polarity"),
+        "source_endpoint": compact_endpoint(
+            transition.get("source_endpoint") or {},
+            include_docs=include_docs,
+        ),
+        "target_endpoint": compact_endpoint(
+            transition.get("target_endpoint") or {},
+            include_docs=include_docs,
+        ),
+        "delta_q_trace": transition.get("delta_q_trace"),
+        "metric_delta": transition.get("metric_delta"),
+        "metadata": transition.get("metadata"),
+    }
+
+
+class LandscapeBuilder:
+    """
+    LLM-assisted construction of midpoint and transported semantic states.
+
+    Actual Hotpot execution is delegated to HotpotRuntime.
+    All external LLM calls are delegated to CallCache.
+    """
+
+    def __init__(
+        self,
+        *,
+        runtime: HotpotRuntime,
+        cache: CallCache,
+        model: str = "openai/gpt-5-mini",
+        temperature: float = 1.0,
+        max_tokens: int = 16000,
+        max_retries: int = 2,
+        midpoint_system_prompt: str = (
+            DEFAULT_MIDPOINT_SYSTEM_PROMPT
+        ),
+        transport_match_system_prompt: str = (
+            DEFAULT_TRANSPORT_MATCH_SYSTEM_PROMPT
+        ),
+        transport_endpoint_system_prompt: str = (
+            DEFAULT_TRANSPORT_ENDPOINT_SYSTEM_PROMPT
+        ),
+    ):
+        self.runtime = runtime
+        self.cache = cache
+        self.model = model
+        self.temperature = temperature
+        self.max_tokens = max_tokens
+        self.max_retries = max_retries
+
+        self.midpoint_system_prompt = midpoint_system_prompt
+        self.transport_match_system_prompt = (
+            transport_match_system_prompt
+        )
+        self.transport_endpoint_system_prompt = (
+            transport_endpoint_system_prompt
+        )
+
+    def _cached_json_call(
+        self,
+        *,
+        stage: str,
+        system_prompt: str,
+        payload: Mapping[str, Any],
+        metadata: Optional[Mapping[str, Any]] = None,
+        prompt_version: Optional[int | str] = None,
+    ) -> tuple[dict[str, Any], bool, dict[str, Any]]:
+        request = {
+            "system_prompt": system_prompt,
+            "payload": dict(payload),
+        }
+
+        messages = [
+            {
+                "role": "system",
+                "content": system_prompt,
+            },
+            {
+                "role": "user",
+                "content": json.dumps(
+                    payload,
+                    ensure_ascii=False,
+                    indent=2,
+                ),
+            },
+        ]
+
+        last_error: Optional[Exception] = None
+
+        for retry_index in range(self.max_retries + 1):
+            try:
+                parsed, cache_hit, record = (
+                    self.cache.cached_call(
+                        stage=stage,
+                        request=request,
+                        call_fn=lambda: _completion_text(
+                            completion(
+                                model=self.model,
+                                messages=messages,
+                                temperature=self.temperature,
+                                max_tokens=self.max_tokens,
+                            )
+                        ),
+                        parse_fn=_parse_json_object,
+                        model=self.model,
+                        generation={
+                            "temperature": self.temperature,
+                            "max_tokens": self.max_tokens,
+                        },
+                        prompt_version=prompt_version,
+                        metadata=metadata,
+                        retry_index=retry_index,
+                    )
+                )
+
+                if not isinstance(parsed, dict):
+                    raise ValueError(
+                        "Parsed response is not a JSON object."
+                    )
+
+                return parsed, cache_hit, record
+
+            except Exception as exc:
+                last_error = exc
+
+        assert last_error is not None
+        raise last_error
+
+    def generate_midpoint_endpoint(
+        self,
+        *,
+        row: Mapping[str, Any],
+        source_endpoint: Mapping[str, Any],
+        target_endpoint: Mapping[str, Any],
+        hop1_docs: Sequence[str],
+        hop1_titles: Sequence[str],
+        hop1_query: str,
+        prompt_version: Optional[int | str] = None,
+        metadata: Optional[Mapping[str, Any]] = None,
+    ) -> dict[str, Any]:
+        """
+        Generate a midpoint query and materialize it through actual BM25 and
+        downstream Hotpot execution.
+        """
+
+        sample_id = _clean_text(
+            source_endpoint.get("sample_id")
+        )
+
+        if sample_id != _clean_text(
+            target_endpoint.get("sample_id")
+        ):
+            raise ValueError(
+                "Midpoint source and target samples differ."
+            )
+
+        payload = {
+            "question": source_endpoint.get("question"),
+            "summary_1": source_endpoint.get("summary_1"),
+            "source_endpoint": compact_endpoint(
+                source_endpoint
+            ),
+            "target_endpoint": compact_endpoint(
+                target_endpoint
+            ),
+        }
+
+        parsed, cache_hit, call_record = (
+            self._cached_json_call(
+                stage="midpoint_generation",
+                system_prompt=self.midpoint_system_prompt,
+                payload=payload,
+                prompt_version=prompt_version,
+                metadata={
+                    "sample_id": sample_id,
+                    "source_endpoint_id": source_endpoint.get(
+                        "endpoint_id"
+                    ),
+                    "target_endpoint_id": target_endpoint.get(
+                        "endpoint_id"
+                    ),
+                    **dict(metadata or {}),
+                },
+            )
+        )
+
+        midpoint_query = _clean_text(
+            parsed.get("midpoint_query")
+        )
+
+        if not midpoint_query:
+            raise ValueError(
+                "Midpoint generator returned no midpoint_query."
+            )
+
+        if midpoint_query in {
+            _clean_text(source_endpoint.get("query")),
+            _clean_text(target_endpoint.get("query")),
+        }:
+            raise ValueError(
+                "Midpoint query duplicates an endpoint query."
+            )
+
+        midpoint_rollout = self.runtime.run_from_hop2_query(
+            row,
+            hop1_docs=hop1_docs,
+            hop1_titles=hop1_titles,
+            hop1_query=hop1_query,
+            summary_1=_clean_text(
+                source_endpoint.get("summary_1")
+            ),
+            hop2_query=midpoint_query,
+        )
+
+        midpoint_endpoint = make_query_endpoint(
+            midpoint_rollout,
+            endpoint_type="midpoint",
+            metadata={
+                "source_endpoint_id": source_endpoint.get(
+                    "endpoint_id"
+                ),
+                "target_endpoint_id": target_endpoint.get(
+                    "endpoint_id"
+                ),
+                "generation_rationale": parsed.get(
+                    "rationale"
+                ),
+                "expected_progress": parsed.get(
+                    "expected_progress"
+                ),
+                "cache_hit": cache_hit,
+                "call_input_hash": call_record.get(
+                    "input_hash"
+                ),
+            },
+        )
+
+        return {
+            "sample_id": sample_id,
+            "source_endpoint_id": source_endpoint.get(
+                "endpoint_id"
+            ),
+            "target_endpoint_id": target_endpoint.get(
+                "endpoint_id"
+            ),
+            "midpoint_endpoint": midpoint_endpoint,
+            "midpoint_rollout": midpoint_rollout,
+            "generation": parsed,
+            "cache_hit": cache_hit,
+            "call_record": call_record,
+        }
+
+    def match_repair_transition(
+        self,
+        *,
+        correct_endpoint: Mapping[str, Any],
+        candidate_transitions: Sequence[
+            Mapping[str, Any]
+        ],
+        prompt_version: Optional[int | str] = None,
+        metadata: Optional[Mapping[str, Any]] = None,
+    ) -> dict[str, Any]:
+        if not candidate_transitions:
+            raise ValueError(
+                "No W-side repair transitions were provided."
+            )
+
+        candidates = [
+            compact_transition(transition)
+            for transition in candidate_transitions
+        ]
+
+        payload = {
+            "correct_reference_endpoint": compact_endpoint(
+                correct_endpoint
+            ),
+            "candidate_w_repair_transitions": candidates,
+        }
+
+        sample_id = _clean_text(
+            correct_endpoint.get("sample_id")
+        )
+
+        parsed, cache_hit, call_record = (
+            self._cached_json_call(
+                stage="transport_match",
+                system_prompt=(
+                    self.transport_match_system_prompt
+                ),
+                payload=payload,
+                prompt_version=prompt_version,
+                metadata={
+                    "sample_id": sample_id,
+                    "num_candidates": len(candidates),
+                    **dict(metadata or {}),
+                },
+            )
+        )
+
+        matched_id = _clean_text(
+            parsed.get("matched_transition_id")
+        )
+
+        transition_by_id = {
+            _clean_text(t.get("transition_id")): t
+            for t in candidate_transitions
+        }
+
+        if matched_id not in transition_by_id:
+            raise ValueError(
+                "Transport matcher returned unknown transition: "
+                f"{matched_id}"
+            )
+
+        return {
+            "match_id": _stable_id(
+                "match",
+                {
+                    "sample_id": sample_id,
+                    "matched_transition_id": matched_id,
+                },
+            ),
+            "target_sample_id": sample_id,
+            "matched_transition_id": matched_id,
+            "matched_transition": dict(
+                transition_by_id[matched_id]
+            ),
+            "rationale": _clean_text(
+                parsed.get("rationale")
+            ),
+            "confidence": float(
+                parsed.get("confidence", 0.0)
+            ),
+            "cache_hit": cache_hit,
+            "call_record": call_record,
+        }
+
+    def generate_transported_endpoint(
+        self,
+        *,
+        correct_endpoint: Mapping[str, Any],
+        matched_transition: Mapping[str, Any],
+        prompt_version: Optional[int | str] = None,
+        metadata: Optional[Mapping[str, Any]] = None,
+    ) -> dict[str, Any]:
+        """
+        Apply the W-side failure behavior to a C-side correct endpoint.
+
+        The result is semantic rather than an actual BM25 execution.
+        """
+
+        sample_id = _clean_text(
+            correct_endpoint.get("sample_id")
+        )
+
+        payload = {
+            "correct_reference_endpoint": compact_endpoint(
+                correct_endpoint
+            ),
+            "matched_w_repair_transition": (
+                compact_transition(matched_transition)
+            ),
+        }
+
+        parsed, cache_hit, call_record = (
+            self._cached_json_call(
+                stage="transported_endpoint",
+                system_prompt=(
+                    self.transport_endpoint_system_prompt
+                ),
+                payload=payload,
+                prompt_version=prompt_version,
+                metadata={
+                    "sample_id": sample_id,
+                    "matched_transition_id": (
+                        matched_transition.get(
+                            "transition_id"
+                        )
+                    ),
+                    **dict(metadata or {}),
+                },
+            )
+        )
+
+        damaged_query = _clean_text(
+            parsed.get("damaged_query")
+        )
+
+        if not damaged_query:
+            raise ValueError(
+                "Transported endpoint generator returned "
+                "no damaged_query."
+            )
+
+        if damaged_query == _clean_text(
+            correct_endpoint.get("query")
+        ):
+            raise ValueError(
+                "Transported damaged query is unchanged."
+            )
+
+        expected_titles = parsed.get("expected_titles") or []
+
+        if not isinstance(expected_titles, list):
+            raise ValueError(
+                "expected_titles must be a JSON list."
+            )
+
+        endpoint = make_semantic_endpoint(
+            sample_id=sample_id,
+            endpoint_type="transported_damaged",
+            question=_clean_text(
+                correct_endpoint.get("question")
+            ),
+            summary_1=_clean_text(
+                correct_endpoint.get("summary_1")
+            ),
+            query=damaged_query,
+            expected_titles=[
+                _clean_text(title)
+                for title in expected_titles
+            ],
+            metadata={
+                "reference_endpoint_id": (
+                    correct_endpoint.get("endpoint_id")
+                ),
+                "matched_w_transition_id": (
+                    matched_transition.get(
+                        "transition_id"
+                    )
+                ),
+                "expected_failure_behavior": (
+                    parsed.get(
+                        "expected_failure_behavior"
+                    )
+                ),
+                "locality_check": parsed.get(
+                    "locality_check"
+                ),
+                "generation_rationale": parsed.get(
+                    "rationale"
+                ),
+                "cache_hit": cache_hit,
+                "call_input_hash": call_record.get(
+                    "input_hash"
+                ),
+            },
+        )
+
+        return {
+            "sample_id": sample_id,
+            "reference_endpoint": dict(correct_endpoint),
+            "matched_transition_id": (
+                matched_transition.get("transition_id")
+            ),
+            "transported_endpoint": endpoint,
+            "generation": parsed,
+            "cache_hit": cache_hit,
+            "call_record": call_record,
+        }
+
+    def build_signed_transition(
+        self,
+        *,
+        correct_endpoint: Mapping[str, Any],
+        transported_endpoint: Mapping[str, Any],
+        matched_transition_id: Optional[str] = None,
+    ) -> dict[str, Any]:
+        """
+        C-side signed negative edge:
+
+            correct endpoint -> transported damaged endpoint
+
+        This direction receives polarity='avoid'.
+        """
+
+        return make_transition(
+            transition_type="transported_damage",
+            polarity="avoid",
+            source_endpoint=correct_endpoint,
+            target_endpoint=transported_endpoint,
+            metadata={
+                "matched_w_transition_id": (
+                    matched_transition_id
+                ),
+                "target_is_semantic": True,
+            },
+        )

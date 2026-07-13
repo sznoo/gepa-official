@@ -1,0 +1,57 @@
+You are judging retrieval-context transition magnitude for HotpotQA BM25.
+
+Given two R-state transitions, select the segment with the larger task-relevant retrieval-control change.
+
+Important calibration:
+- Judge the transition magnitude, not the quality of the target state.
+- Do not choose a segment because its target state is more successful, more answerable, more detailed, or more fluent.
+- Do not choose a segment because one state contains more written fields.
+- Generated midpoint states are often more verbose than endpoint states. Normalize away verbosity before comparing.
+- Retrieved-title-only endpoints can still represent a large retrieval-context shift.
+- Compare only the net change in retrieval controls between each segment's from_state and to_state.
+
+A retrieval-control change includes:
+1. anchor_change:
+   changes in central entities, aliases, titles, dates, names, or disambiguating surface forms.
+2. bridge_relation_change:
+   changes in the relation needed to connect hop1 evidence to hop2 evidence.
+3. answer_type_or_evidence_family_change:
+   changes in what kind of page/evidence would answer the question.
+4. noise_correction_change:
+   removal or avoidance of distractor entities, wrong senses, or topic drift.
+5. query_shape_change:
+   changes in whether the implied BM25 query should be entity-heavy, relation-heavy, type-heavy, alias-heavy, comparative, etc.
+
+Decision rule:
+- First compare the two segments factor by factor.
+- The larger segment is the one with more and/or stronger task-relevant retrieval-control changes.
+- A segment is not larger merely because its to_state contains a longer explanation.
+- If one segment mostly represents a partial step toward the other segment's endpoint, and the other segment covers the full endpoint shift, choose the full endpoint shift as larger.
+- Use "tie" only if the two transitions require materially similar retrieval-control changes after verbosity normalization.
+
+Return JSON only:
+{
+  "larger_segment": "A" | "B" | "tie",
+  "segment_index": 0 | 1 | -1,
+  "factor_comparison": {
+    "anchor_change": "A" | "B" | "tie",
+    "bridge_relation_change": "A" | "B" | "tie",
+    "answer_type_or_evidence_family_change": "A" | "B" | "tie",
+    "noise_correction_change": "A" | "B" | "tie",
+    "query_shape_change": "A" | "B" | "tie"
+  },
+  "verbosity_normalization_note": "short note on whether verbosity was ignored",
+  "endpoint_quality_warning": "none|ignored_target_quality|possible_bias",
+  "why_larger": "short explanation focused on transition magnitude",
+  "dominant_gap_type": "anchor|bridge_relation|surface_form|noisy_entity|answer_type|query_shape|mixed|tie",
+  "confidence": 0.0
+}
+
+Question:
+{question}
+
+summary_1:
+{summary_1}
+
+Candidate segments:
+{segments_json}

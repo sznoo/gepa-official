@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.midpoint.select_largest_edge",
+  "key": "0b1a98abd51df9356e295eddc495f21dd741538d4ccca914a271c2e98dafb0f7",
+  "created_at": "2026-07-12T16:10:06.730354+00:00",
+  "request": {
+    "operation": "midpoint.select_largest_edge",
+    "signature": "ours.utils.midpoint.SelectLargestEdgeSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Derive the minimal final answer supported by the supplied intermediate summaries.",
+      "task_context": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "edges": [
+        {
+          "edge_index": 0,
+          "left_state": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "University of Oxford",
+            "score": 0.0
+          },
+          "right_state": {
+            "state_kind": "intermediate",
+            "state_origin": "generated_midpoint",
+            "output": "a Scottish university",
+            "score": null
+          }
+        },
+        {
+          "edge_index": 1,
+          "left_state": {
+            "state_kind": "intermediate",
+            "state_origin": "generated_midpoint",
+            "output": "a Scottish university",
+            "score": null
+          },
+          "right_state": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "University of Glasgow",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are working with a functional semantic distance over states of one\nagent in a multi-agent pipeline.\n\nEach state contains the selected agent's output and may also contain the\ndownstream consequences produced by that output while the rest of the\npipeline is held fixed. The agent output is the primary object of the\ntransition. Downstream evidence and metrics are supporting evidence about\nits functional effect.\n\nThe distance is not surface text edit distance and is not a correctness\nscore. It measures how much task-relevant behavior and information must\nchange to move from one state to another.\n\nJudge distance using:\n1. Agent-output behavior: what the output is trying to accomplish for the\n   selected agent's role.\n2. Task-relevant information: which entities, relations, evidence,\n   conclusions, or answer constraints are preserved, added, removed, or\n   corrected.\n3. Downstream consequence: how the output changes retrieval, evidence,\n   answerability, or information available to later agents.\n4. Transition utility: whether a state is a meaningful intermediate step\n   between two endpoint states.\n\nDo not infer distance from text length, token count, document count, or\nlexical overlap. Do not treat a state as closer merely because its metric\nor final answer is better. Metrics are evidence of functional consequence,\nnot the distance definition itself.\n\nA midpoint output o_mid between o_left and o_right must:\n- preserve useful task-relevant behavior or information from o_left;\n- make concrete semantic progress toward o_right;\n- differ meaningfully from both endpoint outputs;\n- not merely paraphrase or copy o_left;\n- not simply copy o_right;\n- represent two smaller functional transitions than the original edge.\n\nCompare all adjacent transitions jointly and select the single edge with\nthe largest functional semantic distance.\n\nUse the same distance definition for every edge. If two edges are\nfunctionally tied, select the lower edge_index.\n\nAgent:\nfinal\n\nAgent role:\nDerive the minimal final answer supported by the supplied intermediate summaries.\n\nTask context:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nAdjacent projected state edges:\n[\n  {\n    \"edge_index\": 0,\n    \"left_state\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"University of Oxford\",\n      \"score\": 0.0\n    },\n    \"right_state\": {\n      \"state_kind\": \"intermediate\",\n      \"state_origin\": \"generated_midpoint\",\n      \"output\": \"a Scottish university\",\n      \"score\": null\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"left_state\": {\n      \"state_kind\": \"intermediate\",\n      \"state_origin\": \"generated_midpoint\",\n      \"output\": \"a Scottish university\",\n      \"score\": null\n    },\n    \"right_state\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"University of Glasgow\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"edge_index\": <zero-based integer>,\n  \"rationale\": \"<brief functional-semantic reason>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"edge_index\": 0,\n  \"rationale\": \"Edge 0 makes a larger functional change: it replaces a specific English university (University of Oxford) with a vague, wrong-country label (a Scottish university), losing the original named-entity and altering the task-relevant fact (country). Edge 1 is a smaller, concrete refinement that preserves the Scottish constraint and adds specificity (University of Glasgow), so it is a smaller semantic step.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "midpoint.select_largest_edge",
+    "signature": "ours.utils.midpoint.SelectLargestEdgeSignature",
+    "agent": "final",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 2
+  }
+}
