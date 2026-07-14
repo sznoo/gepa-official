@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "817b1346cc31e3002165fbac6a0f6edae1a0c21a760fcd50e305ce2191a54bbc",
+  "created_at": "2026-07-13T18:47:17.973925+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "passages": [
+          "Liberal Arts and Sciences at Tilburg University | Tilburg University offers an intensive three-year program in Liberal Arts and Sciences, which combines a broad and interdisciplinary education with in-depth specialization.  The distinctive focus of Tilburg University’s Liberal Arts and Sciences program is on Europe in a globalizing world.  Both historical and current societal key issues are tackled in the course of this international program, taught entirely in English.  Students are trained to approach complex issues from different perspectives and from a variety of academic disciplines.  To achieve this intellectual flexibility, lectures are team-taught by lecturers from different academic backgrounds and research traditions.  This method of instruction is unique to Tilburg University.",
+          "Edward E. Baptist | Edward E. Baptist (born 1970) is an American academic and writer.  He is a Professor of History at Cornell University, located in Ithaca, New York, where he specializes in the history of the 19th-century United States, and particularly the South.  Thematically, he has been interested in the history of capitalism, and has also been interested in digital humanities methodologies.  He is the author of numerous books.",
+          "Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures).  These depictions are usually done by writers, designers and artists from the West.  In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a similar interest in Oriental themes.",
+          "Harrogate Tutorial College | Harrogate Tutorial College in Harrogate, North Yorkshire, England is a small co-educational independent school.  HTC specialises in preparing students for university and teaches GCSE and A-level qualifications in tutorial classes.  The college's admissions policy and style of teaching has made it a popular choice among pupils of British public schools who have not met the often restrictive academic requirements of their schools to proceed to A-level.  Attracting many overseas students wishing to enroll at British universities, the college also provides English language courses which are often taught in combination with academic subjects.  Special preparation is offered to Oxford and Cambridge applicants and 90% of HTC students secure places at university.",
+          "Master of Arts in Special Education | The Master of Arts in Special Education is a postgraduate academic master's degree awarded by universities in many countries.  This degree designed to develop the capabilities and resources of educators of children who require Special education, such as students with an Autism spectrum disorder.",
+          "Seth Evans | Seth Evans is a scholar and educator who specializes in the Abhidhamma Pitaka (abhidhammapiṭaka) and the Visuddhimagga.  Especially interested in the phenomenological aspects of Buddhist psychology.  Academic focus is primarily on Buddhist ontology, Buddhist metaphysics, and Buddhist epistemology.  He did his graduate studies in Buddhist theory as a Theravada monk at Mahachulalongkornrajavidyalaya University.  As a monk, he taught meditation at Wat Prayong where he completed five vassa.",
+          "Brazilian academic art | Brazilian Academic art was a major art style in Brazil from the early 19th century to the early 20th century, based on European academic art and produced on official institutions of professional art education."
+        ],
+        "current_output": "Cornell University"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Cornell University",
+        "score": 0.0,
+        "generated_query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\"",
+        "retrieved_titles": [
+          "Edward E. Baptist",
+          "Wikidumper.org",
+          "Orientalism",
+          "Cornell University College of Arts and Sciences",
+          "James Thomas Quarles",
+          "Lisa Wainwright",
+          "Robert Hobbs"
+        ],
+        "summary_2": "Cornell University",
+        "answer": "Cornell University",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Nigel Leask"
+        ]
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Summary of first-hop evidence: The 'Orientalism' source states that Orientalist painting (depicting the Middle East) was one of the specialisms of 19th-century academic art. Bridge / missing information needed next: the identity and institutional affiliation of the academic who counted this specialism among their interests. Retrieval direction for next hop: retrieve the 'Nigel Leask' page (biography/academic profile) to confirm whether Orientalism/Orientalist painting is listed among his special interests and to extract the university where he taught. (This is a summary1 output, not a final answer.)",
+        "score": 1.0,
+        "generated_query": "Search for: Nigel Leask biography profile \"special interests\" Orientalism university (e.g., Wikipedia or university staff page)",
+        "retrieved_titles": [
+          "Nigel Leask",
+          "Spock (website)",
+          "William Keith Leask",
+          "Index of religion-related articles",
+          "Wikiseek",
+          "Marilyn Leask",
+          "Nigel Horspool"
+        ],
+        "summary_2": "University of Glasgow",
+        "answer": "University of Glasgow",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Nigel Leask"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"passages\": [\n    \"Liberal Arts and Sciences at Tilburg University | Tilburg University offers an intensive three-year program in Liberal Arts and Sciences, which combines a broad and interdisciplinary education with in-depth specialization.  The distinctive focus of Tilburg University’s Liberal Arts and Sciences program is on Europe in a globalizing world.  Both historical and current societal key issues are tackled in the course of this international program, taught entirely in English.  Students are trained to approach complex issues from different perspectives and from a variety of academic disciplines.  To achieve this intellectual flexibility, lectures are team-taught by lecturers from different academic backgrounds and research traditions.  This method of instruction is unique to Tilburg University.\",\n    \"Edward E. Baptist | Edward E. Baptist (born 1970) is an American academic and writer.  He is a Professor of History at Cornell University, located in Ithaca, New York, where he specializes in the history of the 19th-century United States, and particularly the South.  Thematically, he has been interested in the history of capitalism, and has also been interested in digital humanities methodologies.  He is the author of numerous books.\",\n    \"Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures).  These depictions are usually done by writers, designers and artists from the West.  In particular, Orientalist painting, depicting more specifically \\\"the Middle East\\\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a similar interest in Oriental themes.\",\n    \"Harrogate Tutorial College | Harrogate Tutorial College in Harrogate, North Yorkshire, England is a small co-educational independent school.  HTC specialises in preparing students for university and teaches GCSE and A-level qualifications in tutorial classes.  The college's admissions policy and style of teaching has made it a popular choice among pupils of British public schools who have not met the often restrictive academic requirements of their schools to proceed to A-level.  Attracting many overseas students wishing to enroll at British universities, the college also provides English language courses which are often taught in combination with academic subjects.  Special preparation is offered to Oxford and Cambridge applicants and 90% of HTC students secure places at university.\",\n    \"Master of Arts in Special Education | The Master of Arts in Special Education is a postgraduate academic master's degree awarded by universities in many countries.  This degree designed to develop the capabilities and resources of educators of children who require Special education, such as students with an Autism spectrum disorder.\",\n    \"Seth Evans | Seth Evans is a scholar and educator who specializes in the Abhidhamma Pitaka (abhidhammapiṭaka) and the Visuddhimagga.  Especially interested in the phenomenological aspects of Buddhist psychology.  Academic focus is primarily on Buddhist ontology, Buddhist metaphysics, and Buddhist epistemology.  He did his graduate studies in Buddhist theory as a Theravada monk at Mahachulalongkornrajavidyalaya University.  As a monk, he taught meditation at Wat Prayong where he completed five vassa.\",\n    \"Brazilian academic art | Brazilian Academic art was a major art style in Brazil from the early 19th century to the early 20th century, based on European academic art and produced on official institutions of professional art education.\"\n  ],\n  \"current_output\": \"Cornell University\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Cornell University\",\n  \"score\": 0.0,\n  \"generated_query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\",\n  \"retrieved_titles\": [\n    \"Edward E. Baptist\",\n    \"Wikidumper.org\",\n    \"Orientalism\",\n    \"Cornell University College of Arts and Sciences\",\n    \"James Thomas Quarles\",\n    \"Lisa Wainwright\",\n    \"Robert Hobbs\"\n  ],\n  \"summary_2\": \"Cornell University\",\n  \"answer\": \"Cornell University\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Nigel Leask\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Summary of first-hop evidence: The 'Orientalism' source states that Orientalist painting (depicting the Middle East) was one of the specialisms of 19th-century academic art. Bridge / missing information needed next: the identity and institutional affiliation of the academic who counted this specialism among their interests. Retrieval direction for next hop: retrieve the 'Nigel Leask' page (biography/academic profile) to confirm whether Orientalism/Orientalist painting is listed among his special interests and to extract the university where he taught. (This is a summary1 output, not a final answer.)\",\n  \"score\": 1.0,\n  \"generated_query\": \"Search for: Nigel Leask biography profile \\\"special interests\\\" Orientalism university (e.g., Wikipedia or university staff page)\",\n  \"retrieved_titles\": [\n    \"Nigel Leask\",\n    \"Spock (website)\",\n    \"William Keith Leask\",\n    \"Index of religion-related articles\",\n    \"Wikiseek\",\n    \"Marilyn Leask\",\n    \"Nigel Horspool\"\n  ],\n  \"summary_2\": \"University of Glasgow\",\n  \"answer\": \"University of Glasgow\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Nigel Leask\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If any passage contains the phrase 'specialisms of 19th-century academic art', 'Orientalist painting', or 'Orientalism'.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of producing a concise, passage-supported factual statement drawn from the provided passages and reusing short passage phrases or passage titles that already appear in the input.\",\n    \"change_rule\": \"Instead of producing a final answer or a single extracted entity, produce a three-part summary: (1) one short sentence naming the passage (by its visible title or the word 'passage') and the specific claim it supports about the specialism (use only short quoted phrases that already appear in the passages, e.g. 'Orientalist painting'); (2) one explicit statement of the bridge / missing fact needed for the next hop: that the identity (name) of the academic who counted this specialism among their interests and that academic's institutional affiliation are not present and must be retrieved; (3) a concrete retrieval direction: a short search/query template describing what page to fetch next (e.g., 'fetch the scholar's biography or university staff profile that lists special interests / Orientalism'). Do not attempt to answer the question or infer the missing identity or affiliation.\",\n    \"drop_or_avoid_rule\": \"Do not output a final answer, do not invent or assert any academic's name or university, do not copy long literal spans that appear only in other (target) states, and avoid including any sample-specific names unless they already appear in the visible passages. Avoid verbose explanations; keep the three parts brief and actionable.\",\n    \"output_contract\": \"Produce the single field 'summary' (string). The summary must contain: (A) a one-sentence citation-style evidence line: which visible passage supports that 'Orientalist painting' was a specialism of 19th-century academic art; (B) a one-sentence bridge statement naming the missing fact needed next (the scholar's identity and their university affiliation); (C) a one-sentence retrieval direction giving a concrete query/page type to request next (e.g., 'retrieve the scholar's biography or university staff page that lists special interests (Orientalism)'). Each of the three parts should be present and separated by a short delimiter (period or semicolon).\",\n    \"why_local_transition\": \"The agent's current output supplies a final-seeming name instead of summarizing first-hop evidence and exposing the missing bridge for the next retrieval. This narrow prompt edit makes the agent emit the required first-hop summary and an explicit, actionable retrieval direction without producing a final answer.\"\n  },\n  \"rationale\": \"Source behavior returned a terse final output rather than the required first-hop evidence summary and retrieval direction. The smallest coherent change is to add a rule triggered by the presence of the passage that mentions 'Orientalism' so the agent will: (1) cite that passage and the supported claim, (2) state precisely what is missing (the scholar's identity and affiliation), and (3) provide a concrete next-hop retrieval instruction. The change preserves existing useful behavior (concise, passage-grounded phrasing) while avoiding invention or leakage of target-only information, complying with the constraint to not output answers or sample-specific names that are not already visible.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

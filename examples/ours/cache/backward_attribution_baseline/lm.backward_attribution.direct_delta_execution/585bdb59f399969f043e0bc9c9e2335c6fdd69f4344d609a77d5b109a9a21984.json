@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "585bdb59f399969f043e0bc9c9e2335c6fdd69f4344d609a77d5b109a9a21984",
+  "created_at": "2026-07-13T17:21:41.027603+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks for a person (e.g., begins with or includes 'who'/'whom') and the available summaries contain a named individual who answers the question, apply this prompt edit.",
+            "preserve_rule": "Keep the existing use of the provided summaries as supporting evidence and keep selecting the named entity (person) that directly answers the question.",
+            "change_rule": "When producing the final `answer`, emit only the minimal name string (the person's full name as it appears in the supporting summaries). Strip any parenthetical remarks, appositive descriptions, job titles, explanatory phrases, or extra punctuation so the answer is just the name text.",
+            "drop_or_avoid_rule": "Do not include parenthetical clauses, occupational labels, explanatory appositives, or any extra descriptive text appended to the name. Avoid punctuation or commentary beyond the exact name (no parentheses, hyphenated explanations, trailing clauses, or sentences).",
+            "output_contract": "The `answer` field must contain only the minimal answer string (the person's name) supported by the summaries. Place that single string inside the [[ ## answer ## ]] block and nothing else.",
+            "why_local_transition": "This edge only requires trimming extraneous explanatory text from an otherwise-correct answer so the final output matches the minimal-answer contract; it preserves existing evidence usage and only tightens answer formatting."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The winner of the first season of \"Next Great Baker\" would win an apprenticeship at the bakery owned by who?",
+        "summary_1": "Buddy Valastro",
+        "summary_2": "Buddy Valastro — the owner of Carlo's Bake Shop.",
+        "current_output": "Buddy Valastro (owner of Carlo's Bake Shop)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks for a person (e.g., begins with or includes 'who'/'whom') and the available summaries contain a named individual who answers the question, apply this prompt edit.\",\n      \"preserve_rule\": \"Keep the existing use of the provided summaries as supporting evidence and keep selecting the named entity (person) that directly answers the question.\",\n      \"change_rule\": \"When producing the final `answer`, emit only the minimal name string (the person's full name as it appears in the supporting summaries). Strip any parenthetical remarks, appositive descriptions, job titles, explanatory phrases, or extra punctuation so the answer is just the name text.\",\n      \"drop_or_avoid_rule\": \"Do not include parenthetical clauses, occupational labels, explanatory appositives, or any extra descriptive text appended to the name. Avoid punctuation or commentary beyond the exact name (no parentheses, hyphenated explanations, trailing clauses, or sentences).\",\n      \"output_contract\": \"The `answer` field must contain only the minimal answer string (the person's name) supported by the summaries. Place that single string inside the [[ ## answer ## ]] block and nothing else.\",\n      \"why_local_transition\": \"This edge only requires trimming extraneous explanatory text from an otherwise-correct answer so the final output matches the minimal-answer contract; it preserves existing evidence usage and only tightens answer formatting.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The winner of the first season of \\\"Next Great Baker\\\" would win an apprenticeship at the bakery owned by who?\",\n  \"summary_1\": \"Buddy Valastro\",\n  \"summary_2\": \"Buddy Valastro — the owner of Carlo's Bake Shop.\",\n  \"current_output\": \"Buddy Valastro (owner of Carlo's Bake Shop)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nBuddy Valastro\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Question asks for a person; summaries name Buddy Valastro as the bakery owner, and per the ordered delta the final output contains only that name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 77,
+    "row_index": 77,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

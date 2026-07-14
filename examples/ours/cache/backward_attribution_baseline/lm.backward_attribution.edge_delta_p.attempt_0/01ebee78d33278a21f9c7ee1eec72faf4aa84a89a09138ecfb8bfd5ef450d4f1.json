@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "01ebee78d33278a21f9c7ee1eec72faf4aa84a89a09138ecfb8bfd5ef450d4f1",
+  "created_at": "2026-07-13T17:20:18.666083+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+        "summary_1": "Whistle Down the Wind (1961)",
+        "summary_2": "Whistle Down the Wind (1961)",
+        "current_output": "Whistle Down the Wind (1961)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Whistle Down the Wind (1961)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Whistle Down the Wind",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\",\n  \"summary_1\": \"Whistle Down the Wind (1961)\",\n  \"summary_2\": \"Whistle Down the Wind (1961)\",\n  \"current_output\": \"Whistle Down the Wind (1961)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Whistle Down the Wind (1961)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Whistle Down the Wind\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the current generated answer or both summary_1 and summary_2 contain a film title that ends with a parenthetical four-digit year (pattern: \\\"(YYYY)\\\", e.g. \\\"(1961)\\\").\",\n    \"preserve_rule\": \"Keep the original title words, casing, and ordering exactly as they appear in the visible inputs. Do not add new words, explanatory phrases, or metadata beyond the title.\",\n    \"change_rule\": \"If the trigger matches, remove only the trailing parenthetical four-digit year (the substring matching \\\"(\\\\d{4})\\\") from the title before emitting the final answer. Do not alter any other characters of the title.\",\n    \"drop_or_avoid_rule\": \"Do not append or reinsert any date, parenthetical, extra punctuation, or explanatory text. Avoid adding cast names, years, or qualifiers; avoid expanding or contracting the title beyond removing the terminal \\\"(YYYY)\\\" pattern.\",\n    \"output_contract\": \"Produce the [[ ## answer ## ]] block containing only the minimal film title string (title text without the trailing parenthetical year). No additional words, punctuation, or metadata should appear inside the answer block.\",\n    \"why_local_transition\": \"The only difference between the current output and the desired output is a formatting artifact: a trailing parenthetical year. Stripping a terminal \\\"(YYYY)\\\" yields the minimal canonical title while preserving the evidence from the summaries.\"\n  },\n  \"rationale\": \"This delta makes a narrowly scoped, deterministic edit: remove a trailing parenthetical four-digit year when present. It preserves all title text and the agent's existing behavior except for this small canonicalization, satisfies the final-answer contract (only the minimal title), and avoids introducing new content or relying on hidden labels. The rule is limited to the specific pattern to reduce risk of removing meaningful parentheticals that are not years.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 67,
+    "row_index": 67,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

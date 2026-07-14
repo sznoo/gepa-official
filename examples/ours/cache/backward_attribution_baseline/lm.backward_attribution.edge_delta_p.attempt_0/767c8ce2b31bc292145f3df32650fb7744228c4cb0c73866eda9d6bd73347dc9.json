@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "767c8ce2b31bc292145f3df32650fb7744228c4cb0c73866eda9d6bd73347dc9",
+  "created_at": "2026-07-13T17:25:17.540469+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What do people in the United Kingdom commonly call the location of the room where the entire play \"On the Rocks\" is set?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What do people in the United Kingdom commonly call the location of the room where the entire play \"On the Rocks\" is set?",
+        "summary_1": "They commonly call it \"Number 10\" (10 Downing Street).",
+        "summary_2": "They commonly call it \"Number 10\" (10 Downing Street).",
+        "current_output": "\"Number 10\" — 10 Downing Street."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "\"Number 10\" — 10 Downing Street.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Number 10",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What do people in the United Kingdom commonly call the location of the room where the entire play \\\"On the Rocks\\\" is set?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What do people in the United Kingdom commonly call the location of the room where the entire play \\\"On the Rocks\\\" is set?\",\n  \"summary_1\": \"They commonly call it \\\"Number 10\\\" (10 Downing Street).\",\n  \"summary_2\": \"They commonly call it \\\"Number 10\\\" (10 Downing Street).\",\n  \"current_output\": \"\\\"Number 10\\\" — 10 Downing Street.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"\\\"Number 10\\\" — 10 Downing Street.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Number 10\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the provided summaries both contain the same short common name for the location (e.g., both summaries include the phrase \\\"Number 10\\\").\",\n    \"preserve_rule\": \"Continue to use the visible summaries as the authoritative evidence source and preserve the short label text they provide.\",\n    \"change_rule\": \"When writing the answer, emit only the minimal short name string exactly as given by the summaries. Remove any surrounding quotation marks, explanatory parentheticals, em dashes, appended formal names, or extra words. The answer must be the short common name alone (for example: Number 10).\",\n    \"drop_or_avoid_rule\": \"Do not include additional context, clarifications, punctuation decorations, or the expanded place name (e.g., do not append '— 10 Downing Street', parentheses, quotes, or any extra sentence).\",\n    \"output_contract\": \"Fill the 'answer' field with exactly the single minimal answer token sequence (the short common name from the summaries) and nothing else. Ensure the final [[ ## answer ## ]] block contains only that minimal string.\",\n    \"why_local_transition\": \"The current output adds an explanatory appendix and punctuation; this narrow prompt edit forces the final stage to format the supported short label alone, satisfying the final-answer contract without changing evidential basis.\"\n  },\n  \"rationale\": \"This delta is a minimal behavior change that preserves the agent's reliance on the summaries while tightening formatting to the required minimal final answer. It does not introduce new facts, it only removes extra punctuation and appended formal names that are unnecessary for the final-answer contract. The trigger ensures the rule applies only when the summaries concordantly provide a short common name, so the agent still uses visible evidence and omits superfluous text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 141,
+    "row_index": 141,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

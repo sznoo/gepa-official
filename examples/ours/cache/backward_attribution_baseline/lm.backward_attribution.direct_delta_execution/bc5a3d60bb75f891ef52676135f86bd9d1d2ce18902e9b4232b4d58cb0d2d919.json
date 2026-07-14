@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "bc5a3d60bb75f891ef52676135f86bd9d1d2ce18902e9b4232b4d58cb0d2d919",
+  "created_at": "2026-07-13T17:24:05.246098+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question is a binary (yes/no) question about whether two named taxa or places are from the same locations (for example, the question asks whether Brunnera and Codonanthe are from the same locations) and the visible summaries state different native regions for the two names.",
+            "preserve_rule": "Keep using summary_1 and summary_2 as the exclusive evidence sources. Preserve any inference that compares the named native regions in those summaries and preserve the determination already reached from that comparison.",
+            "change_rule": "Do not produce an explanatory sentence. Instead, reduce the final output to a single lowercase answer token indicating the binary decision inferred from the summaries: either the word yes or the word no. Decide which token by comparing the native-location statements in the summaries (if they describe the same region -> yes; if they describe different regions -> no).",
+            "drop_or_avoid_rule": "Avoid any additional text, punctuation, capitalization, justification, examples, or region names in the final output. Do not restate, summarize, or quote the summaries in the answer block. Do not prepend or append salutations, qualifiers, or metadata.",
+            "output_contract": "Place exactly one lowercase word — either yes or no — and nothing else inside the [[ ## answer ## ]] output block. No punctuation, no surrounding explanatory text, and no extra tokens.",
+            "why_local_transition": "The source behavior included a verbose explanatory sentence; this small behavioral edit enforces the final-answer format required by the agent role (a single minimal yes/no token) while keeping the same evidence and decision logic from the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are Brunnera and Codonanthe from the same locations?",
+        "summary_1": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies — e.g., Belize).",
+        "summary_2": "No. Brunnera is native to Eastern Europe/Northwest Asia, while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).",
+        "current_output": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question is a binary (yes/no) question about whether two named taxa or places are from the same locations (for example, the question asks whether Brunnera and Codonanthe are from the same locations) and the visible summaries state different native regions for the two names.\",\n      \"preserve_rule\": \"Keep using summary_1 and summary_2 as the exclusive evidence sources. Preserve any inference that compares the named native regions in those summaries and preserve the determination already reached from that comparison.\",\n      \"change_rule\": \"Do not produce an explanatory sentence. Instead, reduce the final output to a single lowercase answer token indicating the binary decision inferred from the summaries: either the word yes or the word no. Decide which token by comparing the native-location statements in the summaries (if they describe the same region -> yes; if they describe different regions -> no).\",\n      \"drop_or_avoid_rule\": \"Avoid any additional text, punctuation, capitalization, justification, examples, or region names in the final output. Do not restate, summarize, or quote the summaries in the answer block. Do not prepend or append salutations, qualifiers, or metadata.\",\n      \"output_contract\": \"Place exactly one lowercase word — either yes or no — and nothing else inside the [[ ## answer ## ]] output block. No punctuation, no surrounding explanatory text, and no extra tokens.\",\n      \"why_local_transition\": \"The source behavior included a verbose explanatory sentence; this small behavioral edit enforces the final-answer format required by the agent role (a single minimal yes/no token) while keeping the same evidence and decision logic from the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are Brunnera and Codonanthe from the same locations?\",\n  \"summary_1\": \"No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies — e.g., Belize).\",\n  \"summary_2\": \"No. Brunnera is native to Eastern Europe/Northwest Asia, while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).\",\n  \"current_output\": \"No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"no\",\n  \"rationale\": \"Compared the native-region statements in summary_1 and summary_2 and applied the ordered rule to return a single lowercase yes/no token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 111,
+    "row_index": 111,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

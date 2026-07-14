@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "3f7f5763b0d48c6cd8af14990586716316fdc5fbda06555d6a0a984edd9dcc20",
+  "created_at": "2026-07-13T17:22:48.002349+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "White Shepherd and Kunming wolfdog, are a breed of what?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "White Shepherd and Kunming wolfdog, are a breed of what?",
+        "summary_1": "They are breeds of dog.",
+        "summary_2": "They are breeds of dog.",
+        "current_output": "They are breeds of dog."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are breeds of dog.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "dog",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"White Shepherd and Kunming wolfdog, are a breed of what?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"White Shepherd and Kunming wolfdog, are a breed of what?\",\n  \"summary_1\": \"They are breeds of dog.\",\n  \"summary_2\": \"They are breeds of dog.\",\n  \"current_output\": \"They are breeds of dog.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are breeds of dog.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"dog\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the visible summaries (summary_1 and summary_2) agree on a category or the current_output is a restatement that contains a clear categorical noun present in the summaries.\",\n    \"preserve_rule\": \"Keep using the provided summaries and the current_output as the evidence source. If they consistently indicate the same category term, accept that as the supported category.\",\n    \"change_rule\": \"Instead of emitting a full sentence, extract the single-word (or shortest noun token) category that appears in the summaries (or in both a summary and the current_output) and emit only that token as the answer.\",\n    \"drop_or_avoid_rule\": \"Avoid full-sentence answers, added determiners, explanatory phrases, or any extra punctuation. Do not invent or introduce new categories beyond what the visible summaries support.\",\n    \"output_contract\": \"Produce the field `answer` whose value is exactly the minimal categorical label (a single word) supported by the visible summaries. The [[ ## answer ## ]] block must contain only that word and nothing else.\",\n    \"why_local_transition\": \"This change converts an otherwise-correct full-sentence reply into the concise label format required by the final-answer contract, using only information already present in the summaries.\"\n  },\n  \"rationale\": \"The smallest coherent behavioral change is to prefer emitting the minimal categorical token when the summaries agree. This preserves the agent's use of the same evidence while removing extraneous phrasing so the final output matches the required single-word answer format. The rule is narrowly scoped (applies only when summaries concur) and avoids inventing content.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 91,
+    "row_index": 91,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

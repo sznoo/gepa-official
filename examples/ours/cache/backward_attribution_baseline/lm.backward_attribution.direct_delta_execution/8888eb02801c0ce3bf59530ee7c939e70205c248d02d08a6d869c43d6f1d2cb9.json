@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "8888eb02801c0ce3bf59530ee7c939e70205c248d02d08a6d869c43d6f1d2cb9",
+  "created_at": "2026-07-13T17:25:01.297294+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 and summary_2 are both present and assert the same ownership string for the asked entity, and the agent's current answer differs from that asserted ownership in the summaries.",
+            "preserve_rule": "Keep the existing final-answer formatting behavior (the [[ ## answer ## ]] block and minimal-answer contract) and retain any other useful inference behavior not directly about the ownership value.",
+            "change_rule": "When the trigger condition holds, prefer the ownership string provided by the visible summaries (the value they both agree on) as the authoritative source for the answer. Produce that ownership string as the minimal answer text, and do not append explanations, qualifiers, or extra names not present in the agreeing summaries.",
+            "drop_or_avoid_rule": "Avoid using external knowledge, memory, or prior outputs that contradict the ownership string given in the agreeing summaries. Do not add family names, dates, or other extra details unless those exact details appear in the visible summaries.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the single minimal ownership string exactly as presented by the agreeing summaries (no surrounding text, punctuation, or explanation).",
+            "why_local_transition": "The current output uses a different ownership claim than the provided summaries. This small rule shifts priority to consistent information in the visible summaries so the final answer matches the evidence the pipeline supplied, while preserving the agent's existing output format and other behaviors."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.",
+        "summary_1": "Space (Ibiza) was owned by STANCA.",
+        "summary_2": "Space (Ibiza) was owned by STANCA.",
+        "current_output": "Space (Ibiza) was owned by Pepe Roselló (the Roselló family)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 and summary_2 are both present and assert the same ownership string for the asked entity, and the agent's current answer differs from that asserted ownership in the summaries.\",\n      \"preserve_rule\": \"Keep the existing final-answer formatting behavior (the [[ ## answer ## ]] block and minimal-answer contract) and retain any other useful inference behavior not directly about the ownership value.\",\n      \"change_rule\": \"When the trigger condition holds, prefer the ownership string provided by the visible summaries (the value they both agree on) as the authoritative source for the answer. Produce that ownership string as the minimal answer text, and do not append explanations, qualifiers, or extra names not present in the agreeing summaries.\",\n      \"drop_or_avoid_rule\": \"Avoid using external knowledge, memory, or prior outputs that contradict the ownership string given in the agreeing summaries. Do not add family names, dates, or other extra details unless those exact details appear in the visible summaries.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal ownership string exactly as presented by the agreeing summaries (no surrounding text, punctuation, or explanation).\",\n      \"why_local_transition\": \"The current output uses a different ownership claim than the provided summaries. This small rule shifts priority to consistent information in the visible summaries so the final answer matches the evidence the pipeline supplied, while preserving the agent's existing output format and other behaviors.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.\",\n  \"summary_1\": \"Space (Ibiza) was owned by STANCA.\",\n  \"summary_2\": \"Space (Ibiza) was owned by STANCA.\",\n  \"current_output\": \"Space (Ibiza) was owned by Pepe Roselló (the Roselló family).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"STANCA\",\n  \"rationale\": \"Both summaries explicitly agreed that Space (Ibiza) was owned by STANCA; per the ordered delta, I used that agreeing ownership string as the minimal authoritative answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 129,
+    "row_index": 129,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

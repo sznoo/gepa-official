@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "48a83971298a37b07649c80ccf9d02c2f33b1468dbcecaa8ef3f94a91205058e",
+  "created_at": "2026-07-13T17:24:17.331900+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "summary_2": "I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.",
+        "current_output": "No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Kim Basinger",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"summary_2\": \"I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.\",\n  \"current_output\": \"No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Kim Basinger\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"The question explicitly asks which actor/actress starred in both named works, AND both summary_1 and summary_2 state they do not list cast members or otherwise provide no cast names for the specified titles.\",\n    \"preserve_rule\": \"Keep the base behavior of treating the provided summaries as primary evidence: do not invent or assert details when the summaries themselves contain cast lists or explicit, conflicting information.\",\n    \"change_rule\": \"If the summaries offer no cast information for the named works, permit the agent to consult its own general (memorized) knowledge only when that internal knowledge yields a single, unambiguous actress known to have starred in both specified titles. In that exact case, produce only the actress's name as the answer string (no explanation). If the agent's internal knowledge is uncertain, yields multiple plausible candidates, or conflicts with the summaries, do not guess—fall back to the preserve_rule (ask for clarification or state insufficient evidence).\",\n    \"drop_or_avoid_rule\": \"When using internal knowledge as allowed above, avoid any additional commentary, explanations, requests for clarification, cast lists, or supporting excerpts. Do not restate uncertainty or summarize the summaries; output must be only the single-name answer.\",\n    \"output_contract\": \"Populate the [[ ## answer ## ]] block with only the minimal answer string (the single actress name) when the change_rule conditions are met. Otherwise follow the base prompt's normal evidence-based output behavior.\",\n    \"why_local_transition\": \"The source refused to assert an overlap because the summaries lacked cast details. This local change permits a very narrow, high-confidence use of the agent's internal knowledge to supply a single-name answer when summaries give no cast info and the agent is certain, enabling a direct minimal answer instead of an abstention.\"\n  },\n  \"rationale\": \"This delta makes the smallest coherent behavioral change: it preserves evidence-first behavior but adds a tightly scoped exception allowing confident recall to produce a concise answer when the provided summaries contain no cast data. It prevents hallucination by requiring single, unambiguous internal knowledge and by forbidding guesses when uncertain. It also enforces the agent's existing output contract to return only the minimal answer string, matching the agent role and keeping other behavior unchanged.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "497b9ee154ab96f21c767e08d4a03f70e6afe662098e06300143256de15768bf",
+  "created_at": "2026-07-13T17:22:23.077345+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "\"Could I Leave You?\" was a song in Follies, a musical concering what?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "\"Could I Leave You?\" was a song in Follies, a musical concering what?",
+        "summary_1": "Follies concerns a reunion of former showgirls in a crumbling Broadway theater, and the lives, relationships and regrets that resurface.",
+        "summary_2": "Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.",
+        "current_output": "Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "a crumbling Broadway theatre",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"\\\"Could I Leave You?\\\" was a song in Follies, a musical concering what?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"\\\"Could I Leave You?\\\" was a song in Follies, a musical concering what?\",\n  \"summary_1\": \"Follies concerns a reunion of former showgirls in a crumbling Broadway theater, and the lives, relationships and regrets that resurface.\",\n  \"summary_2\": \"Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.\",\n  \"current_output\": \"Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"a crumbling Broadway theatre\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks what a work (here, the musical) 'concerns' or otherwise asks 'what' the work is about (e.g., the question text contains both a form of 'concern'/'concer' and 'what', or is phrased 'what does X concern?').\",\n    \"preserve_rule\": \"Keep using the provided summary_1 and summary_2 as evidence. Preserve any extraction or verification behavior that finds a direct supporting phrase in those summaries.\",\n    \"change_rule\": \"Instead of returning a full descriptive sentence, return only the shortest noun phrase from the visible summaries that directly answers what the musical concerns. Produce that phrase verbatim (or with minimal orthographic normalization) and nothing else as the answer field. Do not add explanatory words, clauses, or punctuation beyond the phrase itself.\",\n    \"drop_or_avoid_rule\": \"Do not rephrase into a full sentence, do not append supporting details (e.g., lives, relationships, regrets), and do not combine multiple summary fragments. Avoid inventing new wording not present in the visible summaries.\",\n    \"output_contract\": \"Fill the 'answer' output so that the [[ ## answer ## ]] block contains only the single minimal answer string (the shortest noun phrase from the provided summaries that directly answers the question), with no extra text, punctuation, or commentary.\",\n    \"why_local_transition\": \"The base prompt produced a full-sentence restatement from the summaries. This edge enforces the agent's final-answer contract to emit the minimal phrase that directly answers 'what' the musical concerns, matching the concise output requirement while still using the provided summaries as evidence.\"\n  },\n  \"rationale\": \"The source output restates a full descriptive sentence from the summaries. The final-answer contract requires a minimal answer string. The smallest coherent change is to detect 'what the musical concerns' questions and switch from full-sentence restatement to returning the shortest supporting noun phrase found in the visible summaries. This preserves evidence use and verification while removing extra commentary; it is narrowly scoped and does not alter other behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 85,
+    "row_index": 85,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

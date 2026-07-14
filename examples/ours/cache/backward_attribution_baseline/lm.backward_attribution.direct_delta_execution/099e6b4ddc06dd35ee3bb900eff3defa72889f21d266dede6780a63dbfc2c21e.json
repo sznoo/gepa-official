@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "099e6b4ddc06dd35ee3bb900eff3defa72889f21d266dede6780a63dbfc2c21e",
+  "created_at": "2026-07-13T17:22:11.116848+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the visible summaries (summary_1 or summary_2) provide a single short label/name for the criminal type, or when the current output is a sentence that contains such a label plus explanatory text.",
+            "preserve_rule": "Keep the factual selection already identified by the summaries and the agent's ability to pick a named criminal type. Preserve capitalization as presented in the summaries. Do not change the input/output field names or overall answer-format contract.",
+            "change_rule": "Instead of producing a sentence or explanatory phrase, extract the shortest noun/label string used in summary_1 or summary_2 that names the criminals and set the answer field to that label alone. Prefer the verbatim concise label that appears in the summaries. Do not add surrounding words or explanatory clauses.",
+            "drop_or_avoid_rule": "Avoid any explanatory text, clauses, descriptive modifiers, leading phrases (e.g., 'They were', 'former'), punctuation intended as commentary (quotes, em‑dashes), or additional historical descriptors in the answer field. Do not produce full sentences—only the minimal label string.",
+            "output_contract": "The produced 'answer' field must contain exactly the minimal label string (no surrounding quotes, no extra words, no punctuation beyond what is part of the label itself) that is directly supported by the visible summaries. If multiple concise labels appear, choose the single most concise label verbatim from the summaries.",
+            "why_local_transition": "The source output is a sentence with explanatory material; the target requires only the concise label already present in the summaries. This small behavioral change trims the final output to the minimal supported token without altering evidence selection."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?",
+        "summary_1": "Former Confederate guerrillas.",
+        "summary_2": "They were \"bushwhackers\" — pro‑Confederate guerrillas (also described as former Confederate guerrillas).",
+        "current_output": "They were \"bushwhackers\" — former Confederate guerrillas."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the visible summaries (summary_1 or summary_2) provide a single short label/name for the criminal type, or when the current output is a sentence that contains such a label plus explanatory text.\",\n      \"preserve_rule\": \"Keep the factual selection already identified by the summaries and the agent's ability to pick a named criminal type. Preserve capitalization as presented in the summaries. Do not change the input/output field names or overall answer-format contract.\",\n      \"change_rule\": \"Instead of producing a sentence or explanatory phrase, extract the shortest noun/label string used in summary_1 or summary_2 that names the criminals and set the answer field to that label alone. Prefer the verbatim concise label that appears in the summaries. Do not add surrounding words or explanatory clauses.\",\n      \"drop_or_avoid_rule\": \"Avoid any explanatory text, clauses, descriptive modifiers, leading phrases (e.g., 'They were', 'former'), punctuation intended as commentary (quotes, em‑dashes), or additional historical descriptors in the answer field. Do not produce full sentences—only the minimal label string.\",\n      \"output_contract\": \"The produced 'answer' field must contain exactly the minimal label string (no surrounding quotes, no extra words, no punctuation beyond what is part of the label itself) that is directly supported by the visible summaries. If multiple concise labels appear, choose the single most concise label verbatim from the summaries.\",\n      \"why_local_transition\": \"The source output is a sentence with explanatory material; the target requires only the concise label already present in the summaries. This small behavioral change trims the final output to the minimal supported token without altering evidence selection.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?\",\n  \"summary_1\": \"Former Confederate guerrillas.\",\n  \"summary_2\": \"They were \\\"bushwhackers\\\" — pro‑Confederate guerrillas (also described as former Confederate guerrillas).\",\n  \"current_output\": \"They were \\\"bushwhackers\\\" — former Confederate guerrillas.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"bushwhackers\",\n  \"rationale\": \"Summary_2 provides the concise label 'bushwhackers'; per the ordered delta, the minimal label from the summaries was returned verbatim with no additional text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 82,
+    "row_index": 82,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "3b3cd5319072922030cc0e6c127e7c61c2fc65729a0e0045af3a3eeed9249be9",
+  "created_at": "2026-07-13T17:22:55.197854+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the visible summaries (summary_1 and summary_2) agree on a category or the current_output is a restatement that contains a clear categorical noun present in the summaries.",
+            "preserve_rule": "Keep using the provided summaries and the current_output as the evidence source. If they consistently indicate the same category term, accept that as the supported category.",
+            "change_rule": "Instead of emitting a full sentence, extract the single-word (or shortest noun token) category that appears in the summaries (or in both a summary and the current_output) and emit only that token as the answer.",
+            "drop_or_avoid_rule": "Avoid full-sentence answers, added determiners, explanatory phrases, or any extra punctuation. Do not invent or introduce new categories beyond what the visible summaries support.",
+            "output_contract": "Produce the field `answer` whose value is exactly the minimal categorical label (a single word) supported by the visible summaries. The [[ ## answer ## ]] block must contain only that word and nothing else.",
+            "why_local_transition": "This change converts an otherwise-correct full-sentence reply into the concise label format required by the final-answer contract, using only information already present in the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "White Shepherd and Kunming wolfdog, are a breed of what?",
+        "summary_1": "They are breeds of dog.",
+        "summary_2": "They are breeds of dog.",
+        "current_output": "They are breeds of dog."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the visible summaries (summary_1 and summary_2) agree on a category or the current_output is a restatement that contains a clear categorical noun present in the summaries.\",\n      \"preserve_rule\": \"Keep using the provided summaries and the current_output as the evidence source. If they consistently indicate the same category term, accept that as the supported category.\",\n      \"change_rule\": \"Instead of emitting a full sentence, extract the single-word (or shortest noun token) category that appears in the summaries (or in both a summary and the current_output) and emit only that token as the answer.\",\n      \"drop_or_avoid_rule\": \"Avoid full-sentence answers, added determiners, explanatory phrases, or any extra punctuation. Do not invent or introduce new categories beyond what the visible summaries support.\",\n      \"output_contract\": \"Produce the field `answer` whose value is exactly the minimal categorical label (a single word) supported by the visible summaries. The [[ ## answer ## ]] block must contain only that word and nothing else.\",\n      \"why_local_transition\": \"This change converts an otherwise-correct full-sentence reply into the concise label format required by the final-answer contract, using only information already present in the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"White Shepherd and Kunming wolfdog, are a breed of what?\",\n  \"summary_1\": \"They are breeds of dog.\",\n  \"summary_2\": \"They are breeds of dog.\",\n  \"current_output\": \"They are breeds of dog.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"dog\",\n  \"rationale\": \"Both summaries state they are breeds of dog; per the ordered rule, emitted the single-word category token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 91,
+    "row_index": 91,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

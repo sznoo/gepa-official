@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a0ead823d4e59c9d668b345c9e6081ae5ad0b860e83f4ae59b0035bc0b31e5e6",
+  "created_at": "2026-07-13T17:26:00.337197+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 and summary_2 are present and agree on a named entity, and the agent's current_output contains that same named entity followed by a parenthetical alias or extra parenthetical clause (pattern: \"PrimaryName ( ... )\").",
+            "preserve_rule": "Keep the base behavior: produce the final answer only in the [[ ## answer ## ]] block and keep any primary name text that appears before the parenthesis if it is supported by the visible summaries.",
+            "change_rule": "When the trigger matches, replace the current_output with only the primary name token sequence that appears immediately before the first opening parenthesis in the supported summary text. Remove the parenthetical clause, any accompanying aliases, explanatory phrases, and trailing punctuation so the answer is the shortest canonical name string supported by the summaries.",
+            "drop_or_avoid_rule": "Avoid including parenthetical aliases, explanatory phrases, extra descriptors, full sentences, punctuation beyond the bare name, or any additional commentary. Do not add questions, justifications, or alternate names.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal canonical name string supported by the visible summaries (the text immediately before any parenthetical clause), with no surrounding text or punctuation.",
+            "why_local_transition": "The agent currently emits a name together with a parenthetical alias; this small rule trims the parenthetical content to satisfy the final-answer requirement of returning only the minimal canonical name supported by the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?",
+        "summary_1": "The völva divine figure Huld (also identified with the German Holda).",
+        "summary_2": "The völva divine figure Huld (also identified with the German Holda).",
+        "current_output": "Huld (also identified with the German Holda)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 and summary_2 are present and agree on a named entity, and the agent's current_output contains that same named entity followed by a parenthetical alias or extra parenthetical clause (pattern: \\\"PrimaryName ( ... )\\\").\",\n      \"preserve_rule\": \"Keep the base behavior: produce the final answer only in the [[ ## answer ## ]] block and keep any primary name text that appears before the parenthesis if it is supported by the visible summaries.\",\n      \"change_rule\": \"When the trigger matches, replace the current_output with only the primary name token sequence that appears immediately before the first opening parenthesis in the supported summary text. Remove the parenthetical clause, any accompanying aliases, explanatory phrases, and trailing punctuation so the answer is the shortest canonical name string supported by the summaries.\",\n      \"drop_or_avoid_rule\": \"Avoid including parenthetical aliases, explanatory phrases, extra descriptors, full sentences, punctuation beyond the bare name, or any additional commentary. Do not add questions, justifications, or alternate names.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal canonical name string supported by the visible summaries (the text immediately before any parenthetical clause), with no surrounding text or punctuation.\",\n      \"why_local_transition\": \"The agent currently emits a name together with a parenthetical alias; this small rule trims the parenthetical content to satisfy the final-answer requirement of returning only the minimal canonical name supported by the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?\",\n  \"summary_1\": \"The völva divine figure Huld (also identified with the German Holda).\",\n  \"summary_2\": \"The völva divine figure Huld (also identified with the German Holda).\",\n  \"current_output\": \"Huld (also identified with the German Holda).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Huld\",\n  \"rationale\": \"Both summaries and the current output name matched 'Huld (…)', so per the ordered rule the parenthetical was removed, yielding only the primary name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 149,
+    "row_index": 149,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

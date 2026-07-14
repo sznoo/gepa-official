@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "31577450bdd134052c478be2e394384a7618b4d55da5878d2f7b8a83c6a4b6db",
+  "created_at": "2026-07-13T17:17:40.519474+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks for a place (e.g., begins with or contains 'Where' / 'Where was') AND one or more of the provided summaries contains a named locality more specific than a state (a city, town, village name, or an explicit 'City, State' phrase).",
+            "preserve_rule": "Continue using only the provided summaries as evidence and preserve the existing minimal-answer behaviour and output framing (the [[ ## answer ## ]] block). Keep returning the shortest location string that is directly supported by the summaries.",
+            "change_rule": "If any summary contains a city/town name (optionally already paired with a state), output the most specific locality mention present: prefer 'City, State' if both appear together in a summary, otherwise output the city/town name (add the state only if it is explicitly present in a summary). If no locality more specific than a state is present, fall back to outputting the state exactly as found in the summaries.",
+            "drop_or_avoid_rule": "Do not invent, infer, or insert any place that does not appear in the visible summaries or the question. Do not use outside knowledge or expand a state into a city. Avoid extra words, qualifiers, punctuation, or explanatory text outside the required minimal location string.",
+            "output_contract": "Produce exactly one minimal location string (no surrounding explanation) placed inside the [[ ## answer ## ]] block. The string must be directly and only supported by the provided summaries.",
+            "why_local_transition": "This is a narrowly scoped change that only alters how specific a location the agent returns when the summaries already contain a more specific locality; it leaves all other behaviors and the input/output interface intact."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "summary_1": "He was from Mississippi.",
+        "summary_2": "The man (Byron De La Beckwith) was from Mississippi.",
+        "current_output": "Mississippi"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for a place (e.g., begins with or contains 'Where' / 'Where was') AND one or more of the provided summaries contains a named locality more specific than a state (a city, town, village name, or an explicit 'City, State' phrase).\",\n      \"preserve_rule\": \"Continue using only the provided summaries as evidence and preserve the existing minimal-answer behaviour and output framing (the [[ ## answer ## ]] block). Keep returning the shortest location string that is directly supported by the summaries.\",\n      \"change_rule\": \"If any summary contains a city/town name (optionally already paired with a state), output the most specific locality mention present: prefer 'City, State' if both appear together in a summary, otherwise output the city/town name (add the state only if it is explicitly present in a summary). If no locality more specific than a state is present, fall back to outputting the state exactly as found in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not invent, infer, or insert any place that does not appear in the visible summaries or the question. Do not use outside knowledge or expand a state into a city. Avoid extra words, qualifiers, punctuation, or explanatory text outside the required minimal location string.\",\n      \"output_contract\": \"Produce exactly one minimal location string (no surrounding explanation) placed inside the [[ ## answer ## ]] block. The string must be directly and only supported by the provided summaries.\",\n      \"why_local_transition\": \"This is a narrowly scoped change that only alters how specific a location the agent returns when the summaries already contain a more specific locality; it leaves all other behaviors and the input/output interface intact.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"summary_1\": \"He was from Mississippi.\",\n  \"summary_2\": \"The man (Byron De La Beckwith) was from Mississippi.\",\n  \"current_output\": \"Mississippi\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nMississippi\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries state he was from Mississippi and no more specific locality appears, so the state is returned exactly as shown in the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 52,
+    "row_index": 52,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

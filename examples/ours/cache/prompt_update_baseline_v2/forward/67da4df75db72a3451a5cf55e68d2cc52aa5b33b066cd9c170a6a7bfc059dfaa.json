@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "67da4df75db72a3451a5cf55e68d2cc52aa5b33b066cd9c170a6a7bfc059dfaa",
+  "created_at": "2026-07-13T17:43:29.704318+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "answer": "Susan Carland",
+    "context": {
+      "title": [
+        "Andy Cowan",
+        "The Dream with Roy and HG",
+        "Roy and HG's Russian Revolution",
+        "Susan Carland",
+        "The Ice Dream with Roy and HG",
+        "Hazel Treweek",
+        "Salam Cafe",
+        "Rove LA",
+        "The Glass House (2001 TV series)",
+        "In Siberia Tonight"
+      ],
+      "sentences": [
+        [
+          "Andy Cowan (born Andrew Glenn Cowan) is an American writer and script consultant for television and other media, including two of the five best television series of all time, as compiled in 2012 by ABC News and \"People\" magazine, and the number two and number eight best written series as voted on by the Writers Guild of America in 2013 (101 Best Written TV Series).",
+          " He's hosted the radio comedy talk show, \"Up & Down Guys\", on KPFK 90.7 FM in Los Angeles.",
+          " He has appeared on several television shows, and hosted the hour-long talk show pilot, \"Another Talk Show!",
+          " with Andy Cowan\", featuring Jason Alexander and Sheila Raye Charles.",
+          " and was guest commentator on KTTV's \"Good Day L.A.\" He has written humor columns for the \"Los Angeles Times\" newspaper and magazine, \"Salon\", special material for \"The New Yorker\", and several songs, one of which won international song contest nods.",
+          " He's a voiceover artist, and sings in jazz clubs throughout Los Angeles."
+        ],
+        [
+          "The Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Sydney 2000 and Athens 2004 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Roy and HG's Russian Revolution was a sports/comedy talk show, broadcast every night during the Sochi 2014 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam."
+        ],
+        [
+          "The Ice Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Salt Lake 2002, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Hazel Treweek, OAM, MBE was an Australian academic, teacher and Shakespearean scholar.",
+          " She was married to Athanasius \"Ath\" Treweek, an Australian academic, linguist and World War II cryptographer/codebreaker."
+        ],
+        [
+          "Salam Cafe is an Australian comedy talk show.",
+          " Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.",
+          " Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life."
+        ],
+        [
+          "Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.",
+          " The show is hosted by Rove McManus and is set in Los Angeles.",
+          " The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.",
+          " The show was picked up for a two-year run on the Fox8 subscription channel."
+        ],
+        [
+          "The Glass House was a half-hour Australian comedy talk show which screened on the ABC from 2001 to 2006."
+        ],
+        [
+          "In Siberia Tonight is an Australian comedy talk show which aired on SBS from 2005 to 2006.",
+          " The program was hosted by comedian Steve Abbott and was themed around his Russian heritage.",
+          " The program commonly featured The Kransky Sisters, Indira Naidoo, Steves' mum Evelyn Abbott and Marcello Maio."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Salam Cafe",
+        "Salam Cafe",
+        "Susan Carland"
+      ],
+      "sent_id": [
+        0,
+        2,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "e08bba879cb8",
+    "rerun_from": null,
+    "question": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "gold_answer": "Susan Carland",
+    "context": {
+      "title": [
+        "Andy Cowan",
+        "The Dream with Roy and HG",
+        "Roy and HG's Russian Revolution",
+        "Susan Carland",
+        "The Ice Dream with Roy and HG",
+        "Hazel Treweek",
+        "Salam Cafe",
+        "Rove LA",
+        "The Glass House (2001 TV series)",
+        "In Siberia Tonight"
+      ],
+      "sentences": [
+        [
+          "Andy Cowan (born Andrew Glenn Cowan) is an American writer and script consultant for television and other media, including two of the five best television series of all time, as compiled in 2012 by ABC News and \"People\" magazine, and the number two and number eight best written series as voted on by the Writers Guild of America in 2013 (101 Best Written TV Series).",
+          " He's hosted the radio comedy talk show, \"Up & Down Guys\", on KPFK 90.7 FM in Los Angeles.",
+          " He has appeared on several television shows, and hosted the hour-long talk show pilot, \"Another Talk Show!",
+          " with Andy Cowan\", featuring Jason Alexander and Sheila Raye Charles.",
+          " and was guest commentator on KTTV's \"Good Day L.A.\" He has written humor columns for the \"Los Angeles Times\" newspaper and magazine, \"Salon\", special material for \"The New Yorker\", and several songs, one of which won international song contest nods.",
+          " He's a voiceover artist, and sings in jazz clubs throughout Los Angeles."
+        ],
+        [
+          "The Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Sydney 2000 and Athens 2004 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Roy and HG's Russian Revolution was a sports/comedy talk show, broadcast every night during the Sochi 2014 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam."
+        ],
+        [
+          "The Ice Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Salt Lake 2002, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Hazel Treweek, OAM, MBE was an Australian academic, teacher and Shakespearean scholar.",
+          " She was married to Athanasius \"Ath\" Treweek, an Australian academic, linguist and World War II cryptographer/codebreaker."
+        ],
+        [
+          "Salam Cafe is an Australian comedy talk show.",
+          " Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.",
+          " Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life."
+        ],
+        [
+          "Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.",
+          " The show is hosted by Rove McManus and is set in Los Angeles.",
+          " The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.",
+          " The show was picked up for a two-year run on the Fox8 subscription channel."
+        ],
+        [
+          "The Glass House was a half-hour Australian comedy talk show which screened on the ABC from 2001 to 2006."
+        ],
+        [
+          "In Siberia Tonight is an Australian comedy talk show which aired on SBS from 2005 to 2006.",
+          " The program was hosted by comedian Steve Abbott and was themed around his Russian heritage.",
+          " The program commonly featured The Kransky Sisters, Indira Naidoo, Steves' mum Evelyn Abbott and Marcello Maio."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Salam Cafe",
+        "Salam Cafe",
+        "Susan Carland"
+      ],
+      "sent_id": [
+        0,
+        2,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Salam Cafe",
+      "Susan Carland"
+    ],
+    "hop1_query": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "hop1_docs": [
+      "Salam Cafe | Salam Cafe is an Australian comedy talk show.  Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.  Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life.",
+      "Before the Game | Before The Game was an Australian rules football comedy panel television show which aired on Network Ten on 1 March 2003 until 27 September 2013.  The show was hosted by Andrew Maher with regular panelists Mick Molloy, Dave Hughes, Anthony Lehmann and Neroli Meadows.  The format of the show was light-hearted discussion and analysis of Australian Football League (AFL) news and views and included appearances by current players.",
+      "Arlene Francis | Arlene Francis (born Arline Francis Kazanjian; October 20, 1907 – May 31, 2001) was an American actress, radio and television talk show host, and game show panelist.  She is known for her long-standing role as a panelist on the television game show \" What's My Line? \", on which she regularly appeared for 25 years, from 1950 through the mid-1970s, on both the network and syndicated versions of the show.",
+      "Susan Carland | Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam.",
+      "Rove LA | Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.  The show is hosted by Rove McManus and is set in Los Angeles.  The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.  The show was picked up for a two-year run on the Fox8 subscription channel.",
+      "The Eric Bana Show Live | The Eric Bana Show Live was an Australian television comedy and talk show hosted by and named after Eric Bana.",
+      "Reihan Salam | Reihan Morshed Salam ( ; born 29 December 1979) is a conservative American political commentator, columnist, and author.  He is the executive editor of \"National Review\" and a columnist for \"Slate\", as well as a contributing editor at \"National Affairs\", an interviewer for VICE, and a fellow at the University of Chicago Institute of Politics.  He has appeared on a number of radio and television shows, including NPR's \"Morning Edition, Talk of the Nation, All Things Considered\", and \"Tell Me More\", on HBO's \"Real Time with Bill Maher\", NBCUniversal's \"The Chris Matthews Show\", WNYC's \"The Brian Lehrer Show\", BBC's \"Newsnight\", ABC's \"This Week\", CNN's \"Fareed Zakaria GPS\", Comedy Central's \"The Colbert Report\", American Public Media's \"Marketplace, and Fox News' Tucker Carlson Tonight\"."
+    ],
+    "hop1_titles": [
+      "Salam Cafe",
+      "Before the Game",
+      "Arlene Francis",
+      "Susan Carland",
+      "Rove LA",
+      "The Eric Bana Show Live",
+      "Reihan Salam"
+    ],
+    "summary_1": "Susan Carland (Susan Janet Carland)",
+    "hop2_query": "Susan Carland Salam Cafe panelist \"Susan Janet Carland\" Australian academic author feminist",
+    "hop2_docs": [
+      "Susan Carland | Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam.",
+      "Salam Cafe | Salam Cafe is an Australian comedy talk show.  Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.  Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life.",
+      "Carland Cross (TV series) | Carland Cross was an 1996 hardboiled animated television series developed with the collaboration of Belgian, French and Canadian broadcasters.  The series spanned 26 episodes (26 minutes in length) and was based on the comics The Adventures of Carland Cross, by Belgian natives Olivier Grenson and Michel Oleffe.  Carland Cross tells the story of a fictional British private investigator specializing in curious and inexplicable cases.  The series aired late 1996 under the French-language title \"Carland Coss\" and in other markets, such as Spanish, as Las aventuras de Carland Cross.",
+      "Matt Carland | Matt Carland (8 September 1909 – 5 February 1998) was a former Australian rules footballer who played with Essendon and Footscray in the Victorian Football League (VFL).",
+      "Jarrod Carland | Jarrod Carland is an Australian creative director, establishing design agency Studio Jack in 2008.  He has also been involved in the entertainment industry as a producer, working on a variety of events and productions, from festivals to musical theatre productions and large scale concert events.",
+      "Carland Cross (disambiguation) | Carland Cross is a settlement in Cornwall, UK.",
+      "Carland Cross (character) | Carland Cross is a fictional character and the protagonist in the series of the same name.  Created by Belgian author and illustrator Michel Oleffe and Olivier Grenson in late 1989, he made his first comic book appearance in 1990.  He also went on to appear in a total of eight novels."
+    ],
+    "hop2_titles": [
+      "Susan Carland",
+      "Salam Cafe",
+      "Carland Cross (TV series)",
+      "Matt Carland",
+      "Jarrod Carland",
+      "Carland Cross (disambiguation)",
+      "Carland Cross (character)"
+    ],
+    "summary_2": "Susan Carland (Susan Janet Carland)",
+    "answer": "Susan Carland (Susan Janet Carland)",
+    "score": 0.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Salam Cafe",
+      "Susan Carland"
+    ],
+    "hit_titles_total": [
+      "Salam Cafe",
+      "Susan Carland"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

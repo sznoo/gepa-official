@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "6b044f8768ad143f1fa6e60b407430bf2f061ac9b7d955cd2a4313a7e12a65ab",
+  "created_at": "2026-07-13T17:21:44.652165+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "John Foxe (1516/17 – 18 April 1587) was an English historian and martyrologist, the author of \"Actes and Monuments\", an account of Christian martyrs throughout Western history but emphasizing the sufferings of English Protestants and proto-Protestants from the fourteenth century through the reign of which Queen of England and Ireland from July 1553 until her death?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "John Foxe (1516/17 – 18 April 1587) was an English historian and martyrologist, the author of \"Actes and Monuments\", an account of Christian martyrs throughout Western history but emphasizing the sufferings of English Protestants and proto-Protestants from the fourteenth century through the reign of which Queen of England and Ireland from July 1553 until her death?",
+        "summary_1": "Mary I (Mary Tudor), Queen of England and Ireland.",
+        "summary_2": "Mary I (Mary Tudor), Queen of England and Ireland.",
+        "current_output": "Mary I (Mary Tudor)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Mary I (Mary Tudor)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Mary I",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"John Foxe (1516/17 – 18 April 1587) was an English historian and martyrologist, the author of \\\"Actes and Monuments\\\", an account of Christian martyrs throughout Western history but emphasizing the sufferings of English Protestants and proto-Protestants from the fourteenth century through the reign of which Queen of England and Ireland from July 1553 until her death?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"John Foxe (1516/17 – 18 April 1587) was an English historian and martyrologist, the author of \\\"Actes and Monuments\\\", an account of Christian martyrs throughout Western history but emphasizing the sufferings of English Protestants and proto-Protestants from the fourteenth century through the reign of which Queen of England and Ireland from July 1553 until her death?\",\n  \"summary_1\": \"Mary I (Mary Tudor), Queen of England and Ireland.\",\n  \"summary_2\": \"Mary I (Mary Tudor), Queen of England and Ireland.\",\n  \"current_output\": \"Mary I (Mary Tudor)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Mary I (Mary Tudor)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Mary I\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question requests the name of a monarch or person and the agent's current candidate output (or the visible summaries) include a parenthetical clarification, alternate name, title, or other appended disambiguation (e.g., anything in parentheses or extra descriptive phrases).\",\n    \"preserve_rule\": \"Continue to rely on the provided summaries as the evidence source and keep any confirmed agreement between summary_1 and summary_2. Preserve existing behavior that avoids inventing new facts or adding unseen claims.\",\n    \"change_rule\": \"When generating the final [[ ## answer ## ]] string, reduce the candidate to its minimal canonical name form: emit only the shortest commonly used name or regnal name itself, omitting parenthetical aliases, alternative names, date ranges, honorifics, and appended descriptive clauses. Produce exactly that name string and nothing else.\",\n    \"drop_or_avoid_rule\": \"Do not include parenthetical clarifiers, alternate names, epithets, date ranges, explanatory phrases, or extra titles. Do not add any surrounding explanatory text, punctuation, or qualifiers beyond the single minimal name token sequence.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal name string (no additional words, sentences, or punctuation). Maintain the same interface and formatting as the base prompt.\",\n    \"why_local_transition\": \"The source output includes extra disambiguation/parenthetical material. This small rule removes only those appended clarifiers so the agent returns the concise canonical name expected for this final-answer endpoint while preserving evidence use.\"\n  },\n  \"rationale\": \"This delta performs the smallest coherent behavioral edit: strip parenthetical or appended disambiguation from an otherwise correct candidate name. It preserves reliance on the visible summaries and prevents introducing new content. Constraining the output to the minimal name string satisfies the final-answer contract and moves the output from a verbose variant to the concise target form without changing how the agent finds or verifies the answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 76,
+    "row_index": 76,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "49b3980a4c46258d0bdf1d4da43de61472e6445d4f1e0264f8a655c1531a5d5b",
+  "created_at": "2026-07-13T17:21:32.709222+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The winner of the first season of \"Next Great Baker\" would win an apprenticeship at the bakery owned by who?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The winner of the first season of \"Next Great Baker\" would win an apprenticeship at the bakery owned by who?",
+        "summary_1": "Buddy Valastro",
+        "summary_2": "Buddy Valastro — the owner of Carlo's Bake Shop.",
+        "current_output": "Buddy Valastro (owner of Carlo's Bake Shop)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Buddy Valastro (owner of Carlo's Bake Shop)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Buddy Valastro",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The winner of the first season of \\\"Next Great Baker\\\" would win an apprenticeship at the bakery owned by who?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The winner of the first season of \\\"Next Great Baker\\\" would win an apprenticeship at the bakery owned by who?\",\n  \"summary_1\": \"Buddy Valastro\",\n  \"summary_2\": \"Buddy Valastro — the owner of Carlo's Bake Shop.\",\n  \"current_output\": \"Buddy Valastro (owner of Carlo's Bake Shop)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Buddy Valastro (owner of Carlo's Bake Shop)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Buddy Valastro\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks for a person (e.g., begins with or includes 'who'/'whom') and the available summaries contain a named individual who answers the question, apply this prompt edit.\",\n    \"preserve_rule\": \"Keep the existing use of the provided summaries as supporting evidence and keep selecting the named entity (person) that directly answers the question.\",\n    \"change_rule\": \"When producing the final `answer`, emit only the minimal name string (the person's full name as it appears in the supporting summaries). Strip any parenthetical remarks, appositive descriptions, job titles, explanatory phrases, or extra punctuation so the answer is just the name text.\",\n    \"drop_or_avoid_rule\": \"Do not include parenthetical clauses, occupational labels, explanatory appositives, or any extra descriptive text appended to the name. Avoid punctuation or commentary beyond the exact name (no parentheses, hyphenated explanations, trailing clauses, or sentences).\",\n    \"output_contract\": \"The `answer` field must contain only the minimal answer string (the person's name) supported by the summaries. Place that single string inside the [[ ## answer ## ]] block and nothing else.\",\n    \"why_local_transition\": \"This edge only requires trimming extraneous explanatory text from an otherwise-correct answer so the final output matches the minimal-answer contract; it preserves existing evidence usage and only tightens answer formatting.\"\n  },\n  \"rationale\": \"The current output includes a correct person but adds parenthetical explanatory text. The smallest coherent change is to instruct the agent to output only the minimal named entity drawn from the summaries. This preserves the agent's selection and evidence use while removing extraneous description, satisfying the final-answer contract without introducing new behavior or copying any target label explicitly.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 77,
+    "row_index": 77,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "4f3dcb46ead5b2308cd5a09b0dd304550b6d5be1832d48dcf3e8a242b5507f70",
+  "created_at": "2026-07-13T18:49:58.968230+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 says the cast is not listed and suggests specifying versions or allowing a search (phrases like \"can't determine\", \"don't list\", \"specify which versions\", or \"allow me to search\").",
+            "preserve_rule": "Keep using the given `question` and `summary_1` as inputs and preserve the agent's concise, user-facing tone. Keep any explicit user restrictions (if the user explicitly refuses searches, do not override).",
+            "change_rule": "Instead of emitting a clarifying question to the user, generate a single compact retrieval query string that names the two film cast pages to fetch and a short comparator phrase to find overlap. Format the query as one line, no bullets, no explanation, no candidate answers or speculative names. Use forms like: \"Third Person (film) cast; From Here to Eternity (film) cast; actress appeared in both\".",
+            "drop_or_avoid_rule": "Do not ask the user to choose versions in this step (unless the user explicitly forbids searching). Do not include specific actress names that are not already present in the visible inputs. Avoid multi-sentence instructions, lists, or copying the original clarifying-question wording.",
+            "output_contract": "Produce the field `query` as a single short string suitable for retrieval: it must mention the two cast-list pages (use the exact phrases 'Third Person (film) cast' and 'From Here to Eternity (film) cast' or equivalent) and include a brief comparator phrase (e.g., 'actress appeared in both'). No extra commentary, no multi-line formatting, and no final answer.",
+            "why_local_transition": "This minimal edit redirects the agent from asking a clarification to producing a focused second-hop retrieval query that directly targets the missing bridge (the films' cast lists). It's a local behavioral change limited to query generation and preserves other prompt behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when summary_1 contains an explicit inability to find cast members (e.g. contains \"I can't determine the actress\" or suggests running lookups) AND the question names two works to compare (contains both \"Third Person\" and \"From Here to Eternity\").",
+            "preserve_rule": "Keep producing exactly one compact retrieval query as the agent's output. Preserve use of the original question text and quoted work titles when present.",
+            "change_rule": "Do not assert any candidate performer name. Instead produce a neutral, focused bridging search query that explicitly targets an actress who appears in both works. Format the query as a single-line search string that includes the phrase \"actress appeared in both\" followed by both work titles in quotes (for example: \"actress appeared in both \\\"Third Person\\\" \\\"From Here to Eternity\\\"\").",
+            "drop_or_avoid_rule": "Avoid including asserted names, clarifying questions to the user, or extraneous metadata (years, multiple cast tokens) in the query. Do not ask the user which version to mean inside the retrieval query — keep the query narrowly targeted to find overlapping cast members.",
+            "output_contract": "Produce one single-line retrieval query (string) that: (a) is compact and directly usable for a second-hop search, (b) contains the phrase \"actress appeared in both\" and both work titles in quotes, (c) contains no asserted person names, no user-facing clarification question, and no long explanatory text.",
+            "why_local_transition": "The source output tended toward asserting a specific name or mixing extraneous terms. This small rule shifts behavior to issue a precise bridging search for overlap between the two works (without asserting an answer), which is the minimal focused change needed to obtain supporting evidence for the multi-hop pipeline."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "current_output": {
+          "query": "Do you mean the 2013 film \"Third Person\" and the 1953 film \"From Here to Eternity\", or other versions? If you'd like me to search, run these lookups and compare:\n- \"Third Person (film) cast\" \n- \"From Here to Eternity (film) cast\" \n- \"actress appeared in both 'Third Person' and 'From Here to Eternity'\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 says the cast is not listed and suggests specifying versions or allowing a search (phrases like \\\"can't determine\\\", \\\"don't list\\\", \\\"specify which versions\\\", or \\\"allow me to search\\\").\",\n      \"preserve_rule\": \"Keep using the given `question` and `summary_1` as inputs and preserve the agent's concise, user-facing tone. Keep any explicit user restrictions (if the user explicitly refuses searches, do not override).\",\n      \"change_rule\": \"Instead of emitting a clarifying question to the user, generate a single compact retrieval query string that names the two film cast pages to fetch and a short comparator phrase to find overlap. Format the query as one line, no bullets, no explanation, no candidate answers or speculative names. Use forms like: \\\"Third Person (film) cast; From Here to Eternity (film) cast; actress appeared in both\\\".\",\n      \"drop_or_avoid_rule\": \"Do not ask the user to choose versions in this step (unless the user explicitly forbids searching). Do not include specific actress names that are not already present in the visible inputs. Avoid multi-sentence instructions, lists, or copying the original clarifying-question wording.\",\n      \"output_contract\": \"Produce the field `query` as a single short string suitable for retrieval: it must mention the two cast-list pages (use the exact phrases 'Third Person (film) cast' and 'From Here to Eternity (film) cast' or equivalent) and include a brief comparator phrase (e.g., 'actress appeared in both'). No extra commentary, no multi-line formatting, and no final answer.\",\n      \"why_local_transition\": \"This minimal edit redirects the agent from asking a clarification to producing a focused second-hop retrieval query that directly targets the missing bridge (the films' cast lists). It's a local behavioral change limited to query generation and preserves other prompt behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 contains an explicit inability to find cast members (e.g. contains \\\"I can't determine the actress\\\" or suggests running lookups) AND the question names two works to compare (contains both \\\"Third Person\\\" and \\\"From Here to Eternity\\\").\",\n      \"preserve_rule\": \"Keep producing exactly one compact retrieval query as the agent's output. Preserve use of the original question text and quoted work titles when present.\",\n      \"change_rule\": \"Do not assert any candidate performer name. Instead produce a neutral, focused bridging search query that explicitly targets an actress who appears in both works. Format the query as a single-line search string that includes the phrase \\\"actress appeared in both\\\" followed by both work titles in quotes (for example: \\\"actress appeared in both \\\\\\\"Third Person\\\\\\\" \\\\\\\"From Here to Eternity\\\\\\\"\\\").\",\n      \"drop_or_avoid_rule\": \"Avoid including asserted names, clarifying questions to the user, or extraneous metadata (years, multiple cast tokens) in the query. Do not ask the user which version to mean inside the retrieval query — keep the query narrowly targeted to find overlapping cast members.\",\n      \"output_contract\": \"Produce one single-line retrieval query (string) that: (a) is compact and directly usable for a second-hop search, (b) contains the phrase \\\"actress appeared in both\\\" and both work titles in quotes, (c) contains no asserted person names, no user-facing clarification question, and no long explanatory text.\",\n      \"why_local_transition\": \"The source output tended toward asserting a specific name or mixing extraneous terms. This small rule shifts behavior to issue a precise bridging search for overlap between the two works (without asserting an answer), which is the minimal focused change needed to obtain supporting evidence for the multi-hop pipeline.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"current_output\": {\n    \"query\": \"Do you mean the 2013 film \\\"Third Person\\\" and the 1953 film \\\"From Here to Eternity\\\", or other versions? If you'd like me to search, run these lookups and compare:\\n- \\\"Third Person (film) cast\\\" \\n- \\\"From Here to Eternity (film) cast\\\" \\n- \\\"actress appeared in both 'Third Person' and 'From Here to Eternity'\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Third Person (film) cast; From Here to Eternity (film) cast; actress appeared in both \\\"Third Person\\\" \\\"From Here to Eternity\\\"\"\n  },\n  \"rationale\": \"Delta 0 was applied to include the two cast-page phrases and a brief comparator; Delta 1 ensured the query contains the phrase \\\"actress appeared in both\\\" followed by both quoted titles. Single-line retrieval query returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

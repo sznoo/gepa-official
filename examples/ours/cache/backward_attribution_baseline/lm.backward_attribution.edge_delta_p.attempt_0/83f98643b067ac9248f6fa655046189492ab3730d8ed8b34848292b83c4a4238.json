@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "83f98643b067ac9248f6fa655046189492ab3730d8ed8b34848292b83c4a4238",
+  "created_at": "2026-07-13T17:16:05.925710+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "For which opera was the teacher of Der Bärenhäuter best known?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "For which opera was the teacher of Der Bärenhäuter best known?",
+        "summary_1": "He was best known for the opera Hänsel und Gretel.",
+        "summary_2": "Hänsel und Gretel (Hansel and Gretel) by Engelbert Humperdinck.",
+        "current_output": "Hänsel und Gretel."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Hänsel und Gretel.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Hansel and Gretel",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"For which opera was the teacher of Der Bärenhäuter best known?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"For which opera was the teacher of Der Bärenhäuter best known?\",\n  \"summary_1\": \"He was best known for the opera Hänsel und Gretel.\",\n  \"summary_2\": \"Hänsel und Gretel (Hansel and Gretel) by Engelbert Humperdinck.\",\n  \"current_output\": \"Hänsel und Gretel.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Hänsel und Gretel.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Hansel and Gretel\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the provided summaries mention the same work using multiple orthographic variants (e.g., a diacritic form and an ASCII/parenthetical English variant) or include a parenthetical English title.\",\n    \"preserve_rule\": \"Keep the factual selection exactly as supported by the visible summaries: do not add, remove, or reinterpret which work is being referenced; preserve the named entity that the summaries indicate.\",\n    \"change_rule\": \"When an explicit ASCII/English variant is present in the summaries (for example as a parenthetical alternative), prefer that exact variant as the output. If no explicit ASCII variant is present but the chosen name contains diacritics, normalize diacritics to their closest ASCII equivalents. Strip trailing sentence punctuation (periods, etc.) and surrounding quotation marks; output only the title string itself.\",\n    \"drop_or_avoid_rule\": \"Do not append explanatory text, articles, or punctuation; do not retain only-diacritic forms when an ASCII/English variant is present in the summaries; do not invent alternative titles or additional context.\",\n    \"output_contract\": \"Produce the single minimal answer string (the normalized title) and nothing else. Conform to the final-answer block convention: the answer field must contain only the title string with no surrounding punctuation, commentary, or markup.\",\n    \"why_local_transition\": \"This small normalization and formatting rule converts an otherwise-correct title with diacritics or terminal punctuation into the canonical ASCII/English form and exact minimal string expected by the final-output contract, without changing the underlying factual choice supported by the summaries.\"\n  },\n  \"rationale\": \"The source output already identifies the correct work but includes a diacritic form and terminal punctuation. The smallest safe behavioral edit is to normalize orthography and formatting (prefer an explicit ASCII/English variant when present; otherwise convert diacritics to ASCII and remove trailing punctuation). This preserves the factual content drawn from the summaries, avoids adding or inventing information, and ensures the final answer is the minimal string required by the agent's output contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 46,
+    "row_index": 46,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

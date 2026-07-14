@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "65be07af9eecbcd5df0949b598562d0f6470a9cfa265c4c34026982bf7284a6a",
+  "created_at": "2026-07-13T17:17:26.998367+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "summary_1": "He was from Mississippi.",
+        "summary_2": "The man (Byron De La Beckwith) was from Mississippi.",
+        "current_output": "Mississippi"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Mississippi",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Greenwood, Mississippi",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"summary_1\": \"He was from Mississippi.\",\n  \"summary_2\": \"The man (Byron De La Beckwith) was from Mississippi.\",\n  \"current_output\": \"Mississippi\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Mississippi\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Greenwood, Mississippi\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks for a place (e.g., begins with or contains 'Where' / 'Where was') AND one or more of the provided summaries contains a named locality more specific than a state (a city, town, village name, or an explicit 'City, State' phrase).\",\n    \"preserve_rule\": \"Continue using only the provided summaries as evidence and preserve the existing minimal-answer behaviour and output framing (the [[ ## answer ## ]] block). Keep returning the shortest location string that is directly supported by the summaries.\",\n    \"change_rule\": \"If any summary contains a city/town name (optionally already paired with a state), output the most specific locality mention present: prefer 'City, State' if both appear together in a summary, otherwise output the city/town name (add the state only if it is explicitly present in a summary). If no locality more specific than a state is present, fall back to outputting the state exactly as found in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not invent, infer, or insert any place that does not appear in the visible summaries or the question. Do not use outside knowledge or expand a state into a city. Avoid extra words, qualifiers, punctuation, or explanatory text outside the required minimal location string.\",\n    \"output_contract\": \"Produce exactly one minimal location string (no surrounding explanation) placed inside the [[ ## answer ## ]] block. The string must be directly and only supported by the provided summaries.\",\n    \"why_local_transition\": \"This is a narrowly scoped change that only alters how specific a location the agent returns when the summaries already contain a more specific locality; it leaves all other behaviors and the input/output interface intact.\"\n  },\n  \"rationale\": \"The smallest coherent fix is to prefer the most specific place explicitly present in the visible summaries (city when available, otherwise state). That makes the agent produce city-level answers when supported while preserving existing minimal-answer behavior and avoiding hallucination. The edit is local: it only changes specificity-selection logic and keeps the same evidence sources and output contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 52,
+    "row_index": 52,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

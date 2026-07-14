@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "2de03c288f1e14c69ffe320b5984fc0a36d4e5445f571b4567c9cf09e58ba745",
+  "created_at": "2026-07-13T17:22:13.078236+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What was Debbie Rowe's husband dubbed?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What was Debbie Rowe's husband dubbed?",
+        "summary_1": "Her husband, Michael Jackson, was dubbed the \"King of Pop.\"",
+        "summary_2": "He was dubbed the \"King of Pop.\"",
+        "current_output": "He was dubbed the \"King of Pop.\""
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "He was dubbed the \"King of Pop.\"",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "\"King of Pop\"",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What was Debbie Rowe's husband dubbed?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What was Debbie Rowe's husband dubbed?\",\n  \"summary_1\": \"Her husband, Michael Jackson, was dubbed the \\\"King of Pop.\\\"\",\n  \"summary_2\": \"He was dubbed the \\\"King of Pop.\\\"\",\n  \"current_output\": \"He was dubbed the \\\"King of Pop.\\\"\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"He was dubbed the \\\"King of Pop.\\\"\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"\\\"King of Pop\\\"\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question requests a short title/nickname (e.g. contains wording like \\\"dubbed\\\") and at least one provided summary contains a quoted nickname or the phrase \\\"dubbed the\\\".\",\n    \"preserve_rule\": \"Keep using the visible summaries as the evidence source and preserve the base requirement to produce the `answer` field and fill the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"Instead of returning a full sentence, extract the minimal nickname phrase from the summaries: if a summary encloses the nickname in quotation marks, output the text inside those quotes; otherwise output the words immediately following the phrase 'dubbed the' in a summary. Place only that extracted phrase into the [[ ## answer ## ]] block.\",\n    \"drop_or_avoid_rule\": \"Do not add surrounding explanatory text, pronouns, verbs, or additional punctuation. Do not produce a sentence like 'He was dubbed ...' or any commentary. Do not invent or alter words not present in the summaries.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly the minimal nickname string taken from the summaries (the quoted text's inner contents or the words after 'dubbed the'), matching the wording in the summaries, with no extra characters, sentences, or explanation.\",\n    \"why_local_transition\": \"The source output is a full sentence; the target requires the minimal label. This small behavioral change makes the agent return only the nickname already present in the summaries rather than a sentence.\"\n  },\n  \"rationale\": \"The visible summaries already contain the correct short label. The smallest, safest edit is to instruct the agent to extract and return only that label (prefer the text inside quotes when present). This preserves use of the summaries as evidence and the original output interface while removing the extra sentence-level wording that caused the mismatch with the target.\" \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 84,
+    "row_index": 84,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

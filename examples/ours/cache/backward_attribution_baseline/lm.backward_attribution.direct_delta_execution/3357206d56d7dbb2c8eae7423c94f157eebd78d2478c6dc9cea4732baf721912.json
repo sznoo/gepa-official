@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "3357206d56d7dbb2c8eae7423c94f157eebd78d2478c6dc9cea4732baf721912",
+  "created_at": "2026-07-13T17:23:29.839787+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 and summary_2 both assert the same category/occupation/role for the question's subjects (for example, both say 'novelists'), and the current output is a sentence, a plural phrase, or contains parenthetical synonyms.",
+            "preserve_rule": "Keep using only summary_1 and summary_2 as evidence. Preserve any factual label that both summaries agree on; do not introduce new facts or external information.",
+            "change_rule": "Instead of producing a sentence or a multi-word/parenthetical answer, produce a single, concise noun label that captures the shared category. Prefer the shortest canonical form present in the summaries, using the singular noun when appropriate.",
+            "drop_or_avoid_rule": "Do not include pronouns, explanatory phrases, parenthetical synonyms, full sentences, or extra punctuation. Avoid pluralization when a singular noun conveys the category; do not invent or add facts not present in the summaries.",
+            "output_contract": "Place only the minimal answer string (the single noun label described above) inside the [[ ## answer ## ]] block with no surrounding text, punctuation, or explanation.",
+            "why_local_transition": "The source output is a sentence with a plural and parenthetical synonym. The intended behavior is a minimal canonical label derived from the visible summaries. This edit makes a small, local change that compresses sentence-form output into the minimal noun label already supported by the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What do George Orwell and Jane Smiley have in common?",
+        "summary_1": "Both George Orwell and Jane Smiley are authors (novelists).",
+        "summary_2": "They are both novelists (authors).",
+        "current_output": "They are both novelists (authors)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 and summary_2 both assert the same category/occupation/role for the question's subjects (for example, both say 'novelists'), and the current output is a sentence, a plural phrase, or contains parenthetical synonyms.\",\n      \"preserve_rule\": \"Keep using only summary_1 and summary_2 as evidence. Preserve any factual label that both summaries agree on; do not introduce new facts or external information.\",\n      \"change_rule\": \"Instead of producing a sentence or a multi-word/parenthetical answer, produce a single, concise noun label that captures the shared category. Prefer the shortest canonical form present in the summaries, using the singular noun when appropriate.\",\n      \"drop_or_avoid_rule\": \"Do not include pronouns, explanatory phrases, parenthetical synonyms, full sentences, or extra punctuation. Avoid pluralization when a singular noun conveys the category; do not invent or add facts not present in the summaries.\",\n      \"output_contract\": \"Place only the minimal answer string (the single noun label described above) inside the [[ ## answer ## ]] block with no surrounding text, punctuation, or explanation.\",\n      \"why_local_transition\": \"The source output is a sentence with a plural and parenthetical synonym. The intended behavior is a minimal canonical label derived from the visible summaries. This edit makes a small, local change that compresses sentence-form output into the minimal noun label already supported by the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What do George Orwell and Jane Smiley have in common?\",\n  \"summary_1\": \"Both George Orwell and Jane Smiley are authors (novelists).\",\n  \"summary_2\": \"They are both novelists (authors).\",\n  \"current_output\": \"They are both novelists (authors).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nnovelist\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries identify them as novelists/authors; applied the rule to use the shortest canonical singular noun and place it alone inside the answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

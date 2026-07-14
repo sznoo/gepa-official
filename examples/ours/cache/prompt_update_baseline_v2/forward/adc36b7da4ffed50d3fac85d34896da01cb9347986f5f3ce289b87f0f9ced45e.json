@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "adc36b7da4ffed50d3fac85d34896da01cb9347986f5f3ce289b87f0f9ced45e",
+  "created_at": "2026-07-13T17:42:18.378599+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "What was Alfed Dreyfus lawyer, Fernand Labori a victim of?",
+    "answer": "assassination attempt",
+    "context": {
+      "title": [
+        "Fernand Lalonde",
+        "Hippolytus de Marsiliis",
+        "Fernand Choquette",
+        "Alfred Dreyfus",
+        "Fernand Dubé",
+        "Fernand de Brinon",
+        "Fernand Labori",
+        "Vera Brühne",
+        "Fernand Crémieux",
+        "Edgar Demange"
+      ],
+      "sentences": [
+        [
+          "Fernand Lalonde (born August 27, 1932) is a Canadian lawyer and politician.",
+          " Lalonde represented the riding of Marguerite-Bourgeoys in the National Assembly of Quebec from 1973 to 1984."
+        ],
+        [
+          "Hippolytus de Marsiliis (born 1451 Bologna; date of death unknown) was a lawyer and \"doctor utriusque iuris\" (Lat.",
+          " 'doctor of either law' — one who studied civil as well as canon law).",
+          " He received his doctorate in 1480 but the date at which he became a lawyer is unknown.",
+          " Throughout his life, he wrote many repetitiones and notabilia on many canons and decretals.",
+          " In addition, he taught Roman law beginning in the year 1482.",
+          " He is best known for documenting the Chinese water torture method, in which drops of water would consistently fall on a victim's forehead, causing him to go insane.",
+          " He also was the first person to document sleep deprivation as a means of torture, wherein the interrogators would repeat same questions, shaking the victim at random intervals, pricking him with a sharp pin, or forcing him to march down a hallway endlessly.",
+          " If the interrogators grew weary, they would switch out with another group, who then would ask the same questions (today police use this method, but it is known as the third degree)."
+        ],
+        [
+          "Fernand Choquette, {'1': \", '2': \", '3': \", '4': \"} (October 27, 1895 – January 17, 1975) was a Canadian Quebec MNA and judge of the Quebec Court of Appeal from 1956 until 1970.",
+          " He also worked as a lawyer for over 10 years and a teacher for over 20 years."
+        ],
+        [
+          "Alfred Dreyfus (] ; 9 October 1859 – 12 July 1935) was a French Jewish artillery officer whose trial and conviction in 1894 on charges of treason became one of the most tense political dramas in modern French history with a wide echo in all Europe.",
+          " Known today as the Dreyfus affair, the incident eventually ended with Dreyfus's complete exoneration."
+        ],
+        [
+          "Fernand G. Dubé, QC (December 29, 1928 – October 5, 1999) was a Canadian lawyer and politician in the Province of New Brunswick."
+        ],
+        [
+          "Fernand de Brinon, Marquis de Brinon (] ; 26 August 1885 – 15 April 1947) was a French lawyer and journalist who was one of the architects of French collaboration with the Nazis during World War II.",
+          " He claimed to have had five private talks with Adolf Hitler between 1933 and 1937."
+        ],
+        [
+          "Fernand-Gustave-Gaston Labori (April 18, 1860 – March 14, 1917) was a French attorney.",
+          " He was born in Reims.",
+          " In his professional life, he defended the accused in some of the most prominent political cases of his day.",
+          " Among his noted clients was Alfred Dreyfus, who was eventually acquitted of treason.",
+          " During the Dreyfus trial, Labori was the victim of an assassination attempt which hospitalized him for a week.",
+          " The attacker was never identified."
+        ],
+        [
+          "Vera Brühne (February 6, 1910 in Essen – April 17, 2001 in Munich) became famous throughout Germany as a victim of miscarriage of justice.",
+          " In 1961/62, she was convicted, together with Johann Ferbach, of having murdered the physician Otto Praun and his lover.",
+          " Ulrich Sonnemann considered the case as a new Dreyfus affair.",
+          " In 1979, she was pardoned by Bavarian governor Franz Josef Strauss."
+        ],
+        [
+          "Fernand Crémieux (1857-1928) was a French lawyer and politician.",
+          " He served as a member of the National Assembly from 1885 to 1889, and from 1893 to 1898, representing Gard.",
+          " He also served as a member of the French Senate from 1903 to 1928, representing Gard."
+        ],
+        [
+          "Edgar Demange (April 22, 1841 in Versailles – February 1925 in Paris) was a French jurist.",
+          " He was, with Fernand Labori, the lawyer of Alfred Dreyfus during his trials in 1894 and 1899."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Fernand Labori",
+        "Alfred Dreyfus"
+      ],
+      "sent_id": [
+        4,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "e08bba879cb8",
+    "rerun_from": null,
+    "question": "What was Alfed Dreyfus lawyer, Fernand Labori a victim of?",
+    "gold_answer": "assassination attempt",
+    "context": {
+      "title": [
+        "Fernand Lalonde",
+        "Hippolytus de Marsiliis",
+        "Fernand Choquette",
+        "Alfred Dreyfus",
+        "Fernand Dubé",
+        "Fernand de Brinon",
+        "Fernand Labori",
+        "Vera Brühne",
+        "Fernand Crémieux",
+        "Edgar Demange"
+      ],
+      "sentences": [
+        [
+          "Fernand Lalonde (born August 27, 1932) is a Canadian lawyer and politician.",
+          " Lalonde represented the riding of Marguerite-Bourgeoys in the National Assembly of Quebec from 1973 to 1984."
+        ],
+        [
+          "Hippolytus de Marsiliis (born 1451 Bologna; date of death unknown) was a lawyer and \"doctor utriusque iuris\" (Lat.",
+          " 'doctor of either law' — one who studied civil as well as canon law).",
+          " He received his doctorate in 1480 but the date at which he became a lawyer is unknown.",
+          " Throughout his life, he wrote many repetitiones and notabilia on many canons and decretals.",
+          " In addition, he taught Roman law beginning in the year 1482.",
+          " He is best known for documenting the Chinese water torture method, in which drops of water would consistently fall on a victim's forehead, causing him to go insane.",
+          " He also was the first person to document sleep deprivation as a means of torture, wherein the interrogators would repeat same questions, shaking the victim at random intervals, pricking him with a sharp pin, or forcing him to march down a hallway endlessly.",
+          " If the interrogators grew weary, they would switch out with another group, who then would ask the same questions (today police use this method, but it is known as the third degree)."
+        ],
+        [
+          "Fernand Choquette, {'1': \", '2': \", '3': \", '4': \"} (October 27, 1895 – January 17, 1975) was a Canadian Quebec MNA and judge of the Quebec Court of Appeal from 1956 until 1970.",
+          " He also worked as a lawyer for over 10 years and a teacher for over 20 years."
+        ],
+        [
+          "Alfred Dreyfus (] ; 9 October 1859 – 12 July 1935) was a French Jewish artillery officer whose trial and conviction in 1894 on charges of treason became one of the most tense political dramas in modern French history with a wide echo in all Europe.",
+          " Known today as the Dreyfus affair, the incident eventually ended with Dreyfus's complete exoneration."
+        ],
+        [
+          "Fernand G. Dubé, QC (December 29, 1928 – October 5, 1999) was a Canadian lawyer and politician in the Province of New Brunswick."
+        ],
+        [
+          "Fernand de Brinon, Marquis de Brinon (] ; 26 August 1885 – 15 April 1947) was a French lawyer and journalist who was one of the architects of French collaboration with the Nazis during World War II.",
+          " He claimed to have had five private talks with Adolf Hitler between 1933 and 1937."
+        ],
+        [
+          "Fernand-Gustave-Gaston Labori (April 18, 1860 – March 14, 1917) was a French attorney.",
+          " He was born in Reims.",
+          " In his professional life, he defended the accused in some of the most prominent political cases of his day.",
+          " Among his noted clients was Alfred Dreyfus, who was eventually acquitted of treason.",
+          " During the Dreyfus trial, Labori was the victim of an assassination attempt which hospitalized him for a week.",
+          " The attacker was never identified."
+        ],
+        [
+          "Vera Brühne (February 6, 1910 in Essen – April 17, 2001 in Munich) became famous throughout Germany as a victim of miscarriage of justice.",
+          " In 1961/62, she was convicted, together with Johann Ferbach, of having murdered the physician Otto Praun and his lover.",
+          " Ulrich Sonnemann considered the case as a new Dreyfus affair.",
+          " In 1979, she was pardoned by Bavarian governor Franz Josef Strauss."
+        ],
+        [
+          "Fernand Crémieux (1857-1928) was a French lawyer and politician.",
+          " He served as a member of the National Assembly from 1885 to 1889, and from 1893 to 1898, representing Gard.",
+          " He also served as a member of the French Senate from 1903 to 1928, representing Gard."
+        ],
+        [
+          "Edgar Demange (April 22, 1841 in Versailles – February 1925 in Paris) was a French jurist.",
+          " He was, with Fernand Labori, the lawyer of Alfred Dreyfus during his trials in 1894 and 1899."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Fernand Labori",
+        "Alfred Dreyfus"
+      ],
+      "sent_id": [
+        4,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Fernand Labori",
+      "Alfred Dreyfus"
+    ],
+    "hop1_query": "What was Alfed Dreyfus lawyer, Fernand Labori a victim of?",
+    "hop1_docs": [
+      "Fernand Labori | Fernand-Gustave-Gaston Labori (April 18, 1860 – March 14, 1917) was a French attorney.  He was born in Reims.  In his professional life, he defended the accused in some of the most prominent political cases of his day.  Among his noted clients was Alfred Dreyfus, who was eventually acquitted of treason.  During the Dreyfus trial, Labori was the victim of an assassination attempt which hospitalized him for a week.  The attacker was never identified.",
+      "Edgar Demange | Edgar Demange (April 22, 1841 in Versailles – February 1925 in Paris) was a French jurist.  He was, with Fernand Labori, the lawyer of Alfred Dreyfus during his trials in 1894 and 1899.",
+      "Mathieu Dreyfus | Mathieu Dreyfus (1857-1930) was an Alsatian Jewish industrialist and the older brother of Alfred Dreyfus, a French military officer falsely convicted of treason in what became known as the Dreyfus Affair.  Mathieu was one of his brother's most loyal supporters throughout the affair.",
+      "Ius Laboris | Ius Laboris is an international law firm network specializing in issues relating to employment law, employee benefits, and pensions.  As of 2015, the network had over 1,400 HR lawyers based in around 50 countries across Europe, the Americas, the Middle East, and Asia.",
+      "Camille Ferdinand Dreyfus | Ferdinand Dreyfus (5 May 1849 - 15 July 1915) was a wealthy French lawyer, historian and philanthropist who became Senator for Seine-et-Oise from 1909 to 1915.",
+      "Édouard Dreyfus Gonzalez | Édouard Vincent Joseph Dreyfus González de Orbegoso, 5th count of Premio Real (1876–1941) was a French Catholic businessman of Jewish descent, a lawyer, painter and writer, who was also an amateur composer under the pseudonym of Jean Dora.",
+      "Hubert Dreyfus's views on artificial intelligence | Hubert Dreyfus has been a critic of artificial intelligence research since the 1960s.  In a series of papers and books, including Alchemy and AI (1965), What Computers Can't Do (1972; 1979; 1992) and Mind over Machine (1986), he presented a pessimistic assessment of AI's progress and a critique of the philosophical foundations of the field.  Dreyfus' objections are discussed in most introductions to the philosophy of artificial intelligence, including , the standard AI textbook, and in , a survey of contemporary philosophy."
+    ],
+    "hop1_titles": [
+      "Fernand Labori",
+      "Edgar Demange",
+      "Mathieu Dreyfus",
+      "Ius Laboris",
+      "Camille Ferdinand Dreyfus",
+      "Édouard Dreyfus Gonzalez",
+      "Hubert Dreyfus's views on artificial intelligence"
+    ],
+    "summary_1": "He was the victim of an assassination attempt.",
+    "hop2_query": "Fernand Labori assassination attempt",
+    "hop2_docs": [
+      "Fernand Labori | Fernand-Gustave-Gaston Labori (April 18, 1860 – March 14, 1917) was a French attorney.  He was born in Reims.  In his professional life, he defended the accused in some of the most prominent political cases of his day.  Among his noted clients was Alfred Dreyfus, who was eventually acquitted of treason.  During the Dreyfus trial, Labori was the victim of an assassination attempt which hospitalized him for a week.  The attacker was never identified.",
+      "Edgar Demange | Edgar Demange (April 22, 1841 in Versailles – February 1925 in Paris) was a French jurist.  He was, with Fernand Labori, the lawyer of Alfred Dreyfus during his trials in 1894 and 1899.",
+      "Tony da Costa Fernandes | Tony da Costa Fernandes (born c. 1943) served as the Foreign Minister of UNITA, a rebel group in Angola.  In the 1990s Fernandes and UNITA Interior Minister General Miguel N'Zau Puna allegedly uncovered the fact that UNITA leader Jonas Savimbi ordered the assassinations of both Wilson dos Santos, UNITA's representative to Portugal, and Tito Chingunji, one of Costa Fernandes' predecessors.  Dos Santos and Chingunji's deaths and the defections of Fernandes and Puna weakened the U.S.-UNITA relationship and seriously harmed Savimbi's international reputation.",
+      "Assassination attempts on Hirohito | During the 1920s and 1930s, there were three known assassination attempts on Hirohito, the Emperor of Japan.  The assailants were all either Korean or Japanese.  Assassination attempts on Hirohito took place throughout his reign as Prince regent, and Emperor of Japan.  All of their attempts failed.  Of the four would-be assassins, two were sentenced to death, one was granted amnesty and eventually released, and one committed suicide before she could be tried.",
+      "Attempted assassination of Arthur Calwell | On 21 June 1966 an assassination attempt was made on Arthur Calwell then leader of the Australian Labour Party.  It was arguably the second assassination attempt in Australian political history following Henry James O'Farrell's attempt on the life of Prince Alfred.  (Although Percival Brookfield had been killed and Thomas Ley murdered several political opponents.)",
+      "Assassination attempt | There are several lists of assassination attempts:",
+      "Fernand Bonnier de La Chapelle | Fernand Bonnier de La Chapelle (1922 – December 26, 1942) was a member of the French resistance during World War II.  He assassinated Admiral of the Fleet François Darlan, the former chief of government of Vichy France and the self-proclaimed high commissioner of French North Africa and West Africa, on December 24, 1942.  Bonnier de La Chapelle's speedy trial and execution fueled theories about who may have been behind the assassination."
+    ],
+    "hop2_titles": [
+      "Fernand Labori",
+      "Edgar Demange",
+      "Tony da Costa Fernandes",
+      "Assassination attempts on Hirohito",
+      "Attempted assassination of Arthur Calwell",
+      "Assassination attempt",
+      "Fernand Bonnier de La Chapelle"
+    ],
+    "summary_2": "He was the victim of an assassination attempt.",
+    "answer": "an assassination attempt",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Alfred Dreyfus"
+    ],
+    "hit_titles_hop1": [
+      "Fernand Labori"
+    ],
+    "hit_titles_total": [
+      "Fernand Labori"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

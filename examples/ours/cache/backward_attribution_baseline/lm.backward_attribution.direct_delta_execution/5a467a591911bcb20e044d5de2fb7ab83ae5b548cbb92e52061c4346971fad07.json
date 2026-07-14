@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "5a467a591911bcb20e044d5de2fb7ab83ae5b548cbb92e52061c4346971fad07",
+  "created_at": "2026-07-13T17:17:09.080138+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 and summary_2 both contain the same venue name verbatim, and the current output contains that venue name plus extra locational or descriptive phrases, apply this prompt update.",
+            "preserve_rule": "Keep the chosen entity and all factual content drawn from summary_1 and summary_2. Do not change which venue is being answered for or remove supporting evidence; preserve correctness and the agent's existing decision.",
+            "change_rule": "Replace the verbose output with only the minimal named-entity string for the venue: extract the shortest contiguous substring that matches the venue name as it appears verbatim in the summaries, and output only that substring. Strip trailing locational modifiers (for example, phrases like 'in City, State'), introductory words, and extraneous punctuation. Do not introduce new qualifiers or additional context.",
+            "drop_or_avoid_rule": "Do not add location phrases, explanatory clauses, full-sentence framing, or any extra punctuation beyond what is part of the venue's official name. Avoid restating the question, providing a summary, or producing multiple tokens beyond the single minimal venue name.",
+            "output_contract": "The final output must be a single short answer: exactly the minimal venue name string (no trailing period or extra text). Place only that string inside the [[ ## answer ## ]] block; nothing else should appear in the block.",
+            "why_local_transition": "This edge tightens verbosity by removing redundant locational wording while preserving the same supported entity. The evidence for the venue is already present in the visible summaries, so the smallest coherent change is to format the endpoint as the minimal name string rather than a longer sentence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Cult of Personality is a song used by CM Punk as an entrance song for the WWE event held at which New Jersey stadium?",
+        "summary_1": "MetLife Stadium in East Rutherford, New Jersey.",
+        "summary_2": "MetLife Stadium in East Rutherford, New Jersey.",
+        "current_output": "MetLife Stadium in East Rutherford, New Jersey."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 and summary_2 both contain the same venue name verbatim, and the current output contains that venue name plus extra locational or descriptive phrases, apply this prompt update.\",\n      \"preserve_rule\": \"Keep the chosen entity and all factual content drawn from summary_1 and summary_2. Do not change which venue is being answered for or remove supporting evidence; preserve correctness and the agent's existing decision.\",\n      \"change_rule\": \"Replace the verbose output with only the minimal named-entity string for the venue: extract the shortest contiguous substring that matches the venue name as it appears verbatim in the summaries, and output only that substring. Strip trailing locational modifiers (for example, phrases like 'in City, State'), introductory words, and extraneous punctuation. Do not introduce new qualifiers or additional context.\",\n      \"drop_or_avoid_rule\": \"Do not add location phrases, explanatory clauses, full-sentence framing, or any extra punctuation beyond what is part of the venue's official name. Avoid restating the question, providing a summary, or producing multiple tokens beyond the single minimal venue name.\",\n      \"output_contract\": \"The final output must be a single short answer: exactly the minimal venue name string (no trailing period or extra text). Place only that string inside the [[ ## answer ## ]] block; nothing else should appear in the block.\",\n      \"why_local_transition\": \"This edge tightens verbosity by removing redundant locational wording while preserving the same supported entity. The evidence for the venue is already present in the visible summaries, so the smallest coherent change is to format the endpoint as the minimal name string rather than a longer sentence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Cult of Personality is a song used by CM Punk as an entrance song for the WWE event held at which New Jersey stadium?\",\n  \"summary_1\": \"MetLife Stadium in East Rutherford, New Jersey.\",\n  \"summary_2\": \"MetLife Stadium in East Rutherford, New Jersey.\",\n  \"current_output\": \"MetLife Stadium in East Rutherford, New Jersey.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]MetLife Stadium[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries contained the same venue name verbatim; per the delta, I removed the locational modifiers and returned only the minimal venue name string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 50,
+    "row_index": 50,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "843ed5d9935144a8f4331827a56af0dae4e9e5848888917b211cfb210469c615",
+  "created_at": "2026-07-13T17:25:18.210814+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 and summary_2 both assert the same occupation for the named persons (for example both summaries contain the same occupation noun phrase or both say 'They are both ...'),",
+            "preserve_rule": "Keep the agent's role and existing final-answer interface. Continue to produce the 'answer' field and place the result inside the [[ ## answer ## ]] block exactly as the base prompt expects.",
+            "change_rule": "Instead of a full-sentence reply, emit only the minimal shared occupation noun phrase that appears in both summaries. Do not prepend pronouns, verbs, articles, or explanatory text. Produce the noun phrase alone (optionally followed by a single comma if punctuation is normally used in this dataset) and nothing else inside the [[ ## answer ## ]] block.",
+            "drop_or_avoid_rule": "Do not output full sentences (e.g., 'They are both ...'), do not repeat or combine both summaries verbatim, and do not add explanations, qualifiers, or extra punctuation beyond a single optional comma. Do not invent or infer an occupation not directly supported by both visible summaries.",
+            "output_contract": "[[ ## answer ## ]] must contain only the minimal occupation noun phrase that is directly supported by both summary_1 and summary_2; no other text, no explanation, and no additional sentences.",
+            "why_local_transition": "The source output is a full sentence. This local change converts that sentence into the required minimal answer form by extracting and emitting only the shared occupation phrase present in both summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Mick Jackson and Drew Renaud, have which mutual occupation?",
+        "summary_1": "They are both film directors.",
+        "summary_2": "They are both film directors.",
+        "current_output": "They are both film directors."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 and summary_2 both assert the same occupation for the named persons (for example both summaries contain the same occupation noun phrase or both say 'They are both ...'),\",\n      \"preserve_rule\": \"Keep the agent's role and existing final-answer interface. Continue to produce the 'answer' field and place the result inside the [[ ## answer ## ]] block exactly as the base prompt expects.\",\n      \"change_rule\": \"Instead of a full-sentence reply, emit only the minimal shared occupation noun phrase that appears in both summaries. Do not prepend pronouns, verbs, articles, or explanatory text. Produce the noun phrase alone (optionally followed by a single comma if punctuation is normally used in this dataset) and nothing else inside the [[ ## answer ## ]] block.\",\n      \"drop_or_avoid_rule\": \"Do not output full sentences (e.g., 'They are both ...'), do not repeat or combine both summaries verbatim, and do not add explanations, qualifiers, or extra punctuation beyond a single optional comma. Do not invent or infer an occupation not directly supported by both visible summaries.\",\n      \"output_contract\": \"[[ ## answer ## ]] must contain only the minimal occupation noun phrase that is directly supported by both summary_1 and summary_2; no other text, no explanation, and no additional sentences.\",\n      \"why_local_transition\": \"The source output is a full sentence. This local change converts that sentence into the required minimal answer form by extracting and emitting only the shared occupation phrase present in both summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Mick Jackson and Drew Renaud, have which mutual occupation?\",\n  \"summary_1\": \"They are both film directors.\",\n  \"summary_2\": \"They are both film directors.\",\n  \"current_output\": \"They are both film directors.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nfilm directors\",\n  \"rationale\": \"Both summaries state the same occupation ('film directors'), so per the ordered delta I emitted only that minimal shared occupation noun phrase inside the [[ ## answer ## ]] block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 134,
+    "row_index": 134,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

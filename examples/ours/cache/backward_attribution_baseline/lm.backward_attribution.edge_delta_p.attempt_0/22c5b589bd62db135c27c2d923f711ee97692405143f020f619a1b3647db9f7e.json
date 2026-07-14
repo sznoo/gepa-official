@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "22c5b589bd62db135c27c2d923f711ee97692405143f020f619a1b3647db9f7e",
+  "created_at": "2026-07-13T17:23:19.898077+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What do George Orwell and Jane Smiley have in common?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What do George Orwell and Jane Smiley have in common?",
+        "summary_1": "Both George Orwell and Jane Smiley are authors (novelists).",
+        "summary_2": "They are both novelists (authors).",
+        "current_output": "They are both novelists (authors)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are both novelists (authors).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "novelist",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What do George Orwell and Jane Smiley have in common?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What do George Orwell and Jane Smiley have in common?\",\n  \"summary_1\": \"Both George Orwell and Jane Smiley are authors (novelists).\",\n  \"summary_2\": \"They are both novelists (authors).\",\n  \"current_output\": \"They are both novelists (authors).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are both novelists (authors).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"novelist\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 and summary_2 both assert the same category/occupation/role for the question's subjects (for example, both say 'novelists'), and the current output is a sentence, a plural phrase, or contains parenthetical synonyms.\",\n    \"preserve_rule\": \"Keep using only summary_1 and summary_2 as evidence. Preserve any factual label that both summaries agree on; do not introduce new facts or external information.\",\n    \"change_rule\": \"Instead of producing a sentence or a multi-word/parenthetical answer, produce a single, concise noun label that captures the shared category. Prefer the shortest canonical form present in the summaries, using the singular noun when appropriate.\",\n    \"drop_or_avoid_rule\": \"Do not include pronouns, explanatory phrases, parenthetical synonyms, full sentences, or extra punctuation. Avoid pluralization when a singular noun conveys the category; do not invent or add facts not present in the summaries.\",\n    \"output_contract\": \"Place only the minimal answer string (the single noun label described above) inside the [[ ## answer ## ]] block with no surrounding text, punctuation, or explanation.\",\n    \"why_local_transition\": \"The source output is a sentence with a plural and parenthetical synonym. The intended behavior is a minimal canonical label derived from the visible summaries. This edit makes a small, local change that compresses sentence-form output into the minimal noun label already supported by the summaries.\"\n  },\n  \"rationale\": \"The smallest necessary behavioral change is to canonicalize and shorten the final output to a single supported noun label. This preserves reliance on the provided summaries, avoids adding information, and enforces the existing final-answer contract that demands a minimal answer string. It corrects the current verbosity (sentence + parentheses + plural) without altering how evidence is used.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

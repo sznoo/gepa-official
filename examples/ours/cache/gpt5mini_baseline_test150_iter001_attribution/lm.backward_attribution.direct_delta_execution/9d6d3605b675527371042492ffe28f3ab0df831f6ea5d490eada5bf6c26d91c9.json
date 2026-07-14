@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "9d6d3605b675527371042492ffe28f3ab0df831f6ea5d490eada5bf6c26d91c9",
+  "created_at": "2026-07-13T18:46:45.718171+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 indicates that the provided passages do not state the requested venue count (contains phrases like \"do not state\", \"cannot be determined\", or \"missing\"), and the current query is a multi-part or verbose retrieval request.",
+            "preserve_rule": "Keep producing exactly one retrieval query as the output field `query`. Preserve any tournament or schedule phrases already present in the question (e.g., \"England cricket team's 2017-18 schedule\", \"main tournament\"). Do not change other agent inputs or outputs structure.",
+            "change_rule": "Replace verbose, multi-part phrasing with a single, compact second-hop retrieval query that narrowly targets the missing bridge: request only the tournament identity (if not explicit) and the number of venues used by that tournament within the England cricket team's 2017–18 schedule. Do not ask for lists, citations, or multiple deliverables in the query; keep it a short search-style phrase suitable for a retrieval engine.",
+            "drop_or_avoid_rule": "Avoid multi-part instructions (e.g., \"please provide the number of venues, list the venues, and cite the source\") and avoid added wording that asks for citations or full lists. Do not broaden the query to unrelated competitions or global venue lists.",
+            "output_contract": "The agent's `query` must be a single, concise retrieval query (one line, one short sentence or keyword phrase) that targets: the main tournament associated with the England cricket team's 2017–18 schedule and the number of venues it used. The query must not request multiple outputs (lists + citations) and must fit a single retrieval call.",
+            "why_local_transition": "The current output is overly verbose and requests extra deliverables (lists and citations) that confuse the second-hop retrieval. A minimal, focused query increases likelihood of retrieving the missing bridge (the tournament name and its venue count) while preserving existing input context and the agent's single-query behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If summary_1 indicates the phrase 'cannot be determined' or otherwise flags that which 'main tournament' is meant is ambiguous, or if the current draft query contains multi-part requests (e.g. 'Please provide' or asks for lists/citations).",
+            "preserve_rule": "Keep using the same input fields (question, summary_1) and continue to produce exactly one retrieval query. Preserve any correct disambiguation already attempted in the draft query and any sample-specific terms that appear in the visible inputs (e.g. references to the England cricket team and the 2017–18 schedule).",
+            "change_rule": "Replace verbose or multi-demand queries with a single, compact, focused disambiguation retrieval query. The query should (a) ask which specific 'main tournament' in England's 2017–18 schedule is being referenced (if ambiguous) and (b) ask only for the number of venues used by that tournament. Keep the query one sentence and short (aim for under ~20 words). Do not request citations, lists, or stepwise outputs in the query itself.",
+            "drop_or_avoid_rule": "Do not include requests for citations, lists of venues, or procedural polite phrasing (e.g. 'Please provide'). Do not introduce or assume tournament names or other entities that do not already appear in the visible inputs. Avoid multi-part delivery demands; the query must remain a single focused retrieval question.",
+            "output_contract": "Produce the field `query` containing one concise, single-sentence retrieval question that either disambiguates which 'main tournament' in England's 2017–18 schedule is meant and asks how many venues it used, or directly asks how many venues the referenced main tournament used. The query must be under ~20 words, contain no citation/list request, and be formatted as a direct question.",
+            "why_local_transition": "The current state shows ambiguity about which 'main tournament' is meant and the draft query is verbose and multi-part. A concise disambiguation+venue-count query is the minimal change needed to target the correct second-hop document and improve retrieval effectiveness without altering other agent behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How many venues are involved in the main tournament which is part of the English Cricket Team's 2017-2018 schedule?",
+        "summary_1": "The passages do not state how many venues are involved; the answer cannot be determined from the provided information.",
+        "current_output": {
+          "query": "How many venues were used for the main tournament in the England cricket team's 2017–18 schedule? Please provide the number of venues, list the venues, and cite the source (e.g., ECB, ESPNcricinfo, or other reliable coverage)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 indicates that the provided passages do not state the requested venue count (contains phrases like \\\"do not state\\\", \\\"cannot be determined\\\", or \\\"missing\\\"), and the current query is a multi-part or verbose retrieval request.\",\n      \"preserve_rule\": \"Keep producing exactly one retrieval query as the output field `query`. Preserve any tournament or schedule phrases already present in the question (e.g., \\\"England cricket team's 2017-18 schedule\\\", \\\"main tournament\\\"). Do not change other agent inputs or outputs structure.\",\n      \"change_rule\": \"Replace verbose, multi-part phrasing with a single, compact second-hop retrieval query that narrowly targets the missing bridge: request only the tournament identity (if not explicit) and the number of venues used by that tournament within the England cricket team's 2017–18 schedule. Do not ask for lists, citations, or multiple deliverables in the query; keep it a short search-style phrase suitable for a retrieval engine.\",\n      \"drop_or_avoid_rule\": \"Avoid multi-part instructions (e.g., \\\"please provide the number of venues, list the venues, and cite the source\\\") and avoid added wording that asks for citations or full lists. Do not broaden the query to unrelated competitions or global venue lists.\",\n      \"output_contract\": \"The agent's `query` must be a single, concise retrieval query (one line, one short sentence or keyword phrase) that targets: the main tournament associated with the England cricket team's 2017–18 schedule and the number of venues it used. The query must not request multiple outputs (lists + citations) and must fit a single retrieval call.\",\n      \"why_local_transition\": \"The current output is overly verbose and requests extra deliverables (lists and citations) that confuse the second-hop retrieval. A minimal, focused query increases likelihood of retrieving the missing bridge (the tournament name and its venue count) while preserving existing input context and the agent's single-query behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 indicates the phrase 'cannot be determined' or otherwise flags that which 'main tournament' is meant is ambiguous, or if the current draft query contains multi-part requests (e.g. 'Please provide' or asks for lists/citations).\",\n      \"preserve_rule\": \"Keep using the same input fields (question, summary_1) and continue to produce exactly one retrieval query. Preserve any correct disambiguation already attempted in the draft query and any sample-specific terms that appear in the visible inputs (e.g. references to the England cricket team and the 2017–18 schedule).\",\n      \"change_rule\": \"Replace verbose or multi-demand queries with a single, compact, focused disambiguation retrieval query. The query should (a) ask which specific 'main tournament' in England's 2017–18 schedule is being referenced (if ambiguous) and (b) ask only for the number of venues used by that tournament. Keep the query one sentence and short (aim for under ~20 words). Do not request citations, lists, or stepwise outputs in the query itself.\",\n      \"drop_or_avoid_rule\": \"Do not include requests for citations, lists of venues, or procedural polite phrasing (e.g. 'Please provide'). Do not introduce or assume tournament names or other entities that do not already appear in the visible inputs. Avoid multi-part delivery demands; the query must remain a single focused retrieval question.\",\n      \"output_contract\": \"Produce the field `query` containing one concise, single-sentence retrieval question that either disambiguates which 'main tournament' in England's 2017–18 schedule is meant and asks how many venues it used, or directly asks how many venues the referenced main tournament used. The query must be under ~20 words, contain no citation/list request, and be formatted as a direct question.\",\n      \"why_local_transition\": \"The current state shows ambiguity about which 'main tournament' is meant and the draft query is verbose and multi-part. A concise disambiguation+venue-count query is the minimal change needed to target the correct second-hop document and improve retrieval effectiveness without altering other agent behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How many venues are involved in the main tournament which is part of the English Cricket Team's 2017-2018 schedule?\",\n  \"summary_1\": \"The passages do not state how many venues are involved; the answer cannot be determined from the provided information.\",\n  \"current_output\": {\n    \"query\": \"How many venues were used for the main tournament in the England cricket team's 2017–18 schedule? Please provide the number of venues, list the venues, and cite the source (e.g., ECB, ESPNcricinfo, or other reliable coverage).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Which main tournament in England's 2017–18 schedule is referenced and how many venues did it use?\"\n  },\n  \"rationale\": \"Replaced the verbose, multi-part draft with a single concise disambiguation+venue-count retrieval question per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 31,
+    "row_index": 31,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

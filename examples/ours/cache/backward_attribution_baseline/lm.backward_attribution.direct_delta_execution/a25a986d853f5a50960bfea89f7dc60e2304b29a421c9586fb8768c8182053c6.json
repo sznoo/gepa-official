@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a25a986d853f5a50960bfea89f7dc60e2304b29a421c9586fb8768c8182053c6",
+  "created_at": "2026-07-13T17:21:45.276679+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks for a person (e.g., begins with 'Who' or 'Which' and refers to a performer such as 'singer'/'sang') and the provided summaries explicitly contain a clear personal name as the respondent.",
+            "preserve_rule": "Continue to rely on summary_1 and summary_2 as the evidence source and preserve their exact capitalization for names. Keep any existing behavior that prefers information verbatim from the summaries.",
+            "change_rule": "Instead of emitting a full sentence or explanatory phrase, extract the single personal name that the summaries present as the performer and place that name as the only content of the answer field. Do not add commentary, verbs, parentheticals, quotations around the name, or other descriptive text. If the summaries do not present a single clear name, output the token 'Unknown' only.",
+            "drop_or_avoid_rule": "Avoid full-sentence outputs, pronouns + verbs (e.g., 'he sang...'), added context, or any additional punctuation outside the name. Do not append clarifying clauses or duplicate the question.",
+            "output_contract": "The answer field must contain exactly one minimal answer string: the performer name as shown in the summaries (no surrounding text or punctuation). If ambiguous or unsupported, output exactly 'Unknown'.",
+            "why_local_transition": "The current output is a verbose sentence; for final output we need the minimal named-entity answer string supported by the visible summaries so downstream evaluation/consumers receive only the concise answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which Canadian singer sang \" something stronger\" in the musical applause?",
+        "summary_1": "Len Cariou. He sang \"Something Greater\" (with Lauren Bacall) in Applause.",
+        "summary_2": "Len Cariou — the Canadian performer — sang \"Something Greater\" (with Lauren Bacall) in the musical Applause.",
+        "current_output": "Len Cariou — he sang \"Something Greater\" (with Lauren Bacall) in the musical Applause."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for a person (e.g., begins with 'Who' or 'Which' and refers to a performer such as 'singer'/'sang') and the provided summaries explicitly contain a clear personal name as the respondent.\",\n      \"preserve_rule\": \"Continue to rely on summary_1 and summary_2 as the evidence source and preserve their exact capitalization for names. Keep any existing behavior that prefers information verbatim from the summaries.\",\n      \"change_rule\": \"Instead of emitting a full sentence or explanatory phrase, extract the single personal name that the summaries present as the performer and place that name as the only content of the answer field. Do not add commentary, verbs, parentheticals, quotations around the name, or other descriptive text. If the summaries do not present a single clear name, output the token 'Unknown' only.\",\n      \"drop_or_avoid_rule\": \"Avoid full-sentence outputs, pronouns + verbs (e.g., 'he sang...'), added context, or any additional punctuation outside the name. Do not append clarifying clauses or duplicate the question.\",\n      \"output_contract\": \"The answer field must contain exactly one minimal answer string: the performer name as shown in the summaries (no surrounding text or punctuation). If ambiguous or unsupported, output exactly 'Unknown'.\",\n      \"why_local_transition\": \"The current output is a verbose sentence; for final output we need the minimal named-entity answer string supported by the visible summaries so downstream evaluation/consumers receive only the concise answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which Canadian singer sang \\\" something stronger\\\" in the musical applause?\",\n  \"summary_1\": \"Len Cariou. He sang \\\"Something Greater\\\" (with Lauren Bacall) in Applause.\",\n  \"summary_2\": \"Len Cariou — the Canadian performer — sang \\\"Something Greater\\\" (with Lauren Bacall) in the musical Applause.\",\n  \"current_output\": \"Len Cariou — he sang \\\"Something Greater\\\" (with Lauren Bacall) in the musical Applause.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Len Cariou\",\n  \"rationale\": \"Question asks for a performer; both summaries explicitly give the name Len Cariou, so the exact name was returned as the minimal answer per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 78,
+    "row_index": 78,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

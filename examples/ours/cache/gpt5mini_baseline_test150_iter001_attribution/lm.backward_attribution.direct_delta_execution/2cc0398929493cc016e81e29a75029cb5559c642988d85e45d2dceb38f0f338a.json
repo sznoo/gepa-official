@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2cc0398929493cc016e81e29a75029cb5559c642988d85e45d2dceb38f0f338a",
+  "created_at": "2026-07-13T18:45:24.151415+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the question compares two named people and summary_1 identifies one of them as likely covering a broader set of entertainment roles (here: Dave Moody vs Ransom Riggs).",
+            "preserve_rule": "Keep the agent's current goal of producing a second-hop retrieval query about occupations/roles in the entertainment industry; preserve concision and the requirement to target supporting evidence (not to give the final answer).",
+            "change_rule": "Instead of asking for full lists and sources for both people, produce a single, compact retrieval query that focuses on the missing person (the one named in summary_1 as needing confirmation). The query must include that person's name and succinct keywords like \"entertainment-industry roles\" or \"occupations\" so a retrieval system will return a page listing their roles. Keep the query to one short line (aim for ≲12 words) and do not ask for per-role sources or multi-part outputs.",
+            "drop_or_avoid_rule": "Do not request multi-person comparisons, detailed lists, or source instructions (e.g., \"For each person provide...\", \"Wikipedia or official biography\"). Avoid long example lists, formatting directives, or any phrasing that asks the retriever to return final conclusions or supporting statements.",
+            "output_contract": "Emit exactly one field named `query`. Its value must be a single-line, compact retrieval query (plain text, ≲12 words) that names the missing person and requests their entertainment-industry occupations/roles (for example using the pattern: <Person Name> + \"entertainment industry roles\" or \"occupations\"). Do not include extra instructions, explanations, or source requests in the query.",
+            "why_local_transition": "The source query was a broad multi-person retrieval instruction that diluted focus and fetched irrelevant documents. Narrowing the next-hop query to the specific missing person (Dave Moody) is the minimal targeted change needed to recover the missing supporting title and occupations."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "current_output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question compares two named people and summary_1 identifies one of them as likely covering a broader set of entertainment roles (here: Dave Moody vs Ransom Riggs).\",\n      \"preserve_rule\": \"Keep the agent's current goal of producing a second-hop retrieval query about occupations/roles in the entertainment industry; preserve concision and the requirement to target supporting evidence (not to give the final answer).\",\n      \"change_rule\": \"Instead of asking for full lists and sources for both people, produce a single, compact retrieval query that focuses on the missing person (the one named in summary_1 as needing confirmation). The query must include that person's name and succinct keywords like \\\"entertainment-industry roles\\\" or \\\"occupations\\\" so a retrieval system will return a page listing their roles. Keep the query to one short line (aim for ≲12 words) and do not ask for per-role sources or multi-part outputs.\",\n      \"drop_or_avoid_rule\": \"Do not request multi-person comparisons, detailed lists, or source instructions (e.g., \\\"For each person provide...\\\", \\\"Wikipedia or official biography\\\"). Avoid long example lists, formatting directives, or any phrasing that asks the retriever to return final conclusions or supporting statements.\",\n      \"output_contract\": \"Emit exactly one field named `query`. Its value must be a single-line, compact retrieval query (plain text, ≲12 words) that names the missing person and requests their entertainment-industry occupations/roles (for example using the pattern: <Person Name> + \\\"entertainment industry roles\\\" or \\\"occupations\\\"). Do not include extra instructions, explanations, or source requests in the query.\",\n      \"why_local_transition\": \"The source query was a broad multi-person retrieval instruction that diluted focus and fetched irrelevant documents. Narrowing the next-hop query to the specific missing person (Dave Moody) is the minimal targeted change needed to recover the missing supporting title and occupations.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"current_output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dave Moody entertainment industry roles\"\n  },\n  \"rationale\": \"Followed deltas: narrowed to the missing person (Dave Moody), used concise keywords 'entertainment industry roles', and emitted a single short-line query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

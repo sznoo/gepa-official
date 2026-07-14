@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "905c8fda734e4b9c9bc00b13e6cd84035034826b9900cdd8861f30ffd3be189e",
+  "created_at": "2026-07-13T18:46:39.949317+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question contains a medical-location descriptor (words like \"medical\", \"clinic\", \"hospital\", or the phrase \"medical practice\") AND the provided summary_1 is a short organization name that does NOT contain medical keywords (e.g. does not include \"clinic\", \"hospital\", \"medical\", \"health\", or \"Mayo\"),",
+            "preserve_rule": "Keep the current behavior of incorporating summary_1 into the query only when summary_1 already matches the question descriptor (i.e., summary_1 itself contains medical-related keywords). Otherwise do not use summary_1 as the primary retrieval anchor.",
+            "change_rule": "When triggered, generate a compact second-hop query that pairs the place named in the question (the community or landmark token, e.g. \"Desert Ridge\") with a brief descriptive phrase taken from the question (e.g. \"non-profit medical practice\" and the state token \"Minnesota\"). Do not insert the summary_1 name into the query in this case.",
+            "drop_or_avoid_rule": "Avoid appending unrelated organization names (such as summary_1 when it lacks medical keywords) or long verbatim question text. Also avoid adding extra candidate organization names or long spans unique to any hidden target. Keep the query short and focused on the place + descriptor + state.",
+            "output_contract": "Produce a single compact query string combining the place from `question` and the descriptor+state, for example in the form: \"Desert Ridge non-profit medical practice Minnesota\" (same structure, adapted to the current sample's place and descriptor).",
+            "why_local_transition": "This change prevents incorrectly reusing an upstream organization name (summary_1) that doesn't match the requested entity type, and instead focuses the second-hop retrieval on the place plus the exact descriptor in the question so the pipeline can find the correct supporting medical practice."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Desert Ridge includes what non-profit medical practice facility based out of Minnesota?",
+        "summary_1": "Hazelden Foundation",
+        "current_output": {
+          "query": "Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question contains a medical-location descriptor (words like \\\"medical\\\", \\\"clinic\\\", \\\"hospital\\\", or the phrase \\\"medical practice\\\") AND the provided summary_1 is a short organization name that does NOT contain medical keywords (e.g. does not include \\\"clinic\\\", \\\"hospital\\\", \\\"medical\\\", \\\"health\\\", or \\\"Mayo\\\"),\",\n      \"preserve_rule\": \"Keep the current behavior of incorporating summary_1 into the query only when summary_1 already matches the question descriptor (i.e., summary_1 itself contains medical-related keywords). Otherwise do not use summary_1 as the primary retrieval anchor.\",\n      \"change_rule\": \"When triggered, generate a compact second-hop query that pairs the place named in the question (the community or landmark token, e.g. \\\"Desert Ridge\\\") with a brief descriptive phrase taken from the question (e.g. \\\"non-profit medical practice\\\" and the state token \\\"Minnesota\\\"). Do not insert the summary_1 name into the query in this case.\",\n      \"drop_or_avoid_rule\": \"Avoid appending unrelated organization names (such as summary_1 when it lacks medical keywords) or long verbatim question text. Also avoid adding extra candidate organization names or long spans unique to any hidden target. Keep the query short and focused on the place + descriptor + state.\",\n      \"output_contract\": \"Produce a single compact query string combining the place from `question` and the descriptor+state, for example in the form: \\\"Desert Ridge non-profit medical practice Minnesota\\\" (same structure, adapted to the current sample's place and descriptor).\",\n      \"why_local_transition\": \"This change prevents incorrectly reusing an upstream organization name (summary_1) that doesn't match the requested entity type, and instead focuses the second-hop retrieval on the place plus the exact descriptor in the question so the pipeline can find the correct supporting medical practice.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Desert Ridge includes what non-profit medical practice facility based out of Minnesota?\",\n  \"summary_1\": \"Hazelden Foundation\",\n  \"current_output\": {\n    \"query\": \"Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Desert Ridge non-profit medical practice Minnesota\"},\n  \"rationale\": \"Question contained a medical descriptor and a state while summary_1 lacked medical keywords, so per the delta I omitted the summary_1 name and formed a compact place+descriptor+state query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 79,
+    "row_index": 79,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

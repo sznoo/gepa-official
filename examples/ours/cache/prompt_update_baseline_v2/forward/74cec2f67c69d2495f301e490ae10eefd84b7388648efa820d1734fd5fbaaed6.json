@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "74cec2f67c69d2495f301e490ae10eefd84b7388648efa820d1734fd5fbaaed6",
+  "created_at": "2026-07-13T17:42:49.104015+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Which band is from Ohio, Guided by Voices or Gravity Kills?",
+    "answer": "Guided by Voices",
+    "context": {
+      "title": [
+        "TVT Records",
+        "Superstarved",
+        "Guided by Voices",
+        "Gravity Kills (album)",
+        "Jim Marcus",
+        "Rocky Morton",
+        "Gravity Kills",
+        "Hypersonic Hyperphonic",
+        "Perversion (album)",
+        "Falling (Gravity Kills song)"
+      ],
+      "sentences": [
+        [
+          "TVT Records was an American record label founded by Steve Gottlieb.",
+          " Over the course of its 25-year history, the label released some 25 Gold, Platinum and Multi-platinum releases.",
+          " Its roster included Nine Inch Nails, Ja Rule, Lil Jon, Underworld, KMFDM, Gravity Kills, The KLF, The Baldwin Brothers, Sevendust, Nothingface, the Wellwater Conspiracy, Brian Jonestown Massacre, The Holloways, The Cinematics, Buck-O-Nine, DJ Hurricane, Speech and Pitbull.",
+          " Its biggest commercial successes were the triple platinum Nine Inch Nails's \"Pretty Hate Machine\", two double platinum releases by Lil Jon, and platinum releases by Snoop Dogg and Tha Eastsidaz, Dashboard Confessional, Default and Ying Yang Twins as well as gold releases by Sevendust, Gravity Kills and The Black Crowes and Jimmy Page.",
+          " Additionally, TVT also had success overseas, achieving a gold release in Germany and Sweden with The Connells and scored platinum and gold records in Canada with Default."
+        ],
+        [
+          "Superstarved (stylized as superstarved★ or superstarved*) is the third studio album by Gravity Kills, released March 19, 2002.",
+          " The album is described as \"more riff-oriented\" and \"grindier\"."
+        ],
+        [
+          "Guided by Voices (often abbreviated as GBV) is an American indie rock band from Dayton, Ohio.",
+          " It has made frequent personnel changes but always maintained the presence of principal songwriter Robert Pollard."
+        ],
+        [
+          "Gravity Kills is the debut studio album by industrial rock band Gravity Kills.",
+          " It was released in 1996 on TVT Records.",
+          " The album sold just under 500,000 copies."
+        ],
+        [
+          "James Marcus (born March 22, 1966) is a musician, artist, political activist, and respected typographer who is best known for his work as the lead singer and founder of the Industrial band Die Warzau.",
+          " He is credited as engineer, remixer, vocalist, songwriter, percussionist, drummer, bass player, pianist, keyboardist or artist on albums by Die Warzau, GoFight, Sister Machine Gun, Björk, Pigface, Pansy Division, The Swans, Haloblack, Chris Connelly, KMFDM, Skrew, Machines of Loving Grace, Stabbing Westward, Gravity Kills, Everplastic, Screaming Rachel, Dessau, Chemlab, The Final Cut, Testify, Mindfunk, Little Louis and various other artists across many different genres.",
+          " His work can be heard on some of the most popular tracks by many of these groups, such as the Pigface's \"Asphole\", \"Aboriginal\", \"Steamroller\", etc., KMFDM's \"Light\", Sister Machine gun's \"Wired\", \"Lung\", \"Nothing\", etc."
+        ],
+        [
+          "Rocky Morton (born 1955) is an English director.",
+          " He was the co-creator of Max Headroom and co-director on \"Super Mario Bros\".",
+          " Various music videos by Tom Tom Club, Talking Heads, Gravity Kills, Orgy, George Harrison and Miles Davis are credited to Morton.",
+          " Videos include \"New Frontier\".",
+          " Alongside his partner, Annabel Jankel, the duo made their television debut with the original \",\" and its Americanized version.",
+          " The duo made their big-screen debut with the remake of the film noir classic, \"D.O.A.,\" starring Dennis Quaid and Meg Ryan."
+        ],
+        [
+          "Gravity Kills is an American industrial rock band from St. Louis, Missouri.",
+          " Their music was described by one critic as \"a blending of eerie industrial rock with a pop-infused melodic chorus and a bit of hard-core head banging.\""
+        ],
+        [
+          "Hypersonic Hyperphonic is the second studio album by Tinfed, released on December 3, 1996 by Re-Constriction Records.",
+          " \"Sonic Boom\" noted that \"Tinfed is one of those bands who would fit perfectly on tour with the likes of God Lives Underwater, Stabbing Westward, Filter & Gravity Kills which means they should do rather well with the current crossover audience.\""
+        ],
+        [
+          "\"Perversion\" is a 1998 album by Industrial Rock act Gravity Kills."
+        ],
+        [
+          "\"Falling\" is a song by industrial rock band Gravity Kills from the album \"Perversion\", released by TVT Records in 1998."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Guided by Voices",
+        "Gravity Kills"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "e08bba879cb8",
+    "rerun_from": null,
+    "question": "Which band is from Ohio, Guided by Voices or Gravity Kills?",
+    "gold_answer": "Guided by Voices",
+    "context": {
+      "title": [
+        "TVT Records",
+        "Superstarved",
+        "Guided by Voices",
+        "Gravity Kills (album)",
+        "Jim Marcus",
+        "Rocky Morton",
+        "Gravity Kills",
+        "Hypersonic Hyperphonic",
+        "Perversion (album)",
+        "Falling (Gravity Kills song)"
+      ],
+      "sentences": [
+        [
+          "TVT Records was an American record label founded by Steve Gottlieb.",
+          " Over the course of its 25-year history, the label released some 25 Gold, Platinum and Multi-platinum releases.",
+          " Its roster included Nine Inch Nails, Ja Rule, Lil Jon, Underworld, KMFDM, Gravity Kills, The KLF, The Baldwin Brothers, Sevendust, Nothingface, the Wellwater Conspiracy, Brian Jonestown Massacre, The Holloways, The Cinematics, Buck-O-Nine, DJ Hurricane, Speech and Pitbull.",
+          " Its biggest commercial successes were the triple platinum Nine Inch Nails's \"Pretty Hate Machine\", two double platinum releases by Lil Jon, and platinum releases by Snoop Dogg and Tha Eastsidaz, Dashboard Confessional, Default and Ying Yang Twins as well as gold releases by Sevendust, Gravity Kills and The Black Crowes and Jimmy Page.",
+          " Additionally, TVT also had success overseas, achieving a gold release in Germany and Sweden with The Connells and scored platinum and gold records in Canada with Default."
+        ],
+        [
+          "Superstarved (stylized as superstarved★ or superstarved*) is the third studio album by Gravity Kills, released March 19, 2002.",
+          " The album is described as \"more riff-oriented\" and \"grindier\"."
+        ],
+        [
+          "Guided by Voices (often abbreviated as GBV) is an American indie rock band from Dayton, Ohio.",
+          " It has made frequent personnel changes but always maintained the presence of principal songwriter Robert Pollard."
+        ],
+        [
+          "Gravity Kills is the debut studio album by industrial rock band Gravity Kills.",
+          " It was released in 1996 on TVT Records.",
+          " The album sold just under 500,000 copies."
+        ],
+        [
+          "James Marcus (born March 22, 1966) is a musician, artist, political activist, and respected typographer who is best known for his work as the lead singer and founder of the Industrial band Die Warzau.",
+          " He is credited as engineer, remixer, vocalist, songwriter, percussionist, drummer, bass player, pianist, keyboardist or artist on albums by Die Warzau, GoFight, Sister Machine Gun, Björk, Pigface, Pansy Division, The Swans, Haloblack, Chris Connelly, KMFDM, Skrew, Machines of Loving Grace, Stabbing Westward, Gravity Kills, Everplastic, Screaming Rachel, Dessau, Chemlab, The Final Cut, Testify, Mindfunk, Little Louis and various other artists across many different genres.",
+          " His work can be heard on some of the most popular tracks by many of these groups, such as the Pigface's \"Asphole\", \"Aboriginal\", \"Steamroller\", etc., KMFDM's \"Light\", Sister Machine gun's \"Wired\", \"Lung\", \"Nothing\", etc."
+        ],
+        [
+          "Rocky Morton (born 1955) is an English director.",
+          " He was the co-creator of Max Headroom and co-director on \"Super Mario Bros\".",
+          " Various music videos by Tom Tom Club, Talking Heads, Gravity Kills, Orgy, George Harrison and Miles Davis are credited to Morton.",
+          " Videos include \"New Frontier\".",
+          " Alongside his partner, Annabel Jankel, the duo made their television debut with the original \",\" and its Americanized version.",
+          " The duo made their big-screen debut with the remake of the film noir classic, \"D.O.A.,\" starring Dennis Quaid and Meg Ryan."
+        ],
+        [
+          "Gravity Kills is an American industrial rock band from St. Louis, Missouri.",
+          " Their music was described by one critic as \"a blending of eerie industrial rock with a pop-infused melodic chorus and a bit of hard-core head banging.\""
+        ],
+        [
+          "Hypersonic Hyperphonic is the second studio album by Tinfed, released on December 3, 1996 by Re-Constriction Records.",
+          " \"Sonic Boom\" noted that \"Tinfed is one of those bands who would fit perfectly on tour with the likes of God Lives Underwater, Stabbing Westward, Filter & Gravity Kills which means they should do rather well with the current crossover audience.\""
+        ],
+        [
+          "\"Perversion\" is a 1998 album by Industrial Rock act Gravity Kills."
+        ],
+        [
+          "\"Falling\" is a song by industrial rock band Gravity Kills from the album \"Perversion\", released by TVT Records in 1998."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Guided by Voices",
+        "Gravity Kills"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Guided by Voices",
+      "Gravity Kills"
+    ],
+    "hop1_query": "Which band is from Ohio, Guided by Voices or Gravity Kills?",
+    "hop1_docs": [
+      "Guided by Voices | Guided by Voices (often abbreviated as GBV) is an American indie rock band from Dayton, Ohio.  It has made frequent personnel changes but always maintained the presence of principal songwriter Robert Pollard.",
+      "Let's Go Eat the Factory | Let's Go Eat the Factory is the 16th album by Dayton, Ohio rock group Guided by Voices.  The album is the first since their 2004 dissolution, and the first to feature the band's classic lineup since 1996's \"Under the Bushes Under the Stars\".  The album was produced by the band and recorded at the homes of members Tobin Sprout, Mitch Mitchell, and Greg Demos.  As with previous albums, it features the band's famously lo-fi 4-track sound as well as more modern production.  It is also the first Guided by Voices album to be released under the Guided by Voices, Inc. label.",
+      "Sunfish Holy Breakfast | Sunfish Holy Breakfast is an EP by Guided by Voices, a band from Dayton, Ohio.  It was released on 19 November 1996.",
+      "Falling (Gravity Kills song) | \"Falling\" is a song by industrial rock band Gravity Kills from the album \"Perversion\", released by TVT Records in 1998.",
+      "Gravity Kills (album) | Gravity Kills is the debut studio album by industrial rock band Gravity Kills.  It was released in 1996 on TVT Records.  The album sold just under 500,000 copies.",
+      "Gravity Kills | Gravity Kills is an American industrial rock band from St. Louis, Missouri.  Their music was described by one critic as \"a blending of eerie industrial rock with a pop-infused melodic chorus and a bit of hard-core head banging.\"",
+      "Andrei Găluț | Andrei Găluț (] ; born 2 August 1984) is a Romanian rock singer.  He won the 2007–08 season of Prima TV's \"Megastar\" He was the lead singer of metalcore band Goodbye to Gravity from 2010 until 2015 when he was seriously injured in the Colectiv nightclub fire which killed the other four members of the band.  He was the only member of Goodbye to Gravity to survive the fire."
+    ],
+    "hop1_titles": [
+      "Guided by Voices",
+      "Let's Go Eat the Factory",
+      "Sunfish Holy Breakfast",
+      "Falling (Gravity Kills song)",
+      "Gravity Kills (album)",
+      "Gravity Kills",
+      "Andrei Găluț"
+    ],
+    "summary_1": "Guided by Voices is from Ohio.",
+    "hop2_query": "Guided by Voices",
+    "hop2_docs": [
+      "The Best of Guided by Voices: Human Amusements at Hourly Rates | The Best of Guided by Voices: Human Amusements at Hourly Rates",
+      "Propeller (Guided by Voices album) | Propeller is the fifth album by Dayton, Ohio indie rock group Guided by Voices.",
+      "Guided by Voices discography | The Guided by Voices discography includes dozens of releases, both official and unofficial.  Only the official releases credited specifically to the band are documented below.  Robert Pollard, the main creative force behind the band, is an extremely prolific songwriter, having written or co-written more than 1,600 songs, with over 500 of them released under the Guided by Voices moniker.",
+      "Live from Austin, TX (Guided by Voices album) | Live From Austin, TX is a live album by indie band Guided by Voices, recorded on November 9, 2004 and released by New West Records.",
+      "Guided by Voices | Guided by Voices (often abbreviated as GBV) is an American indie rock band from Dayton, Ohio.  It has made frequent personnel changes but always maintained the presence of principal songwriter Robert Pollard.",
+      "Motivational Jumpsuit | Motivational Jumpsuit is the 20th album by Dayton, Ohio rock group Guided by Voices.  It was released in February 2014 under their own record label \"Guided by Voices Inc.\" It reached #18 on the Top Heatseekers chart.",
+      "Please Be Honest | Please Be Honest is the 22nd album by Dayton, Ohio rock group Guided by Voices.  It was released April 22, 2016 on Guided by Voices Inc.  Robert Pollard wrote all the music and played every instrument on the record."
+    ],
+    "hop2_titles": [
+      "The Best of Guided by Voices: Human Amusements at Hourly Rates",
+      "Propeller (Guided by Voices album)",
+      "Guided by Voices discography",
+      "Live from Austin, TX (Guided by Voices album)",
+      "Guided by Voices",
+      "Motivational Jumpsuit",
+      "Please Be Honest"
+    ],
+    "summary_2": "Guided by Voices is from Ohio.",
+    "answer": "Guided by Voices",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Gravity Kills",
+      "Guided by Voices"
+    ],
+    "hit_titles_total": [
+      "Gravity Kills",
+      "Guided by Voices"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

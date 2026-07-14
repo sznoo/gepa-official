@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "95d965769581a1503c0586185ddab95d841d7b69b0da4f898b518aff23a48448",
+  "created_at": "2026-07-13T17:22:47.939018+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+        "summary_1": "The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.",
+        "summary_2": "I can’t determine the year from the passages. Please either (a) specify which Maurice you mean (for example Maurice \"Rocket\" Richard), or (b) allow me to look up the winner year using external sources — then I will provide the exact year.",
+        "current_output": "Which Maurice do you mean (for example Maurice \"Rocket\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Which Maurice do you mean (for example Maurice \"Rocket\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "1947",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n  \"summary_1\": \"The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.\",\n  \"summary_2\": \"I can’t determine the year from the passages. Please either (a) specify which Maurice you mean (for example Maurice \\\"Rocket\\\" Richard), or (b) allow me to look up the winner year using external sources — then I will provide the exact year.\",\n  \"current_output\": \"Which Maurice do you mean (for example Maurice \\\"Rocket\\\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Which Maurice do you mean (for example Maurice \\\"Rocket\\\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"1947\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the user's question gives only the given name 'Maurice' (no surname) AND at least one of the visible summaries or the assistant's prior message explicitly mentions Maurice \\\"Rocket\\\" Richard as an example, AND the visible summaries identify the award as the Hart Memorial Trophy.\",\n    \"preserve_rule\": \"Keep all existing behavior that asks for clarification or permission to use external sources in ambiguous cases. If the user later supplies a surname or explicitly permits an external lookup, follow the normal clarification or lookup flow unchanged.\",\n    \"change_rule\": \"In the narrow trigger case, do not ask another clarification. Instead assume the intended referent is Maurice \\\"Rocket\\\" Richard (because that example already appears in the visible context) and use the agent's internal knowledge to produce the single-year answer for when that person won the Hart Memorial Trophy. Emit only the minimal answer string as the 'answer' value; do not add explanation, rationale, or follow-up questions.\",\n    \"drop_or_avoid_rule\": \"When the trigger applies, do not prompt the user for clarification or permission to search; do not include supporting sentences or justification in the output; do not present multiple candidate persons or ambiguous options. If the agent does not have sufficient internal confidence about the year, revert to the original behavior of asking for clarification or permission to look up the information.\",\n    \"output_contract\": \"Return the field 'answer' containing only the minimal answer string (the year) and nothing else. Ensure the [[ ## answer ## ]] block (or equivalent minimal-answer slot) contains just that year with no surrounding commentary, formatting, or explanation.\",\n    \"why_local_transition\": \"This targeted rule resolves the one-step ambiguity (only the given name 'Maurice') by using the explicit example already present in the visible context (Maurice \\\"Rocket\\\" Richard), allowing the agent to produce the concise final-year answer without changing broader clarification or lookup policies.\"\n  },\n  \"rationale\": \"The smallest coherent behavioral change is to treat the already-mentioned example (Maurice \\\"Rocket\\\" Richard) as the intended referent when the question uses only the given name and the summaries identify the award. This avoids unnecessary extra prompts in this specific case while preserving normal behavior for other ambiguities and preserving the agent's final-answer contract. The delta is narrowly triggered, keeps the agent's interface and existing flows, forbids extra commentary, and falls back to clarification if the agent lacks internal confidence.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 88,
+    "row_index": 88,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

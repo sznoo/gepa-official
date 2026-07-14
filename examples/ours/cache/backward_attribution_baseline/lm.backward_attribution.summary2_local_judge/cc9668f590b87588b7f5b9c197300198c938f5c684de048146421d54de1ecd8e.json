@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "cc9668f590b87588b7f5b9c197300198c938f5c684de048146421d54de1ecd8e",
+  "created_at": "2026-07-13T17:24:54.312282+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+      "source_summary": "Chad Johnson (also known as Chad Ochocinco)",
+      "target_summary": "Summary_1 stated that \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\" Second-hop supporting evidence: (1) NFL Street 3: \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\" (2) Chad Johnson: \"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.",
+      "candidate_summary": "Summary_1 stated that \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\" Second-hop supporting evidence: (1) NFL Street 3: \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\" (2) Chad Johnson: \"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nNFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?\n\nSource summary2:\nChad Johnson (also known as Chad Ochocinco)\n\nTarget summary2:\nSummary_1 stated that \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\" Second-hop supporting evidence: (1) NFL Street 3: \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\" (2) Chad Johnson: \"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.\n\nCandidate summary2:\nSummary_1 stated that \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\" Second-hop supporting evidence: (1) NFL Street 3: \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\" (2) Chad Johnson: \"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate fully matches the target’s integrated claim that Chad Javon Johnson (Chad Ochocinco), a former Cincinnati Bengals wide receiver, appears on NFL Street 3’s cover and was the game’s official spokesperson. It preserves the source’s name and adds the spokesperson, team, position, and cover details from the target.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

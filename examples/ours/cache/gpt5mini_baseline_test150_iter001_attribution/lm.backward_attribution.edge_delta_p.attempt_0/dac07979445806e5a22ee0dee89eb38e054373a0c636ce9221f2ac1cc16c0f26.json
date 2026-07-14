@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "dac07979445806e5a22ee0dee89eb38e054373a0c636ce9221f2ac1cc16c0f26",
+  "created_at": "2026-07-13T18:51:16.217821+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "passages": [
+          "Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England.  The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.",
+          "Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England.  Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.",
+          "Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.",
+          "Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire.  It is one of the main feeder schools for Moorlands Sixth Form College.  Government Performance Tables have placed Moorside High in the top 5% of schools nationally.",
+          "Moorside | Moorside may refer to any of these places in England:",
+          "Moorside, Greater Manchester | Moorside is a suburb of Oldham in Greater Manchester, England.",
+          "Susan Brown (English actress) | Susan Brown (born 6 May 1946) is an English actress of stage and screen.  She is best known for her role as Septa Mordane in HBO series Game of Thrones."
+        ],
+        "current_output": "Susan Brown"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Susan Brown",
+        "score": 0.0,
+        "generated_query": "Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\n- Full name (as credited), birth/death years if available, and any disambiguating info.\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\n\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources.",
+        "retrieved_titles": [
+          "Susan Brown (English actress)",
+          "Jamie Kane",
+          "Susan Gilmore",
+          "Colette Brown",
+          "Bobbie Brown",
+          "Molly MacDonald",
+          "Jemima Abey"
+        ],
+        "summary_2": "Susan Brown",
+        "answer": "Susan Brown",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Gemma Whelan",
+          "The Moorside"
+        ]
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "First-hop evidence: the retrieval returned a page for \"Susan Brown (English actress)\" stating she is best known for her role as Septa Mordane in HBO's Game of Thrones. The other retrieved \"Moorside\" items are place/railway/school pages and do not contain information about a TV production or its cast.\n\nBridge / missing fact needed: which actress appears in both Game of Thrones and the (TV) production The Moorside — i.e., the intersection of the Game of Thrones cast and the cast of The Moorside.\n\nNext-hop retrieval direction (compact):\n- Retrieve the page \"The Moorside\" to obtain the cast list for that production. \n- Retrieve actor/actress pages for likely overlaps (example retrieval target: \"Gemma Whelan\") and/or query \"The Moorside cast\" or \"Which Game of Thrones actors appeared in The Moorside\" to identify the overlapping actress.\n\nThis is a summary of first-hop evidence and a focused retrieval plan; it does not assert any second-hop facts or a final answer.",
+        "score": 1.0,
+        "generated_query": "\"The Moorside cast\" OR \"The Moorside (TV drama) cast list\" OR \"The Moorside BBC cast\"",
+        "retrieved_titles": [
+          "Moorside railway station",
+          "Moorside, Leeds",
+          "Moorside railway station, Cumbria",
+          "The Moorside",
+          "Moorside Edge transmitting station",
+          "Moorside High School, Werrington",
+          "Moorside"
+        ],
+        "summary_2": "Gemma Whelan",
+        "answer": "Gemma Whelan",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "The Moorside"
+        ],
+        "missing_titles_after_hop2": [
+          "Gemma Whelan"
+        ]
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"passages\": [\n    \"Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England.  The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.\",\n    \"Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England.  Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.\",\n    \"Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.\",\n    \"Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire.  It is one of the main feeder schools for Moorlands Sixth Form College.  Government Performance Tables have placed Moorside High in the top 5% of schools nationally.\",\n    \"Moorside | Moorside may refer to any of these places in England:\",\n    \"Moorside, Greater Manchester | Moorside is a suburb of Oldham in Greater Manchester, England.\",\n    \"Susan Brown (English actress) | Susan Brown (born 6 May 1946) is an English actress of stage and screen.  She is best known for her role as Septa Mordane in HBO series Game of Thrones.\"\n  ],\n  \"current_output\": \"Susan Brown\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Susan Brown\",\n  \"score\": 0.0,\n  \"generated_query\": \"Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\\n- Full name (as credited), birth/death years if available, and any disambiguating info.\\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\\n\\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources.\",\n  \"retrieved_titles\": [\n    \"Susan Brown (English actress)\",\n    \"Jamie Kane\",\n    \"Susan Gilmore\",\n    \"Colette Brown\",\n    \"Bobbie Brown\",\n    \"Molly MacDonald\",\n    \"Jemima Abey\"\n  ],\n  \"summary_2\": \"Susan Brown\",\n  \"answer\": \"Susan Brown\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Gemma Whelan\",\n    \"The Moorside\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"First-hop evidence: the retrieval returned a page for \\\"Susan Brown (English actress)\\\" stating she is best known for her role as Septa Mordane in HBO's Game of Thrones. The other retrieved \\\"Moorside\\\" items are place/railway/school pages and do not contain information about a TV production or its cast.\\n\\nBridge / missing fact needed: which actress appears in both Game of Thrones and the (TV) production The Moorside — i.e., the intersection of the Game of Thrones cast and the cast of The Moorside.\\n\\nNext-hop retrieval direction (compact):\\n- Retrieve the page \\\"The Moorside\\\" to obtain the cast list for that production. \\n- Retrieve actor/actress pages for likely overlaps (example retrieval target: \\\"Gemma Whelan\\\") and/or query \\\"The Moorside cast\\\" or \\\"Which Game of Thrones actors appeared in The Moorside\\\" to identify the overlapping actress.\\n\\nThis is a summary of first-hop evidence and a focused retrieval plan; it does not assert any second-hop facts or a final answer.\",\n  \"score\": 1.0,\n  \"generated_query\": \"\\\"The Moorside cast\\\" OR \\\"The Moorside (TV drama) cast list\\\" OR \\\"The Moorside BBC cast\\\"\",\n  \"retrieved_titles\": [\n    \"Moorside railway station\",\n    \"Moorside, Leeds\",\n    \"Moorside railway station, Cumbria\",\n    \"The Moorside\",\n    \"Moorside Edge transmitting station\",\n    \"Moorside High School, Werrington\",\n    \"Moorside\"\n  ],\n  \"summary_2\": \"Gemma Whelan\",\n  \"answer\": \"Gemma Whelan\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"The Moorside\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Gemma Whelan\"\n  ]\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the current `summary` output is a terse single name or similarly short label (e.g., one or two tokens) and the provided passages include at least one actor page plus several place/rail/school `Moorside` pages (i.e., evidence exists but no explicit retrieval plan).\",\n    \"preserve_rule\": \"Keep the original I/O interface (input fields `question` and `passages`; output field `summary`). Preserve any accurate evidence already cited from the passages (e.g., facts quoted/paraphrased from an actor page). Maintain concise, neutral language and avoid changing downstream expectations for the agent's output format.\",\n    \"change_rule\": \"Instead of emitting only a name, produce a compact first-hop evidence summary plus a concrete next-hop retrieval plan. Specifically, the agent should: (1) identify which passage(s) support any asserted actor appearance and include a short quoted or paraphrased fragment (<=15 words) and the passage title; (2) identify which retrieved `Moorside` passages are non-relevant to TV cast (list their titles); (3) state the bridge / missing fact explicitly as: 'we need the intersection of the Game of Thrones cast and The Moorside cast' (or equivalent); (4) give 1–3 concrete next-hop retrieval targets or queries (examples: the page titled \\\"The Moorside\\\", the phrase \\\"The Moorside cast\\\", and actor pages likely to overlap) that will find that intersection; (5) remain concise and do not assert any second-hop facts or a final answer.\",\n    \"drop_or_avoid_rule\": \"Do not output a final answer or assert facts that require a second hop. Do not invent or assume cast memberships not present in the passages. Avoid long verbatim spans from sources (>15 words). Do not introduce sample-specific names that are not already present in the visible inputs. Do not change the output field name or overall format.\",\n    \"output_contract\": \"The produced `summary` must include: (A) first-hop evidence: named passage title(s) + a short supporting quote or paraphrase (<=15 words) showing the claimed appearance; (B) a short note listing which retrieved `Moorside` passages contain no cast info; (C) an explicit statement of the bridge/missing fact needed (intersection of the two productions' casts); and (D) at least one concrete next-hop retrieval instruction (page title or search query) to obtain the cast list(s). The summary must not assert a final answer or include unverified cast claims.\",\n    \"why_local_transition\": \"This change is narrowly focused on how the agent summarizes the first hop and specifies the next retrieval direction. It does not alter the input/output interface, the agent's tone, or other behaviors; it simply replaces an underspecified single-name output with a structured, evidence-based summary and retrieval plan needed for the next hop.\"\n  },\n  \"rationale\": \"The source output was a single name without evidence or a retrieval plan. The minimal, local fix is to require the agent to (a) tie any asserted actor appearance to a specific passage with a short quote/paraphrase, (b) mark which retrieved `Moorside` pages are irrelevant to cast, and (c) provide explicit next-hop retrieval targets/queries to find the intersection of casts. This preserves useful behavior (using the actor page evidence already present) while preventing premature final answers. The delta obeys the anti-cheating constraints by not asserting any second-hop facts, not introducing names absent from visible inputs, and keeping all changes as a prompt-level instruction rather than as content-level answers.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 120,
+    "row_index": 120,
+    "bisection_round": 0,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

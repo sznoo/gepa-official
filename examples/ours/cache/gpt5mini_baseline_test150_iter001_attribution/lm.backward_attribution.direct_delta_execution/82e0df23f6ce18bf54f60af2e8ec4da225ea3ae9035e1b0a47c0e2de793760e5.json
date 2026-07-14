@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "82e0df23f6ce18bf54f60af2e8ec4da225ea3ae9035e1b0a47c0e2de793760e5",
+  "created_at": "2026-07-13T18:47:46.654470+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question explicitly asks for the 'nth' episode (here: 'fourth episode') and summary_1 supplies a single candidate episode title (e.g., \"Social Psychology\").",
+            "preserve_rule": "Keep the supplied candidate title from summary_1 as an anchor term in the retrieval query.",
+            "change_rule": "Replace a narrow 'title verification' query with a compact query that requests the show's episode list (season if known) and asks which entry is the nth. Produce a single-line query that names the series and asks for the season/episode list while including the candidate title as a check. Example format to follow (fill in from inputs): \"Community season 1 episode list verify fourth episode Social Psychology\".",
+            "drop_or_avoid_rule": "Do not issue queries that only append vague words like 'verification' without requesting the episode list; avoid long, noisy queries or mentioning unrelated series names. Do not assert the candidate title as correct—phrase the query to retrieve authoritative ordering.",
+            "output_contract": "Output exactly one concise retrieval query string (single line). The string must include the show's name, indicate 'episode list' or 'season 1 episode list' when possible, reference the ordinal asked for (e.g., fourth), and include the candidate title from summary_1 as an anchor. Keep the query short and focused to retrieve authoritative episode-order sources.",
+            "why_local_transition": "The original query narrowly tries to verify a single title; requesting the season/episode list directly (while keeping the candidate as an anchor) better surfaces authoritative ordering and alternate titles needed for the next hop without changing the agent's interface or discarding existing evidence."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When summary_1 contains a specific candidate episode title (for example: \"Social Psychology\") or the prior query attempts to verify a candidate episode title.",
+            "preserve_rule": "Keep using the provided fields `question` and `summary_1` as the signal for what to verify; keep producing exactly one compact retrieval `query` string as the agent's output.",
+            "change_rule": "Replace verbose or multi-title verification phrasing with a single, compact keyword-style retrieval query that targets verification of the candidate title's episode number. Construct the query by quoting the candidate title from summary_1 and appending minimal context identifying the series and the episode-number check. Example pattern: '\"Social Psychology\" Community episode 4 verification'.",
+            "drop_or_avoid_rule": "Do not include additional episode titles, full natural-language questions, multi-clause lists, or long explanatory text in the query. Avoid adding unrelated episode names or broader article lists; do not produce an answer in the prompt delta.",
+            "output_contract": "Produce exactly one short retrieval query string that (a) quotes the candidate title taken from summary_1, (b) names the series (Community) or uses 'Community' as context, and (c) indicates an episode-number verification (e.g., contains 'episode 4' or 'episode number'). No other fields or text should be emitted by this delta.",
+            "why_local_transition": "This minimal change focuses the second-hop retrieval on verifying the candidate title's episode number (the missing bridge) rather than returning a noisy list of titles; it preserves the original inputs and makes the retrieval target precise and compact."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "summary_1": "\"Social Psychology\"",
+        "current_output": {
+          "query": "Community (TV series) season 1 episode 4 title \"Social Psychology\" verification"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question explicitly asks for the 'nth' episode (here: 'fourth episode') and summary_1 supplies a single candidate episode title (e.g., \\\"Social Psychology\\\").\",\n      \"preserve_rule\": \"Keep the supplied candidate title from summary_1 as an anchor term in the retrieval query.\",\n      \"change_rule\": \"Replace a narrow 'title verification' query with a compact query that requests the show's episode list (season if known) and asks which entry is the nth. Produce a single-line query that names the series and asks for the season/episode list while including the candidate title as a check. Example format to follow (fill in from inputs): \\\"Community season 1 episode list verify fourth episode Social Psychology\\\".\",\n      \"drop_or_avoid_rule\": \"Do not issue queries that only append vague words like 'verification' without requesting the episode list; avoid long, noisy queries or mentioning unrelated series names. Do not assert the candidate title as correct—phrase the query to retrieve authoritative ordering.\",\n      \"output_contract\": \"Output exactly one concise retrieval query string (single line). The string must include the show's name, indicate 'episode list' or 'season 1 episode list' when possible, reference the ordinal asked for (e.g., fourth), and include the candidate title from summary_1 as an anchor. Keep the query short and focused to retrieve authoritative episode-order sources.\",\n      \"why_local_transition\": \"The original query narrowly tries to verify a single title; requesting the season/episode list directly (while keeping the candidate as an anchor) better surfaces authoritative ordering and alternate titles needed for the next hop without changing the agent's interface or discarding existing evidence.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 contains a specific candidate episode title (for example: \\\"Social Psychology\\\") or the prior query attempts to verify a candidate episode title.\",\n      \"preserve_rule\": \"Keep using the provided fields `question` and `summary_1` as the signal for what to verify; keep producing exactly one compact retrieval `query` string as the agent's output.\",\n      \"change_rule\": \"Replace verbose or multi-title verification phrasing with a single, compact keyword-style retrieval query that targets verification of the candidate title's episode number. Construct the query by quoting the candidate title from summary_1 and appending minimal context identifying the series and the episode-number check. Example pattern: '\\\"Social Psychology\\\" Community episode 4 verification'.\",\n      \"drop_or_avoid_rule\": \"Do not include additional episode titles, full natural-language questions, multi-clause lists, or long explanatory text in the query. Avoid adding unrelated episode names or broader article lists; do not produce an answer in the prompt delta.\",\n      \"output_contract\": \"Produce exactly one short retrieval query string that (a) quotes the candidate title taken from summary_1, (b) names the series (Community) or uses 'Community' as context, and (c) indicates an episode-number verification (e.g., contains 'episode 4' or 'episode number'). No other fields or text should be emitted by this delta.\",\n      \"why_local_transition\": \"This minimal change focuses the second-hop retrieval on verifying the candidate title's episode number (the missing bridge) rather than returning a noisy list of titles; it preserves the original inputs and makes the retrieval target precise and compact.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"summary_1\": \"\\\"Social Psychology\\\"\",\n  \"current_output\": {\n    \"query\": \"Community (TV series) season 1 episode 4 title \\\"Social Psychology\\\" verification\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Community season 1 episode list verify fourth episode \\\"Social Psychology\\\"\"\n  },\n  \"rationale\": \"Delta 0 was used to request the season/episode list and include the ordinal and candidate title; delta 1 was applied to keep the query compact and quote the candidate title for episode-number verification.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 63,
+    "row_index": 63,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

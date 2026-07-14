@@ -1,7 +1,10 @@
+# /home/jinwoo/gepa-official/src/ours/analyze_attribute.py
 #!/usr/bin/env python3
 from __future__ import annotations
 
 import argparse
+import concurrent.futures as cf
+import hashlib
 import json
 import os
 import re
@@ -18,7 +21,11 @@ from gepa.proposer.reflective_mutation.base import LanguageModel, Signature
 from tqdm.auto import tqdm
 
 from ours.lm import run_signature
-from ours.prompts import AGENTGRAD_PROMPT_SET
+from ours.prompts import (
+    AGENTGRAD_PROMPT_SET,
+    BASELINE_PROMPT_SET,
+    validate_candidate,
+)
 from ours.runtime import OursRuntime
 from ours.utils.destination import build_agent_destination
 from ours.utils.materialize import (
@@ -42,6 +49,13 @@ AGENT_ORDER = (
     "query",
     "summary1",
 )
+
+DEFAULT_AGENT_MAX_ITERS = {
+    "final": 0,
+    "summary2": 0,
+    "query": 1,
+    "summary1": 1,
+}
 
 AGENT_TO_PROMPT_KEY = {
     "summary1": "summarize1.predict",
@@ -84,7 +98,7 @@ MAX_STATE_DOCS = 7
 MAX_STATE_DOC_CHARS = 500
 MAX_VISIBLE_TEXT_CHARS = 12000
 
-SCRIPT_VERSION = "2026-07-13-v2"
+SCRIPT_VERSION = "2026-07-14-v4-candidate-log-input"
 
 
 def _log(enabled: bool, message: str) -> None:
@@ -140,6 +154,260 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
         return []
     with path.open("r", encoding="utf-8") as file:
         return [json.loads(line) for line in file if line.strip()]
+
+
+def read_rows_file(path: str | Path) -> list[dict[str, Any]]:
+    """Read either a JSON list or a JSONL row log."""
+    path = Path(path)
+    text = path.read_text(encoding="utf-8").strip()
+    if not text:
+        return []
+
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError:
+        value = [
+            json.loads(line)
+            for line in text.splitlines()
+            if line.strip()
+        ]
+
+    if isinstance(value, Mapping):
+        rows = value.get("rows")
+        value = rows if isinstance(rows, list) else [value]
+
+    if not isinstance(value, list):
+        raise TypeError(
+            f"{path} must contain a JSON list or JSONL rows."
+        )
+    if not all(isinstance(row, Mapping) for row in value):
+        raise TypeError(f"{path} contains a non-object row.")
+
+    return [dict(row) for row in value]
+
+
+def canonical_hash(value: Any) -> str:
+    payload = json.dumps(
+        value,
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+        default=str,
+    ).encode("utf-8")
+    return hashlib.sha256(payload).hexdigest()
+
+
+def load_candidate_file(
+    path: str | Path,
+) -> tuple[dict[str, str], str]:
+    """Load update_prompt candidate.json or a direct prompt mapping."""
+    path = Path(path)
+    value = read_json(path)
+    if not isinstance(value, Mapping):
+        raise TypeError(
+            f"{path} must contain a JSON object."
+        )
+
+    candidate_value: Any = value
+    for key in ("candidate", "prompts"):
+        nested = value.get(key)
+        if isinstance(nested, Mapping):
+            candidate_value = nested
+            break
+
+    required = set(AGENT_TO_PROMPT_KEY.values())
+    if not isinstance(candidate_value, Mapping):
+        raise TypeError(
+            f"{path} does not contain a prompt candidate mapping."
+        )
+
+    candidate = {
+        str(key): str(prompt)
+        for key, prompt in candidate_value.items()
+        if str(key) in required
+    }
+    missing = required - set(candidate)
+    if missing:
+        raise ValueError(
+            f"{path} is missing prompt keys: {sorted(missing)}"
+        )
+
+    candidate_name = str(
+        value.get("candidate_name")
+        or value.get("condition")
+        or path.stem
+    )
+    return candidate, candidate_name
+
+
+def normalize_eval_rows(
+    *,
+    eval_rows_path: str | Path,
+    source_eval_rows_path: str | Path | None,
+    expected_candidate_hash: str | None,
+) -> list[dict[str, Any]]:
+    """
+    Accept legacy flat eval rows or update_prompt eval_rows.jsonl.
+
+    For update_prompt logs, merge each nested trace over the corresponding
+    source eval row so gold/context fields remain available.
+    """
+    raw_rows = read_rows_file(eval_rows_path)
+    source_rows = (
+        read_rows_file(source_eval_rows_path)
+        if source_eval_rows_path
+        else []
+    )
+
+    is_rollout_log = any(
+        isinstance(row.get("trace"), Mapping)
+        or "eval_position" in row
+        for row in raw_rows
+    )
+
+    if not is_rollout_log:
+        normalized = [dict(row) for row in raw_rows]
+        row_hashes = {
+            str(row.get("candidate_hash"))
+            for row in normalized
+            if row.get("candidate_hash")
+        }
+        if (
+            expected_candidate_hash is not None
+            and row_hashes
+            and row_hashes != {expected_candidate_hash}
+        ):
+            raise ValueError(
+                "Flat eval rows candidate_hash does not match "
+                "--candidate-path."
+            )
+
+        if expected_candidate_hash is not None:
+            for row in normalized:
+                row.setdefault(
+                    "candidate_hash",
+                    expected_candidate_hash,
+                )
+
+        return normalized
+
+    successful = [
+        row
+        for row in raw_rows
+        if not row.get("error")
+    ]
+
+    if expected_candidate_hash is not None:
+        logged_hashes = {
+            str(row.get("candidate_hash"))
+            for row in successful
+            if row.get("candidate_hash")
+        }
+        if (
+            logged_hashes
+            and expected_candidate_hash not in logged_hashes
+        ):
+            raise ValueError(
+                "No successful eval row matches the candidate loaded "
+                "from --candidate-path."
+            )
+
+        successful = [
+            row
+            for row in successful
+            if (
+                not row.get("candidate_hash")
+                or str(row.get("candidate_hash"))
+                == expected_candidate_hash
+            )
+        ]
+
+    latest_by_position: dict[int, dict[str, Any]] = {}
+    for ordinal, row in enumerate(successful):
+        position = int(
+            row.get("eval_position", ordinal)
+        )
+        latest_by_position[position] = dict(row)
+
+    normalized = []
+    for position in sorted(latest_by_position):
+        logged = latest_by_position[position]
+        source = (
+            dict(source_rows[position])
+            if position < len(source_rows)
+            else {}
+        )
+
+        trace = logged.get("trace")
+        trace = (
+            dict(trace)
+            if isinstance(trace, Mapping)
+            else {}
+        )
+
+        row = {
+            **source,
+            **trace,
+        }
+        row["index"] = logged.get(
+            "row_index",
+            row.get("index", position),
+        )
+        row["sample_id"] = logged.get(
+            "sample_id",
+            row.get("sample_id"),
+        )
+        row["score"] = float(
+            logged.get(
+                "score",
+                row.get("score") or 0.0,
+            )
+        )
+        row["candidate_hash"] = (
+            logged.get("candidate_hash")
+            or expected_candidate_hash
+        )
+        row["eval_position"] = position
+        row["original_baseline_score"] = logged.get(
+            "original_baseline_score"
+        )
+
+        normalized.append(row)
+
+    required = (
+        "question",
+        "gold_answer",
+        "summary_1",
+        "hop2_query",
+        "summary_2",
+        "answer",
+    )
+    missing_rows = [
+        {
+            "position": int(
+                row.get("eval_position", index)
+            ),
+            "missing": [
+                key
+                for key in required
+                if row.get(key) is None
+            ],
+        }
+        for index, row in enumerate(normalized)
+        if any(
+            row.get(key) is None
+            for key in required
+        )
+    ]
+
+    if missing_rows:
+        raise ValueError(
+            "Normalized rollout rows are missing attribution fields. "
+            "Pass the original flat rows with --source-eval-rows. "
+            f"Examples: {missing_rows[:5]}"
+        )
+
+    return normalized
 
 
 def write_json(path: str | Path, value: Any) -> None:
@@ -1610,7 +1878,7 @@ def analyze_wrong_sample(
     runtime: OursRuntime,
     lm: LanguageModel,
     lm_config: Mapping[str, Any],
-    max_iter: int,
+    agent_max_iters: Mapping[str, int],
     delta_attempts: int,
     verbose: bool = False,
 ) -> dict[str, Any]:
@@ -1638,7 +1906,7 @@ def analyze_wrong_sample(
                 runtime=runtime,
                 lm=lm,
                 lm_config=lm_config,
-                max_iter=max_iter,
+                max_iter=agent_max_iters[agent],
                 delta_attempts=delta_attempts,
                 verbose=verbose,
             )
@@ -1679,7 +1947,14 @@ def analyze_wrong_sample(
         "gold_answer": row.get("gold_answer"),
         "baseline_answer": row.get("answer"),
         "baseline_score": float(row.get("score") or 0.0),
-        "candidate_hash": row.get("candidate_hash"),
+        "candidate_hash": (
+            row.get("candidate_hash")
+            or canonical_hash(candidate)
+        ),
+        "source_candidate_hash": (
+            row.get("candidate_hash")
+            or canonical_hash(candidate)
+        ),
         "attributed": attributed_agent is not None,
         "attributed_agent": attributed_agent,
         "attempts": attempts,
@@ -1814,6 +2089,22 @@ def parse_args() -> argparse.Namespace:
         )
     )
     parser.add_argument("--eval-rows", default=DEFAULT_EVAL_ROWS)
+    parser.add_argument(
+        "--source-eval-rows",
+        default=None,
+        help=(
+            "Optional original flat eval_rows JSON used to supplement "
+            "nested update_prompt eval_rows.jsonl traces."
+        ),
+    )
+    parser.add_argument(
+        "--candidate-path",
+        default=None,
+        help=(
+            "Optional candidate.json from a previous prompt-update "
+            "iteration. If omitted, BASELINE_PROMPT_SET is used."
+        ),
+    )
     parser.add_argument("--run-dir", default=DEFAULT_RUN_DIR)
     parser.add_argument("--env-file", default=DEFAULT_ENV_FILE)
     parser.add_argument("--cache-dir", default="examples/ours/cache/backward_attribution_v2")
@@ -1825,17 +2116,26 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--temperature", type=float, default=1.0)
     parser.add_argument("--max-tokens", type=int, default=16000)
 
-    parser.add_argument(
-        "--max-iter",
-        type=int,
-        default=3,
-        help="Maximum bisection rounds after the initial endpoint probe.",
-    )
+    for agent, default in DEFAULT_AGENT_MAX_ITERS.items():
+        parser.add_argument(
+            f"--{agent}-max-iter",
+            type=int,
+            default=default,
+            help=(
+                f"Maximum midpoint generations for {agent}. "
+                "The number of endpoint probes is max_iter + 1."
+            ),
+        )
     parser.add_argument(
         "--delta-attempts",
         type=int,
         default=3,
         help="Maximum guarded delta-p generation attempts per edge.",
+    )
+    parser.add_argument(
+        "--num-threads",
+        type=int,
+        default=4,
     )
     parser.add_argument("--indices", default=None)
     parser.add_argument("--limit", type=int, default=None)
@@ -1855,6 +2155,10 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    agent_max_iters = {
+        agent: getattr(args, f"{agent}_max_iter")
+        for agent in AGENT_ORDER
+    }
 
     print(
         f"[startup] script={Path(__file__).resolve()} "
@@ -1862,10 +2166,15 @@ def main() -> None:
         flush=True,
     )
 
-    if args.max_iter < 0:
-        raise ValueError("--max-iter must be non-negative.")
+    for agent, max_iter in agent_max_iters.items():
+        if max_iter < 0:
+            raise ValueError(
+                f"--{agent}-max-iter must be non-negative."
+            )
     if args.delta_attempts < 1:
         raise ValueError("--delta-attempts must be at least 1.")
+    if args.num_threads < 1:
+        raise ValueError("--num-threads must be at least 1.")
     if args.limit is not None and args.limit < 0:
         raise ValueError("--limit must be non-negative.")
 
@@ -1877,9 +2186,51 @@ def main() -> None:
         )
     _log(args.verbose, f"[setup] loaded environment from {args.env_file}")
 
-    eval_rows = read_json(args.eval_rows)
-    if not isinstance(eval_rows, list):
-        raise TypeError("eval_rows.json must contain a top-level list.")
+    if args.candidate_path:
+        candidate, candidate_name = load_candidate_file(
+            args.candidate_path
+        )
+        candidate_path = str(
+            Path(args.candidate_path)
+        )
+    else:
+        candidate = dict(
+            BASELINE_PROMPT_SET["prompts"]
+        )
+        candidate_name = (
+            BASELINE_PROMPT_SET["name"]
+        )
+        candidate_path = None
+
+    candidate_hash = canonical_hash(candidate)
+
+    eval_rows = normalize_eval_rows(
+        eval_rows_path=args.eval_rows,
+        source_eval_rows_path=args.source_eval_rows,
+        expected_candidate_hash=(
+            candidate_hash
+            if args.candidate_path
+            else None
+        ),
+    )
+    if not eval_rows:
+        raise ValueError(
+            "No usable evaluation rows were loaded."
+        )
+
+    if args.candidate_path:
+        for row in eval_rows:
+            row.setdefault(
+                "candidate_hash",
+                candidate_hash,
+            )
+
+    _log(
+        args.verbose,
+        f"[setup] candidate={candidate_name} "
+        f"candidate_hash={candidate_hash[:12]} "
+        f"candidate_path={candidate_path or 'builtin'}",
+    )
 
     selected_indices = parse_indices(args.indices)
     wrong_items = [
@@ -1897,7 +2248,8 @@ def main() -> None:
     _log(
         args.verbose,
         f"[setup] eval_rows={args.eval_rows} total={len(eval_rows)} "
-        f"wrong_selected={len(wrong_items)} model={args.model} max_iter={args.max_iter}",
+        f"wrong_selected={len(wrong_items)} model={args.model} "
+        f"agent_max_iters={agent_max_iters}",
     )
 
     run_dir = Path(args.run_dir)
@@ -1913,7 +2265,32 @@ def main() -> None:
                 path.unlink()
 
     existing_rows = read_jsonl(attribute_path)
-    done = {int(row["sample_index"]) for row in existing_rows}
+
+    if args.candidate_path and existing_rows:
+        existing_hashes = {
+            str(
+                row.get("source_candidate_hash")
+                or row.get("candidate_hash")
+            )
+            for row in existing_rows
+            if (
+                row.get("source_candidate_hash")
+                or row.get("candidate_hash")
+            )
+        }
+        if (
+            existing_hashes
+            and existing_hashes != {candidate_hash}
+        ):
+            raise ValueError(
+                "Existing attribution rows were produced from a "
+                "different candidate. Use a new --run-dir or --overwrite."
+            )
+
+    done = {
+        int(row["sample_index"])
+        for row in existing_rows
+    }
 
     _log(args.verbose, f"[setup] initialize LM model={args.model}")
     lm = make_dspy_lm(
@@ -1938,7 +2315,10 @@ def main() -> None:
         k=args.k,
         retriever_dir=args.retriever_dir,
     )
-    candidate = dict(AGENTGRAD_PROMPT_SET["prompts"])
+    validate_candidate(
+        candidate,
+        program=base_program,
+    )
     adapter = HotpotAdapter(
         program=base_program,
         metric_fn=answer_exact_match,
@@ -1951,7 +2331,10 @@ def main() -> None:
             "k": args.k,
         },
     )
-    _log(args.verbose, "[setup] apply AgentGrad candidate to HotpotMultiHop")
+    _log(
+        args.verbose,
+        f"[setup] apply candidate={candidate_name} to HotpotMultiHop",
+    )
     program = adapter.build_program(candidate)
     _log(args.verbose, "[setup] program ready")
 
@@ -1967,13 +2350,24 @@ def main() -> None:
     write_json(config_path, {
         "eval_rows": str(args.eval_rows),
         "run_dir": str(args.run_dir),
-        "candidate_name": AGENTGRAD_PROMPT_SET["name"],
+        "candidate_name": candidate_name,
+        "candidate_path": candidate_path,
+        "candidate_hash": candidate_hash,
+        "source_eval_rows": (
+            str(args.source_eval_rows)
+            if args.source_eval_rows
+            else None
+        ),
         "candidate": candidate,
         "agent_order": list(AGENT_ORDER),
         "model": lm_config,
         "retriever_dir": str(args.retriever_dir),
         "k": args.k,
-        "max_iter": args.max_iter,
+        "agent_max_iters": agent_max_iters,
+        "agent_probe_counts": {
+            agent: max_iter + 1
+            for agent, max_iter in agent_max_iters.items()
+        },
         "delta_attempts": args.delta_attempts,
         "success_definition": (
             "All ordered adjacent-edge delta-p items are supplied directly "
@@ -1990,39 +2384,39 @@ def main() -> None:
         f"[setup] completed={len(done)} pending={len(pending)} "
         f"cache_enabled={not args.no_cache} run_dir={run_dir}",
     )
-    progress = tqdm(pending, desc="Backward attribution", unit="sample")
+    completed_rows = list(existing_rows)
 
-    for sample_position, row in progress:
-        result = analyze_wrong_sample(
+    def run_one(
+        item: tuple[int, Mapping[str, Any]],
+    ) -> dict[str, Any]:
+        sample_position, row = item
+        worker_program = (
+            program
+            if args.num_threads == 1
+            else adapter.build_program(candidate)
+        )
+        return analyze_wrong_sample(
             row=row,
             sample_index=sample_position,
-            program=program,
+            program=worker_program,
             candidate=candidate,
             runtime=runtime,
             lm=lm,
             lm_config=lm_config,
-            max_iter=args.max_iter,
+            agent_max_iters=agent_max_iters,
             delta_attempts=args.delta_attempts,
             verbose=args.verbose,
         )
+
+    def persist_result(result: Mapping[str, Any]) -> None:
         append_jsonl(attribute_path, result)
+
         verified_edges = endpoint_verified_edge_rows(result)
         for edge_row in verified_edges:
             append_jsonl(edge_path, edge_row)
 
-        _log(
-            args.verbose,
-            f"[sample={sample_position}] persisted attribute row; "
-            f"endpoint_verified_edges_added={len(verified_edges)}",
-        )
-
-        progress.set_postfix(
-            attributed=result.get("attributed_agent") or "none",
-            refresh=False,
-        )
-
-        all_rows = read_jsonl(attribute_path)
-        summary = build_summary(all_rows)
+        completed_rows.append(dict(result))
+        summary = build_summary(completed_rows)
         summary.update({
             "num_eval_rows": len(eval_rows),
             "num_wrong_rows_selected": len(wrong_items),
@@ -2030,6 +2424,48 @@ def main() -> None:
             "endpoint_verified_edges": str(edge_path),
         })
         write_json(summary_path, summary)
+
+        _log(
+            args.verbose,
+            f"[sample={result['sample_index']}] persisted attribute row; "
+            f"endpoint_verified_edges_added={len(verified_edges)}",
+        )
+
+    if args.num_threads == 1:
+        progress = tqdm(
+            pending,
+            desc="Backward attribution",
+            unit="sample",
+        )
+        for item in progress:
+            result = run_one(item)
+            persist_result(result)
+            progress.set_postfix(
+                attributed=result.get("attributed_agent") or "none",
+                refresh=False,
+            )
+    else:
+        with cf.ThreadPoolExecutor(
+            max_workers=args.num_threads,
+        ) as executor:
+            futures = [
+                executor.submit(run_one, item)
+                for item in pending
+            ]
+            progress = tqdm(
+                total=len(futures),
+                desc="Backward attribution",
+                unit="sample",
+            )
+            for future in cf.as_completed(futures):
+                result = future.result()
+                persist_result(result)
+                progress.set_postfix(
+                    attributed=result.get("attributed_agent") or "none",
+                    refresh=False,
+                )
+                progress.update(1)
+            progress.close()
 
     all_rows = read_jsonl(attribute_path)
     summary = build_summary(all_rows)

@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "d5c4e5ec006633ac5c7d1a4a9a977b3d6cddd4807c4c50046960dd4983282b22",
+  "created_at": "2026-07-13T19:00:23.307306+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 25,
+        "stable_id": "25",
+        "question": "Are Jon Fratelli and Skye Edwards from the same country?",
+        "summary_1": "Not enough information to confirm for \"Skye Edwards\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.",
+        "hop2_query": "No — Jon Fratelli is Scottish and the (provided) Skye-Jilly Edwards is Australian, so they are not from the same country.",
+        "summary_2": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+        "answer": "No",
+        "gold_support_titles": [
+          "Jon Fratelli",
+          "Skye Edwards"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 40,
+          "w_stable_id": "40",
+          "agent": "summary2",
+          "w_question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "London",
+            "score": 0.0,
+            "answer": "London"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary: summary_1 states that the Royal Academy of Dramatic Art is based in London. The retrieved supporting document (Royal Academy of Dramatic Art) confirms: \"The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.\"",
+            "score": 0.0,
+            "answer": "London"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When producing the required `summary` and the provided `context` asserts a factual claim that is also supported by one or more retrieved `passages`.",
+                "preserve_rule": "Keep the current behaviour of generating the `summary` field from only the given `question`, `context`, and `passages`. Preserve concise, factual phrasing and any facts already present in `context`.",
+                "change_rule": "If a retrieved passage corroborates the claim in `context`, explicitly state in the summary which retrieved passage(s) support that claim by naming the passage title, and include a single brief confirming clause or short quoted fragment taken directly from that passage (no long verbatim copying). Do not add any new facts beyond what the inputs provide.",
+                "drop_or_avoid_rule": "Do not attempt to produce the final answer outside of the `summary` field, do not fabricate or expand facts, do not include long multi-sentence quotations from passages, and do not introduce information that is not present in `question`, `context`, or `passages`.",
+                "output_contract": "Return the field `summary` (string). The summary must (a) restate the claim found in `context`, (b) identify at least one supporting passage by its title, and (c) include at most one short quoted fragment or brief clause from that supporting passage as evidence. Keep the summary concise (one or two sentences).",
+                "why_local_transition": "This small edit teaches the agent to integrate second-hop (retrieved passage) evidence with the first-hop context by explicitly citing which retrieved document corroborates the context claim and preserving the minimal supporting fragment needed for downstream answerers."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+            "score": 1.0,
+            "answer": "No"
+          }
+        },
+        {
+          "w_sample_index": 65,
+          "w_stable_id": "65",
+          "agent": "summary2",
+          "w_question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+            "score": 0.0,
+            "answer": "71"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "\"Reapers\" is a song by English rock band Muse. The Reapers (song) entry states it peaked at number 71 on the Swiss Hitparade singles chart. The Swiss Hitparade are Switzerland's main music sales charts.",
+            "score": 0.0,
+            "answer": "71"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks for a song's chart position and the visible inputs include (a) a passage about that song that names the artist and gives chart placement and (b) a passage that defines the named chart (e.g., a 'Swiss Hitparade' entry), apply this update.",
+                "preserve_rule": "Keep the existing concise factual content already produced (the numeric chart position and the concise factual tone). Continue to derive facts only from the provided `context`/`passages`.",
+                "change_rule": "Adjust the summary-generation instruction to produce one or two short integrated sentences that (1) identify the subject by naming the song and its artist using the song passage, (2) report the chart peak using the numeric value and chart name found in the passages, and (3) add a brief clarifying phrase that the named chart is the country's main music sales chart using the chart passage. Keep wording compact and factual; cite passages implicitly by relying on their content.",
+                "drop_or_avoid_rule": "Do not add additional chart positions, release details, or speculative information not present in the visible inputs. Do not reproduce long article bodies or unrelated metadata. Avoid hedging or speculative language; avoid changing the output interface or adding new fields.",
+                "output_contract": "Produce the `summary` as 1–2 concise sentences that (a) name the song and its artist, (b) state the song's peak position and the chart name (preserving the numeric value), and (c) briefly explain that the named chart is the country's main music sales chart. The summary must be grounded in the provided `passages`/`context` and must preserve the original numeric answer.",
+                "why_local_transition": "The source output gives only the chart result. This local change augments that minimal answer with two facts already present in the inputs (the song's artist and the chart's definition), integrating second-hop evidence with the first-hop context while keeping the original numeric claim intact."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+            "score": 1.0,
+            "answer": "No"
+          }
+        },
+        {
+          "w_sample_index": 98,
+          "w_stable_id": "98",
+          "agent": "summary2",
+          "w_question": "The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).",
+            "score": 0.0,
+            "answer": "a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary1 asserted that both films depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality). From the second-hop retrieval: (1) La criatura: \"The creature (Spanish: La criatura) is a 1977 drama film, directed by Eloy de la Iglesia.\" (2) La Bête: \"The Beast (French: \\\"La Bête\\\") is a 1975 X rated French erotic fantasy horror film...\" and \"it features the relationship between a beast (monster) and a woman.\" Integration: the La Bête article explicitly supports the presence of a relationship between a beast and a woman; the visible La criatura sentence confirms the film's title, year, and director but does not itself state the relationship. Retain these exact facts for the final-answer agent.",
+            "score": 0.0,
+            "answer": "a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the provided 'context' contains a prior assertion about both films (a claimed relationship or property) AND the 'passages' include at least one passage that explicitly states that relationship and at least one passage that only supplies film metadata (title, year, director) without restating the relationship.",
+                "preserve_rule": "Keep the agent's existing behavior of producing a concise summary that integrates second-hop evidence with the first-hop assertion and retains facts needed by the final-answer agent. Preserve any correct concise conclusion already present in the current output.",
+                "change_rule": "In addition to the preserved summary behavior, explicitly integrate evidence as follows: (1) Briefly paraphrase the prior assertion from 'context' (do not copy long target-only phrasing). (2) Identify which passage(s) explicitly support the asserted relationship by naming the passage and giving a one-line paraphrase or very short quote (only using wording already present in 'passages'). (3) For passage(s) that do not state the relationship but supply useful metadata, retain those specific metadata facts (title, year, director) as one-line items. (4) Produce a final one- or two-sentence integration that says which passage provides explicit support and which provides metadata to carry forward. Do not add new facts or long quotations beyond the visible passages.",
+                "drop_or_avoid_rule": "Do not output the final answer as the prompt edit. Do not invent or assert support that is not present in the visible passages. Avoid long verbatim spans that are not already in 'passages' or 'context'. Do not instruct the agent to copy a target-state sentence verbatim or to use evaluation/internal labels. Avoid giving extra unrelated details.",
+                "output_contract": "The produced 'summary' must: (a) paraphrase the first-hop assertion from 'context' in one brief clause; (b) name the passage(s) that explicitly support that assertion with a one-line paraphrase/short quote drawn from their text; (c) name any passage(s) that only provide metadata and list the retained metadata (title, year, director) in one line each; (d) conclude with one concise integration sentence indicating which passage explicitly supports the claim and which passage(s) only provide metadata for the final-answer agent. Keep the whole summary concise (about 1-4 sentences).",
+                "why_local_transition": "This edge refines how second-hop evidence is integrated: instead of only restating the conclusion, the agent must attribute the explicit support to the passage that contains it and carry forward concrete metadata from the other passage. The change is local to the integration behavior and preserves the agent's interface and prior useful conclusions."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+            "score": 1.0,
+            "answer": "No"
+          }
+        },
+        {
+          "w_sample_index": 117,
+          "w_stable_id": "117",
+          "agent": "summary2",
+          "w_question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Chad Johnson (also known as Chad Ochocinco)",
+            "score": 0.0,
+            "answer": "Chad Johnson (also known as Chad Ochocinco)"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary_1 stated that \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\" Second-hop supporting evidence: (1) NFL Street 3: \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\" (2) Chad Johnson: \"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.",
+            "score": 0.0,
+            "answer": "Chad Johnson"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the current `context` (or the agent's prior summary) names a person as the game's spokesperson AND the `passages` include (a) a passage that explicitly links that same person to the game (mentions cover/official spokesperson) and (b) a passage that gives the person's occupation/identity (e.g., that the name is an American football wide receiver or shows the full personal name/alias).",
+                "preserve_rule": "Keep the agent's existing concise identification behavior (do not remove the short named-identification already produced). Preserve any correct aliasing already present in `context` (for example, 'Chad Johnson (also known as Chad Ochocinco)') and keep the output field `summary` as the single returned field.",
+                "change_rule": "Augment the summary by explicitly integrating the second-hop supporting sentences with the first-hop claim: (1) Begin with a brief restatement of the claim that came from the first-hop `context` (one short clause). (2) Add two micro-evidence lines by paraphrasing each supporting passage in one short clause and indicating the passage title in parentheses — one clause reflecting the game passage that identifies the person as the game's official spokesperson/cover appearance, and one clause reflecting the biographical passage that establishes the person's occupation/alias. (3) Finish with one concise integrated sentence that links the person's full name/alias, their occupation, and the stated role as the game's official spokesperson. Keep all paraphrases short (no long verbatim quotes) and avoid introducing facts not present in the inputs.",
+                "drop_or_avoid_rule": "Do not add new facts, speculation, or external context beyond the given `passages` and `context`. Avoid long literal spans from passages; paraphrase or use very short quoted phrases that already appear in the visible inputs. Do not mention dataset, labels, or evaluation. Do not replace the agent's single-field output format or output extraneous fields. Avoid hedging language ('likely', 'probably') when passages state facts.",
+                "output_contract": "Produce the field `summary` only. Summary should be 1–3 concise sentences: (a) restate the original claim from `context`, (b) include two short paraphrases as supporting evidence with brief parenthetical passage titles, and (c) provide a single integrated sentence tying the person's full name/alias and occupation to the role of official spokesperson for the game. Do not exceed three sentences and do not invent information.",
+                "why_local_transition": "This edit targets only how this agent (the second-step integrator) composes its summary: it must bring together the first-hop claim and second-hop passages into a compact evidence-backed summary. The change is limited to the agent's behavior (how it formats and integrates evidence) and preserves the existing output field and base behavior."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+            "score": 1.0,
+            "answer": "No"
+          }
+        },
+        {
+          "w_sample_index": 106,
+          "w_stable_id": "106",
+          "agent": "summary2",
+          "w_question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Brent Musburger",
+            "score": 0.0,
+            "answer": "Brent Musburger"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary integration: summary_1 named \"Brent Musburger.\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.",
+            "score": 0.0,
+            "answer": "Brent Musburger"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks for which person (identity) in the provided context/passages performed or called an action tied to VSiN (Vegas Stats & Information Network), and the passages contain a passage that names an individual and explicitly states their role at VSiN (e.g., contains the phrase \"managing editor\" or equivalent), and the current produced summary is a bare name or single-token answer.",
+                "preserve_rule": "Keep the agent's existing behavior of selecting the correct named entity from the provided `context` and `passages` as the candidate answer. Preserve use of exact tokens that appear in the visible inputs (e.g., the person's name as shown in `context`/`passages`).",
+                "change_rule": "Instead of emitting only the name, produce a very short integrated summary sentence that (a) identifies the entity by the same name shown in inputs, (b) cites the role found in the passages (for example: 'managing editor at Vegas Stats and Information Network (VSiN)'), and (c) includes an explicit retention note stating that this fact should be kept for the final-answer agent. Keep this summary concise (one or two short sentences) and restricted to facts present in the given passages.",
+                "drop_or_avoid_rule": "Avoid single-token or bare-name outputs when a role-relevant passage is available. Do not add any information not present in the visible `passages` or `context`. Do not restate long verbatim spans beyond the concise role statement; avoid speculative language or source claims not present in the inputs.",
+                "output_contract": "The `summary` field must be a short integrated statement (one or two sentences) that: (1) names the entity exactly as in inputs, (2) asserts the role found in the passages (e.g., 'managing editor at Vegas Stats and Information Network (VSiN)'), and (3) ends with an explicit short retention note for downstream agents (e.g., 'Retain this fact for final-answer agent.'). No extra facts or long quotations may be added.",
+                "why_local_transition": "This edge upgrades a bare-entity output into a compact integrated summary that retains the role information needed downstream. It is local because it only changes output granularity and explicit retention behavior for identity-role cases, leaving other summarization behavior unchanged."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+            "score": 1.0,
+            "answer": "No"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 25,\n  \"stable_id\": \"25\",\n  \"question\": \"Are Jon Fratelli and Skye Edwards from the same country?\",\n  \"summary_1\": \"Not enough information to confirm for \\\"Skye Edwards\\\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.\",\n  \"hop2_query\": \"No — Jon Fratelli is Scottish and the (provided) Skye-Jilly Edwards is Australian, so they are not from the same country.\",\n  \"summary_2\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n  \"answer\": \"No\",\n  \"gold_support_titles\": [\n    \"Jon Fratelli\",\n    \"Skye Edwards\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 40,\n    \"w_stable_id\": \"40\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"London\",\n      \"score\": 0.0,\n      \"answer\": \"London\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary: summary_1 states that the Royal Academy of Dramatic Art is based in London. The retrieved supporting document (Royal Academy of Dramatic Art) confirms: \\\"The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.\\\"\",\n      \"score\": 0.0,\n      \"answer\": \"London\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When producing the required `summary` and the provided `context` asserts a factual claim that is also supported by one or more retrieved `passages`.\",\n          \"preserve_rule\": \"Keep the current behaviour of generating the `summary` field from only the given `question`, `context`, and `passages`. Preserve concise, factual phrasing and any facts already present in `context`.\",\n          \"change_rule\": \"If a retrieved passage corroborates the claim in `context`, explicitly state in the summary which retrieved passage(s) support that claim by naming the passage title, and include a single brief confirming clause or short quoted fragment taken directly from that passage (no long verbatim copying). Do not add any new facts beyond what the inputs provide.\",\n          \"drop_or_avoid_rule\": \"Do not attempt to produce the final answer outside of the `summary` field, do not fabricate or expand facts, do not include long multi-sentence quotations from passages, and do not introduce information that is not present in `question`, `context`, or `passages`.\",\n          \"output_contract\": \"Return the field `summary` (string). The summary must (a) restate the claim found in `context`, (b) identify at least one supporting passage by its title, and (c) include at most one short quoted fragment or brief clause from that supporting passage as evidence. Keep the summary concise (one or two sentences).\",\n          \"why_local_transition\": \"This small edit teaches the agent to integrate second-hop (retrieved passage) evidence with the first-hop context by explicitly citing which retrieved document corroborates the context claim and preserving the minimal supporting fragment needed for downstream answerers.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n      \"score\": 1.0,\n      \"answer\": \"No\"\n    }\n  },\n  {\n    \"w_sample_index\": 65,\n    \"w_stable_id\": \"65\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"What number did the song \\\"Reapers\\\"  by Muse reach on Switzerland's main music sales chart?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\",\n      \"score\": 0.0,\n      \"answer\": \"71\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"\\\"Reapers\\\" is a song by English rock band Muse. The Reapers (song) entry states it peaked at number 71 on the Swiss Hitparade singles chart. The Swiss Hitparade are Switzerland's main music sales charts.\",\n      \"score\": 0.0,\n      \"answer\": \"71\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks for a song's chart position and the visible inputs include (a) a passage about that song that names the artist and gives chart placement and (b) a passage that defines the named chart (e.g., a 'Swiss Hitparade' entry), apply this update.\",\n          \"preserve_rule\": \"Keep the existing concise factual content already produced (the numeric chart position and the concise factual tone). Continue to derive facts only from the provided `context`/`passages`.\",\n          \"change_rule\": \"Adjust the summary-generation instruction to produce one or two short integrated sentences that (1) identify the subject by naming the song and its artist using the song passage, (2) report the chart peak using the numeric value and chart name found in the passages, and (3) add a brief clarifying phrase that the named chart is the country's main music sales chart using the chart passage. Keep wording compact and factual; cite passages implicitly by relying on their content.\",\n          \"drop_or_avoid_rule\": \"Do not add additional chart positions, release details, or speculative information not present in the visible inputs. Do not reproduce long article bodies or unrelated metadata. Avoid hedging or speculative language; avoid changing the output interface or adding new fields.\",\n          \"output_contract\": \"Produce the `summary` as 1–2 concise sentences that (a) name the song and its artist, (b) state the song's peak position and the chart name (preserving the numeric value), and (c) briefly explain that the named chart is the country's main music sales chart. The summary must be grounded in the provided `passages`/`context` and must preserve the original numeric answer.\",\n          \"why_local_transition\": \"The source output gives only the chart result. This local change augments that minimal answer with two facts already present in the inputs (the song's artist and the chart's definition), integrating second-hop evidence with the first-hop context while keeping the original numeric claim intact.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n      \"score\": 1.0,\n      \"answer\": \"No\"\n    }\n  },\n  {\n    \"w_sample_index\": 98,\n    \"w_stable_id\": \"98\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \\\"La Bête\\\" ) feature what relationship?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).\",\n      \"score\": 0.0,\n      \"answer\": \"a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary1 asserted that both films depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality). From the second-hop retrieval: (1) La criatura: \\\"The creature (Spanish: La criatura) is a 1977 drama film, directed by Eloy de la Iglesia.\\\" (2) La Bête: \\\"The Beast (French: \\\\\\\"La Bête\\\\\\\") is a 1975 X rated French erotic fantasy horror film...\\\" and \\\"it features the relationship between a beast (monster) and a woman.\\\" Integration: the La Bête article explicitly supports the presence of a relationship between a beast and a woman; the visible La criatura sentence confirms the film's title, year, and director but does not itself state the relationship. Retain these exact facts for the final-answer agent.\",\n      \"score\": 0.0,\n      \"answer\": \"a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the provided 'context' contains a prior assertion about both films (a claimed relationship or property) AND the 'passages' include at least one passage that explicitly states that relationship and at least one passage that only supplies film metadata (title, year, director) without restating the relationship.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of producing a concise summary that integrates second-hop evidence with the first-hop assertion and retains facts needed by the final-answer agent. Preserve any correct concise conclusion already present in the current output.\",\n          \"change_rule\": \"In addition to the preserved summary behavior, explicitly integrate evidence as follows: (1) Briefly paraphrase the prior assertion from 'context' (do not copy long target-only phrasing). (2) Identify which passage(s) explicitly support the asserted relationship by naming the passage and giving a one-line paraphrase or very short quote (only using wording already present in 'passages'). (3) For passage(s) that do not state the relationship but supply useful metadata, retain those specific metadata facts (title, year, director) as one-line items. (4) Produce a final one- or two-sentence integration that says which passage provides explicit support and which provides metadata to carry forward. Do not add new facts or long quotations beyond the visible passages.\",\n          \"drop_or_avoid_rule\": \"Do not output the final answer as the prompt edit. Do not invent or assert support that is not present in the visible passages. Avoid long verbatim spans that are not already in 'passages' or 'context'. Do not instruct the agent to copy a target-state sentence verbatim or to use evaluation/internal labels. Avoid giving extra unrelated details.\",\n          \"output_contract\": \"The produced 'summary' must: (a) paraphrase the first-hop assertion from 'context' in one brief clause; (b) name the passage(s) that explicitly support that assertion with a one-line paraphrase/short quote drawn from their text; (c) name any passage(s) that only provide metadata and list the retained metadata (title, year, director) in one line each; (d) conclude with one concise integration sentence indicating which passage explicitly supports the claim and which passage(s) only provide metadata for the final-answer agent. Keep the whole summary concise (about 1-4 sentences).\",\n          \"why_local_transition\": \"This edge refines how second-hop evidence is integrated: instead of only restating the conclusion, the agent must attribute the explicit support to the passage that contains it and carry forward concrete metadata from the other passage. The change is local to the integration behavior and preserves the agent's interface and prior useful conclusions.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n      \"score\": 1.0,\n      \"answer\": \"No\"\n    }\n  },\n  {\n    \"w_sample_index\": 117,\n    \"w_stable_id\": \"117\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, which  American football wide receiver, was an official spokesperson of the game?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Chad Johnson (also known as Chad Ochocinco)\",\n      \"score\": 0.0,\n      \"answer\": \"Chad Johnson (also known as Chad Ochocinco)\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary_1 stated that \\\"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\\\" Second-hop supporting evidence: (1) NFL Street 3: \\\"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\\\" (2) Chad Johnson: \\\"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\\\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.\",\n      \"score\": 0.0,\n      \"answer\": \"Chad Johnson\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the current `context` (or the agent's prior summary) names a person as the game's spokesperson AND the `passages` include (a) a passage that explicitly links that same person to the game (mentions cover/official spokesperson) and (b) a passage that gives the person's occupation/identity (e.g., that the name is an American football wide receiver or shows the full personal name/alias).\",\n          \"preserve_rule\": \"Keep the agent's existing concise identification behavior (do not remove the short named-identification already produced). Preserve any correct aliasing already present in `context` (for example, 'Chad Johnson (also known as Chad Ochocinco)') and keep the output field `summary` as the single returned field.\",\n          \"change_rule\": \"Augment the summary by explicitly integrating the second-hop supporting sentences with the first-hop claim: (1) Begin with a brief restatement of the claim that came from the first-hop `context` (one short clause). (2) Add two micro-evidence lines by paraphrasing each supporting passage in one short clause and indicating the passage title in parentheses — one clause reflecting the game passage that identifies the person as the game's official spokesperson/cover appearance, and one clause reflecting the biographical passage that establishes the person's occupation/alias. (3) Finish with one concise integrated sentence that links the person's full name/alias, their occupation, and the stated role as the game's official spokesperson. Keep all paraphrases short (no long verbatim quotes) and avoid introducing facts not present in the inputs.\",\n          \"drop_or_avoid_rule\": \"Do not add new facts, speculation, or external context beyond the given `passages` and `context`. Avoid long literal spans from passages; paraphrase or use very short quoted phrases that already appear in the visible inputs. Do not mention dataset, labels, or evaluation. Do not replace the agent's single-field output format or output extraneous fields. Avoid hedging language ('likely', 'probably') when passages state facts.\",\n          \"output_contract\": \"Produce the field `summary` only. Summary should be 1–3 concise sentences: (a) restate the original claim from `context`, (b) include two short paraphrases as supporting evidence with brief parenthetical passage titles, and (c) provide a single integrated sentence tying the person's full name/alias and occupation to the role of official spokesperson for the game. Do not exceed three sentences and do not invent information.\",\n          \"why_local_transition\": \"This edit targets only how this agent (the second-step integrator) composes its summary: it must bring together the first-hop claim and second-hop passages into a compact evidence-backed summary. The change is limited to the agent's behavior (how it formats and integrates evidence) and preserves the existing output field and base behavior.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n      \"score\": 1.0,\n      \"answer\": \"No\"\n    }\n  },\n  {\n    \"w_sample_index\": 106,\n    \"w_stable_id\": \"106\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Brent Musburger\",\n      \"score\": 0.0,\n      \"answer\": \"Brent Musburger\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary integration: summary_1 named \\\"Brent Musburger.\\\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.\",\n      \"score\": 0.0,\n      \"answer\": \"Brent Musburger\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks for which person (identity) in the provided context/passages performed or called an action tied to VSiN (Vegas Stats & Information Network), and the passages contain a passage that names an individual and explicitly states their role at VSiN (e.g., contains the phrase \\\"managing editor\\\" or equivalent), and the current produced summary is a bare name or single-token answer.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of selecting the correct named entity from the provided `context` and `passages` as the candidate answer. Preserve use of exact tokens that appear in the visible inputs (e.g., the person's name as shown in `context`/`passages`).\",\n          \"change_rule\": \"Instead of emitting only the name, produce a very short integrated summary sentence that (a) identifies the entity by the same name shown in inputs, (b) cites the role found in the passages (for example: 'managing editor at Vegas Stats and Information Network (VSiN)'), and (c) includes an explicit retention note stating that this fact should be kept for the final-answer agent. Keep this summary concise (one or two short sentences) and restricted to facts present in the given passages.\",\n          \"drop_or_avoid_rule\": \"Avoid single-token or bare-name outputs when a role-relevant passage is available. Do not add any information not present in the visible `passages` or `context`. Do not restate long verbatim spans beyond the concise role statement; avoid speculative language or source claims not present in the inputs.\",\n          \"output_contract\": \"The `summary` field must be a short integrated statement (one or two sentences) that: (1) names the entity exactly as in inputs, (2) asserts the role found in the passages (e.g., 'managing editor at Vegas Stats and Information Network (VSiN)'), and (3) ends with an explicit short retention note for downstream agents (e.g., 'Retain this fact for final-answer agent.'). No extra facts or long quotations may be added.\",\n          \"why_local_transition\": \"This edge upgrades a bare-entity output into a compact integrated summary that retains the role information needed downstream. It is local because it only changes output granularity and explicit retention behavior for identity-role cases, leaving other summarization behavior unchanged.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n      \"score\": 1.0,\n      \"answer\": \"No\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 117,\n  \"dominant_gap_type\": \"entity_disambiguation\",\n  \"transported_damage_hypothesis\": \"The summary agent will drop the cautious disambiguation/hedge and instead produce a brief, confident identification that 'Skye Edwards' refers to the biographical Skye‑Jilly Edwards and assert her nationality (Australian) without explicitly confirming the name-match from the passages.\",\n  \"expected_damaged_behavior\": \"The summary2 output becomes a short, integrated sentence naming the person and their nationality (e.g., 'Skye Edwards is Australian') or a terse disambiguating claim tying the ambiguous name to the known biographical entry, but it omits the previous 'Cannot confirm' hedge and provides no micro-evidence lines linking the passages.\",\n  \"rationale\": \"Candidate 117 targets alias/identity resolution: its repair augments a bare-name baseline with two micro-evidence lines and an explicit alias/occupation integration. The underlying failure pattern (W_minus) is a lack of explicit evidence-backed disambiguation/alias integration at the summary2 boundary. That same failure can plausibly occur in the target case where 'Skye Edwards' is ambiguous: transporting this failure will locally remove the cautious disambiguation and produce a definitive identification/nominal nationality without carrying forward the two-hop evidence that justifies or questions the name match. This is a local change at the summary2 agent (how it composes identity/alias evidence), does not require inventing entities or changing downstream answer format, and preserves proximity to the correct summary (so the damaged output remains a local neighbor of C_plus).\",\n  \"confidence\": 0.64\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 25,
+    "c_stable_id": "25",
+    "candidate_w_sample_indices": [
+      40,
+      65,
+      98,
+      106,
+      117
+    ],
+    "match_fingerprint": "c55cabff3f94c5b16f8d4c41675e295a9bec63316e592befb89102d2bbd53f79"
+  }
+}

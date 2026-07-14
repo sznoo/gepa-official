@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "dda3741c4891a2342a93af307c8f62f5dbf8446457f8fefa4809c8a1fe6bf6ae",
+  "created_at": "2026-07-13T18:47:43.791514+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Desert Ridge includes what non-profit medical practice facility based out of Minnesota?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Desert Ridge includes what non-profit medical practice facility based out of Minnesota?",
+        "summary_1": "Hazelden Foundation",
+        "current_output": {
+          "query": "Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Desert Ridge Mayo Clinic Minnesota nonprofit medical practice"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Desert Ridge Mayo Clinic Desert Ridge includes what non-profit medical practice facility based out of Minnesota?"
+        },
+        "score": 1.0,
+        "retrieved_titles": [
+          "Desert Ridge",
+          "William James Mayo",
+          "Mayo Clinic",
+          "West Ridge Academy",
+          "William Worrall Mayo",
+          "Red Wing Medical Center",
+          "Desert Ridge High School"
+        ],
+        "retrieved_doc_snippets": [
+          "Desert Ridge | The Desert Ridge master-planned community comprises 5700 acre and is situated in the Northeast Valley of Phoenix, Arizona. As one of Arizona’s largest master-planned communities, Desert Ridge could contain more than 50,000 residents. The community includes CityNorth, Toscana of Desert Ridge, Desert Ridge Marketplace, JW Marriott Desert Ridge Resort & Spa, Mayo Clinic Hospital and American Express regional campus.",
+          "William James Mayo | William James Mayo (June 29, 1861 – July 28, 1939) was a physician and surgeon in the United States and one of the seven founders of the Mayo Clinic. He and his brother, Charles Horace Mayo, both joined their father's private medical practice in Rochester, Minnesota, USA, after graduating from medical school in the 1880s. In 1919, that practice became the not-for-profit Mayo Clinic.",
+          "Mayo Clinic | The Mayo Clinic is a nonprofit medical practice and medical research group based in Rochester, Minnesota. It employs more than 4,500 physicians and scientists and 57,100 allied health staff. The practice specializes in treating difficult cases through tertiary care. It spends over $660 million a year on research.",
+          "West Ridge Academy | West Ridge Academy (known as the Utah Boys Ranch until 2005), is a youth residential treatment center based in West Jordan, Utah, USA. It seeks to provide clinical services, education, and other programs for teens, both girls and boys, that are identified as at risk. Until 2005, the Utah Boys Ranch was male-only. In early 2005, it opened new, separate facilities for girls and changed its name to West Ridge Academy. It is a non-profit 501(c)(3) corporation under the name Chil ...[truncated]",
+          "William Worrall Mayo | William Worrall Mayo ( ; May 31, 1819 – March 6, 1911) was a British-American medical doctor and chemist. He is best known for establishing the private medical practice that later evolved into the Mayo Clinic. He was a descendant of a famous English chemist, John Mayow. His sons, William James Mayo and Charles Horace Mayo, established a joint medical practice in Rochester in the U.S. state of Minnesota in the 1880s.",
+          "Red Wing Medical Center | Mayo Clinic Health System in Red Wing (part of Mayo Clinic Health System) is a 50-bed hospital located in Red Wing, Minnesota, United States. Opened in 2001, it combines a clinic and hospital in one facility.",
+          "Desert Ridge High School | Desert Ridge High School (DRHS) was founded in 2002 in Mesa, Arizona and is part of Gilbert Public Schools."
+        ],
+        "summary_2": "Mayo Clinic (Mayo Clinic Hospital)",
+        "answer": "Mayo Clinic",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Desert Ridge",
+          "Mayo Clinic"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Desert Ridge includes what non-profit medical practice facility based out of Minnesota?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Desert Ridge includes what non-profit medical practice facility based out of Minnesota?\",\n  \"summary_1\": \"Hazelden Foundation\",\n  \"current_output\": {\n    \"query\": \"Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Desert Ridge Mayo Clinic Minnesota nonprofit medical practice\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Desert Ridge Mayo Clinic Desert Ridge includes what non-profit medical practice facility based out of Minnesota?\"\n  },\n  \"score\": 1.0,\n  \"retrieved_titles\": [\n    \"Desert Ridge\",\n    \"William James Mayo\",\n    \"Mayo Clinic\",\n    \"West Ridge Academy\",\n    \"William Worrall Mayo\",\n    \"Red Wing Medical Center\",\n    \"Desert Ridge High School\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Desert Ridge | The Desert Ridge master-planned community comprises 5700 acre and is situated in the Northeast Valley of Phoenix, Arizona. As one of Arizona’s largest master-planned communities, Desert Ridge could contain more than 50,000 residents. The community includes CityNorth, Toscana of Desert Ridge, Desert Ridge Marketplace, JW Marriott Desert Ridge Resort & Spa, Mayo Clinic Hospital and American Express regional campus.\",\n    \"William James Mayo | William James Mayo (June 29, 1861 – July 28, 1939) was a physician and surgeon in the United States and one of the seven founders of the Mayo Clinic. He and his brother, Charles Horace Mayo, both joined their father's private medical practice in Rochester, Minnesota, USA, after graduating from medical school in the 1880s. In 1919, that practice became the not-for-profit Mayo Clinic.\",\n    \"Mayo Clinic | The Mayo Clinic is a nonprofit medical practice and medical research group based in Rochester, Minnesota. It employs more than 4,500 physicians and scientists and 57,100 allied health staff. The practice specializes in treating difficult cases through tertiary care. It spends over $660 million a year on research.\",\n    \"West Ridge Academy | West Ridge Academy (known as the Utah Boys Ranch until 2005), is a youth residential treatment center based in West Jordan, Utah, USA. It seeks to provide clinical services, education, and other programs for teens, both girls and boys, that are identified as at risk. Until 2005, the Utah Boys Ranch was male-only. In early 2005, it opened new, separate facilities for girls and changed its name to West Ridge Academy. It is a non-profit 501(c)(3) corporation under the name Chil ...[truncated]\",\n    \"William Worrall Mayo | William Worrall Mayo ( ; May 31, 1819 – March 6, 1911) was a British-American medical doctor and chemist. He is best known for establishing the private medical practice that later evolved into the Mayo Clinic. He was a descendant of a famous English chemist, John Mayow. His sons, William James Mayo and Charles Horace Mayo, established a joint medical practice in Rochester in the U.S. state of Minnesota in the 1880s.\",\n    \"Red Wing Medical Center | Mayo Clinic Health System in Red Wing (part of Mayo Clinic Health System) is a 50-bed hospital located in Red Wing, Minnesota, United States. Opened in 2001, it combines a clinic and hospital in one facility.\",\n    \"Desert Ridge High School | Desert Ridge High School (DRHS) was founded in 2002 in Mesa, Arizona and is part of Gilbert Public Schools.\"\n  ],\n  \"summary_2\": \"Mayo Clinic (Mayo Clinic Hospital)\",\n  \"answer\": \"Mayo Clinic\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Desert Ridge\",\n    \"Mayo Clinic\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 is present and the generated query asserts or inserts a specific facility/organization name that does not appear in the visible inputs (question or summary_1), or otherwise reads like a hypothesized answer, apply this prompt edit.\",\n    \"preserve_rule\": \"Keep the query concise and retrieval-focused. Preserve mention of the main topic from the question (Desert Ridge), any location tokens present (Minnesota), and the class of entity being sought (non-profit medical practice / facility) when those appear in the inputs.\",\n    \"change_rule\": \"Do not add or assert candidate facility names. Instead, form the query by reusing the question's wording for the information need: produce a short retrieval query that pairs the topic token 'Desert Ridge' with the question phrase about 'what non-profit medical practice facility based out of Minnesota' (i.e., pose the information need rather than asserting an answer).\",\n    \"drop_or_avoid_rule\": \"Avoid introducing named organizations or long lists that are not present in the question or summary_1. Avoid longer explanatory sentences—output a single compact query token sequence and do not output any answer claims.\",\n    \"output_contract\": \"Return exactly one short retrieval query string that references 'Desert Ridge' and the information sought (non-profit medical practice facility, Minnesota). The string must not present or claim an answer and must be suitable for a second-hop retrieval system (examples: 'Desert Ridge non-profit medical practice facility Minnesota' or 'Desert Ridge includes what non-profit medical practice facility based out of Minnesota?').\",\n    \"why_local_transition\": \"The source query inserted a specific facility name not supported by visible inputs. Steering the agent to reuse the original question phrasing (topic + explicit information need) prevents hallucinated candidate insertion and produces a focused, retriever-friendly query that is more likely to fetch pages bridging Desert Ridge to the sought Minnesota-based facility.\"\n  },\n  \"rationale\": \"The minimal, targeted change prevents the agent from inventing or asserting a candidate facility (a common mid-hop hallucination) while preserving its concise retrieval behavior. By instructing the agent to base the second-hop query on the original question wording (topic + explicit info need), we keep the query focused, avoid unsupported claims, and increase the chance of retrieving documents that contain the correct bridge (the facility associated with Desert Ridge and Minnesota). This edit is small, local to the generation of the query, and preserves other useful behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 79,
+    "row_index": 79,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ec5df5ec26472a114309a0c958117e478d168c2f0125b2322bad000a9ee10226",
+  "created_at": "2026-07-13T17:25:14.023407+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Whom did Rosko Gee play with on their albums \"When the Eagle Flies\" (1974) and \"The Last Great Traffic Jam\" (2005)?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Whom did Rosko Gee play with on their albums \"When the Eagle Flies\" (1974) and \"The Last Great Traffic Jam\" (2005)?",
+        "summary_1": "He played with the English rock band Traffic.",
+        "summary_2": "He played with the English rock band Traffic.",
+        "current_output": "He played with the English rock band Traffic."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "He played with the English rock band Traffic.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Steve Winwood,",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Whom did Rosko Gee play with on their albums \\\"When the Eagle Flies\\\" (1974) and \\\"The Last Great Traffic Jam\\\" (2005)?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Whom did Rosko Gee play with on their albums \\\"When the Eagle Flies\\\" (1974) and \\\"The Last Great Traffic Jam\\\" (2005)?\",\n  \"summary_1\": \"He played with the English rock band Traffic.\",\n  \"summary_2\": \"He played with the English rock band Traffic.\",\n  \"current_output\": \"He played with the English rock band Traffic.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"He played with the English rock band Traffic.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Steve Winwood,\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks 'whom', 'who', or otherwise requests a person/people, and the visible summaries mention the collaborator(s) only in group form (e.g., a band) or mention one or more named individuals.\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the only evidence sources and preserve the base prompt's final-answer output contract (the [[ ## answer ## ]] block must contain only the minimal answer string supported by the visible summaries).\",\n    \"change_rule\": \"When the question requests a person/people, prefer to output the most specific PERSON entity explicitly present in summary_1 or summary_2. If one or more named persons appear in the summaries, return only those person name(s) (no extra words). If no person-name appears in the visible summaries but a group/band name does, return the group/band name exactly as it appears in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not invent or add any names or facts that are not present in summary_1 or summary_2; do not add explanatory phrases, qualifiers, or extra descriptions around the returned name(s); do not replace a named person with a group label when a person name is present in the summaries.\",\n    \"output_contract\": \"Produce a single minimal answer string inside [[ ## answer ## ]] containing either (a) the person name(s) exactly as they appear in the visible summaries when present, or (b) otherwise the group/band name exactly as it appears in the visible summaries. No additional text, punctuation, or commentary.\",\n    \"why_local_transition\": \"The question asks for a person ('whom') but the summaries sometimes only provide a group name. This rule nudges the agent to prefer explicit person names when they exist in the visible summaries while otherwise falling back to the group name, producing a more specific minimal answer without fabricating information.\"\n  },\n  \"rationale\": \"This delta is a small, local behavioral change: it only adjusts how the final answer is selected when the question requests a person. It preserves the existing evidence sources and output format, avoids inventing names, and enforces concision. It does not include or reveal any target/gold answer, nor does it instruct the agent to copy any target state. It only clarifies a tie-breaker: prefer explicit person entities in the provided summaries, otherwise return the group label as given.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 137,
+    "row_index": 137,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

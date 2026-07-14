@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a4c39dd7711df2a92c744977674200e20ec32358f28b91d8bc03869d80b4ba81",
+  "created_at": "2026-07-13T17:16:14.375505+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "Cornell University",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\""
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\""
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Edward E. Baptist",
+          "Wikidumper.org",
+          "Orientalism",
+          "Cornell University College of Arts and Sciences",
+          "James Thomas Quarles",
+          "Lisa Wainwright",
+          "Robert Hobbs"
+        ],
+        "retrieved_doc_snippets": [
+          "Edward E. Baptist | Edward E. Baptist (born 1970) is an American academic and writer. He is a Professor of History at Cornell University, located in Ithaca, New York, where he specializes in the history of the 19th-century United States, and particularly the South. Thematically, he has been interested in the history of capitalism, and has also been interested in digital humanities methodologies. He is the author of numerous books.",
+          "Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \"best of the Wikipedia rejects\", articles that are slated for deletion at the site. WikiDumper was launched on November 4, 2006, and accepts user submissions. Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources. The site has been criticized as likely to be less accurate than Wikipedia.",
+          "Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures). These depictions are usually done by writers, designers and artists from the West. In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a ...[truncated]",
+          "Cornell University College of Arts and Sciences | The College of Arts and Sciences (abbreviated to A&S or CAS) is a division of Cornell University. It has been part of the university since its founding, although its name has changed over time. It grants bachelor's degrees, and masters and doctorates through affiliation with the Cornell University Graduate School. Its major academic buildings are located on the Arts Quad and include some of the university's oldest buildings. The college offers co ...[truncated]",
+          "James Thomas Quarles | James Thomas Quarles was a 20th-century American organist, educator, and academic. He was National President of both the Music Teachers National Association and music fraternity Phi Mu Alpha Sinfonia. In his long tenure he taught at Lindenwood University, Cornell University, and the University of Missouri. He was the founding dean of the University of Missouri School of Fine Arts. In 1905 he wrote one of Cornell's school songs \"Cornell Hymn\" In the 1920s he edited a compil ...[truncated]",
+          "Lisa Wainwright | Lisa Wainwright (born September 1960) is an American art historian, the Vice President of Academic Affairs, and Dean of Faculty, at the School of the Art Institute of Chicago (Summer 2010 – present) and the Title IX officer for SAIC for faculty. Wainwright received a Ph.D. in the history of 19th and 20th-century art, University of Illinois, 1993; an M.A. in history of 19th and 20th-century art, University of Illinois, December 1986, and a B.A. cum laude, Vanderbilt University,  ...[truncated]",
+          "Robert Hobbs | Robert Carleton Hobbs is an art historian and curator specializing in twentieth-century art. Since 1991 he has held the Rhoda Thalhimer Endowed Chair of American Art in the highly respected School of Arts, Virginia Commonwealth University. Since 2004 he has served as a visiting professor at Yale University. He has held positions at Cornell University, University of Iowa, Florida State University, and Tehran Museum of Contemporary Art in Iran, and is known for a number of books, in ...[truncated]"
+        ],
+        "summary_2": "Cornell University",
+        "answer": "Cornell University",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Nigel Leask"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Nigel Leask Orientalism professor affiliation"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"Cornell University\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Edward E. Baptist\",\n    \"Wikidumper.org\",\n    \"Orientalism\",\n    \"Cornell University College of Arts and Sciences\",\n    \"James Thomas Quarles\",\n    \"Lisa Wainwright\",\n    \"Robert Hobbs\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Edward E. Baptist | Edward E. Baptist (born 1970) is an American academic and writer. He is a Professor of History at Cornell University, located in Ithaca, New York, where he specializes in the history of the 19th-century United States, and particularly the South. Thematically, he has been interested in the history of capitalism, and has also been interested in digital humanities methodologies. He is the author of numerous books.\",\n    \"Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \\\"best of the Wikipedia rejects\\\", articles that are slated for deletion at the site. WikiDumper was launched on November 4, 2006, and accepts user submissions. Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources. The site has been criticized as likely to be less accurate than Wikipedia.\",\n    \"Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures). These depictions are usually done by writers, designers and artists from the West. In particular, Orientalist painting, depicting more specifically \\\"the Middle East\\\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a ...[truncated]\",\n    \"Cornell University College of Arts and Sciences | The College of Arts and Sciences (abbreviated to A&S or CAS) is a division of Cornell University. It has been part of the university since its founding, although its name has changed over time. It grants bachelor's degrees, and masters and doctorates through affiliation with the Cornell University Graduate School. Its major academic buildings are located on the Arts Quad and include some of the university's oldest buildings. The college offers co ...[truncated]\",\n    \"James Thomas Quarles | James Thomas Quarles was a 20th-century American organist, educator, and academic. He was National President of both the Music Teachers National Association and music fraternity Phi Mu Alpha Sinfonia. In his long tenure he taught at Lindenwood University, Cornell University, and the University of Missouri. He was the founding dean of the University of Missouri School of Fine Arts. In 1905 he wrote one of Cornell's school songs \\\"Cornell Hymn\\\" In the 1920s he edited a compil ...[truncated]\",\n    \"Lisa Wainwright | Lisa Wainwright (born September 1960) is an American art historian, the Vice President of Academic Affairs, and Dean of Faculty, at the School of the Art Institute of Chicago (Summer 2010 – present) and the Title IX officer for SAIC for faculty. Wainwright received a Ph.D. in the history of 19th and 20th-century art, University of Illinois, 1993; an M.A. in history of 19th and 20th-century art, University of Illinois, December 1986, and a B.A. cum laude, Vanderbilt University,  ...[truncated]\",\n    \"Robert Hobbs | Robert Carleton Hobbs is an art historian and curator specializing in twentieth-century art. Since 1991 he has held the Rhoda Thalhimer Endowed Chair of American Art in the highly respected School of Arts, Virginia Commonwealth University. Since 2004 he has served as a visiting professor at Yale University. He has held positions at Cornell University, University of Iowa, Florida State University, and Tehran Museum of Contemporary Art in Iran, and is known for a number of books, in ...[truncated]\"\n  ],\n  \"summary_2\": \"Cornell University\",\n  \"answer\": \"Cornell University\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Nigel Leask\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Nigel Leask Orientalism professor affiliation\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks which university an academic (identified by a 19th‑century academic‑art specialism) taught at and the first‑hop results have not produced that person's affiliation, prepare a second‑hop query to locate the professor's institutional affiliation.\",\n    \"preserve_rule\": \"Keep producing exactly one compact retrieval query string as the agent's output. Preserve any useful terms already extracted from prior context (e.g., a concise specialism label or a candidate person name, if present in the visible inputs).\",\n    \"change_rule\": \"Replace broad, long or quoted search strings with a short, focused query that combines the relevant specialism or visible person name with role/affiliation keywords. Prefer one of these patterns (fill with a visible term if available):\\n- \\\"<SPECIALISM> professor affiliation\\\"\\n- \\\"<PERSON_NAME> <SPECIALISM> affiliation\\\"\\n- \\\"<SPECIALISM> taught at\\\" \\nDo not add extra explanatory words; keep the query compact (approximately 3–6 words).\",\n    \"drop_or_avoid_rule\": \"Do not paste long quoted spans from documents or the full question. Do not output an answer, hypothesis, or instructions to the user. Do not invent or insert person names that do not already appear in the visible inputs. Avoid site: restrictions unless they were already present and useful.\",\n    \"output_contract\": \"Output exactly one line: a single compact retrieval query string (no surrounding commentary or labels), focused on locating the professor's institutional affiliation and limited to a few words.\",\n    \"why_local_transition\": \"This change narrows the agent's second‑hop behavior from a general topical search to a direct affiliation search by combining the specialism (or visible candidate name) with role/affiliation terms, increasing likelihood of retrieving the academic's university.\"\n  },\n  \"rationale\": \"The previous query was broad and used longer phrasing that can return topic pages rather than the specific person's affiliation. For this edge we only need a small behavioral change: instruct the agent to produce a concise, targeted second‑hop query that pairs the specialism (or any visible candidate name) with 'professor', 'taught at', or 'affiliation'. That preserves existing behavior of outputting one query while steering results toward the bridge evidence (the professor's institutional affiliation) without introducing sample‑specific names or producing the answer directly.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

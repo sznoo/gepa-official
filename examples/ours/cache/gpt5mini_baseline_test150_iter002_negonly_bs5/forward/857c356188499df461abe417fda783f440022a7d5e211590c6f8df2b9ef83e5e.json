@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "857c356188499df461abe417fda783f440022a7d5e211590c6f8df2b9ef83e5e",
+  "created_at": "2026-07-14T05:59:43.482044+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nYou are the first-hop summarizer. Compress the supplied passages into a short, actionable intermediate state that lets the next agent know exactly what is present in the passages, what is missing, and what to fetch next. Produce a single `summary` string only.\n\nSummary content requirements (concise: a few short sentences or clauses):\n- First-hop evidence: one short paraphrase or a very brief quoted phrase from the passages that links the relevant entities or facts supporting any partial answer. Do not copy long verbatim spans.\n- Bridge entity: explicitly name the person/entity mentioned in the passages that the second hop should investigate (use the full name or label exactly as it appears in the passages). If the question uses only a given name and the passages do not disambiguate which individual is meant, state clearly that the identity is missing/ambiguous.\n- Missing fact: state in one short sentence which specific fact is required to answer the question (for example: winner name, year, birthplace, or another identifying detail) and confirm it is not present in the given passages.\n- Retrieval directions: give one concise, ordered, actionable next-hop plan (1–2 steps). Prefer concrete target pages or query patterns, e.g. \"open the named person's biography to check for [missing fact]\" or a short query pattern such as '\"<NAME>\" birthplace OR \"born in\" site:wikipedia.org' or 'open a chronological list of <AWARD> winners and search for <NAME>'. Do not instruct the system to execute retrieval here — only specify what the next retrieval should fetch.\n- Clarification: if ambiguity persists (e.g., only a given name is provided and multiple candidates are possible), include a short clarifying request asking the user to provide the full name.\n\nHard constraints and tone:\n- Be concise and factual. Keep the same neutral, summary tone as before.\n- Do not guess, infer, or assert any facts not present in the passages (no candidate answers, no years, no birthplace assertions, etc.).\n- Do not ask the user for permission to search external sources. Give explicit next-hop retrieval directions instead.\n- Output only the single `summary` field text complying with the above requirements.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nYou are integrating newly retrieved passages (second‑hop evidence) with the first‑hop context to produce a grounded, post‑retrieval summary that preserves the facts the final answer generator will need. Produce a single field `summary` whose value is 1–3 concise sentences that: (1) directly state the answer to the question (e.g., where the studios/recordings were located) based on the available evidence; (2) if any passage explicitly names a production facility or studio and ties that facility to a specific locality (for example by giving the facility name together with a street, town, or county), include one short supporting sentence that paraphrases that passage to show the link between the facility and the locality; and (3) include one very short sentence or clause that synthesizes the context and the supporting passage to place the studios in the stated locality. Paraphrase supporting passages; do not include long verbatim quotations.\n\nIf the passages do not conclusively link a named studio to a specific locality, preserve and state that uncertainty rather than asserting unsupported specifics. Avoid headers, meta commentary, long quotations, extra sections, or inventing details not present in the provided context/passages. Keep phrasing compact, factual, and focused on the evidence needed to support the final answer.\n\nOutput contract: produce only the `summary` field (1–3 concise sentences) that integrates the first‑hop context with the second‑hop passages as described above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nAdditional specific, evidence-directed selection rules (apply these only when their trigger conditions are met, otherwise follow the rules above):\n\n8) Prefer an explicitly named immediate jurisdiction when resolving county/country wording conflicts\n- Trigger: The question asks which country/sovereign-state a county or borough is part of (phrasing like 'county' and 'part of what country' or equivalent) and the summaries disagree or one summary uses a parenthetical membership note such as 'A (part of B)'.\n- Behavior: If one summary contains a parenthetical of the form 'A (part of B)', treat the pre-parenthetical name A as the immediate administrative region referenced by the summaries and emit A (trimmed of surrounding punctuation/whitespace) as the minimal answer. More generally, when summaries disagree about a place, prefer the summary that directly names the immediate jurisdiction associated with the county (the subnational or constituent area named in the summary) and extract that short named phrase verbatim as the answer. Do not add any extra words or punctuation.\n- Fallback: If neither summary clearly names an immediate jurisdiction or both are equally ambiguous, emit a concise clarification question per the base rules rather than guessing.\n\n9) Size-answer simplification when both summaries agree with an inclusive qualifier\n- Trigger: The question explicitly asks for a size (phrasing like 'what size' or 'equal to or smaller than what size' or equivalent) AND summary_1 and summary_2 are identical strings for agreement-detection (case-insensitive) AND that common string matches the pattern '<size> or smaller' or '<size> or less' (case-insensitive, allowing optional surrounding punctuation/whitespace).\n- Behavior: Produce as the minimal answer only the '<size>' portion of the agreed common phrase by removing the trailing inclusive qualifier 'or smaller' or 'or less' and any immediately adjacent punctuation/extra whitespace. Emit the remaining size token (number plus unit) verbatim as shown in the summaries (preserve digits, unit spelling/capitalization, and internal spacing).\n- Do not apply this edit when the summaries do not exactly agree, when the common phrase does not match the pattern, or when the question is not asking for a size.\n\n10) Prefer identical parenthetical short-names when present in both summaries\n- Trigger: Both summary_1 and summary_2 each contain an identical parenthetical short-name substring (a substring of the form '(' ... ')' that, once trimmed, is 1–5 words long, agreement checked case-insensitively).\n- Behavior: Extract the parenthetical content (remove the surrounding '(' and ')', trim surrounding whitespace and surrounding punctuation) and treat that extracted short-name as the canonical minimal answer. Emit it verbatim (preserving internal characters and capitalization exactly as shown in the summaries) as the sole content of [[ ## answer ## ]]. Do not emit the longer formal name when such an identical parenthetical is present in both summaries.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "28cd60573b7f",
+    "rerun_from": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "gold_answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ],
+    "hop1_query": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "hop1_docs": [
+      "Alex Delaware | Alex Delaware is a literary character created by Jonathan Kellerman.  The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.  Delaware appears in 32 of Kellerman's popular murder mysteries.  Kellerman sets the series in Los Angeles.  Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist.",
+      "Jonathan Kellerman | Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels.",
+      "Bones (Kellerman novel) | Bones is a mystery novel by American author Jonathan Kellerman.",
+      "Gone (Kellerman novel) | Gone is a mystery novel by American author Jonathan Kellerman",
+      "Flesh and Blood (Kellerman novel) | Flesh and Blood is a mystery novel by Jonathan Kellerman",
+      "Therapy (Kellerman novel) | Therapy is a mystery novel by American author Jonathan Kellerman",
+      "Rage (Kellerman novel) | Rage is a mystery novel by American author Jonathan Kellerman"
+    ],
+    "hop1_titles": [
+      "Alex Delaware",
+      "Jonathan Kellerman",
+      "Bones (Kellerman novel)",
+      "Gone (Kellerman novel)",
+      "Flesh and Blood (Kellerman novel)",
+      "Therapy (Kellerman novel)",
+      "Rage (Kellerman novel)"
+    ],
+    "summary_1": "First-hop evidence: the passages state \"Jonathan Kellerman ... is an American psychologist\" (showing Kellerman is American). Bridge entity: investigate James Emanuel (and Jonathan Kellerman is already identified). Missing fact: James Emanuel's nationality is not present in the given passages. Retrieval directions: 1) open the \"James Emanuel\" biography (e.g., the Wikipedia page titled \"James Emanuel\") to check his nationality or birthplace using the query \"James Emanuel\" born OR \"born in\" OR nationality site:wikipedia.org; 2) if multiple results appear, open the biography that matches the relevant profession (e.g., poet/author) to confirm. Clarification: if you mean a different James Emanuel, please specify which one (profession or context).",
+    "hop2_query": "James Emanuel born OR \"born in\" OR nationality site:wikipedia.org",
+    "hop2_docs": [
+      "Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \"best of the Wikipedia rejects\", articles that are slated for deletion at the site.  WikiDumper was launched on November 4, 2006, and accepts user submissions.  Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources.  The site has been criticized as likely to be less accurate than Wikipedia.",
+      "Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter.  Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).",
+      "The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#",
+      "Emanuel Point Shipwreck Site | The Emanuel Point Shipwreck Site is a historic site near Pensacola, Florida, United States.  It is located off Emanuel Point.  It has been identified as a galleon of the fleet that carried conquistador Tristan de Luna and his army to La Florida in 1559.  It sank along with most of the fleet during a hurricane that struck the coast shortly after Luna's arrival.  On March 4, 1996, it was added to the U.S. National Register of Historic Places.",
+      "URL redirection | URL redirection, also called URL forwarding, is a World Wide Web technique for making a web page available under more than one URL address.  When a web browser attempts to open a URL that has been redirected, a page with a different URL is opened.  Similarly, domain redirection or domain forwarding is when all pages in a URL domain are redirected to a different domain, as when wikipedia.com and wikipedia.net are automatically redirected to wikipedia.org.  URL redirection is done for various reasons: for URL shortening; to prevent broken links when web pages are moved; to allow multiple domain names belonging to the same owner to refer to a single web site; to guide navigation into and out of a website; for privacy protection; and for hostile purposes such as phishing attacks or malware distribution.",
+      "James Emanuel | James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.  Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.  He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment.",
+      "James N. Farmer | James N. Farmer (born 1976, Birmingham, UK) is founder and CEO of Incsub, which includes the WordPress related companies of WPMU DEV, WPMU.org, and Edublogs.org, the largest global weblog community for educators.  James is currently based in Australia, where he has been the Online Community Editor of \"The Age\", and Lecturer in Education Design at Deakin University.  James' blog, \"Incorporated Subversion,\" has been a resource for educators involved with social media and online publishing since 2003."
+    ],
+    "hop2_titles": [
+      "Wikidumper.org",
+      "Robert Jessup",
+      "The Steph Show",
+      "Emanuel Point Shipwreck Site",
+      "URL redirection",
+      "James Emanuel",
+      "James N. Farmer"
+    ],
+    "summary_2": "Both James Emanuel and Jonathan Kellerman are American. James Emanuel is described as a poet and scholar from Alliance, Nebraska, and Jonathan Kellerman is identified in the context as an American psychologist.",
+    "answer": "American",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "James Emanuel"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Jonathan Kellerman"
+    ],
+    "hit_titles_total": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

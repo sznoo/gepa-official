@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c398c539d1db404f319db21a2b87bc07a98f5fddb57b2cd254c105c883f30b3d",
+  "created_at": "2026-07-13T17:23:43.538960+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Where is Tech Mahindra, the creator of EZ-Frame, located?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Where is Tech Mahindra, the creator of EZ-Frame, located?",
+        "summary_1": "Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai.",
+        "summary_2": "Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai, India.",
+        "current_output": "Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Pune",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Where is Tech Mahindra, the creator of EZ-Frame, located?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Where is Tech Mahindra, the creator of EZ-Frame, located?\",\n  \"summary_1\": \"Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai.\",\n  \"summary_2\": \"Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai, India.\",\n  \"current_output\": \"Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Pune\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If both summary_1 and summary_2 contain an identical explicit 'headquartered in <LOCATION>' phrase (i.e., they name the same LOCATION string) and the current output is a full sentence rather than a single token.\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the sole evidence sources. Preserve the distinction already present between a company's headquarters and its registered office and prefer evidence labeled as 'headquartered in' when available.\",\n    \"change_rule\": \"When the trigger condition holds, replace verbose final answers with exactly the single LOCATION token that appears in the 'headquartered in' phrase in both summaries. Emit only that token (no leading/trailing words, prepositions, qualifiers, punctuation, or explanation). If the summaries include a country as part of the identical LOCATION token, include it only if it is part of that exact token in both summaries.\",\n    \"drop_or_avoid_rule\": \"Do not output any extra context, descriptive phrases, full sentences, or multiple locations (e.g., do not append 'India', 'registered office in ...', 'an Indian multinational', or any clarifying text). Avoid presenting more than the single agreed LOCATION. If the summaries do not agree on an identical 'headquartered in' token, do not apply this delta.\",\n    \"output_contract\": \"Produce the field 'answer' containing only the minimal answer string: the single LOCATION token described above. Ensure the [[ ## answer ## ]] block contains exactly that token and nothing else.\",\n    \"why_local_transition\": \"The source output is a verbose sentence. The visible summaries clearly agree on a single headquarters location. This minimal prompt edit enforces selecting the agreed 'headquartered in' LOCATION and formatting it as the single-token final answer, matching the final-agent output contract while changing behavior as little as necessary.\"\n  },\n  \"rationale\": \"This delta makes the smallest focused behavioral change needed to convert a verbose, sentence-style endpoint output into the concise single-token answer required by the final agent. It only applies when both summaries explicitly and identically state the headquarters location, so it preserves existing evidence use and avoids changing behavior in ambiguous cases. The rule never supplies or copies the target answer itself, it only instructs the agent how to extract and format the agreed location from the given summaries, and it prohibits extra context or multiple locations so the final output meets the minimal-answer contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 109,
+    "row_index": 109,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

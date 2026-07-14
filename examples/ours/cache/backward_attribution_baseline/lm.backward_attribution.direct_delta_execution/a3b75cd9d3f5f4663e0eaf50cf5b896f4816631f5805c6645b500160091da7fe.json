@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a3b75cd9d3f5f4663e0eaf50cf5b896f4816631f5805c6645b500160091da7fe",
+  "created_at": "2026-07-13T17:15:27.192223+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the retrieved snippets mention a named specialism (a concise token like \"Orientalism\") that matches the phrase in the question (e.g., \"This specialism of 19th-century academic art...\") and the current query is anchored to a single university name from summary_1.",
+            "preserve_rule": "Keep producing one compact, single-line web search query constrained to Wikipedia (use site:wikipedia.org). Keep queries short and focused and retain quoting for multi-word terms when appropriate.",
+            "change_rule": "Instead of anchoring the second-hop query on the university name from summary_1, extract the short specialism token found in the retrieved snippets (e.g. 'Orientalism') and build a query that looks for academics associated with that specialism plus short occupation/taught indicators. Form: site:wikipedia.org \"<specialism>\" (taught OR professor OR lecturer OR \"Regius\" OR chair). Do not add the original university name to this query.",
+            "drop_or_avoid_rule": "Do not continue to include the prior university name (summary_1) in the second-hop query; avoid long quoted copies of the full question; avoid broad site searches (no general web search scope) and avoid including long literal spans unique to a single target article.",
+            "output_contract": "Return a single-field `query` string: one compact site:wikipedia.org search that quotes the extracted specialism token and includes one short parenthesized OR-list of occupation/taught terms (as in the change_rule). Example form (with the extracted token substituted): site:wikipedia.org \"Orientalism\" (taught OR professor OR lecturer OR \"Regius\" OR chair)",
+            "why_local_transition": "The previous query was overly anchored to a university and missed finding which academic had that specialism. Pivoting the query to the identified specialism plus occupation/taught keywords directly targets biographies of scholars with that interest, which is the missing bridge needed for the second hop."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "Cornell University",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the retrieved snippets mention a named specialism (a concise token like \\\"Orientalism\\\") that matches the phrase in the question (e.g., \\\"This specialism of 19th-century academic art...\\\") and the current query is anchored to a single university name from summary_1.\",\n      \"preserve_rule\": \"Keep producing one compact, single-line web search query constrained to Wikipedia (use site:wikipedia.org). Keep queries short and focused and retain quoting for multi-word terms when appropriate.\",\n      \"change_rule\": \"Instead of anchoring the second-hop query on the university name from summary_1, extract the short specialism token found in the retrieved snippets (e.g. 'Orientalism') and build a query that looks for academics associated with that specialism plus short occupation/taught indicators. Form: site:wikipedia.org \\\"<specialism>\\\" (taught OR professor OR lecturer OR \\\"Regius\\\" OR chair). Do not add the original university name to this query.\",\n      \"drop_or_avoid_rule\": \"Do not continue to include the prior university name (summary_1) in the second-hop query; avoid long quoted copies of the full question; avoid broad site searches (no general web search scope) and avoid including long literal spans unique to a single target article.\",\n      \"output_contract\": \"Return a single-field `query` string: one compact site:wikipedia.org search that quotes the extracted specialism token and includes one short parenthesized OR-list of occupation/taught terms (as in the change_rule). Example form (with the extracted token substituted): site:wikipedia.org \\\"Orientalism\\\" (taught OR professor OR lecturer OR \\\"Regius\\\" OR chair)\",\n      \"why_local_transition\": \"The previous query was overly anchored to a university and missed finding which academic had that specialism. Pivoting the query to the identified specialism plus occupation/taught keywords directly targets biographies of scholars with that interest, which is the missing bridge needed for the second hop.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"Cornell University\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"19th-century academic art\\\" (taught OR professor OR lecturer OR \\\"Regius\\\" OR chair)\"\n  },\n  \"rationale\": \"Pivoted away from the university anchor to the specialism token (quoted multi-word phrase) and constructed a concise site:wikipedia.org query including the required short OR-list of teaching/occupation terms, omitting the prior university name per the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

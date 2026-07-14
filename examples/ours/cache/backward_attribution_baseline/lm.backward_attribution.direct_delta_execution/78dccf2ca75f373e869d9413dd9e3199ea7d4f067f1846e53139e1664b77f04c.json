@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "78dccf2ca75f373e869d9413dd9e3199ea7d4f067f1846e53139e1664b77f04c",
+  "created_at": "2026-07-13T17:20:47.131752+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the current summary or any visible retrieved snippet mentions a PERSON name while summary_1 only gives a pronoun or a location (e.g., 'He was from Mississippi').",
+            "preserve_rule": "Keep the same input/output interface: require the given fields (question, summary_1) and produce only the field 'query'. Preserve existing behavior of producing a compact second-hop retrieval string.",
+            "change_rule": "If a PERSON full name is present in any visible input (summary_2 or retrieved snippets), include that full name in the query together with the primary subject ('Adolph Botnick') and the short location token from summary_1 (if present). Format the query as a compact keyword string of space-separated tokens (no explanatory words). If no PERSON name is visible, fall back to composing a concise query from keywords in the question and summary_1.",
+            "drop_or_avoid_rule": "Avoid verbose phrasing, natural-language sentences, Boolean operators, quotes, or copying long literal spans. Do not output answers, summaries, or instructions—only the compact query string. Avoid including subjective words like 'attempted' or 'man' unless they are necessary keywords; prefer names and key entities.",
+            "output_contract": "Produce a single string field 'query' (one-line, <= ~10 words) that is a concise retrieval query combining: [PERSON full name if visible] + [Adolph Botnick] + [location token from summary_1 if present]. No extra explanation or fields.",
+            "why_local_transition": "The source query used a pronoun/location and failed to target the named suspect. Adding the visible PERSON name plus the subject and location focuses the second-hop retrieval on documents about that suspect and Adolph Botnick, improving chances to recover the missing support."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when the question requests an origin/location for an attacker (question contains 'Where' and a phrase like 'man who attempted to assassinate' or 'attacked').",
+            "preserve_rule": "Keep the named person who was attacked from the question (the victim name) as the primary anchor. Preserve the agent's brevity: produce a single compact retrieval query string.",
+            "change_rule": "Instead of emitting a keyword bag, generate one short, focused retrieval query that explicitly asks for the attacker's place of origin. Construct this by forming an interrogative about the origin of 'the man who attempted to assassinate' plus the victim name from the question. Do not assert any place or factual answer in the query—frame it as a question or origin-seeking phrase.",
+            "drop_or_avoid_rule": "Do not include the place asserted in summary_1 or otherwise repeat a suspected answer. Avoid adding extra unrelated names, long conjunctive keyword lists, or documents/titles. Avoid returning multiple alternative questions—return exactly one concise origin-seeking query.",
+            "output_contract": "Return a single string for `query`: a short (preferably ≤12 words) interrogative or brief phrase explicitly asking for where the attacker of the named victim was from. Do not include answers, extra context, or multiple queries.",
+            "why_local_transition": "This change only alters how the second-hop query is phrased: from a multi-token keyword list to a focused 'where-from' retrieval question anchored on the victim's name, which targets biographical origin evidence without asserting the answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "summary_1": "He was from Mississippi.",
+        "current_output": {
+          "query": "Adolph Botnick attempted assassination man from Mississippi"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the current summary or any visible retrieved snippet mentions a PERSON name while summary_1 only gives a pronoun or a location (e.g., 'He was from Mississippi').\",\n      \"preserve_rule\": \"Keep the same input/output interface: require the given fields (question, summary_1) and produce only the field 'query'. Preserve existing behavior of producing a compact second-hop retrieval string.\",\n      \"change_rule\": \"If a PERSON full name is present in any visible input (summary_2 or retrieved snippets), include that full name in the query together with the primary subject ('Adolph Botnick') and the short location token from summary_1 (if present). Format the query as a compact keyword string of space-separated tokens (no explanatory words). If no PERSON name is visible, fall back to composing a concise query from keywords in the question and summary_1.\",\n      \"drop_or_avoid_rule\": \"Avoid verbose phrasing, natural-language sentences, Boolean operators, quotes, or copying long literal spans. Do not output answers, summaries, or instructions—only the compact query string. Avoid including subjective words like 'attempted' or 'man' unless they are necessary keywords; prefer names and key entities.\",\n      \"output_contract\": \"Produce a single string field 'query' (one-line, <= ~10 words) that is a concise retrieval query combining: [PERSON full name if visible] + [Adolph Botnick] + [location token from summary_1 if present]. No extra explanation or fields.\",\n      \"why_local_transition\": \"The source query used a pronoun/location and failed to target the named suspect. Adding the visible PERSON name plus the subject and location focuses the second-hop retrieval on documents about that suspect and Adolph Botnick, improving chances to recover the missing support.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question requests an origin/location for an attacker (question contains 'Where' and a phrase like 'man who attempted to assassinate' or 'attacked').\",\n      \"preserve_rule\": \"Keep the named person who was attacked from the question (the victim name) as the primary anchor. Preserve the agent's brevity: produce a single compact retrieval query string.\",\n      \"change_rule\": \"Instead of emitting a keyword bag, generate one short, focused retrieval query that explicitly asks for the attacker's place of origin. Construct this by forming an interrogative about the origin of 'the man who attempted to assassinate' plus the victim name from the question. Do not assert any place or factual answer in the query—frame it as a question or origin-seeking phrase.\",\n      \"drop_or_avoid_rule\": \"Do not include the place asserted in summary_1 or otherwise repeat a suspected answer. Avoid adding extra unrelated names, long conjunctive keyword lists, or documents/titles. Avoid returning multiple alternative questions—return exactly one concise origin-seeking query.\",\n      \"output_contract\": \"Return a single string for `query`: a short (preferably ≤12 words) interrogative or brief phrase explicitly asking for where the attacker of the named victim was from. Do not include answers, extra context, or multiple queries.\",\n      \"why_local_transition\": \"This change only alters how the second-hop query is phrased: from a multi-token keyword list to a focused 'where-from' retrieval question anchored on the victim's name, which targets biographical origin evidence without asserting the answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"summary_1\": \"He was from Mississippi.\",\n  \"current_output\": {\n    \"query\": \"Adolph Botnick attempted assassination man from Mississippi\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Where was the man who attempted to assassinate Adolph Botnick from?\"\n  },\n  \"rationale\": \"Applied deltas in order: anchored the query on the victim name and produced a concise origin-seeking interrogative, avoiding the location asserted in summary_1.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 52,
+    "row_index": 52,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

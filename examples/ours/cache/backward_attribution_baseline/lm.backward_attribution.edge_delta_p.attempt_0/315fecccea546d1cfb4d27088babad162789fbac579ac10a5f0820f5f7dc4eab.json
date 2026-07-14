@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "315fecccea546d1cfb4d27088babad162789fbac579ac10a5f0820f5f7dc4eab",
+  "created_at": "2026-07-13T17:13:55.967090+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+        "summary_1": "They are American.",
+        "summary_2": "American",
+        "current_output": "They are American."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are American.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "American",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"James Emanuel and Jonathan Kellerman, are of which nationality?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"James Emanuel and Jonathan Kellerman, are of which nationality?\",\n  \"summary_1\": \"They are American.\",\n  \"summary_2\": \"American\",\n  \"current_output\": \"They are American.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are American.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"American\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the provided summaries together support a short, direct noun/adjective answer (for example when a summary is itself a single-word or both summaries verbatim agree on a short phrase).\",\n    \"preserve_rule\": \"Continue to use the fields `question`, `summary_1`, and `summary_2` as the only evidence sources and continue to produce the `answer` field following the base prompt's final-answer output contract.\",\n    \"change_rule\": \"Instead of generating a full sentence, produce the shortest contiguous text span that appears verbatim in one or both summaries and directly answers the question. Emit that span alone as the `answer` value.\",\n    \"drop_or_avoid_rule\": \"Do not add pronouns, explanatory words, articles, complete-sentence framing (e.g., 'They are', 'The answer is'), extra punctuation, or any tokens not present in the selected summary span. Do not introduce new clauses or disclaimers.\",\n    \"output_contract\": \"The `answer` field (and the [[ ## answer ## ]] block) must contain exactly the minimal answer string selected from the summaries — nothing more, nothing less (no surrounding text or punctuation).\",\n    \"why_local_transition\": \"The current behavior produces a full-sentence response; the desired local change is only to contract outputs to the minimal label already present in the summaries so the final answer block contains the concise token supported by the visible evidence.\"\n  },\n  \"rationale\": \"This edit is the smallest coherent change: it preserves use of the same inputs and the final-answer interface while replacing sentence-level wording with a rule to pick and emit the minimal verbatim summary span. It avoids adding new knowledge, doesn't copy any unseen target-only text, and prevents extra framing words that caused the mismatch between the agent's current output and the required concise answer format.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 27,
+    "row_index": 27,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

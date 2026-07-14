@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d72dcae50caed73f782c69cd1e64cbb0ac60df885043aaab6eb2ad30f63ca98a",
+  "created_at": "2026-07-13T17:25:21.571936+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question explicitly names two works (both titles appear in the question text) and summary_1 indicates the provided passages do not list cast members or that the agent \"can't determine\" the actress, then apply this edit.",
+            "preserve_rule": "Keep existing habits: remain concise, avoid making unwarranted assertions, and still ask clarifying questions when the user genuinely omits which version/edition they mean. Preserve any wording from summary_1 that correctly reports missing cast information.",
+            "change_rule": "When the trigger fires, do NOT ask a clarifying question. Instead emit a single compact retrieval query (one short line) that targets cast lists for both works and looks for overlap. Build the query by taking the titles as they appear in the question, appending the token 'cast' (or '(film) cast' if helpful), and adding a short connector such as 'actress appeared in both' or 'cast overlap'. Join these components into one-line search text (separated by semicolons, commas, or simple conjunction). Do not include candidate actor names or any answer-like content.",
+            "drop_or_avoid_rule": "Avoid asking 'Which version do you mean?' when both titles are already specified. Avoid multi-bullet lookup instructions, long explanatory sentences, or mentioning specific actor names that are not present in the visible inputs. Do not output an answer, summary, or any target-only entity.",
+            "output_contract": "The produced `query` must be a single concise string suitable for a second-hop retrieval, containing both titles (as in the question), the word 'cast' for each title, and a short phrase to find overlap (e.g. 'actress appeared in both' or 'cast overlap'). Example acceptable form (for guidance only): \"Third Person (film) cast; From Here to Eternity (film) cast; actress appeared in both\". The agent must not include actor names or additional commentary.",
+            "why_local_transition": "The source behavior asked for clarification and suggested multiple lookups; given both titles are already specified, the minimal useful change is to issue a focused, single-line retrieval query that targets cast lists and their intersection so the pipeline can recover the missing supporting evidence (the overlapping actress) without premature clarification or speculation."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "current_output": {
+          "query": "Do you mean the 2013 film \"Third Person\" and the 1953 film \"From Here to Eternity\", or other versions? If you'd like me to search, run these lookups and compare:\n- \"Third Person (film) cast\" \n- \"From Here to Eternity (film) cast\" \n- \"actress appeared in both 'Third Person' and 'From Here to Eternity'\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question explicitly names two works (both titles appear in the question text) and summary_1 indicates the provided passages do not list cast members or that the agent \\\"can't determine\\\" the actress, then apply this edit.\",\n      \"preserve_rule\": \"Keep existing habits: remain concise, avoid making unwarranted assertions, and still ask clarifying questions when the user genuinely omits which version/edition they mean. Preserve any wording from summary_1 that correctly reports missing cast information.\",\n      \"change_rule\": \"When the trigger fires, do NOT ask a clarifying question. Instead emit a single compact retrieval query (one short line) that targets cast lists for both works and looks for overlap. Build the query by taking the titles as they appear in the question, appending the token 'cast' (or '(film) cast' if helpful), and adding a short connector such as 'actress appeared in both' or 'cast overlap'. Join these components into one-line search text (separated by semicolons, commas, or simple conjunction). Do not include candidate actor names or any answer-like content.\",\n      \"drop_or_avoid_rule\": \"Avoid asking 'Which version do you mean?' when both titles are already specified. Avoid multi-bullet lookup instructions, long explanatory sentences, or mentioning specific actor names that are not present in the visible inputs. Do not output an answer, summary, or any target-only entity.\",\n      \"output_contract\": \"The produced `query` must be a single concise string suitable for a second-hop retrieval, containing both titles (as in the question), the word 'cast' for each title, and a short phrase to find overlap (e.g. 'actress appeared in both' or 'cast overlap'). Example acceptable form (for guidance only): \\\"Third Person (film) cast; From Here to Eternity (film) cast; actress appeared in both\\\". The agent must not include actor names or additional commentary.\",\n      \"why_local_transition\": \"The source behavior asked for clarification and suggested multiple lookups; given both titles are already specified, the minimal useful change is to issue a focused, single-line retrieval query that targets cast lists and their intersection so the pipeline can recover the missing supporting evidence (the overlapping actress) without premature clarification or speculation.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"current_output\": {\n    \"query\": \"Do you mean the 2013 film \\\"Third Person\\\" and the 1953 film \\\"From Here to Eternity\\\", or other versions? If you'd like me to search, run these lookups and compare:\\n- \\\"Third Person (film) cast\\\" \\n- \\\"From Here to Eternity (film) cast\\\" \\n- \\\"actress appeared in both 'Third Person' and 'From Here to Eternity'\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Third Person cast; From Here to Eternity cast; actress appeared in both\"\n  },\n  \"rationale\": \"The delta triggered (both titles named and summary_1 said cast not listed); produced one compact single-line retrieval query containing both titles, 'cast' for each, and an overlap phrase as required.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

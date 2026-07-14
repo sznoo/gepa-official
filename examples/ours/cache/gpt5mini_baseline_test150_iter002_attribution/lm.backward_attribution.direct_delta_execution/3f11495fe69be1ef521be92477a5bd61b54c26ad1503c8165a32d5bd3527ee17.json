@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "3f11495fe69be1ef521be92477a5bd61b54c26ad1503c8165a32d5bd3527ee17",
+  "created_at": "2026-07-13T20:10:33.359928+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 states a missing birthplace must be verified (mentions 'Bridge needed' or 'place of birth'/'birthplace').",
+            "preserve_rule": "Keep the agent's interface and single-line query output. Continue to use the person's name and aim to fetch an authoritative biography page (infobox / Early life).",
+            "change_rule": "Instead of issuing a broad site-only filter, produce one compact query that pairs the subject's full name with an explicit birthplace keyword and the word 'Wikipedia' to target the biography page. Form: '<Person Name> birthplace Wikipedia' (e.g., 'Baz Luhrmann birthplace Wikipedia'). Output only that query string.",
+            "drop_or_avoid_rule": "Do not use only 'site:...' restrictions without a birthplace keyword; avoid queries likely to match soundtrack, album, or unrelated pages (e.g., queries lacking 'born'/'birthplace' or 'Wikipedia'). Do not emit extra explanatory text.",
+            "output_contract": "Return exactly one concise retrieval query (single line, no commentary) focused on finding the subject's place of birth; the query must name the person and include a birthplace cue (examples may be used for formatting guidance but no additional text).",
+            "why_local_transition": "The prior query used a site restriction but lacked a birthplace cue, returning many unrelated pages. Adding an explicit 'birthplace'/'born' cue and 'Wikipedia' steers retrieval to the subject's biography (infobox / Early life) with a minimal, local prompt change."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when summary_1 identifies a missing place-of-birth bridge (mentions 'town' or 'place of birth') OR when the current/output query asserts a birthplace (contains the verb 'born' followed by a place name).",
+            "preserve_rule": "Keep the agent's role and interface: produce exactly one compact second-hop retrieval query (single-line string returned in the 'query' field), continue to use the fields `question` and `summary_1` as the query source, and preserve concision and preference for authoritative sources.",
+            "change_rule": "Instead of asserting a specific town, generate a concise, neutral search query that (a) includes the director's full name, (b) uses neutral terms such as 'birthplace' or 'place of birth' (not 'born <place>'), and (c) adds a short site restriction or source hint to target authoritative biographies (for example, wikipedia or recognized biography sites). Keep the query single-line and brief (suitable for a web search).",
+            "drop_or_avoid_rule": "Do not include or assert a specific town name that does not already appear in the visible inputs; do not phrase the query as a declarative claim (avoid 'born <town>'); do not output explanatory text or punctuation-heavy questions—only the compact search string; avoid long multi-clause retrieval instructions.",
+            "output_contract": "Return only the field `query` populated with a single-line search string. That string must contain the director's name and one of the neutral phrases ('birthplace' or 'place of birth') and may optionally include a short site/source restriction. The string should be concise (roughly ≤ 10 words) and must not assert a specific location that wasn't present in the visible inputs.",
+            "why_local_transition": "This small behavioral change corrects the previous excessive assertiveness (which claimed a birthplace) and focuses the second-hop retrieval on finding an authoritative place-of-birth source. It preserves existing concise-query behavior while preventing mistaken location assertions that would misdirect retrieval."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "First-hop evidence: Red Curtain Trilogy — \"title given to the first three films directed by Baz Luhrmann\"; Baz Luhrmann — \"born 17 September 1962\".  \nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \nRetrieval direction: 1. Fetch the page titled \"Baz Luhrmann\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \"Baz Luhrmann birthplace site:wikipedia.org\" or fetch authoritative biographies to confirm the town.",
+        "current_output": {
+          "query": "Baz Luhrmann birthplace site:en.wikipedia.org"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 states a missing birthplace must be verified (mentions 'Bridge needed' or 'place of birth'/'birthplace').\",\n      \"preserve_rule\": \"Keep the agent's interface and single-line query output. Continue to use the person's name and aim to fetch an authoritative biography page (infobox / Early life).\",\n      \"change_rule\": \"Instead of issuing a broad site-only filter, produce one compact query that pairs the subject's full name with an explicit birthplace keyword and the word 'Wikipedia' to target the biography page. Form: '<Person Name> birthplace Wikipedia' (e.g., 'Baz Luhrmann birthplace Wikipedia'). Output only that query string.\",\n      \"drop_or_avoid_rule\": \"Do not use only 'site:...' restrictions without a birthplace keyword; avoid queries likely to match soundtrack, album, or unrelated pages (e.g., queries lacking 'born'/'birthplace' or 'Wikipedia'). Do not emit extra explanatory text.\",\n      \"output_contract\": \"Return exactly one concise retrieval query (single line, no commentary) focused on finding the subject's place of birth; the query must name the person and include a birthplace cue (examples may be used for formatting guidance but no additional text).\",\n      \"why_local_transition\": \"The prior query used a site restriction but lacked a birthplace cue, returning many unrelated pages. Adding an explicit 'birthplace'/'born' cue and 'Wikipedia' steers retrieval to the subject's biography (infobox / Early life) with a minimal, local prompt change.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 identifies a missing place-of-birth bridge (mentions 'town' or 'place of birth') OR when the current/output query asserts a birthplace (contains the verb 'born' followed by a place name).\",\n      \"preserve_rule\": \"Keep the agent's role and interface: produce exactly one compact second-hop retrieval query (single-line string returned in the 'query' field), continue to use the fields `question` and `summary_1` as the query source, and preserve concision and preference for authoritative sources.\",\n      \"change_rule\": \"Instead of asserting a specific town, generate a concise, neutral search query that (a) includes the director's full name, (b) uses neutral terms such as 'birthplace' or 'place of birth' (not 'born <place>'), and (c) adds a short site restriction or source hint to target authoritative biographies (for example, wikipedia or recognized biography sites). Keep the query single-line and brief (suitable for a web search).\",\n      \"drop_or_avoid_rule\": \"Do not include or assert a specific town name that does not already appear in the visible inputs; do not phrase the query as a declarative claim (avoid 'born <town>'); do not output explanatory text or punctuation-heavy questions—only the compact search string; avoid long multi-clause retrieval instructions.\",\n      \"output_contract\": \"Return only the field `query` populated with a single-line search string. That string must contain the director's name and one of the neutral phrases ('birthplace' or 'place of birth') and may optionally include a short site/source restriction. The string should be concise (roughly ≤ 10 words) and must not assert a specific location that wasn't present in the visible inputs.\",\n      \"why_local_transition\": \"This small behavioral change corrects the previous excessive assertiveness (which claimed a birthplace) and focuses the second-hop retrieval on finding an authoritative place-of-birth source. It preserves existing concise-query behavior while preventing mistaken location assertions that would misdirect retrieval.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"First-hop evidence: Red Curtain Trilogy — \\\"title given to the first three films directed by Baz Luhrmann\\\"; Baz Luhrmann — \\\"born 17 September 1962\\\".  \\nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \\nRetrieval direction: 1. Fetch the page titled \\\"Baz Luhrmann\\\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \\\"Baz Luhrmann birthplace site:wikipedia.org\\\" or fetch authoritative biographies to confirm the town.\",\n  \"current_output\": {\n    \"query\": \"Baz Luhrmann birthplace site:en.wikipedia.org\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Baz Luhrmann birthplace Wikipedia\"},\n  \"rationale\": \"Delta 0 enforced the '<Name> birthplace Wikipedia' format; Delta 1 preserved neutral 'birthplace' phrasing and avoided asserting a specific town.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

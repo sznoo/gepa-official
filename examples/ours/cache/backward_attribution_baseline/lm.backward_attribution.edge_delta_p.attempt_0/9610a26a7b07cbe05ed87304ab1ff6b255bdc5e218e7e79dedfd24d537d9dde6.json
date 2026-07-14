@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "9610a26a7b07cbe05ed87304ab1ff6b255bdc5e218e7e79dedfd24d537d9dde6",
+  "created_at": "2026-07-13T16:59:42.067832+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "summary_2": "Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "current_output": "Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "David B. Moody",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"summary_2\": \"Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"current_output\": \"Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"David B. Moody\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question requests which of two named people can fill a larger variety of roles (or similar comparative choice) and the provided summaries clearly indicate one person has a broader set of roles.\",\n    \"preserve_rule\": \"Keep the current decision logic: determine which named person the summaries support as having the broader variety of roles, and base the choice only on the visible summaries and question (do not invent or fetch new facts).\",\n    \"change_rule\": \"Do not produce a descriptive sentence or justification. Instead, output exactly one minimal name string — the single person's name (using the form that appears in the provided summaries) who is supported as filling the larger variety of roles.\",\n    \"drop_or_avoid_rule\": \"Avoid any explanatory text, comparative clauses, punctuation beyond the bare name, added titles or initials not present in the summaries, or any content that expands beyond the single name. Do not reference evaluation labels, hidden answers, or the target state.\",\n    \"output_contract\": \"Place only the minimal name (exactly as it appears in the summaries, e.g. 'Dave Moody' or 'Ransom Riggs') inside the [[ ## answer ## ]] block with no surrounding words, punctuation, or justification. The chosen name must be directly supported by the visible summaries.\",\n    \"why_local_transition\": \"This edge changes only the final-output formatting: it preserves the same evidence-based choice but enforces the base prompt's minimal-answer requirement by removing the earlier sentence-level justification and returning only the supported name.\"\n  },\n  \"rationale\": \"The current behavior returns a sentence with justification; the final agent must instead return the minimal answer string. The smallest coherent edit is to constrain the final-format and forbid added explanation while preserving the existing selection process that uses the summaries. This ensures the agent still picks the person indicated by the summaries but adheres to the required minimal-answer output contract without introducing new facts or altering upstream reasoning.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

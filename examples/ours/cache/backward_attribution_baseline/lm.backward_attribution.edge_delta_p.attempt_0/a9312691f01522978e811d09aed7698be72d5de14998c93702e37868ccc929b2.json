@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a9312691f01522978e811d09aed7698be72d5de14998c93702e37868ccc929b2",
+  "created_at": "2026-07-13T17:23:24.000194+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+        "summary_1": "Brent Musburger",
+        "summary_2": "Brent Musburger",
+        "current_output": "Brent Musburger"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Brent Musburger",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Brent Woody Musburger",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\",\n  \"summary_1\": \"Brent Musburger\",\n  \"summary_2\": \"Brent Musburger\",\n  \"current_output\": \"Brent Musburger\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Brent Musburger\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Brent Woody Musburger\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question requests the name of a person and summary_1 and summary_2 both contain (or agree on) a person-name, check whether any visible input field (question, summary_1, summary_2, or other provided context) contains a longer/more specific variant of that name (additional tokens such as a middle name, suffix, or honorific).\",\n    \"preserve_rule\": \"Keep the agent's original final-answer interface and output contract unchanged: produce only the minimal answer string inside the [[ ## answer ## ]] block and rely on the provided summaries as evidence.\",\n    \"change_rule\": \"When the trigger fires and a longer/more specific name form is present in any visible input, replace the shorter name with the longest specific name-string variant found among visible inputs. If multiple longer variants exist, prefer the one appearing first in this order: summary_1, summary_2, then question. If no longer variant is present, leave the original short name unchanged.\",\n    \"drop_or_avoid_rule\": \"Do not invent or add name tokens that do not appear in any visible input. Do not consult external sources or introduce unverified titles/middle names. Avoid changing any other content or the minimal-answer format.\",\n    \"output_contract\": \"Return exactly the minimal person-name string (and only that string) in the [[ ## answer ## ]] block, using the longest-specific variant found in the visible inputs when the trigger applies; otherwise return the name supported by the summaries.\",\n    \"why_local_transition\": \"This edge nudges the agent to prefer a more specific/full name form when such a form already exists somewhere in the visible context, improving completeness of the returned name without inventing unsupported information.\"\n  },\n  \"rationale\": \"The source output is a shorter name form. The target expects a more specific/full form. The smallest safe behavioral change is to prefer the longest name-string variant already present in the visible inputs whenever summaries agree on the person. This preserves the agent's answer format and avoids fabricating unseen tokens, while increasing the chance the agent outputs a fuller name (e.g., including a middle name or suffix) when that fuller form is present in the provided context.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 106,
+    "row_index": 106,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

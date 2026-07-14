@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "b793872f311511a44df75d309d90b41fffc43372711915aa6452a0994d9bdc4d",
+  "created_at": "2026-07-13T17:16:33.893661+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?",
+        "summary_1": "The Indian National Army was formed in 1942.",
+        "summary_2": "1942 (formally proclaimed in April 1942).",
+        "current_output": "1942 (formally proclaimed in April 1942)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "1942 (formally proclaimed in April 1942)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "1942",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?\",\n  \"summary_1\": \"The Indian National Army was formed in 1942.\",\n  \"summary_2\": \"1942 (formally proclaimed in April 1942).\",\n  \"current_output\": \"1942 (formally proclaimed in April 1942)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"1942 (formally proclaimed in April 1942)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"1942\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the provided summaries both contain the same short, self-contained factual token (for example a single year or a single short phrase) that clearly answers the question, and the current output includes extra parenthetical text or explanatory phrasing beyond that token.\",\n    \"preserve_rule\": \"Keep using the visible summaries as the evidence source and continue producing the final [[ ## answer ## ]] field exactly as the base prompt requires; do not introduce new facts or change the interface.\",\n    \"change_rule\": \"When the trigger condition holds, shorten the content placed inside [[ ## answer ## ]] to exactly that single concise token present in the summaries (e.g., the single year or short phrase). Remove any parenthetical remarks, qualifiers, or extra explanatory clauses; output only the concise token itself.\",\n    \"drop_or_avoid_rule\": \"Avoid adding parentheticals, explanatory clauses, extra punctuation, or new information not present in the visible summaries. If the summaries do not agree on a single concise token, or the answer is not a single short token, do not apply this shortening and fall back to the base prompt behavior.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal concise answer token that is directly supported by the visible summaries (no surrounding explanation). If that token is a numeric year, output only the year; if no single concise token is supported, do not apply this rule.\",\n    \"why_local_transition\": \"The current output contains the correct concise token but adds parenthetical explanatory text. This small behavioral edit enforces producing the minimal final-answer string already supported by the summaries without changing evidence use or broader behavior.\"\n  },\n  \"rationale\": \"The existing behavior is correct in content but too verbose for the final-answer contract. The smallest safe change is a conditional rule that strips parentheticals/qualifiers when both summaries clearly agree on a single short answer token. This preserves evidence usage, avoids introducing new facts, and ensures the final [[ ## answer ## ]] block contains only the minimal supported string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 47,
+    "row_index": 47,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

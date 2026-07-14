@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "808b93a98f11ddf870ff2f01fb7f4da33fffcf8e4b21ec812ca1f21d40c7deae",
+  "created_at": "2026-07-13T17:16:11.302052+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "base_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When producing the required `summary` and the provided `context` asserts a factual claim that is also supported by one or more retrieved `passages`.",
+            "preserve_rule": "Keep the current behaviour of generating the `summary` field from only the given `question`, `context`, and `passages`. Preserve concise, factual phrasing and any facts already present in `context`.",
+            "change_rule": "If a retrieved passage corroborates the claim in `context`, explicitly state in the summary which retrieved passage(s) support that claim by naming the passage title, and include a single brief confirming clause or short quoted fragment taken directly from that passage (no long verbatim copying). Do not add any new facts beyond what the inputs provide.",
+            "drop_or_avoid_rule": "Do not attempt to produce the final answer outside of the `summary` field, do not fabricate or expand facts, do not include long multi-sentence quotations from passages, and do not introduce information that is not present in `question`, `context`, or `passages`.",
+            "output_contract": "Return the field `summary` (string). The summary must (a) restate the claim found in `context`, (b) identify at least one supporting passage by its title, and (c) include at most one short quoted fragment or brief clause from that supporting passage as evidence. Keep the summary concise (one or two sentences).",
+            "why_local_transition": "This small edit teaches the agent to integrate second-hop (retrieved passage) evidence with the first-hop context by explicitly citing which retrieved document corroborates the context claim and preserving the minimal supporting fragment needed for downstream answerers."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "context": "The Royal Academy of Dramatic Art is based in London.",
+        "passages": [
+          "Tomahawk Theatre Company | Tomahawk is a theatre company based in Oxford, South East England.  Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts.",
+          "Royal Academy of Dramatic Art | The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.  It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree.",
+          "Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).",
+          "Shereen Martineau | Martineau trained at the Royal Academy of Dramatic Art (RADA).",
+          "Stephan Chase | Stephan Chase is a British actor of Cornish and Scots descent.  He was educated in Ireland and England.  Before joining the Royal Shakespeare Company, he won a scholarship and trained at the Royal Academy of Dramatic Art (RADA) later becoming an Associate of RADA.",
+          "List of RADA alumni | This is a list of alumni of the Royal Academy of Dramatic Art in London, England.",
+          "Mark Hadfield | Before starting his professional career, Hadfield trained at the Royal Academy of Dramatic Art (RADA)."
+        ],
+        "current_output": "London"
+      },
+      "output_requirement": "Return one summary_2 string integrating only the visible summary_1 and hop2 passages."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nBase prompt p:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When producing the required `summary` and the provided `context` asserts a factual claim that is also supported by one or more retrieved `passages`.\",\n      \"preserve_rule\": \"Keep the current behaviour of generating the `summary` field from only the given `question`, `context`, and `passages`. Preserve concise, factual phrasing and any facts already present in `context`.\",\n      \"change_rule\": \"If a retrieved passage corroborates the claim in `context`, explicitly state in the summary which retrieved passage(s) support that claim by naming the passage title, and include a single brief confirming clause or short quoted fragment taken directly from that passage (no long verbatim copying). Do not add any new facts beyond what the inputs provide.\",\n      \"drop_or_avoid_rule\": \"Do not attempt to produce the final answer outside of the `summary` field, do not fabricate or expand facts, do not include long multi-sentence quotations from passages, and do not introduce information that is not present in `question`, `context`, or `passages`.\",\n      \"output_contract\": \"Return the field `summary` (string). The summary must (a) restate the claim found in `context`, (b) identify at least one supporting passage by its title, and (c) include at most one short quoted fragment or brief clause from that supporting passage as evidence. Keep the summary concise (one or two sentences).\",\n      \"why_local_transition\": \"This small edit teaches the agent to integrate second-hop (retrieved passage) evidence with the first-hop context by explicitly citing which retrieved document corroborates the context claim and preserving the minimal supporting fragment needed for downstream answerers.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"context\": \"The Royal Academy of Dramatic Art is based in London.\",\n  \"passages\": [\n    \"Tomahawk Theatre Company | Tomahawk is a theatre company based in Oxford, South East England.  Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts.\",\n    \"Royal Academy of Dramatic Art | The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.  It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree.\",\n    \"Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).\",\n    \"Shereen Martineau | Martineau trained at the Royal Academy of Dramatic Art (RADA).\",\n    \"Stephan Chase | Stephan Chase is a British actor of Cornish and Scots descent.  He was educated in Ireland and England.  Before joining the Royal Shakespeare Company, he won a scholarship and trained at the Royal Academy of Dramatic Art (RADA) later becoming an Associate of RADA.\",\n    \"List of RADA alumni | This is a list of alumni of the Royal Academy of Dramatic Art in London, England.\",\n    \"Mark Hadfield | Before starting his professional career, Hadfield trained at the Royal Academy of Dramatic Art (RADA).\"\n  ],\n  \"current_output\": \"London\"\n}\n\nRequired parsed output:\nReturn one summary_2 string integrating only the visible summary_1 and hop2 passages.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"The Royal Academy of Dramatic Art is based in London; this is supported by the passage \\\"Royal Academy of Dramatic Art\\\", which states it \\\"is a drama school in London, England.\\\"\",\n  \"rationale\": \"Restated the context claim, cited the corroborating passage by title and included a short quoted fragment from that passage, without adding new facts.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 40,
+    "row_index": 40,
+    "bisection_round": 0,
+    "agent": "summary2",
+    "n_edges": 1
+  }
+}

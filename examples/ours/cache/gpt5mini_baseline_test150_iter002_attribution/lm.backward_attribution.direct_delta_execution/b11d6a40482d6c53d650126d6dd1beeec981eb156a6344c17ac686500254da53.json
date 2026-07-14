@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "b11d6a40482d6c53d650126d6dd1beeec981eb156a6344c17ac686500254da53",
+  "created_at": "2026-07-13T20:12:38.440154+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 names a specific page title to verify (e.g., '10 Downing Street') and the agent role is to produce a single second-hop retrieval query to confirm a concise common-name claim.",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as input; preserve inclusion of the named page title tokens from summary_1 as the focal retrieval target.",
+            "change_rule": "Instead of emitting multiple site-filtered or separate-line queries, produce exactly one compact, single-line natural-language query. Begin with the canonical page title token(s) taken from summary_1, then append a short clarifying phrase that asks for the specific fact to verify (for example, a brief phrase asking what the location is commonly called in the United Kingdom). Do not include retrieval instructions, multiple queries, 'site:' filters, or additional commentary.",
+            "drop_or_avoid_rule": "Do not output multiple queries or separate lines (no parallel '10 Downing Street' and 'Number 10' queries). Avoid adding site: filters, search operators, extra context, or the answer itself. Do not include meta-comments or instructions to the retriever.",
+            "output_contract": "Return a single-line string as the `query`. The line must start with the page title tokens from summary_1 and end with a concise natural-language verification phrase about the common UK name. No other text, no explanation, and no answer.",
+            "why_local_transition": "Combining the named page title with a short verification phrase focuses the retriever on the canonical page and the specific claim (common UK name), preventing noisy results caused by multiple separate or site-filtered queries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What do people in the United Kingdom commonly call the location of the room where the entire play \"On the Rocks\" is set?",
+        "summary_1": "First-hop evidence: On the Rocks (play) — \"entire play is set in the Cabinet Room of 10 Downing Street.\"  \nBridge needed: the common UK name for \"10 Downing Street\" (candidate: \"Number 10\" / \"No. 10\") must be verified.  \nRetrieval direction: 1. Fetch the page titled \"10 Downing Street\" and inspect the lead/infobox for common/alternative names (e.g., \"Number 10\", \"No. 10\"). 2. If needed, fetch the redirect/page titled \"Number 10\" or run the query: \"Number 10 site:wikipedia.org\" to confirm common UK usage.",
+        "current_output": {
+          "query": "10 Downing Street site:wikipedia.org\nNumber 10 site:wikipedia.org"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 names a specific page title to verify (e.g., '10 Downing Street') and the agent role is to produce a single second-hop retrieval query to confirm a concise common-name claim.\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as input; preserve inclusion of the named page title tokens from summary_1 as the focal retrieval target.\",\n      \"change_rule\": \"Instead of emitting multiple site-filtered or separate-line queries, produce exactly one compact, single-line natural-language query. Begin with the canonical page title token(s) taken from summary_1, then append a short clarifying phrase that asks for the specific fact to verify (for example, a brief phrase asking what the location is commonly called in the United Kingdom). Do not include retrieval instructions, multiple queries, 'site:' filters, or additional commentary.\",\n      \"drop_or_avoid_rule\": \"Do not output multiple queries or separate lines (no parallel '10 Downing Street' and 'Number 10' queries). Avoid adding site: filters, search operators, extra context, or the answer itself. Do not include meta-comments or instructions to the retriever.\",\n      \"output_contract\": \"Return a single-line string as the `query`. The line must start with the page title tokens from summary_1 and end with a concise natural-language verification phrase about the common UK name. No other text, no explanation, and no answer.\",\n      \"why_local_transition\": \"Combining the named page title with a short verification phrase focuses the retriever on the canonical page and the specific claim (common UK name), preventing noisy results caused by multiple separate or site-filtered queries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What do people in the United Kingdom commonly call the location of the room where the entire play \\\"On the Rocks\\\" is set?\",\n  \"summary_1\": \"First-hop evidence: On the Rocks (play) — \\\"entire play is set in the Cabinet Room of 10 Downing Street.\\\"  \\nBridge needed: the common UK name for \\\"10 Downing Street\\\" (candidate: \\\"Number 10\\\" / \\\"No. 10\\\") must be verified.  \\nRetrieval direction: 1. Fetch the page titled \\\"10 Downing Street\\\" and inspect the lead/infobox for common/alternative names (e.g., \\\"Number 10\\\", \\\"No. 10\\\"). 2. If needed, fetch the redirect/page titled \\\"Number 10\\\" or run the query: \\\"Number 10 site:wikipedia.org\\\" to confirm common UK usage.\",\n  \"current_output\": {\n    \"query\": \"10 Downing Street site:wikipedia.org\\nNumber 10 site:wikipedia.org\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"10 Downing Street what is it commonly called in the United Kingdom?\"\n  },\n  \"rationale\": \"Used the page title tokens from summary_1 as the query start and appended a concise phrase asking for the common UK name; produced one single-line natural-language query with no site filters or extra commentary.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 141,
+    "row_index": 141,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

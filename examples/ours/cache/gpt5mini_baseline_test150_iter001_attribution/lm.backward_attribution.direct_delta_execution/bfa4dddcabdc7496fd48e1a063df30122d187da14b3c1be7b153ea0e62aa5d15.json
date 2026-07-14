@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "bfa4dddcabdc7496fd48e1a063df30122d187da14b3c1be7b153ea0e62aa5d15",
+  "created_at": "2026-07-13T18:45:37.770550+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks which university (contains tokens like \"which University\" or \"who taught at\") AND the current query includes the university named in `summary_1` (exact match), apply this edit.",
+            "preserve_rule": "Keep the existing compact-search style (e.g. use site:wikipedia.org) and retain the specialism tokens already present such as the phrase \"19th-century academic art\" and the phrase \"special interests\" when they appear.",
+            "change_rule": "Remove the explicit university name from the query (the string in `summary_1`). Instead add a short affiliation-seeking phrase such as \"taught at\" or \"who taught at\" and an occupation token like \"academic\" or \"professor\" so the query targets pages that state an academic's institutional affiliation. Produce one single-line compact query (example form):\nsite:wikipedia.org \"special interests\" \"19th-century academic art\" \"taught at\"",
+            "drop_or_avoid_rule": "Do not insert person names or other sample-specific anchors that are not present in the visible agent inputs. Do not reproduce the full question verbatim or long literal spans not already visible. Avoid anchoring the query to the known university from `summary_1` (do not include that university string).",
+            "output_contract": "Return exactly one single-line retrieval query string. It must be concise, use site:wikipedia.org, include a phrase referring to the specialism (e.g. \"19th-century academic art\" and/or \"special interests\"), and include an affiliation-seeking phrase such as \"taught at\" or \"who taught at\" so results emphasize an academic's university.",
+            "why_local_transition": "The source query anchors on the known university and may retrieve pages about the university instead of the academic who had that specialism. This small edit preserves the specialism signal but changes the anchor to an affiliation-seeking phrasing, so the second-hop is more likely to retrieve the individual's page (which names where they taught) without altering the agent's interface or broader behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "Cornell University",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks which university (contains tokens like \\\"which University\\\" or \\\"who taught at\\\") AND the current query includes the university named in `summary_1` (exact match), apply this edit.\",\n      \"preserve_rule\": \"Keep the existing compact-search style (e.g. use site:wikipedia.org) and retain the specialism tokens already present such as the phrase \\\"19th-century academic art\\\" and the phrase \\\"special interests\\\" when they appear.\",\n      \"change_rule\": \"Remove the explicit university name from the query (the string in `summary_1`). Instead add a short affiliation-seeking phrase such as \\\"taught at\\\" or \\\"who taught at\\\" and an occupation token like \\\"academic\\\" or \\\"professor\\\" so the query targets pages that state an academic's institutional affiliation. Produce one single-line compact query (example form):\\nsite:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"taught at\\\"\",\n      \"drop_or_avoid_rule\": \"Do not insert person names or other sample-specific anchors that are not present in the visible agent inputs. Do not reproduce the full question verbatim or long literal spans not already visible. Avoid anchoring the query to the known university from `summary_1` (do not include that university string).\",\n      \"output_contract\": \"Return exactly one single-line retrieval query string. It must be concise, use site:wikipedia.org, include a phrase referring to the specialism (e.g. \\\"19th-century academic art\\\" and/or \\\"special interests\\\"), and include an affiliation-seeking phrase such as \\\"taught at\\\" or \\\"who taught at\\\" so results emphasize an academic's university.\",\n      \"why_local_transition\": \"The source query anchors on the known university and may retrieve pages about the university instead of the academic who had that specialism. This small edit preserves the specialism signal but changes the anchor to an affiliation-seeking phrasing, so the second-hop is more likely to retrieve the individual's page (which names where they taught) without altering the agent's interface or broader behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"Cornell University\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"taught at\\\" \\\"academic\\\"\"\n  },\n  \"rationale\": \"Detected question about which University and query contained the university from summary_1; removed the university name, kept specialism phrases, and added an affiliation-seeking phrase plus an occupation token as required.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

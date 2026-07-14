@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "4853c8dd374008701083d18897fc09aa184f67ed8d6e10fd92aff78496f538ab",
+  "created_at": "2026-07-13T17:14:29.058207+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "In which airport is the head office of the airline which joined with the government of Sierra Leone to form Leone Airways?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "In which airport is the head office of the airline which joined with the government of Sierra Leone to form Leone Airways?",
+        "summary_1": "Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).",
+        "summary_2": "Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).",
+        "current_output": "Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Murtala Muhammed International Airport",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"In which airport is the head office of the airline which joined with the government of Sierra Leone to form Leone Airways?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"In which airport is the head office of the airline which joined with the government of Sierra Leone to form Leone Airways?\",\n  \"summary_1\": \"Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).\",\n  \"summary_2\": \"Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).\",\n  \"current_output\": \"Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Murtala Muhammed International Airport (Ikeja, Lagos, Nigeria).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Murtala Muhammed International Airport\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the candidate answer inferred from the provided summaries contains parenthetical text (text in parentheses), a trailing location qualifier (e.g., comma + city/country), or terminal punctuation (period).\",\n    \"preserve_rule\": \"Retain the core airport name exactly as it appears in the summaries (preserve the words and capitalization of the proper name). Do not change how the airport is selected from the summaries.\",\n    \"change_rule\": \"Strip away any parenthetical content and any trailing location qualifiers or terminal punctuation. Output only the core airport name string (the proper name) with no surrounding parentheses, no comma-separated location text, and no final period.\",\n    \"drop_or_avoid_rule\": \"Do not include parentheticals, city/country qualifiers, explanatory phrases, commas with locations, or terminal punctuation in the final answer. Do not append any additional descriptive words beyond the airport's proper name.\",\n    \"output_contract\": \"Fill the [[ ## answer ## ]] block with only the minimal answer string consisting solely of the airport's name as present in the summaries (no parentheses, no extra location qualifiers, no trailing punctuation).\",\n    \"why_local_transition\": \"The current behavior already selects the correct airport from the summaries but emits extra parenthetical/location text and punctuation. This small rule removes only those extraneous decorations so the final output meets the minimal-answer requirement without altering evidence selection.\"\n  },\n  \"rationale\": \"A minimal prompt edit is needed to enforce the base prompt's minimal-answer contract: remove parenthetical and trailing location/punctuation while preserving the selected airport name. This change is narrowly scoped (it only strips decorative text) and thus preserves useful upstream behavior and evidence while producing the exact-format minimal answer required for this edge.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 33,
+    "row_index": 33,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

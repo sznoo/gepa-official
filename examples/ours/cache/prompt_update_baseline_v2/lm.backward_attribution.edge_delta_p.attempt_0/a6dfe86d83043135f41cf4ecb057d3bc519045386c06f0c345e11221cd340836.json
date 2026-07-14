@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a6dfe86d83043135f41cf4ecb057d3bc519045386c06f0c345e11221cd340836",
+  "created_at": "2026-07-13T17:41:24.826209+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?",
+        "summary_1": "Nickelodeon Sunday Movie Toons",
+        "summary_2": "Nickelodeon Sunday Movie Toons",
+        "current_output": "Nickelodeon Sunday Movie Toons"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Nickelodeon Sunday Movie Toons",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Nickelodeon Sunday Movie Toons is a series of made-for-TV movies",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?\",\n  \"summary_1\": \"Nickelodeon Sunday Movie Toons\",\n  \"summary_2\": \"Nickelodeon Sunday Movie Toons\",\n  \"current_output\": \"Nickelodeon Sunday Movie Toons\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Nickelodeon Sunday Movie Toons\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Nickelodeon Sunday Movie Toons is a series of made-for-TV movies\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 and summary_2 are present and (a) they are identical or (b) both clearly name the same short titled entity, and the agent's current output already equals that named entity.\",\n    \"preserve_rule\": \"Keep the current behavior that yields the named-entity answer string (the short title) as the sole content when supported by the summaries.\",\n    \"change_rule\": \"Do not append any explanatory phrase, copular clause, or descriptive sentence after the named-entity string. If tempted to add clarifying text (e.g., extra clauses beginning with 'is', 'was', 'which', 'that', or additional descriptors), suppress that addition and emit only the name.\",\n    \"drop_or_avoid_rule\": \"Avoid adding any suffixes, sentence fragments, or punctuation beyond the minimal name. Specifically, do not add predicate clauses, appositions, or evaluative text that turn the answer into a sentence or explanation.\",\n    \"output_contract\": \"Ensure the [[ ## answer ## ]] block contains only the minimal answer string exactly as supported by the visible summaries (no extra words, clauses, or punctuation).\",\n    \"why_local_transition\": \"This edge prevents a small harmful drift from a correct concise answer into a longer explanatory sentence. The minimal change enforces the existing concise-output behavior while leaving other behaviors unchanged.\"\n  },\n  \"rationale\": \"The source state already produces the correct concise title. The harmful transition is just an appended explanatory clause; the smallest reliable fix is to block such appendices in this situation. The trigger uses only visible summaries and the current output, so it applies only when the concise name is already supported. The rules preserve existing correct behavior and constrain only the addition of extra descriptive text, satisfying the requirement to express a minimal, local prompt edit without producing or copying target content.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 57,
+    "row_index": 57,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 70,
+    "matched_w_stable_id": "70",
+    "bisection_round": 0,
+    "material_fingerprint": "ba6afe59b1d22bf2f9e7006dcb1d9448ea1462d94dfac935fcbfe0a8c01f08d4",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

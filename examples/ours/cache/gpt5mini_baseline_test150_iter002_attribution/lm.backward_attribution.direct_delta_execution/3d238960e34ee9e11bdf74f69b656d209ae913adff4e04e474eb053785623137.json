@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "3d238960e34ee9e11bdf74f69b656d209ae913adff4e04e474eb053785623137",
+  "created_at": "2026-07-13T20:06:48.228136+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 explicitly requests identifying a band that \"dissolved in 2011\" and whose lead singer was \"born in 1960\" (i.e., summary_1 contains both tokens or a 'Bridge needed' statement with those constraints).",
+            "preserve_rule": "Keep the current retrieval intent and constraints from summary_1: the goal is to identify the band (or its lead singer) matching the dissolution year and birth-year constraint, then fetch the band's debut-album personnel to find the bassist. Preserve the preference for concise, search-engine-friendly queries and use of Wikipedia as the primary source.",
+            "change_rule": "Instead of emitting a multi-step procedural plan, produce one single-line, search-optimized query that combines the needed constraints and targets. Build the query by conjoining keywords for the dissolution year, the lead-singer birth year, the debut album, and personnel/bass, and append site:wikipedia.org. Do not enumerate steps or instruct the retriever how to iterate.",
+            "drop_or_avoid_rule": "Do not output numbered steps, multi-step instructions, or internal retrieval procedures. Do not introduce specific candidate names or answers that do not already appear in the visible inputs. Do not include explanations, diagnostics, or any content other than the single compact query string.",
+            "output_contract": "Return exactly one single-line query string (no surrounding commentary). The string must be concise and search-friendly, combining keywords such as: dissolved 2011, lead singer born 1960, debut album, personnel, bass, and include site:wikipedia.org. Example form: dissolved 2011 \"lead singer\" born 1960 \"debut album\" personnel bass site:wikipedia.org",
+            "why_local_transition": "The minimal necessary change is to convert a procedural multi-step retrieval plan into a single compact query that the 'query' agent is supposed to produce. This keeps the original retrieval targets but makes the output directly usable by the IR system for the second-hop fetch."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "summary_1": "First-hop evidence: Passage 7 — \"Richard 'Rick' Savage (born 2 December 1960)\" and \"is the bass guitarist\"; Passage 6 — \"Blackpool Lights ... dissolved in 2008\" (no 2011 dissolution in provided passages).\n\nBridge needed: The identity of the band that dissolved in 2011 and whose lead singer was born in 1960 (the band name or the lead singer's name to verify).\n\nRetrieval direction:\n1. Fetch \"List of bands disestablished in 2011\" (Wikipedia) and scan entries for candidate bands disbanded in 2011.\n2. For each candidate band, open the band's Wikipedia page and check the lead singer's name in the infobox/Members section; open that lead singer's biography page to confirm a birth year of 1960.\n3. Once the band is identified, fetch that band's debut album page and inspect the \"Personnel\"/\"Credits\" section to find who played bass on the debut album.",
+        "current_output": {
+          "query": "1) \"List of bands disestablished in 2011\" site:wikipedia.org\n2) For each band from that list: \"<Band Name> Wikipedia\" (to find lead singer in infobox)\n3) For lead singer candidates: \"<Lead Singer Name> born 1960 site:wikipedia.org\" to confirm birth year\n4) After confirming the band whose lead singer was born in 1960 and disbanded in 2011: \"<Band Name> debut album personnel\" OR \"<Debut Album Title> personnel\" site:wikipedia.org to find who played bass on the debut album"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 explicitly requests identifying a band that \\\"dissolved in 2011\\\" and whose lead singer was \\\"born in 1960\\\" (i.e., summary_1 contains both tokens or a 'Bridge needed' statement with those constraints).\",\n      \"preserve_rule\": \"Keep the current retrieval intent and constraints from summary_1: the goal is to identify the band (or its lead singer) matching the dissolution year and birth-year constraint, then fetch the band's debut-album personnel to find the bassist. Preserve the preference for concise, search-engine-friendly queries and use of Wikipedia as the primary source.\",\n      \"change_rule\": \"Instead of emitting a multi-step procedural plan, produce one single-line, search-optimized query that combines the needed constraints and targets. Build the query by conjoining keywords for the dissolution year, the lead-singer birth year, the debut album, and personnel/bass, and append site:wikipedia.org. Do not enumerate steps or instruct the retriever how to iterate.\",\n      \"drop_or_avoid_rule\": \"Do not output numbered steps, multi-step instructions, or internal retrieval procedures. Do not introduce specific candidate names or answers that do not already appear in the visible inputs. Do not include explanations, diagnostics, or any content other than the single compact query string.\",\n      \"output_contract\": \"Return exactly one single-line query string (no surrounding commentary). The string must be concise and search-friendly, combining keywords such as: dissolved 2011, lead singer born 1960, debut album, personnel, bass, and include site:wikipedia.org. Example form: dissolved 2011 \\\"lead singer\\\" born 1960 \\\"debut album\\\" personnel bass site:wikipedia.org\",\n      \"why_local_transition\": \"The minimal necessary change is to convert a procedural multi-step retrieval plan into a single compact query that the 'query' agent is supposed to produce. This keeps the original retrieval targets but makes the output directly usable by the IR system for the second-hop fetch.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"summary_1\": \"First-hop evidence: Passage 7 — \\\"Richard 'Rick' Savage (born 2 December 1960)\\\" and \\\"is the bass guitarist\\\"; Passage 6 — \\\"Blackpool Lights ... dissolved in 2008\\\" (no 2011 dissolution in provided passages).\\n\\nBridge needed: The identity of the band that dissolved in 2011 and whose lead singer was born in 1960 (the band name or the lead singer's name to verify).\\n\\nRetrieval direction:\\n1. Fetch \\\"List of bands disestablished in 2011\\\" (Wikipedia) and scan entries for candidate bands disbanded in 2011.\\n2. For each candidate band, open the band's Wikipedia page and check the lead singer's name in the infobox/Members section; open that lead singer's biography page to confirm a birth year of 1960.\\n3. Once the band is identified, fetch that band's debut album page and inspect the \\\"Personnel\\\"/\\\"Credits\\\" section to find who played bass on the debut album.\",\n  \"current_output\": {\n    \"query\": \"1) \\\"List of bands disestablished in 2011\\\" site:wikipedia.org\\n2) For each band from that list: \\\"<Band Name> Wikipedia\\\" (to find lead singer in infobox)\\n3) For lead singer candidates: \\\"<Lead Singer Name> born 1960 site:wikipedia.org\\\" to confirm birth year\\n4) After confirming the band whose lead singer was born in 1960 and disbanded in 2011: \\\"<Band Name> debut album personnel\\\" OR \\\"<Debut Album Title> personnel\\\" site:wikipedia.org to find who played bass on the debut album\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"dissolved 2011 \\\"lead singer\\\" born 1960 \\\"debut album\\\" personnel bass site:wikipedia.org\"\n  },\n  \"rationale\": \"Followed the ordered delta: converted the multi-step retrieval plan into one concise, search-optimized single-line Wikipedia query combining 'dissolved 2011', lead-singer birth year 1960, 'debut album', personnel, and bass.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 19,
+    "row_index": 19,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

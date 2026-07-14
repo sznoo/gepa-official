@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "73ffaea538c9e7534a7a75fe737366beb0cc4179be9717c1a8b3c4becc48e6aa",
+  "created_at": "2026-07-13T20:07:24.606947+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 or question refers to 'Orientalism' (or 'Orientalist painting') and the agent_role is to produce a second-hop retrieval query for the academic who listed this among their 'special interests'.",
+            "preserve_rule": "Keep the existing interface: produce one compact single-line search query (no explanation). Continue restricting to site:wikipedia.org and aim for biography pages that record interests and employers.",
+            "change_rule": "Do not use the exact phrase \"special interests\" by itself. Instead, synthesize a query that: (a) pairs 'Orientalism' or 'Orientalist painting' with biography-style phrases such as 'special interest', 'special interests including', 'interests include', 'interested in', or 'with interests including'; (b) adds at least one academic-position term (e.g., 'taught at' OR 'Professor' OR 'Regius' OR 'lecturer') to surface employer/university info; and (c) applies a negative clause excluding 'Site of Special Scientific Interest' / 'Sites of Special Scientific Interest' to avoid SSSI pages. Format the result as a single compact search string using quoted phrases and OR/AND operators.",
+            "drop_or_avoid_rule": "Avoid the bare phrase \"special interests\" and any query formulations that return 'List of Sites of Special Scientific Interest' pages. Do not emit names, universities, answers, or additional commentary—only the search query string.",
+            "output_contract": "Produce exactly one single-line search query (a string) suitable for a web search that (1) targets Wikipedia biographies mentioning Orientalism as an interest, (2) biases for pages that state where the person 'taught at' or held a professorship, and (3) excludes SSSI pages. No extra text.",
+            "why_local_transition": "The prior query's use of the literal phrase 'special interests' matched many 'Site(s) of Special Scientific Interest' pages, producing noise. A minimal behavioral change—use biography-specific phrasing, add academic-position keywords, and exclude SSSI—preserves the original goal while steering retrieval toward a person's biography that will state the university."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "First-hop evidence: Passage \"Orientalism\" — \"Orientalist painting ... was one of the many specialisms of 19th-century academic art.\"  \nBridge needed: the name of the academic who listed Orientalist painting/Orientalism among their special interests (the person whose employer/“taught at” must be verified).  \nRetrieval direction: 1. Search for biographies with the phrase \"special interests\" plus \"Orientalism\" or \"Orientalist painting\" (e.g., site:wikipedia.org \"special interests\" \"Orientalism\"). 2. Open the candidate person's page and inspect the infobox/lead and 'Career'/'Academic positions' sections for \"taught at\"/employer to record the university.",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"Orientalism\" OR site:wikipedia.org \"special interests\" \"Orientalist painting\" OR \"\\\"special interests\\\" \\\"Orientalism\\\" \\\"taught at\\\"\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 or question refers to 'Orientalism' (or 'Orientalist painting') and the agent_role is to produce a second-hop retrieval query for the academic who listed this among their 'special interests'.\",\n      \"preserve_rule\": \"Keep the existing interface: produce one compact single-line search query (no explanation). Continue restricting to site:wikipedia.org and aim for biography pages that record interests and employers.\",\n      \"change_rule\": \"Do not use the exact phrase \\\"special interests\\\" by itself. Instead, synthesize a query that: (a) pairs 'Orientalism' or 'Orientalist painting' with biography-style phrases such as 'special interest', 'special interests including', 'interests include', 'interested in', or 'with interests including'; (b) adds at least one academic-position term (e.g., 'taught at' OR 'Professor' OR 'Regius' OR 'lecturer') to surface employer/university info; and (c) applies a negative clause excluding 'Site of Special Scientific Interest' / 'Sites of Special Scientific Interest' to avoid SSSI pages. Format the result as a single compact search string using quoted phrases and OR/AND operators.\",\n      \"drop_or_avoid_rule\": \"Avoid the bare phrase \\\"special interests\\\" and any query formulations that return 'List of Sites of Special Scientific Interest' pages. Do not emit names, universities, answers, or additional commentary—only the search query string.\",\n      \"output_contract\": \"Produce exactly one single-line search query (a string) suitable for a web search that (1) targets Wikipedia biographies mentioning Orientalism as an interest, (2) biases for pages that state where the person 'taught at' or held a professorship, and (3) excludes SSSI pages. No extra text.\",\n      \"why_local_transition\": \"The prior query's use of the literal phrase 'special interests' matched many 'Site(s) of Special Scientific Interest' pages, producing noise. A minimal behavioral change—use biography-specific phrasing, add academic-position keywords, and exclude SSSI—preserves the original goal while steering retrieval toward a person's biography that will state the university.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"First-hop evidence: Passage \\\"Orientalism\\\" — \\\"Orientalist painting ... was one of the many specialisms of 19th-century academic art.\\\"  \\nBridge needed: the name of the academic who listed Orientalist painting/Orientalism among their special interests (the person whose employer/“taught at” must be verified).  \\nRetrieval direction: 1. Search for biographies with the phrase \\\"special interests\\\" plus \\\"Orientalism\\\" or \\\"Orientalist painting\\\" (e.g., site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\"). 2. Open the candidate person's page and inspect the infobox/lead and 'Career'/'Academic positions' sections for \\\"taught at\\\"/employer to record the university.\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\" OR site:wikipedia.org \\\"special interests\\\" \\\"Orientalist painting\\\" OR \\\"\\\\\\\"special interests\\\\\\\" \\\\\\\"Orientalism\\\\\\\" \\\\\\\"taught at\\\\\\\"\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"site:wikipedia.org (\\\"Orientalism\\\" OR \\\"Orientalist painting\\\") AND (\\\"special interest\\\" OR \\\"special interests including\\\" OR \\\"interests include\\\" OR \\\"interested in\\\" OR \\\"with interests including\\\") AND (\\\"taught at\\\" OR \\\"Professor\\\" OR \\\"Regius\\\" OR \\\"lecturer\\\") -\\\"Site of Special Scientific Interest\\\" -\\\"Sites of Special Scientific Interest\\\"\"\n  },\n  \"rationale\": \"Paired Orientalism terms with biography-style interest phrases (avoiding the bare phrase \\\"special interests\\\"), added academic-position keywords to surface employers, restricted to site:wikipedia.org, and excluded SSSI pages per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

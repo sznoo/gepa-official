@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "996c5d7f76a6998f8e5e86dff5424cb97fd59e9f640452f8bb61cb63860f3db6",
+  "created_at": "2026-07-13T17:16:42.227517+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The End of the Innocence was a single by which former member of the Eagles?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The End of the Innocence was a single by which former member of the Eagles?",
+        "summary_1": "Don Henley",
+        "summary_2": "\"The End of the Innocence\" was a single by Don Henley, former lead vocalist and drummer of the Eagles.",
+        "current_output": "Don Henley"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Don Henley",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Donald Hugh Henley",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The End of the Innocence was a single by which former member of the Eagles?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The End of the Innocence was a single by which former member of the Eagles?\",\n  \"summary_1\": \"Don Henley\",\n  \"summary_2\": \"\\\"The End of the Innocence\\\" was a single by Don Henley, former lead vocalist and drummer of the Eagles.\",\n  \"current_output\": \"Don Henley\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Don Henley\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Donald Hugh Henley\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question requests or expects the name of a person and the provided summaries include at least one personal name (a named individual).\",\n    \"preserve_rule\": \"Keep the base behavior of returning only the minimal name string that is supported verbatim by the visible summaries/inputs and nothing else (no extra explanation or qualification).\",\n    \"change_rule\": \"If any visible summary or input contains a more complete/canonical form of the same person's name (for example a full given name, middle name, or other expanded form) then prefer and output that more complete form exactly as it appears in the visible inputs. Only use a more complete form when it appears verbatim in the provided summaries/inputs.\",\n    \"drop_or_avoid_rule\": \"Do not invent or infer expansions, middle names, or formal versions that do not appear in the visible summaries/inputs. Avoid consulting any external knowledge; do not add explanatory text or qualifiers — output only the chosen name string.\",\n    \"output_contract\": \"Place exactly the chosen name string (no surrounding text) into the [[ ## answer ## ]] block. The string must be drawn verbatim from the visible summaries/inputs according to the rules above.\",\n    \"why_local_transition\": \"This makes a minimal, local adjustment to prefer a more specific name when that specific form is already present in the visible evidence, improving precision of the final name selection without changing the interface or introducing new facts.\"\n  },\n  \"rationale\": \"The change is the smallest coherent edit: it only alters the name-selection preference when an explicitly more complete name is present in the visible inputs. It preserves the original minimal-answer contract, prevents hallucination by forbidding invented expansions, and only uses text already provided to the agent. This nudges the agent toward producing a fuller canonical name when that form is available in the summaries while leaving behavior unchanged when it is not.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 48,
+    "row_index": 48,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

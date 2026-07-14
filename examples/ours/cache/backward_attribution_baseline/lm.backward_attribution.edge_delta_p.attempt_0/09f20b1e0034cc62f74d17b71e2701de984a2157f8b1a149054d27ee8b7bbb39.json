@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "09f20b1e0034cc62f74d17b71e2701de984a2157f8b1a149054d27ee8b7bbb39",
+  "created_at": "2026-07-13T17:19:36.252883+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+        "summary_1": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+        "summary_2": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+        "current_output": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "number 75",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What number did the song \\\"Reapers\\\"  by Muse reach on Switzerland's main music sales chart?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What number did the song \\\"Reapers\\\"  by Muse reach on Switzerland's main music sales chart?\",\n  \"summary_1\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\",\n  \"summary_2\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\",\n  \"current_output\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"number 75\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 or summary_2 contains a phrasing that reports a chart position for the asked song (phrases like \\\"reached number X\\\" or \\\"number X\\\"), apply this prompt edit.\",\n    \"preserve_rule\": \"Continue to treat summary_1 and summary_2 as the primary evidence sources and preserve the existing preference/verification behavior (prefer summary_1, fall back to summary_2; if they agree, accept that value).\",\n    \"change_rule\": \"Do not emit a full sentence. Instead, extract the chart-position token (the numeric digits X) that the summaries report for the song and use that token as the answer string. Produce only that numeric token as the final answer.\",\n    \"drop_or_avoid_rule\": \"Avoid any additional words, sentences, parenthetical notes, chart names, labels like \\\"number\\\" or \\\"position\\\", or explanatory text. Do not invent, modify, or normalize numeric values beyond directly extracting what the summaries state.\",\n    \"output_contract\": \"The final output must place only the minimal numeric chart-position token (digits only) inside the [[ ## answer ## ]] block — no surrounding text, punctuation, or commentary.\",\n    \"why_local_transition\": \"This small edit enforces the pipeline's final-answer format (minimal answer token) while still relying exclusively on the visible summaries as evidence, converting the current verbose sentence output into the required minimal numeric answer.\"\n  },\n  \"rationale\": \"The source output is a full sentence quoting summary content; the desired local change is formatting/selection-only: extract and emit the numeric chart position token and nothing else. This delta is narrowly scoped (format-and-extract) so it preserves evidence use and existing verification rules while ensuring the final-output contract (minimal numeric string) is met. It does not introduce any new facts or refer to hidden/gold data, satisfying the anti-cheating constraints.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 65,
+    "row_index": 65,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "7ba08a4c8771e2c16afabce797d8ddf4bfc7b8c8cea305ccb16c508308e659c8",
+  "created_at": "2026-07-13T18:47:04.646474+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 says the award is identified (Hart Memorial Trophy) but the year/winner for the referenced 'Maurice' is unknown, and the current output asks the user to specify which Maurice or to allow an external lookup.",
+            "preserve_rule": "Keep using the award name exactly as written in summary_1 (Hart Memorial Trophy) and preserve the agent's requirement to output a single compact retrieval query string.",
+            "change_rule": "Do not ask the user for the full name or permission to search. Instead, produce one concise second-hop retrieval query that pairs the token 'Maurice' with the award phrase and requests the year/winner. Form the query as a compact keyword string (for example: 'Maurice Hart Memorial Trophy winner year').",
+            "drop_or_avoid_rule": "Avoid asking clarifying questions to the user, avoid restating the full natural-language question, avoid returning multiple query alternatives, and avoid inserting any specific full-name anchor that does not already appear in the agent's visible inputs.",
+            "output_contract": "Return exactly one short, one-line retrieval query (<= 10 words). It must include 'Maurice' and either 'Hart Memorial Trophy' or 'Hart Trophy' and a term indicating year/winner (e.g. 'winner year'). No explanations, no user prompts, and no target answers.",
+            "why_local_transition": "This change only swaps a user-clarifying prompt for a direct, narrowly targeted retrieval query when the award is known but the individual's identity/year is missing. It is minimal and preserves existing evidence while enabling the next retrieval hop."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+        "summary_1": "The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.",
+        "current_output": {
+          "query": "Which Maurice do you mean (please give full name)? Or should I perform an external lookup to find the year a Maurice won the Hart Memorial Trophy?"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 says the award is identified (Hart Memorial Trophy) but the year/winner for the referenced 'Maurice' is unknown, and the current output asks the user to specify which Maurice or to allow an external lookup.\",\n      \"preserve_rule\": \"Keep using the award name exactly as written in summary_1 (Hart Memorial Trophy) and preserve the agent's requirement to output a single compact retrieval query string.\",\n      \"change_rule\": \"Do not ask the user for the full name or permission to search. Instead, produce one concise second-hop retrieval query that pairs the token 'Maurice' with the award phrase and requests the year/winner. Form the query as a compact keyword string (for example: 'Maurice Hart Memorial Trophy winner year').\",\n      \"drop_or_avoid_rule\": \"Avoid asking clarifying questions to the user, avoid restating the full natural-language question, avoid returning multiple query alternatives, and avoid inserting any specific full-name anchor that does not already appear in the agent's visible inputs.\",\n      \"output_contract\": \"Return exactly one short, one-line retrieval query (<= 10 words). It must include 'Maurice' and either 'Hart Memorial Trophy' or 'Hart Trophy' and a term indicating year/winner (e.g. 'winner year'). No explanations, no user prompts, and no target answers.\",\n      \"why_local_transition\": \"This change only swaps a user-clarifying prompt for a direct, narrowly targeted retrieval query when the award is known but the individual's identity/year is missing. It is minimal and preserves existing evidence while enabling the next retrieval hop.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n  \"summary_1\": \"The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.\",\n  \"current_output\": {\n    \"query\": \"Which Maurice do you mean (please give full name)? Or should I perform an external lookup to find the year a Maurice won the Hart Memorial Trophy?\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Maurice Hart Memorial Trophy winner year\"\n  },\n  \"rationale\": \"Followed deltas: kept 'Hart Memorial Trophy', included 'Maurice' and a year/winner term, returned one concise retrieval query (<=10 words).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 88,
+    "row_index": 88,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

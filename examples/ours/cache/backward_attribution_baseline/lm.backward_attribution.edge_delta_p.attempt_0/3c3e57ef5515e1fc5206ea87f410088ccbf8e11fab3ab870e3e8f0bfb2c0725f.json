@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "3c3e57ef5515e1fc5206ea87f410088ccbf8e11fab3ab870e3e8f0bfb2c0725f",
+  "created_at": "2026-07-13T17:21:39.293987+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which Canadian singer sang \" something stronger\" in the musical applause?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which Canadian singer sang \" something stronger\" in the musical applause?",
+        "summary_1": "Len Cariou. He sang \"Something Greater\" (with Lauren Bacall) in Applause.",
+        "summary_2": "Len Cariou — the Canadian performer — sang \"Something Greater\" (with Lauren Bacall) in the musical Applause.",
+        "current_output": "Len Cariou — he sang \"Something Greater\" (with Lauren Bacall) in the musical Applause."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Len Cariou — he sang \"Something Greater\" (with Lauren Bacall) in the musical Applause.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Len Cariou",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which Canadian singer sang \\\" something stronger\\\" in the musical applause?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which Canadian singer sang \\\" something stronger\\\" in the musical applause?\",\n  \"summary_1\": \"Len Cariou. He sang \\\"Something Greater\\\" (with Lauren Bacall) in Applause.\",\n  \"summary_2\": \"Len Cariou — the Canadian performer — sang \\\"Something Greater\\\" (with Lauren Bacall) in the musical Applause.\",\n  \"current_output\": \"Len Cariou — he sang \\\"Something Greater\\\" (with Lauren Bacall) in the musical Applause.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Len Cariou — he sang \\\"Something Greater\\\" (with Lauren Bacall) in the musical Applause.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Len Cariou\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks for a person (e.g., begins with 'Who' or 'Which' and refers to a performer such as 'singer'/'sang') and the provided summaries explicitly contain a clear personal name as the respondent.\",\n    \"preserve_rule\": \"Continue to rely on summary_1 and summary_2 as the evidence source and preserve their exact capitalization for names. Keep any existing behavior that prefers information verbatim from the summaries.\",\n    \"change_rule\": \"Instead of emitting a full sentence or explanatory phrase, extract the single personal name that the summaries present as the performer and place that name as the only content of the answer field. Do not add commentary, verbs, parentheticals, quotations around the name, or other descriptive text. If the summaries do not present a single clear name, output the token 'Unknown' only.\",\n    \"drop_or_avoid_rule\": \"Avoid full-sentence outputs, pronouns + verbs (e.g., 'he sang...'), added context, or any additional punctuation outside the name. Do not append clarifying clauses or duplicate the question.\",\n    \"output_contract\": \"The answer field must contain exactly one minimal answer string: the performer name as shown in the summaries (no surrounding text or punctuation). If ambiguous or unsupported, output exactly 'Unknown'.\",\n    \"why_local_transition\": \"The current output is a verbose sentence; for final output we need the minimal named-entity answer string supported by the visible summaries so downstream evaluation/consumers receive only the concise answer.\"\n  },\n  \"rationale\": \"This delta makes the smallest targeted change: it leaves evidence usage intact but tightens the final rendering to a single minimal name token. It preserves correct behavior (using summaries) while removing unnecessary explanatory phrasing that deviates from the final-answer contract. The fallback 'Unknown' handles ambiguity without introducing extra commentary.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 78,
+    "row_index": 78,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "6be1c2ce2a6636e93b4b91de7b02db31670c1969baa078102beba97313548238",
+  "created_at": "2026-07-13T18:54:15.186085+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 94,
+        "stable_id": "94",
+        "question": "what year was the 2008 electee for a Cheshire constituency represented in the UK Parliament born?",
+        "summary_1": "1973",
+        "hop2_query": "SELECT ?person ?personLabel ?birthYear WHERE {\n  # Person held the position \"Member of Parliament\"\n  ?person p:P39 ?posStmt.\n  ?posStmt ps:P39 wd:Q16707842.\n\n  # The statement has an electoral district (constituency) and a term start in 2008\n  ?posStmt pq:P768 ?constituency.\n  ?posStmt pq:P580 ?startTime.\n  FILTER(YEAR(?startTime) = 2008)\n\n  # The constituency is in an area labeled \"Cheshire\"\n  ?constituency wdt:P131 ?area.\n  ?area rdfs:label \"Cheshire\"@en.\n\n  # Get birth year\n  ?person wdt:P569 ?birthDate.\n  BIND(YEAR(?birthDate) AS ?birthYear)\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"en\". }\n}\nLIMIT 50",
+        "summary_2": "1973",
+        "answer": "1973",
+        "gold_support_titles": [
+          "Edward Timpson",
+          "Crewe and Nantwich (UK Parliament constituency)"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 113,
+          "w_stable_id": "113",
+          "agent": "final",
+          "w_question": "Dissident Irish Republican campaign includes which paramilitary group that began attacks around 2009?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Óglaigh na hÉireann (ONH)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Óglaigh na hÉireann",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If both summary_1 and summary_2 contain the same short named-entity string and that string ends with a parenthetical abbreviation (for example: 'Name (ABC)' or 'Óglaigh na hÉireann (ONH)').",
+                "preserve_rule": "Preserve all existing minimal-answer behavior: use only the visible summaries as evidence, produce the answer inside the [[ ## answer ## ]] block, emit only the minimal token sequence required, and do not add explanatory text or extra punctuation.",
+                "change_rule": "When the trigger applies, remove the trailing parenthetical abbreviation and any adjacent whitespace/punctuation from the matched phrase, and emit only the remaining base name verbatim as the minimal answer. Do not otherwise alter capitalization or internal characters of the base name.",
+                "drop_or_avoid_rule": "Do not emit parenthetical acronyms, bracketed abbreviations, or trailing parenthetical clarifications in the final answer. Avoid adding any surrounding punctuation or extra tokens as a result of stripping the parenthetical.",
+                "output_contract": "The [[ ## answer ## ]] block must contain exactly the base name (the matched phrase with the trailing parenthetical removed) and nothing else; continue to follow the original minimal-answer normalization rules for whitespace and punctuation.",
+                "why_local_transition": "This small rule change prevents emitting redundant parenthetical acronyms when both summaries agree on a named entity, yielding the canonical short name while preserving all other minimal-answer constraints."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "1973",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 66,
+          "w_stable_id": "66",
+          "agent": "final",
+          "w_question": "Which National Park includes the features Red Eagle Mountain and Going-to-the-Sun Road?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Glacier National Park (Montana)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Glacier National Park",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 and summary_2 contain the same short named-entity string (case-insensitive match) and that shared string ends with a trailing parenthetical disambiguator of the form ' ( ... )' (e.g., 'Name (Place)').",
+                "preserve_rule": "Keep all existing base-prompt constraints: use only the visible summaries as evidence, produce the answer inside [[ ## answer ## ]] and nothing else, preserve the internal capitalization and characters of the extracted phrase, and follow the general minimal-answer normalization (strip surrounding whitespace/punctuation).",
+                "change_rule": "When the trigger applies, strip a single trailing parenthetical disambiguator (one final ' ( ... )' block) from the agreed-upon phrase before emitting. After removing that trailing parenthetical, apply the base prompt's normalization (trim surrounding whitespace/punctuation) and emit the remaining core name as the sole content of [[ ## answer ## ]]. Do not otherwise alter internal punctuation or capitalization.",
+                "drop_or_avoid_rule": "Do not append explanatory text, substitute a different disambiguator, or consult external knowledge to justify removal. Only remove the parenthetical when both summaries exactly agree on the same phrase and the parenthetical appears at the end; if removal would produce an empty or clearly ambiguous result, revert to emitting the original agreed phrase (including the parenthetical).",
+                "output_contract": "Maintain the original final-answer contract: the [[ ## answer ## ]] block must contain only the single minimal answer string produced after this optional parenthetical removal (or the original agreed phrase if reverted). No extra characters or text allowed.",
+                "why_local_transition": "The base prompt's verbatim-extract rule causes retained parenthetical disambiguators when both summaries match exactly. For minimal canonical answers we should drop such trailing parentheticals (e.g., state/place disambiguators) so the agent emits the concise entity name while otherwise preserving the base behavior."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "1973",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 104,
+          "w_stable_id": "104",
+          "agent": "final",
+          "w_question": "What do George Orwell and Jane Smiley have in common?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "novelists",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "novelist",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "The question text contains a phrase like 'have in common' or 'in common' referring to two named people, AND summary_1 and summary_2 both contain the same short noun phrase when compared case-insensitively, and that common phrase is a plural noun token (e.g., ends with a regular plural suffix).",
+                "preserve_rule": "Continue to use only summary_1 and summary_2 as the evidential basis. Keep emitting the final result inside [[ ## answer ## ]] and obey the base minimal-answer formatting and normalization rules (do not add extra words, punctuation, or explanation). Preserve capitalization of the chosen token as it appears in the summaries.",
+                "change_rule": "When the trigger applies, emit the singular form of the agreed-upon plural noun as the minimal answer token. Form the singular by applying simple regular-normalization rules to the shared phrase (handle common cases such as removing a trailing 's', converting trailing 'ies' -> 'y', or stripping a trailing 'es' when appropriate) and preserve the original capitalization from the summaries. Do not consult or add external facts—this is strictly a morphological normalization of the confirmed shared phrase.",
+                "drop_or_avoid_rule": "Do not emit the plural form in this trigger case, and do not add clarifying questions or explanatory text. Avoid inventing new words or expanding the phrase; do not attempt to paraphrase beyond the minimal singular token derived from the agreed phrase. Do not use internal background knowledge to replace the noun with any different term.",
+                "output_contract": "Produce exactly one minimal token (the singularized noun) inside [[ ## answer ## ]] and nothing else. Follow all base-prompt framing about normalization and no surrounding punctuation or commentary.",
+                "why_local_transition": "This edge implements a narrowly scoped morphological normalization: when two people are asked 'what they have in common' and both summaries assert the same plural profession/role, prefer the singular occupational noun as the minimal concise descriptor. It is a minimal behavioral tweak of output form (number) preserving the evidential basis and the base prompt's output constraints."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "1973",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 132,
+          "w_stable_id": "132",
+          "agent": "final",
+          "w_question": "The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Björk (Björk Guðmundsdóttir)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Björk Guðmundsdóttir",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Both summary_1 and summary_2 contain the same named-entity substring that matches the pattern: <preparen> ( <paren> ) (i.e., some text followed immediately by parentheses containing alternate name/form).",
+                "preserve_rule": "Keep all existing minimal-answer behavior: use only the visible summaries as evidence; prefer the identical phrase when both summaries agree; normalize by trimming surrounding whitespace/punctuation; produce only the minimal token sequence inside the [[ ## answer ## ]] block and nothing else.",
+                "change_rule": "When the trigger pattern is detected, treat the parenthetical content as the preferred minimal answer if the text inside the parentheses contains more than one token (i.e., contains a space) or is clearly a fuller form (longer token count) than the preceding token. Extract the parenthetical text, strip surrounding whitespace and any enclosing parentheses, and emit that extracted string verbatim (preserving original characters and capitalization) as the sole content of [[ ## answer ## ]]. If the parentheses contain only a shorter nickname or single token that is not longer than the pre-parenthetical token, fall back to the existing rule that emits the common phrase.",
+                "drop_or_avoid_rule": "Do not emit the combined 'A (B)' form as the answer, do not include parentheses, do not append explanatory text, and do not add punctuation or labels. Do not consult external sources. Do not change behavior for examples that do not match the parenthetical pattern.",
+                "output_contract": "The [[ ## answer ## ]] block must contain exactly the parenthetical text selected by the change_rule (or, when falling back, the previously selected minimal phrase). No extra characters, punctuation, or explanatory text may be added; preserve the original capitalization and characters from the summaries.",
+                "why_local_transition": "This minimal change causes cases where summaries give a parenthetical full-name form (e.g., short name followed by full name in parentheses) to yield the fuller canonical name as the concise answer, fixing instances where the answer would otherwise retain the parenthetical wrapper instead of emitting the clean full-name token."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "1973",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 48,
+          "w_stable_id": "48",
+          "agent": "final",
+          "w_question": "The End of the Innocence was a single by which former member of the Eagles?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Don Henley",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Donald Hugh Henley",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 and summary_2 satisfy rule 2 (they contain the same short person-name string) AND the given-name token in that shared string is a common diminutive/nickname (for example, 'Don' as a diminutive of 'Donald'),",
+                "preserve_rule": "Keep all existing minimal-answer formatting and normalization rules exactly (emit a single short token sequence only, preserve capitalization from the chosen phrase, no added punctuation, no explanatory text). If you do not apply the change below, fall back to the base prompt behavior (emit the short name verbatim as per rule 2).",
+                "change_rule": "Attempt a conservative, high-confidence expansion of the diminutive to its canonical full given name using only your internal background knowledge. If you can internally confirm with high confidence that the diminutive corresponds to a specific individual's full legal given name, emit that full legal given name combined with the same surname appearing in the summaries (include a middle name only if you can internally confirm it with high confidence). If you cannot internally confirm the full-name expansion with high confidence, do not expand and instead emit the short name verbatim per the base rule 2.",
+                "drop_or_avoid_rule": "Do not append roles, descriptors, dates, or any extra words beyond the full-name string. Do not invent or append middle names unless you have high internal confidence. Never add punctuation, labels, or explanatory text to the minimal answer.",
+                "output_contract": "Produce exactly the minimal name string determined by the above rule inside the [[ ## answer ## ]] block and nothing else; preserve the base prompt's requirement that the block contain only the minimal answer string.",
+                "why_local_transition": "This change only adjusts the name-selection heuristic (expanding a common diminutive to a canonical full name when internally certain). It preserves the rest of the base prompt's minimal-answer behavior and only affects cases where both summaries already agree on the same short name."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "1973",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 94,\n  \"stable_id\": \"94\",\n  \"question\": \"what year was the 2008 electee for a Cheshire constituency represented in the UK Parliament born?\",\n  \"summary_1\": \"1973\",\n  \"hop2_query\": \"SELECT ?person ?personLabel ?birthYear WHERE {\\n  # Person held the position \\\"Member of Parliament\\\"\\n  ?person p:P39 ?posStmt.\\n  ?posStmt ps:P39 wd:Q16707842.\\n\\n  # The statement has an electoral district (constituency) and a term start in 2008\\n  ?posStmt pq:P768 ?constituency.\\n  ?posStmt pq:P580 ?startTime.\\n  FILTER(YEAR(?startTime) = 2008)\\n\\n  # The constituency is in an area labeled \\\"Cheshire\\\"\\n  ?constituency wdt:P131 ?area.\\n  ?area rdfs:label \\\"Cheshire\\\"@en.\\n\\n  # Get birth year\\n  ?person wdt:P569 ?birthDate.\\n  BIND(YEAR(?birthDate) AS ?birthYear)\\n\\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \\\"en\\\". }\\n}\\nLIMIT 50\",\n  \"summary_2\": \"1973\",\n  \"answer\": \"1973\",\n  \"gold_support_titles\": [\n    \"Edward Timpson\",\n    \"Crewe and Nantwich (UK Parliament constituency)\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 113,\n    \"w_stable_id\": \"113\",\n    \"agent\": \"final\",\n    \"w_question\": \"Dissident Irish Republican campaign includes which paramilitary group that began attacks around 2009?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Óglaigh na hÉireann (ONH)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Óglaigh na hÉireann\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If both summary_1 and summary_2 contain the same short named-entity string and that string ends with a parenthetical abbreviation (for example: 'Name (ABC)' or 'Óglaigh na hÉireann (ONH)').\",\n          \"preserve_rule\": \"Preserve all existing minimal-answer behavior: use only the visible summaries as evidence, produce the answer inside the [[ ## answer ## ]] block, emit only the minimal token sequence required, and do not add explanatory text or extra punctuation.\",\n          \"change_rule\": \"When the trigger applies, remove the trailing parenthetical abbreviation and any adjacent whitespace/punctuation from the matched phrase, and emit only the remaining base name verbatim as the minimal answer. Do not otherwise alter capitalization or internal characters of the base name.\",\n          \"drop_or_avoid_rule\": \"Do not emit parenthetical acronyms, bracketed abbreviations, or trailing parenthetical clarifications in the final answer. Avoid adding any surrounding punctuation or extra tokens as a result of stripping the parenthetical.\",\n          \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly the base name (the matched phrase with the trailing parenthetical removed) and nothing else; continue to follow the original minimal-answer normalization rules for whitespace and punctuation.\",\n          \"why_local_transition\": \"This small rule change prevents emitting redundant parenthetical acronyms when both summaries agree on a named entity, yielding the canonical short name while preserving all other minimal-answer constraints.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"1973\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 66,\n    \"w_stable_id\": \"66\",\n    \"agent\": \"final\",\n    \"w_question\": \"Which National Park includes the features Red Eagle Mountain and Going-to-the-Sun Road?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Glacier National Park (Montana)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Glacier National Park\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 and summary_2 contain the same short named-entity string (case-insensitive match) and that shared string ends with a trailing parenthetical disambiguator of the form ' ( ... )' (e.g., 'Name (Place)').\",\n          \"preserve_rule\": \"Keep all existing base-prompt constraints: use only the visible summaries as evidence, produce the answer inside [[ ## answer ## ]] and nothing else, preserve the internal capitalization and characters of the extracted phrase, and follow the general minimal-answer normalization (strip surrounding whitespace/punctuation).\",\n          \"change_rule\": \"When the trigger applies, strip a single trailing parenthetical disambiguator (one final ' ( ... )' block) from the agreed-upon phrase before emitting. After removing that trailing parenthetical, apply the base prompt's normalization (trim surrounding whitespace/punctuation) and emit the remaining core name as the sole content of [[ ## answer ## ]]. Do not otherwise alter internal punctuation or capitalization.\",\n          \"drop_or_avoid_rule\": \"Do not append explanatory text, substitute a different disambiguator, or consult external knowledge to justify removal. Only remove the parenthetical when both summaries exactly agree on the same phrase and the parenthetical appears at the end; if removal would produce an empty or clearly ambiguous result, revert to emitting the original agreed phrase (including the parenthetical).\",\n          \"output_contract\": \"Maintain the original final-answer contract: the [[ ## answer ## ]] block must contain only the single minimal answer string produced after this optional parenthetical removal (or the original agreed phrase if reverted). No extra characters or text allowed.\",\n          \"why_local_transition\": \"The base prompt's verbatim-extract rule causes retained parenthetical disambiguators when both summaries match exactly. For minimal canonical answers we should drop such trailing parentheticals (e.g., state/place disambiguators) so the agent emits the concise entity name while otherwise preserving the base behavior.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"1973\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 104,\n    \"w_stable_id\": \"104\",\n    \"agent\": \"final\",\n    \"w_question\": \"What do George Orwell and Jane Smiley have in common?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"novelists\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"novelist\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"The question text contains a phrase like 'have in common' or 'in common' referring to two named people, AND summary_1 and summary_2 both contain the same short noun phrase when compared case-insensitively, and that common phrase is a plural noun token (e.g., ends with a regular plural suffix).\",\n          \"preserve_rule\": \"Continue to use only summary_1 and summary_2 as the evidential basis. Keep emitting the final result inside [[ ## answer ## ]] and obey the base minimal-answer formatting and normalization rules (do not add extra words, punctuation, or explanation). Preserve capitalization of the chosen token as it appears in the summaries.\",\n          \"change_rule\": \"When the trigger applies, emit the singular form of the agreed-upon plural noun as the minimal answer token. Form the singular by applying simple regular-normalization rules to the shared phrase (handle common cases such as removing a trailing 's', converting trailing 'ies' -> 'y', or stripping a trailing 'es' when appropriate) and preserve the original capitalization from the summaries. Do not consult or add external facts—this is strictly a morphological normalization of the confirmed shared phrase.\",\n          \"drop_or_avoid_rule\": \"Do not emit the plural form in this trigger case, and do not add clarifying questions or explanatory text. Avoid inventing new words or expanding the phrase; do not attempt to paraphrase beyond the minimal singular token derived from the agreed phrase. Do not use internal background knowledge to replace the noun with any different term.\",\n          \"output_contract\": \"Produce exactly one minimal token (the singularized noun) inside [[ ## answer ## ]] and nothing else. Follow all base-prompt framing about normalization and no surrounding punctuation or commentary.\",\n          \"why_local_transition\": \"This edge implements a narrowly scoped morphological normalization: when two people are asked 'what they have in common' and both summaries assert the same plural profession/role, prefer the singular occupational noun as the minimal concise descriptor. It is a minimal behavioral tweak of output form (number) preserving the evidential basis and the base prompt's output constraints.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"1973\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 132,\n    \"w_stable_id\": \"132\",\n    \"agent\": \"final\",\n    \"w_question\": \"The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Björk (Björk Guðmundsdóttir)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Björk Guðmundsdóttir\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Both summary_1 and summary_2 contain the same named-entity substring that matches the pattern: <preparen> ( <paren> ) (i.e., some text followed immediately by parentheses containing alternate name/form).\",\n          \"preserve_rule\": \"Keep all existing minimal-answer behavior: use only the visible summaries as evidence; prefer the identical phrase when both summaries agree; normalize by trimming surrounding whitespace/punctuation; produce only the minimal token sequence inside the [[ ## answer ## ]] block and nothing else.\",\n          \"change_rule\": \"When the trigger pattern is detected, treat the parenthetical content as the preferred minimal answer if the text inside the parentheses contains more than one token (i.e., contains a space) or is clearly a fuller form (longer token count) than the preceding token. Extract the parenthetical text, strip surrounding whitespace and any enclosing parentheses, and emit that extracted string verbatim (preserving original characters and capitalization) as the sole content of [[ ## answer ## ]]. If the parentheses contain only a shorter nickname or single token that is not longer than the pre-parenthetical token, fall back to the existing rule that emits the common phrase.\",\n          \"drop_or_avoid_rule\": \"Do not emit the combined 'A (B)' form as the answer, do not include parentheses, do not append explanatory text, and do not add punctuation or labels. Do not consult external sources. Do not change behavior for examples that do not match the parenthetical pattern.\",\n          \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly the parenthetical text selected by the change_rule (or, when falling back, the previously selected minimal phrase). No extra characters, punctuation, or explanatory text may be added; preserve the original capitalization and characters from the summaries.\",\n          \"why_local_transition\": \"This minimal change causes cases where summaries give a parenthetical full-name form (e.g., short name followed by full name in parentheses) to yield the fuller canonical name as the concise answer, fixing instances where the answer would otherwise retain the parenthetical wrapper instead of emitting the clean full-name token.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"1973\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 48,\n    \"w_stable_id\": \"48\",\n    \"agent\": \"final\",\n    \"w_question\": \"The End of the Innocence was a single by which former member of the Eagles?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Don Henley\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Donald Hugh Henley\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 and summary_2 satisfy rule 2 (they contain the same short person-name string) AND the given-name token in that shared string is a common diminutive/nickname (for example, 'Don' as a diminutive of 'Donald'),\",\n          \"preserve_rule\": \"Keep all existing minimal-answer formatting and normalization rules exactly (emit a single short token sequence only, preserve capitalization from the chosen phrase, no added punctuation, no explanatory text). If you do not apply the change below, fall back to the base prompt behavior (emit the short name verbatim as per rule 2).\",\n          \"change_rule\": \"Attempt a conservative, high-confidence expansion of the diminutive to its canonical full given name using only your internal background knowledge. If you can internally confirm with high confidence that the diminutive corresponds to a specific individual's full legal given name, emit that full legal given name combined with the same surname appearing in the summaries (include a middle name only if you can internally confirm it with high confidence). If you cannot internally confirm the full-name expansion with high confidence, do not expand and instead emit the short name verbatim per the base rule 2.\",\n          \"drop_or_avoid_rule\": \"Do not append roles, descriptors, dates, or any extra words beyond the full-name string. Do not invent or append middle names unless you have high internal confidence. Never add punctuation, labels, or explanatory text to the minimal answer.\",\n          \"output_contract\": \"Produce exactly the minimal name string determined by the above rule inside the [[ ## answer ## ]] block and nothing else; preserve the base prompt's requirement that the block contain only the minimal answer string.\",\n          \"why_local_transition\": \"This change only adjusts the name-selection heuristic (expanding a common diminutive to a canonical full name when internally certain). It preserves the rest of the base prompt's minimal-answer behavior and only affects cases where both summaries already agree on the same short name.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"1973\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 66,\n  \"dominant_gap_type\": \"entity_disambiguation\",\n  \"transported_damage_hypothesis\": \"When both summaries agree on an entity string that ends with a trailing parenthetical disambiguator, the agent will silently strip that parenthetical and emit/use only the core name (drop the ' ( ... )' block).\",\n  \"expected_damaged_behavior\": \"At the final agent boundary the model will remove trailing parenthetical disambiguators from constituency titles (e.g., drop ' (UK Parliament constituency)') and proceed using the ambiguous core name; the output remains the minimal-answer form but may reflect an ambiguously anchored entity.\",\n  \"rationale\": \"The Crewe and Nantwich gold title includes a trailing parenthetical disambiguator. The W66 repair describes a narrowly scoped surface-form/entity-disambiguation heuristic (strip final ' ( ... )') that is plausibly applied at the same agent boundary in the Cheshire-constituency case. This is a local output-shape / disambiguation tweak (it transfers the failure mode of losing the disambiguator without introducing new facts), and it can produce a neighbor error at the C_plus boundary (ambiguous core name used instead of the disambiguated title) while obeying the constraints of not importing specific W-side entities or flipping the numeric answer.\",\n  \"confidence\": 0.67\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 94,
+    "c_stable_id": "94",
+    "candidate_w_sample_indices": [
+      48,
+      66,
+      104,
+      113,
+      132
+    ],
+    "match_fingerprint": "68313709101359d2d5b0f455f2016a35dcf57933b0267b077c4d4b67ec0d69e6"
+  }
+}

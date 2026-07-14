@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "25e6d588d28b2b8c30b4c8c4cf06dbda47eb9a11a2d2ad2a5db63646e76a411b",
+  "created_at": "2026-07-13T17:22:04.427409+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?",
+        "summary_1": "Former Confederate guerrillas.",
+        "summary_2": "They were \"bushwhackers\" — pro‑Confederate guerrillas (also described as former Confederate guerrillas).",
+        "current_output": "They were \"bushwhackers\" — former Confederate guerrillas."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They were \"bushwhackers\" — former Confederate guerrillas.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "bushwhackers",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What type of criminals, named after a term from the Revolutionary War, were involved in the Clay County Savings Association Building robbery?\",\n  \"summary_1\": \"Former Confederate guerrillas.\",\n  \"summary_2\": \"They were \\\"bushwhackers\\\" — pro‑Confederate guerrillas (also described as former Confederate guerrillas).\",\n  \"current_output\": \"They were \\\"bushwhackers\\\" — former Confederate guerrillas.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They were \\\"bushwhackers\\\" — former Confederate guerrillas.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"bushwhackers\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the visible summaries (summary_1 or summary_2) provide a single short label/name for the criminal type, or when the current output is a sentence that contains such a label plus explanatory text.\",\n    \"preserve_rule\": \"Keep the factual selection already identified by the summaries and the agent's ability to pick a named criminal type. Preserve capitalization as presented in the summaries. Do not change the input/output field names or overall answer-format contract.\",\n    \"change_rule\": \"Instead of producing a sentence or explanatory phrase, extract the shortest noun/label string used in summary_1 or summary_2 that names the criminals and set the answer field to that label alone. Prefer the verbatim concise label that appears in the summaries. Do not add surrounding words or explanatory clauses.\",\n    \"drop_or_avoid_rule\": \"Avoid any explanatory text, clauses, descriptive modifiers, leading phrases (e.g., 'They were', 'former'), punctuation intended as commentary (quotes, em‑dashes), or additional historical descriptors in the answer field. Do not produce full sentences—only the minimal label string.\",\n    \"output_contract\": \"The produced 'answer' field must contain exactly the minimal label string (no surrounding quotes, no extra words, no punctuation beyond what is part of the label itself) that is directly supported by the visible summaries. If multiple concise labels appear, choose the single most concise label verbatim from the summaries.\",\n    \"why_local_transition\": \"The source output is a sentence with explanatory material; the target requires only the concise label already present in the summaries. This small behavioral change trims the final output to the minimal supported token without altering evidence selection.\"\n  },\n  \"rationale\": \"The smallest coherent change is to force the final agent output to be the single minimal label drawn from the visible summaries instead of a full sentence. That preserves the agent's prior identification of the criminal type while removing extra descriptive text so the final-answer contract (minimal string only) is satisfied.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 82,
+    "row_index": 82,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

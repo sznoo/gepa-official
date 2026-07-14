@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "2cbb7beb0facb059f4deb042cce0bbb27d60d3b22fdd46e453597644196948d6",
+  "created_at": "2026-07-13T18:45:35.817614+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+      "current_output": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+      "upstream_context": {
+        "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+        "summary_1": "\"Reapers\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).",
+        "hop2_query": "Muse \"Reapers\" Swiss Hitparade peak position",
+        "hop2_titles": [
+          "Reapers (song)",
+          "Philipp Fankhauser",
+          "Swiss Hitparade",
+          "Sign in the Sky",
+          "Opus (Opus album)",
+          "Solo (Opus album)",
+          "List of number-one hits of 2012 (Switzerland)"
+        ],
+        "hop2_docs": [
+          "Reapers (song) | \"Reapers\" is a song by English rock band Muse.  It was released as the second promotional single from the band's seventh studio album \"Drones\", and was given a 7\" single release, as part of Record Store Day 2016, on 16 April 2016 as the fifth and final single from Drones.  It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \"Billboard\"' s Hot Rock Songs, and became Muse's highest-charting single on \"Billboard\"' s Mainstream Rock Songs at number 2.",
+          "Philipp Fankhauser | Philipp Manuel Fankhauser (born February 20, 1964 in Thun, Switzerland) is a Swiss blues musician and songwriter.  Several of his albums have charted in the top ten of the Swiss Hitparade, such as \"Love Man Riding\", which peaked at No. 7, \"Home\", which peaked at No. 2,",
+          "Swiss Hitparade | The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.  The charts are a record of the highest-selling singles and albums in various genres in Switzerland.",
+          "Sign in the Sky | Sign in the Sky is the second album by hard rock band China.  It was released in 1989 by the label Vertigo.  The single, \"In the Middle of the Night\", peaked at No. 11 on the Swiss Hitparade.",
+          "Opus (Opus album) | Opus is the sixth studio album by Austrian pop rock band Opus.  It was released in 1987.  It peaked at #7 on the Ö3 Austria Top 40 Longplay.  The first single \"Whiteland\", peaked at #3 on the Ö3 Austria Top 40 Singles and #2 on the Ö3-Hitparade.  The second single, \"Faster and Faster\", peaked at #12 on the Ö3 Austria Top 40 Singles and #2 on the Ö3-Hitparade.  The third single, \"Will You Ever Know Me\", peaked at #24 on the Ö3-Hitparade.",
+          "Solo (Opus album) | Solo is the fifth album by Austrian pop rock band Opus.  It was released in 1985.  It peaked at #8 on the Ö3 Austria Top 40 Longplay.  The first single \"Rock on the Rocks\", peaked at #21 on the Ö3-Hitparade.  The second single, \"Idolater\", peaked at #24 on the Ö3-Hitparade.",
+          "List of number-one hits of 2012 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2012."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Reapers (song)",
+          "sent_id": 0,
+          "sentence": "\"Reapers\" is a song by English rock band Muse."
+        },
+        {
+          "title": "Reapers (song)",
+          "sent_id": 2,
+          "sentence": "It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \"Billboard\"' s Hot Rock Songs, and became Muse's highest-charting single on \"Billboard\"' s Mainstream Rock Songs at number 2."
+        },
+        {
+          "title": "Swiss Hitparade",
+          "sent_id": 0,
+          "sentence": "The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?\n\nCurrent agent output:\n\"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\"\n\nActual upstream context:\n{\n  \"question\": \"What number did the song \\\"Reapers\\\"  by Muse reach on Switzerland's main music sales chart?\",\n  \"summary_1\": \"\\\"Reapers\\\" reached number 71 on Switzerland's main music sales chart (the Swiss Hitparade).\",\n  \"hop2_query\": \"Muse \\\"Reapers\\\" Swiss Hitparade peak position\",\n  \"hop2_titles\": [\n    \"Reapers (song)\",\n    \"Philipp Fankhauser\",\n    \"Swiss Hitparade\",\n    \"Sign in the Sky\",\n    \"Opus (Opus album)\",\n    \"Solo (Opus album)\",\n    \"List of number-one hits of 2012 (Switzerland)\"\n  ],\n  \"hop2_docs\": [\n    \"Reapers (song) | \\\"Reapers\\\" is a song by English rock band Muse.  It was released as the second promotional single from the band's seventh studio album \\\"Drones\\\", and was given a 7\\\" single release, as part of Record Store Day 2016, on 16 April 2016 as the fifth and final single from Drones.  It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \\\"Billboard\\\"' s Hot Rock Songs, and became Muse's highest-charting single on \\\"Billboard\\\"' s Mainstream Rock Songs at number 2.\",\n    \"Philipp Fankhauser | Philipp Manuel Fankhauser (born February 20, 1964 in Thun, Switzerland) is a Swiss blues musician and songwriter.  Several of his albums have charted in the top ten of the Swiss Hitparade, such as \\\"Love Man Riding\\\", which peaked at No. 7, \\\"Home\\\", which peaked at No. 2,\",\n    \"Swiss Hitparade | The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.  The charts are a record of the highest-selling singles and albums in various genres in Switzerland.\",\n    \"Sign in the Sky | Sign in the Sky is the second album by hard rock band China.  It was released in 1989 by the label Vertigo.  The single, \\\"In the Middle of the Night\\\", peaked at No. 11 on the Swiss Hitparade.\",\n    \"Opus (Opus album) | Opus is the sixth studio album by Austrian pop rock band Opus.  It was released in 1987.  It peaked at #7 on the Ö3 Austria Top 40 Longplay.  The first single \\\"Whiteland\\\", peaked at #3 on the Ö3 Austria Top 40 Singles and #2 on the Ö3-Hitparade.  The second single, \\\"Faster and Faster\\\", peaked at #12 on the Ö3 Austria Top 40 Singles and #2 on the Ö3-Hitparade.  The third single, \\\"Will You Ever Know Me\\\", peaked at #24 on the Ö3-Hitparade.\",\n    \"Solo (Opus album) | Solo is the fifth album by Austrian pop rock band Opus.  It was released in 1985.  It peaked at #8 on the Ö3 Austria Top 40 Longplay.  The first single \\\"Rock on the Rocks\\\", peaked at #21 on the Ö3-Hitparade.  The second single, \\\"Idolater\\\", peaked at #24 on the Ö3-Hitparade.\",\n    \"List of number-one hits of 2012 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2012.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Reapers (song)\",\n    \"sent_id\": 0,\n    \"sentence\": \"\\\"Reapers\\\" is a song by English rock band Muse.\"\n  },\n  {\n    \"title\": \"Reapers (song)\",\n    \"sent_id\": 2,\n    \"sentence\": \"It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \\\"Billboard\\\"' s Hot Rock Songs, and became Muse's highest-charting single on \\\"Billboard\\\"' s Mainstream Rock Songs at number 2.\"\n  },\n  {\n    \"title\": \"Swiss Hitparade\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"\\\"Reapers\\\" is a song by English rock band Muse. The Reapers (song) entry states it peaked at number 71 on the Swiss Hitparade singles chart. The Swiss Hitparade are Switzerland's main music sales charts.\",\n  \"rationale\": \"Integrated the summary_1 claim with two hop2 supporting sentences: the 'Reapers (song)' page gives the peak positions including '71 on the Swiss Hitparade singles chart', and the 'Swiss Hitparade' page defines the Swiss Hitparade as Switzerland's main music sales charts. These visible supports supply the facts the final-answer agent needs.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 65,
+    "row_index": 65
+  }
+}

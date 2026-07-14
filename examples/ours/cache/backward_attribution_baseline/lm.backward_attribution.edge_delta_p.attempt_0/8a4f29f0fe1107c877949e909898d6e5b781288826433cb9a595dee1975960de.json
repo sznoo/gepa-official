@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "8a4f29f0fe1107c877949e909898d6e5b781288826433cb9a595dee1975960de",
+  "created_at": "2026-07-13T17:22:54.794032+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?",
+        "summary_1": "Battle Creek, Michigan, United States",
+        "summary_2": "Battle Creek, Michigan, United States",
+        "current_output": "Battle Creek, Michigan, United States"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Battle Creek, Michigan, United States",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Battle Creek, Michigan",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?\",\n  \"summary_1\": \"Battle Creek, Michigan, United States\",\n  \"summary_2\": \"Battle Creek, Michigan, United States\",\n  \"current_output\": \"Battle Creek, Michigan, United States\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Battle Creek, Michigan, United States\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Battle Creek, Michigan\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 and summary_2 are identical and both end with \\\", United States\\\", and the question requests a location (e.g., asks \\\"where\\\" or \\\"headquartered where\\\").\",\n    \"preserve_rule\": \"Keep using the location string verbatim from the summaries as the source of truth and continue to produce only the minimal answer string in the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"If both summaries agree and provide a location that ends with \\\", United States\\\", remove the trailing \\\", United States\\\" (and any redundant comma/space) before emitting. Emit the remaining city and state only (format: City, State).\",\n    \"drop_or_avoid_rule\": \"Do not add explanatory text, qualifiers, or the country in another form (e.g., \\\"USA\\\" or \\\"United States of America\\\"). Do not expand into sentences or add punctuation beyond the single city/state comma separator.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly one short location string in the form \\\"City, State\\\" (no country) when both summaries agree and end with \\\", United States\\\". No extra text, punctuation, or commentary is allowed.\",\n    \"why_local_transition\": \"Both visible summaries include the full city/state/country; dropping the country yields a more concise, still-supported location string and fixes the one-token excess (the country) while preserving the original evidence and output format.\"\n  },\n  \"rationale\": \"This is a minimal, local behavioral edit: it only strips a redundant country suffix when both summaries agree on it and the question asks for a location. It preserves the base prompt's requirement to use the summaries and to emit a minimal answer string, avoids adding new behaviors, and directly addresses the single-token difference between the current output and the desired concise location form.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 95,
+    "row_index": 95,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

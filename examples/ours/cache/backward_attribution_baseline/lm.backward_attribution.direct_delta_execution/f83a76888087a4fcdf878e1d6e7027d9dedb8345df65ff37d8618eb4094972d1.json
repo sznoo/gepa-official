@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "f83a76888087a4fcdf878e1d6e7027d9dedb8345df65ff37d8618eb4094972d1",
+  "created_at": "2026-07-13T17:14:50.683630+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If any visible summary contains a name immediately followed by a parenthetical clarification (pattern: NAME (EXTRA)), apply the rule below.",
+            "preserve_rule": "Keep the original chosen name tokenization and wording from the summaries; do not invent new descriptors or change wording other than removing the parenthetical segment.",
+            "change_rule": "When the trigger matches, strip the parenthetical and its surrounding space from the selected summary string and output only the text that appears before the opening parenthesis. If multiple summaries contain parentheticals, prefer the first matching summary in the provided summary order. If no summary contains a parenthesis, keep the existing selection behavior unchanged.",
+            "drop_or_avoid_rule": "Do not include the parenthetical clarification or any additional explanatory phrases (e.g., 'part of ...', country qualifiers) in the final answer. Avoid adding context, justification, or full-sentence framing — emit only the pared-down name.",
+            "output_contract": "Produce the `answer` field as a single minimal name string (the text before any parenthesis when the trigger matched). Place only that minimal string inside the [[ ## answer ## ]] block with no extra text, punctuation, or explanation.",
+            "why_local_transition": "Removes an extraneous parenthetical clarification that made the final output longer than the minimal name present in the visible summaries, while preserving the originally selected name."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Londonderry Borough Police are the force in the county that is part of what country?",
+        "summary_1": "Ireland",
+        "summary_2": "Northern Ireland (part of the United Kingdom)",
+        "current_output": "Northern Ireland (part of the United Kingdom)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If any visible summary contains a name immediately followed by a parenthetical clarification (pattern: NAME (EXTRA)), apply the rule below.\",\n      \"preserve_rule\": \"Keep the original chosen name tokenization and wording from the summaries; do not invent new descriptors or change wording other than removing the parenthetical segment.\",\n      \"change_rule\": \"When the trigger matches, strip the parenthetical and its surrounding space from the selected summary string and output only the text that appears before the opening parenthesis. If multiple summaries contain parentheticals, prefer the first matching summary in the provided summary order. If no summary contains a parenthesis, keep the existing selection behavior unchanged.\",\n      \"drop_or_avoid_rule\": \"Do not include the parenthetical clarification or any additional explanatory phrases (e.g., 'part of ...', country qualifiers) in the final answer. Avoid adding context, justification, or full-sentence framing — emit only the pared-down name.\",\n      \"output_contract\": \"Produce the `answer` field as a single minimal name string (the text before any parenthesis when the trigger matched). Place only that minimal string inside the [[ ## answer ## ]] block with no extra text, punctuation, or explanation.\",\n      \"why_local_transition\": \"Removes an extraneous parenthetical clarification that made the final output longer than the minimal name present in the visible summaries, while preserving the originally selected name.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Londonderry Borough Police are the force in the county that is part of what country?\",\n  \"summary_1\": \"Ireland\",\n  \"summary_2\": \"Northern Ireland (part of the United Kingdom)\",\n  \"current_output\": \"Northern Ireland (part of the United Kingdom)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nNorthern Ireland\",\n  \"rationale\": \"summary_2 contained a parenthetical; per the rule the parenthetical and preceding space were removed and the text before '(' was output.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 39,
+    "row_index": 39,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

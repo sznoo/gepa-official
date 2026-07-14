@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "7674a4a341334a479b4570fccb6ad34bc9b71d7a62de587fefe4e878c60a64a0",
+  "created_at": "2026-07-13T17:13:18.786319+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When producing the final `answer` for this question (the fields `question`, `summary_1`, and `summary_2` are present and you are at the endpoint that returns `answer`).",
+            "preserve_rule": "Continue to base the selection on the visible summaries as evidence. Preserve any logic that chooses the person supported by the summaries and preserve the `answer` field interface.",
+            "change_rule": "Replace any full-sentence or explanatory final output with only the minimal name string that is directly supported by the visible summaries. Emit the name in the shortest canonical form shown in a summary (do not append roles, verbs, dates, or extra context).",
+            "drop_or_avoid_rule": "Do not include explanatory text, sentences, qualifiers, citations, or any trailing/leading commentary. Avoid verbs (e.g., 'played'), album or band names, birth dates, or occupational labels. Do not add additional names or annotations.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the single minimal answer string (the person's name) exactly as sourced from the visible summaries and nothing else.",
+            "why_local_transition": "The source output is a full sentence; the target format requires a minimal answer string. This small behavioral edit enforces concise final formatting while keeping the same evidence-driven selection."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "summary_1": "Rick Savage (Richard \"Rick\" Savage) — bass guitarist of Def Leppard; born 2 December 1960.",
+        "summary_2": "Mike Mills. He played bass on R.E.M.'s debut album Murmur. ([[ ## completed ## ]])",
+        "current_output": "Mike Mills played bass on R.E.M.'s debut album Murmur."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When producing the final `answer` for this question (the fields `question`, `summary_1`, and `summary_2` are present and you are at the endpoint that returns `answer`).\",\n      \"preserve_rule\": \"Continue to base the selection on the visible summaries as evidence. Preserve any logic that chooses the person supported by the summaries and preserve the `answer` field interface.\",\n      \"change_rule\": \"Replace any full-sentence or explanatory final output with only the minimal name string that is directly supported by the visible summaries. Emit the name in the shortest canonical form shown in a summary (do not append roles, verbs, dates, or extra context).\",\n      \"drop_or_avoid_rule\": \"Do not include explanatory text, sentences, qualifiers, citations, or any trailing/leading commentary. Avoid verbs (e.g., 'played'), album or band names, birth dates, or occupational labels. Do not add additional names or annotations.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal answer string (the person's name) exactly as sourced from the visible summaries and nothing else.\",\n      \"why_local_transition\": \"The source output is a full sentence; the target format requires a minimal answer string. This small behavioral edit enforces concise final formatting while keeping the same evidence-driven selection.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"summary_1\": \"Rick Savage (Richard \\\"Rick\\\" Savage) — bass guitarist of Def Leppard; born 2 December 1960.\",\n  \"summary_2\": \"Mike Mills. He played bass on R.E.M.'s debut album Murmur. ([[ ## completed ## ]])\",\n  \"current_output\": \"Mike Mills played bass on R.E.M.'s debut album Murmur.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Mike Mills\",\n  \"rationale\": \"Used the visible summaries and applied the delta rules to return only the minimal name string supported by summary_2.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 19,
+    "row_index": 19,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

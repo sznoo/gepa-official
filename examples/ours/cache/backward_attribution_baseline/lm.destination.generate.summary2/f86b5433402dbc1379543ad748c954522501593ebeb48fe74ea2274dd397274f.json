@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "f86b5433402dbc1379543ad748c954522501593ebeb48fe74ea2274dd397274f",
+  "created_at": "2026-07-13T17:24:43.858452+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+      "current_output": "Chad Johnson (also known as Chad Ochocinco)",
+      "upstream_context": {
+        "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+        "summary_1": "Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.",
+        "hop2_query": "\"NFL Street 3 official spokesperson Chad Johnson Ochocinco\"",
+        "hop2_titles": [
+          "NFL Street 3",
+          "Chad Johnson (disambiguation)",
+          "Chad Johnson",
+          "Ochocinco: The Ultimate Catch",
+          "Prime Minister's Official Spokesperson",
+          "Chad Johnson (actor)",
+          "Chad Kolton"
+        ],
+        "hop2_docs": [
+          "NFL Street 3 | NFL Street 3 is the third installment of the \"NFL Street\" series, released in November 2006 for the PlayStation 2 and PlayStation Portable consoles.  This installment featured more game modes and unlockable features than previous versions.  Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.",
+          "Chad Johnson (disambiguation) | Chad Johnson (born 1978; formerly Chad Ochocinco) is an American football wide receiver.",
+          "Chad Johnson | Chad Javon Johnson (born January 9, 1978), formerly Chad Ochocinco, is a former American football wide receiver.  He played college football for both Santa Monica College and Oregon State University, and played eleven seasons in the National Football League (NFL) for the Cincinnati Bengals, New England Patriots, and the Miami Dolphins.  He was drafted by the Cincinnati Bengals of the National Football League (NFL) in the second round of the 2001 NFL Draft, and played for the Bengals for 10 seasons.  In 2011, Johnson was traded to the New England Patriots which he played for in Super Bowl XLVI.  In 2012, Johnson played for the Miami Dolphins during preseason but was released following his arrest for domestic violence.  He played for the Montreal Alouettes of the Canadian Football League (CFL) from 2014 to 2015, and played one game in 2017 for Mexican team Monterrey Fundidores of the Liga de Fútbol Americano Profesional.",
+          "Ochocinco: The Ultimate Catch | Ochocinco: The Ultimate Catch is an American reality television series airing on VH1 starring wide receiver Chad Ochocinco.  The show places him with 85 women to choose from to find love.  In the first episode of the show, he eliminated 69 girls.  Rubi Pazmino was the winner of the show.  Fellow NFL Wide Receivers, and Ochocinco's close friends, Bernard \"B-Twice\" Berrian and Terrell Owens appeared on some episodes offering tips and helping Ochocinco select the girls.",
+          "Prime Minister's Official Spokesperson | The Prime Minister's Official Spokesperson or alternatively Prime Minister's Official Spokesman/Spokeswoman is a position in the United Kingdom's Civil Service, located in the Prime Minister's Office in 10 Downing Street and used by the British Prime Minister to convey information to the public.  The Prime Minister's Official Spokesperson usually addresses a small group of press and media correspondents, known as lobby correspondents, each morning to deliver statements on current events on behalf of the Prime Minister.",
+          "Chad Johnson (actor) | Chad Johnson is an American actor in gay pornography.",
+          "Chad Kolton | Chad Kolton was a partner in the American public relations firm HDMK.  Through that role he was also a hired spokesperson for Special Operations OPSEC Education Fund."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "NFL Street 3",
+          "sent_id": 2,
+          "sentence": "Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game."
+        },
+        {
+          "title": "Chad Johnson",
+          "sent_id": 0,
+          "sentence": "Chad Javon Johnson (born January 9, 1978), formerly Chad Ochocinco, is a former American football wide receiver."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nNFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?\n\nCurrent agent output:\n\"Chad Johnson (also known as Chad Ochocinco)\"\n\nActual upstream context:\n{\n  \"question\": \"NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, which  American football wide receiver, was an official spokesperson of the game?\",\n  \"summary_1\": \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\",\n  \"hop2_query\": \"\\\"NFL Street 3 official spokesperson Chad Johnson Ochocinco\\\"\",\n  \"hop2_titles\": [\n    \"NFL Street 3\",\n    \"Chad Johnson (disambiguation)\",\n    \"Chad Johnson\",\n    \"Ochocinco: The Ultimate Catch\",\n    \"Prime Minister's Official Spokesperson\",\n    \"Chad Johnson (actor)\",\n    \"Chad Kolton\"\n  ],\n  \"hop2_docs\": [\n    \"NFL Street 3 | NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, released in November 2006 for the PlayStation 2 and PlayStation Portable consoles.  This installment featured more game modes and unlockable features than previous versions.  Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\",\n    \"Chad Johnson (disambiguation) | Chad Johnson (born 1978; formerly Chad Ochocinco) is an American football wide receiver.\",\n    \"Chad Johnson | Chad Javon Johnson (born January 9, 1978), formerly Chad Ochocinco, is a former American football wide receiver.  He played college football for both Santa Monica College and Oregon State University, and played eleven seasons in the National Football League (NFL) for the Cincinnati Bengals, New England Patriots, and the Miami Dolphins.  He was drafted by the Cincinnati Bengals of the National Football League (NFL) in the second round of the 2001 NFL Draft, and played for the Bengals for 10 seasons.  In 2011, Johnson was traded to the New England Patriots which he played for in Super Bowl XLVI.  In 2012, Johnson played for the Miami Dolphins during preseason but was released following his arrest for domestic violence.  He played for the Montreal Alouettes of the Canadian Football League (CFL) from 2014 to 2015, and played one game in 2017 for Mexican team Monterrey Fundidores of the Liga de Fútbol Americano Profesional.\",\n    \"Ochocinco: The Ultimate Catch | Ochocinco: The Ultimate Catch is an American reality television series airing on VH1 starring wide receiver Chad Ochocinco.  The show places him with 85 women to choose from to find love.  In the first episode of the show, he eliminated 69 girls.  Rubi Pazmino was the winner of the show.  Fellow NFL Wide Receivers, and Ochocinco's close friends, Bernard \\\"B-Twice\\\" Berrian and Terrell Owens appeared on some episodes offering tips and helping Ochocinco select the girls.\",\n    \"Prime Minister's Official Spokesperson | The Prime Minister's Official Spokesperson or alternatively Prime Minister's Official Spokesman/Spokeswoman is a position in the United Kingdom's Civil Service, located in the Prime Minister's Office in 10 Downing Street and used by the British Prime Minister to convey information to the public.  The Prime Minister's Official Spokesperson usually addresses a small group of press and media correspondents, known as lobby correspondents, each morning to deliver statements on current events on behalf of the Prime Minister.\",\n    \"Chad Johnson (actor) | Chad Johnson is an American actor in gay pornography.\",\n    \"Chad Kolton | Chad Kolton was a partner in the American public relations firm HDMK.  Through that role he was also a hired spokesperson for Special Operations OPSEC Education Fund.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"NFL Street 3\",\n    \"sent_id\": 2,\n    \"sentence\": \"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\"\n  },\n  {\n    \"title\": \"Chad Johnson\",\n    \"sent_id\": 0,\n    \"sentence\": \"Chad Javon Johnson (born January 9, 1978), formerly Chad Ochocinco, is a former American football wide receiver.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary_1 stated that \\\"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\\\" Second-hop supporting evidence: (1) NFL Street 3: \\\"Chad Johnson of the Cincinnati Bengals appears on the cover and was the official spokesperson of the game.\\\" (2) Chad Johnson: \\\"Chad Javon Johnson ..., formerly Chad Ochocinco, is a former American football wide receiver.\\\" Integrated evidence: Chad Javon Johnson (formerly Chad Ochocinco), a former American football wide receiver associated with the Cincinnati Bengals, appears on the cover of NFL Street 3 and is identified as the game's official spokesperson.\",\n  \"rationale\": \"The output combines the summary_1 claim with two visible second-hop sentences: the NFL Street 3 page explicitly names Chad Johnson on the cover and as the official spokesperson, and the Chad Johnson page confirms his identity as a former American football wide receiver (formerly Chad Ochocinco). These retained facts are what the final-answer agent will need to produce the answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 117,
+    "row_index": 117
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_0",
+  "key": "212ba8158618140a31cba43d06933890532b5580a5adc521cc4b76e764af7b06",
+  "created_at": "2026-07-13T17:38:28.336773+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "visible_c_inputs": {
+        "question": "Does Empire of the Sun or 3 Doors Down have more band members?",
+        "summary_1": "3 Doors Down has more band members. Empire of the Sun is a duo (2 members), while 3 Doors Down is a rock band with more than two members.",
+        "summary_2": "3 Doors Down has more band members.",
+        "current_output": "3 Doors Down"
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "3 Doors Down",
+        "score": 1.0
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Guided by Voices is from Ohio.",
+        "score": 0.0
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Guided by Voices",
+        "score": 1.0
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks which of two named options is from a place (pattern: 'Which ... is from X, A or B?') and the provided summaries unambiguously indicate a single band as the answer.",
+            "preserve_rule": "Continue to base the answer only on the visible summaries (summary_1, summary_2). Keep the existing output interface and the requirement to place the final token(s) inside the [[ ## answer ## ]] block.",
+            "change_rule": "Instead of a full sentence or explanatory phrase, output only the minimal identifying band name string that is supported by the summaries. Extract the shortest contiguous substring from the summaries that names the band and emit exactly that substring (trim leading/trailing whitespace) as the answer inside the [[ ## answer ## ]] block. Do not add explanations, context, or extra punctuation.",
+            "drop_or_avoid_rule": "Do not include supporting sentences, justification, provenance, verbs like 'is from', articles, or any other words beyond the band name in the answer block. Avoid adding external facts or paraphrases that extend beyond the visible summaries.",
+            "output_contract": "Produce the field 'answer' whose value is exactly the minimal band-name string (no extras). The [[ ## answer ## ]] block must contain only that name and nothing else.",
+            "why_local_transition": "This change narrows the final-output format from a full sentence to the smallest possible answer string required by the agent's final-answer contract, preserving reliance on the same visible summaries while removing superfluous wording."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-14-v2-positive-update-utils",
+        "c_eval_position": 114,
+        "c_stable_id": "114",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 70,
+        "selected_w_stable_id": "70",
+        "agent": "final",
+        "dominant_gap_type": "output_selection",
+        "transported_damage_hypothesis": "The final agent will output a full-sentence/explanatory answer instead of the minimal band-name string.",
+        "expected_damaged_behavior": "Instead of returning just '3 Doors Down', the agent emits an explanatory sentence (e.g., '3 Doors Down is a rock band with more members than Empire of the Sun.') or otherwise adds extra wording around the correct band name.",
+        "rationale": "W sample 70 describes a narrow, local formatting failure at the final-answer boundary: the repair forces the agent to emit only the minimal band-name string rather than a fuller sentence. That same kind of output-shape failure (excess explanatory phrasing vs. minimal token answer) can plausibly occur for the C question, which also expects a short band-name answer comparing two named options. Transporting this failure pattern only affects final output formatting (not evidence selection, entity resolution, or the correctness of the band choice), keeps the damaged output a local neighbor of the correct minimal answer, and does not require flipping the selected answer. Therefore the W70 pattern is the most semantically transferable to the target.",
+        "confidence": 0.78
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nVisible C inputs:\n{\n  \"question\": \"Does Empire of the Sun or 3 Doors Down have more band members?\",\n  \"summary_1\": \"3 Doors Down has more band members. Empire of the Sun is a duo (2 members), while 3 Doors Down is a rock band with more than two members.\",\n  \"summary_2\": \"3 Doors Down has more band members.\",\n  \"current_output\": \"3 Doors Down\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"3 Doors Down\",\n  \"score\": 1.0\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Guided by Voices is from Ohio.\",\n  \"score\": 0.0\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Guided by Voices\",\n  \"score\": 1.0\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks which of two named options is from a place (pattern: 'Which ... is from X, A or B?') and the provided summaries unambiguously indicate a single band as the answer.\",\n      \"preserve_rule\": \"Continue to base the answer only on the visible summaries (summary_1, summary_2). Keep the existing output interface and the requirement to place the final token(s) inside the [[ ## answer ## ]] block.\",\n      \"change_rule\": \"Instead of a full sentence or explanatory phrase, output only the minimal identifying band name string that is supported by the summaries. Extract the shortest contiguous substring from the summaries that names the band and emit exactly that substring (trim leading/trailing whitespace) as the answer inside the [[ ## answer ## ]] block. Do not add explanations, context, or extra punctuation.\",\n      \"drop_or_avoid_rule\": \"Do not include supporting sentences, justification, provenance, verbs like 'is from', articles, or any other words beyond the band name in the answer block. Avoid adding external facts or paraphrases that extend beyond the visible summaries.\",\n      \"output_contract\": \"Produce the field 'answer' whose value is exactly the minimal band-name string (no extras). The [[ ## answer ## ]] block must contain only that name and nothing else.\",\n      \"why_local_transition\": \"This change narrows the final-output format from a full sentence to the smallest possible answer string required by the agent's final-answer contract, preserving reliance on the same visible summaries while removing superfluous wording.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-14-v2-positive-update-utils\",\n  \"c_eval_position\": 114,\n  \"c_stable_id\": \"114\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 70,\n  \"selected_w_stable_id\": \"70\",\n  \"agent\": \"final\",\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"The final agent will output a full-sentence/explanatory answer instead of the minimal band-name string.\",\n  \"expected_damaged_behavior\": \"Instead of returning just '3 Doors Down', the agent emits an explanatory sentence (e.g., '3 Doors Down is a rock band with more members than Empire of the Sun.') or otherwise adds extra wording around the correct band name.\",\n  \"rationale\": \"W sample 70 describes a narrow, local formatting failure at the final-answer boundary: the repair forces the agent to emit only the minimal band-name string rather than a fuller sentence. That same kind of output-shape failure (excess explanatory phrasing vs. minimal token answer) can plausibly occur for the C question, which also expects a short band-name answer comparing two named options. Transporting this failure pattern only affects final output formatting (not evidence selection, entity resolution, or the correctness of the band choice), keeps the damaged output a local neighbor of the correct minimal answer, and does not require flipping the selected answer. Therefore the W70 pattern is the most semantically transferable to the target.\",\n  \"confidence\": 0.78\n}\n\nRepair feedback from a rejected attempt:\n{}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": \"[[ ## answer ## ]]\\n3 Doors Down has more band members than Empire of the Sun.\\n[[ ## answer ## ]]\",\n  \"transported_failure_pattern\": \"Emit a full-sentence explanatory answer instead of the minimal entity-only answer\",\n  \"expected_damage\": \"The final output includes extra explanatory phrasing (a full sentence comparing the two bands) rather than returning only the bare band-name string; the correct band choice is preserved.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"3 Doors Down (correct band choice)\"],\n    \"why_not_unrelated\": \"Only the answer-format is altered (adds explanatory sentence); the referenced bands and comparative relation come directly from the visible summaries.\"\n  },\n  \"confidence\": 0.78,\n  \"rationale\": \"Applies the reverse of the W repair by reintroducing explanatory wording while keeping the same band selection supported by the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 114,
+    "c_stable_id": "114",
+    "w_sample_index": 70,
+    "w_stable_id": "70",
+    "agent": "final",
+    "damage_attempt": 0,
+    "match_fingerprint": "49eb7895579dee635017ec0eb80afdfab987330fc51ec221f98a7dc78c75e7d2"
+  }
+}

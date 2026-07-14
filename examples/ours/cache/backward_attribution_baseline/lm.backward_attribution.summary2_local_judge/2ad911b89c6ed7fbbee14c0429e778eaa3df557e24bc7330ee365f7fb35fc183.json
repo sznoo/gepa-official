@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "2ad911b89c6ed7fbbee14c0429e778eaa3df557e24bc7330ee365f7fb35fc183",
+  "created_at": "2026-07-13T17:21:42.992673+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+      "source_summary": "Whistle Down the Wind (1961)",
+      "target_summary": "Upstream identified the film Whistle Down the Wind (1961). Second-hop evidence shows that the stage musical Whistle Down the Wind is based on the 1961 film (whose source novel was written by Mary Hayley Bell in 1959), and that Ashley Lloyd has performed in the musical theatre production Whistle Down the Wind.",
+      "candidate_summary": "Whistle Down the Wind (1961). The stage musical 'Whistle Down the Wind', based on the 1961 film whose source novel was written by Mary Hayley Bell in 1959, featured Ashley Lloyd, thereby linking Ashley Lloyd to the film."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhich film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\n\nSource summary2:\nWhistle Down the Wind (1961)\n\nTarget summary2:\nUpstream identified the film Whistle Down the Wind (1961). Second-hop evidence shows that the stage musical Whistle Down the Wind is based on the 1961 film (whose source novel was written by Mary Hayley Bell in 1959), and that Ashley Lloyd has performed in the musical theatre production Whistle Down the Wind.\n\nCandidate summary2:\nWhistle Down the Wind (1961). The stage musical 'Whistle Down the Wind', based on the 1961 film whose source novel was written by Mary Hayley Bell in 1959, featured Ashley Lloyd, thereby linking Ashley Lloyd to the film.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate names the film Whistle Down the Wind (1961), states the film's source novel was written by Mary Hayley Bell in 1959, and reports that the stage musical based on that film featured Ashley Lloyd—preserving the source film title and adding the target's linking evidence that connects Ashley Lloyd to the film.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 67,
+    "row_index": 67,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

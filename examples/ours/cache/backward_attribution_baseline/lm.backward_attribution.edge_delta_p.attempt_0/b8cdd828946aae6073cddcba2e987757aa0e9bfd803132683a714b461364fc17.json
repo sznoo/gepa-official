@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "b8cdd828946aae6073cddcba2e987757aa0e9bfd803132683a714b461364fc17",
+  "created_at": "2026-07-13T17:24:50.025168+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.",
+        "summary_1": "Space (Ibiza) was owned by STANCA.",
+        "summary_2": "Space (Ibiza) was owned by STANCA.",
+        "current_output": "Space (Ibiza) was owned by Pepe Roselló (the Roselló family)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Space (Ibiza) was owned by Pepe Roselló (the Roselló family).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "STANCA",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Eric Estornel, better known by his stage names Maceo Plex and Maetrik, is an American DJ, producer and DJ Awards winner , he is best known for diverse production style, influenced primarily by house and techno but also tech house, as well as a longtime performer for many Ibiza-based clubs, including Space, was a Superclub on the island of Ibiza, Spain from 1986 to 2016, owned by who?.\",\n  \"summary_1\": \"Space (Ibiza) was owned by STANCA.\",\n  \"summary_2\": \"Space (Ibiza) was owned by STANCA.\",\n  \"current_output\": \"Space (Ibiza) was owned by Pepe Roselló (the Roselló family).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Space (Ibiza) was owned by Pepe Roselló (the Roselló family).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"STANCA\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 are both present and assert the same ownership string for the asked entity, and the agent's current answer differs from that asserted ownership in the summaries.\",\n    \"preserve_rule\": \"Keep the existing final-answer formatting behavior (the [[ ## answer ## ]] block and minimal-answer contract) and retain any other useful inference behavior not directly about the ownership value.\",\n    \"change_rule\": \"When the trigger condition holds, prefer the ownership string provided by the visible summaries (the value they both agree on) as the authoritative source for the answer. Produce that ownership string as the minimal answer text, and do not append explanations, qualifiers, or extra names not present in the agreeing summaries.\",\n    \"drop_or_avoid_rule\": \"Avoid using external knowledge, memory, or prior outputs that contradict the ownership string given in the agreeing summaries. Do not add family names, dates, or other extra details unless those exact details appear in the visible summaries.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal ownership string exactly as presented by the agreeing summaries (no surrounding text, punctuation, or explanation).\",\n    \"why_local_transition\": \"The current output uses a different ownership claim than the provided summaries. This small rule shifts priority to consistent information in the visible summaries so the final answer matches the evidence the pipeline supplied, while preserving the agent's existing output format and other behaviors.\"\n  },\n  \"rationale\": \"The source output conflicts with two identical summaries. The minimal, local change is to prioritize a consensus value from the visible summaries when they agree, and to suppress contradictory external knowledge. This keeps the edit narrow (only changing how ownership claims are selected) and preserves the agent's required minimal-answer formatting and other behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 129,
+    "row_index": 129,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

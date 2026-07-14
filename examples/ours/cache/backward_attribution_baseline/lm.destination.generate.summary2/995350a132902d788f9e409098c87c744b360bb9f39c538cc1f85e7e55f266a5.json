@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "995350a132902d788f9e409098c87c744b360bb9f39c538cc1f85e7e55f266a5",
+  "created_at": "2026-07-13T17:20:39.399919+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+      "current_output": "Whistle Down the Wind (1961)",
+      "upstream_context": {
+        "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+        "summary_1": "Whistle Down the Wind (1961)",
+        "hop2_query": "Ashley Lloyd \"Whistle Down the Wind\" cast film 1961 filmography",
+        "hop2_titles": [
+          "Ashley Lloyd",
+          "Whistle Down the Wind (musical)",
+          "Whistle Down the Wind (film)",
+          "Whistle Down the Wind (1989 musical)",
+          "No Matter What (Boyzone song)",
+          "Whistle Down the Wind (novel)",
+          "A Timeless Evening with Sarah Brightman"
+        ],
+        "hop2_docs": [
+          "Ashley Lloyd | Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \"Billy Elliot the Musical\" and \"Whistle Down the Wind\".  In 2012 Lloyd appeared in the new musical \"Loserville\" at the Garrick Theatre in London.  Lloyd is now appearing in the Original London Cast of Dreamgirls at The Savoy Theatre",
+          "Whistle Down the Wind (musical) | Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.  It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959.",
+          "Whistle Down the Wind (film) | Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.  The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills.",
+          "Whistle Down the Wind (1989 musical) | Whistle Down the Wind is a musical based on the novel by Mary Hayley Bell, adapted by Richard Taylor and Russell Labey, with music and lyrics by Richard Taylor.",
+          "No Matter What (Boyzone song) | \"No Matter What\" is a song from the 1996 musical \"Whistle Down the Wind\" and popularised by Irish boyband Boyzone in 1998 when they recorded it to tie in with the show's first UK production.  The recording was written and produced by Andrew Lloyd Webber, Jim Steinman, Nigel Wright with additional production by Franglen & Lupino.  The song was also featured on the US edition of the soundtrack to the 1999 film \"Notting Hill\", and was released to American radio on 10 May 1999.",
+          "Whistle Down the Wind (novel) | Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.  It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).  The central characters are three children — Swallow, Brat and Poor Baby.  The story of the Great Secret is told by Brat.",
+          "A Timeless Evening with Sarah Brightman | A Timeless Evening With Sarah Brightman was the first concert tour by English soprano Sarah Brightman accompanied by the London Symphony Orchestra.  The repertoire performed by Brightman was a balanced combination between well-known Classical and Broadway pieces by composers such as Puccini, Gershwin, Delibes, Bernstein and Andrew Lloyd Webber.  Lloyd Webber joined Brightman on stage to perform together the song \"Whistle Down the Wind\".  Italian tenor Andrea Bocelli sang \"Time to Say Goodbye\" in a duet with Brightman."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Ashley Lloyd",
+          "sent_id": 0,
+          "sentence": "Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \"Billy Elliot the Musical\" and \"Whistle Down the Wind\"."
+        },
+        {
+          "title": "Whistle Down the Wind (musical)",
+          "sent_id": 0,
+          "sentence": "Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman."
+        },
+        {
+          "title": "Whistle Down the Wind (musical)",
+          "sent_id": 1,
+          "sentence": "It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhich film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\n\nCurrent agent output:\n\"Whistle Down the Wind (1961)\"\n\nActual upstream context:\n{\n  \"question\": \"Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\",\n  \"summary_1\": \"Whistle Down the Wind (1961)\",\n  \"hop2_query\": \"Ashley Lloyd \\\"Whistle Down the Wind\\\" cast film 1961 filmography\",\n  \"hop2_titles\": [\n    \"Ashley Lloyd\",\n    \"Whistle Down the Wind (musical)\",\n    \"Whistle Down the Wind (film)\",\n    \"Whistle Down the Wind (1989 musical)\",\n    \"No Matter What (Boyzone song)\",\n    \"Whistle Down the Wind (novel)\",\n    \"A Timeless Evening with Sarah Brightman\"\n  ],\n  \"hop2_docs\": [\n    \"Ashley Lloyd | Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \\\"Billy Elliot the Musical\\\" and \\\"Whistle Down the Wind\\\".  In 2012 Lloyd appeared in the new musical \\\"Loserville\\\" at the Garrick Theatre in London.  Lloyd is now appearing in the Original London Cast of Dreamgirls at The Savoy Theatre\",\n    \"Whistle Down the Wind (musical) | Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.  It is based on the 1961 film \\\"Whistle Down the Wind\\\", whose source novel of the same name was written by Mary Hayley Bell in 1959.\",\n    \"Whistle Down the Wind (film) | Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.  The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills.\",\n    \"Whistle Down the Wind (1989 musical) | Whistle Down the Wind is a musical based on the novel by Mary Hayley Bell, adapted by Richard Taylor and Russell Labey, with music and lyrics by Richard Taylor.\",\n    \"No Matter What (Boyzone song) | \\\"No Matter What\\\" is a song from the 1996 musical \\\"Whistle Down the Wind\\\" and popularised by Irish boyband Boyzone in 1998 when they recorded it to tie in with the show's first UK production.  The recording was written and produced by Andrew Lloyd Webber, Jim Steinman, Nigel Wright with additional production by Franglen & Lupino.  The song was also featured on the US edition of the soundtrack to the 1999 film \\\"Notting Hill\\\", and was released to American radio on 10 May 1999.\",\n    \"Whistle Down the Wind (novel) | Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.  It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).  The central characters are three children — Swallow, Brat and Poor Baby.  The story of the Great Secret is told by Brat.\",\n    \"A Timeless Evening with Sarah Brightman | A Timeless Evening With Sarah Brightman was the first concert tour by English soprano Sarah Brightman accompanied by the London Symphony Orchestra.  The repertoire performed by Brightman was a balanced combination between well-known Classical and Broadway pieces by composers such as Puccini, Gershwin, Delibes, Bernstein and Andrew Lloyd Webber.  Lloyd Webber joined Brightman on stage to perform together the song \\\"Whistle Down the Wind\\\".  Italian tenor Andrea Bocelli sang \\\"Time to Say Goodbye\\\" in a duet with Brightman.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Ashley Lloyd\",\n    \"sent_id\": 0,\n    \"sentence\": \"Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \\\"Billy Elliot the Musical\\\" and \\\"Whistle Down the Wind\\\".\"\n  },\n  {\n    \"title\": \"Whistle Down the Wind (musical)\",\n    \"sent_id\": 0,\n    \"sentence\": \"Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.\"\n  },\n  {\n    \"title\": \"Whistle Down the Wind (musical)\",\n    \"sent_id\": 1,\n    \"sentence\": \"It is based on the 1961 film \\\"Whistle Down the Wind\\\", whose source novel of the same name was written by Mary Hayley Bell in 1959.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Upstream identified the film Whistle Down the Wind (1961). Second-hop evidence shows that the stage musical Whistle Down the Wind is based on the 1961 film (whose source novel was written by Mary Hayley Bell in 1959), and that Ashley Lloyd has performed in the musical theatre production Whistle Down the Wind.\",\n  \"rationale\": \"Integrates summary1 (Whistle Down the Wind (1961)) with visible hop-2 sentences: the musical is based on the 1961 film and the novel by Mary Hayley Bell (1959), and Ashley Lloyd is documented as having performed in the musical. No additional facts were introduced.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 67,
+    "row_index": 67
+  }
+}

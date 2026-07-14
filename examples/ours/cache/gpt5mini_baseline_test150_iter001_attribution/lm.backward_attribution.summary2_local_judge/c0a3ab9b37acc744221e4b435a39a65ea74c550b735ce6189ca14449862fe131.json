@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "c0a3ab9b37acc744221e4b435a39a65ea74c550b735ce6189ca14449862fe131",
+  "created_at": "2026-07-13T18:47:12.469239+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+      "source_summary": "Brent Musburger",
+      "target_summary": "Summary integration: summary_1 named \"Brent Musburger.\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.",
+      "candidate_summary": "Summary integration: summary_1 named \"Brent Musburger.\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nHail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\n\nSource summary2:\nBrent Musburger\n\nTarget summary2:\nSummary integration: summary_1 named \"Brent Musburger.\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.\n\nCandidate summary2:\nSummary integration: summary_1 named \"Brent Musburger.\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target by stating Brent Woody Musburger is an American sportscaster and managing editor/lead broadcaster at VSiN, which preserves the source name and adds the task-relevant affiliation and role from the target.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 106,
+    "row_index": 106,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "94b46d12577ed4e390f1e544cad53a5222c3b4b65e15f875b1b61c6f02131e02",
+  "created_at": "2026-07-13T17:28:57.919416+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the model's current output simply repeats summary_1 (a short factual phrase or date) or otherwise emits a declarative answer instead of a retrieval query.",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` fields as the only inputs. Preserve the requirement that the `query` be compact and retrieval-focused.",
+            "change_rule": "Do not echo summary_1. Instead produce a single-line, search-style retrieval query (3–6 words) that concatenates the smallest set of distinctive tokens from the question that identify the person plus a birth indicator. Construct the query by selecting person-identifying phrases appearing in `question` (for example: the event organizer name, the event start year, and the phrase indicating 'four World Series of Poker bracelets') and append a short birth token such as 'born' or 'birth'. Keep the query lowercase, no punctuation, and avoid forming a full sentence.",
+            "drop_or_avoid_rule": "Avoid outputting a declarative sentence, a date, a long explanatory phrase, or simply repeating `summary_1`. Do not include long quoted spans or unrelated names from retrieved snippets. Do not output the target answer or any full-sentence summary—only a compact search query.",
+            "output_contract": "Return `query` as one short search-style phrase (3–6 words), no punctuation, derived only from `question` and `summary_1`. The phrase must be focused on locating the individual described in the question and must include an explicit birth indicator token (e.g., 'born' or 'birth'). Example structure: [distinctive-event-or-person-token] [distinctive-year-or-attribute] born.",
+            "why_local_transition": "The current prompt mapping was producing an answer echo instead of a retrieval query. This small, targeted change redirects generation to emit a concise, attribute-focused search query (rather than repeating the summary), enabling a correct second-hop retrieval while leaving all other prompt behavior unchanged."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If the question mentions a tournament series started in 2002 by Steven Lipscomb and summary_1 provides a short candidate birthdate or short identity phrase, and the current query is a pronoun, a date string, or otherwise not a focused retrieval query.",
+            "preserve_rule": "Keep producing exactly one compact retrieval query string as the agent's output. Continue to reuse short literal clues already present in summary_1 (e.g., a candidate date) only as optional disambiguators, and keep the query concise.",
+            "change_rule": "When triggered, form the query by combining at least two distinguishing tokens from the question (for example: 'Steven Lipscomb', '2002', 'winner', 'four World Series of Poker bracelets') plus a retrieval intent token such as 'born' or 'birthdate'. Produce a short keyword-style query (no full sentences). Do not output the summary sentence itself as the query.",
+            "drop_or_avoid_rule": "Avoid emitting the summary_1 text verbatim (e.g., 'He was born on ...'), avoid pronouns alone, avoid verbose question restatements, and avoid introducing sample-specific named anchors that do not already appear in the visible inputs.",
+            "output_contract": "Output a single-line, keyword-style query (preferably ≤10 words) that contains at least two distinguishing tokens from the question (e.g., 'Steven Lipscomb', '2002', 'four World Series of Poker bracelets') and an intent token ('born' or 'birthdate'). No explanation or additional text.",
+            "why_local_transition": "This small change makes the agent include the missing bridge terms from the question so a second-hop retrieval will target the tournament series and the player who has four WSOP bracelets and a birthdate, instead of returning the summary text or an unfocused query."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?",
+        "summary_1": "He was born on 17 July 1983.",
+        "current_output": {
+          "query": "He was born on 17 July 1983."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the model's current output simply repeats summary_1 (a short factual phrase or date) or otherwise emits a declarative answer instead of a retrieval query.\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` fields as the only inputs. Preserve the requirement that the `query` be compact and retrieval-focused.\",\n      \"change_rule\": \"Do not echo summary_1. Instead produce a single-line, search-style retrieval query (3–6 words) that concatenates the smallest set of distinctive tokens from the question that identify the person plus a birth indicator. Construct the query by selecting person-identifying phrases appearing in `question` (for example: the event organizer name, the event start year, and the phrase indicating 'four World Series of Poker bracelets') and append a short birth token such as 'born' or 'birth'. Keep the query lowercase, no punctuation, and avoid forming a full sentence.\",\n      \"drop_or_avoid_rule\": \"Avoid outputting a declarative sentence, a date, a long explanatory phrase, or simply repeating `summary_1`. Do not include long quoted spans or unrelated names from retrieved snippets. Do not output the target answer or any full-sentence summary—only a compact search query.\",\n      \"output_contract\": \"Return `query` as one short search-style phrase (3–6 words), no punctuation, derived only from `question` and `summary_1`. The phrase must be focused on locating the individual described in the question and must include an explicit birth indicator token (e.g., 'born' or 'birth'). Example structure: [distinctive-event-or-person-token] [distinctive-year-or-attribute] born.\",\n      \"why_local_transition\": \"The current prompt mapping was producing an answer echo instead of a retrieval query. This small, targeted change redirects generation to emit a concise, attribute-focused search query (rather than repeating the summary), enabling a correct second-hop retrieval while leaving all other prompt behavior unchanged.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If the question mentions a tournament series started in 2002 by Steven Lipscomb and summary_1 provides a short candidate birthdate or short identity phrase, and the current query is a pronoun, a date string, or otherwise not a focused retrieval query.\",\n      \"preserve_rule\": \"Keep producing exactly one compact retrieval query string as the agent's output. Continue to reuse short literal clues already present in summary_1 (e.g., a candidate date) only as optional disambiguators, and keep the query concise.\",\n      \"change_rule\": \"When triggered, form the query by combining at least two distinguishing tokens from the question (for example: 'Steven Lipscomb', '2002', 'winner', 'four World Series of Poker bracelets') plus a retrieval intent token such as 'born' or 'birthdate'. Produce a short keyword-style query (no full sentences). Do not output the summary sentence itself as the query.\",\n      \"drop_or_avoid_rule\": \"Avoid emitting the summary_1 text verbatim (e.g., 'He was born on ...'), avoid pronouns alone, avoid verbose question restatements, and avoid introducing sample-specific named anchors that do not already appear in the visible inputs.\",\n      \"output_contract\": \"Output a single-line, keyword-style query (preferably ≤10 words) that contains at least two distinguishing tokens from the question (e.g., 'Steven Lipscomb', '2002', 'four World Series of Poker bracelets') and an intent token ('born' or 'birthdate'). No explanation or additional text.\",\n      \"why_local_transition\": \"This small change makes the agent include the missing bridge terms from the question so a second-hop retrieval will target the tournament series and the player who has four WSOP bracelets and a birthdate, instead of returning the summary text or an unfocused query.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?\",\n  \"summary_1\": \"He was born on 17 July 1983.\",\n  \"current_output\": {\n    \"query\": \"He was born on 17 July 1983.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"winner steven lipscomb 2002 born\"\n  },\n  \"rationale\": \"Followed deltas: avoided echoing summary_1 and produced a concise (3–6 word), lowercase keyword query combining question tokens plus the birth intent token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 140,
+    "row_index": 140,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

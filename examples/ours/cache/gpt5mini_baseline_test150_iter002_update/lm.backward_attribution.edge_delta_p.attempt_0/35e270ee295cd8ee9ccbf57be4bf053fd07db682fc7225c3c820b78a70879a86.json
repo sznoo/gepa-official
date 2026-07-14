@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "35e270ee295cd8ee9ccbf57be4bf053fd07db682fc7225c3c820b78a70879a86",
+  "created_at": "2026-07-13T18:59:53.564281+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "task_context": {
+        "question": "Are Jan Bucquoy and Richard Linklater of the same nationality?",
+        "agent": "summary2",
+        "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Are Jan Bucquoy and Richard Linklater of the same nationality?",
+        "context": "No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.",
+        "passages": [
+          "Jan Bucquoy | Jan Bucquoy (] ; born 16 November 1945) is an anarchist and author-filmmaker born in Harelbeke, Belgium who started as a theatre practitioner and who worked as a cartoon-scriptwriter.",
+          "Fast Food Nation (film) | Fast Food Nation is a 2006 American-British comedy-drama film directed by Richard Linklater.  The screenplay was written by Linklater and Eric Schlosser, loosely based on the latter's bestselling 2001 non-fiction book of the same name.",
+          "List of awards and nominations received by Richard Linklater | List of awards and nominations received by Richard Linklater",
+          "Lorelei Linklater | Lorelei Grace Linklater (born May 29, 1994) is an American actress.  She is the daughter of Christina Harrison and director Richard Linklater.",
+          "Boyhood (film) | Boyhood is a 2014 American coming-of-age drama film written and directed by Richard Linklater, and starring Patricia Arquette, Ellar Coltrane, Lorelei Linklater, and Ethan Hawke.  Filmed from 2002 to 2013, \"Boyhood\" depicts the childhood and adolescence of Mason Evans Jr. (Coltrane) from ages six to eighteen as he grows up in Texas with divorced parents (Arquette and Hawke).  Richard Linklater's daughter Lorelei plays Mason's sister, Samantha.",
+          "Zula Linklater House | The Zula Linklater House is a two-story office building on Second Avenue in downtown Hillsboro, Oregon, United States.  Completed in 1923, the Mediterranean style structure is built of concrete, wood, and stucco.  Originally constructed for Zula Warren Linklater as a home, it was renovated and turned into office space in 1984.  The building was added to the National Register of Historic Places in 1984.",
+          "List of accolades received by Boyhood (film) | \"Boyhood\" is a 2014 American coming-of-age drama film written and directed by Richard Linklater and starring Patricia Arquette, Ellar Coltrane, Lorelei Linklater and Ethan Hawke."
+        ],
+        "current_output": "No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality."
+      },
+      "current_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.",
+        "score": 1.0,
+        "answer": "No"
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.",
+        "score": 1.0,
+        "answer": "No"
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nTask context:\n{\n  \"question\": \"Are Jan Bucquoy and Richard Linklater of the same nationality?\",\n  \"agent\": \"summary2\",\n  \"agent_role\": \"Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Jan Bucquoy and Richard Linklater of the same nationality?\",\n  \"context\": \"No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.\",\n  \"passages\": [\n    \"Jan Bucquoy | Jan Bucquoy (] ; born 16 November 1945) is an anarchist and author-filmmaker born in Harelbeke, Belgium who started as a theatre practitioner and who worked as a cartoon-scriptwriter.\",\n    \"Fast Food Nation (film) | Fast Food Nation is a 2006 American-British comedy-drama film directed by Richard Linklater.  The screenplay was written by Linklater and Eric Schlosser, loosely based on the latter's bestselling 2001 non-fiction book of the same name.\",\n    \"List of awards and nominations received by Richard Linklater | List of awards and nominations received by Richard Linklater\",\n    \"Lorelei Linklater | Lorelei Grace Linklater (born May 29, 1994) is an American actress.  She is the daughter of Christina Harrison and director Richard Linklater.\",\n    \"Boyhood (film) | Boyhood is a 2014 American coming-of-age drama film written and directed by Richard Linklater, and starring Patricia Arquette, Ellar Coltrane, Lorelei Linklater, and Ethan Hawke.  Filmed from 2002 to 2013, \\\"Boyhood\\\" depicts the childhood and adolescence of Mason Evans Jr. (Coltrane) from ages six to eighteen as he grows up in Texas with divorced parents (Arquette and Hawke).  Richard Linklater's daughter Lorelei plays Mason's sister, Samantha.\",\n    \"Zula Linklater House | The Zula Linklater House is a two-story office building on Second Avenue in downtown Hillsboro, Oregon, United States.  Completed in 1923, the Mediterranean style structure is built of concrete, wood, and stucco.  Originally constructed for Zula Warren Linklater as a home, it was renovated and turned into office space in 1984.  The building was added to the National Register of Historic Places in 1984.\",\n    \"List of accolades received by Boyhood (film) | \\\"Boyhood\\\" is a 2014 American coming-of-age drama film written and directed by Richard Linklater and starring Patricia Arquette, Ellar Coltrane, Lorelei Linklater and Ethan Hawke.\"\n  ],\n  \"current_output\": \"No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"No. Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.\",\n  \"score\": 1.0,\n  \"answer\": \"No\"\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Jan Bucquoy is Belgian and Richard Linklater is American, so they are not the same nationality.\",\n  \"score\": 1.0,\n  \"answer\": \"No\"\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question is a yes/no comparison asking whether two people share nationality (e.g., question begins with 'Are' and mentions 'same nationality').\",\n    \"preserve_rule\": \"Keep the same facts and entities drawn from context/passages (both people's names and their nationalities) and retain the concise one-sentence integration of evidence and conclusion.\",\n    \"change_rule\": \"Do not begin the summary with a standalone 'Yes.' or 'No.' token. Instead, open with a declarative sentence that names the first person and their nationality, then the second person and their nationality, and finish with the conclusion about whether they share nationality.\",\n    \"drop_or_avoid_rule\": \"Avoid prepending a single-word answer ('Yes.' or 'No.') or other leading interjection/punctuation. Avoid adding new facts, hedging, or commentary beyond the concise factual sentence.\",\n    \"output_contract\": \"Produce the field `summary` as one clear declarative sentence that states each person's nationality and the resulting judgment about whether they are the same nationality; the sentence must not start with 'Yes.' or 'No.' and must preserve the factual content from the passages.\",\n    \"why_local_transition\": \"This is a narrow, stylistic correction: it only removes a leading one-word answer while preserving all evidence selection and the original conclusion, changing how the summary is phrased without altering its content.\"\n  },\n  \"rationale\": \"The source output differs from the target only by a leading 'No.' Removing that token is a minimal, local behavioral change. The delta enforces a concise declarative sentence structure (name + nationality, name + nationality, conclusion) and forbids starting with a standalone 'Yes.'/'No.', which ensures the agent preserves evidence and conclusion but matches the target phrasing. This keeps the edit small and focused on surface form rather than content or reasoning.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 58,
+    "row_index": 58,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 40,
+    "matched_w_stable_id": "40",
+    "bisection_round": 0,
+    "material_fingerprint": "91fdcad3020f29901529625d01989f44143fb4fc6c524de3d3e7f08db1d5c54e",
+    "agent": "summary2",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

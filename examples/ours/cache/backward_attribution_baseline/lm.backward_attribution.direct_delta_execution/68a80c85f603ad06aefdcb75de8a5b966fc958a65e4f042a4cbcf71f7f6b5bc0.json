@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "68a80c85f603ad06aefdcb75de8a5b966fc958a65e4f042a4cbcf71f7f6b5bc0",
+  "created_at": "2026-07-13T17:25:55.673088+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When at least one visible summary contains a numeric kill count together with the word \"kill\" or \"kills\" (for example: \"309 kills\").",
+            "preserve_rule": "Keep extracting the answer from the provided summary fields (summary_1, summary_2). Preserve the requirement to produce a concise, evidence-supported answer and do not invent or alter numeric values: prefer a numeric token that appears verbatim in the summaries (or the value agreed by both summaries).",
+            "change_rule": "Format the minimal answer string as a short phrase that includes the unit and crediting verb: produce 'Credited with {N} kills' where {N} is the numeric value taken exactly from the visible summaries. Do not add extra explanation, qualifiers, or other numbers.",
+            "drop_or_avoid_rule": "Avoid producing a bare number alone, avoid adding any extra sentences, citations, or long quoted spans. Do not introduce alternative counts or new factual claims; do not change the output-block structure required by the base prompt.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the short phrase 'Credited with {N} kills' (with {N} filled verbatim from the visible summaries). No other text, lines, or formatting may appear in the answer block.",
+            "why_local_transition": "This small wording change consistently adds the unit and a concise attributive verb while leaving evidence sourcing and brevity intact. It is a minimal behavioral edit that converts an otherwise bare numeric reply into the targeted short phrasing without inventing facts or changing how the agent reads the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The biographical war film about Lyudmila Pavlichenko, the most successful female sniper in history, credits her with how many kills? ",
+        "summary_1": "309 kills",
+        "summary_2": "309",
+        "current_output": "309"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When at least one visible summary contains a numeric kill count together with the word \\\"kill\\\" or \\\"kills\\\" (for example: \\\"309 kills\\\").\",\n      \"preserve_rule\": \"Keep extracting the answer from the provided summary fields (summary_1, summary_2). Preserve the requirement to produce a concise, evidence-supported answer and do not invent or alter numeric values: prefer a numeric token that appears verbatim in the summaries (or the value agreed by both summaries).\",\n      \"change_rule\": \"Format the minimal answer string as a short phrase that includes the unit and crediting verb: produce 'Credited with {N} kills' where {N} is the numeric value taken exactly from the visible summaries. Do not add extra explanation, qualifiers, or other numbers.\",\n      \"drop_or_avoid_rule\": \"Avoid producing a bare number alone, avoid adding any extra sentences, citations, or long quoted spans. Do not introduce alternative counts or new factual claims; do not change the output-block structure required by the base prompt.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the short phrase 'Credited with {N} kills' (with {N} filled verbatim from the visible summaries). No other text, lines, or formatting may appear in the answer block.\",\n      \"why_local_transition\": \"This small wording change consistently adds the unit and a concise attributive verb while leaving evidence sourcing and brevity intact. It is a minimal behavioral edit that converts an otherwise bare numeric reply into the targeted short phrasing without inventing facts or changing how the agent reads the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The biographical war film about Lyudmila Pavlichenko, the most successful female sniper in history, credits her with how many kills? \",\n  \"summary_1\": \"309 kills\",\n  \"summary_2\": \"309\",\n  \"current_output\": \"309\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Credited with 309 kills\",\n  \"rationale\": \"Used the verbatim '309' from the provided summaries and formatted it per the delta instruction as 'Credited with {N} kills'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 144,
+    "row_index": 144,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

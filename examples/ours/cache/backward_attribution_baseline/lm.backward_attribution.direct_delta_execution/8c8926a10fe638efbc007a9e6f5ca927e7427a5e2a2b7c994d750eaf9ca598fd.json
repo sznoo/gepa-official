@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "8c8926a10fe638efbc007a9e6f5ca927e7427a5e2a2b7c994d750eaf9ca598fd",
+  "created_at": "2026-07-13T17:13:21.060348+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the two provided summaries both identify the same person (e.g., both summary_1 and summary_2 are the same personal name string) and the question is asking for that person's identity.",
+            "preserve_rule": "Keep the existing input/output interface and the base prompt's requirement to produce only the minimal answer string in the [[ ## answer ## ]] block. Preserve any behavior that already uses agreement between summaries to choose an answer.",
+            "change_rule": "If both summaries clearly agree on a single person, prefer the person's canonical or full legal name (including commonly used middle name(s)) when you are sufficiently confident of that canonical form from your internal knowledge. If you are not reasonably confident about a more complete canonical name, emit the name as given in the summaries. Always produce only the single minimal name string as the answer.",
+            "drop_or_avoid_rule": "Do not append explanatory text, parenthetical clarifications, filmography, dates, or supporting citations to the answer. Do not invent or guess uncommon or uncertain name components; only expand a name to a fuller canonical form when you have reasonable internal confidence. Avoid changing answers when summaries disagree about the identity.",
+            "output_contract": "The agent's final output must remain a single minimal name string placed alone inside the [[ ## answer ## ]] block, with no additional commentary or markup.",
+            "why_local_transition": "This change nudges the agent to prefer a more complete canonical name when the two summaries strongly agree on an identity, improving completeness while preserving the minimal-answer requirement and avoiding unnecessary verbosity."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?",
+        "summary_1": "John Cassavetes",
+        "summary_2": "John Cassavetes",
+        "current_output": "John Cassavetes"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the two provided summaries both identify the same person (e.g., both summary_1 and summary_2 are the same personal name string) and the question is asking for that person's identity.\",\n      \"preserve_rule\": \"Keep the existing input/output interface and the base prompt's requirement to produce only the minimal answer string in the [[ ## answer ## ]] block. Preserve any behavior that already uses agreement between summaries to choose an answer.\",\n      \"change_rule\": \"If both summaries clearly agree on a single person, prefer the person's canonical or full legal name (including commonly used middle name(s)) when you are sufficiently confident of that canonical form from your internal knowledge. If you are not reasonably confident about a more complete canonical name, emit the name as given in the summaries. Always produce only the single minimal name string as the answer.\",\n      \"drop_or_avoid_rule\": \"Do not append explanatory text, parenthetical clarifications, filmography, dates, or supporting citations to the answer. Do not invent or guess uncommon or uncertain name components; only expand a name to a fuller canonical form when you have reasonable internal confidence. Avoid changing answers when summaries disagree about the identity.\",\n      \"output_contract\": \"The agent's final output must remain a single minimal name string placed alone inside the [[ ## answer ## ]] block, with no additional commentary or markup.\",\n      \"why_local_transition\": \"This change nudges the agent to prefer a more complete canonical name when the two summaries strongly agree on an identity, improving completeness while preserving the minimal-answer requirement and avoiding unnecessary verbosity.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \\\"Rosemary's Baby\\\"?\",\n  \"summary_1\": \"John Cassavetes\",\n  \"summary_2\": \"John Cassavetes\",\n  \"current_output\": \"John Cassavetes\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nJohn Nicholas Cassavetes\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries agree on John Cassavetes; per the ordered rule, I emitted the fuller canonical name (John Nicholas Cassavetes) while keeping only the minimal name in the answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 17,
+    "row_index": 17,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

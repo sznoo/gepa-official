@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "222922d0825b9d2a3b10f785d6313dc6074b303cb1e26fb114f80c0e9d537712",
+  "created_at": "2026-07-13T18:44:47.779022+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?",
+      "current_output": "John Cassavetes",
+      "upstream_context": {
+        "question": "In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?",
+        "summary_1": "John Cassavetes",
+        "hop2_query": "Confirm that John Cassavetes acted in many Hollywood films and appeared as Guy Woodhouse in the film \"Rosemary's Baby\" (1968).",
+        "hop2_titles": [
+          "John Cassavetes",
+          "Rosemary's Baby (film)",
+          "Proxy (film)",
+          "Look What's Happened to Rosemary's Baby",
+          "Faces (film)",
+          "Z Channel: A Magnificent Obsession",
+          "Mia Farrow"
+        ],
+        "hop2_docs": [
+          "John Cassavetes | John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.  Cassavetes was a pioneer of American independent film, writing and directing over a dozen movies, which he partially self-financed, and pioneered the use of improvisation and a realistic cinéma vérité style.  He also acted in many Hollywood films, notably \"Rosemary's Baby\" (1968) and \"The Dirty Dozen\" (1967).  He studied acting with Don Richardson, using an acting technique based on muscle memory.  His income from acting made it possible for him to direct his own films independently.",
+          "Rosemary's Baby (film) | Rosemary's Baby is a 1968 American psychological horror film written and directed by Roman Polanski, based on the bestselling 1967 novel of the same name by Ira Levin.  The cast features Mia Farrow, John Cassavetes, Ruth Gordon, Sidney Blackmer, Maurice Evans, Ralph Bellamy, Angela Dorian, Clay Tanner, and, in his feature film debut, Charles Grodin.  The film chronicles the story of a pregnant woman who suspects that an evil cult wants to take her baby for use in their rituals.",
+          "Proxy (film) | Proxy is a 2013 American horror film directed by Zack Parker.  The movie had its world premiere on September 10, 2013 at the Toronto International Film Festival.  It stars Alexia Rasmussen as a pregnant young woman who joins a support group after suffering a stillbirth due to a vicious attack.  The filmmakers describe Proxy as a spiritual successor to the horror film \"Rosemary's Baby\", and its main character Esther Woodhouse is named after the earlier film's protagonist Rosemary Woodhouse.",
+          "Look What's Happened to Rosemary's Baby | Look What's Happened to Rosemary's Baby (also known as Rosemary's Baby II) is a 1976 American made-for-television horror film and a sequel to Roman Polanski's 1968 film \"Rosemary's Baby\" starring Stephen McHattie, Patty Duke, George Maharis, Ruth Gordon and Ray Milland.  The film premiered as the \"ABC Friday Night Movie\" on October 29, 1976.",
+          "Faces (film) | Faces is a 1968 drama film, written and directed by John Cassavetes and starring John Marley, Cassavetes' wife Gena Rowlands, Fred Draper, Seymour Cassel and Lynn Carlin.  Both Cassel and Carlin received Academy Award nominations for this film.  Cassavetes was nominated for the Academy Award for Best Original Screenplay for \"Faces\".  The film was shot in high contrast 16 mm black and white film stock.  In 2011, it was added to the National Film Registry of the Library of Congress.",
+          "Z Channel: A Magnificent Obsession | Z Channel: A Magnificent Obsession is a 2004 documentary film about Los Angeles pay cable channel Z Channel which was directed by Xan Cassavetes, daughter of Hollywood director and actor John Cassavetes.  It was screened out of competition at the 2004 Cannes Film Festival.",
+          "Mia Farrow | María de Lourdes \"Mia\" Villiers Farrow (born February 9, 1945) is an American actress, activist and former fashion model.  She first gained notice for her role as Allison MacKenzie in the television soap opera \"Peyton Place\" and gained further recognition for her subsequent short-lived marriage to Frank Sinatra.  An early film role, as Rosemary in Roman Polanski's \"Rosemary's Baby\" (1968), saw her nominated for a BAFTA and a Golden Globe for Best Actress.  She went on to appear in films such as \"John and Mary\" (1969), \"Follow Me! \" (1972), \"The Great Gatsby\" (1974) and \"Death on the Nile\" (1978)."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "John Cassavetes",
+          "sent_id": 0,
+          "sentence": "John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter."
+        },
+        {
+          "title": "John Cassavetes",
+          "sent_id": 2,
+          "sentence": "He also acted in many Hollywood films, notably \"Rosemary's Baby\" (1968) and \"The Dirty Dozen\" (1967)."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nIn between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \"Rosemary's Baby\"?\n\nCurrent agent output:\n\"John Cassavetes\"\n\nActual upstream context:\n{\n  \"question\": \"In between J Puttanna Kanagal and John Cassavetes, who acted in many Hollywood films, notably \\\"Rosemary's Baby\\\"?\",\n  \"summary_1\": \"John Cassavetes\",\n  \"hop2_query\": \"Confirm that John Cassavetes acted in many Hollywood films and appeared as Guy Woodhouse in the film \\\"Rosemary's Baby\\\" (1968).\",\n  \"hop2_titles\": [\n    \"John Cassavetes\",\n    \"Rosemary's Baby (film)\",\n    \"Proxy (film)\",\n    \"Look What's Happened to Rosemary's Baby\",\n    \"Faces (film)\",\n    \"Z Channel: A Magnificent Obsession\",\n    \"Mia Farrow\"\n  ],\n  \"hop2_docs\": [\n    \"John Cassavetes | John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.  Cassavetes was a pioneer of American independent film, writing and directing over a dozen movies, which he partially self-financed, and pioneered the use of improvisation and a realistic cinéma vérité style.  He also acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967).  He studied acting with Don Richardson, using an acting technique based on muscle memory.  His income from acting made it possible for him to direct his own films independently.\",\n    \"Rosemary's Baby (film) | Rosemary's Baby is a 1968 American psychological horror film written and directed by Roman Polanski, based on the bestselling 1967 novel of the same name by Ira Levin.  The cast features Mia Farrow, John Cassavetes, Ruth Gordon, Sidney Blackmer, Maurice Evans, Ralph Bellamy, Angela Dorian, Clay Tanner, and, in his feature film debut, Charles Grodin.  The film chronicles the story of a pregnant woman who suspects that an evil cult wants to take her baby for use in their rituals.\",\n    \"Proxy (film) | Proxy is a 2013 American horror film directed by Zack Parker.  The movie had its world premiere on September 10, 2013 at the Toronto International Film Festival.  It stars Alexia Rasmussen as a pregnant young woman who joins a support group after suffering a stillbirth due to a vicious attack.  The filmmakers describe Proxy as a spiritual successor to the horror film \\\"Rosemary's Baby\\\", and its main character Esther Woodhouse is named after the earlier film's protagonist Rosemary Woodhouse.\",\n    \"Look What's Happened to Rosemary's Baby | Look What's Happened to Rosemary's Baby (also known as Rosemary's Baby II) is a 1976 American made-for-television horror film and a sequel to Roman Polanski's 1968 film \\\"Rosemary's Baby\\\" starring Stephen McHattie, Patty Duke, George Maharis, Ruth Gordon and Ray Milland.  The film premiered as the \\\"ABC Friday Night Movie\\\" on October 29, 1976.\",\n    \"Faces (film) | Faces is a 1968 drama film, written and directed by John Cassavetes and starring John Marley, Cassavetes' wife Gena Rowlands, Fred Draper, Seymour Cassel and Lynn Carlin.  Both Cassel and Carlin received Academy Award nominations for this film.  Cassavetes was nominated for the Academy Award for Best Original Screenplay for \\\"Faces\\\".  The film was shot in high contrast 16 mm black and white film stock.  In 2011, it was added to the National Film Registry of the Library of Congress.\",\n    \"Z Channel: A Magnificent Obsession | Z Channel: A Magnificent Obsession is a 2004 documentary film about Los Angeles pay cable channel Z Channel which was directed by Xan Cassavetes, daughter of Hollywood director and actor John Cassavetes.  It was screened out of competition at the 2004 Cannes Film Festival.\",\n    \"Mia Farrow | María de Lourdes \\\"Mia\\\" Villiers Farrow (born February 9, 1945) is an American actress, activist and former fashion model.  She first gained notice for her role as Allison MacKenzie in the television soap opera \\\"Peyton Place\\\" and gained further recognition for her subsequent short-lived marriage to Frank Sinatra.  An early film role, as Rosemary in Roman Polanski's \\\"Rosemary's Baby\\\" (1968), saw her nominated for a BAFTA and a Golden Globe for Best Actress.  She went on to appear in films such as \\\"John and Mary\\\" (1969), \\\"Follow Me! \\\" (1972), \\\"The Great Gatsby\\\" (1974) and \\\"Death on the Nile\\\" (1978).\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"John Cassavetes\",\n    \"sent_id\": 0,\n    \"sentence\": \"John Nicholas Cassavetes ( ; December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter.\"\n  },\n  {\n    \"title\": \"John Cassavetes\",\n    \"sent_id\": 2,\n    \"sentence\": \"He also acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967).\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Candidate: John Cassavetes. John Nicholas Cassavetes (December 9, 1929 – February 3, 1989) was a Greek-American actor, film director, and screenwriter. He also acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967).\",\n  \"rationale\": \"Integrates the upstream candidate (summary_1: John Cassavetes) with second-hop supporting sentences: the John Cassavetes page identifies him as a Greek-American actor/director/screenwriter and states he acted in many Hollywood films, notably \\\"Rosemary's Baby\\\" (1968) and \\\"The Dirty Dozen\\\" (1967). These facts retain the necessary evidence for the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 17,
+    "row_index": 17
+  }
+}

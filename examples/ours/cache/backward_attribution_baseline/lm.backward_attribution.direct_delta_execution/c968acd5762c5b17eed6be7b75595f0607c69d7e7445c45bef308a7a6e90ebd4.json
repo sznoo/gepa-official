@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c968acd5762c5b17eed6be7b75595f0607c69d7e7445c45bef308a7a6e90ebd4",
+  "created_at": "2026-07-13T17:20:28.267574+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current generated answer or both summary_1 and summary_2 contain a film title that ends with a parenthetical four-digit year (pattern: \"(YYYY)\", e.g. \"(1961)\").",
+            "preserve_rule": "Keep the original title words, casing, and ordering exactly as they appear in the visible inputs. Do not add new words, explanatory phrases, or metadata beyond the title.",
+            "change_rule": "If the trigger matches, remove only the trailing parenthetical four-digit year (the substring matching \"(\\d{4})\") from the title before emitting the final answer. Do not alter any other characters of the title.",
+            "drop_or_avoid_rule": "Do not append or reinsert any date, parenthetical, extra punctuation, or explanatory text. Avoid adding cast names, years, or qualifiers; avoid expanding or contracting the title beyond removing the terminal \"(YYYY)\" pattern.",
+            "output_contract": "Produce the [[ ## answer ## ]] block containing only the minimal film title string (title text without the trailing parenthetical year). No additional words, punctuation, or metadata should appear inside the answer block.",
+            "why_local_transition": "The only difference between the current output and the desired output is a formatting artifact: a trailing parenthetical year. Stripping a terminal \"(YYYY)\" yields the minimal canonical title while preserving the evidence from the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+        "summary_1": "Whistle Down the Wind (1961)",
+        "summary_2": "Whistle Down the Wind (1961)",
+        "current_output": "Whistle Down the Wind (1961)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current generated answer or both summary_1 and summary_2 contain a film title that ends with a parenthetical four-digit year (pattern: \\\"(YYYY)\\\", e.g. \\\"(1961)\\\").\",\n      \"preserve_rule\": \"Keep the original title words, casing, and ordering exactly as they appear in the visible inputs. Do not add new words, explanatory phrases, or metadata beyond the title.\",\n      \"change_rule\": \"If the trigger matches, remove only the trailing parenthetical four-digit year (the substring matching \\\"(\\\\d{4})\\\") from the title before emitting the final answer. Do not alter any other characters of the title.\",\n      \"drop_or_avoid_rule\": \"Do not append or reinsert any date, parenthetical, extra punctuation, or explanatory text. Avoid adding cast names, years, or qualifiers; avoid expanding or contracting the title beyond removing the terminal \\\"(YYYY)\\\" pattern.\",\n      \"output_contract\": \"Produce the [[ ## answer ## ]] block containing only the minimal film title string (title text without the trailing parenthetical year). No additional words, punctuation, or metadata should appear inside the answer block.\",\n      \"why_local_transition\": \"The only difference between the current output and the desired output is a formatting artifact: a trailing parenthetical year. Stripping a terminal \\\"(YYYY)\\\" yields the minimal canonical title while preserving the evidence from the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?\",\n  \"summary_1\": \"Whistle Down the Wind (1961)\",\n  \"summary_2\": \"Whistle Down the Wind (1961)\",\n  \"current_output\": \"Whistle Down the Wind (1961)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\\\nWhistle Down the Wind\",\n  \"rationale\": \"Both summaries contained the film title with a trailing '(1961)'; per the ordered rule, I removed only the terminal parenthetical year and emitted the title alone inside the [[ ## answer ## ]] block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 67,
+    "row_index": 67,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

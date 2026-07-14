@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "6797185b7f272cd89729157480022aa4d12251e3e90d439801c1af06e870ee48",
+  "created_at": "2026-07-13T17:14:02.967734+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the provided summaries together support a short, direct noun/adjective answer (for example when a summary is itself a single-word or both summaries verbatim agree on a short phrase).",
+            "preserve_rule": "Continue to use the fields `question`, `summary_1`, and `summary_2` as the only evidence sources and continue to produce the `answer` field following the base prompt's final-answer output contract.",
+            "change_rule": "Instead of generating a full sentence, produce the shortest contiguous text span that appears verbatim in one or both summaries and directly answers the question. Emit that span alone as the `answer` value.",
+            "drop_or_avoid_rule": "Do not add pronouns, explanatory words, articles, complete-sentence framing (e.g., 'They are', 'The answer is'), extra punctuation, or any tokens not present in the selected summary span. Do not introduce new clauses or disclaimers.",
+            "output_contract": "The `answer` field (and the [[ ## answer ## ]] block) must contain exactly the minimal answer string selected from the summaries — nothing more, nothing less (no surrounding text or punctuation).",
+            "why_local_transition": "The current behavior produces a full-sentence response; the desired local change is only to contract outputs to the minimal label already present in the summaries so the final answer block contains the concise token supported by the visible evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+        "summary_1": "They are American.",
+        "summary_2": "American",
+        "current_output": "They are American."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the provided summaries together support a short, direct noun/adjective answer (for example when a summary is itself a single-word or both summaries verbatim agree on a short phrase).\",\n      \"preserve_rule\": \"Continue to use the fields `question`, `summary_1`, and `summary_2` as the only evidence sources and continue to produce the `answer` field following the base prompt's final-answer output contract.\",\n      \"change_rule\": \"Instead of generating a full sentence, produce the shortest contiguous text span that appears verbatim in one or both summaries and directly answers the question. Emit that span alone as the `answer` value.\",\n      \"drop_or_avoid_rule\": \"Do not add pronouns, explanatory words, articles, complete-sentence framing (e.g., 'They are', 'The answer is'), extra punctuation, or any tokens not present in the selected summary span. Do not introduce new clauses or disclaimers.\",\n      \"output_contract\": \"The `answer` field (and the [[ ## answer ## ]] block) must contain exactly the minimal answer string selected from the summaries — nothing more, nothing less (no surrounding text or punctuation).\",\n      \"why_local_transition\": \"The current behavior produces a full-sentence response; the desired local change is only to contract outputs to the minimal label already present in the summaries so the final answer block contains the concise token supported by the visible evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"James Emanuel and Jonathan Kellerman, are of which nationality?\",\n  \"summary_1\": \"They are American.\",\n  \"summary_2\": \"American\",\n  \"current_output\": \"They are American.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"American\",\n  \"rationale\": \"Both summaries state 'American'; per the ordered delta, returned that verbatim as the minimal answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 27,
+    "row_index": 27,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "511f88d68b0276a0e5e87fbddc504353dfe03f05dd6b28a2f7f1509e12725565",
+  "created_at": "2026-07-13T19:01:03.105429+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "task_context": {
+        "question": "Are Jon Fratelli and Skye Edwards from the same country?",
+        "agent": "summary2",
+        "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Are Jon Fratelli and Skye Edwards from the same country?",
+        "context": "Not enough information to confirm for \"Skye Edwards\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.",
+        "passages": [
+          "Skye-Jilly Edwards | Skye-Jilly Edwards (born c. 1972) is an Australian beauty pageant titleholder who won the Miss Globe International 1994 in Istanbul, Turkey and represented her country in the Miss World 1994 pageant in Sun City, South Africa.  She was rated in the top 50 models in Australia by Ralph Magazine.",
+          "Codeine Velvet Club | Codeine Velvet Club was a Scottish alternative rock band formed in 2008 by Lou Hickey and Jon Lawler, a.k.a. Jon Fratelli from The Fratellis.  The band's debut album \"Codeine Velvet Club\" was released on 28 December 2009 in the UK and on 6 April 2010 in the US.",
+          "Jon Fratelli | Jon Fratelli (born John Paul Lawler, 4 March 1979, Glasgow, Scotland) is a Scottish musician and songwriter best known for his work with the band The Fratellis.  He has also played in a band called Codeine Velvet Club, and also performed as a solo artist.",
+          "The Fratellis | The Fratellis are a Scottish rock band from Glasgow, formed in 2005.  The band consists of lead vocalist and guitarist Jon Fratelli (born John Lawler), bass guitarist Barry Fratelli (born Barry Wallace), and drummer and backing vocalist Mince Fratelli (born Gordon McRory).  Their singles \"Chelsea Dagger\" and \"Whistle for the Choir\" were both top ten hits in the UK charts.",
+          "Chelsea Dagger | \"Chelsea Dagger\" is a song by Scottish rock band The Fratellis.  It was released as the second single from their debut studio album, \"Costello Music\" (2006), on 28 August 2006.  It is named after Jon Fratelli's wife Heather, a burlesque dancer whose stage name – a play on Britney Spears – he borrowed for the song.  Fratelli described the tune as \"a rock 'n' roll gig in an old speakeasy or something like that.\"",
+          "Skye | Skye, or the Isle of Skye ( ; Scottish Gaelic: \"An t-Eilean Sgitheanach\" or \"Eilean a' Cheò \"), is the largest and northernmost of the major islands in the Inner Hebrides of Scotland.  The island's peninsulas radiate from a mountainous centre dominated by the Cuillins, the rocky slopes of which provide some of the most dramatic mountain scenery in the country.  Although it has been suggested that the Gaelic \"Sgitheanach \" describes a winged shape there is no definitive agreement as to the name's origins.",
+          "The Skye Boat Song | \"The Skye Boat Song\" is a Scottish folk song, which can be played as a waltz, recalling the escape of Prince Charles Edward Stuart (Bonnie Prince Charlie) from Uist to the Isle of Skye after his defeat at the Battle of Culloden in 1746."
+        ],
+        "current_output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country."
+      },
+      "current_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+        "score": 1.0,
+        "answer": "No"
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Skye Edwards is Australian, and Jon Fratelli is Scottish — they are not from the same country.",
+        "score": 1.0,
+        "answer": "No"
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nTask context:\n{\n  \"question\": \"Are Jon Fratelli and Skye Edwards from the same country?\",\n  \"agent\": \"summary2\",\n  \"agent_role\": \"Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Jon Fratelli and Skye Edwards from the same country?\",\n  \"context\": \"Not enough information to confirm for \\\"Skye Edwards\\\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.\",\n  \"passages\": [\n    \"Skye-Jilly Edwards | Skye-Jilly Edwards (born c. 1972) is an Australian beauty pageant titleholder who won the Miss Globe International 1994 in Istanbul, Turkey and represented her country in the Miss World 1994 pageant in Sun City, South Africa.  She was rated in the top 50 models in Australia by Ralph Magazine.\",\n    \"Codeine Velvet Club | Codeine Velvet Club was a Scottish alternative rock band formed in 2008 by Lou Hickey and Jon Lawler, a.k.a. Jon Fratelli from The Fratellis.  The band's debut album \\\"Codeine Velvet Club\\\" was released on 28 December 2009 in the UK and on 6 April 2010 in the US.\",\n    \"Jon Fratelli | Jon Fratelli (born John Paul Lawler, 4 March 1979, Glasgow, Scotland) is a Scottish musician and songwriter best known for his work with the band The Fratellis.  He has also played in a band called Codeine Velvet Club, and also performed as a solo artist.\",\n    \"The Fratellis | The Fratellis are a Scottish rock band from Glasgow, formed in 2005.  The band consists of lead vocalist and guitarist Jon Fratelli (born John Lawler), bass guitarist Barry Fratelli (born Barry Wallace), and drummer and backing vocalist Mince Fratelli (born Gordon McRory).  Their singles \\\"Chelsea Dagger\\\" and \\\"Whistle for the Choir\\\" were both top ten hits in the UK charts.\",\n    \"Chelsea Dagger | \\\"Chelsea Dagger\\\" is a song by Scottish rock band The Fratellis.  It was released as the second single from their debut studio album, \\\"Costello Music\\\" (2006), on 28 August 2006.  It is named after Jon Fratelli's wife Heather, a burlesque dancer whose stage name – a play on Britney Spears – he borrowed for the song.  Fratelli described the tune as \\\"a rock 'n' roll gig in an old speakeasy or something like that.\\\"\",\n    \"Skye | Skye, or the Isle of Skye ( ; Scottish Gaelic: \\\"An t-Eilean Sgitheanach\\\" or \\\"Eilean a' Cheò \\\"), is the largest and northernmost of the major islands in the Inner Hebrides of Scotland.  The island's peninsulas radiate from a mountainous centre dominated by the Cuillins, the rocky slopes of which provide some of the most dramatic mountain scenery in the country.  Although it has been suggested that the Gaelic \\\"Sgitheanach \\\" describes a winged shape there is no definitive agreement as to the name's origins.\",\n    \"The Skye Boat Song | \\\"The Skye Boat Song\\\" is a Scottish folk song, which can be played as a waltz, recalling the escape of Prince Charles Edward Stuart (Bonnie Prince Charlie) from Uist to the Isle of Skye after his defeat at the Battle of Culloden in 1746.\"\n  ],\n  \"current_output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n  \"score\": 1.0,\n  \"answer\": \"No\"\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Skye Edwards is Australian, and Jon Fratelli is Scottish — they are not from the same country.\",\n  \"score\": 1.0,\n  \"answer\": \"No\"\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks whether two named people are from the same country and the provided passages contain clear nationality statements (or a single matching name-variant entry) for those people.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of integrating evidence across hops and retaining the concrete facts used to reach a conclusion (e.g., names, identified nationalities, and which passage supports each fact). Maintain any explicit note of ambiguity when identity cannot be resolved from the passages.\",\n    \"change_rule\": \"If the passages resolve an identity ambiguity (for example, the passages include only one 'Edwards' entry that clearly names a variant such as 'Skye-Jilly Edwards' with a nationality) then: a) treat that passage as the likely referent for the questioned name; b) combine that nationality fact with the first-hop fact (e.g., Jon Fratelli's nationality) and produce a concise integrated summary stating the two nationalities and whether they match. Favor a direct, non-hedged statement when the evidence is explicit.\",\n    \"drop_or_avoid_rule\": \"Avoid leaving a blanket hedge like 'Cannot confirm' when the passages already provide explicit nationality information that resolves the identity. Also avoid introducing new speculative possibilities or unrelated background; if identity truly remains ambiguous, keep a brief statement of ambiguity and what is missing.\",\n    \"output_contract\": \"Produce the field `summary` that (1) cites the passages used to identify each person's nationality, (2) retains the necessary facts from prior hops (e.g., Jon Fratelli = Scottish) and the second-hop evidence (e.g., the Edwards entry's nationality), and (3) gives a concise conclusion about whether they are from the same country. If identity cannot be resolved from the passages, the summary must explicitly say so and not assert a conclusion.\",\n    \"why_local_transition\": \"This change only narrows the agent's decision rule about when to remove hedging: it uses evidence already present in the visible passages to resolve a name-variant ambiguity and to produce a direct integrated summary. It does not alter other behaviors or the input/output interface.\"\n  },\n  \"rationale\": \"The source output hedged despite the passages containing a clear nationality entry for the named Edwards variant and a clear nationality for Jon Fratelli. The smallest useful prompt edit is to teach the agent to convert explicit, matching nationality evidence into a direct integrated statement rather than defaulting to a blanket 'Cannot confirm.' The delta preserves existing evidence-citation habits and only tightens the condition under which hedging is dropped, so it is minimal and local to this transition.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 25,
+    "row_index": 25,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 117,
+    "matched_w_stable_id": "117",
+    "bisection_round": 0,
+    "material_fingerprint": "51788edd36a02714a45a7e1d2d881e9f5746573b13e6c999f1f52eaa430f350f",
+    "agent": "summary2",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

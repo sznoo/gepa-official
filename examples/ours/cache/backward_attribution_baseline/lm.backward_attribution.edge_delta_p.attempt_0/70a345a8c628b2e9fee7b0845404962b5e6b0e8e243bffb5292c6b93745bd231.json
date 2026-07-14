@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "70a345a8c628b2e9fee7b0845404962b5e6b0e8e243bffb5292c6b93745bd231",
+  "created_at": "2026-07-13T17:25:37.963569+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "When was the man who saved 20,000 Jews hanged? ",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "When was the man who saved 20,000 Jews hanged? ",
+        "summary_1": "If you mean the man mentioned as being hanged who is credited in the passages with saving 20,000, that refers to Hideki Tojo — he was hanged on December 23, 1948. If you mean the man explicitly described as saving 20,000 (Traian Popovici), he died June 4, 1946 (not by hanging).",
+        "summary_2": "- If you mean Hideki Tōjō (sometimes mentioned in the passages in connection with saving 20,000), he was hanged on December 23, 1948.\n- If you mean Traian Popovici, who is explicitly credited with saving 20,000 Jews of Bukovina, he died June 4, 1946 and was not hanged.",
+        "current_output": "- If you mean Hideki Tōjō: he was hanged on December 23, 1948.\n- If you mean Traian Popovici (credited with saving about 20,000 Jews of Bukovina): he was not hanged; he died on June 4, 1946."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "- If you mean Hideki Tōjō: he was hanged on December 23, 1948.\n- If you mean Traian Popovici (credited with saving about 20,000 Jews of Bukovina): he was not hanged; he died on June 4, 1946.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "December 23, 1948",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"When was the man who saved 20,000 Jews hanged? \",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"When was the man who saved 20,000 Jews hanged? \",\n  \"summary_1\": \"If you mean the man mentioned as being hanged who is credited in the passages with saving 20,000, that refers to Hideki Tojo — he was hanged on December 23, 1948. If you mean the man explicitly described as saving 20,000 (Traian Popovici), he died June 4, 1946 (not by hanging).\",\n  \"summary_2\": \"- If you mean Hideki Tōjō (sometimes mentioned in the passages in connection with saving 20,000), he was hanged on December 23, 1948.\\n- If you mean Traian Popovici, who is explicitly credited with saving 20,000 Jews of Bukovina, he died June 4, 1946 and was not hanged.\",\n  \"current_output\": \"- If you mean Hideki Tōjō: he was hanged on December 23, 1948.\\n- If you mean Traian Popovici (credited with saving about 20,000 Jews of Bukovina): he was not hanged; he died on June 4, 1946.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"- If you mean Hideki Tōjō: he was hanged on December 23, 1948.\\n- If you mean Traian Popovici (credited with saving about 20,000 Jews of Bukovina): he was not hanged; he died on June 4, 1946.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"December 23, 1948\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks for the hanging date of “the man who saved 20,000 Jews” and the provided summaries contain at least one individual who is both (a) described as having saved ~20,000 people and (b) explicitly described as having been hanged (i.e., a hanging date or statement that the person was hanged is present in the visible summaries).\",\n    \"preserve_rule\": \"Keep the agent's existing interface and final-answer contract: produce only the minimal answer string in the `answer` field (no explanatory text) and continue to read and rely on the provided summaries and question.\",\n    \"change_rule\": \"When the trigger conditions hold, select the hanging date that is explicitly given in the summaries for the individual who is described both as having saved ~20,000 people and as being hanged, and place only that date string into the `answer` field. Do not list alternative people or other dates when a matched hanged individual is present in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not include multiple-option lists, qualifying sentences, or the death date/status of other candidates in the `answer`. Avoid adding explanations, uncertainty phrases, or copying long spans of summary text; emit only the minimal date string format that answers the question.\",\n    \"output_contract\": \"The `answer` field must contain only the single date string (in the same readable date format used in the summaries) corresponding to the hanging of the individual who matches both 'saved ~20,000' and 'was hanged'. No surrounding text, bullets, punctuation beyond the date, or commentary is allowed.\",\n    \"why_local_transition\": \"The source behavior produced multiple alternatives. This rule makes the smallest change needed to resolve the question by preferring the summary-supported person who both saved ~20,000 and was hanged, yielding a single minimal date answer consistent with the final-answer contract.\"\n  },\n  \"rationale\": \"This delta is a minimal, local behavioral edit: it does not change the agent's I/O or general policy, only how to resolve this specific ambiguity. It preserves the agent's duty to produce a single minimal answer string and to rely on visible summaries, and it only redirects the agent to prefer the hanging date explicitly associated with the person who both matches the 'saved ~20,000' description and is described as hanged in the summaries. If no such explicit hanged-and-credited person appears, the agent should fall back to prior behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 142,
+    "row_index": 142,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

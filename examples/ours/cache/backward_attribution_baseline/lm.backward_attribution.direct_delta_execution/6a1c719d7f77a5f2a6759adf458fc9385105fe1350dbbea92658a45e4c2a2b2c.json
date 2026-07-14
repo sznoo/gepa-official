@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "6a1c719d7f77a5f2a6759adf458fc9385105fe1350dbbea92658a45e4c2a2b2c",
+  "created_at": "2026-07-13T17:23:51.012921+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks whether two named products are produced in the same country and at least one visible summary explicitly states the production country for each product.",
+            "preserve_rule": "Keep the existing cautious behavior when summaries explicitly contradict each other about the same product (i.e., if one summary asserts Country A for product X and another explicitly asserts Country B for product X, continue to output 'Cannot determine').",
+            "change_rule": "If at least one summary gives an explicit production country for each of the two products and no summary explicitly assigns a different country for either product, treat those explicit country mentions as sufficient evidence. If the (explicit) countries named for the two products differ, answer 'no'. If they are the same, answer 'yes'.",
+            "drop_or_avoid_rule": "Do not return 'Cannot determine' merely because one summary is silent about a product's production country when another summary explicitly provides both products' countries and there is no explicit contradiction.",
+            "output_contract": "Produce only the minimal answer string inside the [[ ## answer ## ]] block. The allowed minimal strings are exactly: 'yes', 'no', or 'Cannot determine'. Do not add explanatory text outside that block.",
+            "why_local_transition": "This change directs the final agent to accept explicit, uncontradicted country statements in the summaries as decisive for a same-country question; silence in the other summary is not a contradiction and should not block a decision."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are Solo and La Croix Sparkling Water produced in the same country ?",
+        "summary_1": "Cannot determine — La Croix is produced in the United States (Wisconsin), but the passages do not say where Solo is produced.",
+        "summary_2": "No. La Croix is produced in the United States (Wisconsin), while Solo is produced in Trinidad and Tobago.",
+        "current_output": "Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks whether two named products are produced in the same country and at least one visible summary explicitly states the production country for each product.\",\n      \"preserve_rule\": \"Keep the existing cautious behavior when summaries explicitly contradict each other about the same product (i.e., if one summary asserts Country A for product X and another explicitly asserts Country B for product X, continue to output 'Cannot determine').\",\n      \"change_rule\": \"If at least one summary gives an explicit production country for each of the two products and no summary explicitly assigns a different country for either product, treat those explicit country mentions as sufficient evidence. If the (explicit) countries named for the two products differ, answer 'no'. If they are the same, answer 'yes'.\",\n      \"drop_or_avoid_rule\": \"Do not return 'Cannot determine' merely because one summary is silent about a product's production country when another summary explicitly provides both products' countries and there is no explicit contradiction.\",\n      \"output_contract\": \"Produce only the minimal answer string inside the [[ ## answer ## ]] block. The allowed minimal strings are exactly: 'yes', 'no', or 'Cannot determine'. Do not add explanatory text outside that block.\",\n      \"why_local_transition\": \"This change directs the final agent to accept explicit, uncontradicted country statements in the summaries as decisive for a same-country question; silence in the other summary is not a contradiction and should not block a decision.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are Solo and La Croix Sparkling Water produced in the same country ?\",\n  \"summary_1\": \"Cannot determine — La Croix is produced in the United States (Wisconsin), but the passages do not say where Solo is produced.\",\n  \"summary_2\": \"No. La Croix is produced in the United States (Wisconsin), while Solo is produced in Trinidad and Tobago.\",\n  \"current_output\": \"Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nno\",\n  \"rationale\": \"Applied the delta: summary_2 explicitly gives countries for both products (La Croix: United States; Solo: Trinidad and Tobago) with no explicit contradiction, so the countries differ → 'no'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 108,
+    "row_index": 108,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

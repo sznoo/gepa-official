@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "00f5ac5301434ec4c149d4d9414d04c825d1beb60a0791f59a3285932f38c0ed",
+  "created_at": "2026-07-13T20:11:18.882476+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+      "current_output": "First-hop evidence: Red Curtain Trilogy — \"title given to the first three films directed by Baz Luhrmann\"; Baz Luhrmann — \"born 17 September 1962\".  \nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \nRetrieval direction: 1. Fetch the page titled \"Baz Luhrmann\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \"Baz Luhrmann birthplace site:wikipedia.org\" or fetch authoritative biographies to confirm the town.",
+      "upstream_context": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "hop1_query": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "hop1_titles": [
+          "Red Curtain Trilogy",
+          "Baz Luhrmann",
+          "Strictly Ballroom",
+          "The Curtain (essay)",
+          "Three Colours: Red",
+          "Curtains (Red Flag song)",
+          "Kōhaku maku"
+        ],
+        "hop1_docs": [
+          "Red Curtain Trilogy | The Red Curtain Trilogy is the title given to the first three films directed by Baz Luhrmann:",
+          "Baz Luhrmann | Mark Anthony \"Baz\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \"Red Curtain Trilogy\", comprising his romantic comedy film \"Strictly Ballroom\" (1992), the romantic drama \"Romeo + Juliet\" (1996), and the pastiche-jukebox musical \"Moulin Rouge! \" (2001).  His 2008 film \"Australia\" is an epic historical romantic drama film starring Hugh Jackman and Nicole Kidman.  His 2013 drama \"The Great Gatsby\", based on F. Scott Fitzgerald's 1925 novel of the same name, stars Leonardo DiCaprio (whom he also used in \"Romeo + Juliet\") and Tobey Maguire.",
+          "Strictly Ballroom | Strictly Ballroom is a 1992 Australian romantic comedy film directed and co-written by Baz Luhrmann.  The film, Luhrmann's début, is the first in his \"The Red Curtain Trilogy\" of theatre-motif-related films; it was followed by \"Romeo + Juliet\" and \"Moulin Rouge! \".",
+          "The Curtain (essay) | The Curtain is a seven-part essay by Milan Kundera, along with The Art of the Novel and Testaments Betrayed composing a type of trilogy of book-length essays on the European novel.",
+          "Three Colours: Red | Three Colors: Red (French: Trois couleurs: Rouge ) is a 1994 romantic mystery film co-written, produced and directed by Polish filmmaker Krzysztof Kieślowski.  It is the final installment of \"The Three Colors Trilogy\", which examines the French Revolutionary ideals; it is preceded by \"\" and \"\".  Kieślowski had announced that this would be his final film, which proved true with the director's sudden death in 1996.  \"Red\" is about fraternity, which it examines by showing characters whose lives gradually become closely interconnected, with bonds forming between two characters who appear to have little in common.",
+          "Curtains (Red Flag song) | Curtains is a song by the American synthpop band Red Flag.  It was released as a single in 2000.  It was also included as disc V06.0 in the Megablack Box Set.",
+          "Kōhaku maku | A kōhaku maku (紅白幕 , literally red and white curtain ) is a type of decorative fabric panel used on various occasions in Japan.  The fabric takes its name from its design of vertical red and white stripes, which is known as \"kōhaku\".  \"Kōhaku maku\" panels are hung from a red and white striped rope."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Baz Luhrmann",
+          "sent_id": 0,
+          "sentence": "Mark Anthony \"Baz\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \"Red Curtain Trilogy\", comprising his romantic comedy film \"Strictly Ballroom\" (1992), the romantic drama \"Romeo + Juliet\" (1996), and the pastiche-jukebox musical \"Moulin Rouge!"
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Herons Creek, New South Wales"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhich town was the director of the \"Red Curtain Trilogy\" born in?\n\nCurrent agent output:\n\"First-hop evidence: Red Curtain Trilogy — \\\"title given to the first three films directed by Baz Luhrmann\\\"; Baz Luhrmann — \\\"born 17 September 1962\\\".  \\nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \\nRetrieval direction: 1. Fetch the page titled \\\"Baz Luhrmann\\\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \\\"Baz Luhrmann birthplace site:wikipedia.org\\\" or fetch authoritative biographies to confirm the town.\"\n\nActual upstream context:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"hop1_query\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"hop1_titles\": [\n    \"Red Curtain Trilogy\",\n    \"Baz Luhrmann\",\n    \"Strictly Ballroom\",\n    \"The Curtain (essay)\",\n    \"Three Colours: Red\",\n    \"Curtains (Red Flag song)\",\n    \"Kōhaku maku\"\n  ],\n  \"hop1_docs\": [\n    \"Red Curtain Trilogy | The Red Curtain Trilogy is the title given to the first three films directed by Baz Luhrmann:\",\n    \"Baz Luhrmann | Mark Anthony \\\"Baz\\\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \\\"Red Curtain Trilogy\\\", comprising his romantic comedy film \\\"Strictly Ballroom\\\" (1992), the romantic drama \\\"Romeo + Juliet\\\" (1996), and the pastiche-jukebox musical \\\"Moulin Rouge! \\\" (2001).  His 2008 film \\\"Australia\\\" is an epic historical romantic drama film starring Hugh Jackman and Nicole Kidman.  His 2013 drama \\\"The Great Gatsby\\\", based on F. Scott Fitzgerald's 1925 novel of the same name, stars Leonardo DiCaprio (whom he also used in \\\"Romeo + Juliet\\\") and Tobey Maguire.\",\n    \"Strictly Ballroom | Strictly Ballroom is a 1992 Australian romantic comedy film directed and co-written by Baz Luhrmann.  The film, Luhrmann's début, is the first in his \\\"The Red Curtain Trilogy\\\" of theatre-motif-related films; it was followed by \\\"Romeo + Juliet\\\" and \\\"Moulin Rouge! \\\".\",\n    \"The Curtain (essay) | The Curtain is a seven-part essay by Milan Kundera, along with The Art of the Novel and Testaments Betrayed composing a type of trilogy of book-length essays on the European novel.\",\n    \"Three Colours: Red | Three Colors: Red (French: Trois couleurs: Rouge ) is a 1994 romantic mystery film co-written, produced and directed by Polish filmmaker Krzysztof Kieślowski.  It is the final installment of \\\"The Three Colors Trilogy\\\", which examines the French Revolutionary ideals; it is preceded by \\\"\\\" and \\\"\\\".  Kieślowski had announced that this would be his final film, which proved true with the director's sudden death in 1996.  \\\"Red\\\" is about fraternity, which it examines by showing characters whose lives gradually become closely interconnected, with bonds forming between two characters who appear to have little in common.\",\n    \"Curtains (Red Flag song) | Curtains is a song by the American synthpop band Red Flag.  It was released as a single in 2000.  It was also included as disc V06.0 in the Megablack Box Set.\",\n    \"Kōhaku maku | A kōhaku maku (紅白幕 , literally red and white curtain ) is a type of decorative fabric panel used on various occasions in Japan.  The fabric takes its name from its design of vertical red and white stripes, which is known as \\\"kōhaku\\\".  \\\"Kōhaku maku\\\" panels are hung from a red and white striped rope.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Baz Luhrmann\",\n    \"sent_id\": 0,\n    \"sentence\": \"Mark Anthony \\\"Baz\\\" Luhrmann ( ; born 17 September 1962) is an Australian film director, screenwriter and producer best known for \\\"Red Curtain Trilogy\\\", comprising his romantic comedy film \\\"Strictly Ballroom\\\" (1992), the romantic drama \\\"Romeo + Juliet\\\" (1996), and the pastiche-jukebox musical \\\"Moulin Rouge!\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Herons Creek, New South Wales\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence: The Red Curtain Trilogy refers to the first three films directed by Baz Luhrmann; the Baz Luhrmann page confirms he was born 17 September 1962. Bridge needed: the town (place) of Baz Luhrmann's birth is not provided in the retrieved sentence and must be verified. Retrieval direction: 1) Open the \\\"Baz Luhrmann\\\" page (infobox 'Born' field and 'Early life' section) to extract his birthplace (town). 2) As a targeted check, fetch the page titled \\\"Herons Creek, New South Wales\\\" if the Baz Luhrmann page references that place, to confirm the town name for the next-hop answer. Return the town name (birthplace) to resolve the question.\",\n  \"rationale\": \"Visible support shows Baz Luhrmann is the director of the Red Curtain Trilogy and gives his birth date, but does not state his place (town) of birth. Therefore the next retrieval must obtain his birthplace from the Baz Luhrmann page (and, if needed, the \\\"Herons Creek, New South Wales\\\" page as a targeted follow-up).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 56,
+    "row_index": 56
+  }
+}

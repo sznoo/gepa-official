@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "3cac2bb5e40f8d36cbe260466cdf569db34dc0f5bfda1bd830bf319b9c0f0c42",
+  "created_at": "2026-07-13T17:38:40.879929+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Does Empire of the Sun or 3 Doors Down have more band members?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Does Empire of the Sun or 3 Doors Down have more band members?",
+        "summary_1": "3 Doors Down has more band members. Empire of the Sun is a duo (2 members), while 3 Doors Down is a rock band with more than two members.",
+        "summary_2": "3 Doors Down has more band members.",
+        "current_output": "3 Doors Down"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "3 Doors Down",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "3 Doors Down has more band members than Empire of the Sun.",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Does Empire of the Sun or 3 Doors Down have more band members?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Does Empire of the Sun or 3 Doors Down have more band members?\",\n  \"summary_1\": \"3 Doors Down has more band members. Empire of the Sun is a duo (2 members), while 3 Doors Down is a rock band with more than two members.\",\n  \"summary_2\": \"3 Doors Down has more band members.\",\n  \"current_output\": \"3 Doors Down\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"3 Doors Down\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"3 Doors Down has more band members than Empire of the Sun.\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If either summary_1 or summary_2 clearly identifies which band has more members (contains phrases like 'has more', 'more than', or an explicit member count such as 'duo' vs a larger band),\",\n    \"preserve_rule\": \"Continue to rely on the provided question, summary_1, and summary_2 as the evidence sources and preserve any determination already present in those summaries.\",\n    \"change_rule\": \"When the summaries indicate which band has more members, produce only the minimal answer string: the single band name that the summaries support. Place exactly that band name into the answer field and do not add any explanatory or comparative wording.\",\n    \"drop_or_avoid_rule\": \"Do not append comparative clauses or explanatory phrases (for example, avoid 'has more band members', 'than', 'has more members than', or any full-sentence elaboration). Avoid adding punctuation or qualifiers beyond the single band name.\",\n    \"output_contract\": \"The answer field must contain exactly one token sequence: the band name (e.g., '3 Doors Down') supported by the summaries, with no extra words, sentences, or commentary. Preserve the original output format.\",\n    \"why_local_transition\": \"This change prevents expanding the concise supported choice into a longer comparative sentence, enforcing the final-answer contract that the output be the minimal band-name string shown by the summaries.\"\n  },\n  \"rationale\": \"The agent's base behavior should keep using the visible summaries but must avoid turning the supported choice into a longer explanatory sentence. This minimal prompt edit triggers when the summaries already identify which band has more members and constrains the output to the single band name, preserving existing evidence use while removing the undesired verbose comparative phrasing.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 114,
+    "row_index": 114,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 70,
+    "matched_w_stable_id": "70",
+    "bisection_round": 0,
+    "material_fingerprint": "7373b2134f18c0dac4d00dd20c0e870c78d6e2d60959f467d6b4c94953fbe40f",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

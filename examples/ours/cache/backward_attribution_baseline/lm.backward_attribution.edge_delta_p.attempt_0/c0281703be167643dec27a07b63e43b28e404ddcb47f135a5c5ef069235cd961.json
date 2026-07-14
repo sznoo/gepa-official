@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c0281703be167643dec27a07b63e43b28e404ddcb47f135a5c5ef069235cd961",
+  "created_at": "2026-07-13T17:06:48.626528+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "When did Limp Bizkit become a rap rock band?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "When did Limp Bizkit become a rap rock band?",
+        "summary_1": "They became a rap rock band when they formed in 1994 (their 1997 debut album then established their trademark rap‑rock sound).",
+        "summary_2": "They became a rap rock band when they formed in 1994; their 1997 debut album established their trademark rap‑rock sound.",
+        "current_output": "Limp Bizkit became a rap rock band when they formed in 1994; their 1997 debut album then established their trademark rap‑rock sound."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Limp Bizkit became a rap rock band when they formed in 1994; their 1997 debut album then established their trademark rap‑rock sound.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "1999",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"When did Limp Bizkit become a rap rock band?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"When did Limp Bizkit become a rap rock band?\",\n  \"summary_1\": \"They became a rap rock band when they formed in 1994 (their 1997 debut album then established their trademark rap‑rock sound).\",\n  \"summary_2\": \"They became a rap rock band when they formed in 1994; their 1997 debut album established their trademark rap‑rock sound.\",\n  \"current_output\": \"Limp Bizkit became a rap rock band when they formed in 1994; their 1997 debut album then established their trademark rap‑rock sound.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Limp Bizkit became a rap rock band when they formed in 1994; their 1997 debut album then established their trademark rap‑rock sound.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"1999\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When generating the final `answer` field from the provided `question`, `summary_1`, and `summary_2`.\",\n    \"preserve_rule\": \"Keep using only facts and wording explicitly present in `summary_1` and `summary_2`. Do not discard evidence already selected by the source behavior; keep the same decision process for which summary phrases are considered relevant.\",\n    \"change_rule\": \"Instead of composing a sentence or explanation, extract the single shortest substring from the visible summaries that directly answers the question (for a 'when' question, this will typically be a date or year phrase). Use only text that appears verbatim in at least one summary; do not introduce new facts, years, or claims.\",\n    \"drop_or_avoid_rule\": \"Avoid any explanatory clauses, justifications, album references, or formation details. Do not produce multi-clause sentences, qualifiers, or any text not present verbatim in the summaries. Do not invent or infer dates that are not explicitly present in the summaries.\",\n    \"output_contract\": \"Produce only the minimal answer string (the single shortest substring from the summaries that directly answers the question) as the value of `answer`. Place nothing else in the `answer` output—no extra punctuation, sentences, or commentary. The final output must be only that minimal string.\",\n    \"why_local_transition\": \"The source output is a full explanatory sentence; the target endpoint expects a minimal answer token. This delta implements the smallest focused change: force minimal-format answers while preserving which summary evidence is used. It changes output shape (verbosity/format) but not the content selection logic.\"\n  },\n  \"rationale\": \"This prompt edit makes a narrowly scoped behavioral change: it enforces minimal-answer-only formatting (a single shortest substring drawn verbatim from the provided summaries) while preserving the agent's reliance on the visible summaries. That reduces verbose outputs like the source sentence to the compact form required at the endpoint without instructing the agent to adopt any specific new fact or to copy the target output. Content selection (which exact year to pick) remains governed by the preserved reliance on the summaries and can be adjusted by other deltas later.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 3,
+    "row_index": 3,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

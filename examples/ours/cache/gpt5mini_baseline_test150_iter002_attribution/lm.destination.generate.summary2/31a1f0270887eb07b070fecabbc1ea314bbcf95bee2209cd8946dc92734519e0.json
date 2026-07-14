@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "31a1f0270887eb07b070fecabbc1ea314bbcf95bee2209cd8946dc92734519e0",
+  "created_at": "2026-07-13T20:07:41.157208+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+      "current_output": "\"Reapers\" peaked at number 71 on the Swiss Hitparade singles chart (Reapers (song) — \"71 on the Swiss Hitparade singles chart\"). The Swiss Hitparade is Switzerland's main music sales chart (Swiss Hitparade).",
+      "upstream_context": {
+        "question": "What number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?",
+        "summary_1": "First-hop evidence: Passage [1] — \"peaked ... 71 on the Swiss Hitparade singles chart\" (states Swiss chart peak candidate).  \nBridge needed: Verify that the Swiss Hitparade (Swiss Singles Chart) lists Muse's \"Reapers\" with a peak position of #71.  \nRetrieval direction: 1. Fetch the \"Reapers\" entry on hitparade.ch (site:hitparade.ch Muse Reapers) and inspect the listed peak/highest position. 2. Fetch the \"Swiss Hitparade\" or \"Swiss Singles Chart\" Wikipedia page and inspect the lead/overview to confirm it is Switzerland's main music sales chart.",
+        "hop2_query": "1) site:hitparade.ch Muse \"Reapers\"  \n2) site:wikipedia.org \"Swiss Hitparade\" OR \"Swiss Singles Chart\"",
+        "hop2_titles": [
+          "Reapers (song)",
+          "Swiss Hitparade",
+          "Philipp Fankhauser",
+          "Tony T.",
+          "Sign in the Sky",
+          "List of number-one hits of 2013 (Switzerland)",
+          "List of number-one hits of 2014 (Switzerland)"
+        ],
+        "hop2_docs": [
+          "Reapers (song) | \"Reapers\" is a song by English rock band Muse.  It was released as the second promotional single from the band's seventh studio album \"Drones\", and was given a 7\" single release, as part of Record Store Day 2016, on 16 April 2016 as the fifth and final single from Drones.  It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \"Billboard\"' s Hot Rock Songs, and became Muse's highest-charting single on \"Billboard\"' s Mainstream Rock Songs at number 2.",
+          "Swiss Hitparade | The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.  The charts are a record of the highest-selling singles and albums in various genres in Switzerland.",
+          "Philipp Fankhauser | Philipp Manuel Fankhauser (born February 20, 1964 in Thun, Switzerland) is a Swiss blues musician and songwriter.  Several of his albums have charted in the top ten of the Swiss Hitparade, such as \"Love Man Riding\", which peaked at No. 7, \"Home\", which peaked at No. 2,",
+          "Tony T. | Neal Antone Dyer better known by the stage name Tony T. is a British singer, rapper and DJ of Jamaican origin, best known as the frontman of German dance music projects Beat System and R.I.O..  His best known hit with R.I.O. was \"Turn This Club Around\" that reached number 3 in German Singles Chart and topped the Swiss Schweizer Hitparade chart, and was certified gold in both charts.",
+          "Sign in the Sky | Sign in the Sky is the second album by hard rock band China.  It was released in 1989 by the label Vertigo.  The single, \"In the Middle of the Night\", peaked at No. 11 on the Swiss Hitparade.",
+          "List of number-one hits of 2013 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2013.",
+          "List of number-one hits of 2014 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2014."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Reapers (song)",
+          "sent_id": 0,
+          "sentence": "\"Reapers\" is a song by English rock band Muse."
+        },
+        {
+          "title": "Reapers (song)",
+          "sent_id": 2,
+          "sentence": "It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \"Billboard\"' s Hot Rock Songs, and became Muse's highest-charting single on \"Billboard\"' s Mainstream Rock Songs at number 2."
+        },
+        {
+          "title": "Swiss Hitparade",
+          "sent_id": 0,
+          "sentence": "The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat number did the song \"Reapers\"  by Muse reach on Switzerland's main music sales chart?\n\nCurrent agent output:\n\"\\\"Reapers\\\" peaked at number 71 on the Swiss Hitparade singles chart (Reapers (song) — \\\"71 on the Swiss Hitparade singles chart\\\"). The Swiss Hitparade is Switzerland's main music sales chart (Swiss Hitparade).\"\n\nActual upstream context:\n{\n  \"question\": \"What number did the song \\\"Reapers\\\"  by Muse reach on Switzerland's main music sales chart?\",\n  \"summary_1\": \"First-hop evidence: Passage [1] — \\\"peaked ... 71 on the Swiss Hitparade singles chart\\\" (states Swiss chart peak candidate).  \\nBridge needed: Verify that the Swiss Hitparade (Swiss Singles Chart) lists Muse's \\\"Reapers\\\" with a peak position of #71.  \\nRetrieval direction: 1. Fetch the \\\"Reapers\\\" entry on hitparade.ch (site:hitparade.ch Muse Reapers) and inspect the listed peak/highest position. 2. Fetch the \\\"Swiss Hitparade\\\" or \\\"Swiss Singles Chart\\\" Wikipedia page and inspect the lead/overview to confirm it is Switzerland's main music sales chart.\",\n  \"hop2_query\": \"1) site:hitparade.ch Muse \\\"Reapers\\\"  \\n2) site:wikipedia.org \\\"Swiss Hitparade\\\" OR \\\"Swiss Singles Chart\\\"\",\n  \"hop2_titles\": [\n    \"Reapers (song)\",\n    \"Swiss Hitparade\",\n    \"Philipp Fankhauser\",\n    \"Tony T.\",\n    \"Sign in the Sky\",\n    \"List of number-one hits of 2013 (Switzerland)\",\n    \"List of number-one hits of 2014 (Switzerland)\"\n  ],\n  \"hop2_docs\": [\n    \"Reapers (song) | \\\"Reapers\\\" is a song by English rock band Muse.  It was released as the second promotional single from the band's seventh studio album \\\"Drones\\\", and was given a 7\\\" single release, as part of Record Store Day 2016, on 16 April 2016 as the fifth and final single from Drones.  It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \\\"Billboard\\\"' s Hot Rock Songs, and became Muse's highest-charting single on \\\"Billboard\\\"' s Mainstream Rock Songs at number 2.\",\n    \"Swiss Hitparade | The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.  The charts are a record of the highest-selling singles and albums in various genres in Switzerland.\",\n    \"Philipp Fankhauser | Philipp Manuel Fankhauser (born February 20, 1964 in Thun, Switzerland) is a Swiss blues musician and songwriter.  Several of his albums have charted in the top ten of the Swiss Hitparade, such as \\\"Love Man Riding\\\", which peaked at No. 7, \\\"Home\\\", which peaked at No. 2,\",\n    \"Tony T. | Neal Antone Dyer better known by the stage name Tony T. is a British singer, rapper and DJ of Jamaican origin, best known as the frontman of German dance music projects Beat System and R.I.O..  His best known hit with R.I.O. was \\\"Turn This Club Around\\\" that reached number 3 in German Singles Chart and topped the Swiss Schweizer Hitparade chart, and was certified gold in both charts.\",\n    \"Sign in the Sky | Sign in the Sky is the second album by hard rock band China.  It was released in 1989 by the label Vertigo.  The single, \\\"In the Middle of the Night\\\", peaked at No. 11 on the Swiss Hitparade.\",\n    \"List of number-one hits of 2013 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2013.\",\n    \"List of number-one hits of 2014 (Switzerland) | This is a list of the Swiss Hitparade number ones of 2014.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Reapers (song)\",\n    \"sent_id\": 0,\n    \"sentence\": \"\\\"Reapers\\\" is a song by English rock band Muse.\"\n  },\n  {\n    \"title\": \"Reapers (song)\",\n    \"sent_id\": 2,\n    \"sentence\": \"It peaked at number 75 on the French Singles Chart, 71 on the Swiss Hitparade singles chart, 37 on \\\"Billboard\\\"' s Hot Rock Songs, and became Muse's highest-charting single on \\\"Billboard\\\"' s Mainstream Rock Songs at number 2.\"\n  },\n  {\n    \"title\": \"Swiss Hitparade\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Swiss Hitparade (German: Schweizer Hitparade ) are Switzerland's main music sales charts.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary: \\\"Reapers\\\" is a song by English rock band Muse. The Reapers (song) page states: \\\"It peaked ... 71 on the Swiss Hitparade singles chart.\\\" The Swiss Hitparade page states: \\\"The Swiss Hitparade ... are Switzerland's main music sales charts.\\\" Retained facts for final answer: the song \\\"Reapers\\\" (by Muse) peaked at number 71 on the Swiss Hitparade, and the Swiss Hitparade is Switzerland's main music sales chart.\",\n  \"rationale\": \"The Reapers (song) supporting sentence explicitly gives a peak of 71 on the Swiss Hitparade singles chart (visible_gold_support). The Swiss Hitparade supporting sentence explicitly identifies the Swiss Hitparade as Switzerland's main music sales charts. Together these visible sentences directly connect the song's listed peak (71) to Switzerland's main chart.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 65,
+    "row_index": 65
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "44ff535cad35facfe1c5027d76fd138e355d45012d6e36a5ec1faa5300a7e119",
+  "created_at": "2026-07-13T17:01:52.622820+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current `query` is a verbose multi-person instruction (e.g., asks for occupation lists for two or more named people and requests sources), apply this prompt edit for the ongoing second-hop retrieval.",
+            "preserve_rule": "Keep the original intent to retrieve explicit occupation/role evidence for a person named in the inputs. Continue to output only the `query` field (no answers or extra commentary).",
+            "change_rule": "Replace the verbose multi-person instruction with a single, compact keyword-style query that names only one person (the person already mentioned in the inputs) followed by occupation-related keywords. Use the pattern: \"<Full Name> occupations musician songwriter producer director filmmaker biography\" (only the name and keywords, space-separated). Produce exactly one such short query string.",
+            "drop_or_avoid_rule": "Do not request sources, do not ask for comparative lists, do not include natural-language instructions or extra explanatory text, and do not mention other people in the same query. Avoid long clauses, sentences, or multi-item formatting — output only the concise keyword query.",
+            "output_contract": "Return a single `query` string field whose value is a short, keyword-style search query naming the chosen person and occupation/biography keywords (for example: \"Dave Moody occupations musician songwriter producer director filmmaker biography\"). Do not return other fields or commentary.",
+            "why_local_transition": "A short, single-person occupation-keyword query focuses the second-hop retrieval on concrete biography/occupation evidence for the named individual and avoids diluting the search with multi-person instructions or source-format constraints."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If the question/summary_1 compare two named people (here: Dave Moody and Ransom Riggs) but the current generated query mentions only one person.",
+            "preserve_rule": "Keep the agent's intent to produce a compact, second‑hop retrieval query that targets occupations/roles and requests reliable sources; maintain brevity and focus on role lists rather than long narratives.",
+            "change_rule": "Ensure the query explicitly names both people (Dave Moody and Ransom Riggs) and requests concise lists of their entertainment‑industry occupations/roles plus a source (Wikipedia or official biography). Phrase this as a single compact retrieval string (one line, imperative keyword style) and avoid adding evaluative language or the full original question.",
+            "drop_or_avoid_rule": "Do not emit queries that target only one person, that repeat the entire natural‑language question verbatim, that ask for a judgement instead of raw role lists, or that include long explanatory text. Avoid conversational phrasing or extra fields.",
+            "output_contract": "Produce a single-line 'query' string that (a) includes both full names, (b) asks for concise lists of entertainment-industry occupations/roles for each, and (c) requests source attribution (Wikipedia or official biography). Keep it compact (one line, ~<=20 words). No other fields or commentary.",
+            "why_local_transition": "The current query targets only Dave Moody and will miss evidence for Ransom Riggs. Adding the second name and asking for role lists for both is the minimal prompt change needed to retrieve supporting documents for comparison."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "current_output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current `query` is a verbose multi-person instruction (e.g., asks for occupation lists for two or more named people and requests sources), apply this prompt edit for the ongoing second-hop retrieval.\",\n      \"preserve_rule\": \"Keep the original intent to retrieve explicit occupation/role evidence for a person named in the inputs. Continue to output only the `query` field (no answers or extra commentary).\",\n      \"change_rule\": \"Replace the verbose multi-person instruction with a single, compact keyword-style query that names only one person (the person already mentioned in the inputs) followed by occupation-related keywords. Use the pattern: \\\"<Full Name> occupations musician songwriter producer director filmmaker biography\\\" (only the name and keywords, space-separated). Produce exactly one such short query string.\",\n      \"drop_or_avoid_rule\": \"Do not request sources, do not ask for comparative lists, do not include natural-language instructions or extra explanatory text, and do not mention other people in the same query. Avoid long clauses, sentences, or multi-item formatting — output only the concise keyword query.\",\n      \"output_contract\": \"Return a single `query` string field whose value is a short, keyword-style search query naming the chosen person and occupation/biography keywords (for example: \\\"Dave Moody occupations musician songwriter producer director filmmaker biography\\\"). Do not return other fields or commentary.\",\n      \"why_local_transition\": \"A short, single-person occupation-keyword query focuses the second-hop retrieval on concrete biography/occupation evidence for the named individual and avoids diluting the search with multi-person instructions or source-format constraints.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If the question/summary_1 compare two named people (here: Dave Moody and Ransom Riggs) but the current generated query mentions only one person.\",\n      \"preserve_rule\": \"Keep the agent's intent to produce a compact, second‑hop retrieval query that targets occupations/roles and requests reliable sources; maintain brevity and focus on role lists rather than long narratives.\",\n      \"change_rule\": \"Ensure the query explicitly names both people (Dave Moody and Ransom Riggs) and requests concise lists of their entertainment‑industry occupations/roles plus a source (Wikipedia or official biography). Phrase this as a single compact retrieval string (one line, imperative keyword style) and avoid adding evaluative language or the full original question.\",\n      \"drop_or_avoid_rule\": \"Do not emit queries that target only one person, that repeat the entire natural‑language question verbatim, that ask for a judgement instead of raw role lists, or that include long explanatory text. Avoid conversational phrasing or extra fields.\",\n      \"output_contract\": \"Produce a single-line 'query' string that (a) includes both full names, (b) asks for concise lists of entertainment-industry occupations/roles for each, and (c) requests source attribution (Wikipedia or official biography). Keep it compact (one line, ~<=20 words). No other fields or commentary.\",\n      \"why_local_transition\": \"The current query targets only Dave Moody and will miss evidence for Ransom Riggs. Adding the second name and asking for role lists for both is the minimal prompt change needed to retrieve supporting documents for comparison.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"current_output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dave Moody Ransom Riggs occupations roles concise list sources Wikipedia official biography\"\n  },\n  \"rationale\": \"Delta 0 converted the verbose multi-person instruction into a compact occupation-keyword form; Delta 1 then required both full names and source attribution, so the final single-line query names both people, requests concise role lists, and asks for Wikipedia/official biography sources.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

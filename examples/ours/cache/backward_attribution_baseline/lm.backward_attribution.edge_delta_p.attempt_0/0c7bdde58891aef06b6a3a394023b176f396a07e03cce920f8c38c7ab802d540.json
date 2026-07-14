@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "0c7bdde58891aef06b6a3a394023b176f396a07e03cce920f8c38c7ab802d540",
+  "created_at": "2026-07-13T17:14:55.789062+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "summary_1": "The Royal Academy of Dramatic Art is based in London.",
+        "summary_2": "London",
+        "current_output": "London"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "London",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "London, England",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"summary_1\": \"The Royal Academy of Dramatic Art is based in London.\",\n  \"summary_2\": \"London\",\n  \"current_output\": \"London\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"London\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"London, England\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question explicitly asks for the city/location (phrases like \\\"which city\\\", \\\"based in what city\\\") AND one or both summaries supply the same short place name (a single-token city, or the current output equals that token).\",\n    \"preserve_rule\": \"Keep all existing behavior: if summaries disagree about the place, lack a clear place name, or the model is not confident about an expanded form, return the place exactly as supported by the summaries (no extra words). Preserve the final-answer output contract and the use of the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"When triggered, prefer a canonical 'City, Country' formatting instead of a bare single-token city name. Implementation: (1) If any summary already gives a multi-token place (e.g., includes a country/region), use that text. (2) Otherwise, if the model can identify the country for the named city with high confidence, append a comma and the country name to the city token (e.g., 'City, Country'). (3) If the country cannot be identified with high confidence, do not invent extra text — emit the city token as in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not add explanatory phrases, qualifiers, or punctuation beyond the minimal 'City' or 'City, Country' string. Do not invent alternate place names, do not include unsupported countries or regions, and do not produce additional sentences or metadata in the answer block.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal place string: either the single city name exactly as supported by the summaries, or a 'City, Country' string when the country is explicitly present in the summaries or when the model is highly confident about the country. No extra commentary, punctuation (other than the comma between city and country), or tags.\",\n    \"why_local_transition\": \"This change nudges the final step to a more disambiguated geographic format (city plus country) when the question requests a location and the summaries support or the model confidently knows the country, producing the slightly more specific form expected downstream while preserving conservative behavior when confidence is low.\"\n  },\n  \"rationale\": \"The current output is a bare city token coming from the summaries. The target state expects a minimally more specific geographic format (city plus country). The smallest safe prompt edit is to instruct the final-answer agent to prefer a 'City, Country' canonical form when the question asks for a city and the country is either present in the summaries or can be identified with high confidence; otherwise preserve the original single-token answer. This preserves existing behavior when uncertainty exists and only broadens output when supported, satisfying the final-answer contract without adding extraneous text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 40,
+    "row_index": 40,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "367e5fe9b639b0222ff1575e23e03732639b9655ed88884b82140226c2a55608",
+  "created_at": "2026-07-13T17:13:46.050679+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When one or both summaries contain the substring \"English title:\" or a parenthetical that includes \"English title:\".",
+            "preserve_rule": "Keep using the provided summaries as the source of truth and preserve the base contract to emit only the minimal answer string in the [[ ## answer ## ]] block. If no English-title pattern is found, do not apply this change and fall back to the agent's prior extraction behavior.",
+            "change_rule": "If the trigger matches, extract the substring that immediately follows the token \"English title:\" (stopping at the closing parenthesis or the end of that phrase). Trim surrounding whitespace and remove any enclosing parentheses or language labels. Set the agent's answer to exactly that extracted title string and nothing else.",
+            "drop_or_avoid_rule": "Do not include the original foreign title, the parenthetical label (e.g., \"(English title: ...)\") or any explanatory text. Avoid extra punctuation, commentary, or formatting beyond the single title string.",
+            "output_contract": "Ensure the [[ ## answer ## ]] block contains exactly the extracted English title string and no additional words, punctuation, or notes. If multiple distinct English-title extractions appear, choose the shortest non-empty extracted string present in the summaries.",
+            "why_local_transition": "The source output combined the French title with a parenthetical English title; the target requires only the English title. This small rule makes the minimal change: locate the 'English title:' text already present in the summaries and output only that English title string."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The title of this film is french and is a continuation of Carne, what is the film called?",
+        "summary_1": "Seul contre tous (English title: I Stand Alone)",
+        "summary_2": "Seul contre tous (English title: I Stand Alone)",
+        "current_output": "Seul contre tous (English title: I Stand Alone)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When one or both summaries contain the substring \\\"English title:\\\" or a parenthetical that includes \\\"English title:\\\".\",\n      \"preserve_rule\": \"Keep using the provided summaries as the source of truth and preserve the base contract to emit only the minimal answer string in the [[ ## answer ## ]] block. If no English-title pattern is found, do not apply this change and fall back to the agent's prior extraction behavior.\",\n      \"change_rule\": \"If the trigger matches, extract the substring that immediately follows the token \\\"English title:\\\" (stopping at the closing parenthesis or the end of that phrase). Trim surrounding whitespace and remove any enclosing parentheses or language labels. Set the agent's answer to exactly that extracted title string and nothing else.\",\n      \"drop_or_avoid_rule\": \"Do not include the original foreign title, the parenthetical label (e.g., \\\"(English title: ...)\\\") or any explanatory text. Avoid extra punctuation, commentary, or formatting beyond the single title string.\",\n      \"output_contract\": \"Ensure the [[ ## answer ## ]] block contains exactly the extracted English title string and no additional words, punctuation, or notes. If multiple distinct English-title extractions appear, choose the shortest non-empty extracted string present in the summaries.\",\n      \"why_local_transition\": \"The source output combined the French title with a parenthetical English title; the target requires only the English title. This small rule makes the minimal change: locate the 'English title:' text already present in the summaries and output only that English title string.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The title of this film is french and is a continuation of Carne, what is the film called?\",\n  \"summary_1\": \"Seul contre tous (English title: I Stand Alone)\",\n  \"summary_2\": \"Seul contre tous (English title: I Stand Alone)\",\n  \"current_output\": \"Seul contre tous (English title: I Stand Alone)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"I Stand Alone\",\n  \"rationale\": \"The summaries contained 'English title:' so I extracted the substring immediately following it per the ordered delta, yielding 'I Stand Alone'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 20,
+    "row_index": 20,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

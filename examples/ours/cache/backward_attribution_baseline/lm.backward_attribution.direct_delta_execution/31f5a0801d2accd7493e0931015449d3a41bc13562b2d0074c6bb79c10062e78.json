@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "31f5a0801d2accd7493e0931015449d3a41bc13562b2d0074c6bb79c10062e78",
+  "created_at": "2026-07-13T17:15:05.805769+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question explicitly asks for the city/location (phrases like \"which city\", \"based in what city\") AND one or both summaries supply the same short place name (a single-token city, or the current output equals that token).",
+            "preserve_rule": "Keep all existing behavior: if summaries disagree about the place, lack a clear place name, or the model is not confident about an expanded form, return the place exactly as supported by the summaries (no extra words). Preserve the final-answer output contract and the use of the [[ ## answer ## ]] block.",
+            "change_rule": "When triggered, prefer a canonical 'City, Country' formatting instead of a bare single-token city name. Implementation: (1) If any summary already gives a multi-token place (e.g., includes a country/region), use that text. (2) Otherwise, if the model can identify the country for the named city with high confidence, append a comma and the country name to the city token (e.g., 'City, Country'). (3) If the country cannot be identified with high confidence, do not invent extra text — emit the city token as in the summaries.",
+            "drop_or_avoid_rule": "Do not add explanatory phrases, qualifiers, or punctuation beyond the minimal 'City' or 'City, Country' string. Do not invent alternate place names, do not include unsupported countries or regions, and do not produce additional sentences or metadata in the answer block.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal place string: either the single city name exactly as supported by the summaries, or a 'City, Country' string when the country is explicitly present in the summaries or when the model is highly confident about the country. No extra commentary, punctuation (other than the comma between city and country), or tags.",
+            "why_local_transition": "This change nudges the final step to a more disambiguated geographic format (city plus country) when the question requests a location and the summaries support or the model confidently knows the country, producing the slightly more specific form expected downstream while preserving conservative behavior when confidence is low."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "summary_1": "The Royal Academy of Dramatic Art is based in London.",
+        "summary_2": "London",
+        "current_output": "London"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question explicitly asks for the city/location (phrases like \\\"which city\\\", \\\"based in what city\\\") AND one or both summaries supply the same short place name (a single-token city, or the current output equals that token).\",\n      \"preserve_rule\": \"Keep all existing behavior: if summaries disagree about the place, lack a clear place name, or the model is not confident about an expanded form, return the place exactly as supported by the summaries (no extra words). Preserve the final-answer output contract and the use of the [[ ## answer ## ]] block.\",\n      \"change_rule\": \"When triggered, prefer a canonical 'City, Country' formatting instead of a bare single-token city name. Implementation: (1) If any summary already gives a multi-token place (e.g., includes a country/region), use that text. (2) Otherwise, if the model can identify the country for the named city with high confidence, append a comma and the country name to the city token (e.g., 'City, Country'). (3) If the country cannot be identified with high confidence, do not invent extra text — emit the city token as in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not add explanatory phrases, qualifiers, or punctuation beyond the minimal 'City' or 'City, Country' string. Do not invent alternate place names, do not include unsupported countries or regions, and do not produce additional sentences or metadata in the answer block.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal place string: either the single city name exactly as supported by the summaries, or a 'City, Country' string when the country is explicitly present in the summaries or when the model is highly confident about the country. No extra commentary, punctuation (other than the comma between city and country), or tags.\",\n      \"why_local_transition\": \"This change nudges the final step to a more disambiguated geographic format (city plus country) when the question requests a location and the summaries support or the model confidently knows the country, producing the slightly more specific form expected downstream while preserving conservative behavior when confidence is low.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"summary_1\": \"The Royal Academy of Dramatic Art is based in London.\",\n  \"summary_2\": \"London\",\n  \"current_output\": \"London\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"London, United Kingdom\",\n  \"rationale\": \"Question asks for the city; both summaries give 'London', and per the delta rule the country (United Kingdom) was appended with high confidence.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 40,
+    "row_index": 40,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

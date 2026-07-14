@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "235476ae2fdb6db66aa3ca32cc5aaedcd010c2dc23683ef6c95279930857b317",
+  "created_at": "2026-07-13T17:24:29.332501+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when any visible field (question, summary_1, summary_2, or current_output) contains a personal name together with a parenthetical alias or alternate name (for example: \"Chad Johnson (also known as Chad Ochocinco)\").",
+            "preserve_rule": "Preserve all name tokens that already appear verbatim in the visible inputs and preserve the agent's existing interface: still produce only the `answer` field and follow the base prompt's minimal-answer requirement.",
+            "change_rule": "Replace any parenthetical alias or 'also known as' clause with a single compact canonical name string drawn only from tokens present in the visible inputs. Concretely: (a) if a fuller legal name (including a middle name) already appears in any visible input, output that fuller form; (b) otherwise output First Last only (no parentheses, no alias text). When multiple variants are present, prefer the variant that occurs most frequently across summaries; if tied, prefer summary_1. Do not fetch, invent, or add tokens that are not already visible.",
+            "drop_or_avoid_rule": "Do not include parenthetical aliases, 'also known as' phrases, explanatory qualifiers, or extra punctuation in the answer. Do not introduce new names, middle names, or external facts. Avoid any multi-part answer text—produce a single name string.",
+            "output_contract": "The assistant must place exactly one minimal name string in the [[ ## answer ## ]] block and nothing else. That name must be assembled only from tokens visible in the provided inputs, formatted as a compact canonical name (see change_rule).",
+            "why_local_transition": "This small behavioral change removes parenthetical aliases and enforces a single canonical name string derived from visible tokens. It nudges the base prompt away from answering with aliases in parentheses toward a compact formal name form while preserving the minimal-answer contract and without inventing new data."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+        "summary_1": "Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.",
+        "summary_2": "Chad Johnson (also known as Chad Ochocinco)",
+        "current_output": "Chad Johnson (also known as Chad Ochocinco)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when any visible field (question, summary_1, summary_2, or current_output) contains a personal name together with a parenthetical alias or alternate name (for example: \\\"Chad Johnson (also known as Chad Ochocinco)\\\").\",\n      \"preserve_rule\": \"Preserve all name tokens that already appear verbatim in the visible inputs and preserve the agent's existing interface: still produce only the `answer` field and follow the base prompt's minimal-answer requirement.\",\n      \"change_rule\": \"Replace any parenthetical alias or 'also known as' clause with a single compact canonical name string drawn only from tokens present in the visible inputs. Concretely: (a) if a fuller legal name (including a middle name) already appears in any visible input, output that fuller form; (b) otherwise output First Last only (no parentheses, no alias text). When multiple variants are present, prefer the variant that occurs most frequently across summaries; if tied, prefer summary_1. Do not fetch, invent, or add tokens that are not already visible.\",\n      \"drop_or_avoid_rule\": \"Do not include parenthetical aliases, 'also known as' phrases, explanatory qualifiers, or extra punctuation in the answer. Do not introduce new names, middle names, or external facts. Avoid any multi-part answer text—produce a single name string.\",\n      \"output_contract\": \"The assistant must place exactly one minimal name string in the [[ ## answer ## ]] block and nothing else. That name must be assembled only from tokens visible in the provided inputs, formatted as a compact canonical name (see change_rule).\",\n      \"why_local_transition\": \"This small behavioral change removes parenthetical aliases and enforces a single canonical name string derived from visible tokens. It nudges the base prompt away from answering with aliases in parentheses toward a compact formal name form while preserving the minimal-answer contract and without inventing new data.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, which  American football wide receiver, was an official spokesperson of the game?\",\n  \"summary_1\": \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\",\n  \"summary_2\": \"Chad Johnson (also known as Chad Ochocinco)\",\n  \"current_output\": \"Chad Johnson (also known as Chad Ochocinco)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nChad Johnson\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Applied the delta to remove the parenthetical alias and choose the First Last form present and preferred from summary_1.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

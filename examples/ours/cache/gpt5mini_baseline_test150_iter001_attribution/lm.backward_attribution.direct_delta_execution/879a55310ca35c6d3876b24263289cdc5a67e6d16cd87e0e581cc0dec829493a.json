@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "879a55310ca35c6d3876b24263289cdc5a67e6d16cd87e0e581cc0dec829493a",
+  "created_at": "2026-07-13T18:47:11.669669+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the prior retrievals (first hop) include a named specialism or concise subject token that explicitly describes a subfield of '19th-century academic art' (a short noun phrase found in any retrieved snippet), and the current query is anchored to the first-hop university from summary_1.",
+            "preserve_rule": "Keep producing a single, compact retrieval query as the agent's output. Preserve use of terse keyword queries (no full sentences) and any site/repository restriction the agent normally uses unless changed by the rule below.",
+            "change_rule": "Do not add person names. Instead, build a short query that uses the exact specialism phrase as found in the retrieved snippet plus a teaching/affiliation keyword to locate the academic and their institution. Combine the specialism token with one of: professor, taught, lecturer, \"taught at\", or \"faculty\"; optionally include a site restriction (e.g., site:wikipedia.org) if ordinarily used. Form must be compact (see output_contract). Example shape: '<specialism-term> professor taught site:wikipedia.org' (replace <specialism-term> with the token exactly as it appeared in the retrieved snippet).",
+            "drop_or_avoid_rule": "Avoid freezing on or inserting the first-hop university (summary_1) into the second-hop query unless a retrieved snippet explicitly ties the subject to that university. Do not introduce any person-name or other target-only entity that did not appear in the agent's visible inputs.",
+            "output_contract": "Return exactly one single-line keyword query (no sentence punctuation). Query length should be compact (about 3–8 keywords). It must (a) include the exact specialism token discovered in the prior retrieval, (b) include one teaching/affiliation keyword from {professor, taught, lecturer, \"taught at\", faculty}, and (c) may include an existing site restriction like site:wikipedia.org. Do not include person names or the first-hop university unless supported by retrieved evidence.",
+            "why_local_transition": "Shifts the second-hop focus away from the noisy first-hop university anchor and instead pivots on the discovered specialism to find the specific academic who worked in that subfield and thereby reveal the university they taught at."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question asks about a 'specialism' or 'special interest' of 19th‑century academic art and a non-empty `summary_1` (an institution or candidate anchor) is available.",
+            "preserve_rule": "Keep the agent's role: produce one compact, single-line second-hop retrieval query that targets the missing bridge/supporting evidence. Preserve use of concise search terms drawn from the question.",
+            "change_rule": "Instead of appending or repeating the full question or introducing new person names, construct a short query that combines (1) a succinct phrase extracted from the question identifying the specialism (e.g. the wording around 'specialism' or '19th-century academic art') with (2) the institution string from `summary_1` and (3) a relation token such as \"special interest\", \"taught\", or \"professor\". Prefer site:wikipedia.org if source retrievals use it. Produce a single-line query using that template, e.g.: site:wikipedia.org \"<phrase-from-question>\" \"special interest\" \"<summary_1>\"",
+            "drop_or_avoid_rule": "Do not introduce or prioritize person names that do not already appear in the visible inputs. Do not output the full question as the query, do not return multiple queries, and avoid long literal spans; keep the query compact and focused on the specialism + institution + relation terms.",
+            "output_contract": "Return exactly one compact query string (one line). The query must contain a short phrase from the question identifying the specialism, the institution from `summary_1` (or leave it out only if truly absent), and at least one relation word such as \"special interest\", \"taught\", or \"professor\". No extra explanation or multiple choices.",
+            "why_local_transition": "The prior query wandered by injecting a specific person or extra tokens. Anchoring the second‑hop query to the specialism phrase from the question plus the recovered institution focuses the search on pages that link that specialism to academics who taught at the named university, which is the missing bridge this hop must recover."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "Cornell University",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"19th-century academic art\" \"Cornell University\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the prior retrievals (first hop) include a named specialism or concise subject token that explicitly describes a subfield of '19th-century academic art' (a short noun phrase found in any retrieved snippet), and the current query is anchored to the first-hop university from summary_1.\",\n      \"preserve_rule\": \"Keep producing a single, compact retrieval query as the agent's output. Preserve use of terse keyword queries (no full sentences) and any site/repository restriction the agent normally uses unless changed by the rule below.\",\n      \"change_rule\": \"Do not add person names. Instead, build a short query that uses the exact specialism phrase as found in the retrieved snippet plus a teaching/affiliation keyword to locate the academic and their institution. Combine the specialism token with one of: professor, taught, lecturer, \\\"taught at\\\", or \\\"faculty\\\"; optionally include a site restriction (e.g., site:wikipedia.org) if ordinarily used. Form must be compact (see output_contract). Example shape: '<specialism-term> professor taught site:wikipedia.org' (replace <specialism-term> with the token exactly as it appeared in the retrieved snippet).\",\n      \"drop_or_avoid_rule\": \"Avoid freezing on or inserting the first-hop university (summary_1) into the second-hop query unless a retrieved snippet explicitly ties the subject to that university. Do not introduce any person-name or other target-only entity that did not appear in the agent's visible inputs.\",\n      \"output_contract\": \"Return exactly one single-line keyword query (no sentence punctuation). Query length should be compact (about 3–8 keywords). It must (a) include the exact specialism token discovered in the prior retrieval, (b) include one teaching/affiliation keyword from {professor, taught, lecturer, \\\"taught at\\\", faculty}, and (c) may include an existing site restriction like site:wikipedia.org. Do not include person names or the first-hop university unless supported by retrieved evidence.\",\n      \"why_local_transition\": \"Shifts the second-hop focus away from the noisy first-hop university anchor and instead pivots on the discovered specialism to find the specific academic who worked in that subfield and thereby reveal the university they taught at.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks about a 'specialism' or 'special interest' of 19th‑century academic art and a non-empty `summary_1` (an institution or candidate anchor) is available.\",\n      \"preserve_rule\": \"Keep the agent's role: produce one compact, single-line second-hop retrieval query that targets the missing bridge/supporting evidence. Preserve use of concise search terms drawn from the question.\",\n      \"change_rule\": \"Instead of appending or repeating the full question or introducing new person names, construct a short query that combines (1) a succinct phrase extracted from the question identifying the specialism (e.g. the wording around 'specialism' or '19th-century academic art') with (2) the institution string from `summary_1` and (3) a relation token such as \\\"special interest\\\", \\\"taught\\\", or \\\"professor\\\". Prefer site:wikipedia.org if source retrievals use it. Produce a single-line query using that template, e.g.: site:wikipedia.org \\\"<phrase-from-question>\\\" \\\"special interest\\\" \\\"<summary_1>\\\"\",\n      \"drop_or_avoid_rule\": \"Do not introduce or prioritize person names that do not already appear in the visible inputs. Do not output the full question as the query, do not return multiple queries, and avoid long literal spans; keep the query compact and focused on the specialism + institution + relation terms.\",\n      \"output_contract\": \"Return exactly one compact query string (one line). The query must contain a short phrase from the question identifying the specialism, the institution from `summary_1` (or leave it out only if truly absent), and at least one relation word such as \\\"special interest\\\", \\\"taught\\\", or \\\"professor\\\". No extra explanation or multiple choices.\",\n      \"why_local_transition\": \"The prior query wandered by injecting a specific person or extra tokens. Anchoring the second‑hop query to the specialism phrase from the question plus the recovered institution focuses the search on pages that link that specialism to academics who taught at the named university, which is the missing bridge this hop must recover.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"Cornell University\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"19th-century academic art\\\" \\\"Cornell University\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"19th-century academic art\\\" \\\"special interest\\\" \\\"Cornell University\\\"\"\n  },\n  \"rationale\": \"Applied delta 1: built a compact query combining the specialism phrase from the question, the institution from summary_1, and the relation token \\\"special interest\\\"; preserved site:wikipedia.org restriction.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c94547c003d04b1e2423b2ce68d758f4ec55fb63f4c60ed5a5959ea050ceda34",
+  "created_at": "2026-07-13T17:24:29.959282+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When one or more visible summaries present a full proper name immediately followed by a parenthetical abbreviation (pattern: 'Full Name (ABBR)', e.g. 'Southeastern Pennsylvania Transportation Authority (SEPTA)').",
+            "preserve_rule": "Continue to base the answer only on the visible summaries and keep the original final-answer interface and minimal-answer behavior (produce a single, concise answer string in the [[ ## answer ## ]] block). Preserve any correct tokens from the source output that are part of the full proper name.",
+            "change_rule": "If the trigger applies, prefer the full proper name form and emit that name alone. Concretely: when both a full name and its parenthetical abbreviation appear, remove the parenthetical abbreviation and output only the full proper name (no added qualifiers). If only an abbreviation is present with no full name, do not invent or expand it—output the minimal string that is actually present in the summaries.",
+            "drop_or_avoid_rule": "Do not include the parenthetical abbreviation, parentheses, expansion notes, explanatory phrases (e.g., 'also known as'), or other extra tokens. Avoid appending punctuation or commentary beyond the minimal name string supported by the summaries.",
+            "output_contract": "Produce exactly one minimal answer string in the [[ ## answer ## ]] block. When a full proper name appears alongside a parenthetical abbreviation in the summaries, the string must be the full proper name only (no abbreviation or extra text). If only an abbreviation is available, return that abbreviation as the minimal supported string.",
+            "why_local_transition": "The source output included both the full name and its abbreviation; the target requires the full name alone. This single, narrow rule removes the redundant parenthetical abbreviation while preserving the base prompt's minimal-answer behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the name of the regional transportation authority that includes the station which is proximal to Cira Centre South?",
+        "summary_1": "Southeastern Pennsylvania Transportation Authority (SEPTA)",
+        "summary_2": "Southeastern Pennsylvania Transportation Authority (SEPTA)",
+        "current_output": "Southeastern Pennsylvania Transportation Authority (SEPTA)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When one or more visible summaries present a full proper name immediately followed by a parenthetical abbreviation (pattern: 'Full Name (ABBR)', e.g. 'Southeastern Pennsylvania Transportation Authority (SEPTA)').\",\n      \"preserve_rule\": \"Continue to base the answer only on the visible summaries and keep the original final-answer interface and minimal-answer behavior (produce a single, concise answer string in the [[ ## answer ## ]] block). Preserve any correct tokens from the source output that are part of the full proper name.\",\n      \"change_rule\": \"If the trigger applies, prefer the full proper name form and emit that name alone. Concretely: when both a full name and its parenthetical abbreviation appear, remove the parenthetical abbreviation and output only the full proper name (no added qualifiers). If only an abbreviation is present with no full name, do not invent or expand it—output the minimal string that is actually present in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not include the parenthetical abbreviation, parentheses, expansion notes, explanatory phrases (e.g., 'also known as'), or other extra tokens. Avoid appending punctuation or commentary beyond the minimal name string supported by the summaries.\",\n      \"output_contract\": \"Produce exactly one minimal answer string in the [[ ## answer ## ]] block. When a full proper name appears alongside a parenthetical abbreviation in the summaries, the string must be the full proper name only (no abbreviation or extra text). If only an abbreviation is available, return that abbreviation as the minimal supported string.\",\n      \"why_local_transition\": \"The source output included both the full name and its abbreviation; the target requires the full name alone. This single, narrow rule removes the redundant parenthetical abbreviation while preserving the base prompt's minimal-answer behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the name of the regional transportation authority that includes the station which is proximal to Cira Centre South?\",\n  \"summary_1\": \"Southeastern Pennsylvania Transportation Authority (SEPTA)\",\n  \"summary_2\": \"Southeastern Pennsylvania Transportation Authority (SEPTA)\",\n  \"current_output\": \"Southeastern Pennsylvania Transportation Authority (SEPTA)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Southeastern Pennsylvania Transportation Authority\",\n  \"rationale\": \"Both summaries included the full name with a parenthetical abbreviation; per the ordered rule, the parenthetical abbreviation was removed and only the full proper name was returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 121,
+    "row_index": 121,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

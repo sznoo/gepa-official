@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "1751e001e07ae7751189109085d8aa1fb469a6003c9ef45050d0c21ab02d0719",
+  "created_at": "2026-07-13T17:22:48.007414+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question names a place (here: 'Desert Ridge') and the current query simply appends the first-hop summary_1 (e.g. 'Hazelden Foundation') rather than directly targeting the place, resulting in retrieved results that do not return the community or place page.",
+            "preserve_rule": "Keep the same I/O fields and produce one compact single-string `query`. Retain use of `question` and `summary_1` as available inputs and keep the query concise (a short bag-of-words style retrieval query).",
+            "change_rule": "When composing the `query`, prefer a place-focused bridging query: include the place token from the question (Desert Ridge) plus short keywords describing the sought facility type and the state's name (e.g. terms like 'nonprofit' or 'non-profit', 'medical practice', and 'Minnesota'). Omit the first-hop summary_1 (e.g. Hazelden Foundation) unless it is clearly the exact Minnesota-based medical practice that the question targets.",
+            "drop_or_avoid_rule": "Avoid appending the first-hop entity summary_1 by default if it does not explicitly match both the place and the facility type in the question. Avoid long spans, full sentences, or adding extra unrelated terms; do not introduce named entities that are not already present in the visible inputs.",
+            "output_contract": "Return a single compact retrieval query string that combines the place from the question, a short phrase for facility type, and the state's name (for example: 'Desert Ridge nonprofit medical practice Minnesota'). Do not return multiple queries or additional explanatory text.",
+            "why_local_transition": "Switches the query from a possibly misleading first-hop anchor (Hazelden Foundation) to a place-centered bridge query so retrieval will surface the community page and its included facilities (the missing support) without exposing or requiring the gold answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Desert Ridge includes what non-profit medical practice facility based out of Minnesota?",
+        "summary_1": "Hazelden Foundation",
+        "current_output": {
+          "query": "Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question names a place (here: 'Desert Ridge') and the current query simply appends the first-hop summary_1 (e.g. 'Hazelden Foundation') rather than directly targeting the place, resulting in retrieved results that do not return the community or place page.\",\n      \"preserve_rule\": \"Keep the same I/O fields and produce one compact single-string `query`. Retain use of `question` and `summary_1` as available inputs and keep the query concise (a short bag-of-words style retrieval query).\",\n      \"change_rule\": \"When composing the `query`, prefer a place-focused bridging query: include the place token from the question (Desert Ridge) plus short keywords describing the sought facility type and the state's name (e.g. terms like 'nonprofit' or 'non-profit', 'medical practice', and 'Minnesota'). Omit the first-hop summary_1 (e.g. Hazelden Foundation) unless it is clearly the exact Minnesota-based medical practice that the question targets.\",\n      \"drop_or_avoid_rule\": \"Avoid appending the first-hop entity summary_1 by default if it does not explicitly match both the place and the facility type in the question. Avoid long spans, full sentences, or adding extra unrelated terms; do not introduce named entities that are not already present in the visible inputs.\",\n      \"output_contract\": \"Return a single compact retrieval query string that combines the place from the question, a short phrase for facility type, and the state's name (for example: 'Desert Ridge nonprofit medical practice Minnesota'). Do not return multiple queries or additional explanatory text.\",\n      \"why_local_transition\": \"Switches the query from a possibly misleading first-hop anchor (Hazelden Foundation) to a place-centered bridge query so retrieval will surface the community page and its included facilities (the missing support) without exposing or requiring the gold answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Desert Ridge includes what non-profit medical practice facility based out of Minnesota?\",\n  \"summary_1\": \"Hazelden Foundation\",\n  \"current_output\": {\n    \"query\": \"Desert Ridge Hazelden Foundation Minnesota non-profit medical practice facility\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Desert Ridge nonprofit medical practice Minnesota\"},\n  \"rationale\": \"Followed the delta: kept the place token (Desert Ridge), included a short facility-type phrase (nonprofit medical practice), added the state (Minnesota), and omitted summary_1 per the change_rule to create a concise place-focused query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 79,
+    "row_index": 79,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

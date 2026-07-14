@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "fb48af6236be2c12bb22772264f8d84ba9ce8a1e6f531d093f9816621c3e36e0",
+  "created_at": "2026-07-13T17:23:05.214421+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the user's question gives only the given name 'Maurice' (no surname) AND at least one of the visible summaries or the assistant's prior message explicitly mentions Maurice \"Rocket\" Richard as an example, AND the visible summaries identify the award as the Hart Memorial Trophy.",
+            "preserve_rule": "Keep all existing behavior that asks for clarification or permission to use external sources in ambiguous cases. If the user later supplies a surname or explicitly permits an external lookup, follow the normal clarification or lookup flow unchanged.",
+            "change_rule": "In the narrow trigger case, do not ask another clarification. Instead assume the intended referent is Maurice \"Rocket\" Richard (because that example already appears in the visible context) and use the agent's internal knowledge to produce the single-year answer for when that person won the Hart Memorial Trophy. Emit only the minimal answer string as the 'answer' value; do not add explanation, rationale, or follow-up questions.",
+            "drop_or_avoid_rule": "When the trigger applies, do not prompt the user for clarification or permission to search; do not include supporting sentences or justification in the output; do not present multiple candidate persons or ambiguous options. If the agent does not have sufficient internal confidence about the year, revert to the original behavior of asking for clarification or permission to look up the information.",
+            "output_contract": "Return the field 'answer' containing only the minimal answer string (the year) and nothing else. Ensure the [[ ## answer ## ]] block (or equivalent minimal-answer slot) contains just that year with no surrounding commentary, formatting, or explanation.",
+            "why_local_transition": "This targeted rule resolves the one-step ambiguity (only the given name 'Maurice') by using the explicit example already present in the visible context (Maurice \"Rocket\" Richard), allowing the agent to produce the concise final-year answer without changing broader clarification or lookup policies."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+        "summary_1": "The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.",
+        "summary_2": "I can’t determine the year from the passages. Please either (a) specify which Maurice you mean (for example Maurice \"Rocket\" Richard), or (b) allow me to look up the winner year using external sources — then I will provide the exact year.",
+        "current_output": "Which Maurice do you mean (for example Maurice \"Rocket\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the user's question gives only the given name 'Maurice' (no surname) AND at least one of the visible summaries or the assistant's prior message explicitly mentions Maurice \\\"Rocket\\\" Richard as an example, AND the visible summaries identify the award as the Hart Memorial Trophy.\",\n      \"preserve_rule\": \"Keep all existing behavior that asks for clarification or permission to use external sources in ambiguous cases. If the user later supplies a surname or explicitly permits an external lookup, follow the normal clarification or lookup flow unchanged.\",\n      \"change_rule\": \"In the narrow trigger case, do not ask another clarification. Instead assume the intended referent is Maurice \\\"Rocket\\\" Richard (because that example already appears in the visible context) and use the agent's internal knowledge to produce the single-year answer for when that person won the Hart Memorial Trophy. Emit only the minimal answer string as the 'answer' value; do not add explanation, rationale, or follow-up questions.\",\n      \"drop_or_avoid_rule\": \"When the trigger applies, do not prompt the user for clarification or permission to search; do not include supporting sentences or justification in the output; do not present multiple candidate persons or ambiguous options. If the agent does not have sufficient internal confidence about the year, revert to the original behavior of asking for clarification or permission to look up the information.\",\n      \"output_contract\": \"Return the field 'answer' containing only the minimal answer string (the year) and nothing else. Ensure the [[ ## answer ## ]] block (or equivalent minimal-answer slot) contains just that year with no surrounding commentary, formatting, or explanation.\",\n      \"why_local_transition\": \"This targeted rule resolves the one-step ambiguity (only the given name 'Maurice') by using the explicit example already present in the visible context (Maurice \\\"Rocket\\\" Richard), allowing the agent to produce the concise final-year answer without changing broader clarification or lookup policies.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n  \"summary_1\": \"The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.\",\n  \"summary_2\": \"I can’t determine the year from the passages. Please either (a) specify which Maurice you mean (for example Maurice \\\"Rocket\\\" Richard), or (b) allow me to look up the winner year using external sources — then I will provide the exact year.\",\n  \"current_output\": \"Which Maurice do you mean (for example Maurice \\\"Rocket\\\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"1947\",\n  \"rationale\": \"Delta triggered because the question used only 'Maurice', the summaries named Maurice \\\"Rocket\\\" Richard as an example and identified the Hart Memorial Trophy; per the ordered rule I assumed that referent and returned the year he won the Hart Memorial Trophy.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 88,
+    "row_index": 88,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

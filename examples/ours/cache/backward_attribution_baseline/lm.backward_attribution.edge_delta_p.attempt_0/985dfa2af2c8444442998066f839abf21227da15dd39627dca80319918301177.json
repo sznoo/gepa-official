@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "985dfa2af2c8444442998066f839abf21227da15dd39627dca80319918301177",
+  "created_at": "2026-07-13T17:21:58.129955+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?",
+        "summary_1": "He was born in Scotland (George Young).",
+        "summary_2": "He was born in Scotland.",
+        "current_output": "Scotland (born in Glasgow)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Scotland (born in Glasgow)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Scotland",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?\",\n  \"summary_1\": \"He was born in Scotland (George Young).\",\n  \"summary_2\": \"He was born in Scotland.\",\n  \"current_output\": \"Scotland (born in Glasgow)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Scotland (born in Glasgow)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Scotland\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If both summary_1 and summary_2 state the same birthplace (i.e., they contain the same short place string) and the current output contains that same place plus an extra parenthetical/local detail (for example, '... (born in CITY)' or other parenthetical note).\",\n    \"preserve_rule\": \"Continue to use the provided summaries as primary evidence and preserve the base final-answer contract: produce a single minimal answer token/string in the [[ ## answer ## ]] block with no extra explanation.\",\n    \"change_rule\": \"When the trigger fires, replace any output that appends parenthetical locality or ancillary notes with exactly the shared birthplace string reported by both summaries (the short place phrase they both agree on). Concretely: drop parenthetical additions and output only the consensus birthplace token/phrase found in both summaries.\",\n    \"drop_or_avoid_rule\": \"Do not include parenthetical details, city names, explanatory parentheses, author names, or other qualifiers in the final answer. Avoid inventing or adding any new geographic detail beyond the single birthplace phrase agreed by the summaries.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal birthplace string supported by the visible summaries (no parentheses, no extra words, no punctuation beyond the single place name).\",\n    \"why_local_transition\": \"This change removes an extraneous parenthetical locality appended to an otherwise-correct birthplace, aligning the final output to the concise consensus present in both summaries while leaving the evidence-use and answer-format rules intact.\"\n  },\n  \"rationale\": \"The source output adds an unnecessary parenthetical locality to an otherwise-correct birthplace. The smallest coherent behavior change is to strip such parenthetical/ancillary text and emit only the birthplace phrase that both summaries agree on. This preserves use of the summaries as evidence and the existing final-answer contract while preventing over-specific or parenthetical additions.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 81,
+    "row_index": 81,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "53fd10cfdc662ce0f84fa69cf9c1f4f6072084212923993b2516b9754451d78c",
+  "created_at": "2026-07-13T17:19:35.469047+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "Sydney, New South Wales, Australia",
+        "summary_2": "Sydney, New South Wales, Australia",
+        "current_output": "Sydney, New South Wales, Australia"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Sydney, New South Wales, Australia",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Herons Creek",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"Sydney, New South Wales, Australia\",\n  \"summary_2\": \"Sydney, New South Wales, Australia\",\n  \"current_output\": \"Sydney, New South Wales, Australia\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Sydney, New South Wales, Australia\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Herons Creek\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question text contains the word \\\"town\\\" (i.e., the user asks for a town) and the visible summaries or current output present a broader geographic string (examples: comma-separated place, state/country names, or multiple administrative levels).\",\n    \"preserve_rule\": \"Continue to use only the provided question and visible summaries as evidence. Preserve the base prompt's requirement to produce a minimal answer string inside the final answer block. Do not fetch or invent external facts.\",\n    \"change_rule\": \"When triggered, prefer a town-level place name as the answer. Choose the shortest verbatim place name from the visible summaries that corresponds to a town (a single name or short proper-name phrase). If a visible summary contains only broader hierarchical forms, attempt to extract a town-level token/phrase from those summaries if it appears verbatim; if no town-level name is present in the visible inputs, answer with the minimal explicit token 'unknown'.\",\n    \"drop_or_avoid_rule\": \"Avoid returning full hierarchical strings (state/country) or explanatory text. Do not append qualifiers, punctuation, or supporting sentences. Do not introduce any place names that do not appear verbatim in the visible inputs.\",\n    \"output_contract\": \"The final output must be exactly the minimal town name string (or the single token 'unknown' if no town-level name is supported) placed inside the required [[ ## answer ## ]] block and nothing else.\",\n    \"why_local_transition\": \"This change enforces the question's specificity ('town') by narrowing outputs from broad geographic phrases to a single town-level name, while still relying only on the provided summaries and preserving the minimal-answer contract.\"\n  },\n  \"rationale\": \"The least invasive fix is a behavioral rule that biases final answers toward town-level names whenever the question explicitly asks for a town. It preserves existing evidence usage and the minimal-answer requirement, avoids hallucination by restricting outputs to tokens present in the visible summaries, and provides a deterministic fallback ('unknown') when no town-level token is available. This yields the required local change without replacing the base prompt or sourcing new information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

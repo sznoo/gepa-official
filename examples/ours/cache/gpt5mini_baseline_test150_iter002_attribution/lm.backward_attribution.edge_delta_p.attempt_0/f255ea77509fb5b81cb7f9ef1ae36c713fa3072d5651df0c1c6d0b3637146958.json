@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "f255ea77509fb5b81cb7f9ef1ae36c713fa3072d5651df0c1c6d0b3637146958",
+  "created_at": "2026-07-13T20:10:25.983582+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "First-hop evidence: Red Curtain Trilogy — \"title given to the first three films directed by Baz Luhrmann\"; Baz Luhrmann — \"born 17 September 1962\".  \nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \nRetrieval direction: 1. Fetch the page titled \"Baz Luhrmann\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \"Baz Luhrmann birthplace site:wikipedia.org\" or fetch authoritative biographies to confirm the town.",
+        "current_output": {
+          "query": "Baz Luhrmann birthplace site:en.wikipedia.org"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Baz Luhrmann born Herons Creek"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Herons Creek, New South Wales Which town was the director of the \"Red Curtain Trilogy\" born in?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Herons Creek, New South Wales",
+          "Red Curtain Trilogy",
+          "Okabena Creek",
+          "Dora Creek, New South Wales",
+          "Yarrabandai Creek",
+          "Marom Creek, New South Wales",
+          "Crystal Creek, New South Wales"
+        ],
+        "retrieved_doc_snippets": [
+          "Herons Creek, New South Wales | Herons Creek is a small township on the North Coast of New South Wales, Australia co-ordinates 31°35′S 152°44′E. The population of Herons Creek is 312 (2011). The township is about 291 kilometres (181 miles) north of Sydney. The North Coast railway line passes through, and a station existed at the site between 1917 and 1974. Film director Baz Luhrmann was raised in the town.",
+          "Red Curtain Trilogy | The Red Curtain Trilogy is the title given to the first three films directed by Baz Luhrmann:",
+          "Okabena Creek | Okabena Creek is a 40 mi waterway in southern Minnesota. It is a tributary, via the short Diversion Creek, of Heron Lake, the outlet of which flows to the Des Moines River. Okabena Creek begins in Worthington, Minnesota, connecting by a ditch to the outlet of Okabena Lake, then flows northeast past the towns of Brewster and Okabena to the Heron Lake/South Heron Lake system.",
+          "Dora Creek, New South Wales | Dora Creek is a small rural suburb of the City of Lake Macquarie in New South Wales, Australia, located west of Lake Macquarie in New South Wales and north of the town of Morisset.",
+          "Yarrabandai Creek | Yarrabandai Creek is a Creek in New South Wales. It is located at and is in Forbes Shire. The creek starts at an elevation of 289m at an elevation of 254m and flows over 8 km near the town of Trundle, New South Wales.",
+          "Marom Creek, New South Wales | Marom Creek is a small town located in the Northern Rivers Region of New South Wales.",
+          "Crystal Creek, New South Wales | Crystal Creek is a town located in north-eastern New South Wales, Australia, in the Tweed Shire."
+        ],
+        "summary_2": "The Red Curtain Trilogy was directed by Baz Luhrmann (Red Curtain Trilogy). The passages report Baz Luhrmann \"was raised in the town\" of Herons Creek (Herons Creek, New South Wales) (Herons Creek, New South Wales), but none of the provided passages state his place of birth.",
+        "answer": "Should I look up Baz Luhrmann's place of birth?",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Herons Creek, New South Wales"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"First-hop evidence: Red Curtain Trilogy — \\\"title given to the first three films directed by Baz Luhrmann\\\"; Baz Luhrmann — \\\"born 17 September 1962\\\".  \\nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \\nRetrieval direction: 1. Fetch the page titled \\\"Baz Luhrmann\\\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \\\"Baz Luhrmann birthplace site:wikipedia.org\\\" or fetch authoritative biographies to confirm the town.\",\n  \"current_output\": {\n    \"query\": \"Baz Luhrmann birthplace site:en.wikipedia.org\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Baz Luhrmann born Herons Creek\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Herons Creek, New South Wales Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Herons Creek, New South Wales\",\n    \"Red Curtain Trilogy\",\n    \"Okabena Creek\",\n    \"Dora Creek, New South Wales\",\n    \"Yarrabandai Creek\",\n    \"Marom Creek, New South Wales\",\n    \"Crystal Creek, New South Wales\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Herons Creek, New South Wales | Herons Creek is a small township on the North Coast of New South Wales, Australia co-ordinates 31°35′S 152°44′E. The population of Herons Creek is 312 (2011). The township is about 291 kilometres (181 miles) north of Sydney. The North Coast railway line passes through, and a station existed at the site between 1917 and 1974. Film director Baz Luhrmann was raised in the town.\",\n    \"Red Curtain Trilogy | The Red Curtain Trilogy is the title given to the first three films directed by Baz Luhrmann:\",\n    \"Okabena Creek | Okabena Creek is a 40 mi waterway in southern Minnesota. It is a tributary, via the short Diversion Creek, of Heron Lake, the outlet of which flows to the Des Moines River. Okabena Creek begins in Worthington, Minnesota, connecting by a ditch to the outlet of Okabena Lake, then flows northeast past the towns of Brewster and Okabena to the Heron Lake/South Heron Lake system.\",\n    \"Dora Creek, New South Wales | Dora Creek is a small rural suburb of the City of Lake Macquarie in New South Wales, Australia, located west of Lake Macquarie in New South Wales and north of the town of Morisset.\",\n    \"Yarrabandai Creek | Yarrabandai Creek is a Creek in New South Wales. It is located at and is in Forbes Shire. The creek starts at an elevation of 289m at an elevation of 254m and flows over 8 km near the town of Trundle, New South Wales.\",\n    \"Marom Creek, New South Wales | Marom Creek is a small town located in the Northern Rivers Region of New South Wales.\",\n    \"Crystal Creek, New South Wales | Crystal Creek is a town located in north-eastern New South Wales, Australia, in the Tweed Shire.\"\n  ],\n  \"summary_2\": \"The Red Curtain Trilogy was directed by Baz Luhrmann (Red Curtain Trilogy). The passages report Baz Luhrmann \\\"was raised in the town\\\" of Herons Creek (Herons Creek, New South Wales) (Herons Creek, New South Wales), but none of the provided passages state his place of birth.\",\n  \"answer\": \"Should I look up Baz Luhrmann's place of birth?\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Herons Creek, New South Wales\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 identifies a missing place-of-birth bridge (mentions 'town' or 'place of birth') OR when the current/output query asserts a birthplace (contains the verb 'born' followed by a place name).\",\n    \"preserve_rule\": \"Keep the agent's role and interface: produce exactly one compact second-hop retrieval query (single-line string returned in the 'query' field), continue to use the fields `question` and `summary_1` as the query source, and preserve concision and preference for authoritative sources.\",\n    \"change_rule\": \"Instead of asserting a specific town, generate a concise, neutral search query that (a) includes the director's full name, (b) uses neutral terms such as 'birthplace' or 'place of birth' (not 'born <place>'), and (c) adds a short site restriction or source hint to target authoritative biographies (for example, wikipedia or recognized biography sites). Keep the query single-line and brief (suitable for a web search).\",\n    \"drop_or_avoid_rule\": \"Do not include or assert a specific town name that does not already appear in the visible inputs; do not phrase the query as a declarative claim (avoid 'born <town>'); do not output explanatory text or punctuation-heavy questions—only the compact search string; avoid long multi-clause retrieval instructions.\",\n    \"output_contract\": \"Return only the field `query` populated with a single-line search string. That string must contain the director's name and one of the neutral phrases ('birthplace' or 'place of birth') and may optionally include a short site/source restriction. The string should be concise (roughly ≤ 10 words) and must not assert a specific location that wasn't present in the visible inputs.\",\n    \"why_local_transition\": \"This small behavioral change corrects the previous excessive assertiveness (which claimed a birthplace) and focuses the second-hop retrieval on finding an authoritative place-of-birth source. It preserves existing concise-query behavior while preventing mistaken location assertions that would misdirect retrieval.\"\n  },\n  \"rationale\": \"The agent previously produced an asserted birthplace rather than a neutral search to verify it. The minimal edit steers query wording toward verification (use 'birthplace' / 'place of birth') and toward authoritative sources, without adding extra steps or changing the output format. It avoids mentioning any town present only in the target state and complies with the constraint that the delta be a prompt-behavior rule (not a candidate query or answer). This keeps the change local, preserves useful existing behavior, and reduces risk of retrieving evidence for an incorrectly asserted location.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

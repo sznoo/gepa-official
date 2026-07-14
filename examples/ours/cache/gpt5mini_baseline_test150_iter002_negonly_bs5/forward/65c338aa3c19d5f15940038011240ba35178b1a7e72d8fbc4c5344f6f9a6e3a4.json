@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "65c338aa3c19d5f15940038011240ba35178b1a7e72d8fbc4c5344f6f9a6e3a4",
+  "created_at": "2026-07-14T05:59:24.099531+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "answer": "yes",
+    "context": {
+      "title": [
+        "Ivan Perestiani",
+        "Nostalgia for the Light",
+        "The Compass Rose (film)",
+        "Salvador Allende (film)",
+        "The Suram Fortress (film)",
+        "Patricio Guzmán",
+        "Pato Guzman",
+        "The Battle of Chile",
+        "The Pearl Button",
+        "Three Lives (film)"
+      ],
+      "sentences": [
+        [
+          "Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).",
+          " He was of Kefalonian Greek descent."
+        ],
+        [
+          "Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.",
+          " Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.",
+          " Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists."
+        ],
+        [
+          "The Compass Rose (Spanish: \"La rosa de los vientos\" ) is a 1983 Spanish drama film directed by Patricio Guzmán.",
+          " It was entered into the 13th Moscow International Film Festival."
+        ],
+        [
+          "Salvador Allende is a 2004 documentary film about Chilean president Salvador Allende, from his election campaign to the \"coup d'état\" which ended his life.",
+          " It was directed by Patricio Guzmán and screened out of competition at the 2004 Cannes Film Festival."
+        ],
+        [
+          "The Suram Fortress (Georgian: სურამის ციხე , Russian: Сурамская крепость ) is a 1922 Soviet Georgian adventure film directed by Ivan Perestiani, based on Daniel Chonkadze's novel with the same title."
+        ],
+        [
+          "Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.",
+          " He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\"."
+        ],
+        [
+          "Patricio \"Pato\" Guzmán (1933–1991), a native of Chile, worked in the United States as an art director, production designer, and producer of television and film.",
+          " He worked on such notable shows as \"The Jack Benny Program\", \"I Love Lucy\", \"The Lucy Show\", \"That Girl\".",
+          " He also served as a production designer for the \"\" pilot \"\" (uncredited) and in that capacity worked directly with art director Matt Jeffries and creator-producer Gene Roddenberry on the design of the original USS Enterprise NCC-1701 exterior and bridge.",
+          " In the 1980s, Guzman worked with director Paul Mazursky on the films \"Tempest\", \"Moscow on the Hudson\", \"Down and Out in Beverly Hills\", and \"\"."
+        ],
+        [
+          "The Battle of Chile is a documentary film directed by the Chilean Patricio Guzman, in three parts: \"The Insurrection of the Bourgeoisie\" (1975), \"The Coup d'état\" (1976), \"Popular Power\" (1979).",
+          " It is a chronicle of the political tension in Chile in 1973 and of the violent counter revolution against the democratically elected government of Salvador Allende.",
+          " It won the Grand Prix in 1975 and 1976 at the Grenoble International Film Festival.",
+          " In 1996, \"Chile, Obstinate Memory\" was released and followed Guzmán back to Chile as he screened the 3-part documentary to Chileans who had never seen it before."
+        ],
+        [
+          "The Pearl Button (Spanish: El botón de nácar ) is a 2015 Chilean documentary film directed by Patricio Guzmán.",
+          " It was screened in the main competition section of the 65th Berlin International Film Festival where it won the Silver Bear for Best Script.",
+          " It won the Lumières Award for Best Documentary at the 21st Lumières Awards.",
+          " The filmmaker has described the work as part of a triptych with \"Nostalgia for the Light\" and potentially a third film focusing on the Andes."
+        ],
+        [
+          "Three Lives (Georgian: სამი სიცოცხლე , Russian: Три жизни , sometimes \"Who is to Blame?\")",
+          " is a 1924 Georgian silent film directed by Ivan Perestiani."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ivan Perestiani",
+        "Patricio Guzmán"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nYou are the first-hop summarizer. Compress the supplied passages into a short, actionable intermediate state that lets the next agent know exactly what is present in the passages, what is missing, and what to fetch next. Produce a single `summary` string only.\n\nSummary content requirements (concise: a few short sentences or clauses):\n- First-hop evidence: one short paraphrase or a very brief quoted phrase from the passages that links the relevant entities or facts supporting any partial answer. Do not copy long verbatim spans.\n- Bridge entity: explicitly name the person/entity mentioned in the passages that the second hop should investigate (use the full name or label exactly as it appears in the passages). If the question uses only a given name and the passages do not disambiguate which individual is meant, state clearly that the identity is missing/ambiguous.\n- Missing fact: state in one short sentence which specific fact is required to answer the question (for example: winner name, year, birthplace, or another identifying detail) and confirm it is not present in the given passages.\n- Retrieval directions: give one concise, ordered, actionable next-hop plan (1–2 steps). Prefer concrete target pages or query patterns, e.g. \"open the named person's biography to check for [missing fact]\" or a short query pattern such as '\"<NAME>\" birthplace OR \"born in\" site:wikipedia.org' or 'open a chronological list of <AWARD> winners and search for <NAME>'. Do not instruct the system to execute retrieval here — only specify what the next retrieval should fetch.\n- Clarification: if ambiguity persists (e.g., only a given name is provided and multiple candidates are possible), include a short clarifying request asking the user to provide the full name.\n\nHard constraints and tone:\n- Be concise and factual. Keep the same neutral, summary tone as before.\n- Do not guess, infer, or assert any facts not present in the passages (no candidate answers, no years, no birthplace assertions, etc.).\n- Do not ask the user for permission to search external sources. Give explicit next-hop retrieval directions instead.\n- Output only the single `summary` field text complying with the above requirements.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nYou are integrating newly retrieved passages (second‑hop evidence) with the first‑hop context to produce a grounded, post‑retrieval summary that preserves the facts the final answer generator will need. Produce a single field `summary` whose value is 1–3 concise sentences that: (1) directly state the answer to the question (e.g., where the studios/recordings were located) based on the available evidence; (2) if any passage explicitly names a production facility or studio and ties that facility to a specific locality (for example by giving the facility name together with a street, town, or county), include one short supporting sentence that paraphrases that passage to show the link between the facility and the locality; and (3) include one very short sentence or clause that synthesizes the context and the supporting passage to place the studios in the stated locality. Paraphrase supporting passages; do not include long verbatim quotations.\n\nIf the passages do not conclusively link a named studio to a specific locality, preserve and state that uncertainty rather than asserting unsupported specifics. Avoid headers, meta commentary, long quotations, extra sections, or inventing details not present in the provided context/passages. Keep phrasing compact, factual, and focused on the evidence needed to support the final answer.\n\nOutput contract: produce only the `summary` field (1–3 concise sentences) that integrates the first‑hop context with the second‑hop passages as described above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nAdditional specific, evidence-directed selection rules (apply these only when their trigger conditions are met, otherwise follow the rules above):\n\n8) Prefer an explicitly named immediate jurisdiction when resolving county/country wording conflicts\n- Trigger: The question asks which country/sovereign-state a county or borough is part of (phrasing like 'county' and 'part of what country' or equivalent) and the summaries disagree or one summary uses a parenthetical membership note such as 'A (part of B)'.\n- Behavior: If one summary contains a parenthetical of the form 'A (part of B)', treat the pre-parenthetical name A as the immediate administrative region referenced by the summaries and emit A (trimmed of surrounding punctuation/whitespace) as the minimal answer. More generally, when summaries disagree about a place, prefer the summary that directly names the immediate jurisdiction associated with the county (the subnational or constituent area named in the summary) and extract that short named phrase verbatim as the answer. Do not add any extra words or punctuation.\n- Fallback: If neither summary clearly names an immediate jurisdiction or both are equally ambiguous, emit a concise clarification question per the base rules rather than guessing.\n\n9) Size-answer simplification when both summaries agree with an inclusive qualifier\n- Trigger: The question explicitly asks for a size (phrasing like 'what size' or 'equal to or smaller than what size' or equivalent) AND summary_1 and summary_2 are identical strings for agreement-detection (case-insensitive) AND that common string matches the pattern '<size> or smaller' or '<size> or less' (case-insensitive, allowing optional surrounding punctuation/whitespace).\n- Behavior: Produce as the minimal answer only the '<size>' portion of the agreed common phrase by removing the trailing inclusive qualifier 'or smaller' or 'or less' and any immediately adjacent punctuation/extra whitespace. Emit the remaining size token (number plus unit) verbatim as shown in the summaries (preserve digits, unit spelling/capitalization, and internal spacing).\n- Do not apply this edit when the summaries do not exactly agree, when the common phrase does not match the pattern, or when the question is not asking for a size.\n\n10) Prefer identical parenthetical short-names when present in both summaries\n- Trigger: Both summary_1 and summary_2 each contain an identical parenthetical short-name substring (a substring of the form '(' ... ')' that, once trimmed, is 1–5 words long, agreement checked case-insensitively).\n- Behavior: Extract the parenthetical content (remove the surrounding '(' and ')', trim surrounding whitespace and surrounding punctuation) and treat that extracted short-name as the canonical minimal answer. Emit it verbatim (preserving internal characters and capitalization exactly as shown in the summaries) as the sole content of [[ ## answer ## ]]. Do not emit the longer formal name when such an identical parenthetical is present in both summaries.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "28cd60573b7f",
+    "rerun_from": null,
+    "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "gold_answer": "yes",
+    "context": {
+      "title": [
+        "Ivan Perestiani",
+        "Nostalgia for the Light",
+        "The Compass Rose (film)",
+        "Salvador Allende (film)",
+        "The Suram Fortress (film)",
+        "Patricio Guzmán",
+        "Pato Guzman",
+        "The Battle of Chile",
+        "The Pearl Button",
+        "Three Lives (film)"
+      ],
+      "sentences": [
+        [
+          "Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).",
+          " He was of Kefalonian Greek descent."
+        ],
+        [
+          "Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.",
+          " Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.",
+          " Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists."
+        ],
+        [
+          "The Compass Rose (Spanish: \"La rosa de los vientos\" ) is a 1983 Spanish drama film directed by Patricio Guzmán.",
+          " It was entered into the 13th Moscow International Film Festival."
+        ],
+        [
+          "Salvador Allende is a 2004 documentary film about Chilean president Salvador Allende, from his election campaign to the \"coup d'état\" which ended his life.",
+          " It was directed by Patricio Guzmán and screened out of competition at the 2004 Cannes Film Festival."
+        ],
+        [
+          "The Suram Fortress (Georgian: სურამის ციხე , Russian: Сурамская крепость ) is a 1922 Soviet Georgian adventure film directed by Ivan Perestiani, based on Daniel Chonkadze's novel with the same title."
+        ],
+        [
+          "Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.",
+          " He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\"."
+        ],
+        [
+          "Patricio \"Pato\" Guzmán (1933–1991), a native of Chile, worked in the United States as an art director, production designer, and producer of television and film.",
+          " He worked on such notable shows as \"The Jack Benny Program\", \"I Love Lucy\", \"The Lucy Show\", \"That Girl\".",
+          " He also served as a production designer for the \"\" pilot \"\" (uncredited) and in that capacity worked directly with art director Matt Jeffries and creator-producer Gene Roddenberry on the design of the original USS Enterprise NCC-1701 exterior and bridge.",
+          " In the 1980s, Guzman worked with director Paul Mazursky on the films \"Tempest\", \"Moscow on the Hudson\", \"Down and Out in Beverly Hills\", and \"\"."
+        ],
+        [
+          "The Battle of Chile is a documentary film directed by the Chilean Patricio Guzman, in three parts: \"The Insurrection of the Bourgeoisie\" (1975), \"The Coup d'état\" (1976), \"Popular Power\" (1979).",
+          " It is a chronicle of the political tension in Chile in 1973 and of the violent counter revolution against the democratically elected government of Salvador Allende.",
+          " It won the Grand Prix in 1975 and 1976 at the Grenoble International Film Festival.",
+          " In 1996, \"Chile, Obstinate Memory\" was released and followed Guzmán back to Chile as he screened the 3-part documentary to Chileans who had never seen it before."
+        ],
+        [
+          "The Pearl Button (Spanish: El botón de nácar ) is a 2015 Chilean documentary film directed by Patricio Guzmán.",
+          " It was screened in the main competition section of the 65th Berlin International Film Festival where it won the Silver Bear for Best Script.",
+          " It won the Lumières Award for Best Documentary at the 21st Lumières Awards.",
+          " The filmmaker has described the work as part of a triptych with \"Nostalgia for the Light\" and potentially a third film focusing on the Andes."
+        ],
+        [
+          "Three Lives (Georgian: სამი სიცოცხლე , Russian: Три жизни , sometimes \"Who is to Blame?\")",
+          " is a 1924 Georgian silent film directed by Ivan Perestiani."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ivan Perestiani",
+        "Patricio Guzmán"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ],
+    "hop1_query": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "hop1_docs": [
+      "Ivan Perestiani | Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).  He was of Kefalonian Greek descent.",
+      "Patricio Guzmán | Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.  He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\".",
+      "Nostalgia for the Light | Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.  Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.  Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists.",
+      "In the Quagmire | In the Quagmire (Georgian: Gaplangva) is a 1927 Soviet silent film directed by Ivane Perestiani.",
+      "Nest of Wasps | Nest of Wasps (Georgian:Krazanas bude) is a 1927 Soviet silent film directed by Ivane Perestiani.",
+      "Ilan-dili | Ilan-dili is a 1926 Soviet silent adventure film directed by Ivane Perestiani.  It is the sequel to the film \"The Savur Grave\".",
+      "The Punishment of Shirvanskaya | The Punishment of Shirvanskaya (Georgian:Sasdjeli) is a 1926 Soviet silent adventure film directed by Ivane Perestiani.  It is a sequel to \"The Crime of Shirvanskaya\"."
+    ],
+    "hop1_titles": [
+      "Ivan Perestiani",
+      "Patricio Guzmán",
+      "Nostalgia for the Light",
+      "In the Quagmire",
+      "Nest of Wasps",
+      "Ilan-dili",
+      "The Punishment of Shirvanskaya"
+    ],
+    "summary_1": "First-hop evidence: passages state Ivan Perestiani \"was a ... film director\" and Patricio Guzmán \"is a Chilean documentary film director.\" Bridge entity: Ivan Perestiani; Patricio Guzmán. Missing fact: the question asks whether both were directors — that specific fact is already stated in the passages (no additional identifying fact missing). Retrieval directions: 1) Open the full biography pages for \"Ivan Perestiani\" and \"Patricio Guzmán\" (e.g., their Wikipedia articles) and check the lead/infobox for occupation and their filmography to confirm they served as directors. Clarification: none — both full names are present and unambiguous in the passages.",
+    "hop2_query": "Ivan Perestiani Wikipedia biography film director filmography\nPatricio Guzmán Wikipedia biography documentary film director filmography",
+    "hop2_docs": [
+      "Patricio Guzmán | Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.  He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\".",
+      "Filmography | A filmography is a list of films related by some criteria.  For example, an actor's career filmography is the list of films he or she has appeared in; a director's comedy filmography is the list of comedy films directed by a particular director.  The term, which has been in use since at least 1957, is modeled on and analogous to \"bibliography\", a list of books, and is distinct from \"videography\" and \"cinematography\", two mass nouns for processes within the cinematic arts.",
+      "Adult Film Database | The AdultFilmDatabase.com is an English-language adult website database that attempts to keep records of all pornographic movies and adult film stars.  This includes filmographies, partial biographies, reviews, labeled and categorized adult film stills, as well as a regularly updated adult industry blog which features the latest news about adult performers, movies, directors, studios, web site updates and sundry adult news from around the world.",
+      "Shashi Kapoor filmography | This is the filmography of Shashi Kapoor, the Indian Bollywood actor, film director, film producer and assistant director.  He has acted in Hindi and English films as the lead hero.  He has done over 175 films.",
+      "Raj Kapoor filmography | Filmography of Indian actor, film producer and film director Raj Kapoor.",
+      "S. P. Balasubrahmanyam filmography | Filmography of Indian film singer, actor, music director and film producer S. P. Balasubrahmanyam.",
+      "Seeman filmography | Seeman is a Tamil film director and actor in Tamil cinema.  He made his directorial debut in 1996, with the Tamil film \"Panchalankurichi\".  Since then, he has directed five films and has also appeared in acting roles in films of other directors.  The following is his filmography."
+    ],
+    "hop2_titles": [
+      "Patricio Guzmán",
+      "Filmography",
+      "Adult Film Database",
+      "Shashi Kapoor filmography",
+      "Raj Kapoor filmography",
+      "S. P. Balasubrahmanyam filmography",
+      "Seeman filmography"
+    ],
+    "summary_2": "Yes — both were film directors: Ivan Perestiani is identified in the context as a film director, and Patricio Guzmán is a Chilean documentary film director (born 1941), known for films such as The Battle of Chile and Salvador Allende.",
+    "answer": "Yes",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ],
+    "hit_titles_total": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

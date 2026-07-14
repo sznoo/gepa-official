@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "7b8245710beb0b7953f246f7a96e377b8381265de88cbbd145eb6ae6eda2f342",
+  "created_at": "2026-07-13T17:23:52.670061+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?",
+        "summary_1": "He was dismissed for violating the NBA's anti-drug program.",
+        "summary_2": "He was dismissed for violating the NBA's anti-drug program (after prior positive steroid test and related violations).",
+        "current_output": "He was dismissed for violating the NBA's anti‑drug program — after testing positive for banned substances and committing multiple violations of the league's drug policy."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "He was dismissed for violating the NBA's anti‑drug program — after testing positive for banned substances and committing multiple violations of the league's drug policy.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "violating the league's anti-drug program",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?\",\n  \"summary_1\": \"He was dismissed for violating the NBA's anti-drug program.\",\n  \"summary_2\": \"He was dismissed for violating the NBA's anti-drug program (after prior positive steroid test and related violations).\",\n  \"current_output\": \"He was dismissed for violating the NBA's anti‑drug program — after testing positive for banned substances and committing multiple violations of the league's drug policy.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"He was dismissed for violating the NBA's anti‑drug program — after testing positive for banned substances and committing multiple violations of the league's drug policy.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"violating the league's anti-drug program\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 both contain the same concise cause for dismissal (e.g., both mention an 'anti-drug' related cause) and the current final answer is a longer sentence that adds extra explanatory clauses or qualifiers not present in both summaries.\",\n    \"preserve_rule\": \"Keep producing the 'answer' field in the same output format and continue to base wording on the provided summaries; preserve any words or short phrases that are present in both summaries.\",\n    \"change_rule\": \"When triggered, replace the verbose final-sentence answer with only the minimal, directly supported cause phrase that appears in both summaries. Construct the answer by extracting the shortest contiguous phrase from the summaries that conveys the shared cause; do not add any additional explanatory clauses, parenthetical remarks, or timeline details.\",\n    \"drop_or_avoid_rule\": \"Do not append or invent extra details (for example: 'after testing positive', 'multiple violations', dates, or other elaborations) that appear in only one summary or only in the current output. Avoid paraphrases that introduce new facts or implications beyond the shared phrase.\",\n    \"output_contract\": \"The 'answer' field must contain only the minimal phrase that is directly supported by both summary_1 and summary_2 (no extra words, sentence punctuation, or surrounding commentary). Ensure the final output places that phrase alone inside the expected [[ ## answer ## ]] block.\",\n    \"why_local_transition\": \"The source output is a longer sentence including extra explanations not fully supported by both summaries. This local rule narrows the final-answer behavior to a compact cause phrase strictly grounded in the shared content of the summaries, producing the minimal permitted answer for this edge.\"\n  },\n  \"rationale\": \"The smallest coherent behavioral change is to require extraction of the shortest shared cause phrase from the summaries and forbid adding unsupported details. That preserves existing behavior of using the summaries for phrasing while removing only the extra explanatory clauses present in the current output. The rule is local: it triggers only when both summaries agree on a concise cause and the final answer is unnecessarily verbose.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 110,
+    "row_index": 110,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

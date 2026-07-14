@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "8b80a20d429023a669460580a7fba31f192addb6bb294f7a81c9de63417ec59d",
+  "created_at": "2026-07-13T17:19:45.443989+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both summary_1 and summary_2 are short, identical, numeric-only tokens (strings made up solely of digits, with optional leading +/−) and the question requests a concise numeric value (for example, begins with 'How many'), activate this prompt delta.",
+            "preserve_rule": "Keep the existing behavior of producing only the minimal answer string placed in the [[ ## answer ## ]] block. Continue to treat the visible summaries as the primary evidence for the answer. If summaries disagree or are not numeric-only, do not apply this delta and keep baseline behavior.",
+            "change_rule": "When triggered, transform the numeric-token answer into its English word form (spell out the number) and output that spelled-out word as the entire content of the [[ ## answer ## ]] block. Do not add any surrounding words, explanation, punctuation, or formatting beyond the single spelled-out token.",
+            "drop_or_avoid_rule": "Do not include the original digit form in the output, do not append explanatory text, and do not expand the response into a sentence. Avoid applying this conversion when the question expects a numeric format (e.g., measurements, dates, or identifiers) or when summaries conflict.",
+            "output_contract": "The agent must still return only the minimal answer string in the [[ ## answer ## ]] block. If the delta applies, that string is the spelled-out English word corresponding to the numeric token inferred from the visible summaries; otherwise the agent's output is unchanged.",
+            "why_local_transition": "This local rule enforces a stylistic conversion from a digit token to its spelled-out word when the visible summaries unanimously provide a short numeric token and the question asks for 'how many', producing the same minimal answer content but in the word-form representation expected for this transition."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "summary_1": "He murdered 11 people.",
+        "summary_2": "11",
+        "current_output": "11"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both summary_1 and summary_2 are short, identical, numeric-only tokens (strings made up solely of digits, with optional leading +/−) and the question requests a concise numeric value (for example, begins with 'How many'), activate this prompt delta.\",\n      \"preserve_rule\": \"Keep the existing behavior of producing only the minimal answer string placed in the [[ ## answer ## ]] block. Continue to treat the visible summaries as the primary evidence for the answer. If summaries disagree or are not numeric-only, do not apply this delta and keep baseline behavior.\",\n      \"change_rule\": \"When triggered, transform the numeric-token answer into its English word form (spell out the number) and output that spelled-out word as the entire content of the [[ ## answer ## ]] block. Do not add any surrounding words, explanation, punctuation, or formatting beyond the single spelled-out token.\",\n      \"drop_or_avoid_rule\": \"Do not include the original digit form in the output, do not append explanatory text, and do not expand the response into a sentence. Avoid applying this conversion when the question expects a numeric format (e.g., measurements, dates, or identifiers) or when summaries conflict.\",\n      \"output_contract\": \"The agent must still return only the minimal answer string in the [[ ## answer ## ]] block. If the delta applies, that string is the spelled-out English word corresponding to the numeric token inferred from the visible summaries; otherwise the agent's output is unchanged.\",\n      \"why_local_transition\": \"This local rule enforces a stylistic conversion from a digit token to its spelled-out word when the visible summaries unanimously provide a short numeric token and the question asks for 'how many', producing the same minimal answer content but in the word-form representation expected for this transition.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"summary_1\": \"He murdered 11 people.\",\n  \"summary_2\": \"11\",\n  \"current_output\": \"11\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"11\",\n  \"rationale\": \"The local delta did not apply because summary_1 is not a numeric-only token; using the visible summaries the minimal supported answer is 11.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 61,
+    "row_index": 61,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

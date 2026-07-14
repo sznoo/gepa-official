@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "9fc6e7d0dfd12f03a7b7a8c088944b96cd397f2e5911cd4ef252ce66b9db9aaa",
+  "created_at": "2026-07-13T17:25:43.037244+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "The question asks 'When' about a person described by combined attributes (mentions the series started by Steven Lipscomb and 'four World Series of Poker bracelets').",
+            "preserve_rule": "Continue to use only the provided fields summary_1 and summary_2 as evidence and keep the final-answer output contract: the [[ ## answer ## ]] block must contain only the minimal answer string.",
+            "change_rule": "When the question names a person by a conjunction of attributes, only accept and output a birth date if at least one visible summary explicitly ties that date to the person described (for example by including the person's name or an explicit phrase linking the date to the described winner/event). If such an explicit linkage is present, extract and output the date exactly as shown in that summary. If no summary explicitly ties a date to the described person, output the single token 'Insufficient evidence' instead of any date.",
+            "drop_or_avoid_rule": "Do not output a birth date merely because a date appears in the summaries unless a summary explicitly links that date to the individual described by the question. Avoid synthesizing, inferring, or combining details to justify a date.",
+            "output_contract": "Place exactly one minimal token in [[ ## answer ## ]]: either the birth date string exactly as it appears in a supporting summary, or the single token 'Insufficient evidence'. No extra words, punctuation, or explanation.",
+            "why_local_transition": "This change tightens the decision rule so the agent only returns a birth date when a visible summary explicitly connects that date to the person described by the compound question, preventing unsupported date answers while preserving the existing minimal-output format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?",
+        "summary_1": "He was born on 17 July 1983.",
+        "summary_2": "He was born on 17 July 1983.",
+        "current_output": "He was born on 17 July 1983."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"The question asks 'When' about a person described by combined attributes (mentions the series started by Steven Lipscomb and 'four World Series of Poker bracelets').\",\n      \"preserve_rule\": \"Continue to use only the provided fields summary_1 and summary_2 as evidence and keep the final-answer output contract: the [[ ## answer ## ]] block must contain only the minimal answer string.\",\n      \"change_rule\": \"When the question names a person by a conjunction of attributes, only accept and output a birth date if at least one visible summary explicitly ties that date to the person described (for example by including the person's name or an explicit phrase linking the date to the described winner/event). If such an explicit linkage is present, extract and output the date exactly as shown in that summary. If no summary explicitly ties a date to the described person, output the single token 'Insufficient evidence' instead of any date.\",\n      \"drop_or_avoid_rule\": \"Do not output a birth date merely because a date appears in the summaries unless a summary explicitly links that date to the individual described by the question. Avoid synthesizing, inferring, or combining details to justify a date.\",\n      \"output_contract\": \"Place exactly one minimal token in [[ ## answer ## ]]: either the birth date string exactly as it appears in a supporting summary, or the single token 'Insufficient evidence'. No extra words, punctuation, or explanation.\",\n      \"why_local_transition\": \"This change tightens the decision rule so the agent only returns a birth date when a visible summary explicitly connects that date to the person described by the compound question, preventing unsupported date answers while preserving the existing minimal-output format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?\",\n  \"summary_1\": \"He was born on 17 July 1983.\",\n  \"summary_2\": \"He was born on 17 July 1983.\",\n  \"current_output\": \"He was born on 17 July 1983.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nInsufficient evidence\",\n  \"rationale\": \"Both summaries state only 'He was born on 17 July 1983.' without explicitly linking that date to the person described in the question, so per the ordered rule I return 'Insufficient evidence'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 140,
+    "row_index": 140,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

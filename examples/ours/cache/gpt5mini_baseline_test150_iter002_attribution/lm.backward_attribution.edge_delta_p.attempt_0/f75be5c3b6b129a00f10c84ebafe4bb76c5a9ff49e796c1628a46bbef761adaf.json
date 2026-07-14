@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "f75be5c3b6b129a00f10c84ebafe4bb76c5a9ff49e796c1628a46bbef761adaf",
+  "created_at": "2026-07-13T20:08:34.352166+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "First-hop evidence: Passage \"Orientalism\" — \"Orientalist painting ... was one of the many specialisms of 19th-century academic art.\"  \nBridge needed: the name of the academic who listed Orientalist painting/Orientalism among their special interests (the person whose employer/“taught at” must be verified).  \nRetrieval direction: 1. Search for biographies with the phrase \"special interests\" plus \"Orientalism\" or \"Orientalist painting\" (e.g., site:wikipedia.org \"special interests\" \"Orientalism\"). 2. Open the candidate person's page and inspect the infobox/lead and 'Career'/'Academic positions' sections for \"taught at\"/employer to record the university.",
+        "current_output": {
+          "query": "site:wikipedia.org \"special interests\" \"Orientalism\" OR site:wikipedia.org \"special interests\" \"Orientalist painting\" OR \"\\\"special interests\\\" \\\"Orientalism\\\" \\\"taught at\\\"\""
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "site:wikipedia.org \"special interests\" \"Orientalism\" OR site:wikipedia.org \"special interests\" \"Orientalist painting\" OR \"\\\"special interests\\\" \\\"Orientalism\\\" \\\"taught at\\\"\""
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Orientalism",
+          "Clayton to Offham Escarpment",
+          "List of Sites of Special Scientific Interest in Kent",
+          "List of Sites of Special Scientific Interest in Conwy",
+          "List of Sites of Special Scientific Interest in Cornwall",
+          "List of Sites of Special Scientific Interest in Devon",
+          "List of Sites of Special Scientific Interest in Monmouthshire"
+        ],
+        "retrieved_doc_snippets": [
+          "Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures). These depictions are usually done by writers, designers and artists from the West. In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a ...[truncated]",
+          "Clayton to Offham Escarpment | The Clayton to Offham Escarpment is a 379.3 ha biological Site of Special Scientific Interest in East Sussex, but extends into West Sussex and thus can be found on the List of Sites of Special Scientific Interest in West Sussex as well as the List of Sites of Special Scientific Interest in East Sussex lists. The site was notified in 1986 under the Wildlife and Countryside Act 1981.",
+          "List of Sites of Special Scientific Interest in Kent | List of Sites of Special Scientific Interest in Kent",
+          "List of Sites of Special Scientific Interest in Conwy | List of Sites of Special Scientific Interest in Conwy",
+          "List of Sites of Special Scientific Interest in Cornwall | List of Sites of Special Scientific Interest in Cornwall",
+          "List of Sites of Special Scientific Interest in Devon | List of Sites of Special Scientific Interest in Devon",
+          "List of Sites of Special Scientific Interest in Monmouthshire | List of Sites of Special Scientific Interest in Monmouthshire"
+        ],
+        "summary_2": "\"Orientalist painting\" was \"one of the many specialisms of 19th-century academic art\" (Orientalism). The provided passages do not identify the academic or state which university they taught at, so the university cannot be determined from these sources.",
+        "answer": "Which academic are you referring to?",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Nigel Leask"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Nigel Leask Orientalism University of Glasgow"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"First-hop evidence: Passage \\\"Orientalism\\\" — \\\"Orientalist painting ... was one of the many specialisms of 19th-century academic art.\\\"  \\nBridge needed: the name of the academic who listed Orientalist painting/Orientalism among their special interests (the person whose employer/“taught at” must be verified).  \\nRetrieval direction: 1. Search for biographies with the phrase \\\"special interests\\\" plus \\\"Orientalism\\\" or \\\"Orientalist painting\\\" (e.g., site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\"). 2. Open the candidate person's page and inspect the infobox/lead and 'Career'/'Academic positions' sections for \\\"taught at\\\"/employer to record the university.\",\n  \"current_output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\" OR site:wikipedia.org \\\"special interests\\\" \\\"Orientalist painting\\\" OR \\\"\\\\\\\"special interests\\\\\\\" \\\\\\\"Orientalism\\\\\\\" \\\\\\\"taught at\\\\\\\"\\\"\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\" OR site:wikipedia.org \\\"special interests\\\" \\\"Orientalist painting\\\" OR \\\"\\\\\\\"special interests\\\\\\\" \\\\\\\"Orientalism\\\\\\\" \\\\\\\"taught at\\\\\\\"\\\"\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Orientalism\",\n    \"Clayton to Offham Escarpment\",\n    \"List of Sites of Special Scientific Interest in Kent\",\n    \"List of Sites of Special Scientific Interest in Conwy\",\n    \"List of Sites of Special Scientific Interest in Cornwall\",\n    \"List of Sites of Special Scientific Interest in Devon\",\n    \"List of Sites of Special Scientific Interest in Monmouthshire\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures). These depictions are usually done by writers, designers and artists from the West. In particular, Orientalist painting, depicting more specifically \\\"the Middle East\\\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a ...[truncated]\",\n    \"Clayton to Offham Escarpment | The Clayton to Offham Escarpment is a 379.3 ha biological Site of Special Scientific Interest in East Sussex, but extends into West Sussex and thus can be found on the List of Sites of Special Scientific Interest in West Sussex as well as the List of Sites of Special Scientific Interest in East Sussex lists. The site was notified in 1986 under the Wildlife and Countryside Act 1981.\",\n    \"List of Sites of Special Scientific Interest in Kent | List of Sites of Special Scientific Interest in Kent\",\n    \"List of Sites of Special Scientific Interest in Conwy | List of Sites of Special Scientific Interest in Conwy\",\n    \"List of Sites of Special Scientific Interest in Cornwall | List of Sites of Special Scientific Interest in Cornwall\",\n    \"List of Sites of Special Scientific Interest in Devon | List of Sites of Special Scientific Interest in Devon\",\n    \"List of Sites of Special Scientific Interest in Monmouthshire | List of Sites of Special Scientific Interest in Monmouthshire\"\n  ],\n  \"summary_2\": \"\\\"Orientalist painting\\\" was \\\"one of the many specialisms of 19th-century academic art\\\" (Orientalism). The provided passages do not identify the academic or state which university they taught at, so the university cannot be determined from these sources.\",\n  \"answer\": \"Which academic are you referring to?\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Nigel Leask\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Nigel Leask Orientalism University of Glasgow\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the summary or any retrieved snippet names a specific person candidate (a named academic) who could be the bridge to the answer.\",\n    \"preserve_rule\": \"Keep producing a single compact, search-engine style query string focused on finding the academic's employer/where they 'taught at'. Preserve preference for authoritative sources (e.g., site:wikipedia.org) when that was already being used.\",\n    \"change_rule\": \"When the trigger is met, replace the broad phrase-based query with an entity-centered query that combines the named candidate + the topical keyword + an affiliation keyword. Format: \\\"<PERSON_NAME> Orientalism University\\\" (optionally append site:wikipedia.org). If multiple candidate names appear, pick the most prominent proper name mentioned; if no clear person name is present, fall back to the original broader query strategy.\",\n    \"drop_or_avoid_rule\": \"Avoid using wide phrase-searches for 'special interests' or long OR chains that match unrelated 'Sites of Special Scientific Interest' pages. Do not include long quoted passages or multi-clause OR lists; prefer concise entity+topic+affiliation queries.\",\n    \"output_contract\": \"Return exactly one compact query string (no explanation). If trigger met: a query of the form \\\"<PERSON_NAME> Orientalism University\\\" (optionally with site:wikipedia.org). If trigger not met: the original broader query strategy is allowed.\",\n    \"why_local_transition\": \"Switching from a broad phrase search to a focused entity+topic+affiliation query when a candidate person is identified increases precision for finding that person's 'taught at' / university info while keeping the agent's interface unchanged.\"\n  },\n  \"rationale\": \"The current query is overly broad and matched many irrelevant 'Site of Special Scientific Interest' pages because it centered on the phrase 'special interests'. The minimal, local behavioral change is to detect when a named academic candidate appears in the context and then emit a concise entity-centered query combining the person's name, the topic (Orientalism), and an affiliation keyword to directly retrieve the university. This preserves existing behavior when no person is identified, avoids introducing new sample-specific anchors or target answers, and adheres to the agent's single-field output contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

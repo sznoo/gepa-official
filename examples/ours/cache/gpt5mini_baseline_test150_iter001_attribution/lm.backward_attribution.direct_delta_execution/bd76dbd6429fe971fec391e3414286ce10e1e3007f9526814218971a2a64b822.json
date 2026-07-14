@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "bd76dbd6429fe971fec391e3414286ce10e1e3007f9526814218971a2a64b822",
+  "created_at": "2026-07-13T18:49:14.119300+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the agent's tentative output is a declarative statement that repeats summary_1 (for example it begins with 'He was born' or is just a date), apply this prompt edit.",
+            "preserve_rule": "Keep using the provided fields `question` and `summary_1`. Preserve the agent's habit of producing a single, compact retrieval query (short, focused, noun-phrase style).",
+            "change_rule": "Instead of emitting the extracted birthdate or repeating summary_1, generate one concise second-hop retrieval query that targets the missing person's page. Construct the query by combining the minimal distinguishing attributes taken from the question: (a) that the person is a winner of the series of international poker tournaments started in 2002 by Steven Lipscomb, and (b) that the person has won four World Series of Poker bracelets. Produce this as a short noun-phrase query (no full-sentence claim, no answer date), prioritizing terms that will surface an individual's biography page.",
+            "drop_or_avoid_rule": "Do not output a declarative birthdate, do not repeat summary_1 verbatim, do not copy long literal spans from the target, and do not pose clarifying questions. Avoid extraneous words; do not assert the final answer in the query.",
+            "output_contract": "Return a single-line `query` value: a compact (roughly ≤12 words) retrieval query in noun-phrase form that combines keywords to identify the person who both won the 2002-era international poker series run by Steven Lipscomb and has four World Series of Poker bracelets. The query must not be a direct answer or include a birthdate.",
+            "why_local_transition": "The current behavior copies an extracted birthdate instead of producing a retrieval query for the missing player page; this small change redirects the agent to create a focused second-hop search that is likely to recover the missing supporting title without altering other behaviors."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?",
+        "summary_1": "He was born on 17 July 1983.",
+        "current_output": {
+          "query": "He was born on 17 July 1983."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the agent's tentative output is a declarative statement that repeats summary_1 (for example it begins with 'He was born' or is just a date), apply this prompt edit.\",\n      \"preserve_rule\": \"Keep using the provided fields `question` and `summary_1`. Preserve the agent's habit of producing a single, compact retrieval query (short, focused, noun-phrase style).\",\n      \"change_rule\": \"Instead of emitting the extracted birthdate or repeating summary_1, generate one concise second-hop retrieval query that targets the missing person's page. Construct the query by combining the minimal distinguishing attributes taken from the question: (a) that the person is a winner of the series of international poker tournaments started in 2002 by Steven Lipscomb, and (b) that the person has won four World Series of Poker bracelets. Produce this as a short noun-phrase query (no full-sentence claim, no answer date), prioritizing terms that will surface an individual's biography page.\",\n      \"drop_or_avoid_rule\": \"Do not output a declarative birthdate, do not repeat summary_1 verbatim, do not copy long literal spans from the target, and do not pose clarifying questions. Avoid extraneous words; do not assert the final answer in the query.\",\n      \"output_contract\": \"Return a single-line `query` value: a compact (roughly ≤12 words) retrieval query in noun-phrase form that combines keywords to identify the person who both won the 2002-era international poker series run by Steven Lipscomb and has four World Series of Poker bracelets. The query must not be a direct answer or include a birthdate.\",\n      \"why_local_transition\": \"The current behavior copies an extracted birthdate instead of producing a retrieval query for the missing player page; this small change redirects the agent to create a focused second-hop search that is likely to recover the missing supporting title without altering other behaviors.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the winner of the series of international poker tournaments started in 2002 by Steven Lipscomb who has also won four World Series of Poker bracelets born?\",\n  \"summary_1\": \"He was born on 17 July 1983.\",\n  \"current_output\": {\n    \"query\": \"He was born on 17 July 1983.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Steven Lipscomb 2002 international poker series winner four WSOP bracelets\"\n  },\n  \"rationale\": \"Applied the delta: replaced the declarative birthdate with a single compact noun-phrase query combining the 2002 Steven Lipscomb series winner attribute and 'four WSOP bracelets' as required.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 140,
+    "row_index": 140,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

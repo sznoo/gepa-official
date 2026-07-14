@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "9f20b46b31f2071e5cd12a6bd8ee660a2335c67438277ed575e8e7a6f62a535d",
+  "created_at": "2026-07-13T17:23:16.684347+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Was Casino Jack and the United States of Money released before It Might Get Loud?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Was Casino Jack and the United States of Money released before It Might Get Loud?",
+        "summary_1": "No. Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release in 2009).",
+        "summary_2": "No. Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009).",
+        "current_output": "No — Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No — Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Was Casino Jack and the United States of Money released before It Might Get Loud?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Was Casino Jack and the United States of Money released before It Might Get Loud?\",\n  \"summary_1\": \"No. Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release in 2009).\",\n  \"summary_2\": \"No. Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009).\",\n  \"current_output\": \"No — Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No — Casino Jack and the United States of Money (2010) was released after It Might Get Loud (2008; wide U.S. release August 14, 2009).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when both summary_1 and summary_2 are present and they clearly agree on the same binary polarity (both assert that the first film was released before the second, or both assert it was released after). Also trigger only if the current answer text contains explanatory material (more than a single word) or punctuation beyond a single token.\",\n    \"preserve_rule\": \"Keep using the visible summaries as the sole evidence for the decision. Preserve the agent's existing logic for determining release-order polarity from those summaries (do not introduce new external facts). Preserve the base prompt's interface and the requirement to output the field 'answer'.\",\n    \"change_rule\": \"When triggered, replace verbose/explanatory final-answer phrasing with a single, lowercased, one-word polarity token that exactly matches the consensus polarity asserted by the summaries (i.e., a single-token affirmative vs. single-token negative). Do not append punctuation, dates, clarifications, or any additional text. Derive the polarity by reading whether the summaries claim the first film was released before (affirmative polarity) or after (negative polarity) the second.\",\n    \"drop_or_avoid_rule\": \"Do not include explanatory clauses, release years, dates, wide-release notes, dashes, or parenthetical details in the 'answer' field. Avoid capitalization, trailing punctuation, or multi-word answers. Do not attempt to reconcile minor wording differences between summaries beyond determining binary agreement; if summaries conflict, do not apply this delta.\",\n    \"output_contract\": \"The produced 'answer' field must contain exactly one lowercase token representing the binary polarity supported by the visible summaries. The [[ ## answer ## ]] block must contain only that single token and nothing else.\",\n    \"why_local_transition\": \"This is a minimal behavioral adjustment: enforce the base-prompt's minimal-answer requirement by collapsing an existing correct-but-verbose endpoint output into the single-token polarity that the summaries already support, without changing evidence selection or the agent's decision process.\"\n  },\n  \"rationale\": \"The source output is correct but verbose. The smallest safe change is to tighten the final-output format to exactly the minimal polarity token implied by the summaries. The delta only changes formatting and the output granularity (from explanation to single-token), preserves existing evidence use, avoids injecting new facts, and triggers only when both summaries agree so no additional resolution logic is required. This keeps the edit local and reversible while ensuring the final field meets the agent's minimal-answer contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 102,
+    "row_index": 102,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

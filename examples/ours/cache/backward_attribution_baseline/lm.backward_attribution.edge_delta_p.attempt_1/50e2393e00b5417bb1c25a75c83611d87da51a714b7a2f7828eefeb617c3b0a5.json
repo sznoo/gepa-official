@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "50e2393e00b5417bb1c25a75c83611d87da51a714b7a2f7828eefeb617c3b0a5",
+  "created_at": "2026-07-13T17:30:10.511404+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "passages": [
+          "From Here to Eternity (Envy album) | From Here To Eternity is the second album by the band Envy.  It was released in Japan in 1998 by the label H.G. Fact in both CD and LP formats.  As has been noted by reviewers, this album shows a logical progression from the previous one, and indicates to the listener which direction the band will take their sound in the future.",
+          "From Here to Eternity: Live | From Here to Eternity: Live is a live album by English punk rock band The Clash.  It was released on 4 October 1999 through Epic Records.  The songs were recorded at different shows.  Some of the recordings featured also appear in the film \"Rude Boy\".  \"London's Burning\", \"What's My Name\" and \"I Fought the Law\" were instrumentally overdubbed to repair some technical deficiencies of the original live recording.",
+          "From Here to Eternity (disambiguation) | From Here to Eternity is a 1953 film.",
+          "From Here to Eternity (Giorgio Moroder song) | \"From Here to Eternity\" is a song by songwriter, producer and performer Giorgio Moroder, released in 1977.",
+          "From Here to Eternity (miniseries) | From Here to Eternity is a 1979 American three-part, six-hour television miniseries and a remake of the 1953 film \"From Here to Eternity\" based on the 1951 novel of the same name.  All three conclude with the December 7, 1941 attack on Pearl Harbor.  The miniseries originally aired in three two-hour installments on three consecutive Wednesdays on NBC on February 14, 21 and 28, 1979.",
+          "From Here to Eternity (Giorgio Moroder album) | From Here to Eternity is a 1977 album composed, produced and performed by Italian musician Giorgio Moroder.",
+          "From Here to Eternity (Iron Maiden song) | \"From Here to Eternity\" is a song by English heavy metal band Iron Maiden, released as the second single from their album \"Fear of the Dark\", released in 1992."
+        ],
+        "current_output": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details."
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "score": 0.0,
+        "generated_query": "Do you mean the 2013 film \"Third Person\" and the 1953 film \"From Here to Eternity\", or other versions? If you'd like me to search, run these lookups and compare:\n- \"Third Person (film) cast\" \n- \"From Here to Eternity (film) cast\" \n- \"actress appeared in both 'Third Person' and 'From Here to Eternity'\"",
+        "retrieved_titles": [
+          "From Here to Eternity (disambiguation)",
+          "From Here to Eternity (miniseries)",
+          "From Here to Eternity",
+          "Underworld: The Eternal War",
+          "From Here to Eternity: Live",
+          "From Here to Eternity (TV series)",
+          "Deirdre Lenihan"
+        ],
+        "summary_2": "I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.",
+        "answer": "No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Kim Basinger",
+          "Third Person (film)"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop evidence: the returned pages do not include cast lists for either title, so no actress names can be confirmed from these results. Bridge entity / missing fact: an actress name that appears on both works' cast lists is required to answer the question — a candidate to check is Kim Basinger (she is listed in results as appearing in Third Person and in a 1980 TV adaptation of From Here to Eternity). Retrieval direction for next hop: fetch the cast list on the \"Third Person (film)\" page (preferably the 2013 Paul Haggis film), fetch the cast sections for both \"From Here to Eternity (1953 film)\" and the \"From Here to Eternity (1980 TV series)\", and fetch Kim Basinger’s page/filmography to confirm whether she is credited in both works and whether those credits match the versions you meant. Note: I’m not asserting a final answer yet — I’m identifying the missing cast evidence and a candidate bridge name to verify.",
+        "score": null,
+        "generated_query": null,
+        "retrieved_titles": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Kim Basinger"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"passages\": [\n    \"From Here to Eternity (Envy album) | From Here To Eternity is the second album by the band Envy.  It was released in Japan in 1998 by the label H.G. Fact in both CD and LP formats.  As has been noted by reviewers, this album shows a logical progression from the previous one, and indicates to the listener which direction the band will take their sound in the future.\",\n    \"From Here to Eternity: Live | From Here to Eternity: Live is a live album by English punk rock band The Clash.  It was released on 4 October 1999 through Epic Records.  The songs were recorded at different shows.  Some of the recordings featured also appear in the film \\\"Rude Boy\\\".  \\\"London's Burning\\\", \\\"What's My Name\\\" and \\\"I Fought the Law\\\" were instrumentally overdubbed to repair some technical deficiencies of the original live recording.\",\n    \"From Here to Eternity (disambiguation) | From Here to Eternity is a 1953 film.\",\n    \"From Here to Eternity (Giorgio Moroder song) | \\\"From Here to Eternity\\\" is a song by songwriter, producer and performer Giorgio Moroder, released in 1977.\",\n    \"From Here to Eternity (miniseries) | From Here to Eternity is a 1979 American three-part, six-hour television miniseries and a remake of the 1953 film \\\"From Here to Eternity\\\" based on the 1951 novel of the same name.  All three conclude with the December 7, 1941 attack on Pearl Harbor.  The miniseries originally aired in three two-hour installments on three consecutive Wednesdays on NBC on February 14, 21 and 28, 1979.\",\n    \"From Here to Eternity (Giorgio Moroder album) | From Here to Eternity is a 1977 album composed, produced and performed by Italian musician Giorgio Moroder.\",\n    \"From Here to Eternity (Iron Maiden song) | \\\"From Here to Eternity\\\" is a song by English heavy metal band Iron Maiden, released as the second single from their album \\\"Fear of the Dark\\\", released in 1992.\"\n  ],\n  \"current_output\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"score\": 0.0,\n  \"generated_query\": \"Do you mean the 2013 film \\\"Third Person\\\" and the 1953 film \\\"From Here to Eternity\\\", or other versions? If you'd like me to search, run these lookups and compare:\\n- \\\"Third Person (film) cast\\\" \\n- \\\"From Here to Eternity (film) cast\\\" \\n- \\\"actress appeared in both 'Third Person' and 'From Here to Eternity'\\\"\",\n  \"retrieved_titles\": [\n    \"From Here to Eternity (disambiguation)\",\n    \"From Here to Eternity (miniseries)\",\n    \"From Here to Eternity\",\n    \"Underworld: The Eternal War\",\n    \"From Here to Eternity: Live\",\n    \"From Here to Eternity (TV series)\",\n    \"Deirdre Lenihan\"\n  ],\n  \"summary_2\": \"I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.\",\n  \"answer\": \"No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Kim Basinger\",\n    \"Third Person (film)\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop evidence: the returned pages do not include cast lists for either title, so no actress names can be confirmed from these results. Bridge entity / missing fact: an actress name that appears on both works' cast lists is required to answer the question — a candidate to check is Kim Basinger (she is listed in results as appearing in Third Person and in a 1980 TV adaptation of From Here to Eternity). Retrieval direction for next hop: fetch the cast list on the \\\"Third Person (film)\\\" page (preferably the 2013 Paul Haggis film), fetch the cast sections for both \\\"From Here to Eternity (1953 film)\\\" and the \\\"From Here to Eternity (1980 TV series)\\\", and fetch Kim Basinger’s page/filmography to confirm whether she is credited in both works and whether those credits match the versions you meant. Note: I’m not asserting a final answer yet — I’m identifying the missing cast evidence and a candidate bridge name to verify.\",\n  \"score\": null,\n  \"generated_query\": null,\n  \"retrieved_titles\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Kim Basinger\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks which actor/actress \\\"starred\\\" or \\\"appeared\\\" in two works (words like actor/actress/starred appear in `question`) AND the provided `passages` do not contain cast lists or the agent's current output states it cannot determine the cast.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of (a) summarizing the first-hop evidence found in the passages and (b) avoiding asserting a final answer when cast evidence is missing.\",\n    \"change_rule\": \"In addition to the preserved behavior, explicitly (1) state the missing bridge fact type needed to answer the question (i.e., an actor/actress name that appears on both works' cast lists), and (2) produce a concise, actionable retrieval plan for the next hop that names which pages/sections to fetch (e.g., the film page for \\\"Third Person\\\" — confirming which version — the cast section(s) for the relevant \\\"From Here to Eternity\\\" page(s) mentioned in the passages, and the candidate performer(s)' filmography pages) and what to check on those pages (cast lists and matching credits). Do not assert any candidate or final answer; present these items as missing evidence and retrieval directions only.\",\n    \"drop_or_avoid_rule\": \"Do not introduce or output specific performer names, gold labels, or other sample-specific literals that are not present in the visible inputs. Avoid asserting a final answer or quoting long target-only spans. Do not instruct the agent to perform the retrieval here — only describe what to fetch next. Do not change the agent's input/output interface.\",\n    \"output_contract\": \"When triggered, produce a `summary` that contains: (a) a one-sentence statement of the first-hop evidence found (e.g., cast lists are not present in the supplied passages), (b) a one-sentence description of the missing bridge fact required to answer the question (an overlapping actor/actress credit), (c) a short ordered list of next-hop retrieval targets and what to check on each (e.g., 'Third Person (film) page — cast section; From Here to Eternity page(s) mentioned in the passages — cast sections; candidate performer page(s) — filmography/credits'), and (d) a short clarifying note that this is not a final answer but a retrieval plan to confirm the overlap.\",\n    \"why_local_transition\": \"This edit only augments the summary output when cast evidence is missing: it does not change the overall role or interface but provides the exact missing-fact framing and next-hop retrieval directions needed for the following agent to find and verify overlapping cast credits.\"\n  },\n  \"rationale\": \"The target intermediate state requires the agent to identify the missing bridge fact (an overlapping performer) and to provide concrete retrieval directions. This delta is the minimal behavioral change to produce that: it instructs the agent to explicitly name the type of missing evidence and to list specific pages/sections to fetch next, while preserving the existing conservative stance (no final answer when evidence is absent). The delta avoids sample-specific literals (per the rejection note) and prevents leakage by forbidding mention of performer names not present in the visible inputs. It keeps the change local to the summary generation and preserves useful existing content.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 1,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 1
+  }
+}

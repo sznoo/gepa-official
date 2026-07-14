@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "aa2897e9a98375af24f52151f6b7514a6740928056fb5076102d707a776957a7",
+  "created_at": "2026-07-13T17:22:03.002359+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both summary_1 and summary_2 state the same birthplace (i.e., they contain the same short place string) and the current output contains that same place plus an extra parenthetical/local detail (for example, '... (born in CITY)' or other parenthetical note).",
+            "preserve_rule": "Continue to use the provided summaries as primary evidence and preserve the base final-answer contract: produce a single minimal answer token/string in the [[ ## answer ## ]] block with no extra explanation.",
+            "change_rule": "When the trigger fires, replace any output that appends parenthetical locality or ancillary notes with exactly the shared birthplace string reported by both summaries (the short place phrase they both agree on). Concretely: drop parenthetical additions and output only the consensus birthplace token/phrase found in both summaries.",
+            "drop_or_avoid_rule": "Do not include parenthetical details, city names, explanatory parentheses, author names, or other qualifiers in the final answer. Avoid inventing or adding any new geographic detail beyond the single birthplace phrase agreed by the summaries.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal birthplace string supported by the visible summaries (no parentheses, no extra words, no punctuation beyond the single place name).",
+            "why_local_transition": "This change removes an extraneous parenthetical locality appended to an otherwise-correct birthplace, aligning the final output to the concise consensus present in both summaries while leaving the evidence-use and answer-format rules intact."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?",
+        "summary_1": "He was born in Scotland (George Young).",
+        "summary_2": "He was born in Scotland.",
+        "current_output": "Scotland (born in Glasgow)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both summary_1 and summary_2 state the same birthplace (i.e., they contain the same short place string) and the current output contains that same place plus an extra parenthetical/local detail (for example, '... (born in CITY)' or other parenthetical note).\",\n      \"preserve_rule\": \"Continue to use the provided summaries as primary evidence and preserve the base final-answer contract: produce a single minimal answer token/string in the [[ ## answer ## ]] block with no extra explanation.\",\n      \"change_rule\": \"When the trigger fires, replace any output that appends parenthetical locality or ancillary notes with exactly the shared birthplace string reported by both summaries (the short place phrase they both agree on). Concretely: drop parenthetical additions and output only the consensus birthplace token/phrase found in both summaries.\",\n      \"drop_or_avoid_rule\": \"Do not include parenthetical details, city names, explanatory parentheses, author names, or other qualifiers in the final answer. Avoid inventing or adding any new geographic detail beyond the single birthplace phrase agreed by the summaries.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal birthplace string supported by the visible summaries (no parentheses, no extra words, no punctuation beyond the single place name).\",\n      \"why_local_transition\": \"This change removes an extraneous parenthetical locality appended to an otherwise-correct birthplace, aligning the final output to the concise consensus present in both summaries while leaving the evidence-use and answer-format rules intact.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Sorry is a 1966 song that was written by Stevie Wright and another Australian musician who moved to Australia with his family as a teenager, but was born where?\",\n  \"summary_1\": \"He was born in Scotland (George Young).\",\n  \"summary_2\": \"He was born in Scotland.\",\n  \"current_output\": \"Scotland (born in Glasgow)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Scotland\",\n  \"rationale\": \"Both summaries agree on 'Scotland' as the birthplace, so the parenthetical locality was removed and the concise consensus birthplace was returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 81,
+    "row_index": 81,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

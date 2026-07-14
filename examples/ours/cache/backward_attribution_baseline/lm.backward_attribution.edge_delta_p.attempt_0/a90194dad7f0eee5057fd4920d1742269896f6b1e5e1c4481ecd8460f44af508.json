@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a90194dad7f0eee5057fd4920d1742269896f6b1e5e1c4481ecd8460f44af508",
+  "created_at": "2026-07-13T17:23:40.524131+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are Solo and La Croix Sparkling Water produced in the same country ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are Solo and La Croix Sparkling Water produced in the same country ?",
+        "summary_1": "Cannot determine — La Croix is produced in the United States (Wisconsin), but the passages do not say where Solo is produced.",
+        "summary_2": "No. La Croix is produced in the United States (Wisconsin), while Solo is produced in Trinidad and Tobago.",
+        "current_output": "Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are Solo and La Croix Sparkling Water produced in the same country ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Solo and La Croix Sparkling Water produced in the same country ?\",\n  \"summary_1\": \"Cannot determine — La Croix is produced in the United States (Wisconsin), but the passages do not say where Solo is produced.\",\n  \"summary_2\": \"No. La Croix is produced in the United States (Wisconsin), while Solo is produced in Trinidad and Tobago.\",\n  \"current_output\": \"Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Cannot determine — the summaries conflict (one lacks Solo’s production country; the other says Solo is from Trinidad and Tobago), so you cannot be sure whether they are produced in the same country.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks whether two named products are produced in the same country and at least one visible summary explicitly states the production country for each product.\",\n    \"preserve_rule\": \"Keep the existing cautious behavior when summaries explicitly contradict each other about the same product (i.e., if one summary asserts Country A for product X and another explicitly asserts Country B for product X, continue to output 'Cannot determine').\",\n    \"change_rule\": \"If at least one summary gives an explicit production country for each of the two products and no summary explicitly assigns a different country for either product, treat those explicit country mentions as sufficient evidence. If the (explicit) countries named for the two products differ, answer 'no'. If they are the same, answer 'yes'.\",\n    \"drop_or_avoid_rule\": \"Do not return 'Cannot determine' merely because one summary is silent about a product's production country when another summary explicitly provides both products' countries and there is no explicit contradiction.\",\n    \"output_contract\": \"Produce only the minimal answer string inside the [[ ## answer ## ]] block. The allowed minimal strings are exactly: 'yes', 'no', or 'Cannot determine'. Do not add explanatory text outside that block.\",\n    \"why_local_transition\": \"This change directs the final agent to accept explicit, uncontradicted country statements in the summaries as decisive for a same-country question; silence in the other summary is not a contradiction and should not block a decision.\"\n  },\n  \"rationale\": \"The source output hesitated because one summary was silent while the other gave explicit country claims. The smallest safe behavioral change is to prefer explicit, uncontradicted country statements over silence: if a summary names countries for both items and no summary explicitly disputes those countries, the agent can determine whether they match. The edit preserves caution against direct contradictions and preserves the required minimal-answer output format.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 108,
+    "row_index": 108,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "715bf163c6da3fdbc00ff140bab24d6a9a37f0d226521b6c602775eec43258d1",
+  "created_at": "2026-07-13T17:19:56.322774+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "summary_1": "He was from Mississippi.",
+        "current_output": {
+          "query": "Adolph Botnick attempted assassination man from Mississippi"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Adolph Botnick attempted assassination man from Mississippi"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Adolph Botnick",
+          "Édouard Mortier, Duke of Trévise",
+          "A Man",
+          "Qin Wuyang",
+          "Assassination attempts on Alexander Ankvab",
+          "Bruce Botnick",
+          "Assassination attempts on Hirohito"
+        ],
+        "retrieved_doc_snippets": [
+          "Adolph Botnick | Adolph Ira \"A. I.\" \"B\" Botnick (August 17, 1924 – October 8, 1995) was a Jewish activist in the Civil Rights Movement. Botnick often sought to minimize violence in race relations. Botnick was a target of an assassination plot by Byron De La Beckwith, who had previously assassinated civil rights leader Medgar Evers. The assassination was prevented when De La Beckwith was arrested for transporting a bomb across state lines.",
+          "Édouard Mortier, Duke of Trévise | Adolphe Édouard Casimir Joseph Mortier, 1st Duc de Trévise (13 February 1768 – 28 July 1835) was a French general and Marshal of France under Napoleon I. He was one of 18 people killed in 1835 during Giuseppe Marco Fieschi's assassination attempt on King Louis Philippe I.",
+          "A Man | A Man (1979) (Italian: \"Un Uomo\" ) (Greek: Ένας Άνδρας , transliteration: \"Enas Andras\") is a novel written by Oriana Fallaci chronicling her relationship with the attempted assassin of Greek dictator George Papadopoulos.",
+          "Qin Wuyang | Qin Wuyang (秦舞陽) was a young man who followed Jing Ke when the latter went on the mission to assassinate Ying Zheng, the king of Qin. Both Jing and Qin were first disguised as envoys from Yan and were there to present the severed head of \"Fan Yuqi\", a Qin turncoat, and a map of Dukang. However, Qin Wuyang started sweating profusely and shivered due to nervousness and this aroused Ying Zheng's suspicion when he saw the young man. Thus, Qin Wuyang was not allowed to go near the king a ...[truncated]",
+          "Assassination attempts on Alexander Ankvab | Alexander Ankvab, who was a President of Abkhazia from 2011 to 2014, has survived six assassination attempts since becoming Prime Minister in 2005.",
+          "Bruce Botnick | Bruce Botnick (born 1945) is an American audio engineer and record producer, best known for his work with The Doors, and with Love.",
+          "Assassination attempts on Hirohito | During the 1920s and 1930s, there were three known assassination attempts on Hirohito, the Emperor of Japan. The assailants were all either Korean or Japanese. Assassination attempts on Hirohito took place throughout his reign as Prince regent, and Emperor of Japan. All of their attempts failed. Of the four would-be assassins, two were sentenced to death, one was granted amnesty and eventually released, and one committed suicide before she could be tried."
+        ],
+        "summary_2": "The man (Byron De La Beckwith) was from Mississippi.",
+        "answer": "Mississippi",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Byron De La Beckwith"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Byron De La Beckwith Adolph Botnick Mississippi"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"summary_1\": \"He was from Mississippi.\",\n  \"current_output\": {\n    \"query\": \"Adolph Botnick attempted assassination man from Mississippi\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Adolph Botnick attempted assassination man from Mississippi\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Adolph Botnick\",\n    \"Édouard Mortier, Duke of Trévise\",\n    \"A Man\",\n    \"Qin Wuyang\",\n    \"Assassination attempts on Alexander Ankvab\",\n    \"Bruce Botnick\",\n    \"Assassination attempts on Hirohito\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Adolph Botnick | Adolph Ira \\\"A. I.\\\" \\\"B\\\" Botnick (August 17, 1924 – October 8, 1995) was a Jewish activist in the Civil Rights Movement. Botnick often sought to minimize violence in race relations. Botnick was a target of an assassination plot by Byron De La Beckwith, who had previously assassinated civil rights leader Medgar Evers. The assassination was prevented when De La Beckwith was arrested for transporting a bomb across state lines.\",\n    \"Édouard Mortier, Duke of Trévise | Adolphe Édouard Casimir Joseph Mortier, 1st Duc de Trévise (13 February 1768 – 28 July 1835) was a French general and Marshal of France under Napoleon I. He was one of 18 people killed in 1835 during Giuseppe Marco Fieschi's assassination attempt on King Louis Philippe I.\",\n    \"A Man | A Man (1979) (Italian: \\\"Un Uomo\\\" ) (Greek: Ένας Άνδρας , transliteration: \\\"Enas Andras\\\") is a novel written by Oriana Fallaci chronicling her relationship with the attempted assassin of Greek dictator George Papadopoulos.\",\n    \"Qin Wuyang | Qin Wuyang (秦舞陽) was a young man who followed Jing Ke when the latter went on the mission to assassinate Ying Zheng, the king of Qin. Both Jing and Qin were first disguised as envoys from Yan and were there to present the severed head of \\\"Fan Yuqi\\\", a Qin turncoat, and a map of Dukang. However, Qin Wuyang started sweating profusely and shivered due to nervousness and this aroused Ying Zheng's suspicion when he saw the young man. Thus, Qin Wuyang was not allowed to go near the king a ...[truncated]\",\n    \"Assassination attempts on Alexander Ankvab | Alexander Ankvab, who was a President of Abkhazia from 2011 to 2014, has survived six assassination attempts since becoming Prime Minister in 2005.\",\n    \"Bruce Botnick | Bruce Botnick (born 1945) is an American audio engineer and record producer, best known for his work with The Doors, and with Love.\",\n    \"Assassination attempts on Hirohito | During the 1920s and 1930s, there were three known assassination attempts on Hirohito, the Emperor of Japan. The assailants were all either Korean or Japanese. Assassination attempts on Hirohito took place throughout his reign as Prince regent, and Emperor of Japan. All of their attempts failed. Of the four would-be assassins, two were sentenced to death, one was granted amnesty and eventually released, and one committed suicide before she could be tried.\"\n  ],\n  \"summary_2\": \"The man (Byron De La Beckwith) was from Mississippi.\",\n  \"answer\": \"Mississippi\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Byron De La Beckwith\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Byron De La Beckwith Adolph Botnick Mississippi\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the current summary or any visible retrieved snippet mentions a PERSON name while summary_1 only gives a pronoun or a location (e.g., 'He was from Mississippi').\",\n    \"preserve_rule\": \"Keep the same input/output interface: require the given fields (question, summary_1) and produce only the field 'query'. Preserve existing behavior of producing a compact second-hop retrieval string.\",\n    \"change_rule\": \"If a PERSON full name is present in any visible input (summary_2 or retrieved snippets), include that full name in the query together with the primary subject ('Adolph Botnick') and the short location token from summary_1 (if present). Format the query as a compact keyword string of space-separated tokens (no explanatory words). If no PERSON name is visible, fall back to composing a concise query from keywords in the question and summary_1.\",\n    \"drop_or_avoid_rule\": \"Avoid verbose phrasing, natural-language sentences, Boolean operators, quotes, or copying long literal spans. Do not output answers, summaries, or instructions—only the compact query string. Avoid including subjective words like 'attempted' or 'man' unless they are necessary keywords; prefer names and key entities.\",\n    \"output_contract\": \"Produce a single string field 'query' (one-line, <= ~10 words) that is a concise retrieval query combining: [PERSON full name if visible] + [Adolph Botnick] + [location token from summary_1 if present]. No extra explanation or fields.\",\n    \"why_local_transition\": \"The source query used a pronoun/location and failed to target the named suspect. Adding the visible PERSON name plus the subject and location focuses the second-hop retrieval on documents about that suspect and Adolph Botnick, improving chances to recover the missing support.\"\n  },\n  \"rationale\": \"This delta makes the minimal targeted change needed for this edge: instruct the agent to detect and incorporate a visible PERSON name into a compact second-hop query while preserving the original interface and useful existing behavior. It prevents verbosity and copying long spans, enforces a precise output format, and falls back safely when no name is visible. The change is local (only alters how the query is composed) and avoids producing any candidate answers or summary text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 52,
+    "row_index": 52,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "2b8310d81147a7f34dc2d894f8548055955347224134acc5aa6ef8f938ae9973",
+  "created_at": "2026-07-13T16:57:38.523409+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+        "summary_1": "Rufus Sewell",
+        "summary_2": "Rufus Sewell",
+        "current_output": "Rufus Sewell"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Rufus Sewell",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Rufus Frederik Sewell",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What actor has appeared in the films \\\"Hamlet\\\", \\\"The Woodlanders\\\" and \\\"The Holiday\\\"?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What actor has appeared in the films \\\"Hamlet\\\", \\\"The Woodlanders\\\" and \\\"The Holiday\\\"?\",\n  \"summary_1\": \"Rufus Sewell\",\n  \"summary_2\": \"Rufus Sewell\",\n  \"current_output\": \"Rufus Sewell\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Rufus Sewell\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Rufus Frederik Sewell\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks for a named person (e.g., \\\"What actor...\\\") and both summary_1 and summary_2 mention the same person name (identical or obvious variant).\",\n    \"preserve_rule\": \"Keep the base prompt's requirement to produce only the minimal answer string in [[ ## answer ## ]], and rely only on tokens that appear in the visible inputs (question, summary_1, summary_2). Preserve any existing tie-breaking behavior already present in the prompt.\",\n    \"change_rule\": \"When the trigger fires, choose as the answer the most complete name variant that appears verbatim in the visible inputs: prefer a longer/more specific string (more tokens) if one of the input fields contains it; otherwise output the exact consensus name shown in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not invent, infer, or add name tokens that do not appear in the question or summaries; do not consult external knowledge or add middle names/initials unless that exact form is present in the visible inputs.\",\n    \"output_contract\": \"Produce the field `answer` whose [[ ## answer ## ]] block contains only the minimal name string supported directly by the visible inputs. If multiple verbatim variants appear, output the one that is most complete (longest verbatim token sequence present). If no clear consensus exists, fall back to the original base prompt behavior.\",\n    \"why_local_transition\": \"This local change biases the agent to prefer the most complete verbatim name present among the provided summaries/inputs (rather than always emitting a shorter canonical form). It is a minimal, evidence-local rule to align the final output with name-variant choices that appear in the visible context.\"\n  },\n  \"rationale\": \"The smallest coherent behavioral edit is to change the tie-breaking/selection rule for name variants so the agent prefers a more complete verbatim form when present in the visible inputs. That preserves the original minimal-answer contract and prevents hallucination by explicitly forbidding additions not present in the question or summaries. The trigger is narrow (applies only for person-name answers when summaries agree) so useful existing behavior is preserved and the change is local and reversible.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 0,
+    "row_index": 0,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

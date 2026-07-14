@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "eb248a5997be9475c148f53426cf0d639e9e2d2ee46e012065a9b93e50a52d27",
+  "created_at": "2026-07-13T17:21:49.891388+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "summary_1": "He murdered 11 people.",
+        "current_output": {
+          "query": "11 people"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Murder in the Heartland Charles Starkweather victims"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Charles Starkweather How many people did the subject of Murder in the Heartland murder?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Murder in the Heartland",
+          "Charles Starkweather",
+          "Westroads Mall shooting",
+          "Redhead murders",
+          "Caril Ann Fugate",
+          "Mary Ann Cotton",
+          "Mass murder"
+        ],
+        "retrieved_doc_snippets": [
+          "Murder in the Heartland | Murder in the Heartland is a television miniseries that aired on ABC in 1993. It was based on the 1957–58 murder spree carried out by 19-year-old Charles Starkweather throughout Nebraska and Wyoming. The first half of the miniseries covers the murders. The second half covers the trials of Starkweather and Caril Ann Fugate, his 14-year-old girlfriend accomplice. Their increasingly disparate versions of events are contrasted as the trials unfold.",
+          "Charles Starkweather | Charles Raymond \"Charlie\" Starkweather (November 24, 1938 – June 25, 1959) was an American teenaged spree killer who murdered eleven people in the states of Nebraska and Wyoming in a two-month murder spree between December 1957 and January 1958. All but one of Starkweather's victims were killed between January 21 and January 29, 1958, the date of his arrest. During the murders committed in 1958, Starkweather was accompanied by his 14-year-old girlfriend, Caril Ann Fugate.",
+          "Westroads Mall shooting | The Westroads Mall shooting was a mass shooting that occurred on December 5, 2007, at a Von Maur department store in Westroads Mall in Omaha, Nebraska. The gunman, nineteen-year-old Robert A. Hawkins, killed eight people and wounded four, two of them critically, before committing suicide. It was the deadliest mass murder in Nebraska since the rampage of Charles Starkweather in 1958.",
+          "Redhead murders | The \"Redhead murders\" are a series of unsolved homicides believed to have been committed by an unidentified serial killer in various parts of the United States, including Tennessee, Arkansas, Kentucky, Mississippi and Pennsylvania. It is presumed that the killings occurred between October 1978 and the 1980s, but they may have continued until 1992. The victims, many of whom have never been identified, usually had reddish hair and their bodies were abandoned along major highways  ...[truncated]",
+          "Caril Ann Fugate | Caril Ann Fugate (born July 30, 1943) is the youngest female in United States history to date to have been tried for first-degree murder. She was the adolescent girlfriend and accomplice of spree killer Charles Starkweather.",
+          "Mary Ann Cotton | Mary Ann Cotton (\"née \" Robson; 31 October 1832 – 24 March 1873) was an English serial killer, convicted of, and hanged for, the murder by poisoning of her stepson Charles Edward Cotton. It is likely that she murdered three of her four husbands, apparently in order to collect on their insurance policies, and many others. She may have murdered as many as 21 people, including 11 of her 13 children. She chiefly used arsenic poisoning, causing gastric pain and rapid decline of heal ...[truncated]",
+          "Mass murder | Mass murder (sometimes interchangeable with \"mass destruction\") is the act of murdering a number of people, typically simultaneously or over a relatively short period of time and in close geographic proximity. The FBI defines mass murder as murdering four or more persons during an event with no \"cooling-off period\" between the murders. A mass murder typically occurs in a single location where one or more people kill several others. Many acts of mass murder end with the perpetrator( ...[truncated]"
+        ],
+        "summary_2": "11",
+        "answer": "11",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Charles Starkweather"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"summary_1\": \"He murdered 11 people.\",\n  \"current_output\": {\n    \"query\": \"11 people\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Murder in the Heartland Charles Starkweather victims\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Charles Starkweather How many people did the subject of Murder in the Heartland murder?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Murder in the Heartland\",\n    \"Charles Starkweather\",\n    \"Westroads Mall shooting\",\n    \"Redhead murders\",\n    \"Caril Ann Fugate\",\n    \"Mary Ann Cotton\",\n    \"Mass murder\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Murder in the Heartland | Murder in the Heartland is a television miniseries that aired on ABC in 1993. It was based on the 1957–58 murder spree carried out by 19-year-old Charles Starkweather throughout Nebraska and Wyoming. The first half of the miniseries covers the murders. The second half covers the trials of Starkweather and Caril Ann Fugate, his 14-year-old girlfriend accomplice. Their increasingly disparate versions of events are contrasted as the trials unfold.\",\n    \"Charles Starkweather | Charles Raymond \\\"Charlie\\\" Starkweather (November 24, 1938 – June 25, 1959) was an American teenaged spree killer who murdered eleven people in the states of Nebraska and Wyoming in a two-month murder spree between December 1957 and January 1958. All but one of Starkweather's victims were killed between January 21 and January 29, 1958, the date of his arrest. During the murders committed in 1958, Starkweather was accompanied by his 14-year-old girlfriend, Caril Ann Fugate.\",\n    \"Westroads Mall shooting | The Westroads Mall shooting was a mass shooting that occurred on December 5, 2007, at a Von Maur department store in Westroads Mall in Omaha, Nebraska. The gunman, nineteen-year-old Robert A. Hawkins, killed eight people and wounded four, two of them critically, before committing suicide. It was the deadliest mass murder in Nebraska since the rampage of Charles Starkweather in 1958.\",\n    \"Redhead murders | The \\\"Redhead murders\\\" are a series of unsolved homicides believed to have been committed by an unidentified serial killer in various parts of the United States, including Tennessee, Arkansas, Kentucky, Mississippi and Pennsylvania. It is presumed that the killings occurred between October 1978 and the 1980s, but they may have continued until 1992. The victims, many of whom have never been identified, usually had reddish hair and their bodies were abandoned along major highways  ...[truncated]\",\n    \"Caril Ann Fugate | Caril Ann Fugate (born July 30, 1943) is the youngest female in United States history to date to have been tried for first-degree murder. She was the adolescent girlfriend and accomplice of spree killer Charles Starkweather.\",\n    \"Mary Ann Cotton | Mary Ann Cotton (\\\"née \\\" Robson; 31 October 1832 – 24 March 1873) was an English serial killer, convicted of, and hanged for, the murder by poisoning of her stepson Charles Edward Cotton. It is likely that she murdered three of her four husbands, apparently in order to collect on their insurance policies, and many others. She may have murdered as many as 21 people, including 11 of her 13 children. She chiefly used arsenic poisoning, causing gastric pain and rapid decline of heal ...[truncated]\",\n    \"Mass murder | Mass murder (sometimes interchangeable with \\\"mass destruction\\\") is the act of murdering a number of people, typically simultaneously or over a relatively short period of time and in close geographic proximity. The FBI defines mass murder as murdering four or more persons during an event with no \\\"cooling-off period\\\" between the murders. A mass murder typically occurs in a single location where one or more people kill several others. Many acts of mass murder end with the perpetrator( ...[truncated]\"\n  ],\n  \"summary_2\": \"11\",\n  \"answer\": \"11\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Charles Starkweather\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks for a numeric count about the subject of a work (e.g. 'How many people did the subject of [WORK] murder?') and the current query is only keywords (names, 'victims') or the summary uses a pronoun ('He', 'She') or gives a count, apply this edit.\",\n    \"preserve_rule\": \"Keep using the given `question` and `summary_1` fields and preserve the agent's goal to produce one compact second-hop retrieval query. Retain any subject name already present in the inputs.\",\n    \"change_rule\": \"Produce a single, compact natural-language query that combines (A) the subject entity if it appears in the question or summary (otherwise the work title from the question) and (B) the explicit measurement phrasing from the question. Prefer forms like '[NAME] how many people did the subject of [WORK] murder?' or, if NAME is not available, 'How many people did the subject of [WORK] murder?'. Keep the query short and focused on finding a source that states the number.\",\n    \"drop_or_avoid_rule\": \"Do not use the known numeric answer itself as the query (e.g., '11 people'). Avoid queries that are only bare keywords (e.g., 'victims', just the work title) or that include extraneous unrelated topics or long explanations. Do not output multiple queries or any commentary.\",\n    \"output_contract\": \"Return exactly one compact query string (no extra text). The query must include either the subject's name (if present in inputs) plus an explicit 'how many people' phrasing, or the work title plus the 'how many people' phrasing. The string should be ready for a second-hop retrieval.\",\n    \"why_local_transition\": \"The source query used keywords and an entity but lacked the explicit measurement phrasing. Adding the question phrase ('how many people') together with the subject/work focuses the search on documents that state the numeric victim count, enabling retrieval of the missing supporting evidence while leaving other behavior unchanged.\"\n  },\n  \"rationale\": \"This delta makes the minimal, targeted change needed to move from a keyword-style first-hop query to a second-hop retrieval query that will find a statement of the victim count. It preserves use of the available inputs and the agent's compact second-hop requirement, avoids exposing the known numeric answer, and prevents overly short or unfocused queries. The rule is local: it only alters how the query is composed (add explicit measurement phrasing and include subject/work), not the agent's interface or broader behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 61,
+    "row_index": 61,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

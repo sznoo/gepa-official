@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "cd0c7402fc130da5b8fd3b39a4e5f23336c2e30ddff2c702406620fb821f06da",
+  "created_at": "2026-07-13T17:14:42.771353+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Londonderry Borough Police are the force in the county that is part of what country?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Londonderry Borough Police are the force in the county that is part of what country?",
+        "summary_1": "Ireland",
+        "summary_2": "Northern Ireland (part of the United Kingdom)",
+        "current_output": "Northern Ireland (part of the United Kingdom)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Northern Ireland (part of the United Kingdom)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Northern Ireland",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Londonderry Borough Police are the force in the county that is part of what country?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Londonderry Borough Police are the force in the county that is part of what country?\",\n  \"summary_1\": \"Ireland\",\n  \"summary_2\": \"Northern Ireland (part of the United Kingdom)\",\n  \"current_output\": \"Northern Ireland (part of the United Kingdom)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Northern Ireland (part of the United Kingdom)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Northern Ireland\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If any visible summary contains a name immediately followed by a parenthetical clarification (pattern: NAME (EXTRA)), apply the rule below.\",\n    \"preserve_rule\": \"Keep the original chosen name tokenization and wording from the summaries; do not invent new descriptors or change wording other than removing the parenthetical segment.\",\n    \"change_rule\": \"When the trigger matches, strip the parenthetical and its surrounding space from the selected summary string and output only the text that appears before the opening parenthesis. If multiple summaries contain parentheticals, prefer the first matching summary in the provided summary order. If no summary contains a parenthesis, keep the existing selection behavior unchanged.\",\n    \"drop_or_avoid_rule\": \"Do not include the parenthetical clarification or any additional explanatory phrases (e.g., 'part of ...', country qualifiers) in the final answer. Avoid adding context, justification, or full-sentence framing — emit only the pared-down name.\",\n    \"output_contract\": \"Produce the `answer` field as a single minimal name string (the text before any parenthesis when the trigger matched). Place only that minimal string inside the [[ ## answer ## ]] block with no extra text, punctuation, or explanation.\",\n    \"why_local_transition\": \"Removes an extraneous parenthetical clarification that made the final output longer than the minimal name present in the visible summaries, while preserving the originally selected name.\"\n  },\n  \"rationale\": \"The current output contains a parenthetical clarification that the task's output contract forbids: the final answer must be the minimal name supported by summaries. The smallest coherent edit is to strip parenthetical clarifications when they appear in a provided summary, preserving the chosen name itself. This change is local (only affects formatting of parentheticals), preserves existing evidence selection, and guarantees the answer block will contain only the minimal entity string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 39,
+    "row_index": 39,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

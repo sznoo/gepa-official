@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "71a7ab162c62704d57cc0471072d4f0584f394af463e219181d37666aef56ca9",
+  "created_at": "2026-07-13T20:11:12.476129+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Where are the studios, where the Muppet Shows were recorded, located ?",
+      "source_summary": "The Muppet Show was recorded at Elstree Studios, which is located in Borehamwood, Hertfordshire, England (Elstree Studios (Shenley Road)) — \"Borehamwood, Hertfordshire\".",
+      "target_summary": "First-hop: The Muppet Show programmes were recorded at Elstree Studios. Second-hop (visible evidence): \"BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.\" Integration: The Elstree-named studios referenced in the first-hop are associated with facilities located in Borehamwood, Hertfordshire (England).",
+      "candidate_summary": "The Muppet Show was recorded at Elstree Studios. The page Elstree Studios (Shenley Road) places that studio on Shenley Road in 'Borehamwood, Hertfordshire'. These Elstree-named studios are therefore associated with facilities located in Borehamwood, Hertfordshire."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhere are the studios, where the Muppet Shows were recorded, located ?\n\nSource summary2:\nThe Muppet Show was recorded at Elstree Studios, which is located in Borehamwood, Hertfordshire, England (Elstree Studios (Shenley Road)) — \"Borehamwood, Hertfordshire\".\n\nTarget summary2:\nFirst-hop: The Muppet Show programmes were recorded at Elstree Studios. Second-hop (visible evidence): \"BBC Elstree Centre, sometimes referred to as BBC Elstree Studios, is a television production facility located on Clarendon Road in Borehamwood, Hertfordshire.\" Integration: The Elstree-named studios referenced in the first-hop are associated with facilities located in Borehamwood, Hertfordshire (England).\n\nCandidate summary2:\nThe Muppet Show was recorded at Elstree Studios. The page Elstree Studios (Shenley Road) places that studio on Shenley Road in 'Borehamwood, Hertfordshire'. These Elstree-named studios are therefore associated with facilities located in Borehamwood, Hertfordshire.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": false,\n  \"rationale\": \"The candidate preserves the key facts: The Muppet Show was recorded at Elstree Studios and those studios are associated with Borehamwood, Hertfordshire (it even cites Shenley Road as in the source). It does not introduce the additional target detail about the BBC Elstree Centre/Clarendon Road, so it adds no new task-relevant information beyond the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 107,
+    "row_index": 107,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

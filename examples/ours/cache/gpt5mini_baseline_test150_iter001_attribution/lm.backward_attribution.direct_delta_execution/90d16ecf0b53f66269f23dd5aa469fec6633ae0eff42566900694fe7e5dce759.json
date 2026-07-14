@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "90d16ecf0b53f66269f23dd5aa469fec6633ae0eff42566900694fe7e5dce759",
+  "created_at": "2026-07-13T18:48:16.218180+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the provided summary or retrieved snippets already identify the award as the Hart Memorial Trophy AND the agent's current output is a clarification request about which 'Maurice' is meant or about permission to look up the winner year.",
+            "preserve_rule": "When no clear candidate name appears among retrieved titles/snippets (no hockey-related Maurice or no mention tied to the Hart Trophy), keep the existing behavior: output a concise clarifying question or request user permission to perform an external lookup.",
+            "change_rule": "When the trigger conditions are met and the retrieved titles/snippets contain a hockey-related Maurice (e.g., any title/snippet that includes 'Maurice' together with hockey context such as 'Rocket' Richard, Hart Trophy, Canadiens, NHL), replace the clarification question with a single compact second-hop retrieval query. Construct that query by taking the most-likely full name form of the Maurice as it appears in the retrieved inputs (use the canonical full name or the name variant present in the snippets/titles) and append keywords specifying the award and year (for example: [FullName] + Hart Memorial Trophy + year). Output only that single short query string (no extra explanation or options).",
+            "drop_or_avoid_rule": "Avoid asking the user for clarification when a clear candidate is present in the evidence. Avoid verbose phrasing, multiple alternative queries, or copying long literal spans beyond the short name token(s) that already appear in the inputs. Do not include candidate answers or summaries—only emit the single compact retrieval query.",
+            "output_contract": "The agent's `query` output must be exactly one short search query string formed as: <most-likely full name from retrieved titles/snippets> + 'Hart Memorial Trophy' + 'year' (or equivalent compact keyword combination). No surrounding text, no punctuation beyond what's needed for the query, and no clarifying questions.",
+            "why_local_transition": "This is a small, local behavioral change that converts an unnecessary clarification into an immediate targeted second-hop query when the local evidence already points to a specific Maurice; it leaves the agent's interface and its fallback clarification behavior unchanged."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when summary_1 explicitly names the award (contains the phrase \"Hart Memorial Trophy\" or equivalent) AND the question uses only the given name \"Maurice\" (no last name) AND the agent's current output is a clarification request about which Maurice is meant.",
+            "preserve_rule": "Keep the agent's compact, retrieval-oriented style: produce a single short query string (not a question to the user), focused on fetching documents that disambiguate the person and show the year.",
+            "change_rule": "Instead of returning a clarification question as the query, generate a concise second-hop retrieval query that combines the given first name and the known award phrase plus a year-focused token. Form the query as: '<Maurice> <Hart Memorial Trophy> year' (or equivalent order), using the award's exact named phrase from summary_1 and the first name from the question to retrieve pages that identify which Maurice won and in what year.",
+            "drop_or_avoid_rule": "Do not ask the user for further clarification in the query field. Do not invent or insert a specific last name or full identity not already present in the visible inputs. Do not produce answers, dates, or long explanatory text in the query output.",
+            "output_contract": "Produce the field `query` as a single compact retrieval string (typically 2–6 words) that includes the given name from the question and the award phrase from summary_1 plus a year-focused term, e.g. 'Maurice Hart Memorial Trophy year'.",
+            "why_local_transition": "This edit only changes how the query is formed when the award is known but the person is referenced by a single given name. It minimally redirects the agent from asking the user for clarification to issuing a focused retrieval query that will fetch documents to resolve which 'Maurice' and the winning year."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+        "summary_1": "The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.",
+        "current_output": {
+          "query": "Which Maurice do you mean (please give full name)? Or should I perform an external lookup to find the year a Maurice won the Hart Memorial Trophy?"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the provided summary or retrieved snippets already identify the award as the Hart Memorial Trophy AND the agent's current output is a clarification request about which 'Maurice' is meant or about permission to look up the winner year.\",\n      \"preserve_rule\": \"When no clear candidate name appears among retrieved titles/snippets (no hockey-related Maurice or no mention tied to the Hart Trophy), keep the existing behavior: output a concise clarifying question or request user permission to perform an external lookup.\",\n      \"change_rule\": \"When the trigger conditions are met and the retrieved titles/snippets contain a hockey-related Maurice (e.g., any title/snippet that includes 'Maurice' together with hockey context such as 'Rocket' Richard, Hart Trophy, Canadiens, NHL), replace the clarification question with a single compact second-hop retrieval query. Construct that query by taking the most-likely full name form of the Maurice as it appears in the retrieved inputs (use the canonical full name or the name variant present in the snippets/titles) and append keywords specifying the award and year (for example: [FullName] + Hart Memorial Trophy + year). Output only that single short query string (no extra explanation or options).\",\n      \"drop_or_avoid_rule\": \"Avoid asking the user for clarification when a clear candidate is present in the evidence. Avoid verbose phrasing, multiple alternative queries, or copying long literal spans beyond the short name token(s) that already appear in the inputs. Do not include candidate answers or summaries—only emit the single compact retrieval query.\",\n      \"output_contract\": \"The agent's `query` output must be exactly one short search query string formed as: <most-likely full name from retrieved titles/snippets> + 'Hart Memorial Trophy' + 'year' (or equivalent compact keyword combination). No surrounding text, no punctuation beyond what's needed for the query, and no clarifying questions.\",\n      \"why_local_transition\": \"This is a small, local behavioral change that converts an unnecessary clarification into an immediate targeted second-hop query when the local evidence already points to a specific Maurice; it leaves the agent's interface and its fallback clarification behavior unchanged.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 explicitly names the award (contains the phrase \\\"Hart Memorial Trophy\\\" or equivalent) AND the question uses only the given name \\\"Maurice\\\" (no last name) AND the agent's current output is a clarification request about which Maurice is meant.\",\n      \"preserve_rule\": \"Keep the agent's compact, retrieval-oriented style: produce a single short query string (not a question to the user), focused on fetching documents that disambiguate the person and show the year.\",\n      \"change_rule\": \"Instead of returning a clarification question as the query, generate a concise second-hop retrieval query that combines the given first name and the known award phrase plus a year-focused token. Form the query as: '<Maurice> <Hart Memorial Trophy> year' (or equivalent order), using the award's exact named phrase from summary_1 and the first name from the question to retrieve pages that identify which Maurice won and in what year.\",\n      \"drop_or_avoid_rule\": \"Do not ask the user for further clarification in the query field. Do not invent or insert a specific last name or full identity not already present in the visible inputs. Do not produce answers, dates, or long explanatory text in the query output.\",\n      \"output_contract\": \"Produce the field `query` as a single compact retrieval string (typically 2–6 words) that includes the given name from the question and the award phrase from summary_1 plus a year-focused term, e.g. 'Maurice Hart Memorial Trophy year'.\",\n      \"why_local_transition\": \"This edit only changes how the query is formed when the award is known but the person is referenced by a single given name. It minimally redirects the agent from asking the user for clarification to issuing a focused retrieval query that will fetch documents to resolve which 'Maurice' and the winning year.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n  \"summary_1\": \"The passages identify the award as the Hart Memorial Trophy but do not state any winners or the year Maurice won it. I cannot determine the year from the provided passages. Please specify which Maurice you mean or allow me to use external sources to look up the winner year.\",\n  \"current_output\": {\n    \"query\": \"Which Maurice do you mean (please give full name)? Or should I perform an external lookup to find the year a Maurice won the Hart Memorial Trophy?\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Maurice Hart Memorial Trophy year\"\n  },\n  \"rationale\": \"Summary_1 names the Hart Memorial Trophy and the question uses only the given name Maurice, so the delta directs emitting a concise second-hop query combining the given name, the award phrase, and a year token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 88,
+    "row_index": 88,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

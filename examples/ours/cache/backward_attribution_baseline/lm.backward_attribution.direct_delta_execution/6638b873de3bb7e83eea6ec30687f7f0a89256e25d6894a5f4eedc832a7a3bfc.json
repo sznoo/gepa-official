@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "6638b873de3bb7e83eea6ec30687f7f0a89256e25d6894a5f4eedc832a7a3bfc",
+  "created_at": "2026-07-13T17:24:05.919298+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If any visible summary or the current candidate answer contains a parenthetical abbreviation or acronym immediately following a proper name (pattern: 'Full Name (ABBR)'; e.g., '(ONH)').",
+            "preserve_rule": "Keep the factual content and the full proper name exactly as presented in the visible inputs. Preserve the base prompt's requirement to return only the minimal answer string supported by the summaries.",
+            "change_rule": "When the trigger matches, remove the parenthetical abbreviation and any surrounding parentheses from the final answer. Output the full proper name alone (no parentheses or appended acronyms). If the visible inputs contain only an abbreviation with no full name, then keep the abbreviation as the minimal answer.",
+            "drop_or_avoid_rule": "Do not add explanations, qualifiers, dates, or extra punctuation; do not reintroduce the removed parenthetical acronym elsewhere in the answer. Avoid changing other words or abbreviating the full name.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal answer string: the full proper name without any parenthetical abbreviation or surrounding parentheses (or, if no full name is available, the abbreviation alone). No extra text, punctuation, or explanation is allowed.",
+            "why_local_transition": "The previous output included a parenthetical acronym that is unnecessary for the minimal-answer form required by the final agent; stripping the parenthetical yields the canonical minimal name expected at the endpoint while preserving the underlying factual content."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Dissident Irish Republican campaign includes which paramilitary group that began attacks around 2009?",
+        "summary_1": "Óglaigh na hÉireann (ONH)",
+        "summary_2": "Óglaigh na hÉireann (ONH), a Real IRA splinter group that began attacks around 2009, is included in the dissident Irish Republican campaign.",
+        "current_output": "Óglaigh na hÉireann (ONH)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If any visible summary or the current candidate answer contains a parenthetical abbreviation or acronym immediately following a proper name (pattern: 'Full Name (ABBR)'; e.g., '(ONH)').\",\n      \"preserve_rule\": \"Keep the factual content and the full proper name exactly as presented in the visible inputs. Preserve the base prompt's requirement to return only the minimal answer string supported by the summaries.\",\n      \"change_rule\": \"When the trigger matches, remove the parenthetical abbreviation and any surrounding parentheses from the final answer. Output the full proper name alone (no parentheses or appended acronyms). If the visible inputs contain only an abbreviation with no full name, then keep the abbreviation as the minimal answer.\",\n      \"drop_or_avoid_rule\": \"Do not add explanations, qualifiers, dates, or extra punctuation; do not reintroduce the removed parenthetical acronym elsewhere in the answer. Avoid changing other words or abbreviating the full name.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string: the full proper name without any parenthetical abbreviation or surrounding parentheses (or, if no full name is available, the abbreviation alone). No extra text, punctuation, or explanation is allowed.\",\n      \"why_local_transition\": \"The previous output included a parenthetical acronym that is unnecessary for the minimal-answer form required by the final agent; stripping the parenthetical yields the canonical minimal name expected at the endpoint while preserving the underlying factual content.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Dissident Irish Republican campaign includes which paramilitary group that began attacks around 2009?\",\n  \"summary_1\": \"Óglaigh na hÉireann (ONH)\",\n  \"summary_2\": \"Óglaigh na hÉireann (ONH), a Real IRA splinter group that began attacks around 2009, is included in the dissident Irish Republican campaign.\",\n  \"current_output\": \"Óglaigh na hÉireann (ONH)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Óglaigh na hÉireann\",\n  \"rationale\": \"Applied the delta: removed the parenthetical abbreviation and returned the full proper name exactly as presented in the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 113,
+    "row_index": 113,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

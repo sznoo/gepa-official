@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "682dd3843c98a4c7791c06c39988deee6af61e2509066d7698641732b8e2412e",
+  "created_at": "2026-07-13T18:45:05.024036+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+      "current_output": "London",
+      "upstream_context": {
+        "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+        "summary_1": "The Royal Academy of Dramatic Art is based in London.",
+        "hop2_query": "Where is the Royal Academy of Dramatic Art (RADA) based?",
+        "hop2_titles": [
+          "Tomahawk Theatre Company",
+          "Royal Academy of Dramatic Art",
+          "Barbara Bryne",
+          "Shereen Martineau",
+          "Stephan Chase",
+          "List of RADA alumni",
+          "Mark Hadfield"
+        ],
+        "hop2_docs": [
+          "Tomahawk Theatre Company | Tomahawk is a theatre company based in Oxford, South East England.  Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts.",
+          "Royal Academy of Dramatic Art | The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.  It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree.",
+          "Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).",
+          "Shereen Martineau | Martineau trained at the Royal Academy of Dramatic Art (RADA).",
+          "Stephan Chase | Stephan Chase is a British actor of Cornish and Scots descent.  He was educated in Ireland and England.  Before joining the Royal Shakespeare Company, he won a scholarship and trained at the Royal Academy of Dramatic Art (RADA) later becoming an Associate of RADA.",
+          "List of RADA alumni | This is a list of alumni of the Royal Academy of Dramatic Art in London, England.",
+          "Mark Hadfield | Before starting his professional career, Hadfield trained at the Royal Academy of Dramatic Art (RADA)."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Royal Academy of Dramatic Art",
+          "sent_id": 0,
+          "sentence": "The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nEmma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\n\nCurrent agent output:\n\"London\"\n\nActual upstream context:\n{\n  \"question\": \"Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?\",\n  \"summary_1\": \"The Royal Academy of Dramatic Art is based in London.\",\n  \"hop2_query\": \"Where is the Royal Academy of Dramatic Art (RADA) based?\",\n  \"hop2_titles\": [\n    \"Tomahawk Theatre Company\",\n    \"Royal Academy of Dramatic Art\",\n    \"Barbara Bryne\",\n    \"Shereen Martineau\",\n    \"Stephan Chase\",\n    \"List of RADA alumni\",\n    \"Mark Hadfield\"\n  ],\n  \"hop2_docs\": [\n    \"Tomahawk Theatre Company | Tomahawk is a theatre company based in Oxford, South East England.  Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts.\",\n    \"Royal Academy of Dramatic Art | The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.  It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree.\",\n    \"Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).\",\n    \"Shereen Martineau | Martineau trained at the Royal Academy of Dramatic Art (RADA).\",\n    \"Stephan Chase | Stephan Chase is a British actor of Cornish and Scots descent.  He was educated in Ireland and England.  Before joining the Royal Shakespeare Company, he won a scholarship and trained at the Royal Academy of Dramatic Art (RADA) later becoming an Associate of RADA.\",\n    \"List of RADA alumni | This is a list of alumni of the Royal Academy of Dramatic Art in London, England.\",\n    \"Mark Hadfield | Before starting his professional career, Hadfield trained at the Royal Academy of Dramatic Art (RADA).\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Royal Academy of Dramatic Art\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary: summary_1 states that the Royal Academy of Dramatic Art is based in London. The retrieved supporting document (Royal Academy of Dramatic Art) confirms: \\\"The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.\\\"\",\n  \"rationale\": \"Combine the initial context (summary_1: RADA is based in London) with the second-hop supporting sentence explicitly stating RADA is a drama school in London, England; together these preserve the factual basis needed by the final-answer agent without adding new information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 40,
+    "row_index": 40
+  }
+}

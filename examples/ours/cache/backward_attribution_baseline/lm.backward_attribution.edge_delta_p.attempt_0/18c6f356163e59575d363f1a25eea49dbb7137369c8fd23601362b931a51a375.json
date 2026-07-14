@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "18c6f356163e59575d363f1a25eea49dbb7137369c8fd23601362b931a51a375",
+  "created_at": "2026-07-13T17:24:00.345010+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are Brunnera and Codonanthe from the same locations?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are Brunnera and Codonanthe from the same locations?",
+        "summary_1": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies — e.g., Belize).",
+        "summary_2": "No. Brunnera is native to Eastern Europe/Northwest Asia, while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).",
+        "current_output": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are Brunnera and Codonanthe from the same locations?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Brunnera and Codonanthe from the same locations?\",\n  \"summary_1\": \"No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies — e.g., Belize).\",\n  \"summary_2\": \"No. Brunnera is native to Eastern Europe/Northwest Asia, while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).\",\n  \"current_output\": \"No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question is a binary (yes/no) question about whether two named taxa or places are from the same locations (for example, the question asks whether Brunnera and Codonanthe are from the same locations) and the visible summaries state different native regions for the two names.\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the exclusive evidence sources. Preserve any inference that compares the named native regions in those summaries and preserve the determination already reached from that comparison.\",\n    \"change_rule\": \"Do not produce an explanatory sentence. Instead, reduce the final output to a single lowercase answer token indicating the binary decision inferred from the summaries: either the word yes or the word no. Decide which token by comparing the native-location statements in the summaries (if they describe the same region -> yes; if they describe different regions -> no).\",\n    \"drop_or_avoid_rule\": \"Avoid any additional text, punctuation, capitalization, justification, examples, or region names in the final output. Do not restate, summarize, or quote the summaries in the answer block. Do not prepend or append salutations, qualifiers, or metadata.\",\n    \"output_contract\": \"Place exactly one lowercase word — either yes or no — and nothing else inside the [[ ## answer ## ]] output block. No punctuation, no surrounding explanatory text, and no extra tokens.\",\n    \"why_local_transition\": \"The source behavior included a verbose explanatory sentence; this small behavioral edit enforces the final-answer format required by the agent role (a single minimal yes/no token) while keeping the same evidence and decision logic from the summaries.\"\n  },\n  \"rationale\": \"This delta implements the smallest coherent change needed to move from a verbose final sentence to the required minimal final-answer format. It preserves the agent's existing use of the provided summaries as evidence and only tightens the output format and token selection rule. The trigger is narrowly scoped to binary location-comparison questions (and references visible sample anchors only when present), so the edit is local to this transition and unlikely to disrupt other behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 111,
+    "row_index": 111,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

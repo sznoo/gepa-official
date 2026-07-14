@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "3af10a60f60cedc02bc9036c812d233f0c58eff7cb9357906b3e91648a55f21b",
+  "created_at": "2026-07-13T17:25:10.512791+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?",
+        "summary_1": "Björk (Björk Guðmundsdóttir)",
+        "summary_2": "The soundtrack to Dancer in the Dark is by Björk (Björk Guðmundsdóttir).",
+        "current_output": "Björk (Björk Guðmundsdóttir)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Björk (Björk Guðmundsdóttir)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Björk Guðmundsdóttir",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The soundtrack to 'Dancer in the Dark' is by what Icelandic singer, songwriter, actress, record producer, and DJ?\",\n  \"summary_1\": \"Björk (Björk Guðmundsdóttir)\",\n  \"summary_2\": \"The soundtrack to Dancer in the Dark is by Björk (Björk Guðmundsdóttir).\",\n  \"current_output\": \"Björk (Björk Guðmundsdóttir)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Björk (Björk Guðmundsdóttir)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Björk Guðmundsdóttir\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When any visible summary or the current_output contains a personal name in the form \\\"ShortName (FullName)\\\" (a short name followed by a parenthetical full name), or when the current_output matches that parenthetical pattern.\",\n    \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source. Preserve characters, diacritics, and capitalization exactly as they appear in the summaries. Maintain the requirement that the [[ ## answer ## ]] block contain only the minimal answer string.\",\n    \"change_rule\": \"If a summary presents a name as \\\"ShortName (FullName)\\\", set the final answer to the parenthetical content (the FullName) only. Strip the surrounding parentheses and drop the redundant short-name. If multiple candidate parentheticals appear, choose the parenthetical that is a full personal name and most directly answers the question. If no parenthetical form is present, produce the minimal answer string that the summaries support.\",\n    \"drop_or_avoid_rule\": \"Do not include the short-name plus parentheses (e.g., \\\"ShortName (FullName)\\\") in the final answer. Do not add explanatory text, punctuation, citations, or any tokens not present in the chosen summary text. Avoid introducing new abbreviations, nicknames, or extraneous labels.\",\n    \"output_contract\": \"Place only the minimal canonical answer string (no parentheses, no extra words, punctuation, or commentary) inside the [[ ## answer ## ]] block. Preserve exact spelling and diacritics from the chosen summary text.\",\n    \"why_local_transition\": \"The source output contained a redundant short-name with a parenthetical full name; the expected minimal final answer is the canonical full name. This small, targeted rule canonicalizes the 'ShortName (FullName)' pattern into the minimal FullName form required for the final-output contract.\"\n  },\n  \"rationale\": \"This delta is the smallest coherent behavior change needed: it does not alter how evidence is used, only how a specific name-format pattern is rendered in the final answer. It avoids adding new information or changing the agent's interface, and it directly removes the redundant short-name + parentheses so the final answer is the minimal canonical name supported by the visible summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 132,
+    "row_index": 132,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

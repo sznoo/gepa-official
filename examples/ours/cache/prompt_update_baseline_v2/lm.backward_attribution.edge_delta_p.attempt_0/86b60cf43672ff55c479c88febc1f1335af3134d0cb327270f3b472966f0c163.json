@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "86b60cf43672ff55c479c88febc1f1335af3134d0cb327270f3b472966f0c163",
+  "created_at": "2026-07-13T17:39:23.380259+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "\"Ricardio the Heart Guy\" is an episode of an animated television series that was created by who?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "\"Ricardio the Heart Guy\" is an episode of an animated television series that was created by who?",
+        "summary_1": "Pendleton Ward",
+        "summary_2": "Pendleton Ward",
+        "current_output": "Pendleton Ward"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Pendleton Ward",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "{'query': 'Pendleton Ward — creator.'}",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"\\\"Ricardio the Heart Guy\\\" is an episode of an animated television series that was created by who?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"\\\"Ricardio the Heart Guy\\\" is an episode of an animated television series that was created by who?\",\n  \"summary_1\": \"Pendleton Ward\",\n  \"summary_2\": \"Pendleton Ward\",\n  \"current_output\": \"Pendleton Ward\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Pendleton Ward\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"{'query': 'Pendleton Ward — creator.'}\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 and summary_2 are identical short named-entity strings (e.g., the same person name) or otherwise clearly agree on a single creator name.\",\n    \"preserve_rule\": \"Keep the base behavior of producing only the minimal answer string supported by the visible summaries and nothing else in the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"If the two summaries agree on a single name, force the output to be exactly that name (extract it from summary_1 or summary_2) with no surrounding braces, JSON-like structure, labels, or extra words. Detect and replace any output that contains characters or tokens typical of structured/query formats (e.g., '{', '}', 'query', ':', \\\"—\\\") with the plain name.\",\n    \"drop_or_avoid_rule\": \"Avoid producing structured objects, JSON-like dictionaries, query-like phrases, explanatory text, or added punctuation around the name. Do not introduce new formatting, metadata, or wrapper tokens.\",\n    \"output_contract\": \"Ensure the [[ ## answer ## ]] block contains only the single minimal answer string (the creator name) that is directly supported by the visible summaries.\",\n    \"why_local_transition\": \"This small behavior change prevents accidental reformatting of a correct minimal answer into a query or structured object when both summaries already supply the same creator name; it preserves the original intent while eliminating the specific faulty formatting pattern.\"\n  },\n  \"rationale\": \"The source state already yields the correct minimal name, but the failure mode is a corruption into a query-like/JSON-like output. The delta is narrowly targeted: it triggers only when both summaries agree and enforces plain-name output while preserving the base contract. It is the smallest coherent edit that blocks the observed formatting corruption without altering valid behavior in other cases.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 93,
+    "row_index": 93,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 141,
+    "matched_w_stable_id": "141",
+    "bisection_round": 0,
+    "material_fingerprint": "6ff3a687ded71a1e825c78853920236e557e0ed1af6161bdac3619af706fdb07",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

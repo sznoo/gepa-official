@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c95bc2cd95bd58ca5c77ca202f7df81dc265a7648dfdc5925bea1afa515f0230",
+  "created_at": "2026-07-13T17:19:58.985621+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks for an ordinal (contains words like 'first', 'second', 'third', 'fourth', 'nth', or the phrase 'the Nth episode').",
+            "preserve_rule": "Continue to treat the provided summaries (summary_1, summary_2, ...) as the primary evidence and keep the original final-answer output contract: the agent's answer must be a single minimal answer string with no extra commentary.",
+            "change_rule": "Instead of returning the first summary text by default, parse the requested ordinal N from the question and choose among the candidate episode titles in the summaries as follows: (1) If any summary explicitly states an episode number or wording that matches N (e.g., 'episode 4', 'fourth episode', 'Season X Episode Y' where Y == N), return that summary's title. (2) If no summary contains explicit numbering, use internal knowledge only as a conservative tiebreaker: if you have high confidence that one of the summary titles corresponds to the requested ordinal, return that title; otherwise do not invent a new title from thin air — instead return a single-token, minimal uncertainty signal (e.g., 'Unknown').",
+            "drop_or_avoid_rule": "Avoid blindly echoing summary_1 or performing a simple majority/tiebreak that ignores the ordinal. Avoid outputting extra explanation or headers. Do not produce titles not present in the summaries unless you have strong internal confidence as an explicit tiebreak. Do not add extraneous text beyond the single minimal answer string.",
+            "output_contract": "Produce only the minimal answer string (the episode title or the single-token uncertainty signal) in the final answer slot; do not include surrounding explanation or additional tokens.",
+            "why_local_transition": "The previous behavior returned a summary title without checking the requested ordinal. This local change adds an ordinal-check and a conservative selection rule so the agent selects a title that actually matches the asked episode number (or signals uncertainty) while preserving use of the provided summaries and the final-answer format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "summary_1": "\"Social Psychology\"",
+        "summary_2": "Social Psychology",
+        "current_output": "Social Psychology"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for an ordinal (contains words like 'first', 'second', 'third', 'fourth', 'nth', or the phrase 'the Nth episode').\",\n      \"preserve_rule\": \"Continue to treat the provided summaries (summary_1, summary_2, ...) as the primary evidence and keep the original final-answer output contract: the agent's answer must be a single minimal answer string with no extra commentary.\",\n      \"change_rule\": \"Instead of returning the first summary text by default, parse the requested ordinal N from the question and choose among the candidate episode titles in the summaries as follows: (1) If any summary explicitly states an episode number or wording that matches N (e.g., 'episode 4', 'fourth episode', 'Season X Episode Y' where Y == N), return that summary's title. (2) If no summary contains explicit numbering, use internal knowledge only as a conservative tiebreaker: if you have high confidence that one of the summary titles corresponds to the requested ordinal, return that title; otherwise do not invent a new title from thin air — instead return a single-token, minimal uncertainty signal (e.g., 'Unknown').\",\n      \"drop_or_avoid_rule\": \"Avoid blindly echoing summary_1 or performing a simple majority/tiebreak that ignores the ordinal. Avoid outputting extra explanation or headers. Do not produce titles not present in the summaries unless you have strong internal confidence as an explicit tiebreak. Do not add extraneous text beyond the single minimal answer string.\",\n      \"output_contract\": \"Produce only the minimal answer string (the episode title or the single-token uncertainty signal) in the final answer slot; do not include surrounding explanation or additional tokens.\",\n      \"why_local_transition\": \"The previous behavior returned a summary title without checking the requested ordinal. This local change adds an ordinal-check and a conservative selection rule so the agent selects a title that actually matches the asked episode number (or signals uncertainty) while preserving use of the provided summaries and the final-answer format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"summary_1\": \"\\\"Social Psychology\\\"\",\n  \"summary_2\": \"Social Psychology\",\n  \"current_output\": \"Social Psychology\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Social Psychology\",\n  \"rationale\": \"Detected ordinal 'fourth' (N=4); summaries contain no explicit numbering; per the deltas, used high-confidence tiebreak and returned the matching title present in the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 63,
+    "row_index": 63,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

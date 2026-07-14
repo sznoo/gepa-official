@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "b53b426d5797bf6a9d33b64ef202ccdbe96195a9b5ba26f44d1464e6336f7a86",
+  "created_at": "2026-07-13T17:43:19.203080+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Are Brunnera and Codonanthe from the same locations?",
+    "answer": "no",
+    "context": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sentences": [
+        [
+          "Brunnera is a genus of flowering plants in the family Boraginaceae.",
+          " They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.",
+          " They have hairy leaves and sprays of blue flowers in spring.",
+          " Numerous cultivars are available, which are valued as groundcover in dappled shade.",
+          " Some possess variegated foliage.",
+          " The best known species is \"Brunnera macrophylla\", known as Siberian bugloss."
+        ],
+        [
+          "Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.",
+          " In its own habitat, the plant usually grows in association with tree ant nests.",
+          " The botanical name comes from the \"Greek\" for bellflower.",
+          " Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.",
+          " Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.",
+          " Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.",
+          " These delightful waxy flowers are strongly scented.",
+          " Colorful berry-like fruits appear after flowering.",
+          " Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.",
+          " Seeds that germinate outside a nest tend to grow more slowly."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "e08bba879cb8",
+    "rerun_from": null,
+    "question": "Are Brunnera and Codonanthe from the same locations?",
+    "gold_answer": "no",
+    "context": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sentences": [
+        [
+          "Brunnera is a genus of flowering plants in the family Boraginaceae.",
+          " They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.",
+          " They have hairy leaves and sprays of blue flowers in spring.",
+          " Numerous cultivars are available, which are valued as groundcover in dappled shade.",
+          " Some possess variegated foliage.",
+          " The best known species is \"Brunnera macrophylla\", known as Siberian bugloss."
+        ],
+        [
+          "Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.",
+          " In its own habitat, the plant usually grows in association with tree ant nests.",
+          " The botanical name comes from the \"Greek\" for bellflower.",
+          " Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.",
+          " Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.",
+          " Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.",
+          " These delightful waxy flowers are strongly scented.",
+          " Colorful berry-like fruits appear after flowering.",
+          " Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.",
+          " Seeds that germinate outside a nest tend to grow more slowly."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Brunnera",
+      "Codonanthe"
+    ],
+    "hop1_query": "Are Brunnera and Codonanthe from the same locations?",
+    "hop1_docs": [
+      "Codonanthe elegans | Codonanthe elegans is a plant species in the genus \"Codonanthe\".  It is found in Belize.",
+      "Coptosia brunnerae | Coptosia brunnerae is a species of beetle in the family Cerambycidae.  It was described by Sama in 2000.  It is known from Jordan.",
+      "Brunnera macrophylla | Brunnera macrophylla, the Siberian bugloss, great forget-me-not, largeleaf brunnera or heartleaf, is a species of flowering plant in the family Boraginaceae, native to the Caucasus.  It is a hardy, rhizomatous, herbaceous perennial, that can reach from 12 to 18 inches (30 to 45 cm) in height, and carries basal, simple cordate leaves on slender stems.  Sprays of small blue flowers, similar to those seen in the related forget-me-nots, are borne from mid-Spring, and bloom for eight to ten weeks.",
+      "Brunnera | Brunnera is a genus of flowering plants in the family Boraginaceae.  They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.  They have hairy leaves and sprays of blue flowers in spring.  Numerous cultivars are available, which are valued as groundcover in dappled shade.  Some possess variegated foliage.  The best known species is \"Brunnera macrophylla\", known as Siberian bugloss.",
+      "Codonanthe | Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.  In its own habitat, the plant usually grows in association with tree ant nests.  The botanical name comes from the \"Greek\" for bellflower.  Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.  Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.  Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.  These delightful waxy flowers are strongly scented.  Colorful berry-like fruits appear after flowering.  Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.  Seeds that germinate outside a nest tend to grow more slowly.",
+      "Organ transplantation | Organ transplantation is a medical procedure in which an organ is removed from one body and placed in the body of a recipient, to replace a damaged or missing organ.  The donor and recipient may be at the same location, or organs may be transported from a donor site to another location.  Organs and/or tissues that are transplanted within the same person's body are called autografts. Transplants that are recently performed between two subjects of the same species are called allografts.  Allografts can either be from a living or cadaveric source.",
+      "Echo Bay Marine Provincial Park | Echo Bay Marine Provincial Park is a provincial park in British Columbia, Canada, established in 1971 and containing 4.66 acre .  It is located at the bay of the same name, offshore from the community of the same name, which is the location of the Simoom Sound post office and is on the west side of Gilford Island."
+    ],
+    "hop1_titles": [
+      "Codonanthe elegans",
+      "Coptosia brunnerae",
+      "Brunnera macrophylla",
+      "Brunnera",
+      "Codonanthe",
+      "Organ transplantation",
+      "Echo Bay Marine Provincial Park"
+    ],
+    "summary_1": "No. Brunnera is native to Eastern Europe/Northwest Asia (e.g., the Caucasus), while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies — e.g., Belize).",
+    "hop2_query": "No — Brunnera is native to Eastern Europe/NW Asia (Caucasus), whereas Codonanthe is native to the New World (Brazil, Guiana, Central America, West Indies).",
+    "hop2_docs": [
+      "Brunnera | Brunnera is a genus of flowering plants in the family Boraginaceae.  They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.  They have hairy leaves and sprays of blue flowers in spring.  Numerous cultivars are available, which are valued as groundcover in dappled shade.  Some possess variegated foliage.  The best known species is \"Brunnera macrophylla\", known as Siberian bugloss.",
+      "Carex nigra | Carex nigra (L.) Reichard (syn.  \"C. acuta\" auct.  non L.) is a perennial species of plants in the family Cyperaceae native to wetlands of Europe, western Asia, NW Africa and E North America.  Common names include common sedge, black sedge or smooth black sedge.  The eastern limit of its range reaches central Siberia, Turkey and probably Caucasus.",
+      "Campylocentrum pachyrrhizum | Campylocentrum pachyrrhizum is a species of orchid.  It is native to the West Indies (Greater Antilles plus Trinidad), southern Mexico (Chiapas, Oaxaca, Yucatán Peninsula), Central America (Guatemala and Panama), northern South America (Venezuela, Ecuador, Brazil, the Guianas), and southern Florida.",
+      "Tillandsia fasciculata | Tillandsia fasciculata, commonly known as the giant airplant or cardinal airplant, is a species of bromeliad that is native to Central America, Mexico, the West Indies, northern South America (Venezuela, Colombia, Suriname, French Guiana, northern Brazil), and the southeastern United States (Georgia, Florida).",
+      "Polygonum patulum | Polygonum patulum, called tree hogweed, is a species of flowering plant in the knotweed family.  It is native to the Mediterranean region, eastern Europe, the Caucasus, Siberia, Central Asia, Mongolia, and the Province of Xinjiang in northwestern China.  It has also become sparingly naturalized in scattered locations in Australia and North America.",
+      "Isatis tinctoria | Isatis tinctoria, also called woad ( ), dyer's woad, or glastum, is a flowering plant in the family Brassicaceae.  It is occasionally known as Asp of Jerusalem.  Woad is also the name of a blue dye produced from the leaves of the plant.  Woad is native to the steppe and desert zones of the Caucasus, Central Asia to eastern Siberia and Western Asia (per Hegi) but is now also found in southeastern and Central Europe and western North America.",
+      "Osmanthus | Osmanthus is a genus of about 30 species of flowering plants in the family Oleaceae.  Most of the species are native to eastern Asia (China, Japan, Indochina, the Himalayas, etc.) with a few species from the Caucasus, New Caledonia, Sumatra, and North America (Mexico, Central America, southeastern United States)."
+    ],
+    "hop2_titles": [
+      "Brunnera",
+      "Carex nigra",
+      "Campylocentrum pachyrrhizum",
+      "Tillandsia fasciculata",
+      "Polygonum patulum",
+      "Isatis tinctoria",
+      "Osmanthus"
+    ],
+    "summary_2": "No. Brunnera is native to Eastern Europe/Northwest Asia, while Codonanthe is native to the New World (Brazil, Guiana, Central America, the West Indies).",
+    "answer": "No",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Brunnera",
+      "Codonanthe"
+    ],
+    "hit_titles_total": [
+      "Brunnera",
+      "Codonanthe"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

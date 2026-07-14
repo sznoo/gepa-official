@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "841819535c35b955321ce1aef3a71a7375b532b5f09f7be36874ad5e19bbe8ba",
+  "created_at": "2026-07-13T17:20:42.924258+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the first-hop summary or current query names a specific episode from Season 1 (for example, 'Social Psychology') but the question asks only for \"the fourth episode\" of Community (no season specified).",
+            "preserve_rule": "Keep producing one compact, search-style second-hop retrieval query derived from the question and the provided first-hop summary; preserve concise phrasing and the agent's output-only interface (the single `query` string).",
+            "change_rule": "Modify the focus of the query to target the fourth episode of another season rather than re-verifying the Season 1 title. Emit a short search query that explicitly targets Season 2 Episode 4, e.g. 'Community season 2 episode 4 title' (one line, search-style, no extra explanation).",
+            "drop_or_avoid_rule": "Do not include any specific episode titles that do not already appear in the visible inputs (avoid naming unseen gold titles). Do not output verification clauses or full sentences; avoid copying long document spans or the final answer.",
+            "output_contract": "Return exactly one compact query string (no surrounding commentary). The query should be 3–7 words, search-style, and aim to retrieve the title of Community season 2 episode 4 (for example: 'Community season 2 episode 4 title').",
+            "why_local_transition": "The first-hop settled on a Season 1 episode while the question is ambiguous about which season's \"fourth episode\" is intended. The smallest useful change is to try a Season 2 Episode 4 lookup so the pipeline can recover a missing alternate-season candidate without altering other behaviors."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "summary_1": "\"Social Psychology\"",
+        "current_output": {
+          "query": "Community (TV series) season 1 episode 4 title \"Social Psychology\" verification"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the first-hop summary or current query names a specific episode from Season 1 (for example, 'Social Psychology') but the question asks only for \\\"the fourth episode\\\" of Community (no season specified).\",\n      \"preserve_rule\": \"Keep producing one compact, search-style second-hop retrieval query derived from the question and the provided first-hop summary; preserve concise phrasing and the agent's output-only interface (the single `query` string).\",\n      \"change_rule\": \"Modify the focus of the query to target the fourth episode of another season rather than re-verifying the Season 1 title. Emit a short search query that explicitly targets Season 2 Episode 4, e.g. 'Community season 2 episode 4 title' (one line, search-style, no extra explanation).\",\n      \"drop_or_avoid_rule\": \"Do not include any specific episode titles that do not already appear in the visible inputs (avoid naming unseen gold titles). Do not output verification clauses or full sentences; avoid copying long document spans or the final answer.\",\n      \"output_contract\": \"Return exactly one compact query string (no surrounding commentary). The query should be 3–7 words, search-style, and aim to retrieve the title of Community season 2 episode 4 (for example: 'Community season 2 episode 4 title').\",\n      \"why_local_transition\": \"The first-hop settled on a Season 1 episode while the question is ambiguous about which season's \\\"fourth episode\\\" is intended. The smallest useful change is to try a Season 2 Episode 4 lookup so the pipeline can recover a missing alternate-season candidate without altering other behaviors.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"summary_1\": \"\\\"Social Psychology\\\"\",\n  \"current_output\": {\n    \"query\": \"Community (TV series) season 1 episode 4 title \\\"Social Psychology\\\" verification\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\": {\"query\": \"Community season 2 episode 4 title\"}, \"rationale\": \"Delta applied: shifted focus from Season 1 to Season 2 per instruction and produced a concise 3–7 word search-style query targeting season 2 episode 4 title.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 63,
+    "row_index": 63,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

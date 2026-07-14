@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ca90ed58f5e0690a02481075b5fe6cd27a02dc2aba40e12b77924b287fbdc249",
+  "created_at": "2026-07-13T17:24:16.663621+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "NFL Street 3 is the third installment of the \"NFL Street\" series, which  American football wide receiver, was an official spokesperson of the game?",
+        "summary_1": "Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.",
+        "summary_2": "Chad Johnson (also known as Chad Ochocinco)",
+        "current_output": "Chad Johnson (also known as Chad Ochocinco)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Chad Johnson (also known as Chad Ochocinco)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Chad Javon Johnson",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, which  American football wide receiver, was an official spokesperson of the game?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"NFL Street 3 is the third installment of the \\\"NFL Street\\\" series, which  American football wide receiver, was an official spokesperson of the game?\",\n  \"summary_1\": \"Chad Johnson (also known as Chad Ochocinco) was the official spokesperson.\",\n  \"summary_2\": \"Chad Johnson (also known as Chad Ochocinco)\",\n  \"current_output\": \"Chad Johnson (also known as Chad Ochocinco)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Chad Johnson (also known as Chad Ochocinco)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Chad Javon Johnson\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when any visible field (question, summary_1, summary_2, or current_output) contains a personal name together with a parenthetical alias or alternate name (for example: \\\"Chad Johnson (also known as Chad Ochocinco)\\\").\",\n    \"preserve_rule\": \"Preserve all name tokens that already appear verbatim in the visible inputs and preserve the agent's existing interface: still produce only the `answer` field and follow the base prompt's minimal-answer requirement.\",\n    \"change_rule\": \"Replace any parenthetical alias or 'also known as' clause with a single compact canonical name string drawn only from tokens present in the visible inputs. Concretely: (a) if a fuller legal name (including a middle name) already appears in any visible input, output that fuller form; (b) otherwise output First Last only (no parentheses, no alias text). When multiple variants are present, prefer the variant that occurs most frequently across summaries; if tied, prefer summary_1. Do not fetch, invent, or add tokens that are not already visible.\",\n    \"drop_or_avoid_rule\": \"Do not include parenthetical aliases, 'also known as' phrases, explanatory qualifiers, or extra punctuation in the answer. Do not introduce new names, middle names, or external facts. Avoid any multi-part answer text—produce a single name string.\",\n    \"output_contract\": \"The assistant must place exactly one minimal name string in the [[ ## answer ## ]] block and nothing else. That name must be assembled only from tokens visible in the provided inputs, formatted as a compact canonical name (see change_rule).\",\n    \"why_local_transition\": \"This small behavioral change removes parenthetical aliases and enforces a single canonical name string derived from visible tokens. It nudges the base prompt away from answering with aliases in parentheses toward a compact formal name form while preserving the minimal-answer contract and without inventing new data.\"\n  },\n  \"rationale\": \"The current output includes an alias in parentheses. The minimal, local edit is to require compact canonical-name formatting (remove parentheses/aliases and prefer the most complete name already present). This is the smallest coherent behavior change that moves the agent's output toward a more canonical single-name form while obeying the rule not to invent unseen tokens or produce extra text. It preserves existing useful behavior (using visible name tokens and the minimal-answer output) and keeps the change narrowly scoped to formatting/selection among visible name variants.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

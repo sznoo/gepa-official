@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "4a16264399c32da7d8bd96825e329704f8af268381456031977ef82f713af998",
+  "created_at": "2026-07-13T20:32:18.379039+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+    "answer": "London, England",
+    "context": {
+      "title": [
+        "Eva Simatou",
+        "Antonia Kinlay",
+        "Estelle Kohler",
+        "Royal Academy of Dramatic Art",
+        "Katherine Kelly (actress)",
+        "Hugh Sinclair (actor)",
+        "Emma Hamilton (film)",
+        "Emma Hamilton (actress)",
+        "Tony Beckley",
+        "Tomahawk Theatre Company"
+      ],
+      "sentences": [
+        [
+          "Eva Simatou is a Greek actress.",
+          " She is a first class graduate of the Advanced Drama School Theatro Technis Karolos Koun (Athens Art Theatre).",
+          " She has also studied in London at City University and holds a BSc in Sociology and Media Studies and an MA in Arts Management & Criticism.",
+          " She was accepted by the Royal Academy of Dramatic Art (RADA) and has successfully completed the Contemporary Drama programme."
+        ],
+        [
+          "She is a graduate of the Royal Academy of Dramatic Art In the West End, Kinlay has played Melody in Michael Longhurst's production of \"Bad Jews\" at the Theatre Royal Haymarket and Penny in \"Three Lions\" at the St James Theatre.",
+          " In 2016 she appeared in \"The Suicide\" at the National Theatre and played the title role in \"Lady Anna: All at Sea\" at the Park Theatre"
+        ],
+        [
+          "Estelle Kohler (born 28 March 1940) is a British theatre and television actress.",
+          " Born in South Africa, Kohler made a name for herself as a Shakespearean actor in England.",
+          " She is a graduate of Royal Academy of Dramatic Art, of which she is an Associate Member, and was nominated a Laurence Olivier Award in 2000 for her performance as Paulina in the Barbican Centre's production of \"The Winter's Tale\" (1999 season).",
+          " She is also remembered for her performance as Hilary Nash (later Main) in the TV series \"The Main Chance\", opposite John Stride.",
+          " Her voice is featured in several audio books by Naxos Audiobooks."
+        ],
+        [
+          "The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.",
+          " It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree."
+        ],
+        [
+          "Katherine Kelly (born 19 November 1979) is an English actress.",
+          " A 2001 graduate of the Royal Academy of Dramatic Art, she played Becky McDonald in the ITV soap opera \"Coronation Street\" from 2006 to 2012, for which she won Best Actress at the 2009 British Soap Awards and Best Serial Drama Performance at the 2012 National Television Awards.",
+          " Since 2013, she has starred as Mae, Lady Loxley in the ITV drama series \"Mr Selfridge\"."
+        ],
+        [
+          "Hugh Sinclair (19 May 1903 – 29 December 1962) was a British actor born in London, England, the son of a clergyman.",
+          " He was educated at Charterhouse School and a graduate of the Royal Academy of Dramatic Art.",
+          " His first marriage was to the actress Valerie Taylor.",
+          " In his book \"The Stage Struck Me!\"",
+          " fellow actor Neville Phillips felt Sinclair always played variations of himself, handsome, debonair, suave and witty and excelled in light comedy.",
+          " By contrast Phillips felt his wife, who Sinclair often appeared opposite, was a dramatic actress of tremendous power with a magnificent voice."
+        ],
+        [
+          "Emma Hamilton is a 1968 historical drama film directed by Christian-Jaque and starring Michèle Mercier, Richard Johnson and John Mills.",
+          " It was partly based on the 1864 novel \"La Sanfelice\" by Alexandre Dumas and depicts the love affair between Emma Hamilton and Horatio Nelson.",
+          " It was a co-production between Italy, West Germany, France and the United States."
+        ],
+        [
+          "Emma Hamilton (born 1984 in Melbourne) is an Australian-born British film, television and theatre actress and graduate of the Royal Academy of Dramatic Art."
+        ],
+        [
+          "Derek Anthony \"Tony\" Beckley (7 October 1929 – 19 April 1980) was an English character actor.",
+          " A graduate of the Royal Academy of Dramatic Art, Beckley went on to carve out a career on film and television throughout the 1960s and 1970s often playing villainous roles, as well as being a veteran of numerous stage productions."
+        ],
+        [
+          "Tomahawk is a theatre company based in Oxford, South East England.",
+          " Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Emma Hamilton (actress)",
+        "Royal Academy of Dramatic Art"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nInstructions (must be followed exactly):\n1) Output format: return a single string in the `summary` field. That string must be a compact, structured summary containing these three labeled sections in this exact order and spelling:  \n   First-hop evidence:  \n   Bridge needed:  \n   Retrieval direction:  \nEach section should be short (each 1–3 short clauses or sentences) and the whole summary should be concise.\n\n2) First-hop evidence: extract and report the concrete fact(s) present in the provided `passages` that are relevant to the question. Name the passage title(s) you used and give a very short quoted phrase or paraphrase (<=15 words) showing the supporting fact. Preserve the concise factual style (e.g., \"Alan Ruck — born July 1, 1956\" or \"Passage: 'Ferris Bueller' cast lists Alan Ruck\"). Do not invent facts.\n\n3) Bridge needed: explicitly state the single overlap, entity, or missing fact that the next retrieval hop must verify to answer the question (for example: the person to check for cast membership; the named tournament page to fetch; the album title whose release year is needed). If the passages already name a candidate title or person, you may cite that candidate here as the bridge to be verified, but do not treat or phrase it as the final answer.\n\n4) Retrieval direction: give ordered, concrete next retrieval actions (1., 2., ...) or one-line query templates the next agent should use to verify the bridge and obtain the missing fact. Examples: fetch the page titled exactly \"<Tournament Title>\" and inspect its 'Venues'/'Schedule' sections; retrieve the film/TV cast list for \"<Work>\"; search \"<Person name>\" birthplace OR \"born in\" site:wikipedia.org. Keep steps explicit and in order. Do not ask for external sources beyond retrieving the named pages or running the stated queries.\n\n5) Prohibitions and constraints: do NOT produce a final answer to the question or assert that the bridge overlap is confirmed. Do NOT invent or infer missing facts. Avoid long verbatim excerpts from sources (keep quotes <=15 words). If a passage supports a short candidate label (a single title or name), do not let that stand alone as the summary — still include the three labeled sections and a retrieval plan. Keep language neutral and factual. \n\n6) When to include additional guidance (examples of minimal behaviors to follow):\n   - If a passage names a tournament/work that appears to be the bridge, put that exact title in 'Bridge needed:' and instruct fetching that page and which sections (Venues/Matches/Schedule/Cast) to check. \n   - If the passages identify a person (e.g., an assassin or credited actor) as the bridge, name that person in 'Bridge needed:' and provide a short retrieval query pattern (e.g., '\"<Name>\" birthplace site:wikipedia.org' or 'fetch \"<Name>\" biography').\n   - If a passage lists some but not all of a question's film credits for an actor, state which film titles from the question are confirmed in 'First-hop evidence:' and which are unverified in 'Bridge needed:', then give queries to fetch the missing film/actor pages.\n\n7) Preserve concise, passage-grounded evidence extraction and always make the next-hop actionable. The `summary` must not change the input/output field names.\n\nReturn only the `summary` string following the rules above.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the field `query`.\n\nRequirements for the `query` output:\n- Return exactly one compact retrieval query string as the value of `query`. Do not output anything else (no explanations, no answers, no extra fields).\n- Keep the query short and focused (one concise line). Avoid numbered lists, imperative prefixes (e.g., \"Fetch:\"), multi-step plans, extraction checklists, or long procedural text.\n- Never emit multiple separate queries or parallel site: filters in place of a single focused query. Do not include downstream instructions to the retriever.\n\nHow to construct the single compact query (choose the rule that best fits the provided inputs):\n1) Title-first verification (when summary_1 names a specific page title):\n   - Begin the query with the page title tokens taken from summary_1, then append a very short natural-language verification phrase asking for the specific fact to confirm. Keep the whole line compact. Example shape: <Page Title> what is this commonly called in the United Kingdom\n2) Film + actor / birth-date check (when summary_1 or question indicates a candidate actor from a film):\n   - Put the film title and the single candidate actor name from summary_1 together, then append a short confirmatory request: confirm they starred in the film and give birth date. Example shape: <Film Title> <Actor Name> confirm starred in the film and birth date\n3) Person occupations / credits (when summary_1 requests occupations or filmography for a named person):\n   - Make a concise keyword-style query combining the person name, occupation/filmography keywords and any specific titles from summary_1. Example shape: <Person Name> filmography occupations \"Title A\" \"Title B\"\n4) Wikipedia-focused exceptions (only if summary_1 or the question explicitly indicates the need for Wikipedia pages, e.g., contains 'HTO', 'WW', or explicitly asks for Wikipedia biography/infobox evidence):\n   - Include site:wikipedia.org in the single compact query and add tight terms such as creator OR designer OR biography OR \"release date\" as needed. Still keep one compact query line.\n\nGeneral constraints (always apply):\n- Prefer using tokens that already appear in summary_1 as anchors (page titles, film titles, person names). Do not invent new entity names.\n- Do not include the final answer, candidate answers, or verbatim page content in the query.\n- Avoid broad or noisy terms, multi-line/site-split queries, and retrieval operator clutter. Keep wording minimal and unambiguous so a retriever can fetch the canonical page(s).",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nKeep the native I/O exactly: return only the single `summary` string field. Work only from facts present in `question`, `context`, and `passages`. Do not add information that is not present in those inputs.\n\nGeneral integration rule (default): If the `context` asserts a factual claim and one or more `passages` corroborate that claim, the `summary` must (a) restate the claim succinctly, (b) name at least one supporting passage by its title, and (c) include at most one very short confirming fragment or brief quoted clause taken directly from that passage (no long verbatim spans). Keep wording concise (usually 1–3 short sentences) and preserve factual tokens exactly as they appear in the inputs when reporting names, numbers, or titles.\n\nAdditional conditional rules (apply only when their triggers are met):\n- Bridge/second-hop corroboration + retention: When the `context` asserts a first-hop claim that should be verified by a second-hop passage (for example: the context claims an actor appeared in Film A and Film B and one of the `passages` explicitly corroborates presence in Film B), produce an integrated-evidence summary of 1–3 short sentences that (1) briefly restates the first-hop claim from `context`, (2) explicitly names the corroborating second-hop passage title (either inline or in a simple parenthetical containing only the title) and may include at most one very short confirming fragment from that passage, and (3) append the short retention sentence: \"Retain these facts for the final-answer agent.\" Do not invent facts; remain concise.\n\n- Role-confirmation (game/subject passage + biographical passage present): When the question asks which person performed a role (e.g., \"which managing editor ... calling the action\") and the inputs include (A) a game/subject passage listing commentators/participants and (B) a biographical passage giving a candidate's occupation/role, override the terse entity-label rule and produce a role-confirmation style `summary` of 1–3 short sentences: (1) one short clause restating the claim to confirm; (2) two micro-evidence clauses, each a short paraphrase that names the supporting passage title in parentheses (one for the game/subject passage, one for the biographical passage); (3) one integrated sentence linking the person's full name and the occupation/role from the passages to the asserted role (that they called the action). If the pipeline needs the fact preserved for later, append: \"Retain this fact for final-answer agent.\" Use at most one very short quoted fragment if helpful; do not add information not present in the inputs.\n\n- Two-candidate biographical integration: When the question names two candidate people and `passages` include explicit supporting biographical passages for both candidates (both passage titles for the two names appear in `passages`), override the terse-label output and produce 1–2 short sentences that integrate both hops: give one brief clause/sentence paraphrasing each person with a parenthetical passage title citation, optionally include at most one very short quoted fragment (≤ ~6 words) to confirm a notable item (e.g., a film title), and finish with a concise link identifying which candidate matches the phrasing of the question. If only one candidate is supported, fall back to the canonical-name label rule.\n\n- Temporal \"When did\" + genre-change diagnostics: If the question begins with a temporal ask (e.g., \"When did...\") and the `passages` include an explicit genre label token (e.g., \"rap rock\") plus multiple candidate dates or passages describing a change in sound, produce a compact diagnostic `summary` (≈1–3 short sentences) that (a) restates the genre claim and cites at least one passage title, (b) reports formation year(s) with their sourcing and briefly note any discrepancy, (c) reports the debut-album title and release date with its passage title, and (d) mentions any later passage documenting a shift/expansion in sound with its title. End with one short sentence naming the remaining evidentiary gap needed to answer the question precisely (for example: \"The earliest explicit attribution of 'rap rock' is not given here; check formation year(s), the debut release date, and contemporary press circa 1997–1999.\"). Do not resolve the gap or invent facts.\n\n- U.S. states entity-label exception: If the question asks which U.S. state(s) (phrases like \"which US states\", \"which U.S. states\", or \"which states\") and the provided `passages` explicitly list state names, output only the canonical state name(s) exactly as they appear in the sources, comma-separated with no surrounding sentence framing or trailing punctuation. Example: \"Virginia, West Virginia\". Do not include passage titles, explanatory clauses, or retention notes in this case.\n\n- Prefer explicit-support single-source attribution: When `context` asserts a claim and at least one `passage` explicitly states that same claim (i.e., there is an explicit-support passage alongside other metadata-only passages), prefer a single concise sentence that attributes the claim to that explicit-support passage. Name the explicit-support passage title (either inline or in a simple parenthetical containing only the title) and avoid appending metadata-only passages unless necessary to resolve ambiguity required downstream.\n\nGrounding, quoting, and conservatism: Always cite supporting passage titles when they corroborate a `context` claim. Include at most one very short quoted fragment or brief confirming clause from a cited passage; do not include long verbatim quotations. Preserve exact tokens from the inputs when reporting names, numbers, titles, or aliases. If the passages resolve identity ambiguity, present the resolved identification directly; if identity is unresolved, explicitly note the ambiguity and what evidence is missing.\n\nFormatting and hard prohibitions:\n- Do not invent facts or expand beyond the provided inputs.\n- Do not output fields other than `summary`.\n- Do not begin the `summary` with a single-word answer token such as 'Yes.' or 'No.'.\n- Do not issue second-person commands, retrieval/fetch/verify instructions, or direct the pipeline/user to consult external pages. If the text you would generate would otherwise include such an instruction, instead state declaratively that the supplied `passages` do not corroborate the claim (e.g., \"The supplied passages do not corroborate the founding year.\").\n- Avoid parenthetical evidence blocks that combine a passage title and a quoted fragment like '(PassageTitle — \"...\")'; instead name the passage title inline or use a simple parenthetical containing only the title, and place any very short quoted fragment as a brief confirming clause outside such compound parentheses.\n\nKeep summaries concise (usually 1–3 short sentences) and return only the single `summary` string field.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\nMaintain all base behaviors and the numbered rules 1–7 in the original specification (general minimal-answer rule; agreement extraction; patterned question triggers; nationality questions; two-performer composition rule; narrow assumed referent; formatting prohibitions; and the additional A–G adjustments). Apply the following small, ordered set of additional, narrowly scoped behaviors (these are supplemental to and constrained by the base rules; apply them only when their listed triggers match):\n\nOrder-of-checks and special-case overrides (apply in this order):\n- Step 0 (explicit retrieval/bridge signal): If either visible summary contains an explicit retrieval/bridge instruction or request (signals such as the phrases 'Bridge needed', 'Fetch', 'Fetch the page', 'retrieval', an enumerated retrieval plan, or similarly explicit language asking for further page fetches or bridging), do not emit a definitive factual minimal answer even if the summaries otherwise appear to agree. Instead emit a concise permission/clarifying yes/no request (one short question sentence asking to perform the requested retrieval, e.g., 'Shall I fetch the requested pages to confirm?') as the sole content of [[ ## answer ## ]]. Do not include any explanatory text or additional tokens.\n\n- Step 1 (exact agreement on a short named-entity): If summary_1 and summary_2 present the same short named-entity string (case-insensitive match, 1–5 words) that unambiguously answers the question per the base rules, do not produce a clarification or a lookup question. Emit that agreed minimal token/phrase directly (trim surrounding punctuation/whitespace and preserve internal capitalization) as the only content of [[ ## answer ## ]]. This enforces the base rule that agreement yields a direct minimal answer.\n\n- Step 2 (narrow internal-knowledge allowances): In these strictly constrained, high-confidence circumstances you may consult internal background knowledge only as specified below; otherwise continue to rely solely on the visible summaries and fall back to clarification when uncertain.\n  - Nationality/demonym override: Trigger: the question explicitly asks for a nationality/demonym and the visible summaries unambiguously identify a single named person as the referent (a single named person appears in the summaries and there is no ambiguity about who is being asked about). Behavior: if you have high internal confidence in that person's widely known nationality/demonym, emit the single demonym token/short phrase as the minimal answer inside [[ ## answer ## ]]. If you do NOT have high internal confidence, emit a concise clarification question (as the minimal answer) instead. Never append qualifiers, parentheticals, or sources.\n  - Shared-illustrator override: Trigger: summary_1 lists one or more specific book titles (multiple candidate titles) and summary_2 indicates no illustrator credits in the supplied passages. Behavior: if the listed candidate books are canonical entries from the same series and you have high internal confidence that a single credited illustrator is consistently credited for all those specific titles, emit that illustrator's name as the sole minimal answer inside [[ ## answer ## ]]. If you lack high confidence or the titles have differing credited illustrators, do not apply this override and instead emit a brief clarification question.\n\n- Step 3 (demonyms comparison for 'Are X and Y from the same country?'): Trigger: the question matches the pattern 'Are X and Y from the same country?' and both summaries contain one demonym token for each named person. Behavior: if both demonym tokens are present and they differ under case-insensitive comparison, emit a single-word negation token (e.g., No) as the entire content of [[ ## answer ## ]]. If they are identical (case-insensitive), emit that common demonym verbatim per the nationality rule. If either demonym is missing, follow the base prompt behavior (ask a concise clarification or apply other base rules).\n\n- Step 4 (strip leading causal 'for '): Trigger: if the minimal answer you would emit begins with the leading causal preposition 'for ' followed by a short phrase that appears verbatim in at least one visible summary, remove the leading 'for ' and emit only the remainder as the minimal answer inside [[ ## answer ## ]]. Apply this rewrite only at final formatting.\n\nAdditional constraints and safeguards (always apply):\n- Preserve the base prompt's strict output contract: the [[ ## answer ## ]] block must contain only the minimal answer string (or a brief clarification question when required), with no added punctuation, explanatory text, provenance, or surrounding characters.\n- Do not invent facts beyond the narrowly allowed internal-knowledge overrides; when in doubt about high internal confidence for an allowed override, emit a concise clarification question instead of guessing.\n- Do not append qualifiers, parentheticals, nationality tags, or type labels to an extracted minimal substring; emit exactly the substring normalized only by trimming surrounding punctuation/whitespace (subject to the parenthetical handling rules A–C from the base prompt).\n- When a visible summary explicitly contains a short creator claim (phrases like 'created by' or 'series creator' immediately followed by a short name) and there is no contradictory creator in the other summary, treat that claim as sufficient to extract and emit the short name as the minimal answer (per the base prompt's explicit-creator delta).\n- The explicit-retrieval/bridge check (Step 0) takes precedence over the 'emit-agreement' rule: if a summary requests retrieval/bridging, ask permission to fetch rather than returning a factual minimal answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by these rules (or a short clarification/permission question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "23ae10eed4fe",
+    "rerun_from": null,
+    "question": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+    "gold_answer": "London, England",
+    "context": {
+      "title": [
+        "Eva Simatou",
+        "Antonia Kinlay",
+        "Estelle Kohler",
+        "Royal Academy of Dramatic Art",
+        "Katherine Kelly (actress)",
+        "Hugh Sinclair (actor)",
+        "Emma Hamilton (film)",
+        "Emma Hamilton (actress)",
+        "Tony Beckley",
+        "Tomahawk Theatre Company"
+      ],
+      "sentences": [
+        [
+          "Eva Simatou is a Greek actress.",
+          " She is a first class graduate of the Advanced Drama School Theatro Technis Karolos Koun (Athens Art Theatre).",
+          " She has also studied in London at City University and holds a BSc in Sociology and Media Studies and an MA in Arts Management & Criticism.",
+          " She was accepted by the Royal Academy of Dramatic Art (RADA) and has successfully completed the Contemporary Drama programme."
+        ],
+        [
+          "She is a graduate of the Royal Academy of Dramatic Art In the West End, Kinlay has played Melody in Michael Longhurst's production of \"Bad Jews\" at the Theatre Royal Haymarket and Penny in \"Three Lions\" at the St James Theatre.",
+          " In 2016 she appeared in \"The Suicide\" at the National Theatre and played the title role in \"Lady Anna: All at Sea\" at the Park Theatre"
+        ],
+        [
+          "Estelle Kohler (born 28 March 1940) is a British theatre and television actress.",
+          " Born in South Africa, Kohler made a name for herself as a Shakespearean actor in England.",
+          " She is a graduate of Royal Academy of Dramatic Art, of which she is an Associate Member, and was nominated a Laurence Olivier Award in 2000 for her performance as Paulina in the Barbican Centre's production of \"The Winter's Tale\" (1999 season).",
+          " She is also remembered for her performance as Hilary Nash (later Main) in the TV series \"The Main Chance\", opposite John Stride.",
+          " Her voice is featured in several audio books by Naxos Audiobooks."
+        ],
+        [
+          "The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.",
+          " It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree."
+        ],
+        [
+          "Katherine Kelly (born 19 November 1979) is an English actress.",
+          " A 2001 graduate of the Royal Academy of Dramatic Art, she played Becky McDonald in the ITV soap opera \"Coronation Street\" from 2006 to 2012, for which she won Best Actress at the 2009 British Soap Awards and Best Serial Drama Performance at the 2012 National Television Awards.",
+          " Since 2013, she has starred as Mae, Lady Loxley in the ITV drama series \"Mr Selfridge\"."
+        ],
+        [
+          "Hugh Sinclair (19 May 1903 – 29 December 1962) was a British actor born in London, England, the son of a clergyman.",
+          " He was educated at Charterhouse School and a graduate of the Royal Academy of Dramatic Art.",
+          " His first marriage was to the actress Valerie Taylor.",
+          " In his book \"The Stage Struck Me!\"",
+          " fellow actor Neville Phillips felt Sinclair always played variations of himself, handsome, debonair, suave and witty and excelled in light comedy.",
+          " By contrast Phillips felt his wife, who Sinclair often appeared opposite, was a dramatic actress of tremendous power with a magnificent voice."
+        ],
+        [
+          "Emma Hamilton is a 1968 historical drama film directed by Christian-Jaque and starring Michèle Mercier, Richard Johnson and John Mills.",
+          " It was partly based on the 1864 novel \"La Sanfelice\" by Alexandre Dumas and depicts the love affair between Emma Hamilton and Horatio Nelson.",
+          " It was a co-production between Italy, West Germany, France and the United States."
+        ],
+        [
+          "Emma Hamilton (born 1984 in Melbourne) is an Australian-born British film, television and theatre actress and graduate of the Royal Academy of Dramatic Art."
+        ],
+        [
+          "Derek Anthony \"Tony\" Beckley (7 October 1929 – 19 April 1980) was an English character actor.",
+          " A graduate of the Royal Academy of Dramatic Art, Beckley went on to carve out a career on film and television throughout the 1960s and 1970s often playing villainous roles, as well as being a veteran of numerous stage productions."
+        ],
+        [
+          "Tomahawk is a theatre company based in Oxford, South East England.",
+          " Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Emma Hamilton (actress)",
+        "Royal Academy of Dramatic Art"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Emma Hamilton (actress)",
+      "Royal Academy of Dramatic Art"
+    ],
+    "hop1_query": "Emma Hamilton is an Austarlian-born actress and graduate of the Royal Academy of Dramatic Art which is based in what city?",
+    "hop1_docs": [
+      "Emma Hamilton (actress) | Emma Hamilton (born 1984 in Melbourne) is an Australian-born British film, television and theatre actress and graduate of the Royal Academy of Dramatic Art.",
+      "Barbara Ewing | Barbara Ewing (born 1944) is a UK-based actress, playwright and novelist.  Born in New Zealand, she graduated from Victoria University of Wellington with a BA in English and Maori before moving to Britain in 1965 to train as an actress at RADA (the Royal Academy of Dramatic Art) in London.",
+      "Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).",
+      "Victoria Hamilton | Victoria Hamilton (born 1971) is an English actress.  After training at the London Academy of Music and Dramatic Art, Hamilton began her career in classical theatre, appearing in productions with the Royal Shakespeare Company and the National Theatre.  In 2002, she appeared in the London stage play \"A Day in the Death of Joe Egg\" alongside Clive Owen and later Eddie Izzard.",
+      "Lucy Davenport | Lucy Davenport is a British actress who graduated at the Royal Academy of Dramatic Art in 1999.",
+      "Kirsty Besterman | Kirsty Besterman is a British actress of the stage and screen.  She trained at the Royal Academy of Dramatic Art graduating in 2002.",
+      "Hannah Arterton | Hannah Jane Arterton (born 26 January 1989) is an English actress.  She was born in Gravesend, Kent.  Arterton attended Gravesend Grammar School for Girls and graduated from the Royal Academy of Dramatic Art in 2011.  Her feature film debut was the romantic musical \"Walking on Sunshine\" (2014).  She is the younger sister of actress Gemma Arterton."
+    ],
+    "hop1_titles": [
+      "Emma Hamilton (actress)",
+      "Barbara Ewing",
+      "Barbara Bryne",
+      "Victoria Hamilton",
+      "Lucy Davenport",
+      "Kirsty Besterman",
+      "Hannah Arterton"
+    ],
+    "summary_1": "First-hop evidence:\n- Emma Hamilton (actress) — \"graduate of the Royal Academy of Dramatic Art.\" (Passage: Emma Hamilton (actress))\n- Barbara Ewing — RADA is described \"in London.\" (Passage: Barbara Ewing)\n\nBridge needed:\n- Royal Academy of Dramatic Art — verify the city where the academy is based (candidate: London).\n\nRetrieval direction:\n1. Fetch the Wikipedia page titled \"Royal Academy of Dramatic Art\" and inspect the lead and infobox for \"Location\"/\"City\".\n2. If needed, fetch the RADA official site \"About\"/\"Contact\" page to confirm the academy's base city.",
+    "hop2_query": "Royal Academy of Dramatic Art what city is it based in",
+    "hop2_docs": [
+      "Tomahawk Theatre Company | Tomahawk is a theatre company based in Oxford, South East England.  Founded in 2005 by Alex Nicholls and Oliver Baird among others, experienced personnel work alongside young actors, directors and technicians, many of whom have gone on to train in London at the Royal Academy of Dramatic Art (RADA), London Academy of Music and Dramatic Art (LAMDA) and Mountview Academy of Theatre Arts.",
+      "Royal Academy of Dramatic Art | The Royal Academy of Dramatic Art (RADA) is a drama school in London, England that provides training for film, television and theatre.  It is one of the oldest and most prestigious drama schools in the United Kingdom, founded in 1904 by Herbert Beerbohm Tree.",
+      "Barbara Bryne | Barbara Bryne (born 1 April 1929) is a British-born U.S.-based stage, film and television actress.  Onstage she has appeared in comedy, dramatic and musical productions.  The London-born actress studied at the Royal Academy of Dramatic Arts (RADA).",
+      "Maastricht Academy of Dramatic Arts | The Maastricht Academy of Dramatic Arts (Dutch: \"Toneelacademie Maastricht\") is a college of dramatic arts located in the city of Maastricht in the Netherlands.  It is part of the Zuyd University (Hogeschool Zuyd).  The school is housed in a former Protestant orphanage in the historic Jekerkwartier in Maastricht.",
+      "Stockholm Academy of Dramatic Arts | On January 1, 2011 the two academies Dramatiska institutet (the Dramatic Institute/University College of Film, Radio, Television and Theatre) and Teaterhögskolan i Stockholm (Swedish National Academy of Dramatic Arts/Stockholm Academy of Dramatic Arts) founded a new academy: Stockholms dramatiska högskola, Stockholm Academy of Dramatic Arts (SADA).",
+      "Academy of Fine Arts, University of Zagreb | The Academy of Fine Arts Zagreb (Croatian: \"Akademija likovnih umjetnosti u Zagrebu\" or ALU) is a Croatian art school based in Zagreb.  It is one of the three art academies affiliated with the University of Zagreb, along with the Academy of Dramatic Art (ADU) and the Academy of Music (MUZA).",
+      "Academy of Music, University of Zagreb | The Academy of Music (Croatian: \"Muzička akademija\" or MUZA) is a Croatian music school based in Zagreb.  It is one of the three art academies affiliated with the University of Zagreb, along with the Academy of Dramatic Art and the Academy of Fine Arts."
+    ],
+    "hop2_titles": [
+      "Tomahawk Theatre Company",
+      "Royal Academy of Dramatic Art",
+      "Barbara Bryne",
+      "Maastricht Academy of Dramatic Arts",
+      "Stockholm Academy of Dramatic Arts",
+      "Academy of Fine Arts, University of Zagreb",
+      "Academy of Music, University of Zagreb"
+    ],
+    "summary_2": "Emma Hamilton is a graduate of the Royal Academy of Dramatic Art; RADA is based in London (Royal Academy of Dramatic Art), \"London, England\".",
+    "answer": "Shall I fetch the requested pages to confirm?",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Royal Academy of Dramatic Art"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Emma Hamilton (actress)"
+    ],
+    "hit_titles_total": [
+      "Emma Hamilton (actress)",
+      "Royal Academy of Dramatic Art"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "d268f7157001e4935acbe1594ff34ab15ac50574ed633c5324c6f824fc24b8ef",
+  "created_at": "2026-07-13T20:14:11.910692+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "summary_1": "First-hop evidence: Passage [7] — \"Susan Brown (English actress) ... best known for role as Septa Mordane\" (Game of Thrones).\n\nBridge needed: Confirm whether Susan Brown appeared in the TV drama \"The Moorside\" (i.e., verify Susan Brown is billed in The Moorside), or identify which actress is credited in both works.\n\nRetrieval direction:\n1. Fetch the page titled \"Susan Brown (English actress)\" and inspect the Filmography/Television credits for any credit titled \"The Moorside\".\n2. Fetch the page titled \"The Moorside\" (TV drama) and inspect the Cast section for \"Susan Brown\" and for actors also credited in Game of Thrones. \n3. If the Wikipedia pages are ambiguous, run site:wikipedia.org search: \"Susan Brown The Moorside\" and \"The Moorside cast\" and check the cited cast lists.",
+        "current_output": {
+          "query": "Susan Brown (English actress) Wikipedia\nThe Moorside (TV drama) Wikipedia cast\nsite:wikipedia.org \"Susan Brown\" \"The Moorside\"\nsite:wikipedia.org \"The Moorside\" cast\nsite:wikipedia.org \"The Moorside\" Sheridan Smith cast"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Gemma Whelan The Moorside cast Game of Thrones"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Gemma Whelan The Moorside What actress was in Game of Thrones and The Moorside?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "The Moorside",
+          "Gemma Whelan",
+          "Moorside railway station",
+          "Moorside railway station, Cumbria",
+          "Moorside, Leeds",
+          "Moorside High School, Werrington",
+          "Moorside"
+        ],
+        "retrieved_doc_snippets": [
+          "The Moorside | The Moorside is a 2017 two-part British television drama. Written by Neil McKay and directed by Paul Whittington, it stars Sheridan Smith, Gemma Whelan, Sian Brooke and Siobhan Finneran and was broadcast on BBC One in two one-hour episodes in February 2017. The drama is based on the 2008 disappearance of 9-year-old Shannon Matthews and the successful search for her by police and volunteers in Dewsbury, West Yorkshire, along with the revelation of mother Karen's involvement in Shan ...[truncated]",
+          "Gemma Whelan | Gemma Elizabeth Whelan (born 23 April 1981) is an English actress and comedian, known for playing Yara Greyjoy in the HBO fantasy-drama series \"Game of Thrones\".",
+          "Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England. The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.",
+          "Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.",
+          "Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England. Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.",
+          "Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire. It is one of the main feeder schools for Moorlands Sixth Form College. Government Performance Tables have placed Moorside High in the top 5% of schools nationally.",
+          "Moorside | Moorside may refer to any of these places in England:"
+        ],
+        "summary_2": "Gemma Whelan",
+        "answer": "Do you mean Gemma Whelan or Susan Brown?",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Gemma Whelan",
+          "The Moorside"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Gemma Whelan",
+          "Gemma Whelan The Moorside What actress was in Game of Thrones and The Moorside?"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"summary_1\": \"First-hop evidence: Passage [7] — \\\"Susan Brown (English actress) ... best known for role as Septa Mordane\\\" (Game of Thrones).\\n\\nBridge needed: Confirm whether Susan Brown appeared in the TV drama \\\"The Moorside\\\" (i.e., verify Susan Brown is billed in The Moorside), or identify which actress is credited in both works.\\n\\nRetrieval direction:\\n1. Fetch the page titled \\\"Susan Brown (English actress)\\\" and inspect the Filmography/Television credits for any credit titled \\\"The Moorside\\\".\\n2. Fetch the page titled \\\"The Moorside\\\" (TV drama) and inspect the Cast section for \\\"Susan Brown\\\" and for actors also credited in Game of Thrones. \\n3. If the Wikipedia pages are ambiguous, run site:wikipedia.org search: \\\"Susan Brown The Moorside\\\" and \\\"The Moorside cast\\\" and check the cited cast lists.\",\n  \"current_output\": {\n    \"query\": \"Susan Brown (English actress) Wikipedia\\nThe Moorside (TV drama) Wikipedia cast\\nsite:wikipedia.org \\\"Susan Brown\\\" \\\"The Moorside\\\"\\nsite:wikipedia.org \\\"The Moorside\\\" cast\\nsite:wikipedia.org \\\"The Moorside\\\" Sheridan Smith cast\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Gemma Whelan The Moorside cast Game of Thrones\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Gemma Whelan The Moorside What actress was in Game of Thrones and The Moorside?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"The Moorside\",\n    \"Gemma Whelan\",\n    \"Moorside railway station\",\n    \"Moorside railway station, Cumbria\",\n    \"Moorside, Leeds\",\n    \"Moorside High School, Werrington\",\n    \"Moorside\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"The Moorside | The Moorside is a 2017 two-part British television drama. Written by Neil McKay and directed by Paul Whittington, it stars Sheridan Smith, Gemma Whelan, Sian Brooke and Siobhan Finneran and was broadcast on BBC One in two one-hour episodes in February 2017. The drama is based on the 2008 disappearance of 9-year-old Shannon Matthews and the successful search for her by police and volunteers in Dewsbury, West Yorkshire, along with the revelation of mother Karen's involvement in Shan ...[truncated]\",\n    \"Gemma Whelan | Gemma Elizabeth Whelan (born 23 April 1981) is an English actress and comedian, known for playing Yara Greyjoy in the HBO fantasy-drama series \\\"Game of Thrones\\\".\",\n    \"Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England. The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.\",\n    \"Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.\",\n    \"Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England. Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.\",\n    \"Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire. It is one of the main feeder schools for Moorlands Sixth Form College. Government Performance Tables have placed Moorside High in the top 5% of schools nationally.\",\n    \"Moorside | Moorside may refer to any of these places in England:\"\n  ],\n  \"summary_2\": \"Gemma Whelan\",\n  \"answer\": \"Do you mean Gemma Whelan or Susan Brown?\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Gemma Whelan\",\n    \"The Moorside\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Gemma Whelan\",\n    \"Gemma Whelan The Moorside What actress was in Game of Thrones and The Moorside?\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 indicates a missing bridge between two works (e.g., contains 'Bridge needed' or requests verification whether an actor from one work appears in another).\",\n    \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query and retain the preference for authoritative pages (Wikipedia/title pages and cast sections) as the next retrieval target.\",\n    \"change_rule\": \"Instead of emitting a multi-term or name-heavy query, emit a single-line intersection-style query that explicitly names both works from the inputs and a cast/cast-list keyword, optionally scoped to wikipedia.org. Construct the query from the question/work titles available in the inputs (do not invent or inject other actor names). Example form: '\\\"Game of Thrones\\\" \\\"The Moorside\\\" cast site:wikipedia.org' but adapt to the exact titles present in the input.\",\n    \"drop_or_avoid_rule\": \"Do not include candidate performer names that do not already appear in the visible agent inputs; avoid concatenating multiple separate queries or adding verbose natural-language question text; do not produce or hint at the answer. Avoid long literal spans that are not present in the visible inputs.\",\n    \"output_contract\": \"Return a single compact search query string (one line) to place in `query`. The string must reference both work titles from the inputs and a cast/cast-list term, optionally include site:wikipedia.org, and must not contain an answer or extra commentary.\",\n    \"why_local_transition\": \"This small change focuses the second-hop retrieval on pages that list casts for both works, directly targeting the missing bridge (shared performer) while preserving the agent's existing behavior of preferring Wikipedia/title cast sections.\"\n  },\n  \"rationale\": \"The agent's current query combined multiple terms and included a candidate name that caused literal leakage. The minimal safe fix is to constrain the query shape so it searches for the intersection of the two works' cast lists (e.g., both titles + 'cast' scoped to Wikipedia). This preserves the original intent (one compact second-hop query, Wikipedia preference) but prevents leaking or inventing performer names not present in the visible inputs, avoids verbose question text or multiple queries, and makes the retrieval more likely to return the cast lists needed to confirm the bridge.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 120,
+    "row_index": 120,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 1
+  }
+}

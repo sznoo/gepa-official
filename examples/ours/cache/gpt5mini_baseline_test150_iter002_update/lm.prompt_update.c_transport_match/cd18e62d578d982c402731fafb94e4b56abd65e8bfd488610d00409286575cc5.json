@@ -1,0 +1,486 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "cd18e62d578d982c402731fafb94e4b56abd65e8bfd488610d00409286575cc5",
+  "created_at": "2026-07-13T19:06:48.602696+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 72,
+        "stable_id": "72",
+        "question": "Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?",
+        "summary_1": "Broad City",
+        "hop2_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+        "summary_2": "Broad City",
+        "answer": "Broad City",
+        "gold_support_titles": [
+          "Lucia Aniello",
+          "Broad City"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 139,
+          "w_stable_id": "139",
+          "agent": "summary1",
+          "w_question": "When was the star of You Can Count on Me who also stared in \"Ferris Bueller's Day Off\" born?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "July 1, 1956",
+            "score": 0.0,
+            "generated_query": "\"Alan Ruck birth date July 1, 1956 You Can Count on Me Ferris Bueller's Day Off\"",
+            "retrieved_titles": [
+              "Ferris Bueller's Day Off",
+              "Alan Ruck",
+              "Ferris Bueller (TV series)",
+              "Parker Lewis Can't Lose",
+              "Save Ferris",
+              "Stephanie Blake",
+              "You Can Count On Me (disambiguation)"
+            ],
+            "summary_2": "July 1, 1956",
+            "answer": "July 1, 1956",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Matthew Broderick",
+              "You Can Count On Me"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: the Ferris Bueller's Day Off page (retrieved) lists the film's stars including Matthew Broderick, Mia Sara, and Alan Ruck. The Alan Ruck page in the first-hop results gives his birth date as July 1, 1956 (this is first-hop evidence only). Bridge needed: the actor who appears in both Ferris Bueller's Day Off and You Can Count on Me (i.e., the overlapping cast member). Retrieval direction for next hop: 1) fetch the You Can Count on Me page to obtain its cast list and identify which Ferris Bueller actor appears there; 2) fetch that identified actor's biography page (e.g., the Matthew Broderick page is already listed as a retrieval target) to obtain the actor's birth date. Do not assume which Ferris Bueller actor is the overlap without checking the You Can Count on Me cast list.",
+            "score": 1.0,
+            "generated_query": "1) Retrieve the You Can Count on Me (2000 film) page (cast section) and return the full credited cast list.\n2) Retrieve the biography pages for Matthew Broderick, Mia Sara, and Alan Ruck and return each actor's birth date (date and place of birth as listed). \n3) Indicate which of those three actors (if any) appears in the You Can Count on Me cast and provide that actor's birth date.",
+            "retrieved_titles": [
+              "You Can Count On Me",
+              "You Can Count On Me (disambiguation)",
+              "List of Fawlty Towers cast members",
+              "The Register of the Victoria Cross",
+              "Richard Carlyle",
+              "List of Colombian writers",
+              "List of Highlander cast members"
+            ],
+            "summary_2": "Matthew Broderick — the actor who appears in both You Can Count on Me and Ferris Bueller's Day Off — was born on March 21, 1962.",
+            "answer": "March 21, 1962",
+            "missing_recovery_rate": 0.5,
+            "recovered_missing_titles": [
+              "You Can Count On Me"
+            ],
+            "missing_titles_after_hop2": [
+              "Matthew Broderick"
+            ]
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when agent_role == 'summary1' and the question links a person across two works (e.g., asks for a star who appears in both A and B) and the visible passages include a film page with a cast list and at least one actor biography.",
+                "preserve_rule": "Keep extracting and reporting concise factual first-hop facts already present in the passages (e.g., 'Alan Ruck — born July 1, 1956') and retain the current short factual style for such items.",
+                "change_rule": "Instead of returning a single final fact, produce a compact, structured summary with three labeled parts: (1) 'First-hop evidence:' name the retrieved passage(s) and the concrete facts they provide (very short phrases); (2) 'Bridge needed:' explicitly state the overlap that must be checked in the next hop (phrase it as a check to identify which Ferris Bueller cast member also appears in You Can Count on Me, without asserting which one); (3) 'Retrieval direction:' list ordered next retrieval steps (e.g., fetch the You Can Count on Me cast list; compare it to the Ferris Bueller cast; then fetch the matching actor's biography to obtain birth date). Keep each part concise (1–3 short clauses).",
+                "drop_or_avoid_rule": "Do not produce a final birth date or assert which actor is the overlap here; do not assume overlaps without checking the You Can Count on Me cast; avoid long verbatim spans from non-visible pages and avoid inventing facts.",
+                "output_contract": "Return the usual 'summary' output string. That string must include the three labeled short sections exactly: 'First-hop evidence:', 'Bridge needed:', and 'Retrieval direction:'. Each section should briefly list the relevant passage names/facts and the explicit next-hop retrieval actions (ordered). Do not include a final answer or unverified conclusions.",
+                "why_local_transition": "The current behavior returned a lone birth date from a first-hop actor page. For a multi-hop pipeline the summary must instead expose which overlap to check and give explicit, ordered retrieval steps so the next agent can find and verify the correct overlapping actor and then retrieve that actor's biography for the birth date."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Broad City",
+            "score": 1.0,
+            "generated_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+            "retrieved_titles": [
+              "Abbi Jacobson",
+              "Ilana Glazer",
+              "Broad City",
+              "List of Broad City episodes",
+              "Time Traveling Bong",
+              "Rough Night",
+              "Gotham Independent Film Awards 2015"
+            ],
+            "summary_2": "Broad City",
+            "answer": "Broad City",
+            "missing_recovery_rate": null,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 31,
+          "w_stable_id": "31",
+          "agent": "summary1",
+          "w_question": "How many venues are involved in the main tournament which is part of the English Cricket Team's 2017-2018 schedule?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "The passages do not state how many venues are involved; the answer cannot be determined from the provided information.",
+            "score": 0.0,
+            "generated_query": "How many venues were used for the main tournament in the England cricket team's 2017–18 schedule? Please provide the number of venues, list the venues, and cite the source (e.g., ECB, ESPNcricinfo, or other reliable coverage).",
+            "retrieved_titles": [
+              "2017–18 Ranji Trophy",
+              "List of cricket grounds in England and Wales",
+              "List of NCAA Division I basketball arenas",
+              "List of World Series Cricket venues",
+              "List of Test cricket grounds",
+              "Venues of the 1956 Winter Olympics",
+              "Venues of the 1972 Winter Olympics"
+            ],
+            "summary_2": "The answer cannot be determined from the provided passages.",
+            "answer": "Cannot determine from the provided summaries; can you provide the relevant passage?",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "2017–18 Ashes series"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary of first-hop evidence: The only supported first-hop fact is that \"The Test series will form part of the 2017–18 Ashes series.\" Bridge / next-hop target: the 2017–18 Ashes series (this is the \"main tournament\" to inspect). Missing evidence needed: the number of venues involved in that Ashes series. Retrieval direction for the next agent: retrieve the page titled \"2017–18 Ashes series\" and extract the venue information (look for a 'Venues' or 'Matches' section or any summary stating the number or list of grounds used). Do not infer the venue count at this stage — this is a retrieval request for that specific article.",
+            "score": 0.0,
+            "generated_query": "Retrieve the page titled \"2017–18 Ashes series\" (e.g., the Wikipedia article). From that page, locate the 'Venues' section or the 'Matches' / 'Schedule' listing and extract the list of grounds/venues used in the series. Return the count of distinct venues and/or the explicit statement on the page indicating how many venues were involved.",
+            "retrieved_titles": [
+              "List of cricket grounds in England and Wales",
+              "List of venues in Neath Port Talbot",
+              "List of Test cricket grounds",
+              "2017–18 Ashes series",
+              "List of cricket grounds in Malaysia",
+              "List of World Series Cricket venues",
+              "List of NCAA Division I basketball arenas"
+            ],
+            "summary_2": "Five venues.",
+            "answer": "Five venues",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "2017–18 Ashes series"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If any passage links the question's 'main tournament' to a named competition (e.g., the passage contains the phrase 'will form part of the 2017–18 Ashes series' or any explicit tournament title), apply this update.",
+                "preserve_rule": "Keep the agent's existing behavior of paraphrasing supported first-hop facts from the passages and of noting when the passages lack an explicit numeric answer. Preserve any exact short phrases quoted verbatim from the passages when those phrases are already present in the visible input.",
+                "change_rule": "When a named tournament is mentioned as the relevant 'main tournament', append a short structured retrieval-oriented summary that: (a) briefly restates the supported first-hop fact linking the team/schedule to that named tournament (paraphrase, not new facts); (b) specifies the tournament title from the passage as the 'bridge / next-hop target' (use the same title phrasing found in the passages, e.g. '2017–18 Ashes series'); (c) names the specific missing fact needed for the next hop ('number of venues involved in that tournament'); and (d) gives a clear retrieval direction for the next agent: retrieve the page titled exactly as the tournament and inspect its 'Venues', 'Matches', 'Schedule', or similar sections to extract the list of grounds and count distinct venues. Explicitly instruct: do not infer the count without retrieving that page.",
+                "drop_or_avoid_rule": "Do not attempt to answer or infer the venue count in the summary. Do not output the final numeric answer or any long literal spans that appear only in the target article. Avoid leaving the output as a bare 'cannot determine'—always supply the bridge/next-hop target and retrieval direction when a tournament title is present. Do not request external sources beyond the named tournament page.",
+                "output_contract": "Produce a concise 'summary' that contains: (1) a one-sentence paraphrase of the supported first-hop fact from the passages; (2) a one-line 'Bridge / next-hop target' naming the tournament title exactly as in the passages; (3) a one-line 'Missing evidence needed' stating that the number of venues is required; (4) a one-line 'Retrieval direction' instructing retrieval of the tournament page and where to look (Venues/Matches/Schedule) to extract and count distinct venues. The summary must not include the venue count or any inference.",
+                "why_local_transition": "This edit only changes how the agent summarizes a specific kind of first-hop (a named tournament) by converting a generic 'cannot determine' into a targeted retrieval request for the tournament page; it keeps all other summarization behavior unchanged."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Broad City",
+            "score": 1.0,
+            "generated_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+            "retrieved_titles": [
+              "Abbi Jacobson",
+              "Ilana Glazer",
+              "Broad City",
+              "List of Broad City episodes",
+              "Time Traveling Bong",
+              "Rough Night",
+              "Gotham Independent Film Awards 2015"
+            ],
+            "summary_2": "Broad City",
+            "answer": "Broad City",
+            "missing_recovery_rate": null,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 52,
+          "w_stable_id": "52",
+          "agent": "summary1",
+          "w_question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "He was from Mississippi.",
+            "score": 0.0,
+            "generated_query": "Adolph Botnick attempted assassination man from Mississippi",
+            "retrieved_titles": [
+              "Adolph Botnick",
+              "Édouard Mortier, Duke of Trévise",
+              "A Man",
+              "Qin Wuyang",
+              "Assassination attempts on Alexander Ankvab",
+              "Bruce Botnick",
+              "Assassination attempts on Hirohito"
+            ],
+            "summary_2": "The man (Byron De La Beckwith) was from Mississippi.",
+            "answer": "Mississippi",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Byron De La Beckwith"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: The Adolph Botnick article states Botnick “was a target of an assassination plot by Byron De La Beckwith, who had previously assassinated civil rights leader Medgar Evers.” Bridge entity / missing fact: the would‑be assassin Byron De La Beckwith is the relevant person; we still need his place of origin (birthplace/state/hometown). Retrieval direction: fetch the “Byron De La Beckwith” biography (or sources on his birthplace/early life) to extract where he was from. This is a summary1 output, not a final answer.",
+            "score": 1.0,
+            "generated_query": "\"Byron De La Beckwith\" birthplace OR \"born in\" OR \"born\" biography site:wikipedia.org OR site:britannica.com OR \"obituary\" OR \"born\"",
+            "retrieved_titles": [
+              "Byron De La Beckwith",
+              "Wikidumper.org",
+              "Legacy.com",
+              "Eric Olsen (writer)",
+              "Bobby DeLaughter",
+              "Adolph Botnick",
+              "Eisenhower Birthplace State Historic Site"
+            ],
+            "summary_2": "Byron De La Beckwith was from Greenwood, Mississippi.",
+            "answer": "Greenwood, Mississippi",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Byron De La Beckwith"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks where 'the man who attempted to assassinate...' (or similar), or when the provided passages state that the subject 'was a target of an assassination plot by [PERSON]' or 'attempted to assassinate' followed by a named person.",
+                "preserve_rule": "Keep the agent's current role of summarizing first-hop evidence: continue to paraphrase or quote the supporting passage text and preserve any named entities found there. Keep outputs concise and focused on evidence derived from the provided passages.",
+                "change_rule": "Instead of returning or implying a final birthplace answer, produce a structured first-hop summary that contains four short parts: (1) First-hop evidence — a brief quote or paraphrase of the passage that links the target and the would‑be assassin; (2) Bridge entity — explicitly name the person identified in the passage as the would‑be assassin (full name as given in the passage); (3) Missing fact — state that the assassin's place of origin (birthplace/state/hometown) is not yet provided and is needed to answer the question; (4) Retrieval direction — give one concise example retrieval query pattern (e.g., '\"<ASSASSIN NAME>\" birthplace OR \"born in\" site:wikipedia.org') or suggest fetching that person's biography. Do not assert or guess the birthplace.",
+                "drop_or_avoid_rule": "Do not produce the final answer or assert any birthplace/place-of-origin. Do not invent facts or infer beyond what the passages state. Avoid copying long verbatim spans beyond a short quoted phrase needed for evidence. Do not instruct the system to perform retrieval; only provide the retrieval direction/query pattern. Do not reference evaluation, labels, or internal scoring.",
+                "output_contract": "Return the single 'summary' output (the agent's normal summary field). The summary must include the four parts in clear, short sentences or clauses: (1) first-hop evidence (quote/paraphrase that identifies the assassin), (2) bridge entity (full name), (3) the missing fact required (assassin's birthplace/place-of-origin), and (4) a concise retrieval query pattern to fetch that person's biography. The summary must not contain the final birthplace answer.",
+                "why_local_transition": "The agent currently produces a final-origin assertion too early. This small local prompt change forces the agent to stop at the first-hop: expose the named suspect from the passage and explicitly request the missing birthplace via a retrieval query, enabling the next hop to fetch the assassin's biography without leaking or inventing the answer."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Broad City",
+            "score": 1.0,
+            "generated_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+            "retrieved_titles": [
+              "Abbi Jacobson",
+              "Ilana Glazer",
+              "Broad City",
+              "List of Broad City episodes",
+              "Time Traveling Bong",
+              "Rough Night",
+              "Gotham Independent Film Awards 2015"
+            ],
+            "summary_2": "Broad City",
+            "answer": "Broad City",
+            "missing_recovery_rate": null,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 0,
+          "w_stable_id": "0",
+          "agent": "summary1",
+          "w_question": "What actor has appeared in the films \"Hamlet\", \"The Woodlanders\" and \"The Holiday\"?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Rufus Sewell",
+            "score": 0.0,
+            "generated_query": "Rufus Sewell filmography \"Hamlet\" \"The Woodlanders\" \"The Holiday\" site:wikipedia.org OR site:imdb.com",
+            "retrieved_titles": [
+              "Wikidumper.org",
+              "Holiday Park Site",
+              "The Steph Show",
+              "URL redirection",
+              "Rufus Sewell",
+              "Eric Olsen (writer)",
+              "Wikipediocracy"
+            ],
+            "summary_2": "Rufus Sewell",
+            "answer": "Rufus Sewell",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "The Holiday"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: Rufus Sewell is an English actor, and his film credits listed here explicitly include Kenneth Branagh's Hamlet (1996) (as Fortinbras) and The Woodlanders. Bridge entity/relation needed next: confirmation whether the same actor (Rufus Sewell) also appears in the film The Holiday. Retrieval direction for the next hop: fetch the 'The Holiday' (film) page and/or Rufus Sewell's full filmography or cast list (e.g., Rufus Sewell filmography section or the cast section of 'The Holiday') to confirm whether he is in that film. This output summarizes first-hop evidence and specifies the missing link to verify; it is not a final answer.",
+            "score": 0.0,
+            "generated_query": "Search for \"Rufus Sewell filmography\" and \"The Holiday (2006 film) cast Rufus Sewell\" to confirm whether Rufus Sewell appears in The Holiday.",
+            "retrieved_titles": [
+              "The Holiday",
+              "All Things to All Men (film)",
+              "Rufus Sewell",
+              "Tristan &amp; Isolde (film)",
+              "Hotel Noir",
+              "Dark City (1998 film)",
+              "Victory (1996 film)"
+            ],
+            "summary_2": "Rufus Sewell",
+            "answer": "Rufus Sewell",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "The Holiday"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question names multiple specific films and one or more passages contain an actor entry that lists some (but not all) of those films in its credits.",
+                "preserve_rule": "Keep the current behavior of extracting the actor name and citing film credits verbatim from the provided passage(s). Preserve concise, first-hop evidence style (do not attempt multi-hop verification here).",
+                "change_rule": "In the summary output, explicitly (a) state the actor name found in the passages and list which of the question's films are present in that passage's credited films (quote or paraphrase the credits as shown); (b) mark which film title(s) from the question are NOT present in those credited films and label them as 'missing verification' or the bridge that needs checking; (c) provide a concrete next-hop retrieval direction using a short search/query template, e.g. 'fetch \"<missing film>\" page' or 'search \"<actor> filmography\"' or 'search \"<missing film> cast\"'. Do not assert the missing film is confirmed — only request verification.",
+                "drop_or_avoid_rule": "Do not present a final answer or claim that the actor appears in any film that was not confirmed by the provided passages. Do not hallucinate or add facts beyond the visible passages. Avoid long verbatim copies of unretrieved pages; keep the summary concise and focused on evidence and the missing link.",
+                "output_contract": "Produce a short `summary` containing three parts: (1) first-hop evidence — actor name and which of the question's films are confirmed in the provided passages; (2) bridge / missing fact — explicit identification of which film(s) from the question remain unverified in the passages; (3) next-hop retrieval direction — one- or two-line search/query suggestions (templates) to confirm the missing film(s). The summary must not assert final answers or unrelated details.",
+                "why_local_transition": "The base prompt resulted in returning an actor name but did not expose which film(s) from the question remained unverified or how to retrieve that verification. This small behavioral change makes the agent explicitly surface the missing verification and give a concrete next retrieval direction, enabling a correct second hop without changing general summarization style."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Broad City",
+            "score": 1.0,
+            "generated_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+            "retrieved_titles": [
+              "Abbi Jacobson",
+              "Ilana Glazer",
+              "Broad City",
+              "List of Broad City episodes",
+              "Time Traveling Bong",
+              "Rough Night",
+              "Gotham Independent Film Awards 2015"
+            ],
+            "summary_2": "Broad City",
+            "answer": "Broad City",
+            "missing_recovery_rate": null,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 120,
+          "w_stable_id": "120",
+          "agent": "summary1",
+          "w_question": "What actress was in Game of Thrones and The Moorside?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Susan Brown",
+            "score": 0.0,
+            "generated_query": "Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\n- Full name (as credited), birth/death years if available, and any disambiguating info.\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\n\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources.",
+            "retrieved_titles": [
+              "Susan Brown (English actress)",
+              "Jamie Kane",
+              "Susan Gilmore",
+              "Colette Brown",
+              "Bobbie Brown",
+              "Molly MacDonald",
+              "Jemima Abey"
+            ],
+            "summary_2": "Susan Brown",
+            "answer": "Susan Brown",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Gemma Whelan",
+              "The Moorside"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: the retrieval returned a page for \"Susan Brown (English actress)\" stating she is best known for her role as Septa Mordane in HBO's Game of Thrones. The other retrieved \"Moorside\" items are place/railway/school pages and do not contain information about a TV production or its cast.\n\nBridge / missing fact needed: which actress appears in both Game of Thrones and the (TV) production The Moorside — i.e., the intersection of the Game of Thrones cast and the cast of The Moorside.\n\nNext-hop retrieval direction (compact):\n- Retrieve the page \"The Moorside\" to obtain the cast list for that production. \n- Retrieve actor/actress pages for likely overlaps (example retrieval target: \"Gemma Whelan\") and/or query \"The Moorside cast\" or \"Which Game of Thrones actors appeared in The Moorside\" to identify the overlapping actress.\n\nThis is a summary of first-hop evidence and a focused retrieval plan; it does not assert any second-hop facts or a final answer.",
+            "score": 1.0,
+            "generated_query": "\"The Moorside cast\" OR \"The Moorside (TV drama) cast list\" OR \"The Moorside BBC cast\"",
+            "retrieved_titles": [
+              "Moorside railway station",
+              "Moorside, Leeds",
+              "Moorside railway station, Cumbria",
+              "The Moorside",
+              "Moorside Edge transmitting station",
+              "Moorside High School, Werrington",
+              "Moorside"
+            ],
+            "summary_2": "Gemma Whelan",
+            "answer": "Gemma Whelan",
+            "missing_recovery_rate": 0.5,
+            "recovered_missing_titles": [
+              "The Moorside"
+            ],
+            "missing_titles_after_hop2": [
+              "Gemma Whelan"
+            ]
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the current `summary` output is a terse single name or similarly short label (e.g., one or two tokens) and the provided passages include at least one actor page plus several place/rail/school `Moorside` pages (i.e., evidence exists but no explicit retrieval plan).",
+                "preserve_rule": "Keep the original I/O interface (input fields `question` and `passages`; output field `summary`). Preserve any accurate evidence already cited from the passages (e.g., facts quoted/paraphrased from an actor page). Maintain concise, neutral language and avoid changing downstream expectations for the agent's output format.",
+                "change_rule": "Instead of emitting only a name, produce a compact first-hop evidence summary plus a concrete next-hop retrieval plan. Specifically, the agent should: (1) identify which passage(s) support any asserted actor appearance and include a short quoted or paraphrased fragment (<=15 words) and the passage title; (2) identify which retrieved `Moorside` passages are non-relevant to TV cast (list their titles); (3) state the bridge / missing fact explicitly as: 'we need the intersection of the Game of Thrones cast and The Moorside cast' (or equivalent); (4) give 1–3 concrete next-hop retrieval targets or queries (examples: the page titled \"The Moorside\", the phrase \"The Moorside cast\", and actor pages likely to overlap) that will find that intersection; (5) remain concise and do not assert any second-hop facts or a final answer.",
+                "drop_or_avoid_rule": "Do not output a final answer or assert facts that require a second hop. Do not invent or assume cast memberships not present in the passages. Avoid long verbatim spans from sources (>15 words). Do not introduce sample-specific names that are not already present in the visible inputs. Do not change the output field name or overall format.",
+                "output_contract": "The produced `summary` must include: (A) first-hop evidence: named passage title(s) + a short supporting quote or paraphrase (<=15 words) showing the claimed appearance; (B) a short note listing which retrieved `Moorside` passages contain no cast info; (C) an explicit statement of the bridge/missing fact needed (intersection of the two productions' casts); and (D) at least one concrete next-hop retrieval instruction (page title or search query) to obtain the cast list(s). The summary must not assert a final answer or include unverified cast claims.",
+                "why_local_transition": "This change is narrowly focused on how the agent summarizes the first hop and specifies the next retrieval direction. It does not alter the input/output interface, the agent's tone, or other behaviors; it simply replaces an underspecified single-name output with a structured, evidence-based summary and retrieval plan needed for the next hop."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Broad City",
+            "score": 1.0,
+            "generated_query": "Lucia Aniello Broad City Ilana Glazer Abbi Jacobson",
+            "retrieved_titles": [
+              "Abbi Jacobson",
+              "Ilana Glazer",
+              "Broad City",
+              "List of Broad City episodes",
+              "Time Traveling Bong",
+              "Rough Night",
+              "Gotham Independent Film Awards 2015"
+            ],
+            "summary_2": "Broad City",
+            "answer": "Broad City",
+            "missing_recovery_rate": null,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": []
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 72,\n  \"stable_id\": \"72\",\n  \"question\": \"Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?\",\n  \"summary_1\": \"Broad City\",\n  \"hop2_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n  \"summary_2\": \"Broad City\",\n  \"answer\": \"Broad City\",\n  \"gold_support_titles\": [\n    \"Lucia Aniello\",\n    \"Broad City\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 139,\n    \"w_stable_id\": \"139\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"When was the star of You Can Count on Me who also stared in \\\"Ferris Bueller's Day Off\\\" born?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"July 1, 1956\",\n      \"score\": 0.0,\n      \"generated_query\": \"\\\"Alan Ruck birth date July 1, 1956 You Can Count on Me Ferris Bueller's Day Off\\\"\",\n      \"retrieved_titles\": [\n        \"Ferris Bueller's Day Off\",\n        \"Alan Ruck\",\n        \"Ferris Bueller (TV series)\",\n        \"Parker Lewis Can't Lose\",\n        \"Save Ferris\",\n        \"Stephanie Blake\",\n        \"You Can Count On Me (disambiguation)\"\n      ],\n      \"summary_2\": \"July 1, 1956\",\n      \"answer\": \"July 1, 1956\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Matthew Broderick\",\n        \"You Can Count On Me\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: the Ferris Bueller's Day Off page (retrieved) lists the film's stars including Matthew Broderick, Mia Sara, and Alan Ruck. The Alan Ruck page in the first-hop results gives his birth date as July 1, 1956 (this is first-hop evidence only). Bridge needed: the actor who appears in both Ferris Bueller's Day Off and You Can Count on Me (i.e., the overlapping cast member). Retrieval direction for next hop: 1) fetch the You Can Count on Me page to obtain its cast list and identify which Ferris Bueller actor appears there; 2) fetch that identified actor's biography page (e.g., the Matthew Broderick page is already listed as a retrieval target) to obtain the actor's birth date. Do not assume which Ferris Bueller actor is the overlap without checking the You Can Count on Me cast list.\",\n      \"score\": 1.0,\n      \"generated_query\": \"1) Retrieve the You Can Count on Me (2000 film) page (cast section) and return the full credited cast list.\\n2) Retrieve the biography pages for Matthew Broderick, Mia Sara, and Alan Ruck and return each actor's birth date (date and place of birth as listed). \\n3) Indicate which of those three actors (if any) appears in the You Can Count on Me cast and provide that actor's birth date.\",\n      \"retrieved_titles\": [\n        \"You Can Count On Me\",\n        \"You Can Count On Me (disambiguation)\",\n        \"List of Fawlty Towers cast members\",\n        \"The Register of the Victoria Cross\",\n        \"Richard Carlyle\",\n        \"List of Colombian writers\",\n        \"List of Highlander cast members\"\n      ],\n      \"summary_2\": \"Matthew Broderick — the actor who appears in both You Can Count on Me and Ferris Bueller's Day Off — was born on March 21, 1962.\",\n      \"answer\": \"March 21, 1962\",\n      \"missing_recovery_rate\": 0.5,\n      \"recovered_missing_titles\": [\n        \"You Can Count On Me\"\n      ],\n      \"missing_titles_after_hop2\": [\n        \"Matthew Broderick\"\n      ]\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when agent_role == 'summary1' and the question links a person across two works (e.g., asks for a star who appears in both A and B) and the visible passages include a film page with a cast list and at least one actor biography.\",\n          \"preserve_rule\": \"Keep extracting and reporting concise factual first-hop facts already present in the passages (e.g., 'Alan Ruck — born July 1, 1956') and retain the current short factual style for such items.\",\n          \"change_rule\": \"Instead of returning a single final fact, produce a compact, structured summary with three labeled parts: (1) 'First-hop evidence:' name the retrieved passage(s) and the concrete facts they provide (very short phrases); (2) 'Bridge needed:' explicitly state the overlap that must be checked in the next hop (phrase it as a check to identify which Ferris Bueller cast member also appears in You Can Count on Me, without asserting which one); (3) 'Retrieval direction:' list ordered next retrieval steps (e.g., fetch the You Can Count on Me cast list; compare it to the Ferris Bueller cast; then fetch the matching actor's biography to obtain birth date). Keep each part concise (1–3 short clauses).\",\n          \"drop_or_avoid_rule\": \"Do not produce a final birth date or assert which actor is the overlap here; do not assume overlaps without checking the You Can Count on Me cast; avoid long verbatim spans from non-visible pages and avoid inventing facts.\",\n          \"output_contract\": \"Return the usual 'summary' output string. That string must include the three labeled short sections exactly: 'First-hop evidence:', 'Bridge needed:', and 'Retrieval direction:'. Each section should briefly list the relevant passage names/facts and the explicit next-hop retrieval actions (ordered). Do not include a final answer or unverified conclusions.\",\n          \"why_local_transition\": \"The current behavior returned a lone birth date from a first-hop actor page. For a multi-hop pipeline the summary must instead expose which overlap to check and give explicit, ordered retrieval steps so the next agent can find and verify the correct overlapping actor and then retrieve that actor's biography for the birth date.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Broad City\",\n      \"score\": 1.0,\n      \"generated_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n      \"retrieved_titles\": [\n        \"Abbi Jacobson\",\n        \"Ilana Glazer\",\n        \"Broad City\",\n        \"List of Broad City episodes\",\n        \"Time Traveling Bong\",\n        \"Rough Night\",\n        \"Gotham Independent Film Awards 2015\"\n      ],\n      \"summary_2\": \"Broad City\",\n      \"answer\": \"Broad City\",\n      \"missing_recovery_rate\": null,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 31,\n    \"w_stable_id\": \"31\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"How many venues are involved in the main tournament which is part of the English Cricket Team's 2017-2018 schedule?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"The passages do not state how many venues are involved; the answer cannot be determined from the provided information.\",\n      \"score\": 0.0,\n      \"generated_query\": \"How many venues were used for the main tournament in the England cricket team's 2017–18 schedule? Please provide the number of venues, list the venues, and cite the source (e.g., ECB, ESPNcricinfo, or other reliable coverage).\",\n      \"retrieved_titles\": [\n        \"2017–18 Ranji Trophy\",\n        \"List of cricket grounds in England and Wales\",\n        \"List of NCAA Division I basketball arenas\",\n        \"List of World Series Cricket venues\",\n        \"List of Test cricket grounds\",\n        \"Venues of the 1956 Winter Olympics\",\n        \"Venues of the 1972 Winter Olympics\"\n      ],\n      \"summary_2\": \"The answer cannot be determined from the provided passages.\",\n      \"answer\": \"Cannot determine from the provided summaries; can you provide the relevant passage?\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"2017–18 Ashes series\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary of first-hop evidence: The only supported first-hop fact is that \\\"The Test series will form part of the 2017–18 Ashes series.\\\" Bridge / next-hop target: the 2017–18 Ashes series (this is the \\\"main tournament\\\" to inspect). Missing evidence needed: the number of venues involved in that Ashes series. Retrieval direction for the next agent: retrieve the page titled \\\"2017–18 Ashes series\\\" and extract the venue information (look for a 'Venues' or 'Matches' section or any summary stating the number or list of grounds used). Do not infer the venue count at this stage — this is a retrieval request for that specific article.\",\n      \"score\": 0.0,\n      \"generated_query\": \"Retrieve the page titled \\\"2017–18 Ashes series\\\" (e.g., the Wikipedia article). From that page, locate the 'Venues' section or the 'Matches' / 'Schedule' listing and extract the list of grounds/venues used in the series. Return the count of distinct venues and/or the explicit statement on the page indicating how many venues were involved.\",\n      \"retrieved_titles\": [\n        \"List of cricket grounds in England and Wales\",\n        \"List of venues in Neath Port Talbot\",\n        \"List of Test cricket grounds\",\n        \"2017–18 Ashes series\",\n        \"List of cricket grounds in Malaysia\",\n        \"List of World Series Cricket venues\",\n        \"List of NCAA Division I basketball arenas\"\n      ],\n      \"summary_2\": \"Five venues.\",\n      \"answer\": \"Five venues\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"2017–18 Ashes series\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If any passage links the question's 'main tournament' to a named competition (e.g., the passage contains the phrase 'will form part of the 2017–18 Ashes series' or any explicit tournament title), apply this update.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of paraphrasing supported first-hop facts from the passages and of noting when the passages lack an explicit numeric answer. Preserve any exact short phrases quoted verbatim from the passages when those phrases are already present in the visible input.\",\n          \"change_rule\": \"When a named tournament is mentioned as the relevant 'main tournament', append a short structured retrieval-oriented summary that: (a) briefly restates the supported first-hop fact linking the team/schedule to that named tournament (paraphrase, not new facts); (b) specifies the tournament title from the passage as the 'bridge / next-hop target' (use the same title phrasing found in the passages, e.g. '2017–18 Ashes series'); (c) names the specific missing fact needed for the next hop ('number of venues involved in that tournament'); and (d) gives a clear retrieval direction for the next agent: retrieve the page titled exactly as the tournament and inspect its 'Venues', 'Matches', 'Schedule', or similar sections to extract the list of grounds and count distinct venues. Explicitly instruct: do not infer the count without retrieving that page.\",\n          \"drop_or_avoid_rule\": \"Do not attempt to answer or infer the venue count in the summary. Do not output the final numeric answer or any long literal spans that appear only in the target article. Avoid leaving the output as a bare 'cannot determine'—always supply the bridge/next-hop target and retrieval direction when a tournament title is present. Do not request external sources beyond the named tournament page.\",\n          \"output_contract\": \"Produce a concise 'summary' that contains: (1) a one-sentence paraphrase of the supported first-hop fact from the passages; (2) a one-line 'Bridge / next-hop target' naming the tournament title exactly as in the passages; (3) a one-line 'Missing evidence needed' stating that the number of venues is required; (4) a one-line 'Retrieval direction' instructing retrieval of the tournament page and where to look (Venues/Matches/Schedule) to extract and count distinct venues. The summary must not include the venue count or any inference.\",\n          \"why_local_transition\": \"This edit only changes how the agent summarizes a specific kind of first-hop (a named tournament) by converting a generic 'cannot determine' into a targeted retrieval request for the tournament page; it keeps all other summarization behavior unchanged.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Broad City\",\n      \"score\": 1.0,\n      \"generated_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n      \"retrieved_titles\": [\n        \"Abbi Jacobson\",\n        \"Ilana Glazer\",\n        \"Broad City\",\n        \"List of Broad City episodes\",\n        \"Time Traveling Bong\",\n        \"Rough Night\",\n        \"Gotham Independent Film Awards 2015\"\n      ],\n      \"summary_2\": \"Broad City\",\n      \"answer\": \"Broad City\",\n      \"missing_recovery_rate\": null,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 52,\n    \"w_stable_id\": \"52\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"He was from Mississippi.\",\n      \"score\": 0.0,\n      \"generated_query\": \"Adolph Botnick attempted assassination man from Mississippi\",\n      \"retrieved_titles\": [\n        \"Adolph Botnick\",\n        \"Édouard Mortier, Duke of Trévise\",\n        \"A Man\",\n        \"Qin Wuyang\",\n        \"Assassination attempts on Alexander Ankvab\",\n        \"Bruce Botnick\",\n        \"Assassination attempts on Hirohito\"\n      ],\n      \"summary_2\": \"The man (Byron De La Beckwith) was from Mississippi.\",\n      \"answer\": \"Mississippi\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Byron De La Beckwith\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: The Adolph Botnick article states Botnick “was a target of an assassination plot by Byron De La Beckwith, who had previously assassinated civil rights leader Medgar Evers.” Bridge entity / missing fact: the would‑be assassin Byron De La Beckwith is the relevant person; we still need his place of origin (birthplace/state/hometown). Retrieval direction: fetch the “Byron De La Beckwith” biography (or sources on his birthplace/early life) to extract where he was from. This is a summary1 output, not a final answer.\",\n      \"score\": 1.0,\n      \"generated_query\": \"\\\"Byron De La Beckwith\\\" birthplace OR \\\"born in\\\" OR \\\"born\\\" biography site:wikipedia.org OR site:britannica.com OR \\\"obituary\\\" OR \\\"born\\\"\",\n      \"retrieved_titles\": [\n        \"Byron De La Beckwith\",\n        \"Wikidumper.org\",\n        \"Legacy.com\",\n        \"Eric Olsen (writer)\",\n        \"Bobby DeLaughter\",\n        \"Adolph Botnick\",\n        \"Eisenhower Birthplace State Historic Site\"\n      ],\n      \"summary_2\": \"Byron De La Beckwith was from Greenwood, Mississippi.\",\n      \"answer\": \"Greenwood, Mississippi\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Byron De La Beckwith\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks where 'the man who attempted to assassinate...' (or similar), or when the provided passages state that the subject 'was a target of an assassination plot by [PERSON]' or 'attempted to assassinate' followed by a named person.\",\n          \"preserve_rule\": \"Keep the agent's current role of summarizing first-hop evidence: continue to paraphrase or quote the supporting passage text and preserve any named entities found there. Keep outputs concise and focused on evidence derived from the provided passages.\",\n          \"change_rule\": \"Instead of returning or implying a final birthplace answer, produce a structured first-hop summary that contains four short parts: (1) First-hop evidence — a brief quote or paraphrase of the passage that links the target and the would‑be assassin; (2) Bridge entity — explicitly name the person identified in the passage as the would‑be assassin (full name as given in the passage); (3) Missing fact — state that the assassin's place of origin (birthplace/state/hometown) is not yet provided and is needed to answer the question; (4) Retrieval direction — give one concise example retrieval query pattern (e.g., '\\\"<ASSASSIN NAME>\\\" birthplace OR \\\"born in\\\" site:wikipedia.org') or suggest fetching that person's biography. Do not assert or guess the birthplace.\",\n          \"drop_or_avoid_rule\": \"Do not produce the final answer or assert any birthplace/place-of-origin. Do not invent facts or infer beyond what the passages state. Avoid copying long verbatim spans beyond a short quoted phrase needed for evidence. Do not instruct the system to perform retrieval; only provide the retrieval direction/query pattern. Do not reference evaluation, labels, or internal scoring.\",\n          \"output_contract\": \"Return the single 'summary' output (the agent's normal summary field). The summary must include the four parts in clear, short sentences or clauses: (1) first-hop evidence (quote/paraphrase that identifies the assassin), (2) bridge entity (full name), (3) the missing fact required (assassin's birthplace/place-of-origin), and (4) a concise retrieval query pattern to fetch that person's biography. The summary must not contain the final birthplace answer.\",\n          \"why_local_transition\": \"The agent currently produces a final-origin assertion too early. This small local prompt change forces the agent to stop at the first-hop: expose the named suspect from the passage and explicitly request the missing birthplace via a retrieval query, enabling the next hop to fetch the assassin's biography without leaking or inventing the answer.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Broad City\",\n      \"score\": 1.0,\n      \"generated_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n      \"retrieved_titles\": [\n        \"Abbi Jacobson\",\n        \"Ilana Glazer\",\n        \"Broad City\",\n        \"List of Broad City episodes\",\n        \"Time Traveling Bong\",\n        \"Rough Night\",\n        \"Gotham Independent Film Awards 2015\"\n      ],\n      \"summary_2\": \"Broad City\",\n      \"answer\": \"Broad City\",\n      \"missing_recovery_rate\": null,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 0,\n    \"w_stable_id\": \"0\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"What actor has appeared in the films \\\"Hamlet\\\", \\\"The Woodlanders\\\" and \\\"The Holiday\\\"?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Rufus Sewell\",\n      \"score\": 0.0,\n      \"generated_query\": \"Rufus Sewell filmography \\\"Hamlet\\\" \\\"The Woodlanders\\\" \\\"The Holiday\\\" site:wikipedia.org OR site:imdb.com\",\n      \"retrieved_titles\": [\n        \"Wikidumper.org\",\n        \"Holiday Park Site\",\n        \"The Steph Show\",\n        \"URL redirection\",\n        \"Rufus Sewell\",\n        \"Eric Olsen (writer)\",\n        \"Wikipediocracy\"\n      ],\n      \"summary_2\": \"Rufus Sewell\",\n      \"answer\": \"Rufus Sewell\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"The Holiday\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: Rufus Sewell is an English actor, and his film credits listed here explicitly include Kenneth Branagh's Hamlet (1996) (as Fortinbras) and The Woodlanders. Bridge entity/relation needed next: confirmation whether the same actor (Rufus Sewell) also appears in the film The Holiday. Retrieval direction for the next hop: fetch the 'The Holiday' (film) page and/or Rufus Sewell's full filmography or cast list (e.g., Rufus Sewell filmography section or the cast section of 'The Holiday') to confirm whether he is in that film. This output summarizes first-hop evidence and specifies the missing link to verify; it is not a final answer.\",\n      \"score\": 0.0,\n      \"generated_query\": \"Search for \\\"Rufus Sewell filmography\\\" and \\\"The Holiday (2006 film) cast Rufus Sewell\\\" to confirm whether Rufus Sewell appears in The Holiday.\",\n      \"retrieved_titles\": [\n        \"The Holiday\",\n        \"All Things to All Men (film)\",\n        \"Rufus Sewell\",\n        \"Tristan &amp; Isolde (film)\",\n        \"Hotel Noir\",\n        \"Dark City (1998 film)\",\n        \"Victory (1996 film)\"\n      ],\n      \"summary_2\": \"Rufus Sewell\",\n      \"answer\": \"Rufus Sewell\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"The Holiday\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question names multiple specific films and one or more passages contain an actor entry that lists some (but not all) of those films in its credits.\",\n          \"preserve_rule\": \"Keep the current behavior of extracting the actor name and citing film credits verbatim from the provided passage(s). Preserve concise, first-hop evidence style (do not attempt multi-hop verification here).\",\n          \"change_rule\": \"In the summary output, explicitly (a) state the actor name found in the passages and list which of the question's films are present in that passage's credited films (quote or paraphrase the credits as shown); (b) mark which film title(s) from the question are NOT present in those credited films and label them as 'missing verification' or the bridge that needs checking; (c) provide a concrete next-hop retrieval direction using a short search/query template, e.g. 'fetch \\\"<missing film>\\\" page' or 'search \\\"<actor> filmography\\\"' or 'search \\\"<missing film> cast\\\"'. Do not assert the missing film is confirmed — only request verification.\",\n          \"drop_or_avoid_rule\": \"Do not present a final answer or claim that the actor appears in any film that was not confirmed by the provided passages. Do not hallucinate or add facts beyond the visible passages. Avoid long verbatim copies of unretrieved pages; keep the summary concise and focused on evidence and the missing link.\",\n          \"output_contract\": \"Produce a short `summary` containing three parts: (1) first-hop evidence — actor name and which of the question's films are confirmed in the provided passages; (2) bridge / missing fact — explicit identification of which film(s) from the question remain unverified in the passages; (3) next-hop retrieval direction — one- or two-line search/query suggestions (templates) to confirm the missing film(s). The summary must not assert final answers or unrelated details.\",\n          \"why_local_transition\": \"The base prompt resulted in returning an actor name but did not expose which film(s) from the question remained unverified or how to retrieve that verification. This small behavioral change makes the agent explicitly surface the missing verification and give a concrete next retrieval direction, enabling a correct second hop without changing general summarization style.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Broad City\",\n      \"score\": 1.0,\n      \"generated_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n      \"retrieved_titles\": [\n        \"Abbi Jacobson\",\n        \"Ilana Glazer\",\n        \"Broad City\",\n        \"List of Broad City episodes\",\n        \"Time Traveling Bong\",\n        \"Rough Night\",\n        \"Gotham Independent Film Awards 2015\"\n      ],\n      \"summary_2\": \"Broad City\",\n      \"answer\": \"Broad City\",\n      \"missing_recovery_rate\": null,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 120,\n    \"w_stable_id\": \"120\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"What actress was in Game of Thrones and The Moorside?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Susan Brown\",\n      \"score\": 0.0,\n      \"generated_query\": \"Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\\n- Full name (as credited), birth/death years if available, and any disambiguating info.\\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\\n\\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources.\",\n      \"retrieved_titles\": [\n        \"Susan Brown (English actress)\",\n        \"Jamie Kane\",\n        \"Susan Gilmore\",\n        \"Colette Brown\",\n        \"Bobbie Brown\",\n        \"Molly MacDonald\",\n        \"Jemima Abey\"\n      ],\n      \"summary_2\": \"Susan Brown\",\n      \"answer\": \"Susan Brown\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Gemma Whelan\",\n        \"The Moorside\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: the retrieval returned a page for \\\"Susan Brown (English actress)\\\" stating she is best known for her role as Septa Mordane in HBO's Game of Thrones. The other retrieved \\\"Moorside\\\" items are place/railway/school pages and do not contain information about a TV production or its cast.\\n\\nBridge / missing fact needed: which actress appears in both Game of Thrones and the (TV) production The Moorside — i.e., the intersection of the Game of Thrones cast and the cast of The Moorside.\\n\\nNext-hop retrieval direction (compact):\\n- Retrieve the page \\\"The Moorside\\\" to obtain the cast list for that production. \\n- Retrieve actor/actress pages for likely overlaps (example retrieval target: \\\"Gemma Whelan\\\") and/or query \\\"The Moorside cast\\\" or \\\"Which Game of Thrones actors appeared in The Moorside\\\" to identify the overlapping actress.\\n\\nThis is a summary of first-hop evidence and a focused retrieval plan; it does not assert any second-hop facts or a final answer.\",\n      \"score\": 1.0,\n      \"generated_query\": \"\\\"The Moorside cast\\\" OR \\\"The Moorside (TV drama) cast list\\\" OR \\\"The Moorside BBC cast\\\"\",\n      \"retrieved_titles\": [\n        \"Moorside railway station\",\n        \"Moorside, Leeds\",\n        \"Moorside railway station, Cumbria\",\n        \"The Moorside\",\n        \"Moorside Edge transmitting station\",\n        \"Moorside High School, Werrington\",\n        \"Moorside\"\n      ],\n      \"summary_2\": \"Gemma Whelan\",\n      \"answer\": \"Gemma Whelan\",\n      \"missing_recovery_rate\": 0.5,\n      \"recovered_missing_titles\": [\n        \"The Moorside\"\n      ],\n      \"missing_titles_after_hop2\": [\n        \"Gemma Whelan\"\n      ]\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the current `summary` output is a terse single name or similarly short label (e.g., one or two tokens) and the provided passages include at least one actor page plus several place/rail/school `Moorside` pages (i.e., evidence exists but no explicit retrieval plan).\",\n          \"preserve_rule\": \"Keep the original I/O interface (input fields `question` and `passages`; output field `summary`). Preserve any accurate evidence already cited from the passages (e.g., facts quoted/paraphrased from an actor page). Maintain concise, neutral language and avoid changing downstream expectations for the agent's output format.\",\n          \"change_rule\": \"Instead of emitting only a name, produce a compact first-hop evidence summary plus a concrete next-hop retrieval plan. Specifically, the agent should: (1) identify which passage(s) support any asserted actor appearance and include a short quoted or paraphrased fragment (<=15 words) and the passage title; (2) identify which retrieved `Moorside` passages are non-relevant to TV cast (list their titles); (3) state the bridge / missing fact explicitly as: 'we need the intersection of the Game of Thrones cast and The Moorside cast' (or equivalent); (4) give 1–3 concrete next-hop retrieval targets or queries (examples: the page titled \\\"The Moorside\\\", the phrase \\\"The Moorside cast\\\", and actor pages likely to overlap) that will find that intersection; (5) remain concise and do not assert any second-hop facts or a final answer.\",\n          \"drop_or_avoid_rule\": \"Do not output a final answer or assert facts that require a second hop. Do not invent or assume cast memberships not present in the passages. Avoid long verbatim spans from sources (>15 words). Do not introduce sample-specific names that are not already present in the visible inputs. Do not change the output field name or overall format.\",\n          \"output_contract\": \"The produced `summary` must include: (A) first-hop evidence: named passage title(s) + a short supporting quote or paraphrase (<=15 words) showing the claimed appearance; (B) a short note listing which retrieved `Moorside` passages contain no cast info; (C) an explicit statement of the bridge/missing fact needed (intersection of the two productions' casts); and (D) at least one concrete next-hop retrieval instruction (page title or search query) to obtain the cast list(s). The summary must not assert a final answer or include unverified cast claims.\",\n          \"why_local_transition\": \"This change is narrowly focused on how the agent summarizes the first hop and specifies the next retrieval direction. It does not alter the input/output interface, the agent's tone, or other behaviors; it simply replaces an underspecified single-name output with a structured, evidence-based summary and retrieval plan needed for the next hop.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Broad City\",\n      \"score\": 1.0,\n      \"generated_query\": \"Lucia Aniello Broad City Ilana Glazer Abbi Jacobson\",\n      \"retrieved_titles\": [\n        \"Abbi Jacobson\",\n        \"Ilana Glazer\",\n        \"Broad City\",\n        \"List of Broad City episodes\",\n        \"Time Traveling Bong\",\n        \"Rough Night\",\n        \"Gotham Independent Film Awards 2015\"\n      ],\n      \"summary_2\": \"Broad City\",\n      \"answer\": \"Broad City\",\n      \"missing_recovery_rate\": null,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": []\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 139,\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"The summary1 agent will refrain from returning the final series name and instead emit a compact, three-part first-hop summary ('First-hop evidence:', 'Bridge needed:', 'Retrieval direction:') that points to fetching the series page to verify the link between Lucia Aniello and the show starring Ilana Glazer and Abbi Jacobson.\",\n  \"expected_damaged_behavior\": \"At the summary1 boundary, instead of outputting the final answer 'Broad City', the agent produces a brief structured summary naming the evidence it saw on the Lucia Aniello page, states the missing bridge (the specific series starring Glazer and Jacobson needs to be checked), and gives ordered retrieval steps (e.g., fetch the show page and check cast/credits) without asserting the series name.\",\n  \"rationale\": \"The W139 edit explicitly converts a single-hop final fact into a three-part retrieval-oriented summary when the question requires linking a person to a work; that transformation is semantically compatible with the Lucia Aniello question (a person-to-series link where the pipeline can verify by fetching the series page). Transporting this pattern would locally change summary1's behavior (same agent role, same evidence->bridge->retrieval shape) and produce the intended local failure (no final assertion) while respecting the rule not to transfer any sample-specific entities. This is more directly transferable than tournament- or assassination-specific patterns because it targets the common multi-hop need to expose the bridge and order the next retrieval rather than asserting a final confidence claim.\",\n  \"confidence\": 0.78\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 72,
+    "c_stable_id": "72",
+    "candidate_w_sample_indices": [
+      0,
+      31,
+      52,
+      120,
+      139
+    ],
+    "match_fingerprint": "eec21f57fe00d2b805b81afbd647e02e99e3ea374e2df11de25bc151ee09a2e5"
+  }
+}

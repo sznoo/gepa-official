@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "2c52afb7fb3abbe06681f38c0623a58d6e8ae0b0d46928c3a69e5f84ddee71c6",
+  "created_at": "2026-07-13T17:40:19.956669+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?",
+        "summary_1": "Broad City",
+        "summary_2": "Broad City",
+        "current_output": "Broad City"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Broad City",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Broad City is an American comedy television series that stars Glazer and Abbi Jacobson.",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Lucia Aniello is known for her work on what American comedy television series that stars Glazer and Abbi Jacobson?\",\n  \"summary_1\": \"Broad City\",\n  \"summary_2\": \"Broad City\",\n  \"current_output\": \"Broad City\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Broad City\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Broad City is an American comedy television series that stars Glazer and Abbi Jacobson.\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When producing the final answer from the provided summaries (i.e., the agent is about to emit the [[ ## answer ## ]] block based on summary_1 and summary_2).\",\n    \"preserve_rule\": \"Keep using the summaries as the authoritative evidence source and prefer consensus between summary_1 and summary_2. If both summaries agree on a short named entity or title, retain that choice.\",\n    \"change_rule\": \"If both summaries contain the same short phrase (a title, name, or concise entity of roughly one to five words), emit exactly that phrase as the contents of the [[ ## answer ## ]] block. Do not append descriptive clauses, definitions, or full-sentence explanations to the phrase.\",\n    \"drop_or_avoid_rule\": \"Avoid adding explanatory text, appositive phrases, or restatements of the question (for example: 'is an American comedy television series that stars...'). Do not expand the concise phrase into a sentence or include additional context beyond the minimal answer token(s).\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string supported by the visible summaries (a short title or name). No extra punctuation, clauses, or descriptive sentences may be included inside or immediately adjacent to the block.\",\n    \"why_local_transition\": \"This change prevents the agent from transforming a correct concise answer (from agreeing short summaries) into a longer explanatory sentence; it enforces preserving the minimal-answer format required by the final-agent role while keeping reliance on the visible summaries.\"\n  },\n  \"rationale\": \"The base behavior already produces the correct short answer. The smallest reliable edit is to block expansions into explanatory sentences when the summaries supply a single concise entity. That preserves evidence usage and the final-answer contract while preventing the specific regression of appending descriptive text (which would change the required output format). This delta is narrowly scoped (applies only at final-answer emission when summaries agree on a short phrase) and thus minimizes unintended side effects.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 72,
+    "row_index": 72,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 70,
+    "matched_w_stable_id": "70",
+    "bisection_round": 0,
+    "material_fingerprint": "5e515b926c3b1c2025ccb77c365bd99da189089356184564aa22c911e75a0f3e",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "76d332296f550504d57cd3b627bf49bc0d517a3fab321c3e5639b42281804f5a",
+  "created_at": "2026-07-13T17:13:11.708348+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "summary_1": "Rick Savage (Richard \"Rick\" Savage) — bass guitarist of Def Leppard; born 2 December 1960.",
+        "summary_2": "Mike Mills. He played bass on R.E.M.'s debut album Murmur. ([[ ## completed ## ]])",
+        "current_output": "Mike Mills played bass on R.E.M.'s debut album Murmur."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Mike Mills played bass on R.E.M.'s debut album Murmur.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Mike Mills",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"summary_1\": \"Rick Savage (Richard \\\"Rick\\\" Savage) — bass guitarist of Def Leppard; born 2 December 1960.\",\n  \"summary_2\": \"Mike Mills. He played bass on R.E.M.'s debut album Murmur. ([[ ## completed ## ]])\",\n  \"current_output\": \"Mike Mills played bass on R.E.M.'s debut album Murmur.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Mike Mills played bass on R.E.M.'s debut album Murmur.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Mike Mills\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When producing the final `answer` for this question (the fields `question`, `summary_1`, and `summary_2` are present and you are at the endpoint that returns `answer`).\",\n    \"preserve_rule\": \"Continue to base the selection on the visible summaries as evidence. Preserve any logic that chooses the person supported by the summaries and preserve the `answer` field interface.\",\n    \"change_rule\": \"Replace any full-sentence or explanatory final output with only the minimal name string that is directly supported by the visible summaries. Emit the name in the shortest canonical form shown in a summary (do not append roles, verbs, dates, or extra context).\",\n    \"drop_or_avoid_rule\": \"Do not include explanatory text, sentences, qualifiers, citations, or any trailing/leading commentary. Avoid verbs (e.g., 'played'), album or band names, birth dates, or occupational labels. Do not add additional names or annotations.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal answer string (the person's name) exactly as sourced from the visible summaries and nothing else.\",\n    \"why_local_transition\": \"The source output is a full sentence; the target format requires a minimal answer string. This small behavioral edit enforces concise final formatting while keeping the same evidence-driven selection.\"\n  },\n  \"rationale\": \"Only formatting/verbosity needs changing: the pipeline already selected the correct person based on summaries but emitted a full sentence. The smallest coherent prompt edit is to constrain final formatting to a single minimal name string drawn from the visible summaries and to forbid extra words. This preserves evidence usage and the agent's interface while producing the concise final output required by the downstream pipeline.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 19,
+    "row_index": 19,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

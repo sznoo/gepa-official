@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "bf1f2a9765923556a52f3e68e5206bee18514ba7aa06e0b017f6fd017ab3bf31",
+  "created_at": "2026-07-13T17:19:51.247234+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "summary_1": "\"Social Psychology\"",
+        "summary_2": "Social Psychology",
+        "current_output": "Social Psychology"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Social Psychology",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Basic Rocket Science",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"summary_1\": \"\\\"Social Psychology\\\"\",\n  \"summary_2\": \"Social Psychology\",\n  \"current_output\": \"Social Psychology\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Social Psychology\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Basic Rocket Science\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks for an ordinal (contains words like 'first', 'second', 'third', 'fourth', 'nth', or the phrase 'the Nth episode').\",\n    \"preserve_rule\": \"Continue to treat the provided summaries (summary_1, summary_2, ...) as the primary evidence and keep the original final-answer output contract: the agent's answer must be a single minimal answer string with no extra commentary.\",\n    \"change_rule\": \"Instead of returning the first summary text by default, parse the requested ordinal N from the question and choose among the candidate episode titles in the summaries as follows: (1) If any summary explicitly states an episode number or wording that matches N (e.g., 'episode 4', 'fourth episode', 'Season X Episode Y' where Y == N), return that summary's title. (2) If no summary contains explicit numbering, use internal knowledge only as a conservative tiebreaker: if you have high confidence that one of the summary titles corresponds to the requested ordinal, return that title; otherwise do not invent a new title from thin air — instead return a single-token, minimal uncertainty signal (e.g., 'Unknown').\",\n    \"drop_or_avoid_rule\": \"Avoid blindly echoing summary_1 or performing a simple majority/tiebreak that ignores the ordinal. Avoid outputting extra explanation or headers. Do not produce titles not present in the summaries unless you have strong internal confidence as an explicit tiebreak. Do not add extraneous text beyond the single minimal answer string.\",\n    \"output_contract\": \"Produce only the minimal answer string (the episode title or the single-token uncertainty signal) in the final answer slot; do not include surrounding explanation or additional tokens.\",\n    \"why_local_transition\": \"The previous behavior returned a summary title without checking the requested ordinal. This local change adds an ordinal-check and a conservative selection rule so the agent selects a title that actually matches the asked episode number (or signals uncertainty) while preserving use of the provided summaries and the final-answer format.\"\n  },\n  \"rationale\": \"A minimal, local edit is needed to change the selection criterion: instead of uncritically echoing the first summary, the agent should parse the ordinal in the question and prefer any summary that explicitly matches that ordinal. This preserves existing reliance on summaries and the strict final-answer format, only altering the tie-breaking/selection logic when an ordinal is requested. The rule is conservative (falls back to uncertainty unless internal knowledge is a confident tiebreaker) to avoid hallucination.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 63,
+    "row_index": 63,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

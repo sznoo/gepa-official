@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "836e9198070f26ab32d9a5aedd67fbc209fb55a6e6b64f715109c7ccbe14fbab",
+  "created_at": "2026-07-13T18:47:01.804148+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?",
+      "current_output": "They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).",
+      "upstream_context": {
+        "question": "The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?",
+        "summary_1": "They both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).",
+        "hop2_query": "Do the 1977 film La criatura (The Creature) and the 1975 film La Bête (The Beast) both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)?",
+        "hop2_titles": [
+          "La criatura",
+          "La Bête (film)",
+          "Zoophilia",
+          "La Bête Humaine (film)",
+          "Beauty and the Beast (2014 film)",
+          "Bestiality (disambiguation)",
+          "Beauty and the Beast (1946 film)"
+        ],
+        "hop2_docs": [
+          "La criatura | The creature (Spanish: La criatura ) is a 1977 drama film, directed by Eloy de la Iglesia.  The plot follows a respectable bourgeois housewife who chooses the love for her black German Shepherd over her relationship with her husband.  \"La criatura\" is notable, like Walerian Borowczyk's \"La Bête\" (1975) and Nagisa Oshima's \"Max, Mon Amour\" (1986), for openly involving zoophilia, then a novelty in Spanish Cinema.",
+          "La Bête (film) | The Beast (French: \"La Bête\" ) is a 1975 X rated French erotic fantasy horror film written, edited, and directed by Walerian Borowczyk.  Although sometimes compared with \"Beauty and the Beast\", there are no parallels in the plot except that it features the relationship between a beast (monster) and a woman.  The film was noted for its explicit sexual content upon its initial release.  It has become a cult film.",
+          "Zoophilia | Zoophilia is a paraphilia involving a sexual fixation on non-human animals.  Bestiality is cross-species sexual activity between human and non-human animals.  The terms are often used interchangeably, but some researchers make a distinction between the attraction (zoophilia) and the act (bestiality).",
+          "La Bête Humaine (film) | La Bête Humaine (English: The Human Beast and Judas Was a Woman) is a 1938 French film directed by Jean Renoir, with cinematography by Curt Courant.  The picture features Jean Gabin and Simone Simon, and is loosely based on the novel of the same name by Émile Zola.",
+          "Beauty and the Beast (2014 film) | Beauty and the Beast (French: La Belle et la Bête ) is a 2014 Franco-German romantic fantasy film based on the traditional fairy tale of the same name by Gabrielle-Suzanne Barbot de Villeneuve.  Written by Christophe Gans and Sandra Vo-Anh and directed by Gans, the film stars Léa Seydoux as Belle and Vincent Cassel as the Beast.",
+          "Bestiality (disambiguation) | Bestiality is an alternate term for zoophilia, sexual acts between humans and animals.",
+          "Beauty and the Beast (1946 film) | Beauty and the Beast (French: La Belle et la Bête ) is a 1946 French romantic fantasy film directed by French poet and filmmaker Jean Cocteau.  Starring Josette Day as Belle and Jean Marais as the Beast, it is an adaptation of the 1757 story \"Beauty and the Beast\", written by Jeanne-Marie Leprince de Beaumont and published as part of a fairy tale anthology."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "La criatura",
+          "sent_id": 0,
+          "sentence": "The creature (Spanish: La criatura ) is a 1977 drama film, directed by Eloy de la Iglesia."
+        },
+        {
+          "title": "La Bête (film)",
+          "sent_id": 0,
+          "sentence": "The Beast (French: \"La Bête\" ) is a 1975 X rated French erotic fantasy horror film written, edited, and directed by Walerian Borowczyk."
+        },
+        {
+          "title": "La Bête (film)",
+          "sent_id": 1,
+          "sentence": "Although sometimes compared with \"Beauty and the Beast\", there are no parallels in the plot except that it features the relationship between a beast (monster) and a woman."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nThe 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?\n\nCurrent agent output:\n\"They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).\"\n\nActual upstream context:\n{\n  \"question\": \"The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \\\"La Bête\\\" ) feature what relationship?\",\n  \"summary_1\": \"They both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).\",\n  \"hop2_query\": \"Do the 1977 film La criatura (The Creature) and the 1975 film La Bête (The Beast) both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality)?\",\n  \"hop2_titles\": [\n    \"La criatura\",\n    \"La Bête (film)\",\n    \"Zoophilia\",\n    \"La Bête Humaine (film)\",\n    \"Beauty and the Beast (2014 film)\",\n    \"Bestiality (disambiguation)\",\n    \"Beauty and the Beast (1946 film)\"\n  ],\n  \"hop2_docs\": [\n    \"La criatura | The creature (Spanish: La criatura ) is a 1977 drama film, directed by Eloy de la Iglesia.  The plot follows a respectable bourgeois housewife who chooses the love for her black German Shepherd over her relationship with her husband.  \\\"La criatura\\\" is notable, like Walerian Borowczyk's \\\"La Bête\\\" (1975) and Nagisa Oshima's \\\"Max, Mon Amour\\\" (1986), for openly involving zoophilia, then a novelty in Spanish Cinema.\",\n    \"La Bête (film) | The Beast (French: \\\"La Bête\\\" ) is a 1975 X rated French erotic fantasy horror film written, edited, and directed by Walerian Borowczyk.  Although sometimes compared with \\\"Beauty and the Beast\\\", there are no parallels in the plot except that it features the relationship between a beast (monster) and a woman.  The film was noted for its explicit sexual content upon its initial release.  It has become a cult film.\",\n    \"Zoophilia | Zoophilia is a paraphilia involving a sexual fixation on non-human animals.  Bestiality is cross-species sexual activity between human and non-human animals.  The terms are often used interchangeably, but some researchers make a distinction between the attraction (zoophilia) and the act (bestiality).\",\n    \"La Bête Humaine (film) | La Bête Humaine (English: The Human Beast and Judas Was a Woman) is a 1938 French film directed by Jean Renoir, with cinematography by Curt Courant.  The picture features Jean Gabin and Simone Simon, and is loosely based on the novel of the same name by Émile Zola.\",\n    \"Beauty and the Beast (2014 film) | Beauty and the Beast (French: La Belle et la Bête ) is a 2014 Franco-German romantic fantasy film based on the traditional fairy tale of the same name by Gabrielle-Suzanne Barbot de Villeneuve.  Written by Christophe Gans and Sandra Vo-Anh and directed by Gans, the film stars Léa Seydoux as Belle and Vincent Cassel as the Beast.\",\n    \"Bestiality (disambiguation) | Bestiality is an alternate term for zoophilia, sexual acts between humans and animals.\",\n    \"Beauty and the Beast (1946 film) | Beauty and the Beast (French: La Belle et la Bête ) is a 1946 French romantic fantasy film directed by French poet and filmmaker Jean Cocteau.  Starring Josette Day as Belle and Jean Marais as the Beast, it is an adaptation of the 1757 story \\\"Beauty and the Beast\\\", written by Jeanne-Marie Leprince de Beaumont and published as part of a fairy tale anthology.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"La criatura\",\n    \"sent_id\": 0,\n    \"sentence\": \"The creature (Spanish: La criatura ) is a 1977 drama film, directed by Eloy de la Iglesia.\"\n  },\n  {\n    \"title\": \"La Bête (film)\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Beast (French: \\\"La Bête\\\" ) is a 1975 X rated French erotic fantasy horror film written, edited, and directed by Walerian Borowczyk.\"\n  },\n  {\n    \"title\": \"La Bête (film)\",\n    \"sent_id\": 1,\n    \"sentence\": \"Although sometimes compared with \\\"Beauty and the Beast\\\", there are no parallels in the plot except that it features the relationship between a beast (monster) and a woman.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary1 asserted that both films depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality). From the second-hop retrieval: (1) La criatura: \\\"The creature (Spanish: La criatura) is a 1977 drama film, directed by Eloy de la Iglesia.\\\" (2) La Bête: \\\"The Beast (French: \\\\\\\"La Bête\\\\\\\") is a 1975 X rated French erotic fantasy horror film...\\\" and \\\"it features the relationship between a beast (monster) and a woman.\\\" Integration: the La Bête article explicitly supports the presence of a relationship between a beast and a woman; the visible La criatura sentence confirms the film's title, year, and director but does not itself state the relationship. Retain these exact facts for the final-answer agent.\",\n  \"rationale\": \"Using only the provided visible supporting sentences and the upstream summary1 claim: the La Bête sentences explicitly report a relationship between a beast and a woman; the La criatura sentence only verifies the film's identity (1977 drama directed by Eloy de la Iglesia). This preserves the facts needed to adjudicate the question while not adding unsupported details about La criatura.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 98,
+    "row_index": 98
+  }
+}

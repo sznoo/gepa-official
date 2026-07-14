@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "a56a3ba8e0ce7032249985759a29446b62764a74d35eb46d81b9fbb1b8042c5c",
+  "created_at": "2026-07-13T20:14:51.081797+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "What actress was in Game of Thrones and The Moorside?",
+      "current_output": "First-hop evidence: Passage [7] — \"Susan Brown (English actress) ... best known for role as Septa Mordane\" (Game of Thrones).\n\nBridge needed: Confirm whether Susan Brown appeared in the TV drama \"The Moorside\" (i.e., verify Susan Brown is billed in The Moorside), or identify which actress is credited in both works.\n\nRetrieval direction:\n1. Fetch the page titled \"Susan Brown (English actress)\" and inspect the Filmography/Television credits for any credit titled \"The Moorside\".\n2. Fetch the page titled \"The Moorside\" (TV drama) and inspect the Cast section for \"Susan Brown\" and for actors also credited in Game of Thrones. \n3. If the Wikipedia pages are ambiguous, run site:wikipedia.org search: \"Susan Brown The Moorside\" and \"The Moorside cast\" and check the cited cast lists.",
+      "upstream_context": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "hop1_query": "What actress was in Game of Thrones and The Moorside?",
+        "hop1_titles": [
+          "Moorside railway station",
+          "Moorside, Leeds",
+          "Moorside railway station, Cumbria",
+          "Moorside High School, Werrington",
+          "Moorside",
+          "Moorside, Greater Manchester",
+          "Susan Brown (English actress)"
+        ],
+        "hop1_docs": [
+          "Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England.  The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.",
+          "Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England.  Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.",
+          "Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.",
+          "Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire.  It is one of the main feeder schools for Moorlands Sixth Form College.  Government Performance Tables have placed Moorside High in the top 5% of schools nationally.",
+          "Moorside | Moorside may refer to any of these places in England:",
+          "Moorside, Greater Manchester | Moorside is a suburb of Oldham in Greater Manchester, England.",
+          "Susan Brown (English actress) | Susan Brown (born 6 May 1946) is an English actress of stage and screen.  She is best known for her role as Septa Mordane in HBO series Game of Thrones."
+        ]
+      },
+      "visible_gold_support": [],
+      "missing_support_targets": [
+        {
+          "title": "The Moorside"
+        },
+        {
+          "title": "Gemma Whelan"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhat actress was in Game of Thrones and The Moorside?\n\nCurrent agent output:\n\"First-hop evidence: Passage [7] — \\\"Susan Brown (English actress) ... best known for role as Septa Mordane\\\" (Game of Thrones).\\n\\nBridge needed: Confirm whether Susan Brown appeared in the TV drama \\\"The Moorside\\\" (i.e., verify Susan Brown is billed in The Moorside), or identify which actress is credited in both works.\\n\\nRetrieval direction:\\n1. Fetch the page titled \\\"Susan Brown (English actress)\\\" and inspect the Filmography/Television credits for any credit titled \\\"The Moorside\\\".\\n2. Fetch the page titled \\\"The Moorside\\\" (TV drama) and inspect the Cast section for \\\"Susan Brown\\\" and for actors also credited in Game of Thrones. \\n3. If the Wikipedia pages are ambiguous, run site:wikipedia.org search: \\\"Susan Brown The Moorside\\\" and \\\"The Moorside cast\\\" and check the cited cast lists.\"\n\nActual upstream context:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"hop1_query\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"hop1_titles\": [\n    \"Moorside railway station\",\n    \"Moorside, Leeds\",\n    \"Moorside railway station, Cumbria\",\n    \"Moorside High School, Werrington\",\n    \"Moorside\",\n    \"Moorside, Greater Manchester\",\n    \"Susan Brown (English actress)\"\n  ],\n  \"hop1_docs\": [\n    \"Moorside railway station | Moorside railway station is located in the Moorside and Wardley areas of Swinton, near Manchester, England.  The station stands on Moorside Road close to the junction with Chorley Road (A6), Swinton.\",\n    \"Moorside, Leeds | Moorside is part of the Bramley area of Leeds, West Yorkshire, England.  Moorside falls within the Pudsey ward of the Leeds Metropolitan Council.\",\n    \"Moorside railway station, Cumbria | Moorside is a proposed railway station on the Cumbrian Coast Line which would serve Moorside nuclear power station.\",\n    \"Moorside High School, Werrington | Moorside High School is a coeducational secondary school located in Werrington, Staffordshire.  It is one of the main feeder schools for Moorlands Sixth Form College.  Government Performance Tables have placed Moorside High in the top 5% of schools nationally.\",\n    \"Moorside | Moorside may refer to any of these places in England:\",\n    \"Moorside, Greater Manchester | Moorside is a suburb of Oldham in Greater Manchester, England.\",\n    \"Susan Brown (English actress) | Susan Brown (born 6 May 1946) is an English actress of stage and screen.  She is best known for her role as Septa Mordane in HBO series Game of Thrones.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"The Moorside\"\n  },\n  {\n    \"title\": \"Gemma Whelan\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence summary: The hop1 retrieval returned a Wikipedia page for \\\"Susan Brown (English actress)\\\" which states she is best known for her role as Septa Mordane in the HBO series Game of Thrones. No first-hop document from the provided set confirms any connection to the TV drama \\\"The Moorside.\\\" \\n\\nBridge / missing fact needed: We need to determine which actress appears in both Game of Thrones and The Moorside (i.e., confirm an actress credited in Game of Thrones is also credited in The Moorside), or confirm whether Susan Brown is credited in The Moorside. \\n\\nCompact retrieval direction for next hop: \\n1) Fetch the page titled \\\"The Moorside\\\" and inspect its Cast section for any actresses also credited in Game of Thrones (and specifically check for Susan Brown). \\n2) Fetch the page titled \\\"Susan Brown (English actress)\\\" and inspect the Filmography/Television credits for an entry for \\\"The Moorside.\\\" \\n3) If the cast overlap isn’t clear from those pages, fetch the page titled \\\"Gemma Whelan\\\" (listed as a missing support target) and inspect her credits for either \\\"Game of Thrones\\\" or \\\"The Moorside,\\\" and cross-check any other prominent Game of Thrones actresses against the Moorside cast. \\n\\nThis output summarizes available first-hop evidence and specifies the bridge (cast overlap confirmation) and concrete pages to retrieve next. \",\n  \"rationale\": \"The only explicit first-hop evidence available in the provided documents is the Susan Brown page noting her role in Game of Thrones. No retrieved first-hop document confirms a connection to The Moorside, so the next hop must retrieve the \\\"The Moorside\\\" page (and relevant actor pages such as \\\"Gemma Whelan\\\") to confirm a cast overlap or Susan Brown’s involvement.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 120,
+    "row_index": 120
+  }
+}

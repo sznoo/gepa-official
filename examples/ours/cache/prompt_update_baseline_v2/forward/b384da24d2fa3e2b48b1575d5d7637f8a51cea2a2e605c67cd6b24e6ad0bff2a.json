@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "b384da24d2fa3e2b48b1575d5d7637f8a51cea2a2e605c67cd6b24e6ad0bff2a",
+  "created_at": "2026-07-13T17:43:05.243847+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "California Suite is a 1976 play by an american playwright born in what year?",
+    "answer": "1927",
+    "context": {
+      "title": [
+        "Anthony Clarvoe",
+        "Edward Locke",
+        "London Suite (play)",
+        "Jen Silverman",
+        "Vinegar Tom",
+        "California Suite",
+        "The Vietnamization of New Jersey",
+        "Eden (Steve Carter play)",
+        "California Suite (film)",
+        "Neil Simon"
+      ],
+      "sentences": [
+        [
+          "Anthony Clarvoe is an American playwright born in 1958."
+        ],
+        [
+          "Edward Locke (1869–1945) was an American playwright born in England."
+        ],
+        [
+          "London Suite is a play by Neil Simon, consisting of four one-act plays.",
+          " \"London Suite\" also was a 1996 television movie.",
+          " It is in a similar style to Simon's earlier works \"Plaza Suite\" and \"California Suite\"."
+        ],
+        [
+          "Jen Silverman is an American playwright born in the United States.",
+          " She grew up living and traveling in Scandinavia, Asia, and Europe as well as the United States.",
+          " She completed a BA in comparative literature at Brown University, a MFA in playwriting at the University of Iowa, and also studied at Juilliard."
+        ],
+        [
+          "Vinegar Tom is the title of a 1976 play by the British playwright Caryl Churchill.",
+          " The play examines gender and power relationships through the lens of 17th century witchcraft trials in England.",
+          " The script employs features of the epic theater associated with German playwright Bertolt Brecht, particularly the realistic use of songs.",
+          " The play's title comes from the name of one character's pet cat, supposed to be her familiar spirit, likely inspired by the supposed imp of one Elizabeth Clarke, a woman tried and executed for witchcraft in Essex in 1645.",
+          " The play was inspired by the Women's Rights Act in 1970 and explored the thought that women were treated unequally to men in England, both at the time in which the play takes place, and the time in which the play was written."
+        ],
+        [
+          "California Suite is a 1976 play by Neil Simon.",
+          " Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel."
+        ],
+        [
+          "The Vietnamization of New Jersey (subtitled \"A American Tragedy\" [\"sic\"] ) is a 1976 play written by American playwright Christopher Durang."
+        ],
+        [
+          "Eden is a 1976 play by American playwright Steve Carter.",
+          " Set in the 1920s, it is the first of Carter's Caribbean trilogy.",
+          " \"Eden\" explores intra-racial conflicts between recent immigrants from the Caribbean and the African-American population.",
+          " The West Coast premiere of this critically acclaimed play received five Los Angeles Drama Critics Circle Awards."
+        ],
+        [
+          "California Suite is a 1978 American comedy film directed by Herbert Ross.",
+          " The screenplay by Neil Simon is based on his play of the same name.",
+          " Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.",
+          " Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film."
+        ],
+        [
+          "Marvin Neil Simon (born July 4, 1927) is an American playwright, screenwriter and author.",
+          " He has written more than thirty plays and nearly the same number of movie screenplays, mostly adaptations of his plays.",
+          " He has received more combined Oscar and Tony nominations than any other writer."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "California Suite",
+        "Neil Simon"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer` as follows. Use only the visible summaries (summary_1 and summary_2) as the evidential basis for the final answer; do not add external facts except where the instructions below explicitly allow a limited, well‑justified use of internal background knowledge. Always produce the final result inside the [[ ## answer ## ]] block and make that block contain only the minimal answer string required by these rules.\n\n1) General minimal-answer rule\n- If the summaries unambiguously support a single short answer (a short name, title, demonym, year, or single noun/phrase of roughly 1–5 words), emit only that minimal token sequence as the answer. Normalize the chosen substring by removing any leading/trailing whitespace or surrounding punctuation but preserve the phrase's internal characters and capitalization exactly as shown in the summaries. Do not add quotes, em dashes, braces, labels, trailing punctuation, explanatory clauses, or any additional text.\n\n2) When both summaries agree on an identical short phrase\n- If summary_1 and summary_2 contain the same short named-entity string (after lowercasing only for agreement detection), extract that common phrase, strip surrounding punctuation/whitespace, and emit it verbatim (preserving original capitalization) as the sole content of [[ ## answer ## ]] with no surrounding or appended characters.\n\n3) Patterned question triggers (minimal formatting + deterministic selection)\n- 'Which ... is from X, A or B?': When the question asks which of two named options is from a place and the summaries clearly indicate a single band/person as the answer, emit only the minimal band/person name supported by the summaries.\n- Comparative membership questions (e.g., 'Does A or B have more band members?'): If the summaries clearly indicate which band has more members, emit only that band's name.\n- Short common-name questions (e.g., 'What do people in the UK commonly call the location ...?'): If both summaries provide the same short common name, emit only that short name string.\n\n4) Nationality questions\n- If the question asks for a nationality/demonym and either summary_1 or summary_2 contains a demonym, emit only the minimal demonym token/phrase. Prefer the first demonym found in summary_1; if none appears in summary_1, use the first found in summary_2. Emit it verbatim (no added words or punctuation).\n\n5) Two-performer composition specificity\n- If the question asks for the \"type of musical composition\" used by a named act and both summaries use a generic word like 'song(s)', you may consult internal knowledge only to determine whether the act is a two-person (duo) group. If you can reliably confirm the act is a two-person group, replace the generic term with the single-word or very short noun that names a composition intended for two performers (for example, 'duet') and emit that single word as the minimal answer. If you cannot reliably confirm duo membership, emit the minimal noun exactly as it appears in the summaries.\n\n6) Narrow assumed referent (single-name trigger)\n- If the question supplies only a given name (e.g., 'Maurice') and the visible summaries explicitly mention a specific example with that given name (e.g., a named example appears in the summaries) and the summaries identify the requested fact (e.g., the award), then you may assume that referent and emit the minimal answer (for example, a single year) if you have sufficient internal confidence. If you do not have sufficient internal confidence, follow the normal clarification behavior (emit a brief clarifying question as the answer field) rather than guessing.\n\n7) What to avoid (formatting and content prohibitions)\n- Never add explanatory text, full sentences, comparisons, justifications, or provenance in the answer field. Do not append decorative punctuation (em dashes, extra commas, trailing periods), quotes, braces, JSON-like structures, leading newlines, or any characters not part of the normalized minimal phrase. Do not invent facts not present in the summaries except where the two narrowly scoped rules above permit limited internal confirmation (duo-confirmation and the single-name assumed referent). If the summaries do not unambiguously support a single minimal answer and you lack permitted internal justification, emit a concise clarification request as the answer.\n\nOutput contract reminder: The produced `answer` must be exactly the minimal answer string determined by the rules above (or a short clarification question when required). The [[ ## answer ## ]] block must contain only that string and nothing else."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "e08bba879cb8",
+    "rerun_from": null,
+    "question": "California Suite is a 1976 play by an american playwright born in what year?",
+    "gold_answer": "1927",
+    "context": {
+      "title": [
+        "Anthony Clarvoe",
+        "Edward Locke",
+        "London Suite (play)",
+        "Jen Silverman",
+        "Vinegar Tom",
+        "California Suite",
+        "The Vietnamization of New Jersey",
+        "Eden (Steve Carter play)",
+        "California Suite (film)",
+        "Neil Simon"
+      ],
+      "sentences": [
+        [
+          "Anthony Clarvoe is an American playwright born in 1958."
+        ],
+        [
+          "Edward Locke (1869–1945) was an American playwright born in England."
+        ],
+        [
+          "London Suite is a play by Neil Simon, consisting of four one-act plays.",
+          " \"London Suite\" also was a 1996 television movie.",
+          " It is in a similar style to Simon's earlier works \"Plaza Suite\" and \"California Suite\"."
+        ],
+        [
+          "Jen Silverman is an American playwright born in the United States.",
+          " She grew up living and traveling in Scandinavia, Asia, and Europe as well as the United States.",
+          " She completed a BA in comparative literature at Brown University, a MFA in playwriting at the University of Iowa, and also studied at Juilliard."
+        ],
+        [
+          "Vinegar Tom is the title of a 1976 play by the British playwright Caryl Churchill.",
+          " The play examines gender and power relationships through the lens of 17th century witchcraft trials in England.",
+          " The script employs features of the epic theater associated with German playwright Bertolt Brecht, particularly the realistic use of songs.",
+          " The play's title comes from the name of one character's pet cat, supposed to be her familiar spirit, likely inspired by the supposed imp of one Elizabeth Clarke, a woman tried and executed for witchcraft in Essex in 1645.",
+          " The play was inspired by the Women's Rights Act in 1970 and explored the thought that women were treated unequally to men in England, both at the time in which the play takes place, and the time in which the play was written."
+        ],
+        [
+          "California Suite is a 1976 play by Neil Simon.",
+          " Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel."
+        ],
+        [
+          "The Vietnamization of New Jersey (subtitled \"A American Tragedy\" [\"sic\"] ) is a 1976 play written by American playwright Christopher Durang."
+        ],
+        [
+          "Eden is a 1976 play by American playwright Steve Carter.",
+          " Set in the 1920s, it is the first of Carter's Caribbean trilogy.",
+          " \"Eden\" explores intra-racial conflicts between recent immigrants from the Caribbean and the African-American population.",
+          " The West Coast premiere of this critically acclaimed play received five Los Angeles Drama Critics Circle Awards."
+        ],
+        [
+          "California Suite is a 1978 American comedy film directed by Herbert Ross.",
+          " The screenplay by Neil Simon is based on his play of the same name.",
+          " Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.",
+          " Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film."
+        ],
+        [
+          "Marvin Neil Simon (born July 4, 1927) is an American playwright, screenwriter and author.",
+          " He has written more than thirty plays and nearly the same number of movie screenplays, mostly adaptations of his plays.",
+          " He has received more combined Oscar and Tony nominations than any other writer."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "California Suite",
+        "Neil Simon"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "California Suite",
+      "Neil Simon"
+    ],
+    "hop1_query": "California Suite is a 1976 play by an american playwright born in what year?",
+    "hop1_docs": [
+      "California Suite | California Suite is a 1976 play by Neil Simon.  Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel.",
+      "J. California Cooper | Joan Cooper (November 10, 1931, Berkeley, California – September 20, 2014, Seattle, Washington), known by her pen name, J. California Cooper, was an American playwright and author.  She wrote 17 plays and was named Black Playwright of the Year in 1978 for her play \"Strangers\".",
+      "California Suite (film) | California Suite is a 1978 American comedy film directed by Herbert Ross.  The screenplay by Neil Simon is based on his play of the same name.  Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.  Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film.",
+      "What I Did Last Summer | What I Did Last Summer is a play by the American playwright A.R. Gurney.",
+      "Donkeys' Years | Donkeys' Years is a play by English playwright Michael Frayn that premiered at the Globe Theatre, London, in 1976.",
+      "Frederick J. Jackson | Frederick J. Jackson (September 21, 1886 – May 22, 1953) was an American author, playwright and screenwriter.  He wrote for over 50 films between 1912 and 1946.  Over a forty-year span, a dozen of his plays were produced on Broadway.  Several of his plays were turned into films, including \"The Bishop Misbehaves\".  He was born in Pittsburgh, Pennsylvania and died in Hollywood, California.",
+      "David Mamet | David Alan Mamet ( ; born November 30, 1947) is an American playwright, essayist, screenwriter, and film director.  As a playwright, Mamet has won a Pulitzer Prize and received Tony nominations for \"Glengarry Glen Ross\" (1984) and \"Speed-the-Plow\" (1988).  Mamet first gained acclaim for a trio of off-Broadway plays in 1976, \"The Duck Variations,\" \"Sexual Perversity in Chicago,\" and \"American Buffalo.\"  His play \"Race\" opened on Broadway on December 6, 2009, and his play \"The Penitent\" previewed off-Broadway on February 8, 2017."
+    ],
+    "hop1_titles": [
+      "California Suite",
+      "J. California Cooper",
+      "California Suite (film)",
+      "What I Did Last Summer",
+      "Donkeys' Years",
+      "Frederick J. Jackson",
+      "David Mamet"
+    ],
+    "summary_1": "1927",
+    "hop2_query": "Neil Simon birth year",
+    "hop2_docs": [
+      "Mel Tolkin | Mel Tolkin, né Shmuel Tolchinsky(August 3, 1913 – November 26, 2007), was a television comedy writer best known as head writer of the seminal live TV sketch comedy series \"Your Show of Shows\" (NBC, 1950–1954) during the Golden Age of Television.  There he presided over a storied staff that at times included Mel Brooks, Neil Simon, Danny Simon, and Larry Gelbart.  The writers' room inspired the film \"My Favorite Year\" (1982), produced by Brooks, and the Broadway play \"Laughter on the 23rd Floor\" (1993), written by Neil Simon.",
+      "Simon Neil | Simon Alexander Neil (born 31 August 1979) is a Scottish vocalist, guitarist, and songwriter.",
+      "Neil Simon's I Ought to Be in Pictures | Neil Simon's I Ought to Be in Pictures (also known simply as I Ought to Be in Pictures) is a 1982 American comedy-drama film directed by Herbert Ross and based on Neil Simon's play of the same name.  The film stars Walter Matthau, Ann-Margret, and Dinah Manoff (the only cast member to reprise her Broadway role in the film).  Other actors who have supporting roles are Lance Guest, Eugene Butler, David Faustino, Martin Ferrero and Michael Dudikoff.",
+      "Neil Simon Theatre | The Neil Simon Theatre, formerly the Alvin Theatre, is a Broadway venue built in 1927 and located at 250 West 52nd Street in the Theater District of Midtown Manhattan, New York City.",
+      "Last of the Red Hot Lovers (film) | Neil Simon's Last of the Red Hot Lovers is a 1972 comedy film based on Neil Simon's play of the same name.  Alan Arkin, Sally Kellerman, Paula Prentiss and Renée Taylor star in it.",
+      "Simon of Tournai | Simon of Tournai (c. 1130–1201) was a professor at the University of Paris in the late twelfth century.  His date of birth is uncertain, but he was teaching before 1184, as he signed a document at the same time as Gerard de Pucelle, the Bishop of Coventry, who died that year.",
+      "Emanuel Azenberg | Emanuel \"Manny\" Azenberg (born January 22, 1934) is an American theatre producer and general manager whose professional relationship with playwright Neil Simon spans thirty-three years."
+    ],
+    "hop2_titles": [
+      "Mel Tolkin",
+      "Simon Neil",
+      "Neil Simon's I Ought to Be in Pictures",
+      "Neil Simon Theatre",
+      "Last of the Red Hot Lovers (film)",
+      "Simon of Tournai",
+      "Emanuel Azenberg"
+    ],
+    "summary_2": "1927",
+    "answer": "1927",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Neil Simon"
+    ],
+    "hit_titles_hop1": [
+      "California Suite"
+    ],
+    "hit_titles_total": [
+      "California Suite"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

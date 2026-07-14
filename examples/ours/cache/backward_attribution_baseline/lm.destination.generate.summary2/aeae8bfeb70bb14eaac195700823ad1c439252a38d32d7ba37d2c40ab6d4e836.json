@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "aeae8bfeb70bb14eaac195700823ad1c439252a38d32d7ba37d2c40ab6d4e836",
+  "created_at": "2026-07-13T17:23:41.722728+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+      "current_output": "Brent Musburger",
+      "upstream_context": {
+        "question": "Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?",
+        "summary_1": "Brent Musburger",
+        "hop2_query": "\"Hail Flutie\" \"Vegas Stats & Information Network\" \"managing editor\" called \"calling the action\"",
+        "hop2_titles": [
+          "Vegas Stats &amp; Information Network",
+          "Stat (system call)",
+          "Brent Musburger",
+          "Norm Clarke",
+          "Bill Adee",
+          "Computer-aided call handling",
+          "Flutie effect"
+        ],
+        "hop2_docs": [
+          "Vegas Stats &amp; Information Network | VSiN is a national sports gambling news network based in Las Vegas, Nevada.  VSiN’s lead on-air personality is hall of fame broadcaster Brent Musburger, who anchors the weekday program called “My Guys in the Desert,\" which refers to Musburger’s veiled gambling references during his play-by-play of sports contests in earlier parts of his career.  Musburger left ESPN in January 2017 and joined VSiN.",
+          "Stat (system call) | stat() is a Unix system call that returns file attributes about an inode.  The semantics of stat() vary between operating systems.  As an example, Unix command ls uses this system call to retrieve information on files that includes:",
+          "Brent Musburger | Brent Woody Musburger ( ; born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN).  He retired in January 2017 from the ESPN and ABC television networks.  Formerly with CBS Sports and one of the original members of their program \"The NFL Today\", Musburger has also covered the NBA, MLB, NCAA football and basketball, and NASCAR and served as a studio host for games, a play-by-play man, and halftime host.  He has also performed postgame wrap-up segments and covered championship trophy presentations.  He is a member of the Montana Broadcaster's Association Hall of Fame.",
+          "Norm Clarke | Norm Clarke (born 1942 in Terry, Montana) is an American gossip columnist in Las Vegas, Nevada.  He wrote the column \"Vegas Confidential\" for the \"Las Vegas Review-Journal\" from 1999 to 2016.  He currently writes the column \"Vegas Diary\" for the website of the Vegas Stats & Information Network.  His column covers celebrities and near-celebrities and their doings in the bright lights of \"Sin City.\"",
+          "Bill Adee | Bill Adee is Chief Operating Officer for Vegas Stats and Information Network (VSiN) after joining the network in March 2017.  Adee was formerly executive vice president of digital development and operations for the \"Chicago Tribune\".  He joined the news organization as its sports editor in the spring of 2002.  He previously worked for the \"Chicago Sun-Times\", \"Los Angeles Daily News\", \"Akron Beacon Journal\" of Akron, Ohio, \"The Virginian-Pilot\" of Norfolk, Virginia, \"The Daily Herald' in Arlington Heights, Illinois and the \"News Sun\" of Waukegan, Illinois.",
+          "Computer-aided call handling | Computer aided call handling is a methodology for managing calls to service providers, such as emergency services, through the use of computer based algorithms in order to make consistent and objective decisions on action to be taken.  The computer software can provide scripting, prompts or interactive questioning to assist the call handler in gathering information.",
+          "Flutie effect | The Flutie effect or Flutie factor refers to the American phenomenon of having a successful college sports team increase the exposure and prominence of a university.  This is named after Boston College's Doug Flutie, whose successful Hail Mary pass in the 1984 game against the University of Miami clinched a win which allegedly played a large role in the increase in applications to Boston College the following year."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Brent Musburger",
+          "sent_id": 0,
+          "sentence": "Brent Woody Musburger ( ; born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN)."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nHail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\n\nCurrent agent output:\n\"Brent Musburger\"\n\nActual upstream context:\n{\n  \"question\": \"Hail Flutie was a call made at the game with which managing editor at Vegas Stats and Information Network calling the action?\",\n  \"summary_1\": \"Brent Musburger\",\n  \"hop2_query\": \"\\\"Hail Flutie\\\" \\\"Vegas Stats & Information Network\\\" \\\"managing editor\\\" called \\\"calling the action\\\"\",\n  \"hop2_titles\": [\n    \"Vegas Stats &amp; Information Network\",\n    \"Stat (system call)\",\n    \"Brent Musburger\",\n    \"Norm Clarke\",\n    \"Bill Adee\",\n    \"Computer-aided call handling\",\n    \"Flutie effect\"\n  ],\n  \"hop2_docs\": [\n    \"Vegas Stats &amp; Information Network | VSiN is a national sports gambling news network based in Las Vegas, Nevada.  VSiN’s lead on-air personality is hall of fame broadcaster Brent Musburger, who anchors the weekday program called “My Guys in the Desert,\\\" which refers to Musburger’s veiled gambling references during his play-by-play of sports contests in earlier parts of his career.  Musburger left ESPN in January 2017 and joined VSiN.\",\n    \"Stat (system call) | stat() is a Unix system call that returns file attributes about an inode.  The semantics of stat() vary between operating systems.  As an example, Unix command ls uses this system call to retrieve information on files that includes:\",\n    \"Brent Musburger | Brent Woody Musburger ( ; born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN).  He retired in January 2017 from the ESPN and ABC television networks.  Formerly with CBS Sports and one of the original members of their program \\\"The NFL Today\\\", Musburger has also covered the NBA, MLB, NCAA football and basketball, and NASCAR and served as a studio host for games, a play-by-play man, and halftime host.  He has also performed postgame wrap-up segments and covered championship trophy presentations.  He is a member of the Montana Broadcaster's Association Hall of Fame.\",\n    \"Norm Clarke | Norm Clarke (born 1942 in Terry, Montana) is an American gossip columnist in Las Vegas, Nevada.  He wrote the column \\\"Vegas Confidential\\\" for the \\\"Las Vegas Review-Journal\\\" from 1999 to 2016.  He currently writes the column \\\"Vegas Diary\\\" for the website of the Vegas Stats & Information Network.  His column covers celebrities and near-celebrities and their doings in the bright lights of \\\"Sin City.\\\"\",\n    \"Bill Adee | Bill Adee is Chief Operating Officer for Vegas Stats and Information Network (VSiN) after joining the network in March 2017.  Adee was formerly executive vice president of digital development and operations for the \\\"Chicago Tribune\\\".  He joined the news organization as its sports editor in the spring of 2002.  He previously worked for the \\\"Chicago Sun-Times\\\", \\\"Los Angeles Daily News\\\", \\\"Akron Beacon Journal\\\" of Akron, Ohio, \\\"The Virginian-Pilot\\\" of Norfolk, Virginia, \\\"The Daily Herald' in Arlington Heights, Illinois and the \\\"News Sun\\\" of Waukegan, Illinois.\",\n    \"Computer-aided call handling | Computer aided call handling is a methodology for managing calls to service providers, such as emergency services, through the use of computer based algorithms in order to make consistent and objective decisions on action to be taken.  The computer software can provide scripting, prompts or interactive questioning to assist the call handler in gathering information.\",\n    \"Flutie effect | The Flutie effect or Flutie factor refers to the American phenomenon of having a successful college sports team increase the exposure and prominence of a university.  This is named after Boston College's Doug Flutie, whose successful Hail Mary pass in the 1984 game against the University of Miami clinched a win which allegedly played a large role in the increase in applications to Boston College the following year.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Brent Musburger\",\n    \"sent_id\": 0,\n    \"sentence\": \"Brent Woody Musburger ( ; born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN).\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary integration: summary_1 named \\\"Brent Musburger.\\\" The VSiN article confirms that Brent Woody Musburger (born May 26, 1939) is an American sportscaster, lead broadcaster and managing editor at Vegas Stats and Information Network (VSiN). Retain the fact that Brent Musburger is the managing editor at VSiN for the final-answer agent.\",\n  \"rationale\": \"The visible supporting sentence explicitly identifies Brent Woody Musburger as the managing editor at Vegas Stats and Information Network, which directly connects the summary_1 mention to the VSiN managing-editor role needed by the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 106,
+    "row_index": 106
+  }
+}

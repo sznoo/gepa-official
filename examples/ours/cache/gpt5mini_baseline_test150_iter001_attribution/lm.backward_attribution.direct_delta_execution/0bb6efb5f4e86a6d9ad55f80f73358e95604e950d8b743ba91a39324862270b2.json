@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "0bb6efb5f4e86a6d9ad55f80f73358e95604e950d8b743ba91a39324862270b2",
+  "created_at": "2026-07-13T18:48:29.549295+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 is a single candidate name (e.g. 'Susan Brown') and the question asks which actress appears in both 'Game of Thrones' and 'The Moorside', while the current query is a long multi‑bullet verification checklist.",
+            "preserve_rule": "Keep using summary_1 as the candidate anchor and preserve the goal of finding authoritative cast evidence, but do not require a full filmography or many verification sub-steps in this retrieval query.",
+            "change_rule": "Replace the long, multi-bullet 'Verify whether...' prompt with one concise second-hop retrieval query that seeks the cast overlap or correct actress. Produce a single short search query focused on: identifying which actress appears in both Game of Thrones and The Moorside and returning a definitive name plus a primary cast/source citation.",
+            "drop_or_avoid_rule": "Avoid the lengthy checklist (character histories, full filmography, multiple disambiguation bullets) in this hop; avoid locking exclusively onto the candidate name as the only possible answer; do not include long quoted spans or any specific target-only names not present in the visible inputs.",
+            "output_contract": "Return exactly one short retrieval query (one sentence or a short phrase, <= ~25 words) suitable for a search engine, e.g. a direct question about which actress appears in both productions and requesting a primary cast/source. No extra explanation or multi-item list.",
+            "why_local_transition": "The base prompt over-specified a full verification workflow for a single candidate. For this pipeline edge we only need a compact second-hop retrieval query that finds the bridging cast evidence (who appears in both shows). This edit is minimal and preserves the candidate anchor while shifting output shape to a concise search query."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What actress was in Game of Thrones and The Moorside?",
+        "summary_1": "Susan Brown",
+        "current_output": {
+          "query": "Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\n- Full name (as credited), birth/death years if available, and any disambiguating info.\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\n\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 is a single candidate name (e.g. 'Susan Brown') and the question asks which actress appears in both 'Game of Thrones' and 'The Moorside', while the current query is a long multi‑bullet verification checklist.\",\n      \"preserve_rule\": \"Keep using summary_1 as the candidate anchor and preserve the goal of finding authoritative cast evidence, but do not require a full filmography or many verification sub-steps in this retrieval query.\",\n      \"change_rule\": \"Replace the long, multi-bullet 'Verify whether...' prompt with one concise second-hop retrieval query that seeks the cast overlap or correct actress. Produce a single short search query focused on: identifying which actress appears in both Game of Thrones and The Moorside and returning a definitive name plus a primary cast/source citation.\",\n      \"drop_or_avoid_rule\": \"Avoid the lengthy checklist (character histories, full filmography, multiple disambiguation bullets) in this hop; avoid locking exclusively onto the candidate name as the only possible answer; do not include long quoted spans or any specific target-only names not present in the visible inputs.\",\n      \"output_contract\": \"Return exactly one short retrieval query (one sentence or a short phrase, <= ~25 words) suitable for a search engine, e.g. a direct question about which actress appears in both productions and requesting a primary cast/source. No extra explanation or multi-item list.\",\n      \"why_local_transition\": \"The base prompt over-specified a full verification workflow for a single candidate. For this pipeline edge we only need a compact second-hop retrieval query that finds the bridging cast evidence (who appears in both shows). This edit is minimal and preserves the candidate anchor while shifting output shape to a concise search query.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What actress was in Game of Thrones and The Moorside?\",\n  \"summary_1\": \"Susan Brown\",\n  \"current_output\": {\n    \"query\": \"Verify whether an actress named Susan Brown appeared in both HBO's Game of Thrones and the BBC drama The Moorside. Provide:\\n- Full name (as credited), birth/death years if available, and any disambiguating info.\\n- Character name(s) and the specific episodes/season numbers (or air year) for her appearances in Game of Thrones and in The Moorside.\\n- Short filmography or notable credits to distinguish this Susan Brown from others with the same name.\\n- Authoritative sources/citations (IMDb, Wikipedia, BBC cast pages, BFI, or reputable news articles).\\n\\nIf Susan Brown did not appear in one or both, identify the correct actress(es) who did and provide the same details and sources.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Did Susan Brown appear in both Game of Thrones and The Moorside? Provide authoritative cast/source.\"},\n  \"rationale\": \"Replaced the lengthy verification checklist with one concise second-hop query anchored on summary_1 (Susan Brown), requesting definitive cast evidence and a primary source, per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 120,
+    "row_index": 120,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

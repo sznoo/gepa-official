@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "18d098349d49d498156b35385c0609e172963880ce59c71cc3ed431c8b223502",
+  "created_at": "2026-07-13T17:19:38.453179+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "summary_1": "He murdered 11 people.",
+        "summary_2": "11",
+        "current_output": "11"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "11",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "eleven",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"summary_1\": \"He murdered 11 people.\",\n  \"summary_2\": \"11\",\n  \"current_output\": \"11\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"11\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"eleven\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If both summary_1 and summary_2 are short, identical, numeric-only tokens (strings made up solely of digits, with optional leading +/−) and the question requests a concise numeric value (for example, begins with 'How many'), activate this prompt delta.\",\n    \"preserve_rule\": \"Keep the existing behavior of producing only the minimal answer string placed in the [[ ## answer ## ]] block. Continue to treat the visible summaries as the primary evidence for the answer. If summaries disagree or are not numeric-only, do not apply this delta and keep baseline behavior.\",\n    \"change_rule\": \"When triggered, transform the numeric-token answer into its English word form (spell out the number) and output that spelled-out word as the entire content of the [[ ## answer ## ]] block. Do not add any surrounding words, explanation, punctuation, or formatting beyond the single spelled-out token.\",\n    \"drop_or_avoid_rule\": \"Do not include the original digit form in the output, do not append explanatory text, and do not expand the response into a sentence. Avoid applying this conversion when the question expects a numeric format (e.g., measurements, dates, or identifiers) or when summaries conflict.\",\n    \"output_contract\": \"The agent must still return only the minimal answer string in the [[ ## answer ## ]] block. If the delta applies, that string is the spelled-out English word corresponding to the numeric token inferred from the visible summaries; otherwise the agent's output is unchanged.\",\n    \"why_local_transition\": \"This local rule enforces a stylistic conversion from a digit token to its spelled-out word when the visible summaries unanimously provide a short numeric token and the question asks for 'how many', producing the same minimal answer content but in the word-form representation expected for this transition.\"\n  },\n  \"rationale\": \"The current base prompt is already returning a minimal numeric token (digits). The smallest coherent change to reach the target representation is to convert short, unambiguous digit-only answers into their spelled-out English words while preserving the minimal-answer output contract and all other behavior. The trigger is conservative (requires both summaries to be identical numeric tokens and a 'how many' style question) so the delta applies only when the evidence is unanimous and the conversion is safe. The preserve_rule ensures no extra information or formatting is introduced; the drop_or_avoid_rule prevents misuse for contexts where digits are required. This delta is a narrowly scoped stylistic rule that accomplishes the transition without altering the agent's interface or broader decision logic.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 61,
+    "row_index": 61,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

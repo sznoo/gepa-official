@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d8cc590875ca75bd75d3516a8a72a6cb23a933ff508657c49b9f9b5ad4fc6908",
+  "created_at": "2026-07-13T17:24:50.261633+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the provisional answer (or any visible summary) contains a personal name followed immediately by parenthetical text, e.g. Name (…)",
+            "preserve_rule": "Keep the agent's existing behaviour of producing a single minimal answer string supported by the visible summaries and of emitting that string only inside the [[ ## answer ## ]] block. Preserve any other evidence-selection or formatting rules from the base prompt.",
+            "change_rule": "Before finalizing the answer string, if the string contains an opening parenthesis '(' directly after the main name, remove the parenthetical portion and emit only the text that precedes the first '('. Concretely: set answer = answer.split('(')[0].trim() prior to placing it in [[ ## answer ## ]].",
+            "drop_or_avoid_rule": "Do not strip parentheses when the parenthetical contains essential disambiguation (e.g., birth/death years, occupations, or qualifiers like 'born', digits, commas, or a clearly different identifier). If the parenthetical appears to add a distinct identifier rather than a redundant expansion of the same name, keep it or consult the visible summaries for which form is minimal and supported.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only a single minimal name string (no trailing parenthetical duplication or extra commentary), chosen from and supported by the visible summaries.",
+            "why_local_transition": "The base output includes a redundant parenthetical expansion of the same person's name. This small edit removes that redundancy so the final answer is the concise canonical name while preserving the base prompt's minimal-answer contract and reliance on the visible summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+        "summary_1": "Susan Carland (Susan Janet Carland)",
+        "summary_2": "Susan Carland (Susan Janet Carland)",
+        "current_output": "Susan Carland (Susan Janet Carland)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the provisional answer (or any visible summary) contains a personal name followed immediately by parenthetical text, e.g. Name (…)\",\n      \"preserve_rule\": \"Keep the agent's existing behaviour of producing a single minimal answer string supported by the visible summaries and of emitting that string only inside the [[ ## answer ## ]] block. Preserve any other evidence-selection or formatting rules from the base prompt.\",\n      \"change_rule\": \"Before finalizing the answer string, if the string contains an opening parenthesis '(' directly after the main name, remove the parenthetical portion and emit only the text that precedes the first '('. Concretely: set answer = answer.split('(')[0].trim() prior to placing it in [[ ## answer ## ]].\",\n      \"drop_or_avoid_rule\": \"Do not strip parentheses when the parenthetical contains essential disambiguation (e.g., birth/death years, occupations, or qualifiers like 'born', digits, commas, or a clearly different identifier). If the parenthetical appears to add a distinct identifier rather than a redundant expansion of the same name, keep it or consult the visible summaries for which form is minimal and supported.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only a single minimal name string (no trailing parenthetical duplication or extra commentary), chosen from and supported by the visible summaries.\",\n      \"why_local_transition\": \"The base output includes a redundant parenthetical expansion of the same person's name. This small edit removes that redundancy so the final answer is the concise canonical name while preserving the base prompt's minimal-answer contract and reliance on the visible summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?\",\n  \"summary_1\": \"Susan Carland (Susan Janet Carland)\",\n  \"summary_2\": \"Susan Carland (Susan Janet Carland)\",\n  \"current_output\": \"Susan Carland (Susan Janet Carland)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Susan Carland\",\n  \"rationale\": \"The parenthetical duplicate was removed per the ordered delta; the single minimal name supported by the summaries was returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 126,
+    "row_index": 126,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

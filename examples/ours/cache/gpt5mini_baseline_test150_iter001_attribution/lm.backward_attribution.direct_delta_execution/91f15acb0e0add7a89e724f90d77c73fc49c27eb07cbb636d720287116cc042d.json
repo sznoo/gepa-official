@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "91f15acb0e0add7a89e724f90d77c73fc49c27eb07cbb636d720287116cc042d",
+  "created_at": "2026-07-13T18:49:41.469146+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks for \"the star of You Can Count On Me\" and the agent's current query is anchored to a specific person name or a specific birth date (the current query or summary_1 contains a personal name token or a date like 'July 1, 1956'), then apply this edit.",
+            "preserve_rule": "Keep producing exactly one compact second-hop retrieval query. Keep using the question text as context and preserve concision and single-query output format.",
+            "change_rule": "Replace any actor- or date-anchored query with a concise query that requests the overlapping cast member between the two films. Generate a query that mentions both film titles and asks for the actor who appears in both, without including any actor name or birth date.",
+            "drop_or_avoid_rule": "Avoid anchoring the query to the specific name or date present in current_output or summary_1 (e.g., do not base the query on 'Alan Ruck' or 'July 1, 1956') unless the visible inputs explicitly identify that person as the star of 'You Can Count On Me'.",
+            "output_contract": "Emit one single-line retrieval query (no explanation) that names both films and requests the overlapping actor. Keep it concise (roughly one short sentence, <=20 tokens), do not include answers, dates, or extra instructions.",
+            "why_local_transition": "The current query is improperly anchored to a specific actor/date that doesn't match the question's 'star of You Can Count On Me'. The minimal correction is to redirect the second-hop query to find which actor appears in both 'You Can Count On Me' and 'Ferris Bueller's Day Off', enabling the next retrieval to surface the correct star."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the star of You Can Count on Me who also stared in \"Ferris Bueller's Day Off\" born?",
+        "summary_1": "July 1, 1956",
+        "current_output": {
+          "query": "\"Alan Ruck birth date July 1, 1956 You Can Count on Me Ferris Bueller's Day Off\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks for \\\"the star of You Can Count On Me\\\" and the agent's current query is anchored to a specific person name or a specific birth date (the current query or summary_1 contains a personal name token or a date like 'July 1, 1956'), then apply this edit.\",\n      \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query. Keep using the question text as context and preserve concision and single-query output format.\",\n      \"change_rule\": \"Replace any actor- or date-anchored query with a concise query that requests the overlapping cast member between the two films. Generate a query that mentions both film titles and asks for the actor who appears in both, without including any actor name or birth date.\",\n      \"drop_or_avoid_rule\": \"Avoid anchoring the query to the specific name or date present in current_output or summary_1 (e.g., do not base the query on 'Alan Ruck' or 'July 1, 1956') unless the visible inputs explicitly identify that person as the star of 'You Can Count On Me'.\",\n      \"output_contract\": \"Emit one single-line retrieval query (no explanation) that names both films and requests the overlapping actor. Keep it concise (roughly one short sentence, <=20 tokens), do not include answers, dates, or extra instructions.\",\n      \"why_local_transition\": \"The current query is improperly anchored to a specific actor/date that doesn't match the question's 'star of You Can Count On Me'. The minimal correction is to redirect the second-hop query to find which actor appears in both 'You Can Count On Me' and 'Ferris Bueller's Day Off', enabling the next retrieval to surface the correct star.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the star of You Can Count on Me who also stared in \\\"Ferris Bueller's Day Off\\\" born?\",\n  \"summary_1\": \"July 1, 1956\",\n  \"current_output\": {\n    \"query\": \"\\\"Alan Ruck birth date July 1, 1956 You Can Count on Me Ferris Bueller's Day Off\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\":{\"query\":\"actor who appears in You Can Count on Me and Ferris Bueller's Day Off\"},\"rationale\":\"Replaced the name/date-anchored query with a concise single-line query asking for the overlapping actor in both films, per the ordered delta rules.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 139,
+    "row_index": 139,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

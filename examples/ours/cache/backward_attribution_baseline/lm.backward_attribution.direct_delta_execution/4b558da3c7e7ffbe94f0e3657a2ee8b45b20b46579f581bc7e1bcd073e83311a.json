@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "4b558da3c7e7ffbe94f0e3657a2ee8b45b20b46579f581bc7e1bcd073e83311a",
+  "created_at": "2026-07-13T17:00:30.165399+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current query requests occupation/role lists for both Dave Moody and Ransom Riggs in one combined request (a dual-person list).",
+            "preserve_rule": "Keep producing a single compact retrieval query string (no explanatory text) and preserve the intent to retrieve authoritative biographical/occupation information (prefer Wikipedia or an official biography).",
+            "change_rule": "Replace the dual-person list request with a focused single-person keyword query for Dave Moody that prioritizes occupation/role terms and common biography sources. Construct the query from the person's full name plus one of: 'occupations', 'roles', 'biography', or 'Wikipedia' (e.g., a short keyword string like: Dave Moody occupations biography Wikipedia).",
+            "drop_or_avoid_rule": "Avoid asking for both people in the same query, avoid long multi-part instructions or example lists that dilute retrieval focus, and avoid adding any explanatory or output-format text in the query.",
+            "output_contract": "Output exactly one short, keyword-style retrieval query string (one line). The string must include the person's name 'Dave Moody' and at least one of the keywords: 'occupations', 'roles', 'biography', or 'Wikipedia'. No extra commentary, punctuation-heavy sentences, or instructions.",
+            "why_local_transition": "Narrow the retrieval focus from a broad dual-person request to a single-person occupation/biography query for Dave Moody so the next retrieval is more likely to return Dave Moody's biographical page and explicit list of entertainment roles needed for the comparison."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "current_output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current query requests occupation/role lists for both Dave Moody and Ransom Riggs in one combined request (a dual-person list).\",\n      \"preserve_rule\": \"Keep producing a single compact retrieval query string (no explanatory text) and preserve the intent to retrieve authoritative biographical/occupation information (prefer Wikipedia or an official biography).\",\n      \"change_rule\": \"Replace the dual-person list request with a focused single-person keyword query for Dave Moody that prioritizes occupation/role terms and common biography sources. Construct the query from the person's full name plus one of: 'occupations', 'roles', 'biography', or 'Wikipedia' (e.g., a short keyword string like: Dave Moody occupations biography Wikipedia).\",\n      \"drop_or_avoid_rule\": \"Avoid asking for both people in the same query, avoid long multi-part instructions or example lists that dilute retrieval focus, and avoid adding any explanatory or output-format text in the query.\",\n      \"output_contract\": \"Output exactly one short, keyword-style retrieval query string (one line). The string must include the person's name 'Dave Moody' and at least one of the keywords: 'occupations', 'roles', 'biography', or 'Wikipedia'. No extra commentary, punctuation-heavy sentences, or instructions.\",\n      \"why_local_transition\": \"Narrow the retrieval focus from a broad dual-person request to a single-person occupation/biography query for Dave Moody so the next retrieval is more likely to return Dave Moody's biographical page and explicit list of entertainment roles needed for the comparison.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"current_output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dave Moody occupations biography Wikipedia\"\n  },\n  \"rationale\": \"Followed the delta to replace the dual-person request with a single compact Dave Moody occupation/biography keyword query including his name and required keywords.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

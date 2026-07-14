@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2f9b09b58461fd984e80645752dc57b4d341cfedbeca50942e10abfce52ce329",
+  "created_at": "2026-07-13T17:14:16.183065+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the question asks whether two named people are \"from the same country\" or otherwise asks whether they are from the same nation.",
+            "preserve_rule": "Continue to base all decisions only on the content of `summary_1` and `summary_2`. Keep any useful nationality facts already present in those summaries and do not remove that grounding behavior.",
+            "change_rule": "Constrain the final answer to a single minimal lowercase token placed alone inside the [[ ## answer ## ]] block: one token that expresses affirmation, negation, or explicit insufficiency of evidence. Decide as follows: (a) if the summaries explicitly identify different nationalities for the two persons or explicitly state they are from different countries, emit a single lowercase negative token (a concise negation) and nothing else; (b) if the summaries explicitly identify the same nationality for both, emit a single lowercase affirmative token (a concise affirmation) and nothing else; (c) if the summaries do not supply enough information to determine whether they are from the same country, emit a single lowercase token that denotes insufficient evidence (e.g., a short phrase meaning 'not enough information') and nothing else. Do not introduce new facts or infer nationalities that do not appear in the summaries.",
+            "drop_or_avoid_rule": "Avoid asserting any nationality or additional explanatory text that is not present in the summaries (for example, do not invent that Skye Edwards is English). Do not add parenthetical comments, comparative remarks (e.g., 'both are in the UK'), or any extra sentences inside or adjacent to the answer block.",
+            "output_contract": "The agent's [[ ## answer ## ]] block must contain only one minimal lowercase token (no surrounding text or punctuation). That token must be (1) an affirmation if the summaries clearly show same nationality, (2) a negation if the summaries clearly show different nationalities, or (3) a short explicit indicator of insufficient evidence if the summaries do not allow a determination. The token must be strictly supported by summary_1 and summary_2.",
+            "why_local_transition": "The source output added an unsupported nationality claim and extra explanation; this delta enforces minimal, summary-grounded answers and prevents inventing facts so the final-answer block is concise and strictly supported."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are Jon Fratelli and Skye Edwards from the same country?",
+        "summary_1": "Not enough information to confirm for \"Skye Edwards\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.",
+        "summary_2": "Cannot confirm for \"Skye Edwards\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.",
+        "current_output": "No. Jon Fratelli is Scottish and Skye Edwards is English, so they are from different countries (both are in the UK, but not the same country)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question asks whether two named people are \\\"from the same country\\\" or otherwise asks whether they are from the same nation.\",\n      \"preserve_rule\": \"Continue to base all decisions only on the content of `summary_1` and `summary_2`. Keep any useful nationality facts already present in those summaries and do not remove that grounding behavior.\",\n      \"change_rule\": \"Constrain the final answer to a single minimal lowercase token placed alone inside the [[ ## answer ## ]] block: one token that expresses affirmation, negation, or explicit insufficiency of evidence. Decide as follows: (a) if the summaries explicitly identify different nationalities for the two persons or explicitly state they are from different countries, emit a single lowercase negative token (a concise negation) and nothing else; (b) if the summaries explicitly identify the same nationality for both, emit a single lowercase affirmative token (a concise affirmation) and nothing else; (c) if the summaries do not supply enough information to determine whether they are from the same country, emit a single lowercase token that denotes insufficient evidence (e.g., a short phrase meaning 'not enough information') and nothing else. Do not introduce new facts or infer nationalities that do not appear in the summaries.\",\n      \"drop_or_avoid_rule\": \"Avoid asserting any nationality or additional explanatory text that is not present in the summaries (for example, do not invent that Skye Edwards is English). Do not add parenthetical comments, comparative remarks (e.g., 'both are in the UK'), or any extra sentences inside or adjacent to the answer block.\",\n      \"output_contract\": \"The agent's [[ ## answer ## ]] block must contain only one minimal lowercase token (no surrounding text or punctuation). That token must be (1) an affirmation if the summaries clearly show same nationality, (2) a negation if the summaries clearly show different nationalities, or (3) a short explicit indicator of insufficient evidence if the summaries do not allow a determination. The token must be strictly supported by summary_1 and summary_2.\",\n      \"why_local_transition\": \"The source output added an unsupported nationality claim and extra explanation; this delta enforces minimal, summary-grounded answers and prevents inventing facts so the final-answer block is concise and strictly supported.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are Jon Fratelli and Skye Edwards from the same country?\",\n  \"summary_1\": \"Not enough information to confirm for \\\"Skye Edwards\\\" from the provided passages. Jon Fratelli is Scottish; the only Edwards named here (Skye-Jilly Edwards) is Australian — so not the same country.\",\n  \"summary_2\": \"Cannot confirm for \\\"Skye Edwards\\\" from the provided passages. If you intended Skye-Jilly Edwards, she is Australian, while Jon Fratelli is Scottish — so they are not from the same country.\",\n  \"current_output\": \"No. Jon Fratelli is Scottish and Skye Edwards is English, so they are from different countries (both are in the UK, but not the same country).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"no\",\n  \"rationale\": \"Both summaries explicitly identify Jon Fratelli as Scottish and Skye(-Jilly) Edwards as Australian, so the ordered rule for differing nationalities requires a single negation token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 25,
+    "row_index": 25,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

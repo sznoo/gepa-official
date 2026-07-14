@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "406977e4f7949aa39dd9730c1aa71ef55b96e9c7e7374b95d30957560f8c457a",
+  "created_at": "2026-07-13T20:09:33.919215+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 indicates a missing 'creator/designer' for an HTO mention (e.g., contains 'Bridge needed' or explicitly says the HTO creator is unknown) and the question contains 'HTO'.",
+            "preserve_rule": "Keep the agent's original goal and interface: produce a single 'query' string suitable for a retriever and continue to prefer Wikipedia (site:wikipedia.org). Preserve use of creator/designer search signals already present in the base prompt.",
+            "change_rule": "Replace the multi-step, numbered plan with one concise, single-line retrieval query that (a) targets Wikipedia (site:wikipedia.org), (b) searches for the HTO mention and common name variants together with creator/designer signals (creator OR designer OR \"created by\"), and (c) includes award-related tokens and an expansion of the shorthand 'WW' (include WW OR \"World War\"). Use OR and quoted phrases; do not emit placeholders like <CreatorName>, do not emit multiple numbered steps, and do not add explanation text.",
+            "drop_or_avoid_rule": "Do not output multi-step instructions, placeholders, extraction steps, or non-Wikipedia broad web queries. Avoid long explanatory text; avoid copying or inventing specific target-only entity names that do not appear in the visible inputs.",
+            "output_contract": "Emit exactly one compact query string (no surrounding explanation). The string must be ready to paste into a Wikipedia search and must include site:wikipedia.org. Prefer OR and quoted phrases to cover variants. Example allowed shape: HTO (\"HTO Park\" OR HTO) (creator OR designer OR \"created by\") (award OR WW OR \"World War\") site:wikipedia.org",
+            "why_local_transition": "The current multi-step plan produced overly broad multi-query output and led to noisy non-Wikipedia retrievals; a single concise Wikipedia-focused query that covers HTO variants, creator signals, and the 'WW' expansion keeps the agent focused on the missing bridge (who created the HTO) and the subsequent award check without changing the agent's role or interface."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What award did the creator of the HTO receive in the WW?",
+        "summary_1": "First-hop evidence:\n- HTO Park — \"HTO Park ... is an urban beach in Toronto ... opened in 2007.\" (Passage: HTO Park)\n- Kenny Hotz — \"creator/star of 'Kenny Hotz's Triumph of the Will'; ... has received ... Gemini Awards and the Canadian Comedy Awards.\" (Passage: Kenny Hotz)\n\nBridge needed:\n- The name of the creator/designer of HTO Park (the specific person or firm who created the HTO) — this creator’s page must be checked to see which award they received \"in the WW.\"\n\nRetrieval direction:\n1. Fetch the Wikipedia page titled \"HTO Park\" and inspect the infobox and 'History'/'Design' sections to extract the park's creator/designer name exactly.\n2. Fetch the Wikipedia page for that creator/designer (exact name from step 1) and inspect 'Awards', 'Honors', 'Recognition', or 'Awards and nominations' sections for any award described as occurring \"in the WW\" (or matching the user's \"WW\" phrase).\n3. If the creator page lacks explicit mention of \"WW,\" run a targeted query: \"<Creator name> award site:wikipedia.org\" and inspect matching pages for an award entry corresponding to \"WW.\"",
+        "current_output": {
+          "query": "1) HTO Park site:wikipedia.org\n2) (after extracting creator name from #1) <Creator Name> site:wikipedia.org\n3) <Creator Name> award site:wikipedia.org\n4) If creator name ambiguous, also try: \"HTO Park\" \"designer\" \"Claude Cormier\" site:wikipedia.org"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 indicates a missing 'creator/designer' for an HTO mention (e.g., contains 'Bridge needed' or explicitly says the HTO creator is unknown) and the question contains 'HTO'.\",\n      \"preserve_rule\": \"Keep the agent's original goal and interface: produce a single 'query' string suitable for a retriever and continue to prefer Wikipedia (site:wikipedia.org). Preserve use of creator/designer search signals already present in the base prompt.\",\n      \"change_rule\": \"Replace the multi-step, numbered plan with one concise, single-line retrieval query that (a) targets Wikipedia (site:wikipedia.org), (b) searches for the HTO mention and common name variants together with creator/designer signals (creator OR designer OR \\\"created by\\\"), and (c) includes award-related tokens and an expansion of the shorthand 'WW' (include WW OR \\\"World War\\\"). Use OR and quoted phrases; do not emit placeholders like <CreatorName>, do not emit multiple numbered steps, and do not add explanation text.\",\n      \"drop_or_avoid_rule\": \"Do not output multi-step instructions, placeholders, extraction steps, or non-Wikipedia broad web queries. Avoid long explanatory text; avoid copying or inventing specific target-only entity names that do not appear in the visible inputs.\",\n      \"output_contract\": \"Emit exactly one compact query string (no surrounding explanation). The string must be ready to paste into a Wikipedia search and must include site:wikipedia.org. Prefer OR and quoted phrases to cover variants. Example allowed shape: HTO (\\\"HTO Park\\\" OR HTO) (creator OR designer OR \\\"created by\\\") (award OR WW OR \\\"World War\\\") site:wikipedia.org\",\n      \"why_local_transition\": \"The current multi-step plan produced overly broad multi-query output and led to noisy non-Wikipedia retrievals; a single concise Wikipedia-focused query that covers HTO variants, creator signals, and the 'WW' expansion keeps the agent focused on the missing bridge (who created the HTO) and the subsequent award check without changing the agent's role or interface.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What award did the creator of the HTO receive in the WW?\",\n  \"summary_1\": \"First-hop evidence:\\n- HTO Park — \\\"HTO Park ... is an urban beach in Toronto ... opened in 2007.\\\" (Passage: HTO Park)\\n- Kenny Hotz — \\\"creator/star of 'Kenny Hotz's Triumph of the Will'; ... has received ... Gemini Awards and the Canadian Comedy Awards.\\\" (Passage: Kenny Hotz)\\n\\nBridge needed:\\n- The name of the creator/designer of HTO Park (the specific person or firm who created the HTO) — this creator’s page must be checked to see which award they received \\\"in the WW.\\\"\\n\\nRetrieval direction:\\n1. Fetch the Wikipedia page titled \\\"HTO Park\\\" and inspect the infobox and 'History'/'Design' sections to extract the park's creator/designer name exactly.\\n2. Fetch the Wikipedia page for that creator/designer (exact name from step 1) and inspect 'Awards', 'Honors', 'Recognition', or 'Awards and nominations' sections for any award described as occurring \\\"in the WW\\\" (or matching the user's \\\"WW\\\" phrase).\\n3. If the creator page lacks explicit mention of \\\"WW,\\\" run a targeted query: \\\"<Creator name> award site:wikipedia.org\\\" and inspect matching pages for an award entry corresponding to \\\"WW.\\\"\",\n  \"current_output\": {\n    \"query\": \"1) HTO Park site:wikipedia.org\\n2) (after extracting creator name from #1) <Creator Name> site:wikipedia.org\\n3) <Creator Name> award site:wikipedia.org\\n4) If creator name ambiguous, also try: \\\"HTO Park\\\" \\\"designer\\\" \\\"Claude Cormier\\\" site:wikipedia.org\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"(\\\"HTO Park\\\" OR HTO) (creator OR designer OR \\\"created by\\\") (award OR awards OR WW OR \\\"World War\\\") site:wikipedia.org\"\n  },\n  \"rationale\": \"Applied the ordered delta: replaced multi-step plan with one concise Wikipedia-focused query covering HTO variants, creator/designer signals, and award/WW tokens.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 83,
+    "row_index": 83,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "23a6cf0bea4bdb4acce5a07e5d9d0cde12ba19bb6406b32540cfe98cc8e5438c",
+  "created_at": "2026-07-13T17:24:57.711971+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 and summary_2 both identify the same political party (they each mention 'Liberal Party' or an identical party label) and the question/context refers to the Parliament of Victoria or another Australian body (e.g., contains 'Victoria' or 'Kennett'), and the current output includes parenthetical qualifiers or era/government descriptors.",
+            "preserve_rule": "Keep the agent's existing final-answer format and minimal-answer constraint: produce only the party name inside the [[ ## answer ## ]] block, with no additional explanation, citations, or commentary.",
+            "change_rule": "If the summaries agree on 'Liberal Party' (or the same party label) and the context indicates Australian politics, transform the verbose phrase by removing parenthetical or era/government qualifiers (for example, delete '(the Kennett Liberal Government)' or the word 'Government') and replace it with the canonical national party name that corresponds to that 'Liberal Party' in the Australian/Victorian context. Output that canonical party name as the single minimal answer string.",
+            "drop_or_avoid_rule": "Avoid including parentheticals, government-era descriptors, explanatory phrases, full sentences, or any extra punctuation beyond what belongs to the party's official name. Do not add qualifiers like 'the Kennett ...' or words such as 'Government'; do not produce a multi-part or parenthesized answer.",
+            "output_contract": "Produce exactly one minimal answer string (the party name appropriate to the Victoria/Australia context) and place it only inside the [[ ## answer ## ]] block. No other text or formatting is allowed.",
+            "why_local_transition": "The source output includes a parenthetical government-era descriptor that makes the answer longer than the required minimal canonical party name. This small prompt change instructs the agent to strip such qualifiers and emit the formal national party name for the 'Liberal Party' in the Australian/Victorian context, preserving correctness while satisfying the minimal-answer contract."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "John Delzoppo was the Speaker of the Parliament of Victoria under the governance of which political party?",
+        "summary_1": "He served as Speaker under the Liberal Party (the Kennett Liberal Government).",
+        "summary_2": "John Delzoppo served as Speaker under the Liberal Party (the Kennett Liberal Government).",
+        "current_output": "The Liberal Party (the Kennett Liberal Government)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 and summary_2 both identify the same political party (they each mention 'Liberal Party' or an identical party label) and the question/context refers to the Parliament of Victoria or another Australian body (e.g., contains 'Victoria' or 'Kennett'), and the current output includes parenthetical qualifiers or era/government descriptors.\",\n      \"preserve_rule\": \"Keep the agent's existing final-answer format and minimal-answer constraint: produce only the party name inside the [[ ## answer ## ]] block, with no additional explanation, citations, or commentary.\",\n      \"change_rule\": \"If the summaries agree on 'Liberal Party' (or the same party label) and the context indicates Australian politics, transform the verbose phrase by removing parenthetical or era/government qualifiers (for example, delete '(the Kennett Liberal Government)' or the word 'Government') and replace it with the canonical national party name that corresponds to that 'Liberal Party' in the Australian/Victorian context. Output that canonical party name as the single minimal answer string.\",\n      \"drop_or_avoid_rule\": \"Avoid including parentheticals, government-era descriptors, explanatory phrases, full sentences, or any extra punctuation beyond what belongs to the party's official name. Do not add qualifiers like 'the Kennett ...' or words such as 'Government'; do not produce a multi-part or parenthesized answer.\",\n      \"output_contract\": \"Produce exactly one minimal answer string (the party name appropriate to the Victoria/Australia context) and place it only inside the [[ ## answer ## ]] block. No other text or formatting is allowed.\",\n      \"why_local_transition\": \"The source output includes a parenthetical government-era descriptor that makes the answer longer than the required minimal canonical party name. This small prompt change instructs the agent to strip such qualifiers and emit the formal national party name for the 'Liberal Party' in the Australian/Victorian context, preserving correctness while satisfying the minimal-answer contract.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"John Delzoppo was the Speaker of the Parliament of Victoria under the governance of which political party?\",\n  \"summary_1\": \"He served as Speaker under the Liberal Party (the Kennett Liberal Government).\",\n  \"summary_2\": \"John Delzoppo served as Speaker under the Liberal Party (the Kennett Liberal Government).\",\n  \"current_output\": \"The Liberal Party (the Kennett Liberal Government).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nLiberal Party of Australia\",\n  \"rationale\": \"Both summaries identified the Liberal Party and the question referenced Victoria; per the ordered deltas I removed the parenthetical era descriptor and emitted the canonical national party name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

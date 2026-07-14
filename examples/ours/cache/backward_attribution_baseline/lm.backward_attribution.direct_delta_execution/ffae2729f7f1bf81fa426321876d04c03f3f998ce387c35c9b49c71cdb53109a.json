@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "ffae2729f7f1bf81fa426321876d04c03f3f998ce387c35c9b49c71cdb53109a",
+  "created_at": "2026-07-13T17:16:39.926206+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the provided summaries both contain the same short, self-contained factual token (for example a single year or a single short phrase) that clearly answers the question, and the current output includes extra parenthetical text or explanatory phrasing beyond that token.",
+            "preserve_rule": "Keep using the visible summaries as the evidence source and continue producing the final [[ ## answer ## ]] field exactly as the base prompt requires; do not introduce new facts or change the interface.",
+            "change_rule": "When the trigger condition holds, shorten the content placed inside [[ ## answer ## ]] to exactly that single concise token present in the summaries (e.g., the single year or short phrase). Remove any parenthetical remarks, qualifiers, or extra explanatory clauses; output only the concise token itself.",
+            "drop_or_avoid_rule": "Avoid adding parentheticals, explanatory clauses, extra punctuation, or new information not present in the visible summaries. If the summaries do not agree on a single concise token, or the answer is not a single short token, do not apply this shortening and fall back to the base prompt behavior.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal concise answer token that is directly supported by the visible summaries (no surrounding explanation). If that token is a numeric year, output only the year; if no single concise token is supported, do not apply this rule.",
+            "why_local_transition": "The current output contains the correct concise token but adds parenthetical explanatory text. This small behavioral edit enforces producing the minimal final-answer string already supported by the summaries without changing evidence use or broader behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?",
+        "summary_1": "The Indian National Army was formed in 1942.",
+        "summary_2": "1942 (formally proclaimed in April 1942).",
+        "current_output": "1942 (formally proclaimed in April 1942)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the provided summaries both contain the same short, self-contained factual token (for example a single year or a single short phrase) that clearly answers the question, and the current output includes extra parenthetical text or explanatory phrasing beyond that token.\",\n      \"preserve_rule\": \"Keep using the visible summaries as the evidence source and continue producing the final [[ ## answer ## ]] field exactly as the base prompt requires; do not introduce new facts or change the interface.\",\n      \"change_rule\": \"When the trigger condition holds, shorten the content placed inside [[ ## answer ## ]] to exactly that single concise token present in the summaries (e.g., the single year or short phrase). Remove any parenthetical remarks, qualifiers, or extra explanatory clauses; output only the concise token itself.\",\n      \"drop_or_avoid_rule\": \"Avoid adding parentheticals, explanatory clauses, extra punctuation, or new information not present in the visible summaries. If the summaries do not agree on a single concise token, or the answer is not a single short token, do not apply this shortening and fall back to the base prompt behavior.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal concise answer token that is directly supported by the visible summaries (no surrounding explanation). If that token is a numeric year, output only the year; if no single concise token is supported, do not apply this rule.\",\n      \"why_local_transition\": \"The current output contains the correct concise token but adds parenthetical explanatory text. This small behavioral edit enforces producing the minimal final-answer string already supported by the summaries without changing evidence use or broader behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"When was the army whose soldiers Rameshwar Banerjee was trying to get released when he was shot formed?\",\n  \"summary_1\": \"The Indian National Army was formed in 1942.\",\n  \"summary_2\": \"1942 (formally proclaimed in April 1942).\",\n  \"current_output\": \"1942 (formally proclaimed in April 1942)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"1942\",\n  \"rationale\": \"Both summaries state the year 1942; per the ordered delta, removed parenthetical text and returned only the concise token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 47,
+    "row_index": 47,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

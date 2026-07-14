@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "44e47261354cdbfdf1df90fdcd5ce99ec7111da74390f0cbaf30065b7020dd08",
+  "created_at": "2026-07-13T20:08:45.419353+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the inputs (summary_1 or metadata like missing_titles_after_hop2) contain a specific place-name or place-title (for example, any exact township or article title) OR a prior generic 'person birthplace' query did not return a biography page,",
+            "preserve_rule": "Keep the agent's requirement to emit a single, compact retrieval query string (no extra explanation), and preserve the preference for authoritative biography pages (e.g., Wikipedia) as the retrieval target.",
+            "change_rule": "When a concrete place-title is available, replace a generic person-only birthplace query with a focused place-centered query. Construct one short search string that combines the discovered place-title and the person's name plus a birth-location keyword. Use the pattern: \"<Place Title> <Person Name> (born|birthplace|raised) [site:en.wikipedia.org]\". Produce only that single-line query as the agent's output.",
+            "drop_or_avoid_rule": "Avoid broad person-name-only queries (e.g., 'Baz Luhrmann birthplace') that often retrieve noise (soundtrack/work pages). Do not append the full natural-language question or extra sentences. Do not produce multiple queries or explanatory text.",
+            "output_contract": "Output exactly one compact search query string (one line). It must include the place-title token from the inputs and the person's name and at least one birth-related keyword (born|birthplace|raised). Optionally include site:en.wikipedia.org. No surrounding commentary or formatting.",
+            "why_local_transition": "This edge shifts the query formulation from a generic person-centric search to a focused place-centered search using a newly discovered title; that small change targets the specific page likely to state whether the director was born/raised there, improving retrieval precision without changing the agent's interface."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which town was the director of the \"Red Curtain Trilogy\" born in?",
+        "summary_1": "First-hop evidence: Red Curtain Trilogy — \"title given to the first three films directed by Baz Luhrmann\"; Baz Luhrmann — \"born 17 September 1962\".  \nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \nRetrieval direction: 1. Fetch the page titled \"Baz Luhrmann\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \"Baz Luhrmann birthplace site:wikipedia.org\" or fetch authoritative biographies to confirm the town.",
+        "current_output": {
+          "query": "Baz Luhrmann birthplace site:en.wikipedia.org"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the inputs (summary_1 or metadata like missing_titles_after_hop2) contain a specific place-name or place-title (for example, any exact township or article title) OR a prior generic 'person birthplace' query did not return a biography page,\",\n      \"preserve_rule\": \"Keep the agent's requirement to emit a single, compact retrieval query string (no extra explanation), and preserve the preference for authoritative biography pages (e.g., Wikipedia) as the retrieval target.\",\n      \"change_rule\": \"When a concrete place-title is available, replace a generic person-only birthplace query with a focused place-centered query. Construct one short search string that combines the discovered place-title and the person's name plus a birth-location keyword. Use the pattern: \\\"<Place Title> <Person Name> (born|birthplace|raised) [site:en.wikipedia.org]\\\". Produce only that single-line query as the agent's output.\",\n      \"drop_or_avoid_rule\": \"Avoid broad person-name-only queries (e.g., 'Baz Luhrmann birthplace') that often retrieve noise (soundtrack/work pages). Do not append the full natural-language question or extra sentences. Do not produce multiple queries or explanatory text.\",\n      \"output_contract\": \"Output exactly one compact search query string (one line). It must include the place-title token from the inputs and the person's name and at least one birth-related keyword (born|birthplace|raised). Optionally include site:en.wikipedia.org. No surrounding commentary or formatting.\",\n      \"why_local_transition\": \"This edge shifts the query formulation from a generic person-centric search to a focused place-centered search using a newly discovered title; that small change targets the specific page likely to state whether the director was born/raised there, improving retrieval precision without changing the agent's interface.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which town was the director of the \\\"Red Curtain Trilogy\\\" born in?\",\n  \"summary_1\": \"First-hop evidence: Red Curtain Trilogy — \\\"title given to the first three films directed by Baz Luhrmann\\\"; Baz Luhrmann — \\\"born 17 September 1962\\\".  \\nBridge needed: Baz Luhrmann — town (place) of birth to be verified.  \\nRetrieval direction: 1. Fetch the page titled \\\"Baz Luhrmann\\\" (Wikipedia/biography) and inspect the infobox 'Born' field and the 'Early life' section for birthplace (town). 2. If needed, run query \\\"Baz Luhrmann birthplace site:wikipedia.org\\\" or fetch authoritative biographies to confirm the town.\",\n  \"current_output\": {\n    \"query\": \"Baz Luhrmann birthplace site:en.wikipedia.org\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Red Curtain Trilogy Baz Luhrmann born site:en.wikipedia.org\"\n  },\n  \"rationale\": \"Applied the delta: used the input article title 'Red Curtain Trilogy' as the place-title token, combined it with the person name and the birth keyword 'born', and kept a single compact Wikipedia-focused query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

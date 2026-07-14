@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c97c7c50ebb5845227c1c6e0b951742871c71d2ea0aaa02a56075da609b37600",
+  "created_at": "2026-07-13T17:24:33.977781+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the visible summaries jointly identify the same person by a contiguous proper-name string (capitalized words sequence) and the current produced `answer` includes extra descriptive text (titles, roles, em-dashes, clauses) after that name.",
+            "preserve_rule": "Preserve the exact spelling and capitalization of the identified person-name substring as it appears verbatim in the summaries.",
+            "change_rule": "Replace the current `answer` with only the minimal contiguous person-name substring (the shortest full-name token sequence of capitalized words that appears in the summaries). Remove any following or surrounding descriptors, roles, team names, em-dashes, commas, periods, or explanatory clauses. Produce that name as the sole content of the `answer` field.",
+            "drop_or_avoid_rule": "Do not include job titles, team names, role descriptions, explanatory phrases, punctuation that appends a clause (e.g., '—', ':', ',', parentheses), or any additional text beyond the extracted full name.",
+            "output_contract": "The `answer` field must contain exactly one minimal full-name string (no surrounding text or punctuation), matching the preserved spelling from the summaries. Ensure nothing else is emitted in the `answer` field.",
+            "why_local_transition": "The edge corrects an endpoint that appended descriptive material to an otherwise-correct named answer. This minimal edit enforces the final-answer contract (only the minimal answer string) while keeping the already-correct name unchanged."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?",
+        "summary_1": "Rob Pelinka — general manager of the Los Angeles Lakers — is the teammate from Calip's 1988–89 championship team who is currently serving as a general manager.",
+        "summary_2": "Rob Pelinka — general manager of the Los Angeles Lakers.",
+        "current_output": "Rob Pelinka — general manager of the Los Angeles Lakers."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the visible summaries jointly identify the same person by a contiguous proper-name string (capitalized words sequence) and the current produced `answer` includes extra descriptive text (titles, roles, em-dashes, clauses) after that name.\",\n      \"preserve_rule\": \"Preserve the exact spelling and capitalization of the identified person-name substring as it appears verbatim in the summaries.\",\n      \"change_rule\": \"Replace the current `answer` with only the minimal contiguous person-name substring (the shortest full-name token sequence of capitalized words that appears in the summaries). Remove any following or surrounding descriptors, roles, team names, em-dashes, commas, periods, or explanatory clauses. Produce that name as the sole content of the `answer` field.\",\n      \"drop_or_avoid_rule\": \"Do not include job titles, team names, role descriptions, explanatory phrases, punctuation that appends a clause (e.g., '—', ':', ',', parentheses), or any additional text beyond the extracted full name.\",\n      \"output_contract\": \"The `answer` field must contain exactly one minimal full-name string (no surrounding text or punctuation), matching the preserved spelling from the summaries. Ensure nothing else is emitted in the `answer` field.\",\n      \"why_local_transition\": \"The edge corrects an endpoint that appended descriptive material to an otherwise-correct named answer. This minimal edit enforces the final-answer contract (only the minimal answer string) while keeping the already-correct name unchanged.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?\",\n  \"summary_1\": \"Rob Pelinka — general manager of the Los Angeles Lakers — is the teammate from Calip's 1988–89 championship team who is currently serving as a general manager.\",\n  \"summary_2\": \"Rob Pelinka — general manager of the Los Angeles Lakers.\",\n  \"current_output\": \"Rob Pelinka — general manager of the Los Angeles Lakers.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Rob Pelinka\",\n  \"rationale\": \"Extracted the minimal contiguous person-name string from the summaries and removed descriptive text per the ordered rule.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 122,
+    "row_index": 122,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

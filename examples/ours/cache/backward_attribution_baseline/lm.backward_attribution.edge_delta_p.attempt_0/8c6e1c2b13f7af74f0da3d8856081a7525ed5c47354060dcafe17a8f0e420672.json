@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "8c6e1c2b13f7af74f0da3d8856081a7525ed5c47354060dcafe17a8f0e420672",
+  "created_at": "2026-07-13T17:04:33.439896+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "passages": [
+          "Ransom Riggs | Ransom Riggs (born February 3, 1979) is an American writer and filmmaker best known for the book \"Miss Peregrine's Home for Peculiar Children\".",
+          "No Limit Kids: Much Ado About Middle School | No Limit Kids: Much Ado About Middle School is a 2010 direct-to-video family comedy film.  It starred Bill Cobbs, Lee Meriwether, Blake Michael, Celeste Kellogg and Ashton Harrell.  The screenplay was written by Joshua Moody and the film was directed by Dave Moody for Elevating Entertainment Motion Pictures, who also provided the musical score for the film.",
+          "Praise Band: The Movie | Praise Band: The Movie is a 2008 faith-based film by Elevating Entertainment Motion Pictures.  It starred George Hamilton IV, Adam Melton and James Dana Bryan.  The screenplay was written by Joshua Moody and the film was produced and directed by Dave Moody.",
+          "The Moody Brothers | The Moody Brothers are an Americana country music trio who gained prominence in 1985 when they were nominated for a Grammy Award for their instrumental performance of the classic fiddle tune \"Cotton Eyed Joe\".  This trio of brothers, Carlton Moody, Dave Moody, and Trent Moody were nominated for a second Grammy in 1990 and won three International Country Music Awards in Europe.",
+          "Dave Moody (sportscaster) | David Wayne \"Dave\" Moody is an American motorsports commentator who works for the Motor Racing Network.  He is the lead turn announcer for MRN and has worked for the radio network on and off since 1983.  He moved to MRN full-time in 1997 and became the lead turn announcer in 2001.  Since 2003, Moody has been the host of the nationally syndicated Sirius XM show \"Sirius XM Speedway\" on Sirius XM NASCAR Radio.",
+          "Dave Nutting | David Judd Nutting is an industrial design engineer who played a role in the early video game industry.  He is a graduate of the Pratt Institute with a degree in industrial design.",
+          "Ransomes Industrial Estate | Ransomes Industrial Estate, also known as Ransomes Europark is combined retail and business park on the South-Eastern edge of Ipswich in Suffolk, UK.  It takes its name from Ransomes, Sims & Jefferies, which still maintains a presence on the park."
+        ],
+        "current_output": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker."
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "score": 0.0,
+        "generated_query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).",
+        "retrieved_titles": [
+          "Priyadarshan Jadhav",
+          "The Total Picture Seminar",
+          "Above-the-line (filmmaking)",
+          "Nick G. Miller",
+          "List of British Jewish entertainers",
+          "Tarila Thompson",
+          "Ransom Riggs"
+        ],
+        "summary_2": "Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "answer": "Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Dave Moody"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop evidence: Ransom Riggs is described as an American writer and filmmaker (e.g., Miss Peregrine’s Home for Peculiar Children) — record: writer, filmmaker. Current gap / bridge: the precise occupations credited to Dave Moody are not yet retrieved. Existing notes suggest he holds multiple music- and film-related roles (director, producer, composer/songwriter, musician/artist), but we need the authoritative occupation labels. Retrieval direction for next hop: fetch the \"Dave Moody\" Wikipedia page (and check any \"Dave Moody\" disambiguation to identify the entertainment-related Dave Moody) and extract the exact occupations/roles as listed in the infobox or opening lines. Next agent should list Dave Moody’s distinct entertainment-industry roles and compare the number/variety of those roles to the two confirmed for Riggs. (Summary1: not a final answer.)",
+        "score": null,
+        "generated_query": null,
+        "retrieved_titles": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"passages\": [\n    \"Ransom Riggs | Ransom Riggs (born February 3, 1979) is an American writer and filmmaker best known for the book \\\"Miss Peregrine's Home for Peculiar Children\\\".\",\n    \"No Limit Kids: Much Ado About Middle School | No Limit Kids: Much Ado About Middle School is a 2010 direct-to-video family comedy film.  It starred Bill Cobbs, Lee Meriwether, Blake Michael, Celeste Kellogg and Ashton Harrell.  The screenplay was written by Joshua Moody and the film was directed by Dave Moody for Elevating Entertainment Motion Pictures, who also provided the musical score for the film.\",\n    \"Praise Band: The Movie | Praise Band: The Movie is a 2008 faith-based film by Elevating Entertainment Motion Pictures.  It starred George Hamilton IV, Adam Melton and James Dana Bryan.  The screenplay was written by Joshua Moody and the film was produced and directed by Dave Moody.\",\n    \"The Moody Brothers | The Moody Brothers are an Americana country music trio who gained prominence in 1985 when they were nominated for a Grammy Award for their instrumental performance of the classic fiddle tune \\\"Cotton Eyed Joe\\\".  This trio of brothers, Carlton Moody, Dave Moody, and Trent Moody were nominated for a second Grammy in 1990 and won three International Country Music Awards in Europe.\",\n    \"Dave Moody (sportscaster) | David Wayne \\\"Dave\\\" Moody is an American motorsports commentator who works for the Motor Racing Network.  He is the lead turn announcer for MRN and has worked for the radio network on and off since 1983.  He moved to MRN full-time in 1997 and became the lead turn announcer in 2001.  Since 2003, Moody has been the host of the nationally syndicated Sirius XM show \\\"Sirius XM Speedway\\\" on Sirius XM NASCAR Radio.\",\n    \"Dave Nutting | David Judd Nutting is an industrial design engineer who played a role in the early video game industry.  He is a graduate of the Pratt Institute with a degree in industrial design.\",\n    \"Ransomes Industrial Estate | Ransomes Industrial Estate, also known as Ransomes Europark is combined retail and business park on the South-Eastern edge of Ipswich in Suffolk, UK.  It takes its name from Ransomes, Sims & Jefferies, which still maintains a presence on the park.\"\n  ],\n  \"current_output\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"score\": 0.0,\n  \"generated_query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\",\n  \"retrieved_titles\": [\n    \"Priyadarshan Jadhav\",\n    \"The Total Picture Seminar\",\n    \"Above-the-line (filmmaking)\",\n    \"Nick G. Miller\",\n    \"List of British Jewish entertainers\",\n    \"Tarila Thompson\",\n    \"Ransom Riggs\"\n  ],\n  \"summary_2\": \"Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"answer\": \"Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Dave Moody\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop evidence: Ransom Riggs is described as an American writer and filmmaker (e.g., Miss Peregrine’s Home for Peculiar Children) — record: writer, filmmaker. Current gap / bridge: the precise occupations credited to Dave Moody are not yet retrieved. Existing notes suggest he holds multiple music- and film-related roles (director, producer, composer/songwriter, musician/artist), but we need the authoritative occupation labels. Retrieval direction for next hop: fetch the \\\"Dave Moody\\\" Wikipedia page (and check any \\\"Dave Moody\\\" disambiguation to identify the entertainment-related Dave Moody) and extract the exact occupations/roles as listed in the infobox or opening lines. Next agent should list Dave Moody’s distinct entertainment-industry roles and compare the number/variety of those roles to the two confirmed for Riggs. (Summary1: not a final answer.)\",\n  \"score\": null,\n  \"generated_query\": null,\n  \"retrieved_titles\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks to compare two people and the provided passages give clear occupation labels for one person but do not provide authoritative occupation labels (infobox/opening-line) for the other, and the agent's tentative output is a final comparative judgment rather than an intermediate retrieval plan.\",\n    \"preserve_rule\": \"Keep the current behavior of extracting and concisely listing the occupations or roles that are explicitly supported by the given passages for any person mentioned there. Retain concise phrasing and indication of source evidence (e.g., which passage).\",\n    \"change_rule\": \"Do NOT conclude which person fills a larger variety of entertainment roles when occupations for one person are not authoritatively present in the passages. Instead, produce an intermediate 'first-hop' summary that (a) lists the roles directly supported by the visible passages for each named person, (b) identifies the specific missing fact or bridge needed to continue (e.g., authoritative occupation labels for the second person), and (c) issues a precise retrieval direction for the next hop: fetch the Wikipedia page(s) or disambiguation entry for the missing-name (e.g., 'Dave Moody'), identify the entertainment-related Dave Moody if multiple, and extract the occupations shown in the infobox or opening lines so the next agent can enumerate distinct entertainment-industry roles.\",\n    \"drop_or_avoid_rule\": \"Avoid producing a final comparative answer, avoid asserting roles for the under-documented person beyond what the passages explicitly state, and avoid instructing retrieval of unrelated titles. Do not include a final verdict or any unverified occupation claims.\",\n    \"output_contract\": \"The agent's returned `summary` must be an intermediate-plan style summary containing three short labeled parts: (1) 'first-hop evidence' — a concise list of roles explicitly supported by the input passages for each named person (cite which passage or line), (2) 'gap/bridge' — one sentence naming what authoritative occupation information is missing and why, and (3) 'retrieval direction' — a one-sentence instruction naming the exact page(s) to fetch (e.g., the 'Dave Moody' Wikipedia page and disambiguation if present) and the exact fields to extract (infobox/opening-line occupations; disambiguation check to identify the entertainment-related individual). End with an explicit note that this is not a final answer.\",\n    \"why_local_transition\": \"This change nudges the agent from prematurely giving a final comparison to producing the targeted intermediate output that the pipeline expects: a first-hop evidence summary plus a concrete next-hop retrieval instruction so downstream agents can collect the missing authoritative occupations and complete the comparison.\"\n  },\n  \"rationale\": \"The agent previously emitted a final comparative judgment despite the passages lacking authoritative occupation labels for Dave Moody. The smallest coherent fix is to alter the agent's decision rule so it preserves its useful extraction of supported roles but, when evidence is incomplete for one comparee, stops short of answering and instead explicitly specifies the missing information and the exact Wikipedia page/infobox fields the next agent should fetch. This keeps all existing good behavior (extracting supported roles) and introduces a minimal, narrowly scoped behavior change (emit an intermediate plan rather than a judgment), aligning the agent's output with the target intermediate state without introducing new interface fields or making unverifiable claims.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 1,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "bb72e31191b5777696995dfef7cad1d3128a0e4b2181002ce42bfe98de3f48a4",
+  "created_at": "2026-07-13T17:24:28.414722+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?",
+        "summary_1": "Rob Pelinka — general manager of the Los Angeles Lakers — is the teammate from Calip's 1988–89 championship team who is currently serving as a general manager.",
+        "summary_2": "Rob Pelinka — general manager of the Los Angeles Lakers.",
+        "current_output": "Rob Pelinka — general manager of the Los Angeles Lakers."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Rob Pelinka — general manager of the Los Angeles Lakers.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Rob Pelinka",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which of Demetrius Calip's 1988-1989 National Championship team's members is currently serving as the general manager of another sports team?\",\n  \"summary_1\": \"Rob Pelinka — general manager of the Los Angeles Lakers — is the teammate from Calip's 1988–89 championship team who is currently serving as a general manager.\",\n  \"summary_2\": \"Rob Pelinka — general manager of the Los Angeles Lakers.\",\n  \"current_output\": \"Rob Pelinka — general manager of the Los Angeles Lakers.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Rob Pelinka — general manager of the Los Angeles Lakers.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Rob Pelinka\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the visible summaries jointly identify the same person by a contiguous proper-name string (capitalized words sequence) and the current produced `answer` includes extra descriptive text (titles, roles, em-dashes, clauses) after that name.\",\n    \"preserve_rule\": \"Preserve the exact spelling and capitalization of the identified person-name substring as it appears verbatim in the summaries.\",\n    \"change_rule\": \"Replace the current `answer` with only the minimal contiguous person-name substring (the shortest full-name token sequence of capitalized words that appears in the summaries). Remove any following or surrounding descriptors, roles, team names, em-dashes, commas, periods, or explanatory clauses. Produce that name as the sole content of the `answer` field.\",\n    \"drop_or_avoid_rule\": \"Do not include job titles, team names, role descriptions, explanatory phrases, punctuation that appends a clause (e.g., '—', ':', ',', parentheses), or any additional text beyond the extracted full name.\",\n    \"output_contract\": \"The `answer` field must contain exactly one minimal full-name string (no surrounding text or punctuation), matching the preserved spelling from the summaries. Ensure nothing else is emitted in the `answer` field.\",\n    \"why_local_transition\": \"The edge corrects an endpoint that appended descriptive material to an otherwise-correct named answer. This minimal edit enforces the final-answer contract (only the minimal answer string) while keeping the already-correct name unchanged.\"\n  },\n  \"rationale\": \"The agent currently outputs the correct teammate name but adds an explanatory role phrase, violating the final-answer contract that requires only the minimal answer string. The smallest safe behavior change is to trim any appended descriptors and emit only the preserved name substring that the summaries support. The rules locate a person-name token present in the summaries, keep its exact spelling, and forbid adding titles or extra punctuation so future outputs conform to the required minimal-answer format without altering other useful behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 122,
+    "row_index": 122,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

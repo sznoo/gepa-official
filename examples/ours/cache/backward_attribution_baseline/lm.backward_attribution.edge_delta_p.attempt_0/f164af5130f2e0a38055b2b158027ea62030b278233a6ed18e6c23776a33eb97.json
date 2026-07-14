@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "f164af5130f2e0a38055b2b158027ea62030b278233a6ed18e6c23776a33eb97",
+  "created_at": "2026-07-13T17:23:13.987283+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \"La Bête\" ) feature what relationship?",
+        "summary_1": "They both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).",
+        "summary_2": "They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).",
+        "current_output": "They both depict a sexual/romantic relationship between a woman and an animal (bestiality/zoophilia)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They both depict a sexual/romantic relationship between a woman and an animal (bestiality/zoophilia).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "between a beast (monster) and a woman",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \\\"La Bête\\\" ) feature what relationship?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The 1977 drama film The creature (Spanish: La criatura ) and the 1975 film The Beast (French: \\\"La Bête\\\" ) feature what relationship?\",\n  \"summary_1\": \"They both depict a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).\",\n  \"summary_2\": \"They both portray a sexual/romantic relationship between a woman and an animal (zoophilia/bestiality).\",\n  \"current_output\": \"They both depict a sexual/romantic relationship between a woman and an animal (bestiality/zoophilia).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They both depict a sexual/romantic relationship between a woman and an animal (bestiality/zoophilia).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"between a beast (monster) and a woman\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When both provided summaries describe a sexual/romantic relationship involving a woman and a non-human (animal) and the question title contains the word 'Beast' or 'La Bête'.\",\n    \"preserve_rule\": \"Keep using only facts present in the visible inputs (question and summaries). Preserve the agent's minimal-answer output contract and retain the core entities already mentioned (e.g., the woman and the non-human term that appears in the question or summaries).\",\n    \"change_rule\": \"Instead of a full explanatory sentence, produce a single, concise relational noun-phrase that names the pairing using the non-human term present in the question (e.g., 'beast' / 'La Bête') together with 'woman'. Form the answer as a short phrase describing the relationship (two nouns connected by a preposition or conjunction), and place only that phrase in the answer output.\",\n    \"drop_or_avoid_rule\": \"Do not add parenthetical clarifications, clinical labels (bestiality/zoophilia), extra qualifiers (sexual/romantic), full sentences, or any supporting explanation. Avoid extraneous punctuation or commentary.\",\n    \"output_contract\": \"Produce exactly one minimal answer string (a short relational phrase using only words supported by the visible inputs) and place it alone inside the [[ ## answer ## ]] block. No other text, exposition, or formatting is allowed.\",\n    \"why_local_transition\": \"Compresses the existing descriptive sentence into the required minimal relational phrasing by preferring the 'beast' term already present in the question and the 'woman' entity from the summaries, while preserving only evidence-supported wording.\"\n  },\n  \"rationale\": \"The current output is a full sentence with clinical labels and parentheticals. The smallest coherent change is to instruct the agent to emit a concise relational phrase anchored on entities already visible (the question's 'Beast' and the summaries' 'woman/animal'). This preserves evidence from the inputs, keeps the minimal-answer contract, and avoids adding new information or explanatory text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 98,
+    "row_index": 98,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

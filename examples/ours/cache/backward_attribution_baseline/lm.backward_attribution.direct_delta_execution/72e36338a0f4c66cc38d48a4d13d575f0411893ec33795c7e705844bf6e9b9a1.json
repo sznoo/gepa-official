@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "72e36338a0f4c66cc38d48a4d13d575f0411893ec33795c7e705844bf6e9b9a1",
+  "created_at": "2026-07-13T17:23:55.333998+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both summary_1 and summary_2 contain an identical explicit 'headquartered in <LOCATION>' phrase (i.e., they name the same LOCATION string) and the current output is a full sentence rather than a single token.",
+            "preserve_rule": "Keep using summary_1 and summary_2 as the sole evidence sources. Preserve the distinction already present between a company's headquarters and its registered office and prefer evidence labeled as 'headquartered in' when available.",
+            "change_rule": "When the trigger condition holds, replace verbose final answers with exactly the single LOCATION token that appears in the 'headquartered in' phrase in both summaries. Emit only that token (no leading/trailing words, prepositions, qualifiers, punctuation, or explanation). If the summaries include a country as part of the identical LOCATION token, include it only if it is part of that exact token in both summaries.",
+            "drop_or_avoid_rule": "Do not output any extra context, descriptive phrases, full sentences, or multiple locations (e.g., do not append 'India', 'registered office in ...', 'an Indian multinational', or any clarifying text). Avoid presenting more than the single agreed LOCATION. If the summaries do not agree on an identical 'headquartered in' token, do not apply this delta.",
+            "output_contract": "Produce the field 'answer' containing only the minimal answer string: the single LOCATION token described above. Ensure the [[ ## answer ## ]] block contains exactly that token and nothing else.",
+            "why_local_transition": "The source output is a verbose sentence. The visible summaries clearly agree on a single headquarters location. This minimal prompt edit enforces selecting the agreed 'headquartered in' LOCATION and formatting it as the single-token final answer, matching the final-agent output contract while changing behavior as little as necessary."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Where is Tech Mahindra, the creator of EZ-Frame, located?",
+        "summary_1": "Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai.",
+        "summary_2": "Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai, India.",
+        "current_output": "Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both summary_1 and summary_2 contain an identical explicit 'headquartered in <LOCATION>' phrase (i.e., they name the same LOCATION string) and the current output is a full sentence rather than a single token.\",\n      \"preserve_rule\": \"Keep using summary_1 and summary_2 as the sole evidence sources. Preserve the distinction already present between a company's headquarters and its registered office and prefer evidence labeled as 'headquartered in' when available.\",\n      \"change_rule\": \"When the trigger condition holds, replace verbose final answers with exactly the single LOCATION token that appears in the 'headquartered in' phrase in both summaries. Emit only that token (no leading/trailing words, prepositions, qualifiers, punctuation, or explanation). If the summaries include a country as part of the identical LOCATION token, include it only if it is part of that exact token in both summaries.\",\n      \"drop_or_avoid_rule\": \"Do not output any extra context, descriptive phrases, full sentences, or multiple locations (e.g., do not append 'India', 'registered office in ...', 'an Indian multinational', or any clarifying text). Avoid presenting more than the single agreed LOCATION. If the summaries do not agree on an identical 'headquartered in' token, do not apply this delta.\",\n      \"output_contract\": \"Produce the field 'answer' containing only the minimal answer string: the single LOCATION token described above. Ensure the [[ ## answer ## ]] block contains exactly that token and nothing else.\",\n      \"why_local_transition\": \"The source output is a verbose sentence. The visible summaries clearly agree on a single headquarters location. This minimal prompt edit enforces selecting the agreed 'headquartered in' LOCATION and formatting it as the single-token final answer, matching the final-agent output contract while changing behavior as little as necessary.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Where is Tech Mahindra, the creator of EZ-Frame, located?\",\n  \"summary_1\": \"Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai.\",\n  \"summary_2\": \"Tech Mahindra is an Indian multinational headquartered in Pune, with its registered office in Mumbai, India.\",\n  \"current_output\": \"Tech Mahindra is an Indian multinational headquartered in Pune, India, with its registered office in Mumbai.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nPune\",\n  \"rationale\": \"Both summaries explicitly state 'headquartered in Pune'; per the ordered delta, the final answer is the single LOCATION token 'Pune'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 109,
+    "row_index": 109,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

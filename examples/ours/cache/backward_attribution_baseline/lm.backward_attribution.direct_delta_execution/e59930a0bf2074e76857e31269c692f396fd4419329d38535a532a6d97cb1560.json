@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "e59930a0bf2074e76857e31269c692f396fd4419329d38535a532a6d97cb1560",
+  "created_at": "2026-07-13T17:20:16.185361+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current_output.query is a short numeric or numeric-phrase that simply repeats the summary (e.g. \"11\", \"11 people\") or otherwise lacks the show/title context from `question`.",
+            "preserve_rule": "Keep using the same inputs (`question`, `summary_1`) and retain the requirement to produce exactly one compact second-hop retrieval `query` string.",
+            "change_rule": "When triggered, replace the numeric-only query with a concise focused retrieval query that (a) extracts the show/title phrase from `question` (e.g. the literal phrase 'Murder in the Heartland'), and (b) adds compact connector terms that target the show's subject and murders (for example: terms like \"subject\", \"who\", \"based on\", \"spree killer\", \"murdered\"). Form the query as a short keyword sequence (no answer, no full sentences, do not invent names).",
+            "drop_or_avoid_rule": "Do not emit queries that are only numbers or only repeat `summary_1` (e.g. avoid \"11\" or \"11 people\"); avoid vague single-word queries that retrieve unrelated '11' hits; do not include any predicted person names or answer values.",
+            "output_contract": "Produce exactly one compact retrieval query (a short keyword phrase, ideally <=12 tokens) that combines the show/title taken from `question` and concise search terms to find who the miniseries is about and evidence of how many people that subject murdered. The output must be a query string only (no explanations, no answers, no invented entities).",
+            "why_local_transition": "The baseline query repeated the numeric summary and returned many irrelevant documents about the number '11'. The minimal local change is to require the query to include the show/title context from the question and focused connector terms so the second-hop retrieval finds the show's subject and supporting evidence rather than noisy numeric matches."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How many people did the subject of Murder in the Heartland murder?",
+        "summary_1": "He murdered 11 people.",
+        "current_output": {
+          "query": "11 people"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current_output.query is a short numeric or numeric-phrase that simply repeats the summary (e.g. \\\"11\\\", \\\"11 people\\\") or otherwise lacks the show/title context from `question`.\",\n      \"preserve_rule\": \"Keep using the same inputs (`question`, `summary_1`) and retain the requirement to produce exactly one compact second-hop retrieval `query` string.\",\n      \"change_rule\": \"When triggered, replace the numeric-only query with a concise focused retrieval query that (a) extracts the show/title phrase from `question` (e.g. the literal phrase 'Murder in the Heartland'), and (b) adds compact connector terms that target the show's subject and murders (for example: terms like \\\"subject\\\", \\\"who\\\", \\\"based on\\\", \\\"spree killer\\\", \\\"murdered\\\"). Form the query as a short keyword sequence (no answer, no full sentences, do not invent names).\",\n      \"drop_or_avoid_rule\": \"Do not emit queries that are only numbers or only repeat `summary_1` (e.g. avoid \\\"11\\\" or \\\"11 people\\\"); avoid vague single-word queries that retrieve unrelated '11' hits; do not include any predicted person names or answer values.\",\n      \"output_contract\": \"Produce exactly one compact retrieval query (a short keyword phrase, ideally <=12 tokens) that combines the show/title taken from `question` and concise search terms to find who the miniseries is about and evidence of how many people that subject murdered. The output must be a query string only (no explanations, no answers, no invented entities).\",\n      \"why_local_transition\": \"The baseline query repeated the numeric summary and returned many irrelevant documents about the number '11'. The minimal local change is to require the query to include the show/title context from the question and focused connector terms so the second-hop retrieval finds the show's subject and supporting evidence rather than noisy numeric matches.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How many people did the subject of Murder in the Heartland murder?\",\n  \"summary_1\": \"He murdered 11 people.\",\n  \"current_output\": {\n    \"query\": \"11 people\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Murder in the Heartland subject who murdered\"\n  },\n  \"rationale\": \"Replaced the numeric-only query with the show title from `question` plus concise connector terms per the delta to target the subject and evidence of murders.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 61,
+    "row_index": 61,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "9d52c22871d048adb94f3dd5644fe80c8a840a5678c1a0671db11de3d701c62a",
+  "created_at": "2026-07-13T18:47:16.934553+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "\"Could I Leave You?\" was a song in Follies, a musical concering what?",
+      "source_summary": "Follies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.",
+      "target_summary": "Follies is a musical with music and lyrics by Stephen Sondheim and a book by James Goldman. The story concerns a reunion in a crumbling Broadway theatre, scheduled for demolition, of the past performers of the \"Weismann's Follies\" (a musical revue that played in that theatre between the World Wars); this aligns with the earlier summary framing them as former showgirls whose lives, relationships, and regrets resurface.",
+      "candidate_summary": "Follies is a musical (music and lyrics by Stephen Sondheim; book by James Goldman). It concerns a reunion of the past performers of the 'Weismann's Follies' in a crumbling Broadway theatre scheduled for demolition, and the lives, relationships, and regrets that resurface."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\n\"Could I Leave You?\" was a song in Follies, a musical concering what?\n\nSource summary2:\nFollies concerns a reunion of former showgirls in a crumbling Broadway theatre and the lives, relationships, and regrets that resurface.\n\nTarget summary2:\nFollies is a musical with music and lyrics by Stephen Sondheim and a book by James Goldman. The story concerns a reunion in a crumbling Broadway theatre, scheduled for demolition, of the past performers of the \"Weismann's Follies\" (a musical revue that played in that theatre between the World Wars); this aligns with the earlier summary framing them as former showgirls whose lives, relationships, and regrets resurface.\n\nCandidate summary2:\nFollies is a musical (music and lyrics by Stephen Sondheim; book by James Goldman). It concerns a reunion of the past performers of the 'Weismann's Follies' in a crumbling Broadway theatre scheduled for demolition, and the lives, relationships, and regrets that resurface.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate includes the target's key facts: composers (music/lyrics by Stephen Sondheim; book by James Goldman), the reunion of the past performers of 'Weismann's Follies' in a crumbling Broadway theatre scheduled for demolition, and the resurfacing lives/relationships/regrets. It does not contradict the source and preserves the source's reunion/former-showgirls framing. (Omitted incidental detail about the revue playing between the World Wars, which is not required.)\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 85,
+    "row_index": 85,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

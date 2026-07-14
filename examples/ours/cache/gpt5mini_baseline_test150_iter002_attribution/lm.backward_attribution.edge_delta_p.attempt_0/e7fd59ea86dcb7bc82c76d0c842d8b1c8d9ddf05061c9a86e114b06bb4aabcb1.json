@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "e7fd59ea86dcb7bc82c76d0c842d8b1c8d9ddf05061c9a86e114b06bb4aabcb1",
+  "created_at": "2026-07-13T20:08:45.659622+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960",
+        "summary_1": "First-hop evidence: Passage 7 — \"Richard 'Rick' Savage (born 2 December 1960)\" and \"is the bass guitarist\"; Passage 6 — \"Blackpool Lights ... dissolved in 2008\" (no 2011 dissolution in provided passages).\n\nBridge needed: The identity of the band that dissolved in 2011 and whose lead singer was born in 1960 (the band name or the lead singer's name to verify).\n\nRetrieval direction:\n1. Fetch \"List of bands disestablished in 2011\" (Wikipedia) and scan entries for candidate bands disbanded in 2011.\n2. For each candidate band, open the band's Wikipedia page and check the lead singer's name in the infobox/Members section; open that lead singer's biography page to confirm a birth year of 1960.\n3. Once the band is identified, fetch that band's debut album page and inspect the \"Personnel\"/\"Credits\" section to find who played bass on the debut album.",
+        "current_output": {
+          "query": "1) \"List of bands disestablished in 2011\" site:wikipedia.org\n2) For each band from that list: \"<Band Name> Wikipedia\" (to find lead singer in infobox)\n3) For lead singer candidates: \"<Lead Singer Name> born 1960 site:wikipedia.org\" to confirm birth year\n4) After confirming the band whose lead singer was born in 1960 and disbanded in 2011: \"<Band Name> debut album personnel\" OR \"<Debut Album Title> personnel\" site:wikipedia.org to find who played bass on the debut album"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "R.E.M. Murmur personnel bass"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Michael Stipe Murmur (album) Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960"
+        },
+        "score": 1.0,
+        "retrieved_titles": [
+          "Murmur (album)",
+          "Michael Stipe",
+          "Lynda Stipe",
+          "R.E.M.",
+          "We Came to Play!",
+          "Islands (Kajagoogoo album)",
+          "Gossamer (album)"
+        ],
+        "retrieved_doc_snippets": [
+          "Murmur (album) | Murmur is the debut studio album by the American alternative rock band R.E.M., released on April 12, 1983 by I.R.S. Records. \"Murmur\" drew critical acclaim upon its release for its unusual sound, defined by lead singer Michael Stipe's cryptic lyrics, guitarist Peter Buck's jangly guitar style, and bass guitarist Mike Mills' melodic basslines.",
+          "Michael Stipe | John Michael Stipe (born January 4, 1960) is an American singer, songwriter, musician, film producer, music video director, visual artist, and philanthropist. He is best known as the lead singer of the alternative rock band R.E.M. from their formation in 1980 until their dissolution in 2011.",
+          "Lynda Stipe | Lynda L. Stipe (born September 30, 1962) is an American singer and bass guitarist. She is best recognized for her involvement in the bands Oh-OK, Hetch Hetchy and Flash to Bang Time. She is the younger sister of R.E.M.'s lead singer Michael Stipe.",
+          "R.E.M. | R.E.M. was an American rock band that formed in Athens, Georgia, in 1980 by lead singer Michael Stipe, guitarist Peter Buck, bassist/backing vocalist Mike Mills, and drummer Bill Berry. One of the first alternative rock bands, R.E.M. was noted for Stipe's particular vocal quality and obscure lyrics, Buck's ringing, arpeggiated guitar style, and Mills' melodic basslines and backing vocals. R.E.M. released its first single—\"Radio Free Europe\"—in 1981 on the independent record label Hib-To ...[truncated]",
+          "We Came to Play! | We Came to Play! is an album by Tower of Power released in 1978. It marked the debut of singer Michael Jeffries, who would stay with TOP through the mid-1980s. Also Steve Cropper (of Booker T. & The M.G.'s fame), produced this album. This album is also noted for featuring Victor Conte, the future founder of the controversial BALCO, on bass, and who is also the cousin of band guitarist, Bruce Conte. Also drummer Ron Beck would take a lead vocal spot on \"Love Bug\" which features ...[truncated]",
+          "Islands (Kajagoogoo album) | Islands is the second album by the British pop band Kajagoogoo, released on 21 May 1984 on the EMI label. This was the band's first album without lead vocalist Limahl; who had been fired by the band in mid-1983 and went on to pursue a solo career. Bass player Nick Beggs, already the group's main backing singer, took over lead vocal duties, and also wrote the lyrics. The album was co-produced by the band themselves, now a four-piece group, along with Colin Thurston, w ...[truncated]",
+          "Gossamer (album) | Gossamer is the second studio album by American indie pop band Passion Pit, released on July 20, 2012 by Columbia Records. Recorded in Los Angeles and New York City in 2011, the album was produced by Chris Zane, who also produced the band's debut album \"Manners\" (2009), and lead singer Michael Angelakos."
+        ],
+        "summary_2": "R.E.M.'s debut album Murmur credits bassist Mike Mills (Murmur (album); \"bass guitarist Mike Mills\"). Michael Stipe (born January 4, 1960) was R.E.M.'s lead singer until the band's 2011 dissolution (Michael Stipe).",
+        "answer": "Mike Mills",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Michael Stipe",
+          "Murmur (album)"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\",\n  \"summary_1\": \"First-hop evidence: Passage 7 — \\\"Richard 'Rick' Savage (born 2 December 1960)\\\" and \\\"is the bass guitarist\\\"; Passage 6 — \\\"Blackpool Lights ... dissolved in 2008\\\" (no 2011 dissolution in provided passages).\\n\\nBridge needed: The identity of the band that dissolved in 2011 and whose lead singer was born in 1960 (the band name or the lead singer's name to verify).\\n\\nRetrieval direction:\\n1. Fetch \\\"List of bands disestablished in 2011\\\" (Wikipedia) and scan entries for candidate bands disbanded in 2011.\\n2. For each candidate band, open the band's Wikipedia page and check the lead singer's name in the infobox/Members section; open that lead singer's biography page to confirm a birth year of 1960.\\n3. Once the band is identified, fetch that band's debut album page and inspect the \\\"Personnel\\\"/\\\"Credits\\\" section to find who played bass on the debut album.\",\n  \"current_output\": {\n    \"query\": \"1) \\\"List of bands disestablished in 2011\\\" site:wikipedia.org\\n2) For each band from that list: \\\"<Band Name> Wikipedia\\\" (to find lead singer in infobox)\\n3) For lead singer candidates: \\\"<Lead Singer Name> born 1960 site:wikipedia.org\\\" to confirm birth year\\n4) After confirming the band whose lead singer was born in 1960 and disbanded in 2011: \\\"<Band Name> debut album personnel\\\" OR \\\"<Debut Album Title> personnel\\\" site:wikipedia.org to find who played bass on the debut album\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"R.E.M. Murmur personnel bass\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Michael Stipe Murmur (album) Who played bass for the debut album of the band that dissolved in 2011, and had a lead singer what born in 1960\"\n  },\n  \"score\": 1.0,\n  \"retrieved_titles\": [\n    \"Murmur (album)\",\n    \"Michael Stipe\",\n    \"Lynda Stipe\",\n    \"R.E.M.\",\n    \"We Came to Play!\",\n    \"Islands (Kajagoogoo album)\",\n    \"Gossamer (album)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Murmur (album) | Murmur is the debut studio album by the American alternative rock band R.E.M., released on April 12, 1983 by I.R.S. Records. \\\"Murmur\\\" drew critical acclaim upon its release for its unusual sound, defined by lead singer Michael Stipe's cryptic lyrics, guitarist Peter Buck's jangly guitar style, and bass guitarist Mike Mills' melodic basslines.\",\n    \"Michael Stipe | John Michael Stipe (born January 4, 1960) is an American singer, songwriter, musician, film producer, music video director, visual artist, and philanthropist. He is best known as the lead singer of the alternative rock band R.E.M. from their formation in 1980 until their dissolution in 2011.\",\n    \"Lynda Stipe | Lynda L. Stipe (born September 30, 1962) is an American singer and bass guitarist. She is best recognized for her involvement in the bands Oh-OK, Hetch Hetchy and Flash to Bang Time. She is the younger sister of R.E.M.'s lead singer Michael Stipe.\",\n    \"R.E.M. | R.E.M. was an American rock band that formed in Athens, Georgia, in 1980 by lead singer Michael Stipe, guitarist Peter Buck, bassist/backing vocalist Mike Mills, and drummer Bill Berry. One of the first alternative rock bands, R.E.M. was noted for Stipe's particular vocal quality and obscure lyrics, Buck's ringing, arpeggiated guitar style, and Mills' melodic basslines and backing vocals. R.E.M. released its first single—\\\"Radio Free Europe\\\"—in 1981 on the independent record label Hib-To ...[truncated]\",\n    \"We Came to Play! | We Came to Play! is an album by Tower of Power released in 1978. It marked the debut of singer Michael Jeffries, who would stay with TOP through the mid-1980s. Also Steve Cropper (of Booker T. & The M.G.'s fame), produced this album. This album is also noted for featuring Victor Conte, the future founder of the controversial BALCO, on bass, and who is also the cousin of band guitarist, Bruce Conte. Also drummer Ron Beck would take a lead vocal spot on \\\"Love Bug\\\" which features ...[truncated]\",\n    \"Islands (Kajagoogoo album) | Islands is the second album by the British pop band Kajagoogoo, released on 21 May 1984 on the EMI label. This was the band's first album without lead vocalist Limahl; who had been fired by the band in mid-1983 and went on to pursue a solo career. Bass player Nick Beggs, already the group's main backing singer, took over lead vocal duties, and also wrote the lyrics. The album was co-produced by the band themselves, now a four-piece group, along with Colin Thurston, w ...[truncated]\",\n    \"Gossamer (album) | Gossamer is the second studio album by American indie pop band Passion Pit, released on July 20, 2012 by Columbia Records. Recorded in Los Angeles and New York City in 2011, the album was produced by Chris Zane, who also produced the band's debut album \\\"Manners\\\" (2009), and lead singer Michael Angelakos.\"\n  ],\n  \"summary_2\": \"R.E.M.'s debut album Murmur credits bassist Mike Mills (Murmur (album); \\\"bass guitarist Mike Mills\\\"). Michael Stipe (born January 4, 1960) was R.E.M.'s lead singer until the band's 2011 dissolution (Michael Stipe).\",\n  \"answer\": \"Mike Mills\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Michael Stipe\",\n    \"Murmur (album)\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 or the current query context indicates the missing bridge concerns a band that dissolved in 2011 and summary_1 names (or flags) a person with birth year 1960 associated with that band/lead-singer role, or if the current query mentions an album but omits a singer/band anchor.\",\n    \"preserve_rule\": \"Keep producing a single, compact one-line retrieval query. Preserve any concrete album or band names already present in the query.\",\n    \"change_rule\": \"When the trigger fires, modify the query to include the lead-singer name (if present in summary_1) together with an explicit 'debut album' + 'who played bass' phrasing, or if the album title is available, include '<Album Title> personnel bass' with the singer name as an anchor. Use a single short search string (templates: '<LeadSingerName> <DebutAlbumTitle> who played bass' OR '<BandName> debut album personnel bass').\",\n    \"drop_or_avoid_rule\": \"Avoid multi-step, enumerated search instructions, site: filters, verification steps inside the query, or including explanatory text. Do not add candidate answers, summaries, or internal labels in the query.\",\n    \"output_contract\": \"Return exactly one compact search query string (no bullets or numbered steps). The query must be a single line, focused on retrieving album personnel for the debut album and must include either the lead-singer name (if in summary_1) or the band/album title plus the keywords 'debut album' and 'bass' or 'personnel'.\",\n    \"why_local_transition\": \"The source query omits the lead-singer/band anchor needed to disambiguate which debut album's personnel to retrieve. Adding the singer name (when already mentioned) and 'debut album' + 'who played bass' focuses the second-hop retrieval on the correct album personnel page.\"\n  },\n  \"rationale\": \"This edit is a minimal, local behavior change: it preserves the agent's compact single-query output while adding just enough anchoring (lead singer or album + 'debut album' and 'who played bass' / 'personnel bass') to disambiguate and retrieve the correct personnel information. It avoids introducing new sample-specific facts, avoids multi-step search instructions, and keeps the agent's output format unchanged.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 19,
+    "row_index": 19,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

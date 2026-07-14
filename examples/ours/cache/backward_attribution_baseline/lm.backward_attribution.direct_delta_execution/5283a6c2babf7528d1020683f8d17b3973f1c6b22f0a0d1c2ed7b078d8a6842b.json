@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "5283a6c2babf7528d1020683f8d17b3973f1c6b22f0a0d1c2ed7b078d8a6842b",
+  "created_at": "2026-07-13T17:24:29.055386+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "The question explicitly asks which actor/actress starred in both named works, AND both summary_1 and summary_2 state they do not list cast members or otherwise provide no cast names for the specified titles.",
+            "preserve_rule": "Keep the base behavior of treating the provided summaries as primary evidence: do not invent or assert details when the summaries themselves contain cast lists or explicit, conflicting information.",
+            "change_rule": "If the summaries offer no cast information for the named works, permit the agent to consult its own general (memorized) knowledge only when that internal knowledge yields a single, unambiguous actress known to have starred in both specified titles. In that exact case, produce only the actress's name as the answer string (no explanation). If the agent's internal knowledge is uncertain, yields multiple plausible candidates, or conflicts with the summaries, do not guess—fall back to the preserve_rule (ask for clarification or state insufficient evidence).",
+            "drop_or_avoid_rule": "When using internal knowledge as allowed above, avoid any additional commentary, explanations, requests for clarification, cast lists, or supporting excerpts. Do not restate uncertainty or summarize the summaries; output must be only the single-name answer.",
+            "output_contract": "Populate the [[ ## answer ## ]] block with only the minimal answer string (the single actress name) when the change_rule conditions are met. Otherwise follow the base prompt's normal evidence-based output behavior.",
+            "why_local_transition": "The source refused to assert an overlap because the summaries lacked cast details. This local change permits a very narrow, high-confidence use of the agent's internal knowledge to supply a single-name answer when summaries give no cast info and the agent is certain, enabling a direct minimal answer instead of an abstention."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "summary_2": "I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.",
+        "current_output": "No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"The question explicitly asks which actor/actress starred in both named works, AND both summary_1 and summary_2 state they do not list cast members or otherwise provide no cast names for the specified titles.\",\n      \"preserve_rule\": \"Keep the base behavior of treating the provided summaries as primary evidence: do not invent or assert details when the summaries themselves contain cast lists or explicit, conflicting information.\",\n      \"change_rule\": \"If the summaries offer no cast information for the named works, permit the agent to consult its own general (memorized) knowledge only when that internal knowledge yields a single, unambiguous actress known to have starred in both specified titles. In that exact case, produce only the actress's name as the answer string (no explanation). If the agent's internal knowledge is uncertain, yields multiple plausible candidates, or conflicts with the summaries, do not guess—fall back to the preserve_rule (ask for clarification or state insufficient evidence).\",\n      \"drop_or_avoid_rule\": \"When using internal knowledge as allowed above, avoid any additional commentary, explanations, requests for clarification, cast lists, or supporting excerpts. Do not restate uncertainty or summarize the summaries; output must be only the single-name answer.\",\n      \"output_contract\": \"Populate the [[ ## answer ## ]] block with only the minimal answer string (the single actress name) when the change_rule conditions are met. Otherwise follow the base prompt's normal evidence-based output behavior.\",\n      \"why_local_transition\": \"The source refused to assert an overlap because the summaries lacked cast details. This local change permits a very narrow, high-confidence use of the agent's internal knowledge to supply a single-name answer when summaries give no cast info and the agent is certain, enabling a direct minimal answer instead of an abstention.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"summary_2\": \"I can’t determine an actress who starred in both from the supplied passages (they don’t list Third Person’s cast). If you mean Third Person (2013) and From Here to Eternity (1953), there’s no overlap in principal actresses. Please specify which versions or let me search the cast lists so I can answer definitively.\",\n  \"current_output\": \"No — there is no actress who starred in both Third Person (2013) and From Here to Eternity (1953). If you meant different versions of those titles, tell me which ones and I’ll check their casts.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"No actress starred in both.\",\n  \"rationale\": \"Both summaries state they provide no cast lists and explicitly say that for Third Person (2013) and From Here to Eternity (1953) there is no overlap in actresses, so I used that evidence per the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

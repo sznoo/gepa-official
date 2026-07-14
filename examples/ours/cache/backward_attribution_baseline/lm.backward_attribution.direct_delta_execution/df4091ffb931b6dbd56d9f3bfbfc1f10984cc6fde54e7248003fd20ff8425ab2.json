@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "df4091ffb931b6dbd56d9f3bfbfc1f10984cc6fde54e7248003fd20ff8425ab2",
+  "created_at": "2026-07-13T17:12:56.889669+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If one or more summaries show an entity followed immediately by a parenthetical short name (e.g. FullName (ShortName)).",
+            "preserve_rule": "Continue to rely only on the provided summaries as evidence and preserve the requirement that the final output be the minimal answer string placed in [[ ## answer ## ]]. Do not add new facts or context outside the summaries.",
+            "change_rule": "When the trigger applies, extract the text inside the first parentheses immediately following the entity name and use that extracted text as the answer. If no such parenthetical alias appears, choose the shortest verbatim name token sequence that appears in the summaries. Trim any surrounding whitespace and punctuation from the chosen token(s) before returning.",
+            "drop_or_avoid_rule": "Avoid including descriptive labels (e.g., 'Entertainment', 'Company', 'Inc.'), parenthetical punctuation, explanatory phrases, or any extra words. Do not append clarifying text or sentences; do not invent or substitute alternative names not present verbatim in the summaries.",
+            "output_contract": "Produce the field `answer` so that [[ ## answer ## ]] contains only the single minimal name string selected by the rule above (no additional commentary, punctuation, or surrounding text).",
+            "why_local_transition": "The current output uses the longer formal name that contains a parenthetical short alias present in the summaries. The minimal necessary change is to extract and emit that short alias (already visible in inputs), which preserves evidence usage and satisfies the final-answer contract."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which entertainment company is the creator of \"The X Factor\" the chief executive officer?",
+        "summary_1": "Syco Entertainment (Syco) — Simon Cowell is its chief executive officer.",
+        "summary_2": "Syco Entertainment (Syco) — Simon Cowell is its chief executive officer.",
+        "current_output": "Syco Entertainment (Syco)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If one or more summaries show an entity followed immediately by a parenthetical short name (e.g. FullName (ShortName)).\",\n      \"preserve_rule\": \"Continue to rely only on the provided summaries as evidence and preserve the requirement that the final output be the minimal answer string placed in [[ ## answer ## ]]. Do not add new facts or context outside the summaries.\",\n      \"change_rule\": \"When the trigger applies, extract the text inside the first parentheses immediately following the entity name and use that extracted text as the answer. If no such parenthetical alias appears, choose the shortest verbatim name token sequence that appears in the summaries. Trim any surrounding whitespace and punctuation from the chosen token(s) before returning.\",\n      \"drop_or_avoid_rule\": \"Avoid including descriptive labels (e.g., 'Entertainment', 'Company', 'Inc.'), parenthetical punctuation, explanatory phrases, or any extra words. Do not append clarifying text or sentences; do not invent or substitute alternative names not present verbatim in the summaries.\",\n      \"output_contract\": \"Produce the field `answer` so that [[ ## answer ## ]] contains only the single minimal name string selected by the rule above (no additional commentary, punctuation, or surrounding text).\",\n      \"why_local_transition\": \"The current output uses the longer formal name that contains a parenthetical short alias present in the summaries. The minimal necessary change is to extract and emit that short alias (already visible in inputs), which preserves evidence usage and satisfies the final-answer contract.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which entertainment company is the creator of \\\"The X Factor\\\" the chief executive officer?\",\n  \"summary_1\": \"Syco Entertainment (Syco) — Simon Cowell is its chief executive officer.\",\n  \"summary_2\": \"Syco Entertainment (Syco) — Simon Cowell is its chief executive officer.\",\n  \"current_output\": \"Syco Entertainment (Syco)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nSyco\",\n  \"rationale\": \"The summaries show 'Syco Entertainment (Syco)', so the parenthetical short name 'Syco' was extracted and returned as the minimal answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 13,
+    "row_index": 13,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

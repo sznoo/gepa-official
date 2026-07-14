@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "9e14a65c6ec94ca50ffc86c0bff5b68cc7362c739a9aafa3876baf14bee8fcf7",
+  "created_at": "2026-07-13T20:08:44.576026+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 explicitly states a missing Season 1 Episode 4 title (e.g. contains 'Bridge needed' and references 'Season 1, Episode 4') or the current query is a multi-step fetch instruction.",
+            "preserve_rule": "Keep the agent role and goal: produce one compact second-hop retrieval query that targets the missing episode-title evidence for Community. Preserve use of the provided `question` and `summary_1` fields as context.",
+            "change_rule": "Replace the long procedural fetch instruction with a single short keyword-style search query focused on the target slot. Output exactly one compact query string such as: \"Community Season 1 episode 4 title\" (or equivalent 3–6 word keyword phrase that names the show, 'Season 1', and 'episode 4' plus the word 'title'). Do not include instructions about how to fetch or parse pages, and do not output the episode title itself.",
+            "drop_or_avoid_rule": "Avoid multi-step commands (e.g. 'Fetch the page X and return the table row…') and avoid fallback procedural text that lengthens the query. Do not include candidate answers, full sentences framed as a retrieval plan, site-restrictions, or page-copy instructions.",
+            "output_contract": "Return a single-line compact retrieval query (3–6 words) that is a keyword search targeting the Season 1 Episode 4 title for Community. The string must not contain an answer, an extracted span, or procedural fetch steps—only the concise search phrase.",
+            "why_local_transition": "The current verbose fetch instructions produced noisy matches for many 'List of ... episodes' pages. Switching to a concise keyword query (show + 'Season 1' + 'Episode 4' + 'title') narrows retrieval to the episode-list or episode page and preserves the agent's role while changing only the query format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the fourth episode in the American television sitcom created by Dan Harmon titled \"Community\"?",
+        "summary_1": "First-hop evidence: Community (TV series) — \"Community is an American television sitcom created by Dan Harmon.\" (Passage 4). Community (TV series) — \"aired on NBC and Yahoo! Screen from September 17, 2009 to June 2, 2015.\" (Passage 4).\n\nBridge needed: The exact title of the fourth episode (Season 1, Episode 4) of Community — the episode title must be verified.\n\nRetrieval direction:\n1. Fetch the page titled \"List of Community episodes\" and inspect the Season 1 episode table for episode number 4 (Title column and air date). \n2. If that page is unavailable, fetch \"Community (TV series)\" and check the 'Episodes' or 'Season 1' section / episode list table for Episode 4.",
+        "current_output": {
+          "query": "Fetch the Wikipedia page \"List of Community episodes\" and return the Season 1 episode table row for episode number 4: provide the episode title (and air date). If that page is unavailable, fetch the \"Community (TV series)\" Wikipedia page and extract Season 1 Episode 4 title (and air date)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 explicitly states a missing Season 1 Episode 4 title (e.g. contains 'Bridge needed' and references 'Season 1, Episode 4') or the current query is a multi-step fetch instruction.\",\n      \"preserve_rule\": \"Keep the agent role and goal: produce one compact second-hop retrieval query that targets the missing episode-title evidence for Community. Preserve use of the provided `question` and `summary_1` fields as context.\",\n      \"change_rule\": \"Replace the long procedural fetch instruction with a single short keyword-style search query focused on the target slot. Output exactly one compact query string such as: \\\"Community Season 1 episode 4 title\\\" (or equivalent 3–6 word keyword phrase that names the show, 'Season 1', and 'episode 4' plus the word 'title'). Do not include instructions about how to fetch or parse pages, and do not output the episode title itself.\",\n      \"drop_or_avoid_rule\": \"Avoid multi-step commands (e.g. 'Fetch the page X and return the table row…') and avoid fallback procedural text that lengthens the query. Do not include candidate answers, full sentences framed as a retrieval plan, site-restrictions, or page-copy instructions.\",\n      \"output_contract\": \"Return a single-line compact retrieval query (3–6 words) that is a keyword search targeting the Season 1 Episode 4 title for Community. The string must not contain an answer, an extracted span, or procedural fetch steps—only the concise search phrase.\",\n      \"why_local_transition\": \"The current verbose fetch instructions produced noisy matches for many 'List of ... episodes' pages. Switching to a concise keyword query (show + 'Season 1' + 'Episode 4' + 'title') narrows retrieval to the episode-list or episode page and preserves the agent's role while changing only the query format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the fourth episode in the American television sitcom created by Dan Harmon titled \\\"Community\\\"?\",\n  \"summary_1\": \"First-hop evidence: Community (TV series) — \\\"Community is an American television sitcom created by Dan Harmon.\\\" (Passage 4). Community (TV series) — \\\"aired on NBC and Yahoo! Screen from September 17, 2009 to June 2, 2015.\\\" (Passage 4).\\n\\nBridge needed: The exact title of the fourth episode (Season 1, Episode 4) of Community — the episode title must be verified.\\n\\nRetrieval direction:\\n1. Fetch the page titled \\\"List of Community episodes\\\" and inspect the Season 1 episode table for episode number 4 (Title column and air date). \\n2. If that page is unavailable, fetch \\\"Community (TV series)\\\" and check the 'Episodes' or 'Season 1' section / episode list table for Episode 4.\",\n  \"current_output\": {\n    \"query\": \"Fetch the Wikipedia page \\\"List of Community episodes\\\" and return the Season 1 episode table row for episode number 4: provide the episode title (and air date). If that page is unavailable, fetch the \\\"Community (TV series)\\\" Wikipedia page and extract Season 1 Episode 4 title (and air date).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Community Season 1 episode 4 title\"\n  },\n  \"rationale\": \"Replaced the multi-step fetch instruction with a single concise 3–6 word keyword query naming the show, 'Season 1', 'episode 4', and 'title' as required by the ordered delta.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 63,
+    "row_index": 63,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

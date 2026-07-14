@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "13d33b6950dba075dcfc09048a5936625a697dabf9811c9db2d97ec65a13c230",
+  "created_at": "2026-07-13T17:27:07.761144+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 indicates the reason the answer is missing is lack of cast lists (mentions searching cast lists or specific versions/years), and the agent's current output is a clarification or a multi-item search suggestion.",
+            "preserve_rule": "Keep the agent's default of asking for clarification when the user's question is genuinely ambiguous and summary_1 does not identify specific versions or years to search.",
+            "change_rule": "When summary_1 already names specific versions or years (or otherwise invites a search), replace the clarification/multi-bullet suggestions with a single, compact second-hop retrieval query. Construct it by joining each film title (include year if present in inputs) with the token 'cast' or 'cast list', separated by a short delimiter (comma or semicolon). Do not add candidate actress names unless they already appear in the visible inputs.",
+            "drop_or_avoid_rule": "Avoid multi-line lists of lookups, verbose instructions to the user, clarification questions when versions are already specified, and inserting any actor/actress names or long quoted spans that do not already appear in the visible inputs.",
+            "output_contract": "Produce the field 'query' as one concise single-line string (ideally ≤12 words) intended to retrieve cast lists for the identified versions. Valid formats include examples such as: 'Third Person (2013) cast; From Here to Eternity (1953) cast' or 'Third Person 2013 cast, From Here to Eternity 1953 cast'.",
+            "why_local_transition": "This minimal edit redirects the agent from asking for clarification to issuing the exact compact search needed to fetch the missing evidence (cast lists) when prior context already specifies which versions to check. It changes only the query-construction behavior and preserves other behaviors."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question names two works (here, two film titles) and the current query is a terse token list that includes a candidate performer or only the titles without disambiguation.",
+            "preserve_rule": "Keep using the existing inputs (`question`, `summary_1`) and preserve any candidate actress name already present in the current_output. Maintain a single-line, compact query format rather than a multi-sentence instruction.",
+            "change_rule": "Generate one single-line retrieval query that (a) begins with the candidate actress token if one is present, (b) includes both work titles once, adding the parenthetical disambiguator '(film)' for titles that are ambiguous, and (c) appends a cast-oriented term such as 'cast' or 'starred' to target cast lists. Do not pose clarifying questions to the user in the query.",
+            "drop_or_avoid_rule": "Do not ask the user to clarify versions (avoid 'Do you mean...') in the query, do not produce multi-sentence prompts or meta-comments, and do not include the final answer or long quoted spans from documents.",
+            "output_contract": "The `query` field must be a single compact search string that (if a candidate performer exists) starts with that performer, includes both titles with '(film)' where appropriate, and ends with a cast-oriented term (e.g., 'cast' or 'starred'). Keep it concise and focused for retrieval.",
+            "why_local_transition": "This small edit disambiguates ambiguous titles and explicitly targets cast-list pages, converting a noisy token list into a focused second-hop retrieval query that will retrieve evidence linking the candidate actress to both works."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What acress starred in both \"Third Person\" and \"From Here to Eternity\"?",
+        "summary_1": "I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.",
+        "current_output": {
+          "query": "Do you mean the 2013 film \"Third Person\" and the 1953 film \"From Here to Eternity\", or other versions? If you'd like me to search, run these lookups and compare:\n- \"Third Person (film) cast\" \n- \"From Here to Eternity (film) cast\" \n- \"actress appeared in both 'Third Person' and 'From Here to Eternity'\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 indicates the reason the answer is missing is lack of cast lists (mentions searching cast lists or specific versions/years), and the agent's current output is a clarification or a multi-item search suggestion.\",\n      \"preserve_rule\": \"Keep the agent's default of asking for clarification when the user's question is genuinely ambiguous and summary_1 does not identify specific versions or years to search.\",\n      \"change_rule\": \"When summary_1 already names specific versions or years (or otherwise invites a search), replace the clarification/multi-bullet suggestions with a single, compact second-hop retrieval query. Construct it by joining each film title (include year if present in inputs) with the token 'cast' or 'cast list', separated by a short delimiter (comma or semicolon). Do not add candidate actress names unless they already appear in the visible inputs.\",\n      \"drop_or_avoid_rule\": \"Avoid multi-line lists of lookups, verbose instructions to the user, clarification questions when versions are already specified, and inserting any actor/actress names or long quoted spans that do not already appear in the visible inputs.\",\n      \"output_contract\": \"Produce the field 'query' as one concise single-line string (ideally ≤12 words) intended to retrieve cast lists for the identified versions. Valid formats include examples such as: 'Third Person (2013) cast; From Here to Eternity (1953) cast' or 'Third Person 2013 cast, From Here to Eternity 1953 cast'.\",\n      \"why_local_transition\": \"This minimal edit redirects the agent from asking for clarification to issuing the exact compact search needed to fetch the missing evidence (cast lists) when prior context already specifies which versions to check. It changes only the query-construction behavior and preserves other behaviors.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question names two works (here, two film titles) and the current query is a terse token list that includes a candidate performer or only the titles without disambiguation.\",\n      \"preserve_rule\": \"Keep using the existing inputs (`question`, `summary_1`) and preserve any candidate actress name already present in the current_output. Maintain a single-line, compact query format rather than a multi-sentence instruction.\",\n      \"change_rule\": \"Generate one single-line retrieval query that (a) begins with the candidate actress token if one is present, (b) includes both work titles once, adding the parenthetical disambiguator '(film)' for titles that are ambiguous, and (c) appends a cast-oriented term such as 'cast' or 'starred' to target cast lists. Do not pose clarifying questions to the user in the query.\",\n      \"drop_or_avoid_rule\": \"Do not ask the user to clarify versions (avoid 'Do you mean...') in the query, do not produce multi-sentence prompts or meta-comments, and do not include the final answer or long quoted spans from documents.\",\n      \"output_contract\": \"The `query` field must be a single compact search string that (if a candidate performer exists) starts with that performer, includes both titles with '(film)' where appropriate, and ends with a cast-oriented term (e.g., 'cast' or 'starred'). Keep it concise and focused for retrieval.\",\n      \"why_local_transition\": \"This small edit disambiguates ambiguous titles and explicitly targets cast-list pages, converting a noisy token list into a focused second-hop retrieval query that will retrieve evidence linking the candidate actress to both works.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What acress starred in both \\\"Third Person\\\" and \\\"From Here to Eternity\\\"?\",\n  \"summary_1\": \"I can't determine the actress from the given passages because they don't list any cast members. If you mean the 2013 Third Person and the 1953 From Here to Eternity, their actresses do not overlap; otherwise please specify which versions or allow me to search for cast details.\",\n  \"current_output\": {\n    \"query\": \"Do you mean the 2013 film \\\"Third Person\\\" and the 1953 film \\\"From Here to Eternity\\\", or other versions? If you'd like me to search, run these lookups and compare:\\n- \\\"Third Person (film) cast\\\" \\n- \\\"From Here to Eternity (film) cast\\\" \\n- \\\"actress appeared in both 'Third Person' and 'From Here to Eternity'\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Third Person (2013) cast; From Here to Eternity (1953) cast\"},\n  \"rationale\": \"Delta 0 replaced the clarification with a single compact cast-list retrieval using the years named in summary_1; delta 1 ensured both titles and a cast-oriented term were included.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "0863780b0e54bd6ab3d01e7f2867c6a875b8d709b388ee0d28cc8ebbc520798b",
+  "created_at": "2026-07-13T20:09:37.506162+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+      "current_output": "First-hop evidence: Passage 1 (Archie Kao) — \"series regulars roles on 'Chicago P.D.'\" (names the series Kao was regular on).  \nBridge needed: The series \"Chicago P.D.\" — verify the person(s) credited as the show's creator(s).  \nRetrieval direction: 1. Fetch the page titled \"Chicago P.D.\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.",
+      "upstream_context": {
+        "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "hop1_query": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "hop1_titles": [
+          "Archie Kao",
+          "The Chinese Detective",
+          "Angie Tribeca",
+          "Jay Seals",
+          "Monk (TV series)",
+          "Hannah Britten",
+          "Erik Estrada"
+        ],
+        "hop1_docs": [
+          "Archie Kao | Archie David Kao (born December 14, 1969) is an American actor.  He is best known to American audiences for series regulars roles on \"Chicago P.D.\", \"Power Rangers Lost Galaxy\" as well as long-running hit \"\".",
+          "The Chinese Detective | The Chinese Detective is a British television police procedural drama series, first transmitted by the BBC between 1981 and 1982.  The series was created by Ian Kennedy Martin, who had previously devised \"The Sweeney\" and \"Juliet Bravo\".  The series starred British Chinese actor David Yip as Detective Sergeant John Ho, the first Chinese lead actor in a British television drama series.  The series offered traditional police procedural storylines in a setting of occasional prejudice and distrust within the police force, and the prejudice displayed by those Ho encounters whilst doing his job.  Like many other television detectives of the time, Ho was something of a maverick, often using unorthodox methods to solve crimes.  The series was set in and around London's docklands, before redevelopment began in the 1980s.",
+          "Angie Tribeca | Angie Tribeca is an American comedy television series created by Steve and Nancy Carell.  The series, a satire of police procedural shows, stars Rashida Jones as the titular police detective Angie Tribeca.  It also stars Hayes MacArthur, Jere Burns, Deon Cole, and Andree Vermeulen in supporting roles.",
+          "Jay Seals | Jay Seals (born March 23, 1976) is an American actor, known for his recurring role in the television drama \"Mad Men\" on AMC from 2010 to 2015.  Some of his other credits include the 2012 American television police procedural fantasy drama \"Awake\", as a police tech, Nat, who is considered to be a \"tech-savvy cop\".  He also appeared in numerous other television series and films.",
+          "Monk (TV series) | Monk is an American comedy-drama detective mystery television series created by Andy Breckman and starring Tony Shalhoub as the eponymous character, Adrian Monk.  It originally ran from 2002 to 2009 and is primarily a police procedural series, and also exhibits comic and dramatic tones in its exploration of the main characters' personal lives.  The series was produced by Mandeville Films and Touchstone Television in association with Universal Television.",
+          "Hannah Britten | Hannah Britten is a fictional protagonist in the American police procedural drama television series \"Awake\".  She is portrayed by Laura Allen.  The character first appeared in \"Pilot\" and last appeared in the series finale \"Turtles All the Way Down\".  Hannah was created and designed by series creator and executive producer Kyle Killen after he created and developed the series \"Lone Star\" for the Fox network.",
+          "Erik Estrada | Henry Enrique \"Erik\" Estrada (born March 16, 1949) is an American actor, voice actor, and police officer known for his co-starring lead role in the police drama television series \"CHiPs\", which ran from 1977 to 1983.  He later became known for his work in Spanish-language \"telenovelas\", his appearances in reality television shows and infomercials and as a regular voice on the Adult Swim series \"Sealab 2021\" as well as the movie \"Cool Cat Saves The Kids\"."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Archie Kao",
+          "sent_id": 0,
+          "sentence": "Archie David Kao (born December 14, 1969) is an American actor."
+        },
+        {
+          "title": "Archie Kao",
+          "sent_id": 1,
+          "sentence": "He is best known to American audiences for series regulars roles on \"Chicago P.D.\", \"Power Rangers Lost Galaxy\" as well as long-running hit \"\"."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Chicago P.D. (TV series)"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWho created an American police procedural television series that starred the American actor Archie Kao as a regular?\n\nCurrent agent output:\n\"First-hop evidence: Passage 1 (Archie Kao) — \\\"series regulars roles on 'Chicago P.D.'\\\" (names the series Kao was regular on).  \\nBridge needed: The series \\\"Chicago P.D.\\\" — verify the person(s) credited as the show's creator(s).  \\nRetrieval direction: 1. Fetch the page titled \\\"Chicago P.D.\\\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.\"\n\nActual upstream context:\n{\n  \"question\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"hop1_query\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"hop1_titles\": [\n    \"Archie Kao\",\n    \"The Chinese Detective\",\n    \"Angie Tribeca\",\n    \"Jay Seals\",\n    \"Monk (TV series)\",\n    \"Hannah Britten\",\n    \"Erik Estrada\"\n  ],\n  \"hop1_docs\": [\n    \"Archie Kao | Archie David Kao (born December 14, 1969) is an American actor.  He is best known to American audiences for series regulars roles on \\\"Chicago P.D.\\\", \\\"Power Rangers Lost Galaxy\\\" as well as long-running hit \\\"\\\".\",\n    \"The Chinese Detective | The Chinese Detective is a British television police procedural drama series, first transmitted by the BBC between 1981 and 1982.  The series was created by Ian Kennedy Martin, who had previously devised \\\"The Sweeney\\\" and \\\"Juliet Bravo\\\".  The series starred British Chinese actor David Yip as Detective Sergeant John Ho, the first Chinese lead actor in a British television drama series.  The series offered traditional police procedural storylines in a setting of occasional prejudice and distrust within the police force, and the prejudice displayed by those Ho encounters whilst doing his job.  Like many other television detectives of the time, Ho was something of a maverick, often using unorthodox methods to solve crimes.  The series was set in and around London's docklands, before redevelopment began in the 1980s.\",\n    \"Angie Tribeca | Angie Tribeca is an American comedy television series created by Steve and Nancy Carell.  The series, a satire of police procedural shows, stars Rashida Jones as the titular police detective Angie Tribeca.  It also stars Hayes MacArthur, Jere Burns, Deon Cole, and Andree Vermeulen in supporting roles.\",\n    \"Jay Seals | Jay Seals (born March 23, 1976) is an American actor, known for his recurring role in the television drama \\\"Mad Men\\\" on AMC from 2010 to 2015.  Some of his other credits include the 2012 American television police procedural fantasy drama \\\"Awake\\\", as a police tech, Nat, who is considered to be a \\\"tech-savvy cop\\\".  He also appeared in numerous other television series and films.\",\n    \"Monk (TV series) | Monk is an American comedy-drama detective mystery television series created by Andy Breckman and starring Tony Shalhoub as the eponymous character, Adrian Monk.  It originally ran from 2002 to 2009 and is primarily a police procedural series, and also exhibits comic and dramatic tones in its exploration of the main characters' personal lives.  The series was produced by Mandeville Films and Touchstone Television in association with Universal Television.\",\n    \"Hannah Britten | Hannah Britten is a fictional protagonist in the American police procedural drama television series \\\"Awake\\\".  She is portrayed by Laura Allen.  The character first appeared in \\\"Pilot\\\" and last appeared in the series finale \\\"Turtles All the Way Down\\\".  Hannah was created and designed by series creator and executive producer Kyle Killen after he created and developed the series \\\"Lone Star\\\" for the Fox network.\",\n    \"Erik Estrada | Henry Enrique \\\"Erik\\\" Estrada (born March 16, 1949) is an American actor, voice actor, and police officer known for his co-starring lead role in the police drama television series \\\"CHiPs\\\", which ran from 1977 to 1983.  He later became known for his work in Spanish-language \\\"telenovelas\\\", his appearances in reality television shows and infomercials and as a regular voice on the Adult Swim series \\\"Sealab 2021\\\" as well as the movie \\\"Cool Cat Saves The Kids\\\".\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Archie Kao\",\n    \"sent_id\": 0,\n    \"sentence\": \"Archie David Kao (born December 14, 1969) is an American actor.\"\n  },\n  {\n    \"title\": \"Archie Kao\",\n    \"sent_id\": 1,\n    \"sentence\": \"He is best known to American audiences for series regulars roles on \\\"Chicago P.D.\\\", \\\"Power Rangers Lost Galaxy\\\" as well as long-running hit \\\"\\\".\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Chicago P.D. (TV series)\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence: The Archie Kao page shows (1) he is an American actor and (2) he is best known to American audiences for series regular roles on \\\"Chicago P.D.\\\" and \\\"Power Rangers Lost Galaxy\\\". Bridge / missing fact: Identify who is credited as the creator(s) of the TV series \\\"Chicago P.D.\\\". Retrieval direction: Fetch the page titled \\\"Chicago P.D. (TV series)\\\" (e.g., Wikipedia) and inspect the infobox and lead for the 'Created by' / 'Developer' or showrunner credits; also check the Cast/Series regulars section on that page to corroborate Archie Kao's regular status if needed.\",\n  \"rationale\": \"Visible first-hop support confirms Archie Kao was a series regular on \\\"Chicago P.D.\\\" (Archie Kao page sentences). To answer who created the series, we must retrieve the \\\"Chicago P.D. (TV series)\\\" page and read its creator credit—this title is the appropriate next-hop target.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 9,
+    "row_index": 9
+  }
+}

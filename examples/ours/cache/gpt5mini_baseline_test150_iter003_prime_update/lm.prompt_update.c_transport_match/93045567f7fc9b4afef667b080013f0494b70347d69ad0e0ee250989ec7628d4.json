@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "93045567f7fc9b4afef667b080013f0494b70347d69ad0e0ee250989ec7628d4",
+  "created_at": "2026-07-14T05:31:08.463925+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 119,
+        "stable_id": "119",
+        "question": "What groundbreaking composer is the actor who plays Schwerner in Murder in Mississippi, best known for portraying?",
+        "summary_1": "First-hop evidence: Murder in Mississippi — \"starred Tom Hulce as Schwerner\" (Passage [1]).  \nBridge needed: Tom Hulce — verify which groundbreaking composer he is best known for portraying.  \nRetrieval direction: 1. Fetch the page titled \"Tom Hulce\" (Wikipedia/biography) and inspect the lead/infobox/\"Known for\"/notable roles/filmography for the composer role. 2. If not clear, fetch \"Amadeus (film)\" cast or search \"Tom Hulce Mozart site:wikipedia.org\" to confirm the composer's identity.",
+        "hop2_query": "Tom Hulce Wikipedia OR \"Tom Hulce\" \"Wolfgang Amadeus Mozart\" \"Amadeus\" site:wikipedia.org",
+        "summary_2": "The actor who plays Schwerner (Tom Hulce) is best known for portraying Wolfgang Amadeus Mozart (see \"Tom Hulce\": \"Academy Award-nominated portrayal of Wolfgang Amadeus Mozart\").",
+        "answer": "Wolfgang Amadeus Mozart",
+        "gold_support_titles": [
+          "Murder in Mississippi",
+          "Tom Hulce"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 148,
+          "w_stable_id": "148",
+          "agent": "final",
+          "w_question": "What is the nationality of this professional boxer who lost to Breidis Prescott in a upset match in 2008 that was heavily favoured toward him?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Shall I look up Amir Khan's nationality?",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "British",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question explicitly asks for a nationality/demonym AND the visible summaries identify a single named boxer (e.g., 'Amir Khan') as the referent but neither summary contains a demonym, and the agent's current output is a clarifying prompt asking to \"look up\" the nationality.",
+                "preserve_rule": "Preserve the base prompt's formatting and minimal-answer rules: always emit the final result inside the [[ ## answer ## ]] block; the block must contain only the minimal answer token(s) or a brief clarifying question. Continue to prefer evidence from the visible summaries and to follow rules 1–7 of the base prompt unless this local change applies.",
+                "change_rule": "In this narrow triggered case, do not emit a 'Shall I look up...' clarification. Instead, if the referent is unambiguous (a single named person appears in the summaries) and you have high internal confidence about that person's widely-known nationality, answer directly by emitting the single demonym token/short phrase as the minimal answer inside [[ ## answer ## ]]. If you do NOT have high internal confidence, fall back to emitting a concise clarification question (preserving the answer-block-only constraint). Do not add provenance, explanations, or any extra tokens beyond the minimal demonym or the short clarification question.",
+                "drop_or_avoid_rule": "Avoid asking to perform an external lookup in this specific, unambiguous case when you are highly confident of the nationality. Avoid appending qualifiers, parentheticals, source citations, or explanatory clauses to the minimal answer. Also avoid inventing or guessing when you lack high confidence—use the brief clarification fallback instead.",
+                "output_contract": "If answering, output exactly the minimal demonym token/phrase (1–3 words) inside [[ ## answer ## ]] with no additional characters. If not confident, output a concise clarifying question inside [[ ## answer ## ]]. Do not include any extra text, justification, or metadata.",
+                "why_local_transition": "This small behavioral change converts an unnecessary lookup-request step into a direct minimal answer when the summaries unambiguously identify the person and the nationality is a well-known fact the agent can state with high confidence; it preserves the base prompt's strict output formatting and falls back to clarification when confidence is insufficient."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Wolfgang Amadeus Mozart",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 127,
+          "w_stable_id": "127",
+          "agent": "final",
+          "w_question": "A Wish Way is a device that appears in a book illustrated by who?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Which of the three books do you mean?",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "John R. Neill",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When summary_1 lists one or more specific book titles (here: multiple Oz-era titles) and summary_2 states that the supplied passages do not contain illustrator credits, and the agent's default behavior would be to emit a clarification question asking which book is meant.",
+                "preserve_rule": "Keep all existing base-prompt rules about producing a single minimal answer inside the [[ ## answer ## ]] block, using only the visible summaries as evidence unless a narrowly scoped internal-knowledge override is invoked. Preserve normalization and formatting constraints (no extra words, punctuation, or explanations).",
+                "change_rule": "Allow a conservative internal-knowledge override: if the listed candidate books are all canonical entries from the same series and you have high internal confidence that a single credited illustrator is consistently credited for those specific titles, emit that illustrator's name as the minimal answer (inside [[ ## answer ## ]] with no surrounding text). Apply this override only when the illustrator is unambiguously the same for all named candidate books and you are highly confident; otherwise do not apply and instead follow the base behavior (ask a brief clarification).",
+                "drop_or_avoid_rule": "Do not guess or assert an illustrator unless the high-confidence criterion above is met. Do not attempt to fetch external pages or invent supporting evidence. If the candidate books have different credited illustrators or you lack high confidence that a single illustrator applies to all, avoid answering and instead emit the concise clarification question per the base prompt.",
+                "output_contract": "When the override applies, emit only the illustrator's name as the sole contents of [[ ## answer ## ]] (normalized per base rules). If the override does not apply, emit the brief clarification question as the sole contents of [[ ## answer ## ]]. Do not include explanations, provenance, or additional tokens.",
+                "why_local_transition": "This is a minimal behavioral change that flips the policy from always asking for disambiguation to allowing a narrow, high-confidence internal-knowledge resolution when the visible summaries point to multiple books that in practice share a single credited illustrator. It avoids unnecessary clarifications while preserving the base prompt's strict minimal-answer and evidence-first constraints."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Wolfgang Amadeus Mozart",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 110,
+          "w_stable_id": "110",
+          "agent": "final",
+          "w_question": "Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "for violating the league's anti-drug program",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "violating the league's anti-drug program",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the candidate minimal-answer string the agent would emit begins with a leading causal preposition token 'for ' immediately followed by a short phrase (e.g., a gerund or noun phrase) that also appears verbatim in one of the visible summaries.",
+                "preserve_rule": "Keep all existing base-prompt behaviors: use only the visible summaries as evidence, produce the final result inside the [[ ## answer ## ]] block, and emit only the minimal answer string per the general minimal-answer and agreement rules.",
+                "change_rule": "If the chosen minimal-answer text begins with the prefix 'for ' and the remainder of that text (after removing 'for ') appears verbatim in at least one visible summary, remove the leading 'for ' and emit the remainder as the minimal answer. Apply this rewrite only at the final formatting step (do not alter summary inspection or selection logic).",
+                "drop_or_avoid_rule": "Do not prepend causal prepositions ('for ', 'because ', etc.) to answers when a shorter verb phrase or noun phrase is available verbatim in the summaries. Avoid producing explanatory clauses or leading prepositions as part of the minimal answer; do not convert the answer into a full sentence.",
+                "output_contract": "The [[ ## answer ## ]] block must contain only the minimal answer string (with any leading 'for ' removed per the change_rule). Do not add punctuation, explanatory text, or additional tokens.",
+                "why_local_transition": "The source output included an unnecessary leading causal preposition ('for ') that violates the base prompt's rule to emit the shortest supported token sequence. This delta performs a single local formatting rewrite (strip the leading 'for ' when redundant) so the unchanged base prompt can produce the shorter minimal phrase required by the target edge."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Wolfgang Amadeus Mozart",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 25,
+          "w_stable_id": "25",
+          "agent": "final",
+          "w_question": "Are Jon Fratelli and Skye Edwards from the same country?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Do you mean Skye Edwards the British singer or Skye-Jilly Edwards the Australian?",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "no",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question matches the pattern 'Are X and Y from the same country?' and the visible summaries each include a nationality/demonym token for the two named people (one demonym per person) that are not identical under case-insensitive comparison.",
+                "preserve_rule": "Preserve the base-prompt constraints: use only the visible summaries as evidence and produce the final output inside [[ ## answer ## ]] containing exactly the minimal answer token required by the base rules (no extra words, punctuation, or explanation).",
+                "change_rule": "Do not emit a clarifying question in this branch. Instead, decide sameness by directly comparing the demonym strings found in the summaries: if both persons have demonyms and the two demonym strings differ, produce the concise negative minimal-answer token required by the base prompt (a single-word negation) as the entire content of [[ ## answer ## ]]. If either demonym is missing or both demonyms are identical (case-insensitive), fall back to the base prompt's normal behavior (emit the agreed demonym or ask a short clarification per the existing rules).",
+                "drop_or_avoid_rule": "Do not attempt external reconciliation (e.g., mapping 'Scottish' to 'British') or fetch external facts to merge demonyms. Avoid asking the user for clarification when the visible summaries already provide distinct demonyms for the two people.",
+                "output_contract": "Maintain the original output contract: the [[ ## answer ## ]] block must contain only the single minimal token determined by the above comparison. No additional explanation, punctuation, or context should be added.",
+                "why_local_transition": "The agent previously asked a clarification despite visible summaries providing differing nationalities. This small rule lets the agent treat conflicting demonyms as sufficient evidence to emit the concise negative minimal answer, avoiding an unnecessary clarification while preserving the base prompt's strict minimal-answer format."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Wolfgang Amadeus Mozart",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 119,\n  \"stable_id\": \"119\",\n  \"question\": \"What groundbreaking composer is the actor who plays Schwerner in Murder in Mississippi, best known for portraying?\",\n  \"summary_1\": \"First-hop evidence: Murder in Mississippi — \\\"starred Tom Hulce as Schwerner\\\" (Passage [1]).  \\nBridge needed: Tom Hulce — verify which groundbreaking composer he is best known for portraying.  \\nRetrieval direction: 1. Fetch the page titled \\\"Tom Hulce\\\" (Wikipedia/biography) and inspect the lead/infobox/\\\"Known for\\\"/notable roles/filmography for the composer role. 2. If not clear, fetch \\\"Amadeus (film)\\\" cast or search \\\"Tom Hulce Mozart site:wikipedia.org\\\" to confirm the composer's identity.\",\n  \"hop2_query\": \"Tom Hulce Wikipedia OR \\\"Tom Hulce\\\" \\\"Wolfgang Amadeus Mozart\\\" \\\"Amadeus\\\" site:wikipedia.org\",\n  \"summary_2\": \"The actor who plays Schwerner (Tom Hulce) is best known for portraying Wolfgang Amadeus Mozart (see \\\"Tom Hulce\\\": \\\"Academy Award-nominated portrayal of Wolfgang Amadeus Mozart\\\").\",\n  \"answer\": \"Wolfgang Amadeus Mozart\",\n  \"gold_support_titles\": [\n    \"Murder in Mississippi\",\n    \"Tom Hulce\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 148,\n    \"w_stable_id\": \"148\",\n    \"agent\": \"final\",\n    \"w_question\": \"What is the nationality of this professional boxer who lost to Breidis Prescott in a upset match in 2008 that was heavily favoured toward him?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Shall I look up Amir Khan's nationality?\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"British\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question explicitly asks for a nationality/demonym AND the visible summaries identify a single named boxer (e.g., 'Amir Khan') as the referent but neither summary contains a demonym, and the agent's current output is a clarifying prompt asking to \\\"look up\\\" the nationality.\",\n          \"preserve_rule\": \"Preserve the base prompt's formatting and minimal-answer rules: always emit the final result inside the [[ ## answer ## ]] block; the block must contain only the minimal answer token(s) or a brief clarifying question. Continue to prefer evidence from the visible summaries and to follow rules 1–7 of the base prompt unless this local change applies.\",\n          \"change_rule\": \"In this narrow triggered case, do not emit a 'Shall I look up...' clarification. Instead, if the referent is unambiguous (a single named person appears in the summaries) and you have high internal confidence about that person's widely-known nationality, answer directly by emitting the single demonym token/short phrase as the minimal answer inside [[ ## answer ## ]]. If you do NOT have high internal confidence, fall back to emitting a concise clarification question (preserving the answer-block-only constraint). Do not add provenance, explanations, or any extra tokens beyond the minimal demonym or the short clarification question.\",\n          \"drop_or_avoid_rule\": \"Avoid asking to perform an external lookup in this specific, unambiguous case when you are highly confident of the nationality. Avoid appending qualifiers, parentheticals, source citations, or explanatory clauses to the minimal answer. Also avoid inventing or guessing when you lack high confidence—use the brief clarification fallback instead.\",\n          \"output_contract\": \"If answering, output exactly the minimal demonym token/phrase (1–3 words) inside [[ ## answer ## ]] with no additional characters. If not confident, output a concise clarifying question inside [[ ## answer ## ]]. Do not include any extra text, justification, or metadata.\",\n          \"why_local_transition\": \"This small behavioral change converts an unnecessary lookup-request step into a direct minimal answer when the summaries unambiguously identify the person and the nationality is a well-known fact the agent can state with high confidence; it preserves the base prompt's strict output formatting and falls back to clarification when confidence is insufficient.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Wolfgang Amadeus Mozart\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 127,\n    \"w_stable_id\": \"127\",\n    \"agent\": \"final\",\n    \"w_question\": \"A Wish Way is a device that appears in a book illustrated by who?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Which of the three books do you mean?\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"John R. Neill\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When summary_1 lists one or more specific book titles (here: multiple Oz-era titles) and summary_2 states that the supplied passages do not contain illustrator credits, and the agent's default behavior would be to emit a clarification question asking which book is meant.\",\n          \"preserve_rule\": \"Keep all existing base-prompt rules about producing a single minimal answer inside the [[ ## answer ## ]] block, using only the visible summaries as evidence unless a narrowly scoped internal-knowledge override is invoked. Preserve normalization and formatting constraints (no extra words, punctuation, or explanations).\",\n          \"change_rule\": \"Allow a conservative internal-knowledge override: if the listed candidate books are all canonical entries from the same series and you have high internal confidence that a single credited illustrator is consistently credited for those specific titles, emit that illustrator's name as the minimal answer (inside [[ ## answer ## ]] with no surrounding text). Apply this override only when the illustrator is unambiguously the same for all named candidate books and you are highly confident; otherwise do not apply and instead follow the base behavior (ask a brief clarification).\",\n          \"drop_or_avoid_rule\": \"Do not guess or assert an illustrator unless the high-confidence criterion above is met. Do not attempt to fetch external pages or invent supporting evidence. If the candidate books have different credited illustrators or you lack high confidence that a single illustrator applies to all, avoid answering and instead emit the concise clarification question per the base prompt.\",\n          \"output_contract\": \"When the override applies, emit only the illustrator's name as the sole contents of [[ ## answer ## ]] (normalized per base rules). If the override does not apply, emit the brief clarification question as the sole contents of [[ ## answer ## ]]. Do not include explanations, provenance, or additional tokens.\",\n          \"why_local_transition\": \"This is a minimal behavioral change that flips the policy from always asking for disambiguation to allowing a narrow, high-confidence internal-knowledge resolution when the visible summaries point to multiple books that in practice share a single credited illustrator. It avoids unnecessary clarifications while preserving the base prompt's strict minimal-answer and evidence-first constraints.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Wolfgang Amadeus Mozart\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 110,\n    \"w_stable_id\": \"110\",\n    \"agent\": \"final\",\n    \"w_question\": \"Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"for violating the league's anti-drug program\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"violating the league's anti-drug program\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the candidate minimal-answer string the agent would emit begins with a leading causal preposition token 'for ' immediately followed by a short phrase (e.g., a gerund or noun phrase) that also appears verbatim in one of the visible summaries.\",\n          \"preserve_rule\": \"Keep all existing base-prompt behaviors: use only the visible summaries as evidence, produce the final result inside the [[ ## answer ## ]] block, and emit only the minimal answer string per the general minimal-answer and agreement rules.\",\n          \"change_rule\": \"If the chosen minimal-answer text begins with the prefix 'for ' and the remainder of that text (after removing 'for ') appears verbatim in at least one visible summary, remove the leading 'for ' and emit the remainder as the minimal answer. Apply this rewrite only at the final formatting step (do not alter summary inspection or selection logic).\",\n          \"drop_or_avoid_rule\": \"Do not prepend causal prepositions ('for ', 'because ', etc.) to answers when a shorter verb phrase or noun phrase is available verbatim in the summaries. Avoid producing explanatory clauses or leading prepositions as part of the minimal answer; do not convert the answer into a full sentence.\",\n          \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string (with any leading 'for ' removed per the change_rule). Do not add punctuation, explanatory text, or additional tokens.\",\n          \"why_local_transition\": \"The source output included an unnecessary leading causal preposition ('for ') that violates the base prompt's rule to emit the shortest supported token sequence. This delta performs a single local formatting rewrite (strip the leading 'for ' when redundant) so the unchanged base prompt can produce the shorter minimal phrase required by the target edge.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Wolfgang Amadeus Mozart\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 25,\n    \"w_stable_id\": \"25\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are Jon Fratelli and Skye Edwards from the same country?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Do you mean Skye Edwards the British singer or Skye-Jilly Edwards the Australian?\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"no\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question matches the pattern 'Are X and Y from the same country?' and the visible summaries each include a nationality/demonym token for the two named people (one demonym per person) that are not identical under case-insensitive comparison.\",\n          \"preserve_rule\": \"Preserve the base-prompt constraints: use only the visible summaries as evidence and produce the final output inside [[ ## answer ## ]] containing exactly the minimal answer token required by the base rules (no extra words, punctuation, or explanation).\",\n          \"change_rule\": \"Do not emit a clarifying question in this branch. Instead, decide sameness by directly comparing the demonym strings found in the summaries: if both persons have demonyms and the two demonym strings differ, produce the concise negative minimal-answer token required by the base prompt (a single-word negation) as the entire content of [[ ## answer ## ]]. If either demonym is missing or both demonyms are identical (case-insensitive), fall back to the base prompt's normal behavior (emit the agreed demonym or ask a short clarification per the existing rules).\",\n          \"drop_or_avoid_rule\": \"Do not attempt external reconciliation (e.g., mapping 'Scottish' to 'British') or fetch external facts to merge demonyms. Avoid asking the user for clarification when the visible summaries already provide distinct demonyms for the two people.\",\n          \"output_contract\": \"Maintain the original output contract: the [[ ## answer ## ]] block must contain only the single minimal token determined by the above comparison. No additional explanation, punctuation, or context should be added.\",\n          \"why_local_transition\": \"The agent previously asked a clarification despite visible summaries providing differing nationalities. This small rule lets the agent treat conflicting demonyms as sufficient evidence to emit the concise negative minimal answer, avoiding an unnecessary clarification while preserving the base prompt's strict minimal-answer format.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Wolfgang Amadeus Mozart\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 148,\n  \"dominant_gap_type\": \"answer_selection\",\n  \"transported_damage_hypothesis\": \"Agent will decline to answer directly and instead emit a lookup/clarifying prompt (e.g., \\\"Shall I look up Tom Hulce's roles?\\\") even though the summaries name a single actor and the composer is widely known.\",\n  \"expected_damaged_behavior\": \"At the final agent boundary, produce a concise clarification/lookup request instead of outputting the minimal answer 'Wolfgang Amadeus Mozart'.\",\n  \"rationale\": \"The W failure is a local policy that turns an unnecessary lookup step into a direct minimal answer when summaries unambiguously identify a single person. The C task is structurally the same: a single named actor appears in the summaries and the role (a famous composer) is widely known. Transporting this failure plausibly causes the agent to ask to \\\"look up\\\" the actor's notable role rather than answer directly. This transfers only the behavior (not any W-side entities), stays local to the agent-output decision, preserves the C_plus neighborhood (no answer flip), and matches the criteria for anchor/bridge failures where an agent unnecessarily requests external retrieval instead of using visible evidence or confident internal knowledge.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 119,
+    "c_stable_id": "119",
+    "candidate_w_sample_indices": [
+      25,
+      110,
+      127,
+      148
+    ],
+    "match_fingerprint": "757fa847620beacf3f8c08ec197bf76f119b2e3d9d9f265f43ed6adf7dbc304c"
+  }
+}

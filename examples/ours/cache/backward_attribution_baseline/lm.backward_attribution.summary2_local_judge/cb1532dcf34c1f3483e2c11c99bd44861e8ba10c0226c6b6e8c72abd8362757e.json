@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "cb1532dcf34c1f3483e2c11c99bd44861e8ba10c0226c6b6e8c72abd8362757e",
+  "created_at": "2026-07-13T17:24:28.908449+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Why was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?",
+      "source_summary": "He was dismissed for violating the NBA's anti-drug program (after prior positive steroid test and related violations).",
+      "target_summary": "Summary: Per the provided context and supporting evidence, O.J. Mayo was dismissed from the NBA on July 1, 2016 for violating the league's anti-drug program.",
+      "candidate_summary": "Summary: Per the provided context and supporting evidence, O.J. Mayo was dismissed from the NBA on July 1, 2016 for violating the league's anti-drug program."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhy was O.J Mayo, named the Most Valuable Player at the 2007 Anaheim Classic dismissed from the NBA?\n\nSource summary2:\nHe was dismissed for violating the NBA's anti-drug program (after prior positive steroid test and related violations).\n\nTarget summary2:\nSummary: Per the provided context and supporting evidence, O.J. Mayo was dismissed from the NBA on July 1, 2016 for violating the league's anti-drug program.\n\nCandidate summary2:\nSummary: Per the provided context and supporting evidence, O.J. Mayo was dismissed from the NBA on July 1, 2016 for violating the league's anti-drug program.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate exactly matches the target: it states Mayo was dismissed on July 1, 2016 for violating the NBA's anti-drug program (target_reconstructed=true). It adds the dismissal date that was not in the source (meaningful_gain=true). However, it omits the source's extra detail about a prior positive steroid test and related violations, so it does not preserve all task-relevant information from the source (preserves_source=false).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 110,
+    "row_index": 110,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

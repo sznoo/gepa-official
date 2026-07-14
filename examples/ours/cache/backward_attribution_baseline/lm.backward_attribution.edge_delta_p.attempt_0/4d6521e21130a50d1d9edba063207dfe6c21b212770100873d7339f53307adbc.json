@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "4d6521e21130a50d1d9edba063207dfe6c21b212770100873d7339f53307adbc",
+  "created_at": "2026-07-13T17:13:52.954609+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+        "summary_1": "Yes. Ivan Perestiani and Patricio Guzmán were both film directors.",
+        "summary_2": "Yes. Ivan Perestiani was a Russian/Soviet film director, and Patricio Guzmán is a Chilean documentary film director.",
+        "current_output": "Yes. Both Ivan Perestiani and Patricio Guzmán were film directors."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes. Both Ivan Perestiani and Patricio Guzmán were film directors.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Were Ivan Perestiani and Patricio Guzmán both directors?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Were Ivan Perestiani and Patricio Guzmán both directors?\",\n  \"summary_1\": \"Yes. Ivan Perestiani and Patricio Guzmán were both film directors.\",\n  \"summary_2\": \"Yes. Ivan Perestiani was a Russian/Soviet film director, and Patricio Guzmán is a Chilean documentary film director.\",\n  \"current_output\": \"Yes. Both Ivan Perestiani and Patricio Guzmán were film directors.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes. Both Ivan Perestiani and Patricio Guzmán were film directors.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When producing the final answer and both summary_1 and summary_2 clearly assert the same yes/no conclusion about the question.\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the factual evidence and retain the existing decision logic that determines whether the answer is affirmative or negative.\",\n    \"change_rule\": \"If both summaries agree on an affirmative conclusion, output exactly the single lowercase token yes; if both agree on a negative conclusion, output exactly the single lowercase token no. Do this instead of any multi-sentence or explanatory phrasing. If the summaries do not clearly agree, do not apply this change and fall back to the base prompt's original behavior.\",\n    \"drop_or_avoid_rule\": \"Do not add punctuation, capitalization, surrounding words, explanation, or extra sentences around the single token. Avoid copying or repeating full summary sentences—only emit the single-token minimal answer when the trigger condition holds.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only one lowercase token (yes or no) when both summaries agree; no other characters, punctuation, or text are permitted in that block under the trigger condition.\",\n    \"why_local_transition\": \"This change is a minimal formatting/verbosity edit that only collapses an already-supported binary conclusion into the required minimal answer token when the summaries agree; it does not alter how evidence is used or how the decision is reached.\"\n  },\n  \"rationale\": \"The source output is a full sentence confirming both individuals are directors; the target is the minimal affirmative token. The smallest safe edit is to add a conditional formatting rule that, when both summaries clearly assert the same binary conclusion, replaces verbose final phrasing with the single lowercase token. This preserves evidence use and decision logic while changing only output shape, satisfying the agent's final-answer contract without introducing new reasoning or new data.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 23,
+    "row_index": 23,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

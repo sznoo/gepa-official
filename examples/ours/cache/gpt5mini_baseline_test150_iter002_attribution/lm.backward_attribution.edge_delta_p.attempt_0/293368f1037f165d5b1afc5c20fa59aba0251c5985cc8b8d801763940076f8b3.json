@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "293368f1037f165d5b1afc5c20fa59aba0251c5985cc8b8d801763940076f8b3",
+  "created_at": "2026-07-13T20:08:47.547500+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "summary_1": "First-hop evidence: Passage 1 (Archie Kao) — \"series regulars roles on 'Chicago P.D.'\" (names the series Kao was regular on).  \nBridge needed: The series \"Chicago P.D.\" — verify the person(s) credited as the show's creator(s).  \nRetrieval direction: 1. Fetch the page titled \"Chicago P.D.\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.",
+        "current_output": {
+          "query": "Chicago P.D. Wikipedia \"Created by\" site:wikipedia.org"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Chicago P.D. (TV series) \"created by\""
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Chicago P.D. (TV series) Who created an American police procedural television series that starred the American actor Archie Kao as a regular?"
+        },
+        "score": 1.0,
+        "retrieved_titles": [
+          "Archie Kao",
+          "Against the Wall (TV series)",
+          "Chicago P.D. (TV series)",
+          "Strike Force (TV series)",
+          "Monk (TV series)",
+          "The Chinese Detective",
+          "Unforgettable (U.S. TV series)"
+        ],
+        "retrieved_doc_snippets": [
+          "Archie Kao | Archie David Kao (born December 14, 1969) is an American actor. He is best known to American audiences for series regulars roles on \"Chicago P.D.\", \"Power Rangers Lost Galaxy\" as well as long-running hit \"\".",
+          "Against the Wall (TV series) | Against the Wall is an American police drama television series created by Annie Brunner. The series starred Rachael Carpani as Abby Kowalski, a police detective who recently joined the Internal Affairs division of the Chicago Police Department.",
+          "Chicago P.D. (TV series) | Chicago P.D. is an American police procedural drama television series created by Dick Wolf and Matt Olmstead as the second installment of Dick Wolf's \"Chicago\" franchise. The series premiered on NBC as a mid-season replacement on January 8, 2014. The show follows the uniformed patrol officers and the Intelligence Unit of the 21st District of the Chicago Police Department as they pursue the perpetrators of the city's major street offences.",
+          "Strike Force (TV series) | Strike Force is an American action-adventure/police procedural television series that aired on ABC during the 1981–1982 television season, and was produced by Aaron Spelling Productions. The program starred Robert Stack as Capt. Frank Murphy, the leader of a special unit of specialized detectives and police officers whose job is to stop violent criminals at any cost (usually with a hail of gunfire). Mixing elements of Stack's classic TV series \"The Untouchables\" from 2 ...[truncated]",
+          "Monk (TV series) | Monk is an American comedy-drama detective mystery television series created by Andy Breckman and starring Tony Shalhoub as the eponymous character, Adrian Monk. It originally ran from 2002 to 2009 and is primarily a police procedural series, and also exhibits comic and dramatic tones in its exploration of the main characters' personal lives. The series was produced by Mandeville Films and Touchstone Television in association with Universal Television.",
+          "The Chinese Detective | The Chinese Detective is a British television police procedural drama series, first transmitted by the BBC between 1981 and 1982. The series was created by Ian Kennedy Martin, who had previously devised \"The Sweeney\" and \"Juliet Bravo\". The series starred British Chinese actor David Yip as Detective Sergeant John Ho, the first Chinese lead actor in a British television drama series. The series offered traditional police procedural storylines in a setting of occasional pre ...[truncated]",
+          "Unforgettable (U.S. TV series) | Unforgettable is an American police procedural crime drama television series that premiered on CBS on September 20, 2011. The series was developed by Ed Redlich and John Bellucci, and stars Poppy Montgomery as Detective Carrie Wells, a female police detective with an unusually detailed and photographic memory."
+        ],
+        "summary_2": "Archie Kao is listed as a series regular on Chicago P.D. (Archie Kao). Chicago P.D. was \"created by Dick Wolf and Matt Olmstead\" (Chicago P.D. (TV series)).",
+        "answer": "Dick Wolf and Matt Olmstead",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Chicago P.D. (TV series)"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"summary_1\": \"First-hop evidence: Passage 1 (Archie Kao) — \\\"series regulars roles on 'Chicago P.D.'\\\" (names the series Kao was regular on).  \\nBridge needed: The series \\\"Chicago P.D.\\\" — verify the person(s) credited as the show's creator(s).  \\nRetrieval direction: 1. Fetch the page titled \\\"Chicago P.D.\\\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.\",\n  \"current_output\": {\n    \"query\": \"Chicago P.D. Wikipedia \\\"Created by\\\" site:wikipedia.org\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Chicago P.D. (TV series) \\\"created by\\\"\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Chicago P.D. (TV series) Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\"\n  },\n  \"score\": 1.0,\n  \"retrieved_titles\": [\n    \"Archie Kao\",\n    \"Against the Wall (TV series)\",\n    \"Chicago P.D. (TV series)\",\n    \"Strike Force (TV series)\",\n    \"Monk (TV series)\",\n    \"The Chinese Detective\",\n    \"Unforgettable (U.S. TV series)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Archie Kao | Archie David Kao (born December 14, 1969) is an American actor. He is best known to American audiences for series regulars roles on \\\"Chicago P.D.\\\", \\\"Power Rangers Lost Galaxy\\\" as well as long-running hit \\\"\\\".\",\n    \"Against the Wall (TV series) | Against the Wall is an American police drama television series created by Annie Brunner. The series starred Rachael Carpani as Abby Kowalski, a police detective who recently joined the Internal Affairs division of the Chicago Police Department.\",\n    \"Chicago P.D. (TV series) | Chicago P.D. is an American police procedural drama television series created by Dick Wolf and Matt Olmstead as the second installment of Dick Wolf's \\\"Chicago\\\" franchise. The series premiered on NBC as a mid-season replacement on January 8, 2014. The show follows the uniformed patrol officers and the Intelligence Unit of the 21st District of the Chicago Police Department as they pursue the perpetrators of the city's major street offences.\",\n    \"Strike Force (TV series) | Strike Force is an American action-adventure/police procedural television series that aired on ABC during the 1981–1982 television season, and was produced by Aaron Spelling Productions. The program starred Robert Stack as Capt. Frank Murphy, the leader of a special unit of specialized detectives and police officers whose job is to stop violent criminals at any cost (usually with a hail of gunfire). Mixing elements of Stack's classic TV series \\\"The Untouchables\\\" from 2 ...[truncated]\",\n    \"Monk (TV series) | Monk is an American comedy-drama detective mystery television series created by Andy Breckman and starring Tony Shalhoub as the eponymous character, Adrian Monk. It originally ran from 2002 to 2009 and is primarily a police procedural series, and also exhibits comic and dramatic tones in its exploration of the main characters' personal lives. The series was produced by Mandeville Films and Touchstone Television in association with Universal Television.\",\n    \"The Chinese Detective | The Chinese Detective is a British television police procedural drama series, first transmitted by the BBC between 1981 and 1982. The series was created by Ian Kennedy Martin, who had previously devised \\\"The Sweeney\\\" and \\\"Juliet Bravo\\\". The series starred British Chinese actor David Yip as Detective Sergeant John Ho, the first Chinese lead actor in a British television drama series. The series offered traditional police procedural storylines in a setting of occasional pre ...[truncated]\",\n    \"Unforgettable (U.S. TV series) | Unforgettable is an American police procedural crime drama television series that premiered on CBS on September 20, 2011. The series was developed by Ed Redlich and John Bellucci, and stars Poppy Montgomery as Detective Carrie Wells, a female police detective with an unusually detailed and photographic memory.\"\n  ],\n  \"summary_2\": \"Archie Kao is listed as a series regular on Chicago P.D. (Archie Kao). Chicago P.D. was \\\"created by Dick Wolf and Matt Olmstead\\\" (Chicago P.D. (TV series)).\",\n  \"answer\": \"Dick Wolf and Matt Olmstead\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Chicago P.D. (TV series)\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 explicitly requests fetching the series page to verify its 'Created by' / creator credits or includes phrasing like 'Bridge needed' and names a specific series (e.g., contains the series title and words such as 'verify' or 'Created by').\",\n    \"preserve_rule\": \"Keep producing one compact, single-line retrieval query focused on the identified series page; retain preference for queries that surface the page's infobox (e.g., Wikipedia) and preserve mention of the series title already generated by the base prompt.\",\n    \"change_rule\": \"Modify the query wording to explicitly target creator credits by including the series title plus a short creator-intent phrase. Construct the query from available inputs using this template: \\\"<Series title> (TV series) who created\\\" and, if the actor's name appears in the question/summary_1, append the actor's name as an additional keyword to help disambiguate (e.g., \\\"<Series title> (TV series) who created site:wikipedia.org Archie Kao\\\"). Keep the whole query compact (one line).\",\n    \"drop_or_avoid_rule\": \"Do not include the full natural-language question or any candidate answers, do not copy long target-only spans, and avoid extra tokens or verbose context. Do not instruct to fetch anything beyond a concise retrieval query string.\",\n    \"output_contract\": \"Return a single-line retrieval query string that (a) includes the exact series title, (b) contains an explicit creator-focused phrase such as 'who created' or 'created by', and (c) may optionally include the actor's name and a site restriction like site:wikipedia.org. Example pattern to satisfy automatically: \\\"<Series title> (TV series) who created [ActorName] site:wikipedia.org\\\". No other fields or explanatory text.\",\n    \"why_local_transition\": \"The source query names the series but doesn't explicitly target the 'Created by' field. This local change nudges the generator to form a creator-focused retrieval query (still compact and page-directed) so the second-hop fetches the infobox/creator credits without altering other query-generation behavior.\"\n  },\n  \"rationale\": \"Minimal, targeted behavior edit: preserve the agent's single-query output style while adding an explicit creator-intent phrase so retrieval surfaces the 'Created by' field (usually in an infobox). Using the series title plus 'who created' (and optionally the actor name and site:wikipedia.org) keeps the query compact, improves precision for the needed evidence, and avoids introducing extra instructions or answer leakage. The trigger is tied to summary_1 signals so this rule only applies when the next hop should verify creator credits.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 9,
+    "row_index": 9,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

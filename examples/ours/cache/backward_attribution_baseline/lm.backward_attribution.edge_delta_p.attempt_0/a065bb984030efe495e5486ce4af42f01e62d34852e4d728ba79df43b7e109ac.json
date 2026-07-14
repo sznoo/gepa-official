@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a065bb984030efe495e5486ce4af42f01e62d34852e4d728ba79df43b7e109ac",
+  "created_at": "2026-07-13T17:23:38.157969+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Where are the studios, where the Muppet Shows were recorded, located ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Where are the studios, where the Muppet Shows were recorded, located ?",
+        "summary_1": "They were recorded at Elstree Studios in England.",
+        "summary_2": "They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England.",
+        "current_output": "They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Clarendon Road in Borehamwood, Hertfordshire",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Where are the studios, where the Muppet Shows were recorded, located ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Where are the studios, where the Muppet Shows were recorded, located ?\",\n  \"summary_1\": \"They were recorded at Elstree Studios in England.\",\n  \"summary_2\": \"They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England.\",\n  \"current_output\": \"They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They were recorded at Elstree Studios in Borehamwood/Elstree, Hertfordshire, England.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Clarendon Road in Borehamwood, Hertfordshire\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the visible summaries agree on the recording place/studio (they mention the same studio or locality names, e.g. 'Elstree Studios' and 'Borehamwood'/'Hertfordshire').\",\n    \"preserve_rule\": \"Keep factual tokens and exact phrasings that already appear in the visible summaries (studio name and locality names). Preserve the base prompt's interface: produce only the `answer` field and nothing else.\",\n    \"change_rule\": \"Instead of a full-sentence reply, emit a single, minimal, comma-separated location string composed only from place/studio names present in the summaries. Prefer the exact phrasing used in the summaries when available (for example, use 'Elstree Studios' and 'Borehamwood/Elstree, Hertfordshire, England' if those tokens appear). Do not add verbs, framing text, or new place names.\",\n    \"drop_or_avoid_rule\": \"Do not add unsupported specifics (e.g., street names not present in the summaries), explanations, justifications, or any extra sentences. Avoid punctuation beyond necessary commas; do not introduce content that appears only in the target state.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string: a comma-separated list of studio/place tokens drawn exactly from the summaries, with no surrounding sentence, commentary, or trailing period.\",\n    \"why_local_transition\": \"The agent currently outputs a full declarative sentence. This small behavioral change enforces the required compact answer format while retaining the correct factual tokens from the summaries and preventing the addition of unsupported details.\"\n  },\n  \"rationale\": \"Make the smallest possible edit that converts a verbose sentence into the concise, summary-supported answer string required by the final role. This preserves the correct facts already present (studio and locality names), enforces formatting rules (only the minimal string in the answer block), and prevents hallucinating or adding target-only specifics such as street names.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 107,
+    "row_index": 107,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

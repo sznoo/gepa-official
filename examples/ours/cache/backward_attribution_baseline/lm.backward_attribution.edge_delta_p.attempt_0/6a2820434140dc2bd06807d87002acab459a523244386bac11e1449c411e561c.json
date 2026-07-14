@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "6a2820434140dc2bd06807d87002acab459a523244386bac11e1449c411e561c",
+  "created_at": "2026-07-13T17:25:51.255142+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?",
+        "summary_1": "The völva divine figure Huld (also identified with the German Holda).",
+        "summary_2": "The völva divine figure Huld (also identified with the German Holda).",
+        "current_output": "Huld (also identified with the German Holda)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Huld (also identified with the German Holda).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Huld",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"A mythical forest creature that is seductive and from Sweden has the same being as what divine figure?\",\n  \"summary_1\": \"The völva divine figure Huld (also identified with the German Holda).\",\n  \"summary_2\": \"The völva divine figure Huld (also identified with the German Holda).\",\n  \"current_output\": \"Huld (also identified with the German Holda).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Huld (also identified with the German Holda).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Huld\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 are present and agree on a named entity, and the agent's current_output contains that same named entity followed by a parenthetical alias or extra parenthetical clause (pattern: \\\"PrimaryName ( ... )\\\").\",\n    \"preserve_rule\": \"Keep the base behavior: produce the final answer only in the [[ ## answer ## ]] block and keep any primary name text that appears before the parenthesis if it is supported by the visible summaries.\",\n    \"change_rule\": \"When the trigger matches, replace the current_output with only the primary name token sequence that appears immediately before the first opening parenthesis in the supported summary text. Remove the parenthetical clause, any accompanying aliases, explanatory phrases, and trailing punctuation so the answer is the shortest canonical name string supported by the summaries.\",\n    \"drop_or_avoid_rule\": \"Avoid including parenthetical aliases, explanatory phrases, extra descriptors, full sentences, punctuation beyond the bare name, or any additional commentary. Do not add questions, justifications, or alternate names.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal canonical name string supported by the visible summaries (the text immediately before any parenthetical clause), with no surrounding text or punctuation.\",\n    \"why_local_transition\": \"The agent currently emits a name together with a parenthetical alias; this small rule trims the parenthetical content to satisfy the final-answer requirement of returning only the minimal canonical name supported by the summaries.\"\n  },\n  \"rationale\": \"The source output includes an unnecessary parenthetical alias while both summaries agree on the same named entity. The smallest coherent prompt change is to instruct the agent to strip parenthetical clauses and emit only the primary name (text before '('). This preserves existing correct identification while enforcing the final-answer contract of a minimal name-only string, which moves the output to the desired concise form without altering upstream behavior or adding external information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 149,
+    "row_index": 149,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

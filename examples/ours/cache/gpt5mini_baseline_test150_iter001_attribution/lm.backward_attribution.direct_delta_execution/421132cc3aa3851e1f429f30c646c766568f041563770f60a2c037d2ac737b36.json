@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "421132cc3aa3851e1f429f30c646c766568f041563770f60a2c037d2ac737b36",
+  "created_at": "2026-07-13T18:46:30.379406+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the question names two people and the provided summary_1 explicitly mentions Dave Moody as a subject whose occupations/roles need confirmation (i.e., summary_1 contains the name \"Dave Moody\").",
+            "preserve_rule": "Keep the existing I/O: retain the input fields `question` and `summary_1`, and continue to produce a single `query` field as the agent output. Preserve the goal of creating a second-hop retrieval query that targets missing bridge/support evidence.",
+            "change_rule": "Instead of requesting comparative, multi-person lists or asking for sources, produce exactly one compact, keyword-style retrieval query focused on the missing person named in summary_1 (here, Dave Moody). The query should (a) include the person's full name, (b) include a short sequence of role/occupation keywords that cover likely entertainment roles (e.g., director, producer, composer, musician, songwriter, filmmaker), and (c) be concise (prefer keyword tokens separated by spaces, not full sentences or instructions). Do not append instruction text, metadata, or source requirements.",
+            "drop_or_avoid_rule": "Do not request lists for both people, do not ask the retriever to return 'for each person' or to include source annotations, and avoid verbose natural-language instructions. Avoid producing full-sentence queries, comparative phrasing, or additional scaffolding beyond the single compact keyword query.",
+            "output_contract": "The agent must output a single string in the `query` field: a short keyword-style search query containing the target person's name (from summary_1) plus a focused set of role keywords (total length kept small). No extra fields, no explanation, and no citation/source demand. The string should be ready to use as a second-hop retrieval query.",
+            "why_local_transition": "The source query asked for multi-person, detailed lists and sources; this local change narrows and compresses the instruction so the agent issues one tight second-hop query that directly targets the missing support for Dave Moody, improving retriever recall while leaving other behavior unchanged."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question asks a comparative about which of two named people 'fills a larger variety of roles' (or similar language) and summary_1 lists roles for at least one of those people.",
+            "preserve_rule": "Keep producing a single compact retrieval `query` string. Preserve use of the exact person names present in the question/summary and the intent to retrieve concise role lists and their sources.",
+            "change_rule": "Replace any single-person role-focused query with a single-line, search-friendly query that requests concise lists of entertainment-industry roles for both named people (use the exact names from inputs) and asks for a citation/source for each (e.g., Wikipedia or official biography). You may include a short example set of role keywords (director, producer, composer, musician, writer, filmmaker, screenwriter, actor) to guide retrieval, but keep the query compact.",
+            "drop_or_avoid_rule": "Do not ask for the final comparative judgment, do not return counts or conclusions, do not target only one person, and do not include long quoted spans or the final answer. Avoid verbose natural-language framing; keep to a compact retrieval query.",
+            "output_contract": "Produce the `query` field as one compact, single-line retrieval query that names both people and requests concise lists of their entertainment-industry roles plus a source for each (Wikipedia or official biography).",
+            "why_local_transition": "The current hop only targets one person; the comparison task requires retrieving role-lists for both subjects so the next step can compare variety. This minimal prompt change expands the retrieval scope to both people while preserving the original concise, source-focused retrieval behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "current_output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question names two people and the provided summary_1 explicitly mentions Dave Moody as a subject whose occupations/roles need confirmation (i.e., summary_1 contains the name \\\"Dave Moody\\\").\",\n      \"preserve_rule\": \"Keep the existing I/O: retain the input fields `question` and `summary_1`, and continue to produce a single `query` field as the agent output. Preserve the goal of creating a second-hop retrieval query that targets missing bridge/support evidence.\",\n      \"change_rule\": \"Instead of requesting comparative, multi-person lists or asking for sources, produce exactly one compact, keyword-style retrieval query focused on the missing person named in summary_1 (here, Dave Moody). The query should (a) include the person's full name, (b) include a short sequence of role/occupation keywords that cover likely entertainment roles (e.g., director, producer, composer, musician, songwriter, filmmaker), and (c) be concise (prefer keyword tokens separated by spaces, not full sentences or instructions). Do not append instruction text, metadata, or source requirements.\",\n      \"drop_or_avoid_rule\": \"Do not request lists for both people, do not ask the retriever to return 'for each person' or to include source annotations, and avoid verbose natural-language instructions. Avoid producing full-sentence queries, comparative phrasing, or additional scaffolding beyond the single compact keyword query.\",\n      \"output_contract\": \"The agent must output a single string in the `query` field: a short keyword-style search query containing the target person's name (from summary_1) plus a focused set of role keywords (total length kept small). No extra fields, no explanation, and no citation/source demand. The string should be ready to use as a second-hop retrieval query.\",\n      \"why_local_transition\": \"The source query asked for multi-person, detailed lists and sources; this local change narrows and compresses the instruction so the agent issues one tight second-hop query that directly targets the missing support for Dave Moody, improving retriever recall while leaving other behavior unchanged.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks a comparative about which of two named people 'fills a larger variety of roles' (or similar language) and summary_1 lists roles for at least one of those people.\",\n      \"preserve_rule\": \"Keep producing a single compact retrieval `query` string. Preserve use of the exact person names present in the question/summary and the intent to retrieve concise role lists and their sources.\",\n      \"change_rule\": \"Replace any single-person role-focused query with a single-line, search-friendly query that requests concise lists of entertainment-industry roles for both named people (use the exact names from inputs) and asks for a citation/source for each (e.g., Wikipedia or official biography). You may include a short example set of role keywords (director, producer, composer, musician, writer, filmmaker, screenwriter, actor) to guide retrieval, but keep the query compact.\",\n      \"drop_or_avoid_rule\": \"Do not ask for the final comparative judgment, do not return counts or conclusions, do not target only one person, and do not include long quoted spans or the final answer. Avoid verbose natural-language framing; keep to a compact retrieval query.\",\n      \"output_contract\": \"Produce the `query` field as one compact, single-line retrieval query that names both people and requests concise lists of their entertainment-industry roles plus a source for each (Wikipedia or official biography).\",\n      \"why_local_transition\": \"The current hop only targets one person; the comparison task requires retrieving role-lists for both subjects so the next step can compare variety. This minimal prompt change expands the retrieval scope to both people while preserving the original concise, source-focused retrieval behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"current_output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dave Moody Ransom Riggs roles list director producer composer musician songwriter filmmaker writer sources Wikipedia official biography\"\n  },\n  \"rationale\": \"Applied delta 0 then delta 1 in order: retained compact query format, included both names, role keywords, and requested sources (Wikipedia/official biography) as required by the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

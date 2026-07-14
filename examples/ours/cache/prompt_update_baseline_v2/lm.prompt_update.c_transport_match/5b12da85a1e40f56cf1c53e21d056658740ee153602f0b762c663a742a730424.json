@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "5b12da85a1e40f56cf1c53e21d056658740ee153602f0b762c663a742a730424",
+  "created_at": "2026-07-13T17:40:35.580095+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 57,
+        "stable_id": "57",
+        "question": "2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?",
+        "summary_1": "Nickelodeon Sunday Movie Toons",
+        "hop2_query": "\"Groove Squad\" 2002 \"Nickelodeon Sunday Movie Toons\" OR \"Nickelodeon Movie Toons\" Inspector Gadget Dennis the Menace made-for-TV movie",
+        "summary_2": "Nickelodeon Sunday Movie Toons",
+        "answer": "Nickelodeon Sunday Movie Toons",
+        "gold_support_titles": [
+          "Groove Squad",
+          "Nickelodeon Sunday Movie Toons"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 70,
+          "w_stable_id": "70",
+          "agent": "final",
+          "w_question": "Which band is from Ohio, Guided by Voices or Gravity Kills?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Guided by Voices is from Ohio.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Guided by Voices",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks which of two named options is from a place (pattern: 'Which ... is from X, A or B?') and the provided summaries unambiguously indicate a single band as the answer.",
+                "preserve_rule": "Continue to base the answer only on the visible summaries (summary_1, summary_2). Keep the existing output interface and the requirement to place the final token(s) inside the [[ ## answer ## ]] block.",
+                "change_rule": "Instead of a full sentence or explanatory phrase, output only the minimal identifying band name string that is supported by the summaries. Extract the shortest contiguous substring from the summaries that names the band and emit exactly that substring (trim leading/trailing whitespace) as the answer inside the [[ ## answer ## ]] block. Do not add explanations, context, or extra punctuation.",
+                "drop_or_avoid_rule": "Do not include supporting sentences, justification, provenance, verbs like 'is from', articles, or any other words beyond the band name in the answer block. Avoid adding external facts or paraphrases that extend beyond the visible summaries.",
+                "output_contract": "Produce the field 'answer' whose value is exactly the minimal band-name string (no extras). The [[ ## answer ## ]] block must contain only that name and nothing else.",
+                "why_local_transition": "This change narrows the final-output format from a full sentence to the smallest possible answer string required by the agent's final-answer contract, preserving reliance on the same visible summaries while removing superfluous wording."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Nickelodeon Sunday Movie Toons",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 141,
+          "w_stable_id": "141",
+          "agent": "final",
+          "w_question": "What do people in the United Kingdom commonly call the location of the room where the entire play \"On the Rocks\" is set?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "\"Number 10\" — 10 Downing Street.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Number 10",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the provided summaries both contain the same short common name for the location (e.g., both summaries include the phrase \"Number 10\").",
+                "preserve_rule": "Continue to use the visible summaries as the authoritative evidence source and preserve the short label text they provide.",
+                "change_rule": "When writing the answer, emit only the minimal short name string exactly as given by the summaries. Remove any surrounding quotation marks, explanatory parentheticals, em dashes, appended formal names, or extra words. The answer must be the short common name alone (for example: Number 10).",
+                "drop_or_avoid_rule": "Do not include additional context, clarifications, punctuation decorations, or the expanded place name (e.g., do not append '— 10 Downing Street', parentheses, quotes, or any extra sentence).",
+                "output_contract": "Fill the 'answer' field with exactly the single minimal answer token sequence (the short common name from the summaries) and nothing else. Ensure the final [[ ## answer ## ]] block contains only that minimal string.",
+                "why_local_transition": "The current output adds an explanatory appendix and punctuation; this narrow prompt edit forces the final stage to format the supported short label alone, satisfying the final-answer contract without changing evidential basis."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Nickelodeon Sunday Movie Toons",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 148,
+          "w_stable_id": "148",
+          "agent": "final",
+          "w_question": "What is the nationality of this professional boxer who lost to Breidis Prescott in a upset match in 2008 that was heavily favoured toward him?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "He is British (English).",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "British",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks for a nationality (the question text contains words like \"nationality\" or \"What is the nationality\") and at least one visible summary states a nationality/demonym.",
+                "preserve_rule": "Keep the factual demonym phrase that appears in the visible summaries. Do not invent, alter, or add new factual claims beyond the demonym(s) present in summary_1 and summary_2.",
+                "change_rule": "Instead of a full sentence, output only a single minimal demonym token or short demonym phrase. Extract the first demonym found in summary_1; if summary_1 contains no demonym, extract the first demonym from summary_2. Emit exactly that token/phrase as the answer string.",
+                "drop_or_avoid_rule": "Do not include pronouns, verbs, articles, explanatory text, parentheses, qualifiers, extra punctuation, or any additional sentences. Avoid paraphrasing the demonym; emit it verbatim as it appears (subject to selecting the first occurrence as above).",
+                "output_contract": "The produced 'answer' must contain only the minimal demonym token/phrase (no extra words, punctuation, or explanation). Place that single token/phrase as the entire content of the [[ ## answer ## ]] block.",
+                "why_local_transition": "The source output is a full-sentence/parenthetical form; the final-answer contract requires a minimal demonym. This rule makes the smallest focused change—formatting the already-present summary evidence into the minimal canonical answer—without changing factual content."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Nickelodeon Sunday Movie Toons",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 88,
+          "w_stable_id": "88",
+          "agent": "final",
+          "w_question": "What year did Maurice win the award given to the  \"player judged most valuable to his team\" in the NHL?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Which Maurice do you mean (for example Maurice \"Rocket\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "1947",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the user's question gives only the given name 'Maurice' (no surname) AND at least one of the visible summaries or the assistant's prior message explicitly mentions Maurice \"Rocket\" Richard as an example, AND the visible summaries identify the award as the Hart Memorial Trophy.",
+                "preserve_rule": "Keep all existing behavior that asks for clarification or permission to use external sources in ambiguous cases. If the user later supplies a surname or explicitly permits an external lookup, follow the normal clarification or lookup flow unchanged.",
+                "change_rule": "In the narrow trigger case, do not ask another clarification. Instead assume the intended referent is Maurice \"Rocket\" Richard (because that example already appears in the visible context) and use the agent's internal knowledge to produce the single-year answer for when that person won the Hart Memorial Trophy. Emit only the minimal answer string as the 'answer' value; do not add explanation, rationale, or follow-up questions.",
+                "drop_or_avoid_rule": "When the trigger applies, do not prompt the user for clarification or permission to search; do not include supporting sentences or justification in the output; do not present multiple candidate persons or ambiguous options. If the agent does not have sufficient internal confidence about the year, revert to the original behavior of asking for clarification or permission to look up the information.",
+                "output_contract": "Return the field 'answer' containing only the minimal answer string (the year) and nothing else. Ensure the [[ ## answer ## ]] block (or equivalent minimal-answer slot) contains just that year with no surrounding commentary, formatting, or explanation.",
+                "why_local_transition": "This targeted rule resolves the one-step ambiguity (only the given name 'Maurice') by using the explicit example already present in the visible context (Maurice \"Rocket\" Richard), allowing the agent to produce the concise final-year answer without changing broader clarification or lookup policies."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Nickelodeon Sunday Movie Toons",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 69,
+          "w_stable_id": "69",
+          "agent": "final",
+          "w_question": "What is the type of musical composition that was used by the Korean female band Isak N Jiyeon?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Songs (musical compositions meant to be sung)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "duet",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question requests a 'type of musical composition' about a named musical act (the question contains the act's name) AND both summary_1 and summary_2 report the act used 'songs' (the word 'song' or 'songs' appears in both summaries).",
+                "preserve_rule": "Keep using the provided summaries as the sole evidential basis and preserve the base prompt's output format. Continue to emit only the minimal answer string inside the [[ ## answer ## ]] block and retain any existing behavior that prefers concise noun-like answers drawn from the summaries.",
+                "change_rule": "If the trigger applies, consult your background knowledge only to determine whether the named act is a two-person (two-member) musical act. If you can reliably confirm the act is a two-person act, replace the generic 'song(s)' label with the single-word or very short noun that names a musical composition intended for two performers (i.e., the specific term for a two-person composition). If you cannot confirm two-person membership, fall back to the minimal noun supported by the summaries (e.g., 'song' or 'songs') and do not add qualifiers.",
+                "drop_or_avoid_rule": "Do not add parentheses, definitions, explanations, or supporting text to the answer. Avoid quoting long spans from the summaries beyond the minimal noun. Do not invent other unseen details, and do not output the summaries themselves.",
+                "output_contract": "The [[ ## answer ## ]] block must contain only the minimal noun or short noun-phrase that names the type of musical composition (no punctuation, no extra words, no explanation). If applying the specificity rule, use the single-word term for a two-performer composition when reliably supported by background knowledge; otherwise use the noun present in the summaries.",
+                "why_local_transition": "This small rule nudges the final agent to prefer a more specific composition-type term when the act is a two-person group, moving away from a generic 'songs' label only in cases where background knowledge justifies that specificity. It is targeted, preserves existing summary-based behavior, and keeps the final answer minimal."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Nickelodeon Sunday Movie Toons",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 57,\n  \"stable_id\": \"57\",\n  \"question\": \"2002 animated film Groove Squad was one of many made-for-TV movies, such as Inspector Gadget and Dennis the Menace, on what series?\",\n  \"summary_1\": \"Nickelodeon Sunday Movie Toons\",\n  \"hop2_query\": \"\\\"Groove Squad\\\" 2002 \\\"Nickelodeon Sunday Movie Toons\\\" OR \\\"Nickelodeon Movie Toons\\\" Inspector Gadget Dennis the Menace made-for-TV movie\",\n  \"summary_2\": \"Nickelodeon Sunday Movie Toons\",\n  \"answer\": \"Nickelodeon Sunday Movie Toons\",\n  \"gold_support_titles\": [\n    \"Groove Squad\",\n    \"Nickelodeon Sunday Movie Toons\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 70,\n    \"w_stable_id\": \"70\",\n    \"agent\": \"final\",\n    \"w_question\": \"Which band is from Ohio, Guided by Voices or Gravity Kills?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Guided by Voices is from Ohio.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Guided by Voices\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks which of two named options is from a place (pattern: 'Which ... is from X, A or B?') and the provided summaries unambiguously indicate a single band as the answer.\",\n          \"preserve_rule\": \"Continue to base the answer only on the visible summaries (summary_1, summary_2). Keep the existing output interface and the requirement to place the final token(s) inside the [[ ## answer ## ]] block.\",\n          \"change_rule\": \"Instead of a full sentence or explanatory phrase, output only the minimal identifying band name string that is supported by the summaries. Extract the shortest contiguous substring from the summaries that names the band and emit exactly that substring (trim leading/trailing whitespace) as the answer inside the [[ ## answer ## ]] block. Do not add explanations, context, or extra punctuation.\",\n          \"drop_or_avoid_rule\": \"Do not include supporting sentences, justification, provenance, verbs like 'is from', articles, or any other words beyond the band name in the answer block. Avoid adding external facts or paraphrases that extend beyond the visible summaries.\",\n          \"output_contract\": \"Produce the field 'answer' whose value is exactly the minimal band-name string (no extras). The [[ ## answer ## ]] block must contain only that name and nothing else.\",\n          \"why_local_transition\": \"This change narrows the final-output format from a full sentence to the smallest possible answer string required by the agent's final-answer contract, preserving reliance on the same visible summaries while removing superfluous wording.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Nickelodeon Sunday Movie Toons\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 141,\n    \"w_stable_id\": \"141\",\n    \"agent\": \"final\",\n    \"w_question\": \"What do people in the United Kingdom commonly call the location of the room where the entire play \\\"On the Rocks\\\" is set?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"\\\"Number 10\\\" — 10 Downing Street.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Number 10\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the provided summaries both contain the same short common name for the location (e.g., both summaries include the phrase \\\"Number 10\\\").\",\n          \"preserve_rule\": \"Continue to use the visible summaries as the authoritative evidence source and preserve the short label text they provide.\",\n          \"change_rule\": \"When writing the answer, emit only the minimal short name string exactly as given by the summaries. Remove any surrounding quotation marks, explanatory parentheticals, em dashes, appended formal names, or extra words. The answer must be the short common name alone (for example: Number 10).\",\n          \"drop_or_avoid_rule\": \"Do not include additional context, clarifications, punctuation decorations, or the expanded place name (e.g., do not append '— 10 Downing Street', parentheses, quotes, or any extra sentence).\",\n          \"output_contract\": \"Fill the 'answer' field with exactly the single minimal answer token sequence (the short common name from the summaries) and nothing else. Ensure the final [[ ## answer ## ]] block contains only that minimal string.\",\n          \"why_local_transition\": \"The current output adds an explanatory appendix and punctuation; this narrow prompt edit forces the final stage to format the supported short label alone, satisfying the final-answer contract without changing evidential basis.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Nickelodeon Sunday Movie Toons\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 148,\n    \"w_stable_id\": \"148\",\n    \"agent\": \"final\",\n    \"w_question\": \"What is the nationality of this professional boxer who lost to Breidis Prescott in a upset match in 2008 that was heavily favoured toward him?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"He is British (English).\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"British\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks for a nationality (the question text contains words like \\\"nationality\\\" or \\\"What is the nationality\\\") and at least one visible summary states a nationality/demonym.\",\n          \"preserve_rule\": \"Keep the factual demonym phrase that appears in the visible summaries. Do not invent, alter, or add new factual claims beyond the demonym(s) present in summary_1 and summary_2.\",\n          \"change_rule\": \"Instead of a full sentence, output only a single minimal demonym token or short demonym phrase. Extract the first demonym found in summary_1; if summary_1 contains no demonym, extract the first demonym from summary_2. Emit exactly that token/phrase as the answer string.\",\n          \"drop_or_avoid_rule\": \"Do not include pronouns, verbs, articles, explanatory text, parentheses, qualifiers, extra punctuation, or any additional sentences. Avoid paraphrasing the demonym; emit it verbatim as it appears (subject to selecting the first occurrence as above).\",\n          \"output_contract\": \"The produced 'answer' must contain only the minimal demonym token/phrase (no extra words, punctuation, or explanation). Place that single token/phrase as the entire content of the [[ ## answer ## ]] block.\",\n          \"why_local_transition\": \"The source output is a full-sentence/parenthetical form; the final-answer contract requires a minimal demonym. This rule makes the smallest focused change—formatting the already-present summary evidence into the minimal canonical answer—without changing factual content.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Nickelodeon Sunday Movie Toons\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 88,\n    \"w_stable_id\": \"88\",\n    \"agent\": \"final\",\n    \"w_question\": \"What year did Maurice win the award given to the  \\\"player judged most valuable to his team\\\" in the NHL?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Which Maurice do you mean (for example Maurice \\\"Rocket\\\" Richard)? Or would you like me to look up the year using external sources? If you confirm the person or give permission to search, I will provide the exact year.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"1947\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the user's question gives only the given name 'Maurice' (no surname) AND at least one of the visible summaries or the assistant's prior message explicitly mentions Maurice \\\"Rocket\\\" Richard as an example, AND the visible summaries identify the award as the Hart Memorial Trophy.\",\n          \"preserve_rule\": \"Keep all existing behavior that asks for clarification or permission to use external sources in ambiguous cases. If the user later supplies a surname or explicitly permits an external lookup, follow the normal clarification or lookup flow unchanged.\",\n          \"change_rule\": \"In the narrow trigger case, do not ask another clarification. Instead assume the intended referent is Maurice \\\"Rocket\\\" Richard (because that example already appears in the visible context) and use the agent's internal knowledge to produce the single-year answer for when that person won the Hart Memorial Trophy. Emit only the minimal answer string as the 'answer' value; do not add explanation, rationale, or follow-up questions.\",\n          \"drop_or_avoid_rule\": \"When the trigger applies, do not prompt the user for clarification or permission to search; do not include supporting sentences or justification in the output; do not present multiple candidate persons or ambiguous options. If the agent does not have sufficient internal confidence about the year, revert to the original behavior of asking for clarification or permission to look up the information.\",\n          \"output_contract\": \"Return the field 'answer' containing only the minimal answer string (the year) and nothing else. Ensure the [[ ## answer ## ]] block (or equivalent minimal-answer slot) contains just that year with no surrounding commentary, formatting, or explanation.\",\n          \"why_local_transition\": \"This targeted rule resolves the one-step ambiguity (only the given name 'Maurice') by using the explicit example already present in the visible context (Maurice \\\"Rocket\\\" Richard), allowing the agent to produce the concise final-year answer without changing broader clarification or lookup policies.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Nickelodeon Sunday Movie Toons\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 69,\n    \"w_stable_id\": \"69\",\n    \"agent\": \"final\",\n    \"w_question\": \"What is the type of musical composition that was used by the Korean female band Isak N Jiyeon?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Songs (musical compositions meant to be sung)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"duet\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question requests a 'type of musical composition' about a named musical act (the question contains the act's name) AND both summary_1 and summary_2 report the act used 'songs' (the word 'song' or 'songs' appears in both summaries).\",\n          \"preserve_rule\": \"Keep using the provided summaries as the sole evidential basis and preserve the base prompt's output format. Continue to emit only the minimal answer string inside the [[ ## answer ## ]] block and retain any existing behavior that prefers concise noun-like answers drawn from the summaries.\",\n          \"change_rule\": \"If the trigger applies, consult your background knowledge only to determine whether the named act is a two-person (two-member) musical act. If you can reliably confirm the act is a two-person act, replace the generic 'song(s)' label with the single-word or very short noun that names a musical composition intended for two performers (i.e., the specific term for a two-person composition). If you cannot confirm two-person membership, fall back to the minimal noun supported by the summaries (e.g., 'song' or 'songs') and do not add qualifiers.\",\n          \"drop_or_avoid_rule\": \"Do not add parentheses, definitions, explanations, or supporting text to the answer. Avoid quoting long spans from the summaries beyond the minimal noun. Do not invent other unseen details, and do not output the summaries themselves.\",\n          \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal noun or short noun-phrase that names the type of musical composition (no punctuation, no extra words, no explanation). If applying the specificity rule, use the single-word term for a two-performer composition when reliably supported by background knowledge; otherwise use the noun present in the summaries.\",\n          \"why_local_transition\": \"This small rule nudges the final agent to prefer a more specific composition-type term when the act is a two-person group, moving away from a generic 'songs' label only in cases where background knowledge justifies that specificity. It is targeted, preserves existing summary-based behavior, and keeps the final answer minimal.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Nickelodeon Sunday Movie Toons\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 70,\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"Replace the minimal title answer with a short full-sentence or explanatory phrase (e.g. turn 'Nickelodeon Sunday Movie Toons' into 'Nickelodeon Sunday Movie Toons is a series of made-for-TV movies').\",\n  \"expected_damaged_behavior\": \"The final agent output at the answer boundary will contain a short sentence or appended explanatory text instead of the bare series title, while still referring to the same series (no answer flip).\",\n  \"rationale\": \"The W failure pattern narrows formatting from a full sentence to a minimal title string; its reverse simply reintroduces the extra wording. This maps directly to the C case because both rely on the same evidence-to-output step (emit a series title from visible summaries). Transporting the reverse formatting error yields a local, plausible neighbor (extra explanatory phrasing) without changing the supported entity or requiring additional hops, qualifiers, or disambiguation.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 57,
+    "c_stable_id": "57",
+    "candidate_w_sample_indices": [
+      69,
+      70,
+      88,
+      141,
+      148
+    ],
+    "match_fingerprint": "e8d303c630ed897c5c94bf2230cc31a38a9885a1c5aa9a3da766fed963387285"
+  }
+}

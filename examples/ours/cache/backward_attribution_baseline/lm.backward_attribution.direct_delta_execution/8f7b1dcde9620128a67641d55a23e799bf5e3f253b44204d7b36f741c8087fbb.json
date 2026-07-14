@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "8f7b1dcde9620128a67641d55a23e799bf5e3f253b44204d7b36f741c8087fbb",
+  "created_at": "2026-07-13T17:23:02.698684+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 are identical and both end with \", United States\", and the question requests a location (e.g., asks \"where\" or \"headquartered where\").",
+            "preserve_rule": "Keep using the location string verbatim from the summaries as the source of truth and continue to produce only the minimal answer string in the [[ ## answer ## ]] block.",
+            "change_rule": "If both summaries agree and provide a location that ends with \", United States\", remove the trailing \", United States\" (and any redundant comma/space) before emitting. Emit the remaining city and state only (format: City, State).",
+            "drop_or_avoid_rule": "Do not add explanatory text, qualifiers, or the country in another form (e.g., \"USA\" or \"United States of America\"). Do not expand into sentences or add punctuation beyond the single city/state comma separator.",
+            "output_contract": "The [[ ## answer ## ]] block must contain exactly one short location string in the form \"City, State\" (no country) when both summaries agree and end with \", United States\". No extra text, punctuation, or commentary is allowed.",
+            "why_local_transition": "Both visible summaries include the full city/state/country; dropping the country yields a more concise, still-supported location string and fixes the one-token excess (the country) while preserving the original evidence and output format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?",
+        "summary_1": "Battle Creek, Michigan, United States",
+        "summary_2": "Battle Creek, Michigan, United States",
+        "current_output": "Battle Creek, Michigan, United States"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 are identical and both end with \\\", United States\\\", and the question requests a location (e.g., asks \\\"where\\\" or \\\"headquartered where\\\").\",\n      \"preserve_rule\": \"Keep using the location string verbatim from the summaries as the source of truth and continue to produce only the minimal answer string in the [[ ## answer ## ]] block.\",\n      \"change_rule\": \"If both summaries agree and provide a location that ends with \\\", United States\\\", remove the trailing \\\", United States\\\" (and any redundant comma/space) before emitting. Emit the remaining city and state only (format: City, State).\",\n      \"drop_or_avoid_rule\": \"Do not add explanatory text, qualifiers, or the country in another form (e.g., \\\"USA\\\" or \\\"United States of America\\\"). Do not expand into sentences or add punctuation beyond the single city/state comma separator.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly one short location string in the form \\\"City, State\\\" (no country) when both summaries agree and end with \\\", United States\\\". No extra text, punctuation, or commentary is allowed.\",\n      \"why_local_transition\": \"Both visible summaries include the full city/state/country; dropping the country yields a more concise, still-supported location string and fixes the one-token excess (the country) while preserving the original evidence and output format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Girl Alone was sponsored by an American multinational food manufacturing company that produces cereal and convenience foods, and is headquartered where?\",\n  \"summary_1\": \"Battle Creek, Michigan, United States\",\n  \"summary_2\": \"Battle Creek, Michigan, United States\",\n  \"current_output\": \"Battle Creek, Michigan, United States\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Battle Creek, Michigan\",\n  \"rationale\": \"Both summaries were identical and ended with \\\", United States\\\", so the trailing country was removed to produce the required \\\"City, State\\\" format.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 95,
+    "row_index": 95,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

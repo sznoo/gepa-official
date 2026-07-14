@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "347ae5b0b5692d4c4d798098cfb88aca33866b08a27b17f6e7f2f05890bad2de",
+  "created_at": "2026-07-13T20:08:26.402968+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who created an American police procedural television series that starred the American actor Archie Kao as a regular?",
+        "summary_1": "First-hop evidence: Passage 1 (Archie Kao) — \"series regulars roles on 'Chicago P.D.'\" (names the series Kao was regular on).  \nBridge needed: The series \"Chicago P.D.\" — verify the person(s) credited as the show's creator(s).  \nRetrieval direction: 1. Fetch the page titled \"Chicago P.D.\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.",
+        "current_output": {
+          "query": "Chicago P.D. Wikipedia \"Created by\" site:wikipedia.org"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Chicago P.D. Wikipedia \"Created by\" site:wikipedia.org"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Wikidumper.org",
+          "The Steph Show",
+          "Wikipediocracy",
+          "Simple English Wikipedia",
+          "Robert Jessup",
+          "Afrikaans Wikipedia",
+          "Gender bias on Wikipedia"
+        ],
+        "retrieved_doc_snippets": [
+          "Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \"best of the Wikipedia rejects\", articles that are slated for deletion at the site. WikiDumper was launched on November 4, 2006, and accepts user submissions. Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources. The site has been criticized as likely to be less accurate than Wikipedia.",
+          "The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#",
+          "Wikipediocracy | Wikipediocracy is a website for discussion and criticism of Wikipedia. Its members have brought information about Wikipedia's controversies to the attention of the media. The site was founded in March 2012 by users of Wikipedia Review, another site critical of Wikipedia.",
+          "Simple English Wikipedia | The Simple English Wikipedia is an English edition of the online encyclopedia Wikipedia, primarily written in Basic English and Special English. It was launched on November 17, 2003. It is one of five Wikipedias written in an Anglic language, the others being the English Wikipedia, the Pitkern-Norfuk Wikipedia, the Scots Wikipedia, and the Old English Wikipedia, though the last is largely unintelligible to speakers of the modern language. The site has the stated aim of ...[truncated]",
+          "Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter. Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).",
+          "Afrikaans Wikipedia | The Afrikaans Wikipedia (Afrikaans: \"Afrikaanse Wikipedia\" ) is an Afrikaans edition of the Web-based free-content encyclopedia Wikipedia. The project was started on 16 November 2001, and was the 11th Wikipedia to be created. In December 2016 it was the 84th largest Wikipedia by number of articles. Apart from South Africa and Namibia, the Afrikaans Wikipedia is used and maintained by users in Europe, North America and Oceania. As of May 2013, it was the second-largest Afric ...[truncated]",
+          "Gender bias on Wikipedia | Gender bias on Wikipedia refers to criticism of the online encyclopedia, and especially its English-language site; that the nature and quantity of its content is biased due to the fact that a dominant majority of Wikipedia editors are male. It is among the most frequent criticisms of Wikipedia, and part of a more general criticism about systemic bias in Wikipedia. Wikipedia has fewer and less extensive articles about women or topics important to women. The Wikimedia Fo ...[truncated]"
+        ],
+        "summary_2": "The context states Archie Kao was a series regular on \"Chicago P.D.\", but none of the supplied passages mention \"Chicago P.D.\" or name its creator; the \"Chicago P.D.\" page (e.g., Wikipedia) and its infobox 'Created by' field are needed to identify the creator.",
+        "answer": "May I fetch the Chicago P.D. page to find its creator?",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Chicago P.D. (TV series)"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Chicago P.D. (TV series) \"created by\""
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who created an American police procedural television series that starred the American actor Archie Kao as a regular?\",\n  \"summary_1\": \"First-hop evidence: Passage 1 (Archie Kao) — \\\"series regulars roles on 'Chicago P.D.'\\\" (names the series Kao was regular on).  \\nBridge needed: The series \\\"Chicago P.D.\\\" — verify the person(s) credited as the show's creator(s).  \\nRetrieval direction: 1. Fetch the page titled \\\"Chicago P.D.\\\" (e.g., Wikipedia) and inspect the infobox/'Created by' field; 2. On that page, also check the 'Cast'/'Starring' or 'Series regulars' section to confirm Archie Kao's regular status if required.\",\n  \"current_output\": {\n    \"query\": \"Chicago P.D. Wikipedia \\\"Created by\\\" site:wikipedia.org\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Chicago P.D. Wikipedia \\\"Created by\\\" site:wikipedia.org\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Wikidumper.org\",\n    \"The Steph Show\",\n    \"Wikipediocracy\",\n    \"Simple English Wikipedia\",\n    \"Robert Jessup\",\n    \"Afrikaans Wikipedia\",\n    \"Gender bias on Wikipedia\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \\\"best of the Wikipedia rejects\\\", articles that are slated for deletion at the site. WikiDumper was launched on November 4, 2006, and accepts user submissions. Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources. The site has been criticized as likely to be less accurate than Wikipedia.\",\n    \"The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#\",\n    \"Wikipediocracy | Wikipediocracy is a website for discussion and criticism of Wikipedia. Its members have brought information about Wikipedia's controversies to the attention of the media. The site was founded in March 2012 by users of Wikipedia Review, another site critical of Wikipedia.\",\n    \"Simple English Wikipedia | The Simple English Wikipedia is an English edition of the online encyclopedia Wikipedia, primarily written in Basic English and Special English. It was launched on November 17, 2003. It is one of five Wikipedias written in an Anglic language, the others being the English Wikipedia, the Pitkern-Norfuk Wikipedia, the Scots Wikipedia, and the Old English Wikipedia, though the last is largely unintelligible to speakers of the modern language. The site has the stated aim of ...[truncated]\",\n    \"Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter. Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).\",\n    \"Afrikaans Wikipedia | The Afrikaans Wikipedia (Afrikaans: \\\"Afrikaanse Wikipedia\\\" ) is an Afrikaans edition of the Web-based free-content encyclopedia Wikipedia. The project was started on 16 November 2001, and was the 11th Wikipedia to be created. In December 2016 it was the 84th largest Wikipedia by number of articles. Apart from South Africa and Namibia, the Afrikaans Wikipedia is used and maintained by users in Europe, North America and Oceania. As of May 2013, it was the second-largest Afric ...[truncated]\",\n    \"Gender bias on Wikipedia | Gender bias on Wikipedia refers to criticism of the online encyclopedia, and especially its English-language site; that the nature and quantity of its content is biased due to the fact that a dominant majority of Wikipedia editors are male. It is among the most frequent criticisms of Wikipedia, and part of a more general criticism about systemic bias in Wikipedia. Wikipedia has fewer and less extensive articles about women or topics important to women. The Wikimedia Fo ...[truncated]\"\n  ],\n  \"summary_2\": \"The context states Archie Kao was a series regular on \\\"Chicago P.D.\\\", but none of the supplied passages mention \\\"Chicago P.D.\\\" or name its creator; the \\\"Chicago P.D.\\\" page (e.g., Wikipedia) and its infobox 'Created by' field are needed to identify the creator.\",\n  \"answer\": \"May I fetch the Chicago P.D. page to find its creator?\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Chicago P.D. (TV series)\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Chicago P.D. (TV series) \\\"created by\\\"\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 explicitly names a single page to fetch (e.g., contains wording like \\\"Fetch the page titled 'Chicago P.D.'\\\" or otherwise specifies a particular work/series title), apply this edit.\",\n    \"preserve_rule\": \"Keep the agent's goal of producing one compact second-hop retrieval query and continue to use the provided question and summary_1 as the only context for forming that query. Preserve the focus on verifying the 'created by' / creator information indicated in summary_1.\",\n    \"change_rule\": \"When forming the query, prefer the exact article title from summary_1 (add a parenthetical disambiguator such as '(TV series)' if the title is ambiguous or the summary_1 implies a medium) and include the phrase \\\"created by\\\" (quoted) to target the infobox/creator field. Omit site-restriction operators and remove extraneous keywords so the query is concise and aimed at the creator metadata.\",\n    \"drop_or_avoid_rule\": \"Do not include site: filters (e.g., site:wikipedia.org), full-page engine directives, or extra terms like 'starring', 'cast', or long descriptive phrases that broaden results. Avoid multi-site or general-web filters that earlier produced noisy domain hits.\",\n    \"output_contract\": \"Return exactly one single-line retrieval query (no explanation). The string must: (a) use the exact page title mentioned in summary_1 (with '(TV series)' if appropriate), (b) include the quoted phrase \\\"created by\\\" to target creator metadata, and (c) contain no site: or multi-term filtering operators and no surrounding commentary.\",\n    \"why_local_transition\": \"A minimal change — switching from site-restrictions and generic keywords to the precise article title plus a quoted 'created by' phrase — narrows results to the series' main page and the infobox field that lists creators, reducing noisy domain hits while preserving the original retrieval intent.\"\n  },\n  \"rationale\": \"The previous query relied on a site: filter and broad keywords, which returned irrelevant domains. The smallest effective edit is to instruct the agent to form a compact query that uses the exact article title (add the common parenthetical disambiguator for TV series) and to include the quoted phrase 'created by' so search targets the infobox/creator field. This preserves the agent's original interface and intent, avoids producing an answer within the prompt edit, and keeps the change narrowly focused on query construction to improve retrieval precision.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 9,
+    "row_index": 9,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

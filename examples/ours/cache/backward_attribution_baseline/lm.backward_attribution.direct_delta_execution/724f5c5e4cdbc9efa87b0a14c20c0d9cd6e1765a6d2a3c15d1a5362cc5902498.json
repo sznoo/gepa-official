@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "724f5c5e4cdbc9efa87b0a14c20c0d9cd6e1765a6d2a3c15d1a5362cc5902498",
+  "created_at": "2026-07-13T17:14:41.637960+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When both summary_1 and summary_2 are present in the input.",
+            "preserve_rule": "Continue to base the final answer only on information present in summary_1 and summary_2; do not introduce outside facts or hallucinations.",
+            "change_rule": "For tie-breaking or when multiple candidate answers are present, treat summary_2 as the primary supporting source (use summary_2 to decide the minimal answer) unless summary_1 contains an explicit, direct contradiction. If summary_2 is empty, fall back to summary_1.",
+            "drop_or_avoid_rule": "Avoid the default behavior of always trusting the first-listed summary (summary_1) or answering from a single summary when the other summary provides differing content without explicit contradiction.",
+            "output_contract": "Produce only the minimal answer string strictly supported by the visible summaries. Put that short string alone inside the [[ ## answer ## ]] block and nothing else (no explanations, no extra tokens).",
+            "why_local_transition": "This change minimally adjusts the agent's tie-breaking preference so that subsequent corrections or more accurate information placed into summary_2 will take precedence, allowing the final answer to change accordingly without altering other reasoning rules."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+        "summary_1": "Cornell University",
+        "summary_2": "Cornell University",
+        "current_output": "Cornell University"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When both summary_1 and summary_2 are present in the input.\",\n      \"preserve_rule\": \"Continue to base the final answer only on information present in summary_1 and summary_2; do not introduce outside facts or hallucinations.\",\n      \"change_rule\": \"For tie-breaking or when multiple candidate answers are present, treat summary_2 as the primary supporting source (use summary_2 to decide the minimal answer) unless summary_1 contains an explicit, direct contradiction. If summary_2 is empty, fall back to summary_1.\",\n      \"drop_or_avoid_rule\": \"Avoid the default behavior of always trusting the first-listed summary (summary_1) or answering from a single summary when the other summary provides differing content without explicit contradiction.\",\n      \"output_contract\": \"Produce only the minimal answer string strictly supported by the visible summaries. Put that short string alone inside the [[ ## answer ## ]] block and nothing else (no explanations, no extra tokens).\",\n      \"why_local_transition\": \"This change minimally adjusts the agent's tie-breaking preference so that subsequent corrections or more accurate information placed into summary_2 will take precedence, allowing the final answer to change accordingly without altering other reasoning rules.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?\",\n  \"summary_1\": \"Cornell University\",\n  \"summary_2\": \"Cornell University\",\n  \"current_output\": \"Cornell University\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nCornell University\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries state 'Cornell University'; per the ordered deltas treat summary_2 as primary for tie-breaking, so the minimal answer is 'Cornell University'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

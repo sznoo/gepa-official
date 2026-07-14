@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "34db568dcc0fd8e6e321df441716c7b703a3fc120349941cd4db2b521381b794",
+  "created_at": "2026-07-13T17:01:18.022548+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?",
+        "summary_1": "Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.",
+        "current_output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography)."
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Priyadarshan Jadhav",
+          "The Total Picture Seminar",
+          "Above-the-line (filmmaking)",
+          "Nick G. Miller",
+          "List of British Jewish entertainers",
+          "Tarila Thompson",
+          "Ransom Riggs"
+        ],
+        "retrieved_doc_snippets": [
+          "Priyadarshan Jadhav | Priyadarshan Jadhav (born 29 April 1980) is a Marathi actor, director, producer and screenwriter. He is a multifaceted personality in the Marathi film industry. With a zeal to become a filmmaker Priyadarshan stepped in the Marathi film industry at a young age. He has been a director, producer, script writer for well known films. He is known for his role in Ravi Jadhav's Timepass 2 (2015) as Dagadu.",
+          "The Total Picture Seminar | The Total Picture Seminar, a California LLC, was formed by actor Martin Landau, director Mark Rydell, and screenwriter/playwright Lyle Kessler. The purpose is to educate actors, writers, and directors in the aspects of filmmaking. Martin Landau, Mark Rydell, and Lyle Kessler have worked together for many decades at The Actors Studio. They each bring industry experience, prestige, personal success, and a lifetime of teaching experience to this endeavor. The Seminar pro ...[truncated]",
+          "Above-the-line (filmmaking) | \"Above-the-line\" refers to the list of individuals who guide and influence the creative direction, process, and voice of a given narrative in a film and related expenditures. These roles include but are not limited to the screenwriter, producer, director, and actors.",
+          "Nick G. Miller | Nick G. Miller (born January 18, 1964 in Dayton, Ohio), also known as Nick Miller, is an American businessperson. His main interests are within the entertainment industry, the marine industry, and business education. Miller is an award-winning screenwriter, filmmaker, movie producer, movie director, television producer, actor, music producer, film composer, public speaker, and philanthropist. He has owned various companies within the marine industry and is a consultant and keyno ...[truncated]",
+          "List of British Jewish entertainers | This list of British Jewish entertainers includes entertainers (actors, directors, screenwriters, musicians, and others) from the United Kingdom and its predecessor states who are or were Jewish.",
+          "Tarila Thompson | Tarila Emmanuel Thompson (born February 14, 1968) is a Nigerian actor, director, filmmaker, writer and musician. Thompson began his career in 1993 and is credited for his role in pioneering the English-speaking movie industry in Nigeria known as Nollywood.",
+          "Ransom Riggs | Ransom Riggs (born February 3, 1979) is an American writer and filmmaker best known for the book \"Miss Peregrine's Home for Peculiar Children\"."
+        ],
+        "summary_2": "Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "answer": "Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Dave Moody"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Dave Moody occupations musician songwriter producer director filmmaker biography"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who is able to fill a larger variety of roles in the entertainment industry, Dave Moody or Ransom Riggs?\",\n  \"summary_1\": \"Dave Moody — he is a director, producer, composer/musician, etc., while Ransom Riggs is noted as a writer and filmmaker.\",\n  \"current_output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"List the entertainment-industry occupations/roles for Dave Moody and for Ransom Riggs (e.g., director, producer, composer, musician, writer, filmmaker, screenwriter, actor, etc.). For each person provide a concise list of roles and a source (Wikipedia or official biography).\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Priyadarshan Jadhav\",\n    \"The Total Picture Seminar\",\n    \"Above-the-line (filmmaking)\",\n    \"Nick G. Miller\",\n    \"List of British Jewish entertainers\",\n    \"Tarila Thompson\",\n    \"Ransom Riggs\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Priyadarshan Jadhav | Priyadarshan Jadhav (born 29 April 1980) is a Marathi actor, director, producer and screenwriter. He is a multifaceted personality in the Marathi film industry. With a zeal to become a filmmaker Priyadarshan stepped in the Marathi film industry at a young age. He has been a director, producer, script writer for well known films. He is known for his role in Ravi Jadhav's Timepass 2 (2015) as Dagadu.\",\n    \"The Total Picture Seminar | The Total Picture Seminar, a California LLC, was formed by actor Martin Landau, director Mark Rydell, and screenwriter/playwright Lyle Kessler. The purpose is to educate actors, writers, and directors in the aspects of filmmaking. Martin Landau, Mark Rydell, and Lyle Kessler have worked together for many decades at The Actors Studio. They each bring industry experience, prestige, personal success, and a lifetime of teaching experience to this endeavor. The Seminar pro ...[truncated]\",\n    \"Above-the-line (filmmaking) | \\\"Above-the-line\\\" refers to the list of individuals who guide and influence the creative direction, process, and voice of a given narrative in a film and related expenditures. These roles include but are not limited to the screenwriter, producer, director, and actors.\",\n    \"Nick G. Miller | Nick G. Miller (born January 18, 1964 in Dayton, Ohio), also known as Nick Miller, is an American businessperson. His main interests are within the entertainment industry, the marine industry, and business education. Miller is an award-winning screenwriter, filmmaker, movie producer, movie director, television producer, actor, music producer, film composer, public speaker, and philanthropist. He has owned various companies within the marine industry and is a consultant and keyno ...[truncated]\",\n    \"List of British Jewish entertainers | This list of British Jewish entertainers includes entertainers (actors, directors, screenwriters, musicians, and others) from the United Kingdom and its predecessor states who are or were Jewish.\",\n    \"Tarila Thompson | Tarila Emmanuel Thompson (born February 14, 1968) is a Nigerian actor, director, filmmaker, writer and musician. Thompson began his career in 1993 and is credited for his role in pioneering the English-speaking movie industry in Nigeria known as Nollywood.\",\n    \"Ransom Riggs | Ransom Riggs (born February 3, 1979) is an American writer and filmmaker best known for the book \\\"Miss Peregrine's Home for Peculiar Children\\\".\"\n  ],\n  \"summary_2\": \"Dave Moody. He holds a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"answer\": \"Dave Moody. He fills a broader range of roles (director, producer, composer/musician, etc.) compared with Ransom Riggs, who is primarily a writer and filmmaker.\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Dave Moody\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Dave Moody occupations musician songwriter producer director filmmaker biography\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the current `query` is a verbose multi-person instruction (e.g., asks for occupation lists for two or more named people and requests sources), apply this prompt edit for the ongoing second-hop retrieval.\",\n    \"preserve_rule\": \"Keep the original intent to retrieve explicit occupation/role evidence for a person named in the inputs. Continue to output only the `query` field (no answers or extra commentary).\",\n    \"change_rule\": \"Replace the verbose multi-person instruction with a single, compact keyword-style query that names only one person (the person already mentioned in the inputs) followed by occupation-related keywords. Use the pattern: \\\"<Full Name> occupations musician songwriter producer director filmmaker biography\\\" (only the name and keywords, space-separated). Produce exactly one such short query string.\",\n    \"drop_or_avoid_rule\": \"Do not request sources, do not ask for comparative lists, do not include natural-language instructions or extra explanatory text, and do not mention other people in the same query. Avoid long clauses, sentences, or multi-item formatting — output only the concise keyword query.\",\n    \"output_contract\": \"Return a single `query` string field whose value is a short, keyword-style search query naming the chosen person and occupation/biography keywords (for example: \\\"Dave Moody occupations musician songwriter producer director filmmaker biography\\\"). Do not return other fields or commentary.\",\n    \"why_local_transition\": \"A short, single-person occupation-keyword query focuses the second-hop retrieval on concrete biography/occupation evidence for the named individual and avoids diluting the search with multi-person instructions or source-format constraints.\"\n  },\n  \"rationale\": \"The previous multi-person, source-requesting query is overly verbose and may dilute retrieval focus. Narrowing to one compact keyword query for the person mentioned in the inputs increases recall for occupation/biography pages and yields cleaner evidence for the pipeline's next step. This edit is minimal (only changes the query shape) and preserves the original goal of locating occupation roles while removing unnecessary constraints or extra subjects.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 1,
+    "row_index": 1,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

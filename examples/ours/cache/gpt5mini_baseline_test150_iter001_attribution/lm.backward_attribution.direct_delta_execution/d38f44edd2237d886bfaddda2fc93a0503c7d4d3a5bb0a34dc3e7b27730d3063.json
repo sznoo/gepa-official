@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d38f44edd2237d886bfaddda2fc93a0503c7d4d3a5bb0a34dc3e7b27730d3063",
+  "created_at": "2026-07-13T18:47:07.069226+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 asserts a place-of-origin (contains a phrase like \"from <place>\" or a place name such as a U.S. state).",
+            "preserve_rule": "Keep producing exactly one compact second-hop retrieval query; continue to use the question text and summary_1 as inputs and prefer concise phrasing.",
+            "change_rule": "When triggered, generate a single short query that ties the question subject (use the name from the question, e.g. 'Adolph Botnick') to the role 'assassin/attempted assassin/attacker' and include the place phrase extracted verbatim from summary_1 plus a locality keyword (e.g. 'hometown', 'from', 'origin', 'hometown of'). Keep the query compact (aim for ~3–7 words).",
+            "drop_or_avoid_rule": "Do not issue very broad or generic queries (e.g., omitting the subject or the place), avoid listing multiple candidate names or long document spans, and avoid adding unrelated keywords that increase noise.",
+            "output_contract": "Return a single-line query string combining: [subject-from-question] + [assassin|attempted assassin|attacker] + [place-from-summary_1] + optional locality word (hometown/from/origin). No extra explanation or punctuation.",
+            "why_local_transition": "This makes a minimal, targeted refinement: it preserves using the existing summary place claim while adding the subject and explicit 'assassin' + locality terms so retrieval focuses on the missing bridge (the assassin's hometown) without changing other agent behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If summary_1 asserts a location (contains phrases like 'from <Place>' or 'was from') and the current query does not pose an explicit second-hop question about the subject's origin.",
+            "preserve_rule": "Keep producing exactly one compact second-hop retrieval query. Preserve the original question entity (from `question`) and any location language present in `summary_1`.",
+            "change_rule": "Reframe the query into a concise, retrieval-ready question that pairs the question entity with the asserted location to target the missing bridge. Use the question's named entity and the location from summary_1 to form a short query such as: 'Who attempted to assassinate Adolph Botnick from Mississippi' or 'Assassin of Adolph Botnick from Mississippi'. Do not introduce person names or other specific anchors that do not appear in the visible inputs.",
+            "drop_or_avoid_rule": "Do not emit full sentences, explanatory text, multiple alternative queries, the answer name, or entities absent from the visible inputs. Avoid verbose qualifiers and long literal spans from the target state.",
+            "output_contract": "Output exactly one single-line, compact query string suitable for retrieval, combining the question entity and the asserted location (for example: 'Who attempted to assassinate Adolph Botnick from Mississippi'). No additional text or punctuation.",
+            "why_local_transition": "The source query missed an explicit question-form second-hop that uses the location recovered in summary_1. This minimal prompt edit directs the agent to form a focused retrieval query combining the original entity and the known location so the next retrieval can find the supporting document linking the suspect to that place."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Where was the man who attempted to assassinate Adolph Botnick from?",
+        "summary_1": "He was from Mississippi.",
+        "current_output": {
+          "query": "Adolph Botnick attempted assassination man from Mississippi"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 asserts a place-of-origin (contains a phrase like \\\"from <place>\\\" or a place name such as a U.S. state).\",\n      \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query; continue to use the question text and summary_1 as inputs and prefer concise phrasing.\",\n      \"change_rule\": \"When triggered, generate a single short query that ties the question subject (use the name from the question, e.g. 'Adolph Botnick') to the role 'assassin/attempted assassin/attacker' and include the place phrase extracted verbatim from summary_1 plus a locality keyword (e.g. 'hometown', 'from', 'origin', 'hometown of'). Keep the query compact (aim for ~3–7 words).\",\n      \"drop_or_avoid_rule\": \"Do not issue very broad or generic queries (e.g., omitting the subject or the place), avoid listing multiple candidate names or long document spans, and avoid adding unrelated keywords that increase noise.\",\n      \"output_contract\": \"Return a single-line query string combining: [subject-from-question] + [assassin|attempted assassin|attacker] + [place-from-summary_1] + optional locality word (hometown/from/origin). No extra explanation or punctuation.\",\n      \"why_local_transition\": \"This makes a minimal, targeted refinement: it preserves using the existing summary place claim while adding the subject and explicit 'assassin' + locality terms so retrieval focuses on the missing bridge (the assassin's hometown) without changing other agent behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 asserts a location (contains phrases like 'from <Place>' or 'was from') and the current query does not pose an explicit second-hop question about the subject's origin.\",\n      \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query. Preserve the original question entity (from `question`) and any location language present in `summary_1`.\",\n      \"change_rule\": \"Reframe the query into a concise, retrieval-ready question that pairs the question entity with the asserted location to target the missing bridge. Use the question's named entity and the location from summary_1 to form a short query such as: 'Who attempted to assassinate Adolph Botnick from Mississippi' or 'Assassin of Adolph Botnick from Mississippi'. Do not introduce person names or other specific anchors that do not appear in the visible inputs.\",\n      \"drop_or_avoid_rule\": \"Do not emit full sentences, explanatory text, multiple alternative queries, the answer name, or entities absent from the visible inputs. Avoid verbose qualifiers and long literal spans from the target state.\",\n      \"output_contract\": \"Output exactly one single-line, compact query string suitable for retrieval, combining the question entity and the asserted location (for example: 'Who attempted to assassinate Adolph Botnick from Mississippi'). No additional text or punctuation.\",\n      \"why_local_transition\": \"The source query missed an explicit question-form second-hop that uses the location recovered in summary_1. This minimal prompt edit directs the agent to form a focused retrieval query combining the original entity and the known location so the next retrieval can find the supporting document linking the suspect to that place.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Where was the man who attempted to assassinate Adolph Botnick from?\",\n  \"summary_1\": \"He was from Mississippi.\",\n  \"current_output\": {\n    \"query\": \"Adolph Botnick attempted assassination man from Mississippi\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Adolph Botnick attempted assassin from Mississippi\"},\n  \"rationale\": \"Delta 0 triggered by 'He was from Mississippi' so I formed subject + attempted assassin + place; Delta 1 reframed it into a concise retrieval-ready query pairing the entity and location.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 52,
+    "row_index": 52,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}
