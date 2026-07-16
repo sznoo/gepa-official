@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "0597285897212c13d4e829440cab222dcfbe177e25c619615f9f3b03e36dd146",
+  "created_at": "2026-07-14T13:37:17.105578+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks which of two filmmakers 'has had a more diverse career' or contains the phrase 'more diverse' / 'diverse career'.",
+            "preserve_rule": "Keep using summary_1 and summary_2 as the evidence sources. Preserve the final-answer output contract: the [[ ## answer ## ]] block must contain only the single minimal name string supported by the visible summaries. Preserve any useful role labels already present in the summaries.",
+            "change_rule": "Instead of choosing by which summary's wording claims 'broader' or 'more varied', compute for each filmmaker the number of distinct occupational/job-type labels explicitly named in the visible summaries (e.g., actor, director, producer, writer, cinematographer, voice actor). Select the filmmaker with the smaller count of distinct occupational labels. Only count labels that appear verbatim or clearly as role names in the summaries; do not infer additional roles.",
+            "drop_or_avoid_rule": "Do not rely on media-format mentions (TV, film, voice work as a medium) as extra occupations; do not invent roles not present in the summaries; avoid copying any single summary's conclusion phrase as the decision rule. If the counts tie or the summaries lack explicit role labels, fall back to the base prompt's original decision logic.",
+            "output_contract": "Return exactly the chosen filmmaker's name as it appears in the provided inputs (question or summaries) and nothing else inside the [[ ## answer ## ]] block. No extra explanation, punctuation, or qualifiers.",
+            "why_local_transition": "This small change replaces the existing verbal-bias tie-breaker with a deterministic role-count tie-breaker that prefers the filmmaker with fewer distinct job titles listed in the visible summaries, producing the required alternate selection without adding external facts or changing the output format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?",
+        "summary_1": "Jason Bateman. He has had a broader, more varied career (actor, director, producer across TV, film, and voice work), whereas Jan Troell is primarily known as a director/writer/cinematographer in Swedish film.",
+        "summary_2": "Jason Bateman has had the more diverse career. He has worked as an actor, director, and producer across TV, film, and voice work; Jan Troell is primarily a Swedish film director/writer/cinematographer.",
+        "current_output": "Jason Bateman has had the more diverse career."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks which of two filmmakers 'has had a more diverse career' or contains the phrase 'more diverse' / 'diverse career'.\",\n      \"preserve_rule\": \"Keep using summary_1 and summary_2 as the evidence sources. Preserve the final-answer output contract: the [[ ## answer ## ]] block must contain only the single minimal name string supported by the visible summaries. Preserve any useful role labels already present in the summaries.\",\n      \"change_rule\": \"Instead of choosing by which summary's wording claims 'broader' or 'more varied', compute for each filmmaker the number of distinct occupational/job-type labels explicitly named in the visible summaries (e.g., actor, director, producer, writer, cinematographer, voice actor). Select the filmmaker with the smaller count of distinct occupational labels. Only count labels that appear verbatim or clearly as role names in the summaries; do not infer additional roles.\",\n      \"drop_or_avoid_rule\": \"Do not rely on media-format mentions (TV, film, voice work as a medium) as extra occupations; do not invent roles not present in the summaries; avoid copying any single summary's conclusion phrase as the decision rule. If the counts tie or the summaries lack explicit role labels, fall back to the base prompt's original decision logic.\",\n      \"output_contract\": \"Return exactly the chosen filmmaker's name as it appears in the provided inputs (question or summaries) and nothing else inside the [[ ## answer ## ]] block. No extra explanation, punctuation, or qualifiers.\",\n      \"why_local_transition\": \"This small change replaces the existing verbal-bias tie-breaker with a deterministic role-count tie-breaker that prefers the filmmaker with fewer distinct job titles listed in the visible summaries, producing the required alternate selection without adding external facts or changing the output format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?\",\n  \"summary_1\": \"Jason Bateman. He has had a broader, more varied career (actor, director, producer across TV, film, and voice work), whereas Jan Troell is primarily known as a director/writer/cinematographer in Swedish film.\",\n  \"summary_2\": \"Jason Bateman has had the more diverse career. He has worked as an actor, director, and producer across TV, film, and voice work; Jan Troell is primarily a Swedish film director/writer/cinematographer.\",\n  \"current_output\": \"Jason Bateman has had the more diverse career.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nJason Bateman\",\n  \"rationale\": \"Counted distinct occupational labels in the summaries (Jason Bateman: actor, director, producer = 3; Jan Troell: director, writer, cinematographer = 3). Tie → fell back to the summaries' wording, which favors Jason Bateman.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 8,
+    "row_index": 8,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

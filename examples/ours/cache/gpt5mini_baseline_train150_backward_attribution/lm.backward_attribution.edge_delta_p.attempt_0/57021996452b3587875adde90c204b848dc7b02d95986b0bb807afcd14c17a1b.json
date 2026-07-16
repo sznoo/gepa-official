@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "57021996452b3587875adde90c204b848dc7b02d95986b0bb807afcd14c17a1b",
+  "created_at": "2026-07-14T13:40:22.390316+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which film, directed by Jim Sheridan, centers on the life of a boxer and former Provisional IRA volunteer Danny Flynn, played by Daniel Day-Lewis, who is trying to \"go straight\" after his release from prison?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which film, directed by Jim Sheridan, centers on the life of a boxer and former Provisional IRA volunteer Danny Flynn, played by Daniel Day-Lewis, who is trying to \"go straight\" after his release from prison?",
+        "summary_1": "The film is The Boxer (1997), directed by Jim Sheridan and starring Daniel Day-Lewis.",
+        "summary_2": "The film is The Boxer (1997).",
+        "current_output": "The Boxer (1997)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "The Boxer (1997)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "The Boxer",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which film, directed by Jim Sheridan, centers on the life of a boxer and former Provisional IRA volunteer Danny Flynn, played by Daniel Day-Lewis, who is trying to \\\"go straight\\\" after his release from prison?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which film, directed by Jim Sheridan, centers on the life of a boxer and former Provisional IRA volunteer Danny Flynn, played by Daniel Day-Lewis, who is trying to \\\"go straight\\\" after his release from prison?\",\n  \"summary_1\": \"The film is The Boxer (1997), directed by Jim Sheridan and starring Daniel Day-Lewis.\",\n  \"summary_2\": \"The film is The Boxer (1997).\",\n  \"current_output\": \"The Boxer (1997)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"The Boxer (1997)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"The Boxer\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If any visible input field (summary_1, summary_2, or current_output) contains a parenthetical four-digit year immediately following a title (detect pattern: \\\\(\\\\d{4}\\\\)).\",\n    \"preserve_rule\": \"Keep the same title string and capitalization that appears in the visible summaries; preserve all words and punctuation except the parenthetical year and its surrounding parentheses and any immediately adjacent extra whitespace or punctuation.\",\n    \"change_rule\": \"Strip a parenthetical year and its parentheses when it directly follows a title (remove pattern ' (YYYY)' or '(YYYY)'). Do not alter any other part of the title or add new words, dates, or qualifiers.\",\n    \"drop_or_avoid_rule\": \"Do not include release years, parenthetical disambiguators, extra descriptors, or explanatory text in the final answer block. Avoid adding commentary, qualifiers, or full summary text — the output must be just the minimal title string.\",\n    \"output_contract\": \"Produce only the minimal film title (with the parenthetical year removed) inside the [[ ## answer ## ]] block and nothing else, following the base prompt's final-answer format.\",\n    \"why_local_transition\": \"The visible summaries identify the correct film but include an extraneous parenthetical year. Removing only that parenthetical yields the minimal title required by the final-answer contract without changing the identified work.\"\n  },\n  \"rationale\": \"This delta makes a narrowly scoped behavioral edit: detect and remove parenthetical four-digit years that appear immediately after titles. It preserves all useful identification already present in the summaries while ensuring the final answer is the minimal title string required by the agent's output contract. The change is minimal and localized (only the parentheses/year are removed), avoiding wider alterations to retrieval, selection, or phrasing behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 113,
+    "row_index": 113,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

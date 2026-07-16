@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "79132c332d6152509226ce5f06a69a44418c668660a6a8300d47cf0acc8810f9",
+  "created_at": "2026-07-16T07:05:31.791291+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "what year was the 2008 electee for a Cheshire constituency represented in the UK Parliament born?",
+    "answer": "1973",
+    "context": {
+      "title": [
+        "Dartford (UK Parliament constituency)",
+        "North Wiltshire (UK Parliament constituency)",
+        "John Lloyd Wharton",
+        "Pendle (UK Parliament constituency)",
+        "Crewe and Nantwich (UK Parliament constituency)",
+        "Harrogate (UK Parliament constituency)",
+        "West Suffolk (UK Parliament constituency)",
+        "Stalybridge (UK Parliament constituency)",
+        "Edward Timpson",
+        "Mansfield (UK Parliament constituency)"
+      ],
+      "sentences": [
+        [
+          "Dartford is a constituency represented in the House of Commons of the UK Parliament since 2010 by Gareth Johnson of the Conservative Party.",
+          " The constituency is currently the longest-valid 'bellwether' constituency in the country as the party of the winning candidate has gone on to form the government in every General Election since 1964.",
+          " Candidates for the largest two parties nationally have polled first and second since 1923 in Dartford."
+        ],
+        [
+          "North Wiltshire is a constituency represented in the House of Commons of the UK Parliament since 1997 by James Gray, a Conservative.",
+          " In the period 1832–1983, this was an alternative name for Chippenham or the Northern Division of Wiltshire and as Chippenham dates to the original countrywide Parliament, the Model Parliament, this period is covered in more detail in that article.",
+          " In 2016 it was announced that the North Wiltshire constituency would be scrapped as part of the planned 2018 Constituency Reforms."
+        ],
+        [
+          "The Right Honourable John Lloyd Wharton PC (18 April 1837 – 11 July 1912) was a Barrister and a Conservative Party politician.",
+          " He was the Member of Parliament (MP) for Member of Parliament (MP) for City of Durham (UK Parliament constituency) then Member of Parliament (MP) for Ripon (UK Parliament constituency)."
+        ],
+        [
+          "Pendle is a constituency represented in the House of Commons of the UK Parliament since 2010 by Andrew Stephenson, a Conservative.",
+          " The constituency was newly created for the 1983 General Election, being largely formed from the former Nelson and Colne Constituency."
+        ],
+        [
+          "Crewe and Nantwich is a constituency in Cheshire represented in the House of Commons of the UK Parliament since 2017, by Laura Smith of the Labour Party."
+        ],
+        [
+          "Harrogate ( ) was a constituency represented in the House of Commons of the UK Parliament.",
+          " As with all constituencies, the constituency elected one Member of Parliament (MP) by the first past the post system of election.",
+          " The constituency was renamed Harrogate and Knaresborough in 1997."
+        ],
+        [
+          "West Suffolk is a constituency represented in the House of Commons of the UK Parliament since 2010 by Matthew Hancock, a Conservative.",
+          " Between 1832 and 1885 there had also been a constituency, the Western Division of Suffolk that had also been called West Suffolk."
+        ],
+        [
+          "Stalybridge officially sometimes written in early years as Staleybridge was a constituency represented in the House of Commons of the UK Parliament from 1868 until 1918 by one MP.",
+          " It comprised the borough of Stalybridge which lay in Lancashire and Cheshire and which is in the east of today's Greater Manchester.",
+          " On abolition for the 1918 general election under the Representation of the People Act 1918 the seat's main replacement became Stalybridge and Hyde."
+        ],
+        [
+          "Anthony Edward Timpson (born (1973--)26 1973 ) is a British Conservative Party politician.",
+          " He was first elected as the Member of Parliament (MP) for Crewe and Nantwich at the 2008 by-election but lost his seat in the 2017 general election to the Labour candidate, Laura Smith."
+        ],
+        [
+          "Mansfield is a constituency represented in the House of Commons of the UK Parliament since 2017 by Ben Bradley of the Conservative Party.",
+          " This is the first time a Conservative MP has represented the constituency since its creation in 1885."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Edward Timpson",
+        "Edward Timpson",
+        "Crewe and Nantwich (UK Parliament constituency)"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- If summary_1 already includes explicit profession/role/descriptor tokens for an anchor (for example, 'singer', 'director', 'country music artist'), omit those redundant descriptor tokens and emit a compact anchor-only query consisting of the core visible anchors (names, titles, groups). Retain relation tokens only when the question explicitly requests them or when disambiguation rules demand them. Do not remove descriptors when the question explicitly asks for role/occupation evidence or when a short-title disambiguation rule requires adding an entertainment disambiguator.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity (or otherwise names candidate/bridge entities), treat the context claim as the summary anchor and perform explicit identity-alignment checks before using passage facts. For each entity explicitly named in `context` as a candidate or bridge, do the following: if at least one passage provides an explicit, identity-aligned statement linking that named entity (or a clearly indicated alias) to the asserted relation, append a single brief corroborating sentence that paraphrases that linking fact and references the corroborating passage and also include one short clause for that context-named entity giving the passage-supported relation value (e.g., \"Name: [relation value].\"); if no passage provides the relation value for that context-named entity, append a short clause stating that no relation value is provided in the evidence (e.g., \"Name: no [relation] provided in evidence.\"). Do not create such clauses for entities that are only mentioned in `passages` and are not named in `context`. Do not append corroboration if the `context` already contains the identical corroborating fact verbatim. Keep these additions short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n- Vocal-role single-token normalization (narrow scope): If summary_2 (alone or composed with summary_1 where identity links are explicit) explicitly contains vocal-role evidence — i.e., one or more verbalized vocal-role phrases that clearly denote a singing performer (examples: \"lead singer\", \"lead vocals\", \"vocalist\" as presented in the summaries) — then you may prefer to emit the concise single-token common noun for a person who sings (e.g., \"singer\") only when that single-token common noun itself appears verbatim in the summaries or when the vocal-role phrases in the summaries unambiguously denote the same person-role. If those explicit lexical licenses are not present, retain the literal role phrasing as given in summary_2 and do not normalize modifiers or drop qualifiers.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "ab3db3537ee7",
+    "rerun_from": null,
+    "question": "what year was the 2008 electee for a Cheshire constituency represented in the UK Parliament born?",
+    "gold_answer": "1973",
+    "context": {
+      "title": [
+        "Dartford (UK Parliament constituency)",
+        "North Wiltshire (UK Parliament constituency)",
+        "John Lloyd Wharton",
+        "Pendle (UK Parliament constituency)",
+        "Crewe and Nantwich (UK Parliament constituency)",
+        "Harrogate (UK Parliament constituency)",
+        "West Suffolk (UK Parliament constituency)",
+        "Stalybridge (UK Parliament constituency)",
+        "Edward Timpson",
+        "Mansfield (UK Parliament constituency)"
+      ],
+      "sentences": [
+        [
+          "Dartford is a constituency represented in the House of Commons of the UK Parliament since 2010 by Gareth Johnson of the Conservative Party.",
+          " The constituency is currently the longest-valid 'bellwether' constituency in the country as the party of the winning candidate has gone on to form the government in every General Election since 1964.",
+          " Candidates for the largest two parties nationally have polled first and second since 1923 in Dartford."
+        ],
+        [
+          "North Wiltshire is a constituency represented in the House of Commons of the UK Parliament since 1997 by James Gray, a Conservative.",
+          " In the period 1832–1983, this was an alternative name for Chippenham or the Northern Division of Wiltshire and as Chippenham dates to the original countrywide Parliament, the Model Parliament, this period is covered in more detail in that article.",
+          " In 2016 it was announced that the North Wiltshire constituency would be scrapped as part of the planned 2018 Constituency Reforms."
+        ],
+        [
+          "The Right Honourable John Lloyd Wharton PC (18 April 1837 – 11 July 1912) was a Barrister and a Conservative Party politician.",
+          " He was the Member of Parliament (MP) for Member of Parliament (MP) for City of Durham (UK Parliament constituency) then Member of Parliament (MP) for Ripon (UK Parliament constituency)."
+        ],
+        [
+          "Pendle is a constituency represented in the House of Commons of the UK Parliament since 2010 by Andrew Stephenson, a Conservative.",
+          " The constituency was newly created for the 1983 General Election, being largely formed from the former Nelson and Colne Constituency."
+        ],
+        [
+          "Crewe and Nantwich is a constituency in Cheshire represented in the House of Commons of the UK Parliament since 2017, by Laura Smith of the Labour Party."
+        ],
+        [
+          "Harrogate ( ) was a constituency represented in the House of Commons of the UK Parliament.",
+          " As with all constituencies, the constituency elected one Member of Parliament (MP) by the first past the post system of election.",
+          " The constituency was renamed Harrogate and Knaresborough in 1997."
+        ],
+        [
+          "West Suffolk is a constituency represented in the House of Commons of the UK Parliament since 2010 by Matthew Hancock, a Conservative.",
+          " Between 1832 and 1885 there had also been a constituency, the Western Division of Suffolk that had also been called West Suffolk."
+        ],
+        [
+          "Stalybridge officially sometimes written in early years as Staleybridge was a constituency represented in the House of Commons of the UK Parliament from 1868 until 1918 by one MP.",
+          " It comprised the borough of Stalybridge which lay in Lancashire and Cheshire and which is in the east of today's Greater Manchester.",
+          " On abolition for the 1918 general election under the Representation of the People Act 1918 the seat's main replacement became Stalybridge and Hyde."
+        ],
+        [
+          "Anthony Edward Timpson (born (1973--)26 1973 ) is a British Conservative Party politician.",
+          " He was first elected as the Member of Parliament (MP) for Crewe and Nantwich at the 2008 by-election but lost his seat in the 2017 general election to the Labour candidate, Laura Smith."
+        ],
+        [
+          "Mansfield is a constituency represented in the House of Commons of the UK Parliament since 2017 by Ben Bradley of the Conservative Party.",
+          " This is the first time a Conservative MP has represented the constituency since its creation in 1885."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Edward Timpson",
+        "Edward Timpson",
+        "Crewe and Nantwich (UK Parliament constituency)"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Edward Timpson",
+      "Crewe and Nantwich (UK Parliament constituency)"
+    ],
+    "hop1_query": "what year was the 2008 electee for a Cheshire constituency represented in the UK Parliament born?",
+    "hop1_docs": [
+      "Eddisbury (UK Parliament constituency) | Eddisbury is a constituency in Cheshire represented in the House of Commons of the UK Parliament since 2015 by Antoinette Sandbach, a Conservative.",
+      "Congleton (UK Parliament constituency) | Congleton is a constituency in Cheshire, represented in the House of Commons of the UK Parliament since 2010 by Fiona Bruce of the Conservative Party.",
+      "Halton (UK Parliament constituency) | Halton is a constituency in Cheshire, represented in the House of Commons of the UK Parliament since 1997 by Derek Twigg of the Labour Party.",
+      "Crewe and Nantwich (UK Parliament constituency) | Crewe and Nantwich is a constituency in Cheshire represented in the House of Commons of the UK Parliament since 2017, by Laura Smith of the Labour Party.",
+      "Cheshire (UK Parliament constituency) | Cheshire is a former United Kingdom Parliamentiary constituency for the county of Cheshire.  It was a constituency of the House of Commons of the Parliament of England then of the Parliament of Great Britain from 1707 to 1800 and of the Parliament of the United Kingdom from 1801 to 1832.",
+      "Stalybridge (UK Parliament constituency) | Stalybridge officially sometimes written in early years as Staleybridge was a constituency represented in the House of Commons of the UK Parliament from 1868 until 1918 by one MP.  It comprised the borough of Stalybridge which lay in Lancashire and Cheshire and which is in the east of today's Greater Manchester.  On abolition for the 1918 general election under the Representation of the People Act 1918 the seat's main replacement became Stalybridge and Hyde.",
+      "Hyde (UK Parliament constituency) | Hyde was a county constituency represented in the House of Commons of the Parliament of the United Kingdom from 1885 until 1918.  It was seated in the town of Hyde, Cheshire."
+    ],
+    "hop1_titles": [
+      "Eddisbury (UK Parliament constituency)",
+      "Congleton (UK Parliament constituency)",
+      "Halton (UK Parliament constituency)",
+      "Crewe and Nantwich (UK Parliament constituency)",
+      "Cheshire (UK Parliament constituency)",
+      "Stalybridge (UK Parliament constituency)",
+      "Hyde (UK Parliament constituency)"
+    ],
+    "summary_1": "Passages show MPs for Cheshire constituencies (e.g., \"Eddisbury ... Antoinette Sandbach (Conservative)\"; \"Congleton ... Fiona Bruce (Conservative)\"; \"Halton ... Derek Twigg (Labour)\"; \"Crewe and Nantwich ... Laura Smith (Labour)\"), but none mention a 2008 electee or any 2008 election. Missing bridge: the identity of the MP who was elected in 2008 for a Cheshire constituency and that person's birth year. Next-hop retrieval: search for the 2008 election/by‑election for Cheshire seats (e.g., \"2008 Crewe and Nantwich by‑election winner\" or \"MP elected 2008 Cheshire constituency\") and then look up that person's birth year.",
+    "hop2_query": "2008 Crewe and Nantwich by-election winner birth year",
+    "hop2_docs": [
+      "Crewe and Nantwich by-election, 2008 | The Crewe and Nantwich by-election, 2008 was a parliamentary by-election held on 22 May 2008, for the British House of Commons constituency of Crewe and Nantwich, in Cheshire, England.  The election was won by the Conservative party candidate Edward Timpson, who defeated the Labour party candidate Tamsin Dunwoody, on a swing from Labour to Conservative of 17.6%, a swing that in a general election would see nine Labour cabinet ministers lose their seats.  At the time of the by-election, a swing of 7% in a general election would have seen the Conservatives gain an overall majority over Labour.  This was the first seat gained by the Conservatives in a by-election since the Mitcham and Morden by-election, 1982.",
+      "Crewe and Nantwich Borough Council elections | Crewe and Nantwich was a non-metropolitan district in Cheshire, England.  It was abolished on 1 April 2009 and replaced by Cheshire East.",
+      "Edward Timpson | Anthony Edward Timpson (born (1973--)26 1973 ) is a British Conservative Party politician.  He was first elected as the Member of Parliament (MP) for Crewe and Nantwich at the 2008 by-election but lost his seat in the 2017 general election to the Labour candidate, Laura Smith.",
+      "Nantwich Rural District | Nantwich Rural District was a division of Cheshire until 1974, when it merged with the Nantwich and Crewe Urban districts to create the borough of Crewe and Nantwich.",
+      "Crewe and Nantwich Circular Walk | The Crewe and Nantwich Circular Walk is a 29 mi long-distance walkers' path in the Cheshire East area of Cheshire, England.  As the name suggests, the walk forms a circuit around the towns of Crewe and Nantwich.  It is one of two circular walks in the county of Cheshire, the other being the Vale Royal Round.",
+      "Crewe &amp; Nantwich Steamers | Crewe & Nantwich Steamers is a rugby league club in Nantwich, Cheshire.  They play in the North West Division of the Rugby League Conference and run a second team in the North West Merit League.",
+      "Nantwich railway station | Nantwich railway station serves the town of Nantwich, Cheshire, England.  It is on the Crewe to Shrewsbury line 4+1/2 mi south west of Crewe.  Opened in 1858, it was the junction for the Great Western Railway route to Wellington via Market Drayton until 1963."
+    ],
+    "hop2_titles": [
+      "Crewe and Nantwich by-election, 2008",
+      "Crewe and Nantwich Borough Council elections",
+      "Edward Timpson",
+      "Nantwich Rural District",
+      "Crewe and Nantwich Circular Walk",
+      "Crewe &amp; Nantwich Steamers",
+      "Nantwich railway station"
+    ],
+    "summary_2": "The 2008 Crewe and Nantwich by-election (22 May 2008) was won by Edward Timpson; Edward Timpson was born in 1973 (passages [1], [3]). Context-named MPs: Antoinette Sandbach: no 2008-electee/birth-year provided in evidence; Fiona Bruce: no 2008-electee/birth-year provided in evidence; Derek Twigg: no 2008-electee/birth-year provided in evidence; Laura Smith: no 2008-electee/birth-year provided in evidence.",
+    "answer": "1973",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Edward Timpson"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Crewe and Nantwich (UK Parliament constituency)"
+    ],
+    "hit_titles_total": [
+      "Crewe and Nantwich (UK Parliament constituency)",
+      "Edward Timpson"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "ef943da58f8e499b749d8110657d1a8a67805ea9ce61f259369a68129a520456",
+  "created_at": "2026-07-14T21:09:01.380690+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+      "source_summary": "Unclear from the provided passages: Civil Twilight is a four-piece rock band (Andrew McKeller, Steven McKeller, Richard Wouters, Kevin Dailey), while Juliette and the Licks lists four other members (Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis) but the passages do not explicitly confirm their genders or that this is the full/current male membership.",
+      "target_summary": "Evidence summary (not a final answer):\n\n- Civil Twilight: Upstream evidence describes Civil Twilight as \"a four-piece rock band\" and names the members as the brothers Andrew and Steven McKeller, Richard Wouters, and Kevin Dailey.\n\n- Juliette & The Licks: Visible retrieved evidence states \"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis\" and that \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\" \n\n- Ambiguity noted for comparison: The Juliette & The Licks phrasing \"Other band members have included\" indicates variable/partial membership and does not explicitly assert that those four named musicians constitute the complete/current band lineup, nor does it state their genders. This leaves open whether the four named members are the definitive count to compare against Civil Twilight's four-piece lineup.",
+      "candidate_summary": "Civil Twilight is described as \"a four-piece rock band\" consisting of the brothers Andrew and Steven McKellar, Richard Wouters, and Kevin Dailey, while Juliette & The Licks' passages state \"Other band members have included\" guitarist Craig Fairbaugh, guitarist Emilio Cueto, bassist Jason Womack, and drummer Ed Davis; the passages do not confirm that those listed are a complete/current lineup or specify member genders."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhat number of male band members do both Juliette and the Licks and Civil Twilight have?\n\nSource summary2:\nUnclear from the provided passages: Civil Twilight is a four-piece rock band (Andrew McKeller, Steven McKeller, Richard Wouters, Kevin Dailey), while Juliette and the Licks lists four other members (Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis) but the passages do not explicitly confirm their genders or that this is the full/current male membership.\n\nTarget summary2:\nEvidence summary (not a final answer):\n\n- Civil Twilight: Upstream evidence describes Civil Twilight as \"a four-piece rock band\" and names the members as the brothers Andrew and Steven McKeller, Richard Wouters, and Kevin Dailey.\n\n- Juliette & The Licks: Visible retrieved evidence states \"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis\" and that \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\" \n\n- Ambiguity noted for comparison: The Juliette & The Licks phrasing \"Other band members have included\" indicates variable/partial membership and does not explicitly assert that those four named musicians constitute the complete/current band lineup, nor does it state their genders. This leaves open whether the four named members are the definitive count to compare against Civil Twilight's four-piece lineup.\n\nCandidate summary2:\nCivil Twilight is described as \"a four-piece rock band\" consisting of the brothers Andrew and Steven McKellar, Richard Wouters, and Kevin Dailey, while Juliette & The Licks' passages state \"Other band members have included\" guitarist Craig Fairbaugh, guitarist Emilio Cueto, bassist Jason Womack, and drummer Ed Davis; the passages do not confirm that those listed are a complete/current lineup or specify member genders.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate preserves the target's key facts: Civil Twilight as a four-piece with the listed members and Juliette & The Licks' four named 'other' members, and it repeats the ambiguity about completeness/genders. It also includes the target-only detail that Andrew and Steven are brothers, which is a task-relevant relation not stated in the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 16,
+    "row_index": 16,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

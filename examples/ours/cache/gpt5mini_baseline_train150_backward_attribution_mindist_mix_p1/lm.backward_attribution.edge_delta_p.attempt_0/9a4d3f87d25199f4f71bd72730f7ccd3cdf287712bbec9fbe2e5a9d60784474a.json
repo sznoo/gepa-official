@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "9a4d3f87d25199f4f71bd72730f7ccd3cdf287712bbec9fbe2e5a9d60784474a",
+  "created_at": "2026-07-14T19:01:55.390162+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?",
+        "summary_1": "The passages show the record holder is Billy Hamilton, but they do not state his native city—so the native city cannot be determined from the provided passages.",
+        "summary_2": "Not available / cannot be determined from the provided passages.",
+        "current_output": "Cannot be determined from the provided passages."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Cannot be determined from the provided passages.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Taylorsville",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?\",\n  \"summary_1\": \"The passages show the record holder is Billy Hamilton, but they do not state his native city—so the native city cannot be determined from the provided passages.\",\n  \"summary_2\": \"Not available / cannot be determined from the provided passages.\",\n  \"current_output\": \"Cannot be determined from the provided passages.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Cannot be determined from the provided passages.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Taylorsville\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks for a biographical fact (e.g., birthplace, native city) about a named person who is explicitly identified in the visible summaries (for example, a summary names 'Billy Hamilton') but none of the summaries state that biographical fact explicitly.\",\n    \"preserve_rule\": \"Continue to treat the visible summaries as the primary evidence source. Do not contradict or ignore explicit statements in the summaries. If a summary explicitly says the fact cannot be determined, keep that as the default.\",\n    \"change_rule\": \"When the trigger condition holds, permit the agent to use widely known, stable biographical facts from general knowledge as a fallback only if the named person in the summaries is unambiguous (a full name or an otherwise clearly unique identifier appears in the summaries) and the fact requested is a stable, non-controversial datum (birthplace/native city). If using such a fallback, produce only the minimal place name required by the question (no extra explanation) and do not invent or guess when uncertain.\",\n    \"drop_or_avoid_rule\": \"Do not invent or fabricate a place if the agent is not reasonably confident. Do not expand the answer with supporting text, citations, or reasoning in the final answer block. Do not attempt to reproduce or reference hidden/evaluation-only data. If confidence in a fallback general-knowledge fact is low, revert to the preserved default output (e.g., 'Cannot be determined from the provided passages.').\",\n    \"output_contract\": \"Maintain the original answer field format. The [[ ## answer ## ]] block must contain exactly one minimal string: either the single place-name (city) if the agent supplies a confident fallback per the change_rule, or the unchanged default refusal text when the summaries do not permit determination and no confident fallback exists.\",\n    \"why_local_transition\": \"This small change lets the final-stage agent answer birthplace/native-city questions when the summaries clearly identify a specific, unambiguous person but omit the birthplace, by allowing a safe, conservative fallback to well-known biographical facts. It preserves reliance on the summaries and avoids broad permission to hallucinate.\"\n  },\n  \"rationale\": \"The source state refused to answer because the summaries lacked the birthplace. The target state provides a specific city. The minimal, local behavioral change needed is to allow a conservative fallback to stable general-knowledge biographical facts when the summaries name a unique individual but omit the requested stable datum. The delta keeps the visible summaries as primary evidence, avoids enabling broad hallucination, preserves the final output contract (single minimal string), and is narrowly triggered only for unambiguous, stable biographical facts. This satisfies the requirement to express a small, focused prompt edit rather than replacing the output or copying target data.\" \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 139,
+    "row_index": 139,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "85b2d5cbb9def9933b42f0ef3e3ef5b554ae320ee62735d2eb2cae1331fb1457",
+  "created_at": "2026-07-14T19:01:54.445069+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the first-hop output or summary_1 already supplies a specific work title or a single-year result (e.g., a quoted-title search or a 4-digit year), indicating the agent has identified one Holmes novel.",
+            "preserve_rule": "Keep using the given fields `question` and `summary_1` and continue to produce exactly one compact retrieval query string (no explanatory text). Preserve the agent's preference for short, keyword-style queries rather than full sentences.",
+            "change_rule": "Replace an overly specific quoted-title search with a concise query that targets publication years across Sir Arthur Conan Doyle's Sherlock Holmes novels (for example: 'Sir Arthur Conan Doyle Sherlock Holmes novels publication years'). If the previous query named a specific title, explicitly exclude that title in the query (e.g., add 'other than \"<previous title>\"') to focus on additional works. Keep the query compact (roughly <=12 words) and retrieval-oriented.",
+            "drop_or_avoid_rule": "Avoid reproducing long quoted searches or embedding the already-found year or answer in the query. Do not produce natural-language instructions, multi-part questions, or any candidate answer text. Do not attempt to copy or output any target answer or hidden-support spans.",
+            "output_contract": "Return a single-line, compact search query (keywords only) that will retrieve publication years for Sir Arthur Conan Doyle's Sherlock Holmes novels (excluding any novel already queried). No explanation, no answer, no additional lines.",
+            "why_local_transition": "Hop1 yielded one novel and a year; to recover the missing supporting bridge we must broaden the second-hop to retrieve publication years for other Conan Doyle Holmes novels (excluding the already-queried title) so the pipeline can identify the correct novel and its year."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question asks for the publication year of a Sir Arthur Conan Doyle crime novel featuring Sherlock Holmes and the agent's current query already names a candidate novel or uses 'publication' but retrieval did not surface an explicit bridging source (person/place/inspiration).",
+            "preserve_rule": "Keep the existing behavior of including the novel title and the author and/or the phrase 'publication' or 'publication year' in the query; keep the query compact (one line, keyword-style).",
+            "change_rule": "Augment the compact keyword query by adding exactly one concise 'bridge' keyword that targets sources discussing inspirations, real‑life models, or sources for the novel. Construct the query as: <novel title> <author> (publication|publication year) <bridge_keyword>. Choose one bridge_keyword from: inspiration | inspired by | based on | source | real-life. Keep the whole query ≤ 12 words.",
+            "drop_or_avoid_rule": "Do not produce a full-sentence question or reproduce the user's entire question. Do not insert long unique spans or specific person names unless they already appear in the visible inputs. Avoid punctuation like '?' or long quoted phrases—emit a compact keyword string.",
+            "output_contract": "Return a single-line retrieval query string (the 'query' field) that includes the novel title, the author, and either 'publication'/'publication year' or one bridge keyword as specified. The string must be concise (keyword-style) and suitable for a second-hop retrieval.",
+            "why_local_transition": "Adding a single bridge keyword steers retrieval toward pages that discuss inspirations or real‑world models (the missing bridge evidence) while preserving the existing useful parts of the query (title, author, publication). This minimally changes behavior to recover supporting bridge entities without producing full questions or leaking target-only spans."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "summary_1": "1890",
+        "current_output": {
+          "query": "\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the first-hop output or summary_1 already supplies a specific work title or a single-year result (e.g., a quoted-title search or a 4-digit year), indicating the agent has identified one Holmes novel.\",\n      \"preserve_rule\": \"Keep using the given fields `question` and `summary_1` and continue to produce exactly one compact retrieval query string (no explanatory text). Preserve the agent's preference for short, keyword-style queries rather than full sentences.\",\n      \"change_rule\": \"Replace an overly specific quoted-title search with a concise query that targets publication years across Sir Arthur Conan Doyle's Sherlock Holmes novels (for example: 'Sir Arthur Conan Doyle Sherlock Holmes novels publication years'). If the previous query named a specific title, explicitly exclude that title in the query (e.g., add 'other than \\\"<previous title>\\\"') to focus on additional works. Keep the query compact (roughly <=12 words) and retrieval-oriented.\",\n      \"drop_or_avoid_rule\": \"Avoid reproducing long quoted searches or embedding the already-found year or answer in the query. Do not produce natural-language instructions, multi-part questions, or any candidate answer text. Do not attempt to copy or output any target answer or hidden-support spans.\",\n      \"output_contract\": \"Return a single-line, compact search query (keywords only) that will retrieve publication years for Sir Arthur Conan Doyle's Sherlock Holmes novels (excluding any novel already queried). No explanation, no answer, no additional lines.\",\n      \"why_local_transition\": \"Hop1 yielded one novel and a year; to recover the missing supporting bridge we must broaden the second-hop to retrieve publication years for other Conan Doyle Holmes novels (excluding the already-queried title) so the pipeline can identify the correct novel and its year.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for the publication year of a Sir Arthur Conan Doyle crime novel featuring Sherlock Holmes and the agent's current query already names a candidate novel or uses 'publication' but retrieval did not surface an explicit bridging source (person/place/inspiration).\",\n      \"preserve_rule\": \"Keep the existing behavior of including the novel title and the author and/or the phrase 'publication' or 'publication year' in the query; keep the query compact (one line, keyword-style).\",\n      \"change_rule\": \"Augment the compact keyword query by adding exactly one concise 'bridge' keyword that targets sources discussing inspirations, real‑life models, or sources for the novel. Construct the query as: <novel title> <author> (publication|publication year) <bridge_keyword>. Choose one bridge_keyword from: inspiration | inspired by | based on | source | real-life. Keep the whole query ≤ 12 words.\",\n      \"drop_or_avoid_rule\": \"Do not produce a full-sentence question or reproduce the user's entire question. Do not insert long unique spans or specific person names unless they already appear in the visible inputs. Avoid punctuation like '?' or long quoted phrases—emit a compact keyword string.\",\n      \"output_contract\": \"Return a single-line retrieval query string (the 'query' field) that includes the novel title, the author, and either 'publication'/'publication year' or one bridge keyword as specified. The string must be concise (keyword-style) and suitable for a second-hop retrieval.\",\n      \"why_local_transition\": \"Adding a single bridge keyword steers retrieval toward pages that discuss inspirations or real‑world models (the missing bridge evidence) while preserving the existing useful parts of the query (title, author, publication). This minimally changes behavior to recover supporting bridge entities without producing full questions or leaking target-only spans.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"summary_1\": \"1890\",\n  \"current_output\": {\n    \"query\": \"\\\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Arthur Conan Doyle Sherlock Holmes publication inspiration not Sign of Four\"\n  },\n  \"rationale\": \"Delta 0: replaced the quoted-title search with a compact query for Doyle Holmes publication years and excluded the previously-named title; Delta 1: added one bridge keyword ('inspiration') while keeping the query concise.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

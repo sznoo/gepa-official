@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c526e7fb8467e58b8a367c922d6519ec49f0c5ee3c43bf03fbab92ee25edd8a6",
+  "created_at": "2026-07-15T21:35:26.390143+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "This U.S. state's oldest school, Berwick Academy, overlooks the Salmon Falls River which forms part of the state border with New Hampshire. Name the state.",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "This U.S. state's oldest school, Berwick Academy, overlooks the Salmon Falls River which forms part of the state border with New Hampshire. Name the state.",
+        "passages": [
+          "Berwick Academy (Maine) | Berwick Academy is a college preparatory school located in South Berwick, Maine.  Founded in 1791, it is the oldest educational institution in Maine and one of the oldest private schools in North America.  The school sits on a 72-acre, 11-building campus on a hill overlooking the Salmon Falls River, near the border between Maine and New Hampshire.  Approximately 565 students in grades Pre-K through 12 (and Post-Grad) attend this coeducational day school, from approximately 60 communities in the surrounding regions of southern Maine, southeastern New Hampshire and northeastern Massachusetts.",
+          "Salmon Falls River | The Salmon Falls River is a tributary of the Piscataqua River in the U.S. states of Maine and New Hampshire.  It rises at Great East Lake, Newichawannock Canal, and Horn Pond and flows south-southeast for approximately 38 mi , forming the border between York County, Maine, and Strafford County, New Hampshire.",
+          "Vaughan Woods State Park | Vaughan Woods State Park is a public recreation area located along the Salmon Falls River on the western edge of South Berwick, Maine, at the New Hampshire border.  The state park includes the restored Hamilton House, stands of old-growth forest, and 3 mi of hiking trails.  The lands were bequeathed to the state by Elizabeth Vaughan in 1949.",
+          "Horn Pond | Horn Pond is a 227 acre water body located on the border of Acton, Maine, and Wakefield, New Hampshire, in the United States.  The lake is both spring-fed and fed by the outflows of Great East Lake to the north and Wilson Lake to the east.  Horn Pond's outlet is the Salmon Falls River which forms a natural border between Maine and New Hampshire and empties into the Piscataqua River east of Dover, New Hampshire, and ultimately the Gulf of Maine.",
+          "Newichawannock Canal | The Newichawannock Canal is a man-made canal which drains Great East Lake into Horn Pond at the border between Wakefield, New Hampshire, and Acton, Maine, in the northeastern United States.  It is at the head of the Salmon Falls River, which the Abenaki called \"Newichawannock\", meaning \"river with many falls\".  Begun in 1850 by the Great Falls Company to increase the water available for its mills in Somersworth, New Hampshire, the 0.75 mi canal is unusual as it was built for strictly industrial purposes in an area remote from the actual industrial site.  The canal forms the boundary between the states of New Hampshire and Maine, and is spanned by a stone bridge built at the same time.  The canal and bridge, along with related artifacts, were listed on the National Register of Historic Places in 2014.",
+          "Berwick, Maine | Berwick is a town in York County, Maine, United States, situated in the southern part of the state beside the Salmon Falls River.",
+          "Lovell Lake | Lovell Lake is a 538 acre water body in Carroll County in eastern New Hampshire, United States, in the town of Wakefield.  The lake is both spring-fed and fed by small streams including Horse Brook.  The outlet of the lake, located at the village of Sanbornville, is the beginning of the Branch River.  From here, the Branch River flows through Milton where it joins the Salmon Falls River on the Maine-New Hampshire border.  The Salmon Falls River empties into the tidal waters of the Piscataqua River northwest of Portsmouth, New Hampshire, then into the Gulf of Maine."
+        ],
+        "current_output": "Maine"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Maine",
+        "score": 1.0,
+        "generated_query": "Maine",
+        "retrieved_titles": [
+          "Maine School Administrative District 9",
+          "Kenneth Fredette",
+          "Red Main Spring",
+          "Maine Wing Civil Air Patrol",
+          "White Main",
+          "Maine State House",
+          "White Main Spring"
+        ],
+        "summary_2": "Maine",
+        "answer": "Maine",
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "New Hampshire",
+        "score": 1.0,
+        "generated_query": "Maine",
+        "retrieved_titles": [
+          "Maine School Administrative District 9",
+          "Kenneth Fredette",
+          "Red Main Spring",
+          "Maine Wing Civil Air Patrol",
+          "White Main",
+          "Maine State House",
+          "White Main Spring"
+        ],
+        "summary_2": "Maine",
+        "answer": "Maine",
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"This U.S. state's oldest school, Berwick Academy, overlooks the Salmon Falls River which forms part of the state border with New Hampshire. Name the state.\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This U.S. state's oldest school, Berwick Academy, overlooks the Salmon Falls River which forms part of the state border with New Hampshire. Name the state.\",\n  \"passages\": [\n    \"Berwick Academy (Maine) | Berwick Academy is a college preparatory school located in South Berwick, Maine.  Founded in 1791, it is the oldest educational institution in Maine and one of the oldest private schools in North America.  The school sits on a 72-acre, 11-building campus on a hill overlooking the Salmon Falls River, near the border between Maine and New Hampshire.  Approximately 565 students in grades Pre-K through 12 (and Post-Grad) attend this coeducational day school, from approximately 60 communities in the surrounding regions of southern Maine, southeastern New Hampshire and northeastern Massachusetts.\",\n    \"Salmon Falls River | The Salmon Falls River is a tributary of the Piscataqua River in the U.S. states of Maine and New Hampshire.  It rises at Great East Lake, Newichawannock Canal, and Horn Pond and flows south-southeast for approximately 38 mi , forming the border between York County, Maine, and Strafford County, New Hampshire.\",\n    \"Vaughan Woods State Park | Vaughan Woods State Park is a public recreation area located along the Salmon Falls River on the western edge of South Berwick, Maine, at the New Hampshire border.  The state park includes the restored Hamilton House, stands of old-growth forest, and 3 mi of hiking trails.  The lands were bequeathed to the state by Elizabeth Vaughan in 1949.\",\n    \"Horn Pond | Horn Pond is a 227 acre water body located on the border of Acton, Maine, and Wakefield, New Hampshire, in the United States.  The lake is both spring-fed and fed by the outflows of Great East Lake to the north and Wilson Lake to the east.  Horn Pond's outlet is the Salmon Falls River which forms a natural border between Maine and New Hampshire and empties into the Piscataqua River east of Dover, New Hampshire, and ultimately the Gulf of Maine.\",\n    \"Newichawannock Canal | The Newichawannock Canal is a man-made canal which drains Great East Lake into Horn Pond at the border between Wakefield, New Hampshire, and Acton, Maine, in the northeastern United States.  It is at the head of the Salmon Falls River, which the Abenaki called \\\"Newichawannock\\\", meaning \\\"river with many falls\\\".  Begun in 1850 by the Great Falls Company to increase the water available for its mills in Somersworth, New Hampshire, the 0.75 mi canal is unusual as it was built for strictly industrial purposes in an area remote from the actual industrial site.  The canal forms the boundary between the states of New Hampshire and Maine, and is spanned by a stone bridge built at the same time.  The canal and bridge, along with related artifacts, were listed on the National Register of Historic Places in 2014.\",\n    \"Berwick, Maine | Berwick is a town in York County, Maine, United States, situated in the southern part of the state beside the Salmon Falls River.\",\n    \"Lovell Lake | Lovell Lake is a 538 acre water body in Carroll County in eastern New Hampshire, United States, in the town of Wakefield.  The lake is both spring-fed and fed by small streams including Horse Brook.  The outlet of the lake, located at the village of Sanbornville, is the beginning of the Branch River.  From here, the Branch River flows through Milton where it joins the Salmon Falls River on the Maine-New Hampshire border.  The Salmon Falls River empties into the tidal waters of the Piscataqua River northwest of Portsmouth, New Hampshire, then into the Gulf of Maine.\"\n  ],\n  \"current_output\": \"Maine\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Maine\",\n  \"score\": 1.0,\n  \"generated_query\": \"Maine\",\n  \"retrieved_titles\": [\n    \"Maine School Administrative District 9\",\n    \"Kenneth Fredette\",\n    \"Red Main Spring\",\n    \"Maine Wing Civil Air Patrol\",\n    \"White Main\",\n    \"Maine State House\",\n    \"White Main Spring\"\n  ],\n  \"summary_2\": \"Maine\",\n  \"answer\": \"Maine\",\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"New Hampshire\",\n  \"score\": 1.0,\n  \"generated_query\": \"Maine\",\n  \"retrieved_titles\": [\n    \"Maine School Administrative District 9\",\n    \"Kenneth Fredette\",\n    \"Red Main Spring\",\n    \"Maine Wing Civil Air Patrol\",\n    \"White Main\",\n    \"Maine State House\",\n    \"White Main Spring\"\n  ],\n  \"summary_2\": \"Maine\",\n  \"answer\": \"Maine\",\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the passages mention a named school together with a parenthetical or town/state (for example: 'Berwick Academy (Maine)' or 'South Berwick, Maine') and also mention 'Salmon Falls River' or that the river forms a border.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of producing a concise first-hop summary that highlights the supporting passage evidence.\",\n    \"change_rule\": \"Also require the summary to (a) explicitly expose the bridge entity or verification target needed for the next hop (name the school's town/place and the river as they appear in the passages), (b) quote only very short, verbatim evidence snippets already present in the visible passages (e.g., the school name plus the town/state or the phrase mentioning the river border), and (c) provide 1–2 concrete next-hop retrieval directions (short queries or page titles) that will confirm the school's state or the river's boundary. Frame these as suggested retrieval directions, not as an answer or conclusion.\",\n    \"drop_or_avoid_rule\": \"Do not assert a final answer or present any definitive state label. Avoid recommending next hops that treat the river's border statement as conclusive without verification; prefer queries that verify the school's location or the river boundary (town pages, river/border pages).\",\n    \"output_contract\": \"Return a 1–3 sentence summary that: (1) cites the minimal passage evidence (school name and town/state or the river-border phrase), (2) names the bridge entity/entities to verify (town and/or river), and (3) lists 1–2 concise next-hop retrieval queries or page titles to confirm the location. Do not output the final answer.\",\n    \"why_local_transition\": \"This small prompt addition forces the agent to expose the precise bridge entities and concrete verification queries needed for the next retrieval, reducing reliance on an implicit or premature inference from the river mention and preserving the existing summary behavior.\"\n  },\n  \"rationale\": \"The edit is a minimal behavioral change: it preserves the summarization task while adding a requirement to surface explicit verification targets and concrete next-hop queries. It does not produce an answer, copy any gold label, or instruct the agent to copy the target state. It uses only anchors found in the visible inputs, limits quoted evidence to short spans already present, and reframes the next step as retrieval directions so the next agent must confirm the location rather than assume it.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 53,
+    "row_index": 53,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 93,
+    "matched_w_stable_id": "93",
+    "bisection_round": 0,
+    "material_fingerprint": "0556e9f636b3ada9a5ec35f010dbec65f3c5f6c85464c25e38ac94d6d3ce65bf",
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

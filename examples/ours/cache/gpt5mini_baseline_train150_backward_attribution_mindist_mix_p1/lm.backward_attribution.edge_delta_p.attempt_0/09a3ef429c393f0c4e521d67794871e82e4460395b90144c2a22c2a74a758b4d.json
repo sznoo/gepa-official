@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "09a3ef429c393f0c4e521d67794871e82e4460395b90144c2a22c2a74a758b4d",
+  "created_at": "2026-07-14T19:01:54.331384+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are Crazy Magazine and American Nature Association both magazines?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are Crazy Magazine and American Nature Association both magazines?",
+        "summary_1": "No. Crazy Magazine is a magazine, but the American Nature Association is an organization/publisher (not a magazine).",
+        "summary_2": "No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine.",
+        "current_output": "No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are Crazy Magazine and American Nature Association both magazines?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Crazy Magazine and American Nature Association both magazines?\",\n  \"summary_1\": \"No. Crazy Magazine is a magazine, but the American Nature Association is an organization/publisher (not a magazine).\",\n  \"summary_2\": \"No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine.\",\n  \"current_output\": \"No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No. Crazy Magazine is a magazine; the American Nature Association is an organization/publisher, not a magazine.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 and summary_2 both indicate the same binary conclusion about the question (they both assert the same classification for the two entities mentioned in the question).\",\n    \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source and preserve their consensus judgment; retain the agent's existing responsibility to follow the base prompt and place the final answer in the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"Replace any explanatory or multi-clause final answer with a single lowercase one-word binary label that reflects the consensus of the summaries. Produce only that single token (no surrounding words, punctuation, or explanation) as the final answer.\",\n    \"drop_or_avoid_rule\": \"Do not include explanations, supporting sentences, quoted spans from the summaries, capitalized single words, punctuation, or extra tokens. Avoid introducing any new facts or paraphrases beyond selecting the single-word label that matches the summaries.\",\n    \"output_contract\": \"The agent MUST emit exactly one lowercase word (the minimal binary label consistent with the summaries) and nothing else inside the [[ ## answer ## ]] block. No additional text, formatting, or commentary is allowed.\",\n    \"why_local_transition\": \"The source output contains an explanatory sentence; this small behavioral edit forces the final step to output only the minimal binary label the pipeline expects while preserving the summaries as evidence.\"\n  },\n  \"rationale\": \"The change is minimal and targeted: it leaves all evidence use and decision-making unchanged but enforces the required concise output format. This avoids altering upstream reasoning and satisfies the final-answer contract by converting verbose endpoints into the single-token label supported by the visible summaries.\"  \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 118,
+    "row_index": 118,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "58cf77f5ba6ec109314c9a12fcbe1fc0d245b47ad56ab175a130a44984e806eb",
+  "created_at": "2026-07-14T13:37:17.232205+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When both provided summaries clearly identify the same single named entity as the answer and the question is asking for an identification (e.g. starts with 'What', 'Which', or asks 'What consists of...'),",
+            "preserve_rule": "Continue to base the answer on the information in summary_1 and summary_2 and respect the existing input/output interface; keep any prior checks that confirm consistency between summaries.",
+            "change_rule": "If the trigger condition holds, override any tendency to provide explanatory text and instead set the final answer to be exactly the minimal named-entity surface form found in the summaries. Choose the shortest exact surface form that appears in the summaries (prefer identical strings appearing in both summaries). Do not append descriptions, parenthetical clarifications, lists, or supporting sentences.",
+            "drop_or_avoid_rule": "Avoid adding any extra words, qualifiers, parentheses, explanatory clauses, or enumerations (no 'the', no parenthetical location clarifications, no listing of related items). Do not restate the question or include supporting evidence. Do not output multiple candidate answers.",
+            "output_contract": "The produced [[ ## answer ## ]] block must contain only the single minimal answer string (the named-entity surface form taken from the summaries) and nothing else (no punctuation beyond the name, no surrounding text or labels).",
+            "why_local_transition": "The agent currently emits additional descriptive text and related lists; this local change enforces the final-answer contract by reducing the answer to the single minimal entity string already supported by the visible summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What consists of multiple themed areas including Lilliput Land, Gully Town and Safari Kingdom that is located in Warrington, England , it has a park that  is now part of the resort, and there are  three locations opened by Gullivers?",
+        "summary_1": "The Warrington park is Gulliver's World. The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath). Gulliver's Land includes an Adventurers Village now part of the resort.",
+        "summary_2": "The entity is Gulliver's World (one of the Gulliver's theme parks). The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath).",
+        "current_output": "Gulliver's World (the Gulliver's theme park in Warrington). The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When both provided summaries clearly identify the same single named entity as the answer and the question is asking for an identification (e.g. starts with 'What', 'Which', or asks 'What consists of...'),\",\n      \"preserve_rule\": \"Continue to base the answer on the information in summary_1 and summary_2 and respect the existing input/output interface; keep any prior checks that confirm consistency between summaries.\",\n      \"change_rule\": \"If the trigger condition holds, override any tendency to provide explanatory text and instead set the final answer to be exactly the minimal named-entity surface form found in the summaries. Choose the shortest exact surface form that appears in the summaries (prefer identical strings appearing in both summaries). Do not append descriptions, parenthetical clarifications, lists, or supporting sentences.\",\n      \"drop_or_avoid_rule\": \"Avoid adding any extra words, qualifiers, parentheses, explanatory clauses, or enumerations (no 'the', no parenthetical location clarifications, no listing of related items). Do not restate the question or include supporting evidence. Do not output multiple candidate answers.\",\n      \"output_contract\": \"The produced [[ ## answer ## ]] block must contain only the single minimal answer string (the named-entity surface form taken from the summaries) and nothing else (no punctuation beyond the name, no surrounding text or labels).\",\n      \"why_local_transition\": \"The agent currently emits additional descriptive text and related lists; this local change enforces the final-answer contract by reducing the answer to the single minimal entity string already supported by the visible summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What consists of multiple themed areas including Lilliput Land, Gully Town and Safari Kingdom that is located in Warrington, England , it has a park that  is now part of the resort, and there are  three locations opened by Gullivers?\",\n  \"summary_1\": \"The Warrington park is Gulliver's World. The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath). Gulliver's Land includes an Adventurers Village now part of the resort.\",\n  \"summary_2\": \"The entity is Gulliver's World (one of the Gulliver's theme parks). The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath).\",\n  \"current_output\": \"Gulliver's World (the Gulliver's theme park in Warrington). The three Gulliver parks are Gulliver's World (Warrington), Gulliver's Land (Milton Keynes) and Gulliver's Kingdom (Matlock Bath).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Gulliver's World\",\n  \"rationale\": \"Both summaries identify the same named entity; per the ordered rule I output the shortest exact surface form from the summaries and nothing else.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 17,
+    "row_index": 17,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

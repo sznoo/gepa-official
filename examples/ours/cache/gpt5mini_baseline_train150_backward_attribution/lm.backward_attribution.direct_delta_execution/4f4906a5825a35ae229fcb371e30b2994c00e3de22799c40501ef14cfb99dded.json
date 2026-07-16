@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "4f4906a5825a35ae229fcb371e30b2994c00e3de22799c40501ef14cfb99dded",
+  "created_at": "2026-07-14T13:39:15.843534+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the inputs show the agent lacks release-date information for the two named items (summary_1 or current_output contains phrases like \"can't tell\", \"do not include information\", or the agent is asking the user whether to search or provide details) and the question is a binary ordering question of the form \"Did A or B come first?\".",
+            "preserve_rule": "Keep the agent's single-field output interface (produce only the `query` field). Keep concise, search-oriented phrasing and use the exact title tokens that appear in the visible inputs. Maintain neutral, factual tone and avoid adding new clarification questions to the user.",
+            "change_rule": "Instead of asking the user to choose between options or to permit a search, automatically emit one compact second-hop retrieval query that targets the missing supporting fact needed to decide the ordering. Form the query as: \"<second_title> release date\". If the visible inputs indicate a likely medium (e.g., summary_1 or question includes the word \"film\" or the title already appears with a disambiguator), append that disambiguator in parentheses immediately after the title (e.g., \"<title> (film) release date\"). Do not include follow-up instructions, multiple alternative queries, or user-facing questions.",
+            "drop_or_avoid_rule": "Do not ask the user for permission/options, do not present multiple choice prompts, and do not include explanatory prose. Avoid long spans of copied text from the inputs; produce a succinct search query only.",
+            "output_contract": "Return exactly one short search-query string suitable for a retrieval system. The string must contain the target title as it appears in the inputs and the phrase \"release date\"; it may optionally include a parenthetical disambiguator already present in the inputs (e.g., \"(film)\"). No extra punctuation, questions, or sentences allowed.",
+            "why_local_transition": "The pipeline needs a focused second-hop retrieval query to fetch the release date for one of the two titles so the comparison can be decided. This delta turns a user-deferring prompt into a direct, compact retrieval query for the missing date (minimal, targeted change)."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the user question asks to compare two works (e.g. 'Did X or Y come first?') and the agent's prior output either targeted only one title or asked the user to provide passages instead of issuing a retrieval.",
+            "preserve_rule": "Keep the agent's concise, retrieval-query style and continue to use explicit title strings from the user's question.",
+            "change_rule": "If the previous query targeted only one title or sought clarification, replace it with a single compact retrieval query that includes both titles from the question plus an explicit intent token such as 'release date' or 'release year' (optionally adding a short comparator phrase). Produce the query as one short line suitable for a search system.",
+            "drop_or_avoid_rule": "Do not ask the user for permission or for additional passages, do not attempt to answer or summarize, and avoid verbose clarifying questions or meta-commentary. Do not introduce new specific type qualifiers (e.g., '(film)') unless they already appear in the visible inputs.",
+            "output_contract": "Emit exactly one short query string (one line, <= ~10 words) that contains both titles and an explicit release-date intent. Example form: 'Mala Mala Train Life release dates which came first?'.",
+            "why_local_transition": "The prior query targeted only one title; forcing a single compact query that mentions both titles and release-date intent will retrieve documents for both works so the pipeline can compare release years and determine which came first."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Did Mala Mala or Train Life come first?",
+        "summary_1": "I can't tell which came first because the provided passages do not include information about either \"Mala Mala\" or \"Train Life.\" Please provide passages or context (e.g., whether these are films, songs, albums, or games) or allow a web search so I can compare their release dates.",
+        "current_output": {
+          "query": "Which do you prefer: provide the passages or release details for each title, confirm the exact type/titles, or let me perform a web search to find and compare their release dates? If you choose to provide details, paste them here; if web search is OK, I will look up both items and report which came first."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the inputs show the agent lacks release-date information for the two named items (summary_1 or current_output contains phrases like \\\"can't tell\\\", \\\"do not include information\\\", or the agent is asking the user whether to search or provide details) and the question is a binary ordering question of the form \\\"Did A or B come first?\\\".\",\n      \"preserve_rule\": \"Keep the agent's single-field output interface (produce only the `query` field). Keep concise, search-oriented phrasing and use the exact title tokens that appear in the visible inputs. Maintain neutral, factual tone and avoid adding new clarification questions to the user.\",\n      \"change_rule\": \"Instead of asking the user to choose between options or to permit a search, automatically emit one compact second-hop retrieval query that targets the missing supporting fact needed to decide the ordering. Form the query as: \\\"<second_title> release date\\\". If the visible inputs indicate a likely medium (e.g., summary_1 or question includes the word \\\"film\\\" or the title already appears with a disambiguator), append that disambiguator in parentheses immediately after the title (e.g., \\\"<title> (film) release date\\\"). Do not include follow-up instructions, multiple alternative queries, or user-facing questions.\",\n      \"drop_or_avoid_rule\": \"Do not ask the user for permission/options, do not present multiple choice prompts, and do not include explanatory prose. Avoid long spans of copied text from the inputs; produce a succinct search query only.\",\n      \"output_contract\": \"Return exactly one short search-query string suitable for a retrieval system. The string must contain the target title as it appears in the inputs and the phrase \\\"release date\\\"; it may optionally include a parenthetical disambiguator already present in the inputs (e.g., \\\"(film)\\\"). No extra punctuation, questions, or sentences allowed.\",\n      \"why_local_transition\": \"The pipeline needs a focused second-hop retrieval query to fetch the release date for one of the two titles so the comparison can be decided. This delta turns a user-deferring prompt into a direct, compact retrieval query for the missing date (minimal, targeted change).\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the user question asks to compare two works (e.g. 'Did X or Y come first?') and the agent's prior output either targeted only one title or asked the user to provide passages instead of issuing a retrieval.\",\n      \"preserve_rule\": \"Keep the agent's concise, retrieval-query style and continue to use explicit title strings from the user's question.\",\n      \"change_rule\": \"If the previous query targeted only one title or sought clarification, replace it with a single compact retrieval query that includes both titles from the question plus an explicit intent token such as 'release date' or 'release year' (optionally adding a short comparator phrase). Produce the query as one short line suitable for a search system.\",\n      \"drop_or_avoid_rule\": \"Do not ask the user for permission or for additional passages, do not attempt to answer or summarize, and avoid verbose clarifying questions or meta-commentary. Do not introduce new specific type qualifiers (e.g., '(film)') unless they already appear in the visible inputs.\",\n      \"output_contract\": \"Emit exactly one short query string (one line, <= ~10 words) that contains both titles and an explicit release-date intent. Example form: 'Mala Mala Train Life release dates which came first?'.\",\n      \"why_local_transition\": \"The prior query targeted only one title; forcing a single compact query that mentions both titles and release-date intent will retrieve documents for both works so the pipeline can compare release years and determine which came first.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Did Mala Mala or Train Life come first?\",\n  \"summary_1\": \"I can't tell which came first because the provided passages do not include information about either \\\"Mala Mala\\\" or \\\"Train Life.\\\" Please provide passages or context (e.g., whether these are films, songs, albums, or games) or allow a web search so I can compare their release dates.\",\n  \"current_output\": {\n    \"query\": \"Which do you prefer: provide the passages or release details for each title, confirm the exact type/titles, or let me perform a web search to find and compare their release dates? If you choose to provide details, paste them here; if web search is OK, I will look up both items and report which came first.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Mala Mala Train Life release date\"\n  },\n  \"rationale\": \"Delta 0 identified missing release-date info for the binary ordering question and required a release-date query; Delta 1 then replaced a single-title query with a compact two-title query mentioning both titles and the release-date intent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 75,
+    "row_index": 75,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

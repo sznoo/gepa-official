@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "6483d7200206097499d8275aedd5aba9c6db3736fe75e95e0e63146c29a665f8",
+  "created_at": "2026-07-15T22:04:26.950856+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+      "current_output": "Jooheon",
+      "upstream_context": {
+        "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+        "summary_1": "Jooheon (Monsta X: \"Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\").",
+        "hop2_query": "Monsta X members Jooheon formation 2015",
+        "hop2_titles": [
+          "Monsta X",
+          "Lee Joo-heon",
+          "Monsta X discography",
+          "Monsta Island Czars discography",
+          "Monsta Island Czars",
+          "D.R.I. (band)",
+          "Escape from Monsta Island!"
+        ],
+        "hop2_docs": [
+          "Monsta X | Monsta X (Hangul: 몬스타엑스; often stylized as MONSTA X) is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015.  The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.",
+          "Lee Joo-heon | Lee Joo-heon (born Lee Ho-joon on October 6, 1994), better known by the mononym Jooheon, is a South Korean rapper and songwriter.  He is a member of South Korean boy group Monsta X, formed during the 2014 Mnet's survival show \"No.Mercy\".",
+          "Monsta X discography | The South Korean hip-hop boy group Monsta X, produced and managed by Starship Entertainment debuted in 2015 and have currently released one studio album, four extended plays, one compilation album, one video album, over ten music videos and eleven singles.  The group and members have also participated in singing nine soundtracks for various Korean dramas.",
+          "Monsta Island Czars discography | This is the solo and group discography of the legendary underground hip hop collective Monsta Island Czars.  Included are the solo studio albums, EPs and compilations of the various group members and affiliates.  Although Monsta Island Czars aren't formed until after the death of Subroc, KMD's albums Mr. Hood and Black Bastards are stylistic precursors to what will appear in the Monsta Island Czars catalog.",
+          "Monsta Island Czars | Monsta Island Czars is a hip-hop collective based in New York City, New York, United States most notable for members MF Grimm and MF Doom.",
+          "D.R.I. (band) | D.R.I. (abbreviation for Dirty Rotten Imbeciles) is an American crossover thrash band that formed in Houston, Texas in 1982.  As of 2015, the band comprises two of its founding members, vocalist Kurt Brecht and guitarist Spike Cassidy, as well as drummer Walter \"Monsta\" Ryan and bassist Harald Oimoen.",
+          "Escape from Monsta Island! | Escape from Monsta Island!  is a studio album released by the Monsta Island Czars, a collective notably featuring MF Doom under his King Geedorah alias.  Although the Monsta Island Czars was founded by MF Grimm, he is absent on the entire album due to his incarceration at the time of its production and release."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Lee Joo-heon",
+          "sent_id": 0,
+          "sentence": "Lee Joo-heon (born Lee Ho-joon on October 6, 1994), better known by the mononym Jooheon, is a South Korean rapper and songwriter."
+        },
+        {
+          "title": "Lee Joo-heon",
+          "sent_id": 1,
+          "sentence": "He is a member of South Korean boy group Monsta X, formed during the 2014 Mnet's survival show \"No.Mercy\"."
+        },
+        {
+          "title": "Monsta X",
+          "sent_id": 0,
+          "sentence": "Monsta X (Hangul: 몬스타엑스; often stylized as MONSTA X) is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015."
+        },
+        {
+          "title": "Monsta X",
+          "sent_id": 1,
+          "sentence": "The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\n Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\n\nCurrent agent output:\n\"Jooheon\"\n\nActual upstream context:\n{\n  \"question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n  \"summary_1\": \"Jooheon (Monsta X: \\\"Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\\\").\",\n  \"hop2_query\": \"Monsta X members Jooheon formation 2015\",\n  \"hop2_titles\": [\n    \"Monsta X\",\n    \"Lee Joo-heon\",\n    \"Monsta X discography\",\n    \"Monsta Island Czars discography\",\n    \"Monsta Island Czars\",\n    \"D.R.I. (band)\",\n    \"Escape from Monsta Island!\"\n  ],\n  \"hop2_docs\": [\n    \"Monsta X | Monsta X (Hangul: 몬스타엑스; often stylized as MONSTA X) is a South Korean boy group formed by Starship Entertainment through the survival show \\\"No.Mercy\\\" on Mnet in 2015.  The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\",\n    \"Lee Joo-heon | Lee Joo-heon (born Lee Ho-joon on October 6, 1994), better known by the mononym Jooheon, is a South Korean rapper and songwriter.  He is a member of South Korean boy group Monsta X, formed during the 2014 Mnet's survival show \\\"No.Mercy\\\".\",\n    \"Monsta X discography | The South Korean hip-hop boy group Monsta X, produced and managed by Starship Entertainment debuted in 2015 and have currently released one studio album, four extended plays, one compilation album, one video album, over ten music videos and eleven singles.  The group and members have also participated in singing nine soundtracks for various Korean dramas.\",\n    \"Monsta Island Czars discography | This is the solo and group discography of the legendary underground hip hop collective Monsta Island Czars.  Included are the solo studio albums, EPs and compilations of the various group members and affiliates.  Although Monsta Island Czars aren't formed until after the death of Subroc, KMD's albums Mr. Hood and Black Bastards are stylistic precursors to what will appear in the Monsta Island Czars catalog.\",\n    \"Monsta Island Czars | Monsta Island Czars is a hip-hop collective based in New York City, New York, United States most notable for members MF Grimm and MF Doom.\",\n    \"D.R.I. (band) | D.R.I. (abbreviation for Dirty Rotten Imbeciles) is an American crossover thrash band that formed in Houston, Texas in 1982.  As of 2015, the band comprises two of its founding members, vocalist Kurt Brecht and guitarist Spike Cassidy, as well as drummer Walter \\\"Monsta\\\" Ryan and bassist Harald Oimoen.\",\n    \"Escape from Monsta Island! | Escape from Monsta Island!  is a studio album released by the Monsta Island Czars, a collective notably featuring MF Doom under his King Geedorah alias.  Although the Monsta Island Czars was founded by MF Grimm, he is absent on the entire album due to his incarceration at the time of its production and release.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Lee Joo-heon\",\n    \"sent_id\": 0,\n    \"sentence\": \"Lee Joo-heon (born Lee Ho-joon on October 6, 1994), better known by the mononym Jooheon, is a South Korean rapper and songwriter.\"\n  },\n  {\n    \"title\": \"Lee Joo-heon\",\n    \"sent_id\": 1,\n    \"sentence\": \"He is a member of South Korean boy group Monsta X, formed during the 2014 Mnet's survival show \\\"No.Mercy\\\".\"\n  },\n  {\n    \"title\": \"Monsta X\",\n    \"sent_id\": 0,\n    \"sentence\": \"Monsta X (Hangul: 몬스타엑스; often stylized as MONSTA X) is a South Korean boy group formed by Starship Entertainment through the survival show \\\"No.Mercy\\\" on Mnet in 2015.\"\n  },\n  {\n    \"title\": \"Monsta X\",\n    \"sent_id\": 1,\n    \"sentence\": \"The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary1 identified Jooheon among the names. Lee Joo-heon (Jooheon) is a South Korean rapper and songwriter and is a member of Monsta X. Monsta X was formed by Starship Entertainment through the survival show \\\"No.Mercy\\\" on Mnet in 2015 and the group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\",\n  \"rationale\": \"Combine summary1's mention of Jooheon with the Lee Joo-heon page confirming his identity and membership, and the Monsta X page confirming the group's 2015 formation and listing all seven members. These visible facts are preserved to support the final answer without producing the final answer itself.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 85,
+    "row_index": 85
+  }
+}

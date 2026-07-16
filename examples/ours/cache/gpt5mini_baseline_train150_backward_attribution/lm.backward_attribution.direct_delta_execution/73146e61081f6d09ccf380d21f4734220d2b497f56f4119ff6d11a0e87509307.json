@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "73146e61081f6d09ccf380d21f4734220d2b497f56f4119ff6d11a0e87509307",
+  "created_at": "2026-07-14T13:44:37.237302+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the current agent output is a multi-step plan or contains numbered steps (e.g. '1)', '2)', multiple lines of instructions) instead of a single compact retrieval query.",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as context. Keep any useful search terms already present (for example the album title shown in the question: \"I'm Still Here\") and preserve the idea of first finding the artist and then finding the writer of that artist's debut song.",
+            "change_rule": "Instead of returning a multi-step plan or explanatory text, produce exactly one concise, single-line second-hop retrieval query string. Format rules: (a) If an artist name is already present in the visible inputs, substitute that artist name directly into the single-line query (use the exact token as provided). (b) If no artist name is present, produce a single combined query that will find the artist who released \"I'm Still Here\" and the writer of that artist's debut song in one retrieval (do not emit multiple steps). Use quoted phrases and short connector words (AND, OR) as needed. Do not add additional explanatory text, examples, or numbered steps.",
+            "drop_or_avoid_rule": "Do not output multi-step instructions, numbered lists, or explanatory text. Do not output the final answer, any target-only entity names that do not already appear in visible inputs, or long verbatim spans from hidden target content. Avoid leaking labels or gold information. Do not instruct the caller to 'run query 1 then query 2' — emit a single query string only.",
+            "output_contract": "Return a single field `query` whose value is a single-line search string (no trailing commentary). The string must be concise (preferably one sentence or fragment, no newlines). If an artist token appears in visible inputs, the query may use that token; otherwise the query should include the album title \"I'm Still Here\" plus short phrases to locate the artist's debut song and its writer (e.g. quoted album title + keywords such as debut album, debut song, written by, songwriter).",
+            "why_local_transition": "The baseline produced a verbose, multi-step retrieval plan; the pipeline requires a single compact second-hop retrieval query. This minimal edit compresses the plan into one focused query that the retrieval component can run directly while preserving the original search intent and visible anchor (the album title)."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who wrote the debut song on the debut album of the artist who also released the album \"I'm Still Here\"?",
+        "summary_1": "Insufficient information in the provided passages to answer. None of the passages link any artist to an album titled \"I'm Still Here,\" so the writer of that artist's debut-song cannot be determined from the given text.",
+        "current_output": {
+          "query": "1) Find the artist:\n\"I'm Still Here\" album \"I'm Still Here\" album \"released\" \"album\" discography\n\nor more targeted:\n\"\"I'm Still Here\" album\" \"released\" \"album title\" \"discography\" \"album 'I'm Still Here'\"\n\n2) After identifying the artist (replace ARTIST below with the artist name), find the debut song and writer:\nARTIST \"debut album\" track listing \"tracklist\" \"debut\" \"written by\" OR \"written\" OR \"songwriter\"\n\nExample (if artist were X):\n\"X\" \"debut album\" \"track listing\" \"written by\" \"songwriter\"\n\nUse the above in sequence: first run query 1 to determine the artist who released the album \"I'm Still Here\", then run query 2 with that artist name to find who wrote the debut song on that artist's debut album."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the current agent output is a multi-step plan or contains numbered steps (e.g. '1)', '2)', multiple lines of instructions) instead of a single compact retrieval query.\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as context. Keep any useful search terms already present (for example the album title shown in the question: \\\"I'm Still Here\\\") and preserve the idea of first finding the artist and then finding the writer of that artist's debut song.\",\n      \"change_rule\": \"Instead of returning a multi-step plan or explanatory text, produce exactly one concise, single-line second-hop retrieval query string. Format rules: (a) If an artist name is already present in the visible inputs, substitute that artist name directly into the single-line query (use the exact token as provided). (b) If no artist name is present, produce a single combined query that will find the artist who released \\\"I'm Still Here\\\" and the writer of that artist's debut song in one retrieval (do not emit multiple steps). Use quoted phrases and short connector words (AND, OR) as needed. Do not add additional explanatory text, examples, or numbered steps.\",\n      \"drop_or_avoid_rule\": \"Do not output multi-step instructions, numbered lists, or explanatory text. Do not output the final answer, any target-only entity names that do not already appear in visible inputs, or long verbatim spans from hidden target content. Avoid leaking labels or gold information. Do not instruct the caller to 'run query 1 then query 2' — emit a single query string only.\",\n      \"output_contract\": \"Return a single field `query` whose value is a single-line search string (no trailing commentary). The string must be concise (preferably one sentence or fragment, no newlines). If an artist token appears in visible inputs, the query may use that token; otherwise the query should include the album title \\\"I'm Still Here\\\" plus short phrases to locate the artist's debut song and its writer (e.g. quoted album title + keywords such as debut album, debut song, written by, songwriter).\",\n      \"why_local_transition\": \"The baseline produced a verbose, multi-step retrieval plan; the pipeline requires a single compact second-hop retrieval query. This minimal edit compresses the plan into one focused query that the retrieval component can run directly while preserving the original search intent and visible anchor (the album title).\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who wrote the debut song on the debut album of the artist who also released the album \\\"I'm Still Here\\\"?\",\n  \"summary_1\": \"Insufficient information in the provided passages to answer. None of the passages link any artist to an album titled \\\"I'm Still Here,\\\" so the writer of that artist's debut-song cannot be determined from the given text.\",\n  \"current_output\": {\n    \"query\": \"1) Find the artist:\\n\\\"I'm Still Here\\\" album \\\"I'm Still Here\\\" album \\\"released\\\" \\\"album\\\" discography\\n\\nor more targeted:\\n\\\"\\\"I'm Still Here\\\" album\\\" \\\"released\\\" \\\"album title\\\" \\\"discography\\\" \\\"album 'I'm Still Here'\\\"\\n\\n2) After identifying the artist (replace ARTIST below with the artist name), find the debut song and writer:\\nARTIST \\\"debut album\\\" track listing \\\"tracklist\\\" \\\"debut\\\" \\\"written by\\\" OR \\\"written\\\" OR \\\"songwriter\\\"\\n\\nExample (if artist were X):\\n\\\"X\\\" \\\"debut album\\\" \\\"track listing\\\" \\\"written by\\\" \\\"songwriter\\\"\\n\\nUse the above in sequence: first run query 1 to determine the artist who released the album \\\"I'm Still Here\\\", then run query 2 with that artist name to find who wrote the debut song on that artist's debut album.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"\\\"I'm Still Here\\\" album artist AND \\\"debut album\\\" \\\"debut song\\\" (\\\"written by\\\" OR \\\"songwriter\\\")\"\n  },\n  \"rationale\": \"Replaced the multi-step plan with a single-line combined retrieval query using the quoted album title and keywords to locate the artist and the writer of that artist's debut song, per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 143,
+    "row_index": 143,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

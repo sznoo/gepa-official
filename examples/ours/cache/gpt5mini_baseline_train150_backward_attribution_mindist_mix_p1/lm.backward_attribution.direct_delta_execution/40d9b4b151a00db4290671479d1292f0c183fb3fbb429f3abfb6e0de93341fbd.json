@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "40d9b4b151a00db4290671479d1292f0c183fb3fbb429f3abfb6e0de93341fbd",
+  "created_at": "2026-07-14T19:01:55.432274+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks for a biographical fact (e.g., birthplace, native city) about a named person who is explicitly identified in the visible summaries (for example, a summary names 'Billy Hamilton') but none of the summaries state that biographical fact explicitly.",
+            "preserve_rule": "Continue to treat the visible summaries as the primary evidence source. Do not contradict or ignore explicit statements in the summaries. If a summary explicitly says the fact cannot be determined, keep that as the default.",
+            "change_rule": "When the trigger condition holds, permit the agent to use widely known, stable biographical facts from general knowledge as a fallback only if the named person in the summaries is unambiguous (a full name or an otherwise clearly unique identifier appears in the summaries) and the fact requested is a stable, non-controversial datum (birthplace/native city). If using such a fallback, produce only the minimal place name required by the question (no extra explanation) and do not invent or guess when uncertain.",
+            "drop_or_avoid_rule": "Do not invent or fabricate a place if the agent is not reasonably confident. Do not expand the answer with supporting text, citations, or reasoning in the final answer block. Do not attempt to reproduce or reference hidden/evaluation-only data. If confidence in a fallback general-knowledge fact is low, revert to the preserved default output (e.g., 'Cannot be determined from the provided passages.').",
+            "output_contract": "Maintain the original answer field format. The [[ ## answer ## ]] block must contain exactly one minimal string: either the single place-name (city) if the agent supplies a confident fallback per the change_rule, or the unchanged default refusal text when the summaries do not permit determination and no confident fallback exists.",
+            "why_local_transition": "This small change lets the final-stage agent answer birthplace/native-city questions when the summaries clearly identify a specific, unambiguous person but omit the birthplace, by allowing a safe, conservative fallback to well-known biographical facts. It preserves reliance on the summaries and avoids broad permission to hallucinate."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?",
+        "summary_1": "The passages show the record holder is Billy Hamilton, but they do not state his native city—so the native city cannot be determined from the provided passages.",
+        "summary_2": "Not available / cannot be determined from the provided passages.",
+        "current_output": "Cannot be determined from the provided passages."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks for a biographical fact (e.g., birthplace, native city) about a named person who is explicitly identified in the visible summaries (for example, a summary names 'Billy Hamilton') but none of the summaries state that biographical fact explicitly.\",\n      \"preserve_rule\": \"Continue to treat the visible summaries as the primary evidence source. Do not contradict or ignore explicit statements in the summaries. If a summary explicitly says the fact cannot be determined, keep that as the default.\",\n      \"change_rule\": \"When the trigger condition holds, permit the agent to use widely known, stable biographical facts from general knowledge as a fallback only if the named person in the summaries is unambiguous (a full name or an otherwise clearly unique identifier appears in the summaries) and the fact requested is a stable, non-controversial datum (birthplace/native city). If using such a fallback, produce only the minimal place name required by the question (no extra explanation) and do not invent or guess when uncertain.\",\n      \"drop_or_avoid_rule\": \"Do not invent or fabricate a place if the agent is not reasonably confident. Do not expand the answer with supporting text, citations, or reasoning in the final answer block. Do not attempt to reproduce or reference hidden/evaluation-only data. If confidence in a fallback general-knowledge fact is low, revert to the preserved default output (e.g., 'Cannot be determined from the provided passages.').\",\n      \"output_contract\": \"Maintain the original answer field format. The [[ ## answer ## ]] block must contain exactly one minimal string: either the single place-name (city) if the agent supplies a confident fallback per the change_rule, or the unchanged default refusal text when the summaries do not permit determination and no confident fallback exists.\",\n      \"why_local_transition\": \"This small change lets the final-stage agent answer birthplace/native-city questions when the summaries clearly identify a specific, unambiguous person but omit the birthplace, by allowing a safe, conservative fallback to well-known biographical facts. It preserves reliance on the summaries and avoids broad permission to hallucinate.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?\",\n  \"summary_1\": \"The passages show the record holder is Billy Hamilton, but they do not state his native city—so the native city cannot be determined from the provided passages.\",\n  \"summary_2\": \"Not available / cannot be determined from the provided passages.\",\n  \"current_output\": \"Cannot be determined from the provided passages.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Taylorsville\",\n  \"rationale\": \"Summary_1 names Billy Hamilton but omits his native city; under the ordered delta, a confident, well-known birthplace fallback was allowed, so the city name was returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 139,
+    "row_index": 139,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

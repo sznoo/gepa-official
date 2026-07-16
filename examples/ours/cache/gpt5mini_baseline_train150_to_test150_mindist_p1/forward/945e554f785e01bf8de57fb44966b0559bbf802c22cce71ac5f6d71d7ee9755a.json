@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "945e554f785e01bf8de57fb44966b0559bbf802c22cce71ac5f6d71d7ee9755a",
+  "created_at": "2026-07-14T15:06:59.539568+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "answer": "Susan Carland",
+    "context": {
+      "title": [
+        "Andy Cowan",
+        "The Dream with Roy and HG",
+        "Roy and HG's Russian Revolution",
+        "Susan Carland",
+        "The Ice Dream with Roy and HG",
+        "Hazel Treweek",
+        "Salam Cafe",
+        "Rove LA",
+        "The Glass House (2001 TV series)",
+        "In Siberia Tonight"
+      ],
+      "sentences": [
+        [
+          "Andy Cowan (born Andrew Glenn Cowan) is an American writer and script consultant for television and other media, including two of the five best television series of all time, as compiled in 2012 by ABC News and \"People\" magazine, and the number two and number eight best written series as voted on by the Writers Guild of America in 2013 (101 Best Written TV Series).",
+          " He's hosted the radio comedy talk show, \"Up & Down Guys\", on KPFK 90.7 FM in Los Angeles.",
+          " He has appeared on several television shows, and hosted the hour-long talk show pilot, \"Another Talk Show!",
+          " with Andy Cowan\", featuring Jason Alexander and Sheila Raye Charles.",
+          " and was guest commentator on KTTV's \"Good Day L.A.\" He has written humor columns for the \"Los Angeles Times\" newspaper and magazine, \"Salon\", special material for \"The New Yorker\", and several songs, one of which won international song contest nods.",
+          " He's a voiceover artist, and sings in jazz clubs throughout Los Angeles."
+        ],
+        [
+          "The Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Sydney 2000 and Athens 2004 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Roy and HG's Russian Revolution was a sports/comedy talk show, broadcast every night during the Sochi 2014 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam."
+        ],
+        [
+          "The Ice Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Salt Lake 2002, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Hazel Treweek, OAM, MBE was an Australian academic, teacher and Shakespearean scholar.",
+          " She was married to Athanasius \"Ath\" Treweek, an Australian academic, linguist and World War II cryptographer/codebreaker."
+        ],
+        [
+          "Salam Cafe is an Australian comedy talk show.",
+          " Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.",
+          " Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life."
+        ],
+        [
+          "Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.",
+          " The show is hosted by Rove McManus and is set in Los Angeles.",
+          " The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.",
+          " The show was picked up for a two-year run on the Fox8 subscription channel."
+        ],
+        [
+          "The Glass House was a half-hour Australian comedy talk show which screened on the ABC from 2001 to 2006."
+        ],
+        [
+          "In Siberia Tonight is an Australian comedy talk show which aired on SBS from 2005 to 2006.",
+          " The program was hosted by comedian Steve Abbott and was themed around his Russian heritage.",
+          " The program commonly featured The Kransky Sisters, Indira Naidoo, Steves' mum Evelyn Abbott and Marcello Maio."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Salam Cafe",
+        "Salam Cafe",
+        "Susan Carland"
+      ],
+      "sent_id": [
+        0,
+        2,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nProduce a single, concise, structured first-hop evidence report as the `summary`. The summary must do all of the following and only include content that helps determine what to fetch next:\n\n- Enumerate concrete facts found in the provided passages. For each fact include the passage source label and either a very short quoted fragment (up to about 15 words) when a decisive short fact appears or a brief paraphrase otherwise. Keep each fact to one short line.\n\n- Explicitly identify the bridge entity(ies) and any missing or ambiguous fact(s) that prevent answering the question from the given passages. If a name or identifier in the question corresponds to multiple candidate pages present in `passages`, list every candidate variant and mark the name as ambiguous; do not choose between them.\n\n- Prescribe concrete, prioritized next-hop retrieval targets to resolve each missing or ambiguous element. For each target, specify which page(s) or disambiguation page to fetch and what exact section, keyword, or datum to extract (for example: specific field such as birth year, office held, list membership, dates, or the section heading to check). Prioritize targets (1, 2, 3...) when helpful.\n\n- Only produce a final answer in `summary` if every required fact for every entity is present and unambiguous in the supplied passages; otherwise do not produce a final answer and focus on retrieval guidance.\n\nFormatting and content constraints:\n- Keep the summary concise (a short paragraph or a few short bullet-like lines).\n- Produce only the single output field `summary` and nothing else.\n- Preserve source-linked evidence; do not assert facts without a passage label.\n- Do not invent facts or assume which ambiguous candidate is intended.\n- Avoid copying long verbatim spans; use short quoted fragments when decisive and paraphrase otherwise.\n- When an expected authoritative page is missing from `passages`, note that absence and include that page title as a next-hop retrieval target.\n\nInput: fields `question` and `passages`. Output: one field `summary` meeting the requirements above.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nYou are to produce exactly one compact second-hop retrieval query that targets the missing bridge or supporting evidence referenced by summary_1. Follow these operational rules when constructing the single `query` string:\n\n- Use visible anchor tokens from `question` or `summary_1` (named works, titles, artist names, years or other identifiers only if present) and append a short retrieval cue naming the bridge sought (e.g., artist, album, recording, genre, season count, passage, supporting quote).\n- Emit one concise line (one string assigned to `query`), roughly ≤ 10–12 words, formatted either as a short interrogative that names the anchors or as a compact keyword string (anchors + bridge keywords).\n- If summary_1 explicitly requests a missing attribute or passage, emit the focused retrieval query rather than asking for clarification.\n- Do not include answers, conclusions, enumerations, provenance notes, speculative language, or user-facing explanations; do not invent entities or add tokens that are not present in the inputs.\n- Include year or other identifier tokens only if they appear in the provided inputs and help disambiguate.\n- Keep wording retrieval-oriented and terse. Preserve the fallback that if retrieval using this query later fails, downstream steps may request clarification.\n\nOutput contract: produce exactly one field `query` whose value is the single compact retrieval query line described above.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nInstructions for producing `summary` (single field only):\n1. Merge the first-hop `context` and the second-hop `passages` into one compact integrated `summary` that preserves the primary answer name(s) and only includes passage-supported facts needed to justify or disambiguate that answer.\n2. If `context` already contains a concise answer (a short sentence or a name), keep that content as the first sentence of `summary` when it is consistent with facts in `passages`. If `context` lacks a concise answer, create a concise first sentence that names the primary answer(s), using the canonical labels from `context` when available and otherwise from `passages`.\n3. Expand the summary only when `passages` provide explicit, matching second-hop evidence about one or more named entities referenced in `context`. When expansion is appropriate, append at most one short supporting sentence per named entity. Each supporting sentence must begin with the entity's full name as shown in the inputs and paraphrase up to a few core attributes that are directly present in the `passages` (examples: nationality, a notable award/status, a current affiliation/team, a birth date, membership/partnership relation, or an explicit founding/formation fact).\n4. Keep `summary` concise: typically 1–2 sentences for a single entity; allow up to 3 sentences only when multiple distinct named entities each require one supporting sentence. Prioritize the facts most directly necessary to answer the `question`.\n5. Only assert facts that are directly supported by the provided `passages` or `context`. Do not introduce new entities, dates, awards, affiliations, roles, or causal claims that are not present in the inputs.\n6. Prefer paraphrase over long verbatim copying. Use short quoted phrases only when the exact short phrase (roughly ≤10 words) appears in the `passages` and quoting preserves clarity.\n7. If `context` and `passages` conflict, prefer facts that are explicitly present in the `passages`: update the concise answer to match passage-supported content rather than preserving a contradicted `context`.\n8. If the retrieved `passages` do not supply explicit supporting evidence for named entities in `context`, keep the `summary` concise and do not expand or speculate.\n9. Output exactly one field named `summary` whose value is the integrated post-retrieval summary text. Do not output additional fields, metadata, or commentary.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nFollow these operational rules when producing `answer`:\n- Use only the content of `question`, `summary_1`, and `summary_2` as your evidential basis. Do not introduce new facts or external information.\n- If both `summary_1` and `summary_2` clearly and unambiguously support the same binary (yes/no) conclusion to the question, set `answer` to exactly one lowercase token: yes or no. The `answer` field must contain nothing else (no punctuation, capitalization, quotes, explanation, or additional text).\n- Decide which token to emit by aggregating the visible summaries only. Treat `summary_2` as the later integrated evidence; do not let unresolved language in `summary_1` alone prevent emitting the single-token result if both summaries now unambiguously agree.\n- If the summaries conflict, are ambiguous, incomplete, hedged such that the relation is unresolved, or if the question is non-binary, do not apply the single-token rule; instead follow the agent's existing final-answer fallback behavior for unresolved or non-binary cases (which may produce a fuller response or an uncertainty signal).\n\nProduce only the `answer` field as specified."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "822bbea7ca75",
+    "rerun_from": null,
+    "question": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "gold_answer": "Susan Carland",
+    "context": {
+      "title": [
+        "Andy Cowan",
+        "The Dream with Roy and HG",
+        "Roy and HG's Russian Revolution",
+        "Susan Carland",
+        "The Ice Dream with Roy and HG",
+        "Hazel Treweek",
+        "Salam Cafe",
+        "Rove LA",
+        "The Glass House (2001 TV series)",
+        "In Siberia Tonight"
+      ],
+      "sentences": [
+        [
+          "Andy Cowan (born Andrew Glenn Cowan) is an American writer and script consultant for television and other media, including two of the five best television series of all time, as compiled in 2012 by ABC News and \"People\" magazine, and the number two and number eight best written series as voted on by the Writers Guild of America in 2013 (101 Best Written TV Series).",
+          " He's hosted the radio comedy talk show, \"Up & Down Guys\", on KPFK 90.7 FM in Los Angeles.",
+          " He has appeared on several television shows, and hosted the hour-long talk show pilot, \"Another Talk Show!",
+          " with Andy Cowan\", featuring Jason Alexander and Sheila Raye Charles.",
+          " and was guest commentator on KTTV's \"Good Day L.A.\" He has written humor columns for the \"Los Angeles Times\" newspaper and magazine, \"Salon\", special material for \"The New Yorker\", and several songs, one of which won international song contest nods.",
+          " He's a voiceover artist, and sings in jazz clubs throughout Los Angeles."
+        ],
+        [
+          "The Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Sydney 2000 and Athens 2004 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Roy and HG's Russian Revolution was a sports/comedy talk show, broadcast every night during the Sochi 2014 Olympics, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam."
+        ],
+        [
+          "The Ice Dream with Roy and HG was a sports/comedy talk show, broadcast every night during the Salt Lake 2002, presented by Australian comedy duo Roy and HG."
+        ],
+        [
+          "Hazel Treweek, OAM, MBE was an Australian academic, teacher and Shakespearean scholar.",
+          " She was married to Athanasius \"Ath\" Treweek, an Australian academic, linguist and World War II cryptographer/codebreaker."
+        ],
+        [
+          "Salam Cafe is an Australian comedy talk show.",
+          " Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.",
+          " Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life."
+        ],
+        [
+          "Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.",
+          " The show is hosted by Rove McManus and is set in Los Angeles.",
+          " The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.",
+          " The show was picked up for a two-year run on the Fox8 subscription channel."
+        ],
+        [
+          "The Glass House was a half-hour Australian comedy talk show which screened on the ABC from 2001 to 2006."
+        ],
+        [
+          "In Siberia Tonight is an Australian comedy talk show which aired on SBS from 2005 to 2006.",
+          " The program was hosted by comedian Steve Abbott and was themed around his Russian heritage.",
+          " The program commonly featured The Kransky Sisters, Indira Naidoo, Steves' mum Evelyn Abbott and Marcello Maio."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Salam Cafe",
+        "Salam Cafe",
+        "Susan Carland"
+      ],
+      "sent_id": [
+        0,
+        2,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Salam Cafe",
+      "Susan Carland"
+    ],
+    "hop1_query": "What Australian academic, author and feminist, was a panelist on the Australian comedy talk show Salam Cafe?",
+    "hop1_docs": [
+      "Salam Cafe | Salam Cafe is an Australian comedy talk show.  Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.  Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life.",
+      "Before the Game | Before The Game was an Australian rules football comedy panel television show which aired on Network Ten on 1 March 2003 until 27 September 2013.  The show was hosted by Andrew Maher with regular panelists Mick Molloy, Dave Hughes, Anthony Lehmann and Neroli Meadows.  The format of the show was light-hearted discussion and analysis of Australian Football League (AFL) news and views and included appearances by current players.",
+      "Arlene Francis | Arlene Francis (born Arline Francis Kazanjian; October 20, 1907 – May 31, 2001) was an American actress, radio and television talk show host, and game show panelist.  She is known for her long-standing role as a panelist on the television game show \" What's My Line? \", on which she regularly appeared for 25 years, from 1950 through the mid-1970s, on both the network and syndicated versions of the show.",
+      "Susan Carland | Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam.",
+      "Rove LA | Rove LA is an Australian television comedy talk show which debuted on Fox8 on 19 September 2011.  The show is hosted by Rove McManus and is set in Los Angeles.  The show is presented in a similar fashion to McManus' previous talk show \"Rove\", featuring comedy segments and interviews with celebrity guests.  The show was picked up for a two-year run on the Fox8 subscription channel.",
+      "The Eric Bana Show Live | The Eric Bana Show Live was an Australian television comedy and talk show hosted by and named after Eric Bana.",
+      "Reihan Salam | Reihan Morshed Salam ( ; born 29 December 1979) is a conservative American political commentator, columnist, and author.  He is the executive editor of \"National Review\" and a columnist for \"Slate\", as well as a contributing editor at \"National Affairs\", an interviewer for VICE, and a fellow at the University of Chicago Institute of Politics.  He has appeared on a number of radio and television shows, including NPR's \"Morning Edition, Talk of the Nation, All Things Considered\", and \"Tell Me More\", on HBO's \"Real Time with Bill Maher\", NBCUniversal's \"The Chris Matthews Show\", WNYC's \"The Brian Lehrer Show\", BBC's \"Newsnight\", ABC's \"This Week\", CNN's \"Fareed Zakaria GPS\", Comedy Central's \"The Colbert Report\", American Public Media's \"Marketplace, and Fox News' Tucker Carlson Tonight\"."
+    ],
+    "hop1_titles": [
+      "Salam Cafe",
+      "Before the Game",
+      "Arlene Francis",
+      "Susan Carland",
+      "Rove LA",
+      "The Eric Bana Show Live",
+      "Reihan Salam"
+    ],
+    "summary_1": "- Fact: [1] Salam Cafe page lists panelists \"including Waleed Aly and Susan Carland\" (quoted fragment: \"including Waleed Aly and Susan Carland\").\n- Fact: [4] Susan Carland page describes her as \"an Australian academic, author, and feminist\" (quoted fragment).\n- Bridge entity: Susan Carland — links the occupational identity to membership on Salam Cafe; both required facts are present and unambiguous in the supplied passages.\n- Missing/ambiguous facts: none.\n- Final answer: Susan Carland is the Australian academic, author and feminist who was a panelist on Salam Cafe.",
+    "hop2_query": "Susan Carland Salam Cafe panelist listing",
+    "hop2_docs": [
+      "Salam Cafe | Salam Cafe is an Australian comedy talk show.  Produced by RMITV, and originally airing on Channel 31 from 31 April 2005 under the title Ramadan TV, the show began a revamped ten-week run on the SBS from 7 May 2008.  Hosted by Ahmed Imam and starring various Muslim panellists, including Waleed Aly and Susan Carland, the show presents a light hearted, humorous view on life as a Muslim in Australia through panel discussion and a series of sketches that lampoon the representation of Muslims in Australia and the Islamic way of life.",
+      "Susan Carland | Susan Janet Carland is an Australian academic, author, and feminist, best known for her ongoing media presence speaking on her academic speciality of women in Islam.",
+      "Carland Cross (TV series) | Carland Cross was an 1996 hardboiled animated television series developed with the collaboration of Belgian, French and Canadian broadcasters.  The series spanned 26 episodes (26 minutes in length) and was based on the comics The Adventures of Carland Cross, by Belgian natives Olivier Grenson and Michel Oleffe.  Carland Cross tells the story of a fictional British private investigator specializing in curious and inexplicable cases.  The series aired late 1996 under the French-language title \"Carland Coss\" and in other markets, such as Spanish, as Las aventuras de Carland Cross.",
+      "Carland Cross (disambiguation) | Carland Cross is a settlement in Cornwall, UK.",
+      "Wayne Carlander | Wayne Carlander is a retired American basketball player for the USC Trojans.  A 6'6\" power forward, Carlander finished his four-year career with 1,524 points and 767 rebounds in 116 games played.  His point total ranks fifth all-time at the University of Southern California while his rebounds rank eighth.  Carlander lead the Trojans in scoring for three straight seasons (1983–85) and, as a senior, was named the Pac-10 Conference Men's Basketball Player of the Year.  He was also the team captain for his junior and senior years.",
+      "Carland Cross | Carland Cross is a location in Cornwall, England, United Kingdom, about six miles (10 kilometres) north of Truro at OS grid reference .  At Carland Cross there are a hamlet, a road junction and a large wind farm.  The road junction is in the civil parish of St Erme, very close to the boundary with St Newlyn East.",
+      "John Emmett Carland | John Emmett Carland (December 11, 1853 – November 11, 1922) was a United States federal judge."
+    ],
+    "hop2_titles": [
+      "Salam Cafe",
+      "Susan Carland",
+      "Carland Cross (TV series)",
+      "Carland Cross (disambiguation)",
+      "Wayne Carlander",
+      "Carland Cross",
+      "John Emmett Carland"
+    ],
+    "summary_2": "Susan Carland is the Australian academic, author and feminist who was a panelist on Salam Cafe. Susan Janet Carland is listed among the Muslim panellists on Salam Cafe, an Australian comedy talk show produced by RMITV.",
+    "answer": "Susan Carland",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Salam Cafe",
+      "Susan Carland"
+    ],
+    "hit_titles_total": [
+      "Salam Cafe",
+      "Susan Carland"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

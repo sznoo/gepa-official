@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "7dfaa065665171209a7f8d01025487a456cfeb87395850cb25e98471568c1329",
+  "created_at": "2026-07-14T19:01:55.708151+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks for the mutual occupation of two or more named people and the provided summaries both state (or clearly support) the same occupation.",
+            "preserve_rule": "Keep using summary_1 and summary_2 as the evidence sources; preserve the extraction that the occupation is the same in both summaries.",
+            "change_rule": "Instead of producing a full-sentence reply, output only the occupation noun phrase itself in its canonical singular form. Remove introductory words (e.g., 'They are', 'Both are'), verbs, and extra punctuation. If the summaries use a plural form, convert it to the singular, canonical occupational noun phrase.",
+            "drop_or_avoid_rule": "Do not return full sentences, explanatory clauses, pronouns, or articles surrounding the occupation. Do not append clarifying phrases or punctuation beyond the minimal noun phrase. Avoid pluralizing the occupation when the contract calls for a minimal canonical form.",
+            "output_contract": "Set the 'answer' field to contain only the minimal occupation noun phrase (a short canonical noun phrase in singular form) that is directly supported by the summaries. No other words, sentences, or punctuation should be included.",
+            "why_local_transition": "The current output is a full sentence. This delta enforces the agent's final-answer contract (minimal answer string) by extracting and returning the canonical occupation noun phrase only, preserving the already-present evidence in the summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Matt Lucena and Fabio Fognini, have which mutual occupation?",
+        "summary_1": "They are both professional tennis players.",
+        "summary_2": "They are both professional tennis players.",
+        "current_output": "They are professional tennis players."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for the mutual occupation of two or more named people and the provided summaries both state (or clearly support) the same occupation.\",\n      \"preserve_rule\": \"Keep using summary_1 and summary_2 as the evidence sources; preserve the extraction that the occupation is the same in both summaries.\",\n      \"change_rule\": \"Instead of producing a full-sentence reply, output only the occupation noun phrase itself in its canonical singular form. Remove introductory words (e.g., 'They are', 'Both are'), verbs, and extra punctuation. If the summaries use a plural form, convert it to the singular, canonical occupational noun phrase.\",\n      \"drop_or_avoid_rule\": \"Do not return full sentences, explanatory clauses, pronouns, or articles surrounding the occupation. Do not append clarifying phrases or punctuation beyond the minimal noun phrase. Avoid pluralizing the occupation when the contract calls for a minimal canonical form.\",\n      \"output_contract\": \"Set the 'answer' field to contain only the minimal occupation noun phrase (a short canonical noun phrase in singular form) that is directly supported by the summaries. No other words, sentences, or punctuation should be included.\",\n      \"why_local_transition\": \"The current output is a full sentence. This delta enforces the agent's final-answer contract (minimal answer string) by extracting and returning the canonical occupation noun phrase only, preserving the already-present evidence in the summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Matt Lucena and Fabio Fognini, have which mutual occupation?\",\n  \"summary_1\": \"They are both professional tennis players.\",\n  \"summary_2\": \"They are both professional tennis players.\",\n  \"current_output\": \"They are professional tennis players.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"professional tennis player\",\n  \"rationale\": \"Both summaries state the same occupation; per the ordered rule, returned the canonical singular occupation noun phrase only.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 148,
+    "row_index": 148,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

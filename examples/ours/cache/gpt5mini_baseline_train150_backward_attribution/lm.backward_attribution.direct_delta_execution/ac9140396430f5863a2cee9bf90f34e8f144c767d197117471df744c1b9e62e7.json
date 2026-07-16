@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "ac9140396430f5863a2cee9bf90f34e8f144c767d197117471df744c1b9e62e7",
+  "created_at": "2026-07-14T13:38:33.745404+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When both summary_1 and summary_2 are present, identical, and the text includes the substring \"Party\" (i.e., they name a political party).",
+            "preserve_rule": "Preserve the base behavior of emitting only a minimal, single-token answer in the [[ ## answer ## ]] block and prefer content already present in the visible summaries. Do not add explanations, qualifiers, or extra tokens.",
+            "change_rule": "If the trigger condition holds, convert the party phrase shown in the summaries into its conventional short, one-word party label (the common noun used to name members of that party) instead of the longer '... Party' phrasing. Only apply this conversion when the summaries agree; otherwise leave the summaries' wording unchanged.",
+            "drop_or_avoid_rule": "Avoid returning the verbose '... Party' phrasing, articles, or any surrounding explanatory text. Do not invent or introduce labels that are not the conventional short form corresponding to the party phrase present in the summaries.",
+            "output_contract": "The [[ ## answer ## ]] block must contain exactly the single canonical one-word party label (no additional words, punctuation, or explanation). Ensure no other fields or text accompany that token.",
+            "why_local_transition": "This small normalization step maps a repeated long party name in the summaries to the pipeline's expected concise canonical label, ensuring consistent minimal final answers when both summaries agree."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The mayor whose tenure marked the end of the 1900-1942 era in the history of Albany, New York was what political party?",
+        "summary_1": "Democratic Party",
+        "summary_2": "Democratic Party",
+        "current_output": "Democratic Party"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When both summary_1 and summary_2 are present, identical, and the text includes the substring \\\"Party\\\" (i.e., they name a political party).\",\n      \"preserve_rule\": \"Preserve the base behavior of emitting only a minimal, single-token answer in the [[ ## answer ## ]] block and prefer content already present in the visible summaries. Do not add explanations, qualifiers, or extra tokens.\",\n      \"change_rule\": \"If the trigger condition holds, convert the party phrase shown in the summaries into its conventional short, one-word party label (the common noun used to name members of that party) instead of the longer '... Party' phrasing. Only apply this conversion when the summaries agree; otherwise leave the summaries' wording unchanged.\",\n      \"drop_or_avoid_rule\": \"Avoid returning the verbose '... Party' phrasing, articles, or any surrounding explanatory text. Do not invent or introduce labels that are not the conventional short form corresponding to the party phrase present in the summaries.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly the single canonical one-word party label (no additional words, punctuation, or explanation). Ensure no other fields or text accompany that token.\",\n      \"why_local_transition\": \"This small normalization step maps a repeated long party name in the summaries to the pipeline's expected concise canonical label, ensuring consistent minimal final answers when both summaries agree.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The mayor whose tenure marked the end of the 1900-1942 era in the history of Albany, New York was what political party?\",\n  \"summary_1\": \"Democratic Party\",\n  \"summary_2\": \"Democratic Party\",\n  \"current_output\": \"Democratic Party\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\":\"Democrat\",\"rationale\":\"Both summaries matched 'Democratic Party'; per the ordered rule, converted the party phrase to the canonical one-word member label and returned that single token.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 94,
+    "row_index": 94,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

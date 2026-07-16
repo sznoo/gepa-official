@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "1673b90a820fdc2eaa78fa7623f0dcb891c5f08bf3fb15770f761743eb5b9477",
+  "created_at": "2026-07-14T17:56:20.762650+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+      "source_summary": "Ronnie Dunn and Jenna Sanz-Agero both served as vocalists (lead singers) in their respective bands. Jenna Sanz-Agero was the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer who sang lead vocals for the duo Brooks & Dunn on songs such as \"Only in America\".",
+      "target_summary": "From the first-hop context: Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Brooks & Dunn is a duo consisting of Kix Brooks and Ronnie Dunn, with both members described as vocalists and songwriters. Visible second-hop evidence: Ronnie Gene Dunn is an American country music singer-songwriter and record executive. Integration/bridge note: Jenna's role as Vixen's lead singer is confirmed; Ronnie Dunn is confirmed as a singer-songwriter and as one half of a vocal duo, but the materials available at this boundary do not establish whether he held the specific title \"lead singer\" for Brooks & Dunn.",
+      "candidate_summary": "From the first-hop context: Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Brooks & Dunn is a duo consisting of Kix Brooks and Ronnie Dunn, with both members described as vocalists and songwriters. Visible second-hop evidence: Ronnie Gene Dunn is an American country music singer-songwriter and record executive. Integration/bridge note: Jenna's role as Vixen's lead singer is confirmed; Ronnie Dunn is confirmed as a singer-songwriter and as one half of a vocal duo, but the materials available at this boundary do not establish whether he held the specific title \"lead singer\" for Brooks & Dunn."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nRonnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\n\nSource summary2:\nRonnie Dunn and Jenna Sanz-Agero both served as vocalists (lead singers) in their respective bands. Jenna Sanz-Agero was the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer who sang lead vocals for the duo Brooks & Dunn on songs such as \"Only in America\".\n\nTarget summary2:\nFrom the first-hop context: Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Brooks & Dunn is a duo consisting of Kix Brooks and Ronnie Dunn, with both members described as vocalists and songwriters. Visible second-hop evidence: Ronnie Gene Dunn is an American country music singer-songwriter and record executive. Integration/bridge note: Jenna's role as Vixen's lead singer is confirmed; Ronnie Dunn is confirmed as a singer-songwriter and as one half of a vocal duo, but the materials available at this boundary do not establish whether he held the specific title \"lead singer\" for Brooks & Dunn.\n\nCandidate summary2:\nFrom the first-hop context: Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Brooks & Dunn is a duo consisting of Kix Brooks and Ronnie Dunn, with both members described as vocalists and songwriters. Visible second-hop evidence: Ronnie Gene Dunn is an American country music singer-songwriter and record executive. Integration/bridge note: Jenna's role as Vixen's lead singer is confirmed; Ronnie Dunn is confirmed as a singer-songwriter and as one half of a vocal duo, but the materials available at this boundary do not establish whether he held the specific title \"lead singer\" for Brooks & Dunn.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target: it includes Jenna as Vixen's former lead singer, states Brooks & Dunn members are vocalists/songwriters, identifies Ronnie Dunn as a singer-songwriter and record executive, and explicitly notes uncertainty about him being the 'lead singer.' However, it contradicts the source by omitting the source's claim that Ronnie sang lead vocals for Brooks & Dunn (removing/negating that task-relevant detail).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 57,
+    "row_index": 57,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

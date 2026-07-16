@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "774e256d5220167e79c50e9ae45d9a46d3bf931e45112480c5cf6b9999da4b3c",
+  "created_at": "2026-07-15T23:53:01.725007+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Mick Jackson and Drew Renaud, have which mutual occupation?",
+    "answer": "film director,",
+    "context": {
+      "title": [
+        "Yuri Nosenko: Double Agent",
+        "Mick Jackson (director)",
+        "Mick Jackson (author)",
+        "Denial (2016 film)",
+        "Volcano (1997 film)",
+        "Chattahoochee (film)",
+        "Drew Renaud",
+        "'Igginbottom",
+        "Torrente 3: El protector",
+        "Covert One: The Hades Factor"
+      ],
+      "sentences": [
+        [
+          "Yuri Nosenko: Double Agent is a 1986 British television drama produced by the BBC in association with Primetime Television Ltd. and directed by Mick Jackson."
+        ],
+        [
+          "Mick Jackson (born 4 October 1943 in Grays, England, United Kingdom) is a British film director and television producer.",
+          " Between 1973 and 1987, Jackson directed many documentary and drama productions for BBC TV and Channel 4.",
+          " Relocating to Hollywood, he directed feature films, including \"The Bodyguard\" starring Kevin Costner and Whitney Houston.",
+          " In 2010, Jackson won an Emmy for Outstanding Directing for a Miniseries, Movie or a Dramatic Special for the dramatised biographical TV film \"Temple Grandin\"."
+        ],
+        [
+          "Mick Jackson (born 1960) is a British writer from England, best known for his novel \"The Underground Man\" (1997).",
+          " The book, based on the life of William Cavendish-Scott-Bentinck, 5th Duke of Portland, was shortlisted for the Man Booker Prize and for the 1997 Whitbread Award for best first novel."
+        ],
+        [
+          "Denial is a 2016 historical drama film directed by Mick Jackson and written by David Hare, based on Deborah Lipstadt's book \"History on Trial: My Day in Court with a Holocaust Denier.\"",
+          " It dramatises the \"Irving v Penguin Books Ltd\" case, in which Lipstadt, a Holocaust scholar, was sued by Holocaust denier David Irving for libel.",
+          " It stars Rachel Weisz, Tom Wilkinson, Timothy Spall, Andrew Scott, Jack Lowden, Caren Pistorius and Alex Jennings."
+        ],
+        [
+          "Volcano is a 1997 American disaster film directed by Mick Jackson and produced by Andrew Z. Davis, Neal H. Moritz and Lauren Shuler Donner.",
+          " The storyline was conceived from a screenplay written by Jerome Armstrong and Billy Ray.",
+          " The film features Tommy Lee Jones, Anne Heche, and Don Cheadle.",
+          " Jones is cast as the head of the Los Angeles County Office of Emergency Management (LAC OEM) which has complete authority in the event of an emergency or natural disaster.",
+          " His character attempts to divert the path of a dangerous lava flow through the streets of Los Angeles following the formation of a volcano at the La Brea Tar Pits."
+        ],
+        [
+          "Chattahoochee is a 1989 American drama film directed by Mick Jackson and starring Gary Oldman and Dennis Hopper.",
+          " The film is based on the real-life experiences of Chris Calhoun, who met screenwriter James Hicks, who then wrote a script based on his internment in a Florida state mental institution.",
+          " It was turned down by several major studios before being accepted by Hemdale Film Corporation, a small British-owned, Los Angeles-based company that also produced \"Platoon\", \"Hoosiers\", \"The Last Emperor\", and \"Salvador\"."
+        ],
+        [
+          "Michael \"Drew\" Renaud (born 1985) is an American film director, screenwriter, editor and producer.",
+          " He has received awards from the San Diego Film Festival and LA Shorts Fest."
+        ],
+        [
+          "'Igginbottom were an English progressive rock band, featuring Steven Robinson (guitar), Allan Holdsworth (guitar, vocals), Dave Freeman (drums) and Mick Skelly (bass).",
+          " They were managed by a company called Mimo, which was owned by Mick Jackson, Mo Bacon, Ronnie Scott and his business partner Pete King.",
+          " Their only album, \"'Igginbottom's Wrench\", was released in 1969."
+        ],
+        [
+          "Torrente 3: El protector is a 2005 Spanish black comedy film directed, written, produced and starring Santiago Segura as the lead character, Spanish cop José Luis Torrente.",
+          " The film was the third in the popular Torrente series (following ) and was successful at the box office.",
+          " Santiago Segura decided to make a parody of the American film \"The Bodyguard\", which was directed by Mick Jackson and starred Kevin Costner and Whitney Houston."
+        ],
+        [
+          "Covert One: The Hades Factor (a.k.a. \"Robert Ludlum's Covert One: The Hades Factor\", \"The Hades Factor\") is a made-for-TV thriller filmed in Toronto that first aired in 2006.",
+          " Directed by Mick Jackson, the miniseries is loosely based on \"The Hades Factor\", a 2000 novel written by Gayle Lynds as part of the Covert-One series created by Robert Ludlum."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Mick Jackson (director)",
+        "Drew Renaud"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question` and `passages`, produce the single field `summary`.\n\nGoal: compress the grounded first-hop evidence into a short intermediate state that makes it easy for the next-hop agent to (a) see what facts are present per candidate/entity, (b) see what is ambiguous or missing, and (c) know 1–4 prioritized next-hop retrieval targets or concise queries. This module does not produce the final answer unless the provided passages already unambiguously contain every fact required to resolve the question's relation for every argument.\n\nProcedure:\n1) Decide whether the question's relation is semantically complete given the supplied passages. Treat the hop as INCOMPLETE if any of the following hold: a) the relation requires combining or comparing facts across pages (e.g., comparing birth dates, publication/founding years, ordinal ranks, confirming a named director among candidates) and the passages do not supply each required fact unambiguously for all relevant arguments; b) any relation argument is ambiguous or has multiple candidate pages or mentions in the passages; c) an expected candidate page or explicit fact for an argument is missing (e.g., only one side of a comparison is present). Do not trigger INCOMPLETE solely from surface tokens (years, digits) — base the decision on whether the relation's arguments are unambiguously resolved.\n\n2) If the hop is COMPLETE (all required facts to resolve the relation for every argument are present unambiguously in the passages): produce a concise derived result in `summary`. This may be a short phrase or sentence that states the necessary fact(s) needed by the pipeline. Keep it minimal and grounded in the passages; you may include a 1–2 token citation (passage title) if helpful.\n\n3) If the hop is INCOMPLETE or AMBIGUOUS: do NOT assert a final answer or perform the final comparison/selection. Instead emit a short structured report in `summary` containing these labeled elements (prefer bullets or a compact paragraph with explicit labels). Keep all text neutral and non-assertive.\n\n  - evidence: For each named candidate/argument mentioned in the question or passages, list the candidate label and the exact passage title(s) that mention it plus a very short quoted snippet or explicit fact token found there (1–12 words). If a candidate named in the question has no grounded mention in any provided passage, explicitly mark it as NOT present under evidence.\n\n  - ambiguities_or_missing: Explicitly name any ambiguities (e.g., multiple candidates for the same name, multiple pages that could be the intended entity) and any missing expected pages or facts.\n\n  - missing_facts_or_bridge / bridge_entity_or_missing_fact: State exactly which fact(s) or disambiguation is needed to complete the relation. Use a slight conditional labeling here:\n      * If the question names an entity that has no grounded mention in the provided passages and the unresolved gap is identity/disambiguation (you cannot map the question token to a single canonical entity needed to ground later facts), label the gap as `bridge_entity_or_missing_fact` and specify that the canonical/biography page for that named entity is required to resolve identity.\n      * Otherwise (the missing premise is a concrete attribute/property such as a date, developer, layout engine, filmography item, opening-order token, etc.), use `missing_facts_or_bridge` and describe the exact attribute(s) required (e.g., \"birth date for Person A\", \"developer of Product X\"). Do not request the canonical biography page by default in this case; prefer an attribute-targeted retrieval first.\n\n  - retrieval_direction: Provide 1–4 prioritized next-hop targets or concise queries to resolve the missing facts/ambiguities. Order targets by priority and keep them short. Apply this retrieval-priority conditional:\n      * If the missing gap is identity/disambiguation (see bridge_entity_or_missing_fact above), put the candidate's canonical/biography page title as retrieval_direction #1 (exact title if known) and include 1–2 biography-style fallback queries (e.g., \"<Name> biography\", \"<Name> official page\") as subsequent targets.\n      * If the missing gap is a specific attribute/property, put 1–2 concise attribute-focused queries first (e.g., \"<Item> developer\", \"<Item> layout engine\", \"<Work B> publication year\"). Include the canonical/biography page as a secondary target only if it might reasonably contain the attribute and identity resolution could still be needed.\n\nFormatting and style constraints (apply to both COMPLETE and INCOMPLETE cases):\n- The output must be a single `summary` field only. Do not emit other fields.\n- In INCOMPLETE reports, use neutral, non-assertive phrasing. Do not produce final comparisons, numeric answers, or definitive selections (e.g., avoid \"X is the oldest\" or \"Answer: 3\").\n- Keep the report compact and actionable (short labeled bullets or one concise paragraph). Avoid long prose.\n- It is allowed and encouraged to quote short factual snippets from passages and cite passage titles to show grounding.\n- Do not defer or mark INCOMPLETE when the passages already unambiguously provide all facts for the relation and its arguments.\n\nProduce the `summary` content that follows these rules.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the single field `query`.\n\nGoal\n- Produce exactly one compact, retrieval-intent query suitable for a second-hop search that will recover the missing bridging evidence needed to answer the question. Do not produce the final answer in `query`.\n\nSemantic decision rule (when to emit a retrieval-intent query)\n- If summary_1 does NOT assert a confirmed linking entity or verified bridging fact needed to answer the question, you MUST emit exactly one compact retrieval-intent query. \"Does not assert a confirmed bridge\" includes short or candidate-only summaries (e.g., a single named entity, a quoted candidate title, or numeric anchors that are not verified) and any case where the visible anchors do not unambiguously identify the needed bridge.\n- Narrowed applicability for birth-date disambiguation: If summary_1 lacks a confirmed bridge AND the question explicitly requires a birth-date comparison (e.g., asks who was born earlier or requests birth years) AND the visible inputs (question or summary_1) show ambiguous name candidates AND a suitable disambiguator token (occupation, band, institution, or a parenthetical label) is present or clearly implied in the visible inputs, then emit one compact query that combines: the ambiguous name anchor, the disambiguator copied verbatim from the visible inputs, and a concise birth-term (\"born\" or \"birth year\"). In all other cases (including birth-name mappings, page-title targets, non-temporal bridges, or when no usable disambiguator is available), do not append birth/date relation words or invent disambiguators; instead prefer the minimal visible-anchor form (page-title, name-pair, or person+institution) appropriate to the missing bridge.\n- If summary_1 already names a confirmed bridge (a clearly identified, verified linking entity or unambiguous metadata that directly connects the question's pieces), you may produce a compact query to fetch supporting evidence, but do NOT produce an answer in the `query` field.\n- If summary_1 explicitly states that the bridge cannot be recovered automatically (extreme ambiguity or user-local context requiring clarification), do NOT force a misleading retrieval query. In that case, set `query` to the single short token BRIDGE_UNRECOVERABLE (all caps, no punctuation) so downstream steps can prompt the user for clarification. Do not invent facts.\n\nQuery construction rules\n- Output exactly one compact line of text as `query`. Keep it short and retrieval-focused (few keywords, no full sentences). Use visible anchors from `question` and `summary_1` and minimal retrieval keywords that express the missing relation (e.g., anchor1 anchor2 which artist recorded both; AlbumTitle album artist genre; 1991–92 NHL season regular season).\n- Do not include the final answer, assertions, or user-facing instructions in the `query` field. Avoid polite phrasing, questions to the user, or explanatory text. Prefer noun phrases and relation keywords.\n- If the conditional birth-date disambiguation rule above applies, build the query by concatenating: the ambiguous person name, the disambiguator token copied verbatim from the visible inputs (occupation, band, institution, parenthetical), and a single concise birth-term (\"born\" or \"birth year\"). Use only the visible disambiguator wording; do not invent or normalize parentheticals.\n- Relation-token selection rule: choose a single concise relation token that matches the question's relation (e.g., \"born\" or \"birth year\" only for temporal birth queries). Do not append relation tokens when the canonical retrieval strategy is to use a page-title, exact name-pair, or person+institution anchor.\n- Do not include the final answer or explanatory text. If your natural impulse would be to write a declarative answer or a clarification sentence in `query`, instead convert that output into a compact retrieval-intent query that targets the missing bridge.\n- Preserve semantic fidelity: base the query only on visible anchors and relations in `question` and `summary_1`. Do not invent hidden identifiers or assume unseen facts.\n\nFormat contract\n- Return exactly one field named `query` whose value is a single short string. If unrecoverable as described above, set `query` to BRIDGE_UNRECOVERABLE.\n\nExamples of disallowed outputs for `query`\n- A declarative answer (e.g., \"The artist was X.\")\n- A user-facing clarification sentence (e.g., \"Do you mean X or Y?\") unless summary_1 explicitly requires clarification — in that case use BRIDGE_UNRECOVERABLE.\n\nBehavioral constraints\n- Do not use surface heuristics (token count, punctuation, or quotation marks) as the trigger; apply the semantic rule above.\n- Emit only one compact retrieval string when the bridge is missing; do not emit multiple queries or long explanations.\n\nInputs available: `question`, `summary_1`. Output required: single field `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`. The `summary` must be a concise, post-retrieval integration of the evidence that preserves the facts needed by the final answer. Follow these rules when composing `summary`:\n\n- Purpose: Integrate the first-hop `context` with the newly retrieved `passages` into a grounded state that retains or resolves the earlier bridge only when the second-hop passages supply relation- or attribute-facts that are necessary to answer or disambiguate the `question` (for example: partnership/membership links, joint-award partners indicated by 'with', or requested biographical qualifiers such as nationality, birthdate, current team/status).\n\n- When to append supporting sentence(s): Append the primary canonical label/token from `context` and at most one short passage-grounded supporting sentence only when a passage contains an explicit, directly stated predicate that links the same entity token from `context` (or a clearly corroborated alias/role/date) to the partner or attribute the question cites. Examples of acceptable explicit predicates include clear statements like 'X with Y', 'X is a member of Y', 'X was born DATE', 'X is a recipient of AWARD', 'X is also called Z', or 'X began tenure in YEAR'. The trigger requires that the passage (a) names the same entity token as in `context` or an alias/role/date that is corroborated by other attributes in `context`, and (b) explicitly asserts the relation or attribute needed by the question. Do not append when the passage only contains the attribute string without an explicit predicate, a nearby mention, an indirect implication, or when the link refers to a different named entity.\n\n- Transitive alias/composition: Do not assert transitive equivalence unless every hop in the chain is explicitly stated as an equivalence in the supplied passages and each hop clearly refers to the same entity. If only a mediated or inferred chain exists (i.e., intermediate links are not explicit equivalences and identity-aligned), suppress the appended support and preserve uncertainty.\n\n- When not to append: Do not append supporting sentences and instead return only the canonical label/token when any of the following apply: the question expects a normalized identifier or single token (examples: binary/multiple-choice label selection between named options, identification-only questions, or explicit token-extraction such as 'middle name'); or the `context` already contains a full, passage-consistent, multi-clause integrated answer. Permit an exception for identification/single-token/binary cases only when the question's semantics truly demand the relation/attribute (for example, determining an era boundary or tenure date) and a passage explicitly provides the necessary predicate linking the context entity to that temporal relation or attribute.\n\n- Identity alignment and verification: Before appending, confirm that the fact in `passages` refers to the same entity referenced in `context` by matching names, corroborating aliases, roles, dates, or other attributes. If identity is ambiguous or unsupported, refrain from appending and preserve uncertainty instead. Avoid naive substring or proximity matches as sufficient evidence.\n\n- Style and content constraints: Keep output concise. If appending, limit `summary` to 1–3 sentences total (the primary concise answer plus at most one short supporting sentence per relevant entity or one joint supporting sentence). Preserve the exact canonical label/token selected from `context`. Use a compact paraphrase grounded in passage language, avoid inventing facts or long verbatim quotations, and avoid misattributing attributes from different entities.\n\n- If there is insufficient information in `context` and `passages` to resolve the needed relation/attribute, summarize the uncertainty succinctly rather than asserting unsupported facts.\n\nProduce only the `summary` field as the integrated output string.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\nWhen multiple co-referent surface strings for the same entity appear in summary_2, you may prefer a shorter canonical label only if that exact shorter string appears verbatim in summary_2 either as an independent label or as an explicit parenthetical alternate, AND emitting that shorter string alone would not drop administrative or category qualifiers, required punctuation/abbreviations, or other disambiguating tokens that the question requires; otherwise emit the minimal multi-token or formatted string exactly as supported by summary_2. Preserve multi-token formatted place names, parenthetical acronyms or alternates when they are present or when the question's intent relies on them.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "b9971a087180",
+    "rerun_from": null,
+    "question": "Mick Jackson and Drew Renaud, have which mutual occupation?",
+    "gold_answer": "film director,",
+    "context": {
+      "title": [
+        "Yuri Nosenko: Double Agent",
+        "Mick Jackson (director)",
+        "Mick Jackson (author)",
+        "Denial (2016 film)",
+        "Volcano (1997 film)",
+        "Chattahoochee (film)",
+        "Drew Renaud",
+        "'Igginbottom",
+        "Torrente 3: El protector",
+        "Covert One: The Hades Factor"
+      ],
+      "sentences": [
+        [
+          "Yuri Nosenko: Double Agent is a 1986 British television drama produced by the BBC in association with Primetime Television Ltd. and directed by Mick Jackson."
+        ],
+        [
+          "Mick Jackson (born 4 October 1943 in Grays, England, United Kingdom) is a British film director and television producer.",
+          " Between 1973 and 1987, Jackson directed many documentary and drama productions for BBC TV and Channel 4.",
+          " Relocating to Hollywood, he directed feature films, including \"The Bodyguard\" starring Kevin Costner and Whitney Houston.",
+          " In 2010, Jackson won an Emmy for Outstanding Directing for a Miniseries, Movie or a Dramatic Special for the dramatised biographical TV film \"Temple Grandin\"."
+        ],
+        [
+          "Mick Jackson (born 1960) is a British writer from England, best known for his novel \"The Underground Man\" (1997).",
+          " The book, based on the life of William Cavendish-Scott-Bentinck, 5th Duke of Portland, was shortlisted for the Man Booker Prize and for the 1997 Whitbread Award for best first novel."
+        ],
+        [
+          "Denial is a 2016 historical drama film directed by Mick Jackson and written by David Hare, based on Deborah Lipstadt's book \"History on Trial: My Day in Court with a Holocaust Denier.\"",
+          " It dramatises the \"Irving v Penguin Books Ltd\" case, in which Lipstadt, a Holocaust scholar, was sued by Holocaust denier David Irving for libel.",
+          " It stars Rachel Weisz, Tom Wilkinson, Timothy Spall, Andrew Scott, Jack Lowden, Caren Pistorius and Alex Jennings."
+        ],
+        [
+          "Volcano is a 1997 American disaster film directed by Mick Jackson and produced by Andrew Z. Davis, Neal H. Moritz and Lauren Shuler Donner.",
+          " The storyline was conceived from a screenplay written by Jerome Armstrong and Billy Ray.",
+          " The film features Tommy Lee Jones, Anne Heche, and Don Cheadle.",
+          " Jones is cast as the head of the Los Angeles County Office of Emergency Management (LAC OEM) which has complete authority in the event of an emergency or natural disaster.",
+          " His character attempts to divert the path of a dangerous lava flow through the streets of Los Angeles following the formation of a volcano at the La Brea Tar Pits."
+        ],
+        [
+          "Chattahoochee is a 1989 American drama film directed by Mick Jackson and starring Gary Oldman and Dennis Hopper.",
+          " The film is based on the real-life experiences of Chris Calhoun, who met screenwriter James Hicks, who then wrote a script based on his internment in a Florida state mental institution.",
+          " It was turned down by several major studios before being accepted by Hemdale Film Corporation, a small British-owned, Los Angeles-based company that also produced \"Platoon\", \"Hoosiers\", \"The Last Emperor\", and \"Salvador\"."
+        ],
+        [
+          "Michael \"Drew\" Renaud (born 1985) is an American film director, screenwriter, editor and producer.",
+          " He has received awards from the San Diego Film Festival and LA Shorts Fest."
+        ],
+        [
+          "'Igginbottom were an English progressive rock band, featuring Steven Robinson (guitar), Allan Holdsworth (guitar, vocals), Dave Freeman (drums) and Mick Skelly (bass).",
+          " They were managed by a company called Mimo, which was owned by Mick Jackson, Mo Bacon, Ronnie Scott and his business partner Pete King.",
+          " Their only album, \"'Igginbottom's Wrench\", was released in 1969."
+        ],
+        [
+          "Torrente 3: El protector is a 2005 Spanish black comedy film directed, written, produced and starring Santiago Segura as the lead character, Spanish cop José Luis Torrente.",
+          " The film was the third in the popular Torrente series (following ) and was successful at the box office.",
+          " Santiago Segura decided to make a parody of the American film \"The Bodyguard\", which was directed by Mick Jackson and starred Kevin Costner and Whitney Houston."
+        ],
+        [
+          "Covert One: The Hades Factor (a.k.a. \"Robert Ludlum's Covert One: The Hades Factor\", \"The Hades Factor\") is a made-for-TV thriller filmed in Toronto that first aired in 2006.",
+          " Directed by Mick Jackson, the miniseries is loosely based on \"The Hades Factor\", a 2000 novel written by Gayle Lynds as part of the Covert-One series created by Robert Ludlum."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Mick Jackson (director)",
+        "Drew Renaud"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Mick Jackson (director)",
+      "Drew Renaud"
+    ],
+    "hop1_query": "Mick Jackson and Drew Renaud, have which mutual occupation?",
+    "hop1_docs": [
+      "Drew Renaud | Michael \"Drew\" Renaud (born 1985) is an American film director, screenwriter, editor and producer.  He has received awards from the San Diego Film Festival and LA Shorts Fest.",
+      "Mick Jackson (singer) | Michael George \"Mick\" Jackson (born 2 November 1947) is an English singer-songwriter and the co-writer of the song, \"Blame It on the Boogie\".  The song was co-authored by Mick's brother David Jackson and Elmar Krohn, and produced by Sylvester Levay.",
+      "Mick Jackson (director) | Mick Jackson (born 4 October 1943 in Grays, England, United Kingdom) is a British film director and television producer.  Between 1973 and 1987, Jackson directed many documentary and drama productions for BBC TV and Channel 4.  Relocating to Hollywood, he directed feature films, including \"The Bodyguard\" starring Kevin Costner and Whitney Houston.  In 2010, Jackson won an Emmy for Outstanding Directing for a Miniseries, Movie or a Dramatic Special for the dramatised biographical TV film \"Temple Grandin\".",
+      "Hernani Almeida | Hernani Almeida (born 7 April 1978 in Sao Vicente, Cape Verde) is a Cape Verdean musician, having started at age 7 his musical career via a small keyboard switching at the age of 14 to the electric guitar, an instrument that became his brand image.  After 1989 he joined the group's musical Mick Lima appears in 1994 with his rock band named What, which drew the attention as a guitarist of the music greats of Cape Verde.",
+      "Mick Jackson (author) | Mick Jackson (born 1960) is a British writer from England, best known for his novel \"The Underground Man\" (1997).  The book, based on the life of William Cavendish-Scott-Bentinck, 5th Duke of Portland, was shortlisted for the Man Booker Prize and for the 1997 Whitbread Award for best first novel.",
+      "'Igginbottom | 'Igginbottom were an English progressive rock band, featuring Steven Robinson (guitar), Allan Holdsworth (guitar, vocals), Dave Freeman (drums) and Mick Skelly (bass).  They were managed by a company called Mimo, which was owned by Mick Jackson, Mo Bacon, Ronnie Scott and his business partner Pete King.  Their only album, \"'Igginbottom's Wrench\", was released in 1969.",
+      "The Comforters | The Comforters is the first novel by Scottish author Muriel Spark.  She drew on experiences as a recent convert to Catholicism and having suffered hallucinations due to using Dexedrine, an amphetamine then available over the counter for dieting.  Although completed in late 1955, the book was not published until 1957.  A mutual friend, novelist Alan Barnsley, had sent the proofs to Evelyn Waugh.  At the time Waugh was writing \"The Ordeal of Gilbert Pinfold,\" which dealt with his own drug-induced hallucinations."
+    ],
+    "hop1_titles": [
+      "Drew Renaud",
+      "Mick Jackson (singer)",
+      "Mick Jackson (director)",
+      "Hernani Almeida",
+      "Mick Jackson (author)",
+      "'Igginbottom",
+      "The Comforters"
+    ],
+    "summary_1": "- evidence:\n  - Drew Renaud — passage [1]: \"American film director, screenwriter, editor and producer.\"\n  - Mick Jackson (director) — passage [3]: \"British film director and television producer.\"\n  - Mick Jackson (singer) — passage [2]: \"English singer-songwriter\"\n  - Mick Jackson (author) — passage [5]: \"British writer\"\n- ambiguities_or_missing:\n  - Multiple distinct people named \"Mick Jackson\" appear in passages (director, singer, author). The question does not specify which Mick Jackson is intended.\n- bridge_entity_or_missing_fact:\n  - Need identity disambiguation for \"Mick Jackson\" (which canonical Mick Jackson is meant) to determine the mutual occupation.\n- retrieval_direction (priority):\n  1. Mick Jackson (director) — canonical page\n  2. \"Mick Jackson biography\" — fallback query\n  3. Mick Jackson (singer) or Mick Jackson (author) pages if the intended person is not the director",
+    "hop2_query": "Mick Jackson (director) Drew Renaud occupation",
+    "hop2_docs": [
+      "Drew Renaud | Michael \"Drew\" Renaud (born 1985) is an American film director, screenwriter, editor and producer.  He has received awards from the San Diego Film Festival and LA Shorts Fest.",
+      "Mick Jackson (director) | Mick Jackson (born 4 October 1943 in Grays, England, United Kingdom) is a British film director and television producer.  Between 1973 and 1987, Jackson directed many documentary and drama productions for BBC TV and Channel 4.  Relocating to Hollywood, he directed feature films, including \"The Bodyguard\" starring Kevin Costner and Whitney Houston.  In 2010, Jackson won an Emmy for Outstanding Directing for a Miniseries, Movie or a Dramatic Special for the dramatised biographical TV film \"Temple Grandin\".",
+      "Mick Jackson (singer) | Michael George \"Mick\" Jackson (born 2 November 1947) is an English singer-songwriter and the co-writer of the song, \"Blame It on the Boogie\".  The song was co-authored by Mick's brother David Jackson and Elmar Krohn, and produced by Sylvester Levay.",
+      "Mick Audsley | Mick Audsley (b. 1949, London, England) is a British film and television editor with more than 30 film credits.  Audsley has had a notable collaboration with the director Stephen Frears from 1982 to their latest, \"Tamara Drewe\".  Audsley was nominated for the BAFTA Award for Best Editing for \"Dangerous Liaisons\" (Frears-1988), and he won the BAFTA TV Award (Best Film or Video Editor (Fiction/Entertainment)) for \"The Snapper\" (Frears-1993).  Audsley has had a comparably extended collaboration with director Mike Newell, including \"Harry Potter and the Goblet of Fire\" (2005 (Based on the Sound Editions of Tom Finan who editing Hercules)).",
+      "Michael Jackson's Ghosts | Michael Jackson's Ghosts is a 1996 short film starring Michael Jackson, co-written by horror novelist Stephen King alongside Mick Garris and directed by film director and special effects guru Stan Winston which could also be classified as a long-form music video.  It was filmed and first screened in 1996 and released along with select prints of the film \"Thinner\".  It was released as promo a year later internationally on LaserDisc, VHS and Video CD.  Jackson plays a total of five roles in the film.",
+      "Ian Drew | Ian Drew is Entertainment Director for American celebrity magazine, Us Weekly.  He speaks about celebrities, music and fashion on television shows including CNN, Good Morning America, The Early Show, MSNBC, and Fox News.  He interviewed Janet Jackson for one of Us Weekly's best-selling issues.",
+      "Mick and Nick | Mick and Nick (Mick&Nick) is a below the line specialist agency and part of the Lowe Bull Group (a subsidiary of Lowe Worldwide).  Its offices are based in Bryanston, Johannesburg, South Africa.  Formed in January 2007, Mick & Nick’s core team consists of Nick Liatos (Creative Director), Mick Shepard (Creative Director) and Michelle De Gouveia (Managing Director)."
+    ],
+    "hop2_titles": [
+      "Drew Renaud",
+      "Mick Jackson (director)",
+      "Mick Jackson (singer)",
+      "Mick Audsley",
+      "Michael Jackson's Ghosts",
+      "Ian Drew",
+      "Mick and Nick"
+    ],
+    "summary_2": "Mick Jackson (director) and Drew Renaud are both film directors. Mick Jackson (director) is described as a British film director and television producer, and Drew Renaud is described as an American film director (as well as screenwriter, editor and producer).",
+    "answer": "film directors",
+    "score": 0.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Drew Renaud",
+      "Mick Jackson (director)"
+    ],
+    "hit_titles_total": [
+      "Drew Renaud",
+      "Mick Jackson (director)"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

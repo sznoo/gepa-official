@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "841345a249015b9bb939b3a16bf06242597a5bec03ae05d5fe90e38e02bbbc6f",
+  "created_at": "2026-07-14T13:41:06.541162+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What genre does the album \"Levitate\" come from?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What genre does the album \"Levitate\" come from?",
+        "summary_1": "I can't determine the genre of the album \"Levitate\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.",
+        "summary_2": "I can't determine the genre of the album \"Levitate\" from the provided passages. Please tell me the artist (or give a passage that mentions the album, release year, or label) and I will identify its genre.",
+        "current_output": "I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "post-punk",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What genre does the album \\\"Levitate\\\" come from?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What genre does the album \\\"Levitate\\\" come from?\",\n  \"summary_1\": \"I can't determine the genre of the album \\\"Levitate\\\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.\",\n  \"summary_2\": \"I can't determine the genre of the album \\\"Levitate\\\" from the provided passages. Please tell me the artist (or give a passage that mentions the album, release year, or label) and I will identify its genre.\",\n  \"current_output\": \"I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"post-punk\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply this edit when either summary_1 or summary_2 contains an explicit, short genre statement about the album Levitate or about its artist. Concretely trigger if a summary (case-insensitive) matches patterns such as: 'genre[:\\\\s]+<GENRE>', 'is a(n)? <GENRE> album', 'the album .* is <GENRE>', or 'genre is <GENRE>'.\",\n    \"preserve_rule\": \"If the trigger is NOT satisfied, preserve the current behavior: do not guess the genre and reply asking for the artist or a passage that mentions the album, year, or label.\",\n    \"change_rule\": \"When triggered, extract the shortest contiguous genre phrase captured by the matched pattern (the <GENRE> capture). Normalize by stripping surrounding punctuation and whitespace and return only that normalized genre phrase as the agent's final answer. If multiple explicit genre mentions appear, prefer the one that explicitly refers to the album title 'Levitate' or the named artist; if still ambiguous, prefer the first explicit genre mention in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not infer or hallucinate a genre from the album title alone. Do not output artist names, explanations, supporting text, or multiple genres. Do not paste long spans from the summaries—only the short genre phrase matched. If extraction is uncertain or no explicit genre is found, fall back to preserved behavior (ask for more info).\",\n    \"output_contract\": \"The answer field must contain only the minimal genre string (one short word or short phrase) supported by the visible summaries, with no surrounding explanation or punctuation. Conform to the base prompt's final-answer interface so the [[ ## answer ## ]] block holds only that string.\",\n    \"why_local_transition\": \"This minimal edit enables the final agent to switch from asking for more information to emitting a concise genre label when the supplied summaries already state the genre. It preserves the original conservative behavior when no explicit genre evidence is present and prevents hallucination by requiring an explicit pattern match.\"\n  },\n  \"rationale\": \"The change is narrowly scoped: it only activates when an explicit genre mention appears in the visible summaries and otherwise leaves existing behavior intact. It instructs a straightforward, deterministic extraction and normalization of a short genre phrase, enforces the existing final-answer contract (only the minimal answer string), and explicitly prevents guessing or adding context. This keeps the delta minimal, safe, and compatible with the agent's original interface.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

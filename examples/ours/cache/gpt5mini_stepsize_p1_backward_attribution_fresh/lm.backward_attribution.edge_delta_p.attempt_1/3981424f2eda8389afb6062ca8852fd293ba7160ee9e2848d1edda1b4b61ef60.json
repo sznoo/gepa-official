@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "3981424f2eda8389afb6062ca8852fd293ba7160ee9e2848d1edda1b4b61ef60",
+  "created_at": "2026-07-16T04:52:32.830166+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Whose bestseller list did the author of Empress Bianca have a biography on in 1992?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Whose bestseller list did the author of Empress Bianca have a biography on in 1992?",
+        "summary_1": "None of the passages mention \"Empress Bianca\" or its author. Passages that do appear: passage [4] says James L. Snyder wrote a biography of A.W. Tozer titled \"In Pursuit of God: The Life of A. W. Tozer\" that \"won the Reader’s Choice Award\" from Christianity Today (paraphrase of passage [4]); passages [1], [2], and [7] note other authors with New York Times bestsellers. Missing/next-hop: retrieve the author of Empress Bianca, then search that author's biography + 1992 to locate which person's/bestseller list (e.g., \"New York Times bestseller list\" or another list) featured their biography in 1992. Use query anchors: \"Empress Bianca author\", \"Empress Bianca biography 1992\", and the phrase \"biography ... 1992 bestseller list\" to find the required link.",
+        "current_output": {
+          "query": "Empress Bianca author biography 1992 bestseller list"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Lady Colin Campbell Diana Princess of Wales 1992 New York Times bestseller"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Lady Colin Campbell Whose bestseller list did the author of Empress Bianca have a biography on in 1992?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Lady Colin Campbell",
+          "Empress Bianca",
+          "Bianca Bosker",
+          "Gertrude Elizabeth Blood",
+          "Married to Music",
+          "Lady Wu: The First Empress",
+          "Agnes Campbell"
+        ],
+        "retrieved_doc_snippets": [
+          "Lady Colin Campbell | Georgia Arianna, Lady Colin Campbell (\"née\" Ziadie; born 17 August 1949) is a Jamaican-born British writer, socialite, and television and radio personality. She has published three books about the British Royal Family. They include biographies of Diana, Princess of Wales, which was on \"The New York Times\" bestseller list in 1992, and Queen Elizabeth The Queen Mother. She has also written two autobiographies, one exploring her mother.",
+          "Empress Bianca | Empress Bianca, the first novel by Lady Colin Campbell, was initially published in June 2005. One month later, Arcadia Books, the British publisher, withdrew the book and pulped all unsold copies in reaction to a legal threat initiated on behalf of Lily Safra under her interpretation that the book was a defamatory roman à clef. After some changes the book was republished in the United States in 2008 by Dynasty Press.",
+          "Bianca Bosker | Bianca Bosker is an American journalist and author whose \"New York Times\" bestselling book \"Cork Dork\" has been reviewed by \"The New York Times\" and \"Publishers Weekly\".",
+          "Gertrude Elizabeth Blood | Gertrude Elizabeth, Lady Colin Campbell (\"née\" Blood; 3 May 1857 – 1 November 1911) was an Irish-born journalist, author, playwright, and editor. She was married to Lord Colin Campbell, a brother-in-law of Princess Louise, Queen Victoria's fourth daughter.",
+          "Married to Music | Married to Music is a 2001 biography by Margaret Campbell published by Robson Books of the British cellist Julian Lloyd Webber (with a foreword by Lady Evelyn Barbirolli). Margaret Campbell is an authority on string instrumentalists and has written profiles on string players for \"The Strad\" magazine and is the author of 'The Great Violinists' and 'The Great Cellists'.",
+          "Lady Wu: The First Empress | Lady Wu: The First Empress, also known as The Great Empress or Empress Wu Meiniang, is a 2003 Chinese television series based on the biography of Wu Zetian, the only woman in Chinese history to assume the title of Empress Regnant. The series was first broadcast on CTS in Taiwan in 2003 under the Chinese title 武媚娘傳奇 (\"Wu Meiniang Chuanqi\"; literally: \"The Legend of Wu Meiniang\").",
+          "Agnes Campbell | Lady Agnes Campbell (1526–1601) was the daughter of Colin Campbell, 3rd Earl of Argyll and his wife Lady Jean Gordon, daughter of Alexander Gordon, 3rd Earl of Huntly."
+        ],
+        "summary_2": "The author is Lady Colin Campbell, and her biography of Diana, Princess of Wales was on The New York Times bestseller list in 1992.",
+        "answer": "The New York Times bestseller list",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Empress Bianca",
+          "Lady Colin Campbell"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Lady Colin Campbell"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\",\n  \"summary_1\": \"None of the passages mention \\\"Empress Bianca\\\" or its author. Passages that do appear: passage [4] says James L. Snyder wrote a biography of A.W. Tozer titled \\\"In Pursuit of God: The Life of A. W. Tozer\\\" that \\\"won the Reader’s Choice Award\\\" from Christianity Today (paraphrase of passage [4]); passages [1], [2], and [7] note other authors with New York Times bestsellers. Missing/next-hop: retrieve the author of Empress Bianca, then search that author's biography + 1992 to locate which person's/bestseller list (e.g., \\\"New York Times bestseller list\\\" or another list) featured their biography in 1992. Use query anchors: \\\"Empress Bianca author\\\", \\\"Empress Bianca biography 1992\\\", and the phrase \\\"biography ... 1992 bestseller list\\\" to find the required link.\",\n  \"current_output\": {\n    \"query\": \"Empress Bianca author biography 1992 bestseller list\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Lady Colin Campbell Diana Princess of Wales 1992 New York Times bestseller\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Lady Colin Campbell Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Lady Colin Campbell\",\n    \"Empress Bianca\",\n    \"Bianca Bosker\",\n    \"Gertrude Elizabeth Blood\",\n    \"Married to Music\",\n    \"Lady Wu: The First Empress\",\n    \"Agnes Campbell\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Lady Colin Campbell | Georgia Arianna, Lady Colin Campbell (\\\"née\\\" Ziadie; born 17 August 1949) is a Jamaican-born British writer, socialite, and television and radio personality. She has published three books about the British Royal Family. They include biographies of Diana, Princess of Wales, which was on \\\"The New York Times\\\" bestseller list in 1992, and Queen Elizabeth The Queen Mother. She has also written two autobiographies, one exploring her mother.\",\n    \"Empress Bianca | Empress Bianca, the first novel by Lady Colin Campbell, was initially published in June 2005. One month later, Arcadia Books, the British publisher, withdrew the book and pulped all unsold copies in reaction to a legal threat initiated on behalf of Lily Safra under her interpretation that the book was a defamatory roman à clef. After some changes the book was republished in the United States in 2008 by Dynasty Press.\",\n    \"Bianca Bosker | Bianca Bosker is an American journalist and author whose \\\"New York Times\\\" bestselling book \\\"Cork Dork\\\" has been reviewed by \\\"The New York Times\\\" and \\\"Publishers Weekly\\\".\",\n    \"Gertrude Elizabeth Blood | Gertrude Elizabeth, Lady Colin Campbell (\\\"née\\\" Blood; 3 May 1857 – 1 November 1911) was an Irish-born journalist, author, playwright, and editor. She was married to Lord Colin Campbell, a brother-in-law of Princess Louise, Queen Victoria's fourth daughter.\",\n    \"Married to Music | Married to Music is a 2001 biography by Margaret Campbell published by Robson Books of the British cellist Julian Lloyd Webber (with a foreword by Lady Evelyn Barbirolli). Margaret Campbell is an authority on string instrumentalists and has written profiles on string players for \\\"The Strad\\\" magazine and is the author of 'The Great Violinists' and 'The Great Cellists'.\",\n    \"Lady Wu: The First Empress | Lady Wu: The First Empress, also known as The Great Empress or Empress Wu Meiniang, is a 2003 Chinese television series based on the biography of Wu Zetian, the only woman in Chinese history to assume the title of Empress Regnant. The series was first broadcast on CTS in Taiwan in 2003 under the Chinese title 武媚娘傳奇 (\\\"Wu Meiniang Chuanqi\\\"; literally: \\\"The Legend of Wu Meiniang\\\").\",\n    \"Agnes Campbell | Lady Agnes Campbell (1526–1601) was the daughter of Colin Campbell, 3rd Earl of Argyll and his wife Lady Jean Gordon, daughter of Alexander Gordon, 3rd Earl of Huntly.\"\n  ],\n  \"summary_2\": \"The author is Lady Colin Campbell, and her biography of Diana, Princess of Wales was on The New York Times bestseller list in 1992.\",\n  \"answer\": \"The New York Times bestseller list\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Empress Bianca\",\n    \"Lady Colin Campbell\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Lady Colin Campbell\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 signals the author's identity for the named work is missing and the next hop must find that author's 1992 biography/bestseller-list information (i.e., summary_1 mentions the work title and asks to retrieve the author/biography/1992 relation).\",\n    \"preserve_rule\": \"Keep the original single-line, keyword-style retrieval query output. Continue to use only visible anchors from summary_1 (work title, date tokens, relation keywords) and avoid adding explanatory text or punctuation.\",\n    \"change_rule\": \"If the current query asserts a specific candidate author or other named entity not present in summary_1, replace it with a compact keyword query composed only from visible anchors: the work title token(s) from summary_1 plus the keywords author, biography, 1992, and bestseller list. Do not add any personal names, definitive claims, or full-sentence phrasing.\",\n    \"drop_or_avoid_rule\": \"Do not include any specific author names, target-only entities, or long literal spans that are not present in summary_1. Avoid sentences, questions, or conversational words (e.g., 'Whose', 'did', 'have a biography on'). Avoid punctuation and extra qualifiers.\",\n    \"output_contract\": \"Emit exactly one single-line retrieval query string in the `query` field and nothing else. The string must be a concise keyword-style search using only visible anchors (work title + author/biography/1992/bestseller keywords).\",\n    \"why_local_transition\": \"The prior query asserted a candidate author not supported by the visible summary, risking oracle leakage. This minimal edit restricts the query to only the visible anchors so downstream retrieval can discover the author and the 1992 bestseller-list evidence without introducing unsupported named entities.\"\n  },\n  \"rationale\": \"Make the smallest change needed: remove the unsupported named-author token and enforce a rule that composes a focused anchor-only keyword query. This preserves the agent's contract (one compact query) and its useful behavior (targeting the missing bridge) while preventing leakage of target-only literals and reducing false assertions.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 1
+  }
+}

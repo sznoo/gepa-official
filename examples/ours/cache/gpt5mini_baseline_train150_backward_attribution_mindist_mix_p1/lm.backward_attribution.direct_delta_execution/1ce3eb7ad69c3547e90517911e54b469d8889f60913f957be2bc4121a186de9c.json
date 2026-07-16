@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "1ce3eb7ad69c3547e90517911e54b469d8889f60913f957be2bc4121a186de9c",
+  "created_at": "2026-07-14T19:01:55.018093+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question plus the provided summaries mention one or more journal names or short journal-name fragments.",
+            "preserve_rule": "Keep using the given `question`, `summary_1`, and `summary_2` as the only evidence; preserve the agent's final-answer interface and the requirement that the [[ ## answer ## ]] block contain only the minimal answer string supported by the visible summaries.",
+            "change_rule": "If one summary is a descriptive sentence that explicitly states that the person 'founded' or 'established' an academy or institution which 'established' one or more journals, prefer the journal name that the descriptive summary explicitly identifies as being 'established' by that person/institution. If the descriptive summary lists multiple publications, prefer the entry explicitly labeled a 'journal' (not a 'proceedings' or other series). Use that journal name as the minimal final answer string.",
+            "drop_or_avoid_rule": "Do not introduce new facts, external knowledge, or candidate answers not present in the visible summaries; avoid selecting terse standalone fragments over a descriptive attribution that explicitly ties a named journal to the person in question; avoid adding explanatory text outside the minimal answer string.",
+            "output_contract": "Return exactly the journal name (only the minimal answer string) inside the [[ ## answer ## ]] block, supported directly by the visible summaries and consistent with the preference rule above.",
+            "why_local_transition": "This small disambiguation rule biases selection toward the journal explicitly described as 'established' by the subject in the longer descriptive summary, resolving conflicts between terse labels and descriptive attributions without adding new information or changing the interface."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics",
+        "summary_1": "C. V. Raman — the 1930 Nobel laureate — founded the Indian Academy of Sciences, which established the journal Current Science (and the Proceedings of the Indian Academy of Sciences).",
+        "summary_2": "Current Science",
+        "current_output": "Current Science"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question plus the provided summaries mention one or more journal names or short journal-name fragments.\",\n      \"preserve_rule\": \"Keep using the given `question`, `summary_1`, and `summary_2` as the only evidence; preserve the agent's final-answer interface and the requirement that the [[ ## answer ## ]] block contain only the minimal answer string supported by the visible summaries.\",\n      \"change_rule\": \"If one summary is a descriptive sentence that explicitly states that the person 'founded' or 'established' an academy or institution which 'established' one or more journals, prefer the journal name that the descriptive summary explicitly identifies as being 'established' by that person/institution. If the descriptive summary lists multiple publications, prefer the entry explicitly labeled a 'journal' (not a 'proceedings' or other series). Use that journal name as the minimal final answer string.\",\n      \"drop_or_avoid_rule\": \"Do not introduce new facts, external knowledge, or candidate answers not present in the visible summaries; avoid selecting terse standalone fragments over a descriptive attribution that explicitly ties a named journal to the person in question; avoid adding explanatory text outside the minimal answer string.\",\n      \"output_contract\": \"Return exactly the journal name (only the minimal answer string) inside the [[ ## answer ## ]] block, supported directly by the visible summaries and consistent with the preference rule above.\",\n      \"why_local_transition\": \"This small disambiguation rule biases selection toward the journal explicitly described as 'established' by the subject in the longer descriptive summary, resolving conflicts between terse labels and descriptive attributions without adding new information or changing the interface.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics\",\n  \"summary_1\": \"C. V. Raman — the 1930 Nobel laureate — founded the Indian Academy of Sciences, which established the journal Current Science (and the Proceedings of the Indian Academy of Sciences).\",\n  \"summary_2\": \"Current Science\",\n  \"current_output\": \"Current Science\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]Current Science[[ ## answer ## ]]\",\n  \"rationale\": \"Summary_1 explicitly states the Indian Academy of Sciences (founded by C. V. Raman) established the journal Current Science, and summary_2 matches; per the preference rule, that journal name was selected as the minimal answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 130,
+    "row_index": 130,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

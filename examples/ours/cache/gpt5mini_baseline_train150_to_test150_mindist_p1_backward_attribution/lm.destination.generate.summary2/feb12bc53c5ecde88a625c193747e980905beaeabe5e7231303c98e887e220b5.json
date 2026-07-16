@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "feb12bc53c5ecde88a625c193747e980905beaeabe5e7231303c98e887e220b5",
+  "created_at": "2026-07-14T16:18:31.366096+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+      "current_output": "{\"summary\":\"Both Ronnie Dunn and Jenna Sanz-Agero are identified as singers/vocalists. Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer-songwriter who served as a vocalist in the duo Brooks & Dunn.\"}",
+      "upstream_context": {
+        "question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+        "summary_1": "Primary topic: roles of Ronnie Dunn and Jenna Sanz-Agero in their bands.\n\n- Jenna Sanz-Agero — passage 1: described as \"the former lead singer of the female rock group Vixen.\"\n- Ronnie Dunn — passage 4: Brooks & Dunn is \"consisting of Kix Brooks and Ronnie Dunn, both vocalists and songwriters.\" (Dunn = vocalist)\n- Ambiguity/missing facts: none for the specific band roles asked (both are identified as singers/vocalists).\n- Prioritized next-hop retrieval directives:\n  1. No additional retrieval needed.",
+        "hop2_query": "Ronnie Dunn Jenna Sanz Agero roles in bands",
+        "hop2_titles": [
+          "Jenna Sanz-Agero",
+          "Rita Sanz-Agero",
+          "María Isabel Sanz-Agero",
+          "Ronnie Dunn (album)",
+          "Ronnie Dunn",
+          "Peace, Love, and Country Music",
+          "Ronnie Dunn (footballer)"
+        ],
+        "hop2_docs": [
+          "Jenna Sanz-Agero | Jenna Sanz-Agero is the former lead singer of the female rock group Vixen, and a former president of Media 8.  She lives and works in Los Angeles, California.",
+          "Rita Sanz-Agero | Rita Sanz-Agero (born November 8, 1991 in Guatemala City) is a female modern pentathlete from Guatemala.  At age sixteen, Sanz-Agero became the youngest modern pentathlete to compete at the 2008 Summer Olympics in Beijing, where she finished thirty-fourth in the women's event, with a score of 4,844 points.",
+          "María Isabel Sanz-Agero | María Isabel Sanz-Agero (born November 20, 1965) is a Guatemalan modern pentathlete.  She placed 31st in the women's individual event at the 2004 Summer Olympics.",
+          "Ronnie Dunn (album) | Ronnie Dunn is the debut solo studio album from country music artist Ronnie Dunn.  The album was released on June 7, 2011, via Arista Nashville.  The album is Dunn's first release of music in nearly 25 years; he released three singles in the 1980s without issuing an album.",
+          "Ronnie Dunn | Ronnie Gene Dunn (born June 1, 1953) is an American country music singer-songwriter and record executive.  In 2011, Dunn began working as a solo artist following the breakup of Brooks & Dunn.  He released his self-titled debut album for Arista Nashville on June 7, 2011, reaching the Top 10 with its lead-off single \"Bleed Red\".  In 2013, after leaving Arista Nashville in 2012, Dunn founded Little Will-E Records.  On April 8, 2014, Ronnie Dunn released his second solo album, \"Peace, Love, and Country Music\" through his own Little Will-E Records.",
+          "Peace, Love, and Country Music | Peace, Love, and Country Music is the second solo studio album by country music artist Ronnie Dunn.  The album was released on April 8, 2014 via Dunn's own record label Little Will-E Records.  \"Peace, Love, and Country Music\" is Dunn's first solo release since 2011's \"Ronnie Dunn\" released on Arista Nashville.",
+          "Ronnie Dunn (footballer) | Ronald Victor \"Ronnie\" Dunn (24 November 1908 – January 1994) was an English professional footballer who played as a goalkeeper in the Football League for Crystal Palace."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Ronnie Dunn",
+          "sent_id": 0,
+          "sentence": "Ronnie Gene Dunn (born June 1, 1953) is an American country music singer-songwriter and record executive."
+        },
+        {
+          "title": "Jenna Sanz-Agero",
+          "sent_id": 0,
+          "sentence": "Jenna Sanz-Agero is the former lead singer of the female rock group Vixen, and a former president of Media 8."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nRonnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\n\nCurrent agent output:\n\"{\\\"summary\\\":\\\"Both Ronnie Dunn and Jenna Sanz-Agero are identified as singers/vocalists. Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer-songwriter who served as a vocalist in the duo Brooks & Dunn.\\\"}\"\n\nActual upstream context:\n{\n  \"question\": \"Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\",\n  \"summary_1\": \"Primary topic: roles of Ronnie Dunn and Jenna Sanz-Agero in their bands.\\n\\n- Jenna Sanz-Agero — passage 1: described as \\\"the former lead singer of the female rock group Vixen.\\\"\\n- Ronnie Dunn — passage 4: Brooks & Dunn is \\\"consisting of Kix Brooks and Ronnie Dunn, both vocalists and songwriters.\\\" (Dunn = vocalist)\\n- Ambiguity/missing facts: none for the specific band roles asked (both are identified as singers/vocalists).\\n- Prioritized next-hop retrieval directives:\\n  1. No additional retrieval needed.\",\n  \"hop2_query\": \"Ronnie Dunn Jenna Sanz Agero roles in bands\",\n  \"hop2_titles\": [\n    \"Jenna Sanz-Agero\",\n    \"Rita Sanz-Agero\",\n    \"María Isabel Sanz-Agero\",\n    \"Ronnie Dunn (album)\",\n    \"Ronnie Dunn\",\n    \"Peace, Love, and Country Music\",\n    \"Ronnie Dunn (footballer)\"\n  ],\n  \"hop2_docs\": [\n    \"Jenna Sanz-Agero | Jenna Sanz-Agero is the former lead singer of the female rock group Vixen, and a former president of Media 8.  She lives and works in Los Angeles, California.\",\n    \"Rita Sanz-Agero | Rita Sanz-Agero (born November 8, 1991 in Guatemala City) is a female modern pentathlete from Guatemala.  At age sixteen, Sanz-Agero became the youngest modern pentathlete to compete at the 2008 Summer Olympics in Beijing, where she finished thirty-fourth in the women's event, with a score of 4,844 points.\",\n    \"María Isabel Sanz-Agero | María Isabel Sanz-Agero (born November 20, 1965) is a Guatemalan modern pentathlete.  She placed 31st in the women's individual event at the 2004 Summer Olympics.\",\n    \"Ronnie Dunn (album) | Ronnie Dunn is the debut solo studio album from country music artist Ronnie Dunn.  The album was released on June 7, 2011, via Arista Nashville.  The album is Dunn's first release of music in nearly 25 years; he released three singles in the 1980s without issuing an album.\",\n    \"Ronnie Dunn | Ronnie Gene Dunn (born June 1, 1953) is an American country music singer-songwriter and record executive.  In 2011, Dunn began working as a solo artist following the breakup of Brooks & Dunn.  He released his self-titled debut album for Arista Nashville on June 7, 2011, reaching the Top 10 with its lead-off single \\\"Bleed Red\\\".  In 2013, after leaving Arista Nashville in 2012, Dunn founded Little Will-E Records.  On April 8, 2014, Ronnie Dunn released his second solo album, \\\"Peace, Love, and Country Music\\\" through his own Little Will-E Records.\",\n    \"Peace, Love, and Country Music | Peace, Love, and Country Music is the second solo studio album by country music artist Ronnie Dunn.  The album was released on April 8, 2014 via Dunn's own record label Little Will-E Records.  \\\"Peace, Love, and Country Music\\\" is Dunn's first solo release since 2011's \\\"Ronnie Dunn\\\" released on Arista Nashville.\",\n    \"Ronnie Dunn (footballer) | Ronald Victor \\\"Ronnie\\\" Dunn (24 November 1908 – January 1994) was an English professional footballer who played as a goalkeeper in the Football League for Crystal Palace.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Ronnie Dunn\",\n    \"sent_id\": 0,\n    \"sentence\": \"Ronnie Gene Dunn (born June 1, 1953) is an American country music singer-songwriter and record executive.\"\n  },\n  {\n    \"title\": \"Jenna Sanz-Agero\",\n    \"sent_id\": 0,\n    \"sentence\": \"Jenna Sanz-Agero is the former lead singer of the female rock group Vixen, and a former president of Media 8.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary:\\n\\n- Jenna Sanz-Agero: Jenna Sanz-Agero is described in the retrieved material as \\\"the former lead singer of the female rock group Vixen.\\\" (visible support)\\n\\n- Ronnie Dunn: The retrieved material identifies Ronnie Gene Dunn as \\\"an American country music singer-songwriter.\\\" (visible support) Summary_1 additionally notes that the duo Brooks & Dunn consisted of Kix Brooks and Ronnie Dunn, described there as \\\"both vocalists and songwriters.\\\" (summary_1)\\n\\nThese retained facts (Jenna explicitly labeled a former lead singer; Ronnie identified as a singer-songwriter and described in summary_1 as one of Brooks & Dunn's vocalists/songwriters) provide the evidence needed for the final-answer agent to determine the roles each performed in their bands.\",\n  \"rationale\": \"The visible gold support supplies Jenna's role as the former lead singer of Vixen and identifies Ronnie Dunn as an American country music singer-songwriter. Summary_1 supplies the additional detail that Brooks & Dunn comprised Kix Brooks and Ronnie Dunn, described as vocalists and songwriters. Combining these sourced statements preserves the exact facts needed for the final-answer agent without adding new information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 57,
+    "row_index": 57
+  }
+}

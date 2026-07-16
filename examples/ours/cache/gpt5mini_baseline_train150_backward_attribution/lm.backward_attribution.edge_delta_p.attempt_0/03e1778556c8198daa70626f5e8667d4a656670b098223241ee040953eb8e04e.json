@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "03e1778556c8198daa70626f5e8667d4a656670b098223241ee040953eb8e04e",
+  "created_at": "2026-07-14T13:38:20.661998+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?",
+        "summary_1": "1950",
+        "summary_2": "1950",
+        "current_output": "1950"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "1950",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "1937",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\",\n  \"summary_1\": \"1950\",\n  \"summary_2\": \"1950\",\n  \"current_output\": \"1950\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"1950\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"1937\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks when a person was 'first the Italian champion' (or contains the phrase 'Italian champion') AND the provided summaries only repeat a numeric year that also appears in the question (for example, the event year '1950')\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of producing a single minimal answer string in the [[ ## answer ## ]] block and of using only the provided summaries and the question as evidence.\",\n    \"change_rule\": \"Do not treat a year that merely repeats the question's event-year in the summaries as evidence that it answers a different attribute (e.g., 'first the Italian champion'). Only output a year if at least one summary explicitly links that year to the status 'Italian champion' or to being 'first' for that person. If no summary makes that explicit link, output the single token 'unknown' (lowercase) as the answer.\",\n    \"drop_or_avoid_rule\": \"Avoid copying a year from the summaries into the answer when the summaries only reflect the event (e.g., the car failing to arrive in 1950) and do not explicitly state that the person was first the Italian champion in that year.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly one token: either (a) a numeric year that is explicitly supported by the summaries as 'first the Italian champion', or (b) the single token 'unknown' if no summary explicitly supports such a year.\",\n    \"why_local_transition\": \"This edge prevents the agent from incorrectly echoing the event-year shown in the summaries as the year the person was first Italian champion when the summaries do not explicitly make that connection.\"\n  },\n  \"rationale\": \"The current output copies a year repeated in the summaries that appears to be the event year, not necessarily the year the person was first Italian champion. The smallest reliable behavioral change is to require an explicit textual link in the summaries between a year and the attribute 'first the Italian champion' before outputting that year; otherwise the agent should signal lack of support by answering 'unknown'. This preserves the agent's minimal-answer contract and avoids introducing unsupported assertions.\" \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 93,
+    "row_index": 93,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

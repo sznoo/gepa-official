@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "d8cd32de1ad78d5dde30ae4e0e038a82189606b5a9281a2c85e97022a716d3c5",
+  "created_at": "2026-07-14T19:28:30.471073+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "\"The Stumble\" is a blues guitar instrumental composed by a guitarist born in which year ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "\"The Stumble\" is a blues guitar instrumental composed by a guitarist born in which year ?",
+        "summary_1": "1934",
+        "summary_2": "1934",
+        "current_output": "1934"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "1934",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "The guitarist who composed \"The Stumble\" was born in 1934.",
+        "score": 0.0
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "The guitarist who composed \"The Stumble\" was born in 1934."
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"\\\"The Stumble\\\" is a blues guitar instrumental composed by a guitarist born in which year ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"\\\"The Stumble\\\" is a blues guitar instrumental composed by a guitarist born in which year ?\",\n  \"summary_1\": \"1934\",\n  \"summary_2\": \"1934\",\n  \"current_output\": \"1934\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"1934\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"The guitarist who composed \\\"The Stumble\\\" was born in 1934.\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"The guitarist who composed \\\"The Stumble\\\" was born in 1934.\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When producing the final answer and both summary_1 and summary_2 are present and identical.\",\n    \"preserve_rule\": \"Continue to treat the visible summaries as the source of truth and keep the existing behavior of emitting a concise answer drawn from those summaries.\",\n    \"change_rule\": \"Enforce a strict concision constraint: emit exactly the minimal answer token/string that is supported by the summaries and nothing else. Do not add introductory phrases, explanatory sentences, restatements of the question, or other surrounding context. If the summaries are identical, prefer that string as the answer.\",\n    \"drop_or_avoid_rule\": \"Avoid producing any full sentence or explanatory clause that restates the question or attributes the fact (for example, constructions like 'The X who ... was born in ...'). Do not append quotes, clarifications, or extra descriptors not present in the summaries.\",\n    \"output_contract\": \"The answer field must contain only the minimal answer string supported by the summaries (no extra words, punctuation, sentence fragments, or explanation). The emitted string should match one of the summary strings exactly (use summary_1 when both are identical).\",\n    \"why_local_transition\": \"Prevents an unwanted expansion from a concise summary-derived token into a verbose explanatory sentence; the edit minimally constrains formatting so the final agent output remains the short string present in the summaries.\"\n  },\n  \"rationale\": \"The baseline produced the correct concise token but a previous attempted delta caused literal leakage by adding a full-sentence explanation. This prompt edit is a minimal, local constraint that preserves the correct use of summaries while forbidding sentence-level elaboration that would reproduce the rejected literal. It avoids changing where the answer comes from and only tightens output format to prevent the exact failure mode observed.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 29,
+    "row_index": 29,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "5ccbb80ac5e303367fe9015779fac6900ea970f1e83bf30bb2995ebab7ae621d",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 1
+  }
+}

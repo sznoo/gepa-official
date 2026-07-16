@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_0",
+  "key": "5db645f96c3c90e0f3caebec7594b0600eea4df1560dce2a41cd36cbb04b07b8",
+  "created_at": "2026-07-16T01:04:23.737604+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "visible_c_inputs": {
+        "question": "The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?",
+        "summary_1": "30 August 2009",
+        "summary_2": "30 August 2009",
+        "current_output": "30 August 2009"
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "30 August 2009",
+        "score": 1.0
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).",
+        "score": 0.0
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).",
+            "preserve_rule": "Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.",
+            "change_rule": "Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.",
+            "drop_or_avoid_rule": "Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.",
+            "output_contract": "Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.",
+            "why_local_transition": "The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 83,
+        "c_stable_id": "83",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 28,
+        "selected_w_stable_id": "28",
+        "agent": "final",
+        "dominant_gap_type": "output_selection",
+        "transported_damage_hypothesis": "Apply a single-token final-answer constraint so a multi-token date like '30 August 2009' is truncated to one token (e.g., '30' or 'August').",
+        "expected_damaged_behavior": "The final agent emits exactly one token instead of the full date, producing an incomplete date string that is a local neighbor of the correct answer.",
+        "rationale": "The chosen W failure is a purely output-format/shape edit: when evidence summaries clearly agree the agent is forced to emit a single-token binary answer. That same narrow contract change can be applied to date outputs — it doesn't change facts or require a different reasoning chain, only the final-output shape. Transporting this failure will produce a plausible local damage at the target boundary (truncating the correct multi-token date to one token) without flipping the answer or inventing new content. This matches the transfer criteria: same kind of output-shape/selection failure, local neighbor of C_plus, and preserves underlying evidence use.",
+        "confidence": 0.75
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nVisible C inputs:\n{\n  \"question\": \"The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?\",\n  \"summary_1\": \"30 August 2009\",\n  \"summary_2\": \"30 August 2009\",\n  \"current_output\": \"30 August 2009\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"30 August 2009\",\n  \"score\": 1.0\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\",\n  \"score\": 0.0\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).\",\n      \"preserve_rule\": \"Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.\",\n      \"change_rule\": \"Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.\",\n      \"drop_or_avoid_rule\": \"Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.\",\n      \"output_contract\": \"Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.\",\n      \"why_local_transition\": \"The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 83,\n  \"c_stable_id\": \"83\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 28,\n  \"selected_w_stable_id\": \"28\",\n  \"agent\": \"final\",\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"Apply a single-token final-answer constraint so a multi-token date like '30 August 2009' is truncated to one token (e.g., '30' or 'August').\",\n  \"expected_damaged_behavior\": \"The final agent emits exactly one token instead of the full date, producing an incomplete date string that is a local neighbor of the correct answer.\",\n  \"rationale\": \"The chosen W failure is a purely output-format/shape edit: when evidence summaries clearly agree the agent is forced to emit a single-token binary answer. That same narrow contract change can be applied to date outputs — it doesn't change facts or require a different reasoning chain, only the final-output shape. Transporting this failure will produce a plausible local damage at the target boundary (truncating the correct multi-token date to one token) without flipping the answer or inventing new content. This matches the transfer criteria: same kind of output-shape/selection failure, local neighbor of C_plus, and preserves underlying evidence use.\",\n  \"confidence\": 0.75\n}\n\nRepair feedback from a rejected attempt:\n{}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": {\"query\": \"30\"},\n  \"transported_failure_pattern\": \"force a single-token final answer by truncating a multi-token response to one token\",\n  \"expected_damage\": \"The agent returns only the first token of the date ('30') instead of the full date '30 August 2009', yielding an incomplete date answer.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"30 August 2009\"],\n    \"why_not_unrelated\": \"Only the output shape is changed (truncation to one token); the original date tokens from the visible inputs are preserved and no new content is introduced.\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"Apply the single-token output-shape failure to the visible multi-token date, producing a plausible local truncation that keeps content drawn only from the visible summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 83,
+    "c_stable_id": "83",
+    "w_sample_index": 28,
+    "w_stable_id": "28",
+    "agent": "final",
+    "damage_attempt": 0,
+    "match_fingerprint": "a8f9273d2cfbfef7d5b21a7e7bcd913976bd00b042e79a4e334d20d06f91dd7b"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2d64008d48d2f05d428f23011cbd2a134306c1a1a1df88c88297617522cc0196",
+  "created_at": "2026-07-14T13:42:55.621250+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "The question requests an ordinal book (e.g. 'third') and explicitly says to count 'including the prequel' or otherwise references the prequel in the ordinal request.",
+            "preserve_rule": "Treat the provided fields summary_1, summary_2, ... as the authoritative, ordered evidence of book titles. Preserve each title's exact text and capitalization when selected for output.",
+            "change_rule": "When the trigger applies, build an ordered list L from the summary fields in their given order. Remove duplicate titles by keeping only the first occurrence of any identical title (deduplicate globally). Interpret 'including the prequel' so that the first element of L corresponds to ordinal 1. Parse the requested ordinal (1-based) from the question and return the title at that ordinal from deduplicated L. If the requested ordinal is larger than the length of L, return the single token 'Unknown'. Never invent or substitute titles not present in the summary fields.",
+            "drop_or_avoid_rule": "Do not count identical repeated summary lines as separate books. Do not consult or insert any external knowledge or make assumptions beyond the visible summaries. Avoid producing explanatory text or multiple tokens; do not expand the answer into a sentence.",
+            "output_contract": "Produce exactly one minimal answer string inside [[ ## answer ## ]]: either the selected title exactly as it appears in the summaries, or the single token 'Unknown' if the summaries do not contain enough distinct titles to satisfy the requested ordinal. No additional text, punctuation, or explanation.",
+            "why_local_transition": "The existing behavior treated repeated summary entries as separate positions, so the ordinal counting could be wrong. This small correction defines how to count (include prequel as position 1 and deduplicate identical entries) so the agent selects the correct element from the visible summaries without introducing outside information."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+        "summary_1": "Scrivener's Moon",
+        "summary_2": "Scrivener's Moon",
+        "current_output": "Scrivener's Moon"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"The question requests an ordinal book (e.g. 'third') and explicitly says to count 'including the prequel' or otherwise references the prequel in the ordinal request.\",\n      \"preserve_rule\": \"Treat the provided fields summary_1, summary_2, ... as the authoritative, ordered evidence of book titles. Preserve each title's exact text and capitalization when selected for output.\",\n      \"change_rule\": \"When the trigger applies, build an ordered list L from the summary fields in their given order. Remove duplicate titles by keeping only the first occurrence of any identical title (deduplicate globally). Interpret 'including the prequel' so that the first element of L corresponds to ordinal 1. Parse the requested ordinal (1-based) from the question and return the title at that ordinal from deduplicated L. If the requested ordinal is larger than the length of L, return the single token 'Unknown'. Never invent or substitute titles not present in the summary fields.\",\n      \"drop_or_avoid_rule\": \"Do not count identical repeated summary lines as separate books. Do not consult or insert any external knowledge or make assumptions beyond the visible summaries. Avoid producing explanatory text or multiple tokens; do not expand the answer into a sentence.\",\n      \"output_contract\": \"Produce exactly one minimal answer string inside [[ ## answer ## ]]: either the selected title exactly as it appears in the summaries, or the single token 'Unknown' if the summaries do not contain enough distinct titles to satisfy the requested ordinal. No additional text, punctuation, or explanation.\",\n      \"why_local_transition\": \"The existing behavior treated repeated summary entries as separate positions, so the ordinal counting could be wrong. This small correction defines how to count (include prequel as position 1 and deduplicate identical entries) so the agent selects the correct element from the visible summaries without introducing outside information.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n  \"summary_1\": \"Scrivener's Moon\",\n  \"summary_2\": \"Scrivener's Moon\",\n  \"current_output\": \"Scrivener's Moon\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]Unknown[[ ## answer ## ]]\",\n  \"rationale\": \"Built ordered list from summaries, deduplicated to one title; requested ordinal 3 exceeds the list length, so returned 'Unknown'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 136,
+    "row_index": 136,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "68f58956e6d07fe5263a7260544699a37453fd106bf1f6ba944ffe62bf9c2a03",
+  "created_at": "2026-07-14T13:37:55.816208+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+        "summary_1": "Jooheon",
+        "summary_2": "Jooheon (Lee Joo‑heon)",
+        "current_output": "Jooheon (Lee Joo‑heon)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Jooheon (Lee Joo‑heon)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Lee Joo-heon",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n  \"summary_1\": \"Jooheon\",\n  \"summary_2\": \"Jooheon (Lee Joo‑heon)\",\n  \"current_output\": \"Jooheon (Lee Joo‑heon)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Jooheon (Lee Joo‑heon)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Lee Joo-heon\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If any visible summary contains a parenthetical of the form 'StageName (Full Name)' or similar (i.e., a parenthesis that encloses a fuller personal name),\",\n    \"preserve_rule\": \"Continue to produce only the minimal answer string supported by the visible summaries and nothing else; keep the [[ ## answer ## ]] output contract intact.\",\n    \"change_rule\": \"When the trigger matches, choose the text inside the parentheses (the full personal name) as the answer instead of the stage/mononym. Remove the surrounding parentheses and any stage-name tokens. Normalize punctuation: convert any non-ASCII hyphen to a plain ASCII hyphen '-', collapse multiple spaces to single spaces, and preserve the capitalization as given in the parenthetical.\",\n    \"drop_or_avoid_rule\": \"Do not output the stage name or include parentheses, explanatory qualifiers, dates, or extra punctuation around the name. Avoid adding any descriptive words or copying unrelated spans from the summaries.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single normalized full personal name string (the former parenthetical content), with no additional text, punctuation, or commentary.\",\n    \"why_local_transition\": \"The current output includes both a stage name and a parenthetical full name. Selecting and normalizing the parenthetical full name yields the minimal canonical personal name required for the final-answer output while preserving the agent's minimal-answer behavior.\"\n  },\n  \"rationale\": \"This is a minimal, local prompt edit: it instructs the agent to prefer and normalize the full personal name when a parenthetical full-name appears in the visible summaries. It preserves the existing constraint to produce only a minimal answer and avoids adding new behaviors. The change uses only information already present in the summaries (the parenthetical full name) and enforces formatting rules so the answer will match the expected canonical form without adding extra commentary.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 85,
+    "row_index": 85,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "9d878782e5b9142b8d065e534cd85dd83ca97a51b30cd9a7def2b21cdd7def85",
+  "created_at": "2026-07-16T04:46:11.603031+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "The Fiery Furnaces and Paul Westerberg, are of which nationality?",
+    "answer": "American",
+    "context": {
+      "title": [
+        "The Vox Jaguars",
+        "Winter Women and Holy Ghost Language School",
+        "Bitter Tea",
+        "I'm Going Away (disambiguation)",
+        "Take Me Round Again",
+        "Last Summer (album)",
+        "I'm Going Away",
+        "The Fiery Furnaces",
+        "Besterberg: The Best of Paul Westerberg",
+        "Paul Westerberg"
+      ],
+      "sentences": [
+        [
+          "The Vox Jaguars was a North American rock band that formed in Santa Cruz, California in 2006.",
+          " They began their career with performances in local coffee houses and record stores.",
+          " They are influenced by artists such as The Stooges, MC5, The Velvet Underground, and other Protopunk artists.",
+          " The Vox Jaguars are well known for their energetic live performances, and have performed with The Fiery Furnaces, Big Brother & The Holding Company, Grand Ole Party, and Scissors For Lefty.",
+          " The Vox Jaguars have been part of the garage rock revival, and have influenced many indie artists in the Santa Cruz area of California (No Age, Foreign Born).",
+          " No Age said they were their \"favorite new band\"."
+        ],
+        [
+          "Winter Women and Holy Ghost Language School are two albums by Matthew Friedberger of The Fiery Furnaces recorded, unlike The Fiery Furnaces records, without his sister Eleanor Friedberger.",
+          " Though two separate albums, they were released together as a double album by 859 Recordings in August 2006.",
+          " It was rereleased in October 2009 on Thrill Jockey Records."
+        ],
+        [
+          "Bitter Tea is the fifth full-length album by The Fiery Furnaces, released on April 18, 2006 via Fat Possum in the U.S and Rough Trade in the UK.",
+          " After it leaked onto the internet on February 22, the band immediately started selling the CD on tour."
+        ],
+        [
+          "I'm Going Away is an album by The Fiery Furnaces"
+        ],
+        [
+          "Take Me Round Again is The Fiery Furnaces' ninth album.",
+          " It was first released, in MP3 format, through Thrill Jockey Records, in November 2009.",
+          " The album is being described as \"The Friedbergers cover the Friedbergers,\""
+        ],
+        [
+          "Last Summer is the first solo album released by American indie pop musician Eleanor Friedberger, most notable for being the vocalist in the band The Fiery Furnaces with her brother Matthew Friedberger.",
+          " The album was released on 12 July 2011 on the Merge Records record label."
+        ],
+        [
+          "I'm Going Away is The Fiery Furnaces' eighth album.",
+          " It was released, on CD and LP, on July 21, 2009 in the US and August 24, 2009 in the UK."
+        ],
+        [
+          "The Fiery Furnaces are an American indie rock band, formed in 2000 in Brooklyn, New York.",
+          " The band's primary members are Matthew and Eleanor Friedberger.",
+          " The siblings are originally from Oak Park, Illinois, a near-western suburb of Chicago.",
+          " They are known for their conceptual, highly ambitious releases, which have frequently divided critical opinion."
+        ],
+        [
+          "Besterberg: The Best of Paul Westerberg is a compilation album of recordings by Paul Westerberg."
+        ],
+        [
+          "Paul Harold Westerberg (born December 31, 1959) is an American musician, best known as the lead singer, guitarist and songwriter in The Replacements, one of the seminal alternative rock bands of the 1980s.",
+          " He launched a solo career after the dissolution of that band.",
+          " In recent years, he has cultivated a more independent-minded approach, primarily recording his music at home in his basement."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Fiery Furnaces",
+        "Paul Westerberg"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "The Fiery Furnaces and Paul Westerberg, are of which nationality?",
+    "gold_answer": "American",
+    "context": {
+      "title": [
+        "The Vox Jaguars",
+        "Winter Women and Holy Ghost Language School",
+        "Bitter Tea",
+        "I'm Going Away (disambiguation)",
+        "Take Me Round Again",
+        "Last Summer (album)",
+        "I'm Going Away",
+        "The Fiery Furnaces",
+        "Besterberg: The Best of Paul Westerberg",
+        "Paul Westerberg"
+      ],
+      "sentences": [
+        [
+          "The Vox Jaguars was a North American rock band that formed in Santa Cruz, California in 2006.",
+          " They began their career with performances in local coffee houses and record stores.",
+          " They are influenced by artists such as The Stooges, MC5, The Velvet Underground, and other Protopunk artists.",
+          " The Vox Jaguars are well known for their energetic live performances, and have performed with The Fiery Furnaces, Big Brother & The Holding Company, Grand Ole Party, and Scissors For Lefty.",
+          " The Vox Jaguars have been part of the garage rock revival, and have influenced many indie artists in the Santa Cruz area of California (No Age, Foreign Born).",
+          " No Age said they were their \"favorite new band\"."
+        ],
+        [
+          "Winter Women and Holy Ghost Language School are two albums by Matthew Friedberger of The Fiery Furnaces recorded, unlike The Fiery Furnaces records, without his sister Eleanor Friedberger.",
+          " Though two separate albums, they were released together as a double album by 859 Recordings in August 2006.",
+          " It was rereleased in October 2009 on Thrill Jockey Records."
+        ],
+        [
+          "Bitter Tea is the fifth full-length album by The Fiery Furnaces, released on April 18, 2006 via Fat Possum in the U.S and Rough Trade in the UK.",
+          " After it leaked onto the internet on February 22, the band immediately started selling the CD on tour."
+        ],
+        [
+          "I'm Going Away is an album by The Fiery Furnaces"
+        ],
+        [
+          "Take Me Round Again is The Fiery Furnaces' ninth album.",
+          " It was first released, in MP3 format, through Thrill Jockey Records, in November 2009.",
+          " The album is being described as \"The Friedbergers cover the Friedbergers,\""
+        ],
+        [
+          "Last Summer is the first solo album released by American indie pop musician Eleanor Friedberger, most notable for being the vocalist in the band The Fiery Furnaces with her brother Matthew Friedberger.",
+          " The album was released on 12 July 2011 on the Merge Records record label."
+        ],
+        [
+          "I'm Going Away is The Fiery Furnaces' eighth album.",
+          " It was released, on CD and LP, on July 21, 2009 in the US and August 24, 2009 in the UK."
+        ],
+        [
+          "The Fiery Furnaces are an American indie rock band, formed in 2000 in Brooklyn, New York.",
+          " The band's primary members are Matthew and Eleanor Friedberger.",
+          " The siblings are originally from Oak Park, Illinois, a near-western suburb of Chicago.",
+          " They are known for their conceptual, highly ambitious releases, which have frequently divided critical opinion."
+        ],
+        [
+          "Besterberg: The Best of Paul Westerberg is a compilation album of recordings by Paul Westerberg."
+        ],
+        [
+          "Paul Harold Westerberg (born December 31, 1959) is an American musician, best known as the lead singer, guitarist and songwriter in The Replacements, one of the seminal alternative rock bands of the 1980s.",
+          " He launched a solo career after the dissolution of that band.",
+          " In recent years, he has cultivated a more independent-minded approach, primarily recording his music at home in his basement."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Fiery Furnaces",
+        "Paul Westerberg"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "The Fiery Furnaces",
+      "Paul Westerberg"
+    ],
+    "hop1_query": "The Fiery Furnaces and Paul Westerberg, are of which nationality?",
+    "hop1_docs": [
+      "Fiery Furnace (Arches National Park) | The Fiery Furnace is a collection of narrow sandstone canyons, fins and natural arches in Arches National Park in Utah, USA.",
+      "The Fiery Furnaces discography | Below is a listing of the official release to date by the band The Fiery Furnaces.",
+      "The Fiery Furnaces | The Fiery Furnaces are an American indie rock band, formed in 2000 in Brooklyn, New York.  The band's primary members are Matthew and Eleanor Friedberger.  The siblings are originally from Oak Park, Illinois, a near-western suburb of Chicago.  They are known for their conceptual, highly ambitious releases, which have frequently divided critical opinion.",
+      "Besterberg: The Best of Paul Westerberg | Besterberg: The Best of Paul Westerberg is a compilation album of recordings by Paul Westerberg.",
+      "EP (The Fiery Furnaces album) | EP is the third release from the U.S. indie rock band The Fiery Furnaces.  It is 41 minutes in length, and is arguably not an EP, but rather a short LP, and thus a proper album.",
+      "Out of the Fiery Furnace | Out of the Fiery Furnace is a seven-part documentary series which was completed for ABC television in Australia in 1985.  The series traces the discovery and use of metals, minerals, and energy resources through time and was shown in over twenty countries.  It was produced by Robert Raymond, was written by Robert Raymond and Michael Charlton and was directed by Chris McCullough.  Supported by the Rio Tinto group (via CRA Services Ltd) it consisted of seven episodes, each an hour in duration.  Australian nuclear power advocate Ian Hore-Lacy was closely involved with the production.",
+      "The Burning Fiery Furnace | The Burning Fiery Furnace is an English music drama with music composed by Benjamin Britten, his Opus 77, to a libretto by William Plomer.  One of Britten's three \"Parables for Church Performances\", this work received its premiere at the St Bartholomew's Church, Orford, Suffolk, England, on 9 June 1966 by the English Opera Group."
+    ],
+    "hop1_titles": [
+      "Fiery Furnace (Arches National Park)",
+      "The Fiery Furnaces discography",
+      "The Fiery Furnaces",
+      "Besterberg: The Best of Paul Westerberg",
+      "EP (The Fiery Furnaces album)",
+      "Out of the Fiery Furnace",
+      "The Burning Fiery Furnace"
+    ],
+    "summary_1": "Evidence: Passage [3] – \"The Fiery Furnaces are an American indie rock band\" (formed in Brooklyn, New York) confirms The Fiery Furnaces are American. Passage [4] (\"Besterberg: The Best of Paul Westerberg\") and the other passages mention Paul Westerberg only by album/title and do not state his nationality. Missing fact / next-hop direction: fetch Paul Westerberg's main biography (e.g., his Wikipedia/biography page) and look for an explicit phrase such as \"Paul Westerberg is an American\" or \"American singer-songwriter\" to establish his nationality.",
+    "hop2_query": "Paul Westerberg biography nationality",
+    "hop2_docs": [
+      "Besterberg: The Best of Paul Westerberg | Besterberg: The Best of Paul Westerberg is a compilation album of recordings by Paul Westerberg.",
+      "Stereo (Paul Westerberg album) | Stereo is the fourth solo album by Paul Westerberg.  At this point in his career, the former Replacements leader was entering a new phase.  He said goodbye to professional studios and big-name producers like Brendan O'Brien and Don Was, recording the album in his basement by himself.  As detailed in the liner notes, Westerberg made no effort to fix imperfections like the tape running out in the middle of a song.  \"Stereo\" was packaged with \"Mono\", which he credited to his Grandpaboy alter ego.",
+      "14 Songs (Paul Westerberg album) | 14 Songs is the first official solo album from Paul Westerberg, former leader of The Replacements.  In many ways, it's his second solo album, given that the final Replacements album, \"All Shook Down\", was heavily packed with session musicians and marginalized the other three band members.",
+      "Paul Westerberg | Paul Harold Westerberg (born December 31, 1959) is an American musician, best known as the lead singer, guitarist and songwriter in The Replacements, one of the seminal alternative rock bands of the 1980s.  He launched a solo career after the dissolution of that band.  In recent years, he has cultivated a more independent-minded approach, primarily recording his music at home in his basement.",
+      "Eventually (album) | Eventually is the second solo album that Paul Westerberg released after the breakup of The Replacements.",
+      "Suicaine Gratifaction | Suicaine Gratifaction is the third solo album from former The Replacements leader Paul Westerberg.",
+      "Swingin Party | \"Swingin Party\" is a song written by Paul Westerberg and recorded by his band The Replacements for their fourth studio album \"Tim\" (1985).  The song is an indie rock and rock and roll ballad with influences from jazz, country and new wave.  Lyrically, it portrays the protagonist's \"feigned nonchalance\".  It was well received by music critics, who praised Westerberg's songwriting talent.  The song has been covered by other artists, notably Kindness in 2009 and Lorde in 2013."
+    ],
+    "hop2_titles": [
+      "Besterberg: The Best of Paul Westerberg",
+      "Stereo (Paul Westerberg album)",
+      "14 Songs (Paul Westerberg album)",
+      "Paul Westerberg",
+      "Eventually (album)",
+      "Suicaine Gratifaction",
+      "Swingin Party"
+    ],
+    "summary_2": "Both The Fiery Furnaces and Paul Westerberg are American; the context identifies The Fiery Furnaces as an American indie rock band, and passage [4] explicitly calls Paul Westerberg \"an American musician.\"",
+    "answer": "american",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Paul Westerberg"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "The Fiery Furnaces"
+    ],
+    "hit_titles_total": [
+      "Paul Westerberg",
+      "The Fiery Furnaces"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

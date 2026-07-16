@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "ab0088306110ecc727068cbb3bf987ebdcc9f36a5ad228f3d8f97c6b0a3ce7f7",
+  "created_at": "2026-07-14T13:38:00.004066+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the current `query` is framed as a verification step (contains words like \"Verify\", \"verify\", or contains candidate years or parenthetical explanatory notes).",
+            "preserve_rule": "Keep the agent's role: produce one compact second-hop retrieval query using the given `question` and `summary_1`. Preserve use of available disambiguating context (occupations, bands) that already appears in the visible inputs.",
+            "change_rule": "Instead of a verification-style sentence or including candidate birth years, emit a single short retrieval query that names each person and attaches a concise disambiguator (occupation, band, or the already-seen parenthetical identity) plus the phrase 'birth date' or 'date of birth'. Form: '<Person A> <disambiguator> birth date; <Person B> <disambiguator> birth date' or a compact variant combining both with minimal punctuation.",
+            "drop_or_avoid_rule": "Do not include candidate years, answer guesses, long explanatory parentheses, or instructions like 'Verify'/'check'. Avoid extra clauses, commentary, or multi-sentence queries—produce only the concise search query string.",
+            "output_contract": "Return one single-line retrieval query string (no full-sentence explanation) that mentions both people with short disambiguators present in the visible inputs and the term 'birth date' or 'date of birth'. Do not output any candidate dates or summary statements.",
+            "why_local_transition": "The current query is verbose and includes candidate dates and parenthetical notes, which can distract retrieval. A minimal edit to produce a compact, disambiguation-focused query will better target the correct pages for each person while preserving the agent's original interface and use of available context."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question asks which of two people was born earlier and the current query is ambiguous (multiple people share a name) or the current_output contains short role-based disambiguators (e.g., 'baseball manager', 'AC/DC singer').",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as context and continue to produce exactly one compact second-hop retrieval query. Preserve any useful disambiguators already present in the agent's current_output.",
+            "change_rule": "When composing the single retrieval query, explicitly include both person names plus the words 'birth date' and attach at most one short disambiguator (role/occupation) in parentheses for each name if such disambiguators appear in the visible inputs. Produce a compact paired query (no full sentences, no years, no conclusions). Example form: 'Brian Johnson (AC/DC singer) birth date; Dallas Green (baseball manager) birth date'.",
+            "drop_or_avoid_rule": "Do not include the full question text, do not state or repeat birth years or the final answer, do not append long explanatory phrases or multiple alternative disambiguators, and avoid enumerating many similarly named variants.",
+            "output_contract": "Return a single short string for `query` that mentions both names, the phrase 'birth date', and optional short parenthetical disambiguators drawn only from existing visible inputs. The string must be a concise retrieval query (no sentences, no answer), focused on getting birth-date pages for the two named persons.",
+            "why_local_transition": "The previous query was ambiguous and drew in multiple irrelevant name variants. Adding concise role-based disambiguators for each person directs retrieval toward the correct biographical pages for birth dates while preserving the agent's compact single-query output style."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "summary_1": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "current_output": {
+          "query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the current `query` is framed as a verification step (contains words like \\\"Verify\\\", \\\"verify\\\", or contains candidate years or parenthetical explanatory notes).\",\n      \"preserve_rule\": \"Keep the agent's role: produce one compact second-hop retrieval query using the given `question` and `summary_1`. Preserve use of available disambiguating context (occupations, bands) that already appears in the visible inputs.\",\n      \"change_rule\": \"Instead of a verification-style sentence or including candidate birth years, emit a single short retrieval query that names each person and attaches a concise disambiguator (occupation, band, or the already-seen parenthetical identity) plus the phrase 'birth date' or 'date of birth'. Form: '<Person A> <disambiguator> birth date; <Person B> <disambiguator> birth date' or a compact variant combining both with minimal punctuation.\",\n      \"drop_or_avoid_rule\": \"Do not include candidate years, answer guesses, long explanatory parentheses, or instructions like 'Verify'/'check'. Avoid extra clauses, commentary, or multi-sentence queries—produce only the concise search query string.\",\n      \"output_contract\": \"Return one single-line retrieval query string (no full-sentence explanation) that mentions both people with short disambiguators present in the visible inputs and the term 'birth date' or 'date of birth'. Do not output any candidate dates or summary statements.\",\n      \"why_local_transition\": \"The current query is verbose and includes candidate dates and parenthetical notes, which can distract retrieval. A minimal edit to produce a compact, disambiguation-focused query will better target the correct pages for each person while preserving the agent's original interface and use of available context.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks which of two people was born earlier and the current query is ambiguous (multiple people share a name) or the current_output contains short role-based disambiguators (e.g., 'baseball manager', 'AC/DC singer').\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as context and continue to produce exactly one compact second-hop retrieval query. Preserve any useful disambiguators already present in the agent's current_output.\",\n      \"change_rule\": \"When composing the single retrieval query, explicitly include both person names plus the words 'birth date' and attach at most one short disambiguator (role/occupation) in parentheses for each name if such disambiguators appear in the visible inputs. Produce a compact paired query (no full sentences, no years, no conclusions). Example form: 'Brian Johnson (AC/DC singer) birth date; Dallas Green (baseball manager) birth date'.\",\n      \"drop_or_avoid_rule\": \"Do not include the full question text, do not state or repeat birth years or the final answer, do not append long explanatory phrases or multiple alternative disambiguators, and avoid enumerating many similarly named variants.\",\n      \"output_contract\": \"Return a single short string for `query` that mentions both names, the phrase 'birth date', and optional short parenthetical disambiguators drawn only from existing visible inputs. The string must be a concise retrieval query (no sentences, no answer), focused on getting birth-date pages for the two named persons.\",\n      \"why_local_transition\": \"The previous query was ambiguous and drew in multiple irrelevant name variants. Adding concise role-based disambiguators for each person directs retrieval toward the correct biographical pages for birth dates while preserving the agent's compact single-query output style.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"summary_1\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"current_output\": {\n    \"query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Dallas Green (baseball manager) birth date; Brian Johnson (AC/DC singer) birth date\"\n  },\n  \"rationale\": \"Delta 0 removed the verification phrasing and candidate years; Delta 1 added concise parenthetical disambiguators and the phrase 'birth date' for both names to form a single compact retrieval query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

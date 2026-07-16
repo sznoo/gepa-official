@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "96094f3fed7964f4d2377dfb75d67f0a4903a362c405fb17c7f561c4117d31d6",
+  "created_at": "2026-07-16T06:01:16.569091+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?",
+      "current_output": "George Adamski was Polish American. Passage [1] corroborates this, explicitly calling him a \"Polish American citizen\" who claimed to have met \"Nordic alien Space Brothers.\"",
+      "upstream_context": {
+        "question": "What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?",
+        "summary_1": "Bridge entity: George Adamski. Evidence that he is the contactee: \"UFOlogist George Adamski is credited with being among the first to claim contact with Nordic aliens in the mid 1950s\" (passage [1]). Evidence for nationality: \"George Adamski ... was a Polish American citizen\" (passage [4]). The next hop would be to verify or cite passage [4] as the source for his nationality (\"Polish American\").",
+        "hop2_query": "George Adamski Polish American citizen",
+        "hop2_titles": [
+          "George Adamski",
+          "Jan Adamski",
+          "Kazimierz Adamski",
+          "Adamski (surname)",
+          "Mariusz Adamski",
+          "Wiesław Adamski",
+          "Stanisław Adamski"
+        ],
+        "hop2_docs": [
+          "George Adamski | George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen who became widely known in ufology circles, and to some degree in popular culture, after he claimed to have photographed spaceships from other planets, met with friendly Nordic alien Space Brothers, and to have taken flights with them to the Moon and other planets.",
+          "Jan Adamski | Jan Adamski (born 11 October 1943) is a Polish chess player who won the Polish Chess Championship in 1982.  FIDE International Master (1976).",
+          "Kazimierz Adamski | Kazimierz Adamski (born 1964) is a Polish sculptor.",
+          "Adamski (surname) | Adamski (Polish feminine: Adamska, plural: Adamscy) may refer to:",
+          "Mariusz Adamski | Mariusz \"Mike\" Adamski (born January 10, 1974) is a Polish aerial photographer who has flown many times with the Polish Air Force at Krzesiny Air Base.  He is a graduate of the National Defense University in Warsaw, Poland.  Adamski's works have been published in books, postage stamps, important journals and aviation publications, such as \"Aviation Week & Space Technology\", \"Air Forces Monthly\" and \"Flight International\".",
+          "Wiesław Adamski | Wiesław Adamski (26 July 1947 – 10 February 2017) was a Polish sculptor.",
+          "Stanisław Adamski | Stanisław Adamski (12 April 1875 - 12 November 1967) was a Polish bishop, politician, and social and political activist of the Union of Catholic Societies of Polish Workers (Związek Katolickich Towarzystw Robotników Polskich), founder and editor of the 'Robotnik' (Worker) weekly."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "George Adamski",
+          "sent_id": 0,
+          "sentence": "George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen who became widely known in ufology circles, and to some degree in popular culture, after he claimed to have photographed spaceships from other planets, met with friendly Nordic alien Space Brothers, and to have taken flights with them to the Moon and other planets."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?\n\nCurrent agent output:\n\"George Adamski was Polish American. Passage [1] corroborates this, explicitly calling him a \\\"Polish American citizen\\\" who claimed to have met \\\"Nordic alien Space Brothers.\\\"\"\n\nActual upstream context:\n{\n  \"question\": \"What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?\",\n  \"summary_1\": \"Bridge entity: George Adamski. Evidence that he is the contactee: \\\"UFOlogist George Adamski is credited with being among the first to claim contact with Nordic aliens in the mid 1950s\\\" (passage [1]). Evidence for nationality: \\\"George Adamski ... was a Polish American citizen\\\" (passage [4]). The next hop would be to verify or cite passage [4] as the source for his nationality (\\\"Polish American\\\").\",\n  \"hop2_query\": \"George Adamski Polish American citizen\",\n  \"hop2_titles\": [\n    \"George Adamski\",\n    \"Jan Adamski\",\n    \"Kazimierz Adamski\",\n    \"Adamski (surname)\",\n    \"Mariusz Adamski\",\n    \"Wiesław Adamski\",\n    \"Stanisław Adamski\"\n  ],\n  \"hop2_docs\": [\n    \"George Adamski | George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen who became widely known in ufology circles, and to some degree in popular culture, after he claimed to have photographed spaceships from other planets, met with friendly Nordic alien Space Brothers, and to have taken flights with them to the Moon and other planets.\",\n    \"Jan Adamski | Jan Adamski (born 11 October 1943) is a Polish chess player who won the Polish Chess Championship in 1982.  FIDE International Master (1976).\",\n    \"Kazimierz Adamski | Kazimierz Adamski (born 1964) is a Polish sculptor.\",\n    \"Adamski (surname) | Adamski (Polish feminine: Adamska, plural: Adamscy) may refer to:\",\n    \"Mariusz Adamski | Mariusz \\\"Mike\\\" Adamski (born January 10, 1974) is a Polish aerial photographer who has flown many times with the Polish Air Force at Krzesiny Air Base.  He is a graduate of the National Defense University in Warsaw, Poland.  Adamski's works have been published in books, postage stamps, important journals and aviation publications, such as \\\"Aviation Week & Space Technology\\\", \\\"Air Forces Monthly\\\" and \\\"Flight International\\\".\",\n    \"Wiesław Adamski | Wiesław Adamski (26 July 1947 – 10 February 2017) was a Polish sculptor.\",\n    \"Stanisław Adamski | Stanisław Adamski (12 April 1875 - 12 November 1967) was a Polish bishop, politician, and social and political activist of the Union of Catholic Societies of Polish Workers (Związek Katolickich Towarzystw Robotników Polskich), founder and editor of the 'Robotnik' (Worker) weekly.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"George Adamski\",\n    \"sent_id\": 0,\n    \"sentence\": \"George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen who became widely known in ufology circles, and to some degree in popular culture, after he claimed to have photographed spaceships from other planets, met with friendly Nordic alien Space Brothers, and to have taken flights with them to the Moon and other planets.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary: Bridge entity George Adamski is the UFOlogist credited with being among the first to claim contact with Nordic aliens in the mid-1950s (summary_1). The George Adamski page (sent_id 0) states: \\\"George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen who became widely known in ufology circles ... after he claimed to have photographed spaceships from other planets, met with friendly Nordic alien Space Brothers, and to have taken flights with them to the Moon and other planets.\\\" Retain the exact fact that the George Adamski article identifies him as a \\\"Polish American citizen\\\" alongside the evidence linking him to Nordic alien contact; these points are needed by the final-answer agent.\",\n  \"rationale\": \"The provided George Adamski sentence (visible gold support) explicitly gives both the connection to Nordic alien contact and the phrase \\\"Polish American citizen,\\\" supplying the nationality evidence required to answer the question.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 39,
+    "row_index": 39
+  }
+}

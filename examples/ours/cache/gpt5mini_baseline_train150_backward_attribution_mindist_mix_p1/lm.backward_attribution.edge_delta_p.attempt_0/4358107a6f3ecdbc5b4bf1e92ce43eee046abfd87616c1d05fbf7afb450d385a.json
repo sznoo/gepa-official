@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "4358107a6f3ecdbc5b4bf1e92ce43eee046abfd87616c1d05fbf7afb450d385a",
+  "created_at": "2026-07-14T19:01:52.620482+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+        "summary_1": "She made her film debut in the 1987 thriller \"Hangmen.\"",
+        "current_output": {
+          "query": "Hangmen (1987)"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Brokedown Palace Kate Beckinsale film debut"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Brokedown Palace Kate Beckinsale This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Brokedown Palace",
+          "Kate Beckinsale",
+          "Brokedown Palace (disambiguation)",
+          "Much Ado About Nothing (1993 film)",
+          "Jonathan Kaplan",
+          "Laurel Canyon (film)",
+          "The Trials of Cate McCall"
+        ],
+        "retrieved_doc_snippets": [
+          "Brokedown Palace | Brokedown Palace is a 1999 American drama film directed by Jonathan Kaplan, and starring Claire Danes, Kate Beckinsale, Bill Pullman and Lim Kay Tong. It deals with two American friends imprisoned in Thailand for drug smuggling. Because it presents a critical view of the Thai legal system, most scenes were filmed in the Philippines; however, some panoramas and views were filmed in Bangkok. Its title is taken from a Grateful Dead song written by Jerry Garcia and Robert Hunter f ...[truncated]",
+          "Kate Beckinsale | Kathrin Romary Beckinsale (born 26 July 1973) is an English actress. After some minor television roles, she made her film debut in \"Much Ado About Nothing\" (1993) while still a student at the University of Oxford. She appeared in British costume dramas such as \"Prince of Jutland\" (1994), \"Cold Comfort Farm\" (1995), \"Emma\" (1996), and \"The Golden Bowl\" (2000), in addition to various stage and radio productions. She began to seek film work in the United States in the late 1990s a ...[truncated]",
+          "Brokedown Palace (disambiguation) | Brokedown Palace is a 1999 American drama film by Jonathan Kaplan.",
+          "Much Ado About Nothing (1993 film) | Much Ado About Nothing is a 1993 British/American romantic comedy film based on William Shakespeare's play of the same name. It was adapted for the screen and directed by Kenneth Branagh, who also stars in the film. The film also stars Branagh's then-wife Emma Thompson, Robert Sean Leonard, Denzel Washington, Michael Keaton, Keanu Reeves, and Kate Beckinsale in her film debut.",
+          "Jonathan Kaplan | Jonathan Kaplan (born November 25, 1947) is an American film producer and director. His film \"The Accused\" (1988) earned actress Jodie Foster her first Oscar for Best Actress and was nominated for the Golden Bear at the 39th Berlin International Film Festival. Kaplan received five Emmy nominations for his roles directing and producing \"ER\".",
+          "Laurel Canyon (film) | Laurel Canyon is a 2002 American drama film written and directed by Lisa Cholodenko. The film stars Frances McDormand, Christian Bale, Kate Beckinsale, Natascha McElhone, and Alessandro Nivola.",
+          "The Trials of Cate McCall | The Trials of Cate McCall is a 2013 American drama film directed and written by Karen Moncrieff. The film stars Kate Beckinsale, Nick Nolte and Clancy Brown."
+        ],
+        "summary_2": "She made her film debut in Much Ado About Nothing (1993).",
+        "answer": "She made her film debut in Much Ado About Nothing (1993).",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Brokedown Palace",
+          "Kate Beckinsale"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?\",\n  \"summary_1\": \"She made her film debut in the 1987 thriller \\\"Hangmen.\\\"\",\n  \"current_output\": {\n    \"query\": \"Hangmen (1987)\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Brokedown Palace Kate Beckinsale film debut\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Brokedown Palace Kate Beckinsale This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Brokedown Palace\",\n    \"Kate Beckinsale\",\n    \"Brokedown Palace (disambiguation)\",\n    \"Much Ado About Nothing (1993 film)\",\n    \"Jonathan Kaplan\",\n    \"Laurel Canyon (film)\",\n    \"The Trials of Cate McCall\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Brokedown Palace | Brokedown Palace is a 1999 American drama film directed by Jonathan Kaplan, and starring Claire Danes, Kate Beckinsale, Bill Pullman and Lim Kay Tong. It deals with two American friends imprisoned in Thailand for drug smuggling. Because it presents a critical view of the Thai legal system, most scenes were filmed in the Philippines; however, some panoramas and views were filmed in Bangkok. Its title is taken from a Grateful Dead song written by Jerry Garcia and Robert Hunter f ...[truncated]\",\n    \"Kate Beckinsale | Kathrin Romary Beckinsale (born 26 July 1973) is an English actress. After some minor television roles, she made her film debut in \\\"Much Ado About Nothing\\\" (1993) while still a student at the University of Oxford. She appeared in British costume dramas such as \\\"Prince of Jutland\\\" (1994), \\\"Cold Comfort Farm\\\" (1995), \\\"Emma\\\" (1996), and \\\"The Golden Bowl\\\" (2000), in addition to various stage and radio productions. She began to seek film work in the United States in the late 1990s a ...[truncated]\",\n    \"Brokedown Palace (disambiguation) | Brokedown Palace is a 1999 American drama film by Jonathan Kaplan.\",\n    \"Much Ado About Nothing (1993 film) | Much Ado About Nothing is a 1993 British/American romantic comedy film based on William Shakespeare's play of the same name. It was adapted for the screen and directed by Kenneth Branagh, who also stars in the film. The film also stars Branagh's then-wife Emma Thompson, Robert Sean Leonard, Denzel Washington, Michael Keaton, Keanu Reeves, and Kate Beckinsale in her film debut.\",\n    \"Jonathan Kaplan | Jonathan Kaplan (born November 25, 1947) is an American film producer and director. His film \\\"The Accused\\\" (1988) earned actress Jodie Foster her first Oscar for Best Actress and was nominated for the Golden Bear at the 39th Berlin International Film Festival. Kaplan received five Emmy nominations for his roles directing and producing \\\"ER\\\".\",\n    \"Laurel Canyon (film) | Laurel Canyon is a 2002 American drama film written and directed by Lisa Cholodenko. The film stars Frances McDormand, Christian Bale, Kate Beckinsale, Natascha McElhone, and Alessandro Nivola.\",\n    \"The Trials of Cate McCall | The Trials of Cate McCall is a 2013 American drama film directed and written by Karen Moncrieff. The film stars Kate Beckinsale, Nick Nolte and Clancy Brown.\"\n  ],\n  \"summary_2\": \"She made her film debut in Much Ado About Nothing (1993).\",\n  \"answer\": \"She made her film debut in Much Ado About Nothing (1993).\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Brokedown Palace\",\n    \"Kate Beckinsale\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the current `query` already contains a film title and an actress name but omits the question's descriptive clause (e.g., director / film-type) that would disambiguate the target film.\",\n    \"preserve_rule\": \"Keep all identifying tokens already in the current `query` (film title and actress name) unchanged and use them as anchors for retrieval.\",\n    \"change_rule\": \"Augment the preserved tokens by appending a short, non‑answer phrase drawn from the `question` that disambiguates the film (for example: 'American drama film directed by Jonathan Kaplan' or the minimal clause from the question). Keep the result as one compact retrieval query string (no full sentences or answers).\",\n    \"drop_or_avoid_rule\": \"Do not add candidate answers, summaries, or long quoted spans. Avoid adding unrelated film titles (e.g., other films from summary_1) or generic short queries like only 'actor film debut' that lack the disambiguating clause. Do not include punctuation-heavy phrasing or a full interrogative sentence.\",\n    \"output_contract\": \"Produce a single-line retrieval query that combines: <film title> + <actress name> + <minimal disambiguating clause from the question (e.g. 'American drama film directed by Jonathan Kaplan')>. The field must be concise, contain no answer text, and be suitable for a search engine.\",\n    \"why_local_transition\": \"Adding the question's disambiguating clause to the existing title+actor tokens focuses retrieval on the specific film directed by Jonathan Kaplan, enabling retrieval of pages that link the actress to that film and thereby surface the actress's film‑debut information.\"\n  },\n  \"rationale\": \"The source query already contains good anchors (film title and actress) but is ambiguous for retrieval. Appending the minimal descriptive phrase from the question provides the needed context to retrieve pages about the specific film (Kaplan's American drama) without introducing answers or long spans. This is a minimal, local change that preserves useful tokens while improving precision of the second-hop retrieval.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 44,
+    "row_index": 44,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

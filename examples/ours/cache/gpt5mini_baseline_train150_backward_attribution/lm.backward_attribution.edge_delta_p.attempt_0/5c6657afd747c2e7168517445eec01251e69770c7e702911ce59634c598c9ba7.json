@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "5c6657afd747c2e7168517445eec01251e69770c7e702911ce59634c598c9ba7",
+  "created_at": "2026-07-14T13:37:26.732093+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?",
+        "summary_1": "They were both nicknamed \"the Irish Giant.\"",
+        "summary_2": "They were both nicknamed \"the Irish Giant.\"",
+        "current_output": "They were both nicknamed \"the Irish Giant.\""
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They were both nicknamed \"the Irish Giant.\"",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Irish Giant",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?\",\n  \"summary_1\": \"They were both nicknamed \\\"the Irish Giant.\\\"\",\n  \"summary_2\": \"They were both nicknamed \\\"the Irish Giant.\\\"\",\n  \"current_output\": \"They were both nicknamed \\\"the Irish Giant.\\\"\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They were both nicknamed \\\"the Irish Giant.\\\"\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Irish Giant\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question requests a 'nickname' (the question text contains the word \\\"nickname\\\") and at least one visible summary states the nickname (e.g., includes the phrase nicknamed \\\"the ...\\\" or otherwise names the nickname).\",\n    \"preserve_rule\": \"Keep the base prompt's existing behavior of extracting the nickname from the provided summaries and preserving the capitalization shown there. Continue to use the fields `question`, `summary_1`, and `summary_2` as the only evidence sources.\",\n    \"change_rule\": \"Instead of producing a full sentence, output only the bare nickname token sequence found in the summaries. If the summaries present the nickname with a leading definite article (e.g., 'the X' or '\\\"the X\\\"'), drop the leading 'the' and output only 'X' (no quotes). If the summaries already present the nickname without a leading article, output that form verbatim. Do not add any explanatory words, modifiers, or punctuation.\",\n    \"drop_or_avoid_rule\": \"Do not produce a full-sentence answer (for example, 'They were both nicknamed ...'), do not include surrounding quotation marks, do not include the definite article 'the' at the start of the answer, and do not add extra context, clarifying phrases, or punctuation beyond the nickname itself.\",\n    \"output_contract\": \"Populate [[ ## answer ## ]] with only the minimal nickname string (matching capitalization from the summaries), with no surrounding quotes, no leading/trailing whitespace beyond a single token, and no additional text or punctuation.\",\n    \"why_local_transition\": \"The agent's current output is a full sentence that includes the article 'the'. The target behavior is the minimal canonical nickname token; this small rule steers the unchanged base prompt to return just that canonical string (dropping sentence framing and the leading article) while preserving extraction from the same summaries.\"\n  },\n  \"rationale\": \"This delta is a minimal, local behavioral adjustment: it keeps the existing extraction logic but changes only the final formatting to the minimal-answer contract required by the final agent. It triggers only when the question requests a nickname and a summary names that nickname, so it won't affect unrelated outputs. It explicitly removes sentence framing and the leading 'the' because the endpoint target is a concise canonical label rather than a descriptive sentence, while preserving capitalization and the source-of-truth (the visible summaries). The change follows the constraint of not inserting the target answer directly into the prompt and limits the edit to formatting/selection behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 67,
+    "row_index": 67,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

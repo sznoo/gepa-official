@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "7fc2534bd81a1a032400573388fa939d5bdb26e5527649ccd0170e1ddbc15205",
+  "created_at": "2026-07-14T13:37:22.941531+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 both assign the same role (or clearly synonymous roles) to the named people in the question.",
+            "preserve_rule": "Keep using only the provided summaries as evidence and avoid inventing facts. Preserve the agent's existing behavior of inferring the role from the summaries.",
+            "change_rule": "Replace verbose, sentence-style final outputs with a single noun token: the canonical role term supported by the summaries. If the summaries use synonyms (e.g., two words with the same meaning), pick the shortest common noun form present in the summaries and normalize it to singular form and lowercase. Produce only that token — no explanation, no justification, no additional words.",
+            "drop_or_avoid_rule": "Do not include surrounding phrases (e.g., 'They were', 'both', 'lead singer'), parenthetical notes, plural forms, punctuation, or multiple synonyms. Avoid restating the question or the summaries. Do not append qualifiers or sentence fragments.",
+            "output_contract": "Populate the 'answer' field with exactly one word: the minimal role noun (singular, lowercase) that the summaries jointly support. The [[ ## answer ## ]] block must contain only that single token and nothing else.",
+            "why_local_transition": "The current output is a short sentence with extra words; the pipeline requires the minimal role label. This local prompt edit narrows the final-output behavior so the agent emits the single canonical role noun directly derived from the given summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+        "summary_1": "They were singers — both acted as vocalists (Jenna as lead singer; Ronnie as a vocalist).",
+        "summary_2": "They were singers/vocalists — Jenna Sanz-Agero was the lead singer of Vixen; Ronnie Dunn was a vocalist (singer) in Brooks & Dunn.",
+        "current_output": "They were both singers — vocalists (lead singers)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 both assign the same role (or clearly synonymous roles) to the named people in the question.\",\n      \"preserve_rule\": \"Keep using only the provided summaries as evidence and avoid inventing facts. Preserve the agent's existing behavior of inferring the role from the summaries.\",\n      \"change_rule\": \"Replace verbose, sentence-style final outputs with a single noun token: the canonical role term supported by the summaries. If the summaries use synonyms (e.g., two words with the same meaning), pick the shortest common noun form present in the summaries and normalize it to singular form and lowercase. Produce only that token — no explanation, no justification, no additional words.\",\n      \"drop_or_avoid_rule\": \"Do not include surrounding phrases (e.g., 'They were', 'both', 'lead singer'), parenthetical notes, plural forms, punctuation, or multiple synonyms. Avoid restating the question or the summaries. Do not append qualifiers or sentence fragments.\",\n      \"output_contract\": \"Populate the 'answer' field with exactly one word: the minimal role noun (singular, lowercase) that the summaries jointly support. The [[ ## answer ## ]] block must contain only that single token and nothing else.\",\n      \"why_local_transition\": \"The current output is a short sentence with extra words; the pipeline requires the minimal role label. This local prompt edit narrows the final-output behavior so the agent emits the single canonical role noun directly derived from the given summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\",\n  \"summary_1\": \"They were singers — both acted as vocalists (Jenna as lead singer; Ronnie as a vocalist).\",\n  \"summary_2\": \"They were singers/vocalists — Jenna Sanz-Agero was the lead singer of Vixen; Ronnie Dunn was a vocalist (singer) in Brooks & Dunn.\",\n  \"current_output\": \"They were both singers — vocalists (lead singers).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"singer\",\n  \"rationale\": \"Both summaries identify them as singers/vocalists; per the deltas I chose the shortest common noun present ('singer') and normalized it to singular lowercase.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 57,
+    "row_index": 57,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

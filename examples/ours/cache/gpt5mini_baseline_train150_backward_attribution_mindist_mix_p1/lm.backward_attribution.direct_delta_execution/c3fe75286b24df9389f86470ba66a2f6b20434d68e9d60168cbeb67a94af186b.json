@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c3fe75286b24df9389f86470ba66a2f6b20434d68e9d60168cbeb67a94af186b",
+  "created_at": "2026-07-14T19:01:54.982291+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the visible summaries mention 'letters' (including variants such as 'hybrid/printed e‑mail letters', 'postal packets', or similar parenthetical elaborations) and the current answer repeats a verbose parenthetical expansion, apply this delta.",
+            "preserve_rule": "Keep the factual items already asserted by the summaries (e.g., the presence of mail/letters and any specific subtypes that are explicitly named). Preserve the agent's requirement to produce a minimal final answer string and to not add unsupported claims.",
+            "change_rule": "Replace verbose parenthetical elaboration with a single, concise general label that covers those letter-like deliverables. Produce a short comma-separated noun list of the supported delivery categories (use one common-word label to collapse synonyms such as 'letters' and related variants). Prefer brevity and normalize synonymous phrases into that single label rather than repeating all subtypes.",
+            "drop_or_avoid_rule": "Do not emit the original parenthetical expansion or extra explanatory text. Do not invent or add any delivery item that is not explicitly or plausibly supported by the visible summaries. Avoid full-sentence explanations; produce only the minimal noun list.",
+            "output_contract": "Return only the minimal answer string (no surrounding explanation), composed of the supported delivery category names as a comma-separated list (optionally with 'and' before the last item). Do not include parenthetical details, extra qualifiers, or unsupported items. Preserve the existing final-answer interface (the [[ ## answer ## ]] block must contain only that minimal string).",
+            "why_local_transition": "This small edit compresses verbose, overlapping letter subtypes into a single general label and yields a compact noun-list answer. It preserves the evidence already present (mail/letters) while enforcing the minimal-answer output shape required by the final agent role."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "summary_2": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "current_output": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the visible summaries mention 'letters' (including variants such as 'hybrid/printed e‑mail letters', 'postal packets', or similar parenthetical elaborations) and the current answer repeats a verbose parenthetical expansion, apply this delta.\",\n      \"preserve_rule\": \"Keep the factual items already asserted by the summaries (e.g., the presence of mail/letters and any specific subtypes that are explicitly named). Preserve the agent's requirement to produce a minimal final answer string and to not add unsupported claims.\",\n      \"change_rule\": \"Replace verbose parenthetical elaboration with a single, concise general label that covers those letter-like deliverables. Produce a short comma-separated noun list of the supported delivery categories (use one common-word label to collapse synonyms such as 'letters' and related variants). Prefer brevity and normalize synonymous phrases into that single label rather than repeating all subtypes.\",\n      \"drop_or_avoid_rule\": \"Do not emit the original parenthetical expansion or extra explanatory text. Do not invent or add any delivery item that is not explicitly or plausibly supported by the visible summaries. Avoid full-sentence explanations; produce only the minimal noun list.\",\n      \"output_contract\": \"Return only the minimal answer string (no surrounding explanation), composed of the supported delivery category names as a comma-separated list (optionally with 'and' before the last item). Do not include parenthetical details, extra qualifiers, or unsupported items. Preserve the existing final-answer interface (the [[ ## answer ## ]] block must contain only that minimal string).\",\n      \"why_local_transition\": \"This small edit compresses verbose, overlapping letter subtypes into a single general label and yields a compact noun-list answer. It preserves the evidence already present (mail/letters) while enforcing the minimal-answer output shape required by the final agent role.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"summary_2\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"current_output\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Mail\",\n  \"rationale\": \"Summaries indicate mail/letters; per the deltas, I replaced the verbose parenthetical with a single, concise category label.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

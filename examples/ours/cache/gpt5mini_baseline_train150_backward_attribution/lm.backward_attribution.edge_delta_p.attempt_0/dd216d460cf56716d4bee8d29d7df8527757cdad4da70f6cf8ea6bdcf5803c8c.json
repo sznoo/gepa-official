@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "dd216d460cf56716d4bee8d29d7df8527757cdad4da70f6cf8ea6bdcf5803c8c",
+  "created_at": "2026-07-14T13:38:07.535309+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which 1986 french film features Jean-Hugues Anglade as the character Zorg?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which 1986 french film features Jean-Hugues Anglade as the character Zorg?",
+        "summary_1": "The film is \"Betty Blue\" (French title: 37°2 le matin).",
+        "summary_2": "Betty Blue (French title: 37°2 le matin) — a 1986 French film in which Jean-Hugues Anglade plays Zorg.",
+        "current_output": "Betty Blue (French title: 37°2 le matin)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Betty Blue (French title: 37°2 le matin)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Betty Blue",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which 1986 french film features Jean-Hugues Anglade as the character Zorg?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which 1986 french film features Jean-Hugues Anglade as the character Zorg?\",\n  \"summary_1\": \"The film is \\\"Betty Blue\\\" (French title: 37°2 le matin).\",\n  \"summary_2\": \"Betty Blue (French title: 37°2 le matin) — a 1986 French film in which Jean-Hugues Anglade plays Zorg.\",\n  \"current_output\": \"Betty Blue (French title: 37°2 le matin)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Betty Blue (French title: 37°2 le matin)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Betty Blue\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When composing the final `answer` and the provided summaries contain a film title immediately followed by a parenthetical alternate or foreign title (a pattern like: MainTitle (alternate title...)).\",\n    \"preserve_rule\": \"Continue to treat the provided summaries as authoritative sources and keep producing a single concise answer string based on those summaries.\",\n    \"change_rule\": \"If a title in the summaries includes a parenthetical expression immediately after the main title, output only the text of the main title (the characters appearing before the first ' ('). Prefer the shortest title form that is directly supported by the summaries when multiple variants appear.\",\n    \"drop_or_avoid_rule\": \"Do not include the parenthetical alternate/foreign title, year, explanatory clauses, or extra punctuation. Avoid producing multiple title variants or any surrounding explanatory text; do not add new facts not present in the summaries.\",\n    \"output_contract\": \"Place exactly the minimal title string (no parentheses, no additional text) inside the [[ ## answer ## ]] block. No surrounding explanation, punctuation, or extra whitespace beyond the title itself.\",\n    \"why_local_transition\": \"The current output includes a parenthetical alternate/foreign title; the desired final answer is the minimal canonical title. This small rule removes only the parenthetical portion while preserving reliance on the visible summaries.\"\n  },\n  \"rationale\": \"The source output contains 'MainTitle (alternate title...)' but the target requires just the canonical main title. This delta makes the smallest coherent behavioral change: strip parenthetical alternate titles when forming the final answer while continuing to use the summaries as the information source. It preserves existing concise-answer behavior and avoids introducing broader formatting or content changes.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 87,
+    "row_index": 87,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

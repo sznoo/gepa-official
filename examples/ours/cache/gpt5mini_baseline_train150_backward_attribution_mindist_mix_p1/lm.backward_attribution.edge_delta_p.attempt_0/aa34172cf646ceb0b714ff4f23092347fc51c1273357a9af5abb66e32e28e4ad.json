@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "aa34172cf646ceb0b714ff4f23092347fc51c1273357a9af5abb66e32e28e4ad",
+  "created_at": "2026-07-14T19:01:36.892613+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Who was the professor from the private Ph.D.-granting research university in Chicago that founded a website that is a multimedia archive of the United States Supreme court?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Who was the professor from the private Ph.D.-granting research university in Chicago that founded a website that is a multimedia archive of the United States Supreme court?",
+        "summary_1": "Jerry Goldman",
+        "summary_2": "Jerry Goldman — research professor of law at Chicago-Kent College of Law, Illinois Institute of Technology; founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court.",
+        "current_output": "Jerry Goldman — research professor of law at Chicago-Kent College of Law (Illinois Institute of Technology) and founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Jerry Goldman — research professor of law at Chicago-Kent College of Law (Illinois Institute of Technology) and founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Jerry Goldman",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Who was the professor from the private Ph.D.-granting research university in Chicago that founded a website that is a multimedia archive of the United States Supreme court?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who was the professor from the private Ph.D.-granting research university in Chicago that founded a website that is a multimedia archive of the United States Supreme court?\",\n  \"summary_1\": \"Jerry Goldman\",\n  \"summary_2\": \"Jerry Goldman — research professor of law at Chicago-Kent College of Law, Illinois Institute of Technology; founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court.\",\n  \"current_output\": \"Jerry Goldman — research professor of law at Chicago-Kent College of Law (Illinois Institute of Technology) and founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Jerry Goldman — research professor of law at Chicago-Kent College of Law (Illinois Institute of Technology) and founder of the Oyez Project, the multimedia archive of the U.S. Supreme Court.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Jerry Goldman\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks 'Who' (case-insensitive) and at least one summary (summary_1 or summary_2) names a single person who answers the question, and the current_output contains more than a single name token (e.g., includes titles, roles, affiliations, or explanatory phrases).\",\n    \"preserve_rule\": \"Continue to use the visible summaries (summary_1, summary_2) as the authoritative evidence source. Preserve selection of the named entity already identified in those summaries; do not change which summary content is considered.\",\n    \"change_rule\": \"When triggered, replace any verbose final-output phrasing with a single minimal name string drawn exactly from the summaries (the person's name as presented there). Remove all accompanying descriptors, appositions, parentheses, em-dashes, explanatory clauses, and extra punctuation. Place only that minimal name into the final answer block.\",\n    \"drop_or_avoid_rule\": \"Do not include job titles, affiliations, founding details, descriptions, additional sentences, parenthetical remarks, or punctuation other than letters and internal name punctuation (e.g., hyphens in a name). Avoid adding clarifications, qualifiers, or any text not literally part of the person's name as shown in the summaries.\",\n    \"output_contract\": \"The agent's final output must contain only the single minimal answer string (the person's full name as it appears in the visible summary text) inside the [[ ## answer ## ]] block and nothing else — no extra words, punctuation, or explanatory text.\",\n    \"why_local_transition\": \"The current behavior emits a verbose phrase combining the name with descriptive context. This local prompt edit forces minimalization to satisfy the final-answer contract (one minimal name supported by summaries) while leaving evidence selection unchanged.\"\n  },\n  \"rationale\": \"This delta is a minimal, targeted instruction: it only activates for 'Who' questions when summaries nominate a person and the current output is verbose. It preserves existing evidence use and simply suppresses extra descriptive material, producing the minimal name string required by the agent role. The rules avoid introducing new selection heuristics or copying any target answer verbatim; they only constrain formatting and verbosity so the final output is the single name supported by the visible summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 55,
+    "row_index": 55,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

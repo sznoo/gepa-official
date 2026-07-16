@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "bc5d552e0fb8dcb96bbaea8f9df6c1998977dc4e6ff6de39e8acf4f2fceeaa02",
+  "created_at": "2026-07-14T19:01:36.714410+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "United 300 and 300 were both made in what country?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "United 300 and 300 were both made in what country?",
+        "summary_1": "France",
+        "summary_2": "United States (both films are American)",
+        "current_output": "United States"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "United States",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "American",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"United 300 and 300 were both made in what country?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"United 300 and 300 were both made in what country?\",\n  \"summary_1\": \"France\",\n  \"summary_2\": \"United States (both films are American)\",\n  \"current_output\": \"United States\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"United States\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"American\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks which country the items were made in (phrases like 'what country', 'where were', 'made in') and at least one visible summary contains an explicit nationality adjective or an explicit claim of the form 'both ... are <nationality>' (e.g. the visible phrase 'both films are American').\",\n    \"preserve_rule\": \"Keep using the provided fields question, summary_1, and summary_2 as evidence. Preserve the base behavior of producing a single minimal answer string inside the required [[ ## answer ## ]] block and do not add explanations or extra text.\",\n    \"change_rule\": \"If a summary explicitly provides a nationality adjective (an adjectival demonym) or explicitly states 'both ... are <nationality>', return that nationality adjective exactly as written in the supporting summary (e.g. 'American'). If multiple summaries agree on the same adjectival nationality, return it. If summaries conflict, prefer the summary that explicitly states 'both' or uses an unambiguous adjectival nationality.\",\n    \"drop_or_avoid_rule\": \"Do not convert an adjectival nationality into a country name (for example, do not turn 'American' into 'United States'). Do not append qualifiers, punctuation, or explanatory phrases. Avoid favoring a country-name form when a supporting summary supplies the adjectival form.\",\n    \"output_contract\": \"Produce only the minimal answer string — the nationality adjective exactly as supported by the summaries — and place it alone in the [[ ## answer ## ]] block. No additional text, punctuation, or explanation.\",\n    \"why_local_transition\": \"This small rule biases the final answer toward an explicit adjectival nationality when a summary directly asserts the films share that nationality (e.g. 'both films are American'), which yields a minimal answer string that mirrors the supporting summary wording.\"\n  },\n  \"rationale\": \"The current outputs show a country-name vs. adjectival-nationality mismatch. Introducing a narrow preference for an explicit adjectival nationality (especially when a summary explicitly says 'both ... are <nationality>') is a minimal, local prompt change that preserves existing evidence usage while steering the final answer to the adjectival form present in the visible summaries. This avoids wholesale changes to answer formatting and prevents converting the adjective into a country-name when the summary supplies the adjective.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 50,
+    "row_index": 50,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

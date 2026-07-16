@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "68ba478c4ecde684efd97ffcf0c8a4b408fd55c14455fcd219a212b3255df236",
+  "created_at": "2026-07-14T19:01:54.201650+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "summary_1": "The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.",
+        "current_output": {
+          "query": "\"Edwin Mortimer Hopkins date of birth\" OR \"Edwin M. Hopkins born\" OR \"Edwin Mortimer Hopkins biography birth date\""
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "1891 Kansas Jayhawks second season coach"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "1899–1900 Kansas Jayhawks men's basketball team James Naismith How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "1899–1900 Kansas Jayhawks men's basketball team",
+          "1900–01 Kansas Jayhawks men's basketball team",
+          "1898–99 Kansas Jayhawks men's basketball team",
+          "1901–02 Kansas Jayhawks men's basketball team",
+          "1922–23 Kansas Jayhawks men's basketball team",
+          "1904–05 Kansas Jayhawks men's basketball team",
+          "1903–04 Kansas Jayhawks men's basketball team"
+        ],
+        "retrieved_doc_snippets": [
+          "1899–1900 Kansas Jayhawks men's basketball team | The 1900 Kansas Jayhawks men's basketball team represented the University of Kansas in its second season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his second year.",
+          "1900–01 Kansas Jayhawks men's basketball team | The 1900-1901 Kansas Jayhawks men's basketball team represented the University of Kansas in its third season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 3rd year.",
+          "1898–99 Kansas Jayhawks men's basketball team | The 1899 Kansas Jayhawks men's basketball team represented the University of Kansas in its first season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 1st year.",
+          "1901–02 Kansas Jayhawks men's basketball team | The 1901-1902 Kansas Jayhawks men's basketball team represented the University of Kansas in its fourth season of collegiate basketball. The head coach was Dr. James Naismith, who served his 4th year in that capacity.",
+          "1922–23 Kansas Jayhawks men's basketball team | The 1922–23 Kansas Jayhawks men's basketball team represented the University of Kansas during the 1922–23 NCAA men's basketball season in the United States. The head coach was Phog Allen, coaching in his sixth overall season with the Jayhawks. The team finished the season with a 17–1 record and were named national champions by the Helms Athletic Foundation for the second consecutive season. Senior Paul Endacott was named a consensus All-American fo ...[truncated]",
+          "1904–05 Kansas Jayhawks men's basketball team | The 1904-1905 Kansas Jayhawks men's basketball team represented the University of Kansas in its seventh season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 7th year.",
+          "1903–04 Kansas Jayhawks men's basketball team | The 1903-1904 Kansas Jayhawks men's basketball team represented the University of Kansas in its sixth season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 6th year."
+        ],
+        "summary_2": "I cannot determine his age in 1891 from the supplied passages. Please provide Edwin Mortimer Hopkins's birth date (or allow me to look it up), and I'll calculate his age in 1891.",
+        "answer": "I don’t have enough data here to compute his age in 1891. Please either provide Edwin Mortimer Hopkins’s birth date or tell me to look it up. I will then calculate his exact age in 1891.",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "1899–1900 Kansas Jayhawks men's basketball team"
+        ],
+        "missing_titles_after_hop2": [
+          "James Naismith"
+        ]
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"summary_1\": \"The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.\",\n  \"current_output\": {\n    \"query\": \"\\\"Edwin Mortimer Hopkins date of birth\\\" OR \\\"Edwin M. Hopkins born\\\" OR \\\"Edwin Mortimer Hopkins biography birth date\\\"\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"1891 Kansas Jayhawks second season coach\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"1899–1900 Kansas Jayhawks men's basketball team James Naismith How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"1899–1900 Kansas Jayhawks men's basketball team\",\n    \"1900–01 Kansas Jayhawks men's basketball team\",\n    \"1898–99 Kansas Jayhawks men's basketball team\",\n    \"1901–02 Kansas Jayhawks men's basketball team\",\n    \"1922–23 Kansas Jayhawks men's basketball team\",\n    \"1904–05 Kansas Jayhawks men's basketball team\",\n    \"1903–04 Kansas Jayhawks men's basketball team\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"1899–1900 Kansas Jayhawks men's basketball team | The 1900 Kansas Jayhawks men's basketball team represented the University of Kansas in its second season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his second year.\",\n    \"1900–01 Kansas Jayhawks men's basketball team | The 1900-1901 Kansas Jayhawks men's basketball team represented the University of Kansas in its third season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 3rd year.\",\n    \"1898–99 Kansas Jayhawks men's basketball team | The 1899 Kansas Jayhawks men's basketball team represented the University of Kansas in its first season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 1st year.\",\n    \"1901–02 Kansas Jayhawks men's basketball team | The 1901-1902 Kansas Jayhawks men's basketball team represented the University of Kansas in its fourth season of collegiate basketball. The head coach was Dr. James Naismith, who served his 4th year in that capacity.\",\n    \"1922–23 Kansas Jayhawks men's basketball team | The 1922–23 Kansas Jayhawks men's basketball team represented the University of Kansas during the 1922–23 NCAA men's basketball season in the United States. The head coach was Phog Allen, coaching in his sixth overall season with the Jayhawks. The team finished the season with a 17–1 record and were named national champions by the Helms Athletic Foundation for the second consecutive season. Senior Paul Endacott was named a consensus All-American fo ...[truncated]\",\n    \"1904–05 Kansas Jayhawks men's basketball team | The 1904-1905 Kansas Jayhawks men's basketball team represented the University of Kansas in its seventh season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 7th year.\",\n    \"1903–04 Kansas Jayhawks men's basketball team | The 1903-1904 Kansas Jayhawks men's basketball team represented the University of Kansas in its sixth season of collegiate basketball. The head coach was Dr. James Naismith, the inventor of the game, who served his 6th year.\"\n  ],\n  \"summary_2\": \"I cannot determine his age in 1891 from the supplied passages. Please provide Edwin Mortimer Hopkins's birth date (or allow me to look it up), and I'll calculate his age in 1891.\",\n  \"answer\": \"I don’t have enough data here to compute his age in 1891. Please either provide Edwin Mortimer Hopkins’s birth date or tell me to look it up. I will then calculate his exact age in 1891.\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"1899–1900 Kansas Jayhawks men's basketball team\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"James Naismith\"\n  ]\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 contains a full personal name for the coach (e.g., 'Edwin Mortimer Hopkins') but does not give a birth date or age.\",\n    \"preserve_rule\": \"Keep the agent's original goal: produce one compact retrieval query string derived from the given question and summary_1. Preserve concise, search-friendly phrasing.\",\n    \"change_rule\": \"Instead of querying for team seasons or general coach history, build a single short query that targets the named person's birth date or biographical page. Use the exact name as it appears in summary_1 and include terms like \\\"birth date\\\", \\\"born\\\", or \\\"biography\\\"; allow simple OR variants. Example pattern: \\\"<Exact Name> birth date\\\" OR \\\"<Exact Name> born\\\" OR \\\"<Exact Name> biography birth date\\\".\",\n    \"drop_or_avoid_rule\": \"Do not broaden the query to team-season pages, other coaches, or timeline searches. Do not attempt to compute or state the age in the prompt, and do not include any candidate answer or long factual spans.\",\n    \"output_contract\": \"Return exactly one field `query` containing a single short search string that uses the exact coach name from summary_1 and targets birth-date/biography information (may include simple OR alternatives).\",\n    \"why_local_transition\": \"summary_1 already supplies the coach's identity but lacks the birth-date needed to compute age; the minimal necessary next step is a focused biography/birth-date lookup for that named person rather than another pass over team-season pages.\"\n  },\n  \"rationale\": \"This edit is a minimal, local change: it detects when the summary gives a coach name but no birth-date and redirects the next-hop query to find that birth-date. It preserves the agent's single-query interface and concise style, avoids producing answers or copying facts, and prevents noisy searches of season pages that retrieve other coaches. The change only alters how the query is composed (injecting the exact name and birth-date terms) so downstream steps can compute age.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 99,
+    "row_index": 99,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

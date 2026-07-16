@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "1ab238a60acba4338082e36300c78197143fa6daa97e68a42a1b55a69a5d77c0",
+  "created_at": "2026-07-15T21:32:22.856474+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "Which American economist, winner of the 1976 Nobel Memorial Prize in Economic Sciences, wrote the introduction for the 1996 reprint of \"I, Pencil\"?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Which American economist, winner of the 1976 Nobel Memorial Prize in Economic Sciences, wrote the introduction for the 1996 reprint of \"I, Pencil\"?",
+        "passages": [
+          "I, Pencil | \"I, Pencil\" is an essay by Leonard Read.  The full title is \"I, Pencil: My Family Tree as Told to Leonard E. Read\" and it was first published in the December 1958 issue of \"The Freeman\".  It was reprinted in \"The Freeman\" in May 1996 and as a pamphlet entitled \"I.. .  Pencil\" in May 1998.  In the reprint, Milton Friedman wrote the introduction and Donald J. Boudreaux wrote the afterword.  Friedman (the 1976 winner of the Nobel Prize in Economics) used the essay in his 1980 PBS television show \"Free to Choose\" and the accompanying book of the same name.  In the 2008 50th Anniversary Edition, the introduction is written by Lawrence W. Reed and Friedman wrote the afterword.",
+          "Roger Myerson | Roger Bruce Myerson (born March 29, 1951) is an American economist and winner of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel, sometimes referred to as the \"Nobel Prize\" for economics, with Leonid Hurwicz and Eric Maskin for \"having laid the foundations of mechanism design theory.\"  A professor at the University of Chicago, he has made contributions as an economist and as a political scientist.",
+          "Michael Spence (disambiguation) | Michael Spence is an American-born economist and winner of the 2001 Nobel Memorial Prize in Economic Sciences",
+          "James Mirrlees | Sir James Alexander Mirrlees {'1': \", '2': \", '3': 'FRSE FBA', '4': \"} (born 5 July 1936) is a Scottish economist and winner of the 1996 Nobel Memorial Prize in Economic Sciences.  He was knighted in 1998.",
+          "Edmund Phelps | Edmund Strother Phelps, (born July 26, 1933) is an American economist and the winner of the 2006 Nobel Memorial Prize in Economic Sciences.",
+          "John Harsanyi | John Charles Harsanyi (Hungarian: \"Harsányi János Károly\" ; May 29, 1920 – August 9, 2000) was a Hungarian-American economist and Nobel Memorial Prize in Economic Sciences winner.",
+          "Robert F. Engle | Robert Fry Engle III (born November 10, 1942) is an American economist and the winner of the 2003 Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel, sharing the award with Clive Granger, \"for methods of analyzing economic time series with time-varying volatility (ARCH)\"."
+        ],
+        "current_output": "Milton Friedman"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Milton Friedman",
+        "score": 1.0,
+        "generated_query": "\"I, Pencil\" 1996 reprint introduction Milton Friedman",
+        "retrieved_titles": [
+          "I, Pencil",
+          "EdChoice",
+          "Milton Friedman Institute for Research in Economics",
+          "Milton Friedman bibliography",
+          "Rose Friedman",
+          "Milton Friedman",
+          "Free to Choose"
+        ],
+        "summary_2": "Milton Friedman",
+        "answer": "Milton Friedman",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Milton Friedman"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Milton Friedman wrote the introduction for the 1996 reprint of \"I, Pencil\".",
+        "score": 1.0,
+        "generated_query": "\"I, Pencil\" 1996 reprint introduction Milton Friedman site:.edu OR site:.gov OR site:.org OR publisher OR \"introduction by Milton Friedman\" \"1996\" \"I, Pencil\"",
+        "retrieved_titles": [
+          "I, Pencil",
+          "EdChoice",
+          "Milton Friedman Institute for Research in Economics",
+          "Milton Friedman bibliography",
+          "Nashoba Brook Pencil Factory Site",
+          "Rose Friedman",
+          "Milton Friedman"
+        ],
+        "summary_2": "Milton Friedman",
+        "answer": "Milton Friedman",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Milton Friedman"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"Which American economist, winner of the 1976 Nobel Memorial Prize in Economic Sciences, wrote the introduction for the 1996 reprint of \\\"I, Pencil\\\"?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which American economist, winner of the 1976 Nobel Memorial Prize in Economic Sciences, wrote the introduction for the 1996 reprint of \\\"I, Pencil\\\"?\",\n  \"passages\": [\n    \"I, Pencil | \\\"I, Pencil\\\" is an essay by Leonard Read.  The full title is \\\"I, Pencil: My Family Tree as Told to Leonard E. Read\\\" and it was first published in the December 1958 issue of \\\"The Freeman\\\".  It was reprinted in \\\"The Freeman\\\" in May 1996 and as a pamphlet entitled \\\"I.. .  Pencil\\\" in May 1998.  In the reprint, Milton Friedman wrote the introduction and Donald J. Boudreaux wrote the afterword.  Friedman (the 1976 winner of the Nobel Prize in Economics) used the essay in his 1980 PBS television show \\\"Free to Choose\\\" and the accompanying book of the same name.  In the 2008 50th Anniversary Edition, the introduction is written by Lawrence W. Reed and Friedman wrote the afterword.\",\n    \"Roger Myerson | Roger Bruce Myerson (born March 29, 1951) is an American economist and winner of the Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel, sometimes referred to as the \\\"Nobel Prize\\\" for economics, with Leonid Hurwicz and Eric Maskin for \\\"having laid the foundations of mechanism design theory.\\\"  A professor at the University of Chicago, he has made contributions as an economist and as a political scientist.\",\n    \"Michael Spence (disambiguation) | Michael Spence is an American-born economist and winner of the 2001 Nobel Memorial Prize in Economic Sciences\",\n    \"James Mirrlees | Sir James Alexander Mirrlees {'1': \\\", '2': \\\", '3': 'FRSE FBA', '4': \\\"} (born 5 July 1936) is a Scottish economist and winner of the 1996 Nobel Memorial Prize in Economic Sciences.  He was knighted in 1998.\",\n    \"Edmund Phelps | Edmund Strother Phelps, (born July 26, 1933) is an American economist and the winner of the 2006 Nobel Memorial Prize in Economic Sciences.\",\n    \"John Harsanyi | John Charles Harsanyi (Hungarian: \\\"Harsányi János Károly\\\" ; May 29, 1920 – August 9, 2000) was a Hungarian-American economist and Nobel Memorial Prize in Economic Sciences winner.\",\n    \"Robert F. Engle | Robert Fry Engle III (born November 10, 1942) is an American economist and the winner of the 2003 Sveriges Riksbank Prize in Economic Sciences in Memory of Alfred Nobel, sharing the award with Clive Granger, \\\"for methods of analyzing economic time series with time-varying volatility (ARCH)\\\".\"\n  ],\n  \"current_output\": \"Milton Friedman\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Milton Friedman\",\n  \"score\": 1.0,\n  \"generated_query\": \"\\\"I, Pencil\\\" 1996 reprint introduction Milton Friedman\",\n  \"retrieved_titles\": [\n    \"I, Pencil\",\n    \"EdChoice\",\n    \"Milton Friedman Institute for Research in Economics\",\n    \"Milton Friedman bibliography\",\n    \"Rose Friedman\",\n    \"Milton Friedman\",\n    \"Free to Choose\"\n  ],\n  \"summary_2\": \"Milton Friedman\",\n  \"answer\": \"Milton Friedman\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Milton Friedman\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Milton Friedman wrote the introduction for the 1996 reprint of \\\"I, Pencil\\\".\",\n  \"score\": 1.0,\n  \"generated_query\": \"\\\"I, Pencil\\\" 1996 reprint introduction Milton Friedman site:.edu OR site:.gov OR site:.org OR publisher OR \\\"introduction by Milton Friedman\\\" \\\"1996\\\" \\\"I, Pencil\\\"\",\n  \"retrieved_titles\": [\n    \"I, Pencil\",\n    \"EdChoice\",\n    \"Milton Friedman Institute for Research in Economics\",\n    \"Milton Friedman bibliography\",\n    \"Nashoba Brook Pencil Factory Site\",\n    \"Rose Friedman\",\n    \"Milton Friedman\"\n  ],\n  \"summary_2\": \"Milton Friedman\",\n  \"answer\": \"Milton Friedman\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Milton Friedman\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the agent role requests a first-hop summary (agent_role contains 'Summarize first-hop evidence') and you are producing the `summary` field from the given `passages` and `question`.\",\n    \"preserve_rule\": \"Keep the agent's current behavior of locating and exposing the bridge entity (the named entity in the passages that most directly connects to the question) and retain any short citation or passage identifier that supports that entity.\",\n    \"change_rule\": \"Do not produce a conclusive, answer-like sentence that asserts the target relation. Instead format the summary as two concise pieces: (1) the bridge entity text exactly as it appears in the passages (name only), and (2) a one-line retrieval direction describing the specific fact to confirm in the next hop, phrased as an instruction (for example: 'confirm whether this person performed [relation]'). Use no assertive phrasing like 'X did Y' and avoid adding extra supporting facts beyond what is present in the passages.\",\n    \"drop_or_avoid_rule\": \"Avoid full-sentence claims, definitive answers, added contextual assertions, or any phrasing that attempts to answer the full question. Do not append afterwords, elaborations, or targeted searches; keep output minimal and focused on the entity + retrieval direction.\",\n    \"output_contract\": \"The produced `summary` must be a single short string containing both elements separated clearly (e.g. 'Bridge entity: [NAME]; Retrieval: [short instruction]'). The bridge entity must match the passage text. The retrieval direction must be a short, task-oriented instruction specifying the relation or fact the next hop should confirm (no assertions).\",\n    \"why_local_transition\": \"This small edit shifts behavior from producing potentially answer-like, conclusive summaries to producing a minimal, actionable bridge that directs the next retrieval step. It preserves entity extraction while preventing the agent from asserting the final relation prematurely.\"\n  },\n  \"rationale\": \"The pipeline role is to expose the bridge entity and the next retrieval direction, not to resolve the full relation. The minimal change enforces a strict, structured summary format that (a) preserves useful entity extraction already performed, (b) prevents producing final-answer assertions that leak or preempt later verification, and (c) gives a clear, compact retrieval instruction for the downstream agent. This is the smallest coherent behavioral edit that moves the agent from producing answer-like prose to producing the succinct, actionable output the next hop requires.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 70,
+    "row_index": 70,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 97,
+    "matched_w_stable_id": "97",
+    "bisection_round": 0,
+    "material_fingerprint": "c3bcb8df6bdeb3fd062896cf9d4d166fa114d51825601b436a8f7d03c6f185ae",
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

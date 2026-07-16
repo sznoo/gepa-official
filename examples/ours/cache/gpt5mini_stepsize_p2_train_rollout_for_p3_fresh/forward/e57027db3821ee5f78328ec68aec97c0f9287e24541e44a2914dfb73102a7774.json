@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "e57027db3821ee5f78328ec68aec97c0f9287e24541e44a2914dfb73102a7774",
+  "created_at": "2026-07-16T05:56:21.745252+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+    "answer": "film director and actor",
+    "context": {
+      "title": [
+        "Nils Tavernier",
+        "Dans la Nuit (Louis Sclavis album)",
+        "Bertrand Tavernier",
+        "Safe Conduct",
+        "Beatrice (film)",
+        "Round Midnight (film)",
+        "The Oubliette",
+        "Charles Giblyn",
+        "The Clockmaker",
+        "Holy Lola"
+      ],
+      "sentences": [
+        [
+          "Nils Tavernier (born 1 September 1965) is a French actor and director.",
+          " He is best known for his film appearances in \"Beatrice\" (1987), \"Valmont\" (1988), and \"Revenge of the Musketeers\" (1993), and for his directorial efforts \"The Other Side of the Tracks\" (1997), \"Etoiles: Dancers of the Paris Opera Ballet\" (2001), and \"Les enfants de Thiès\" (2001).",
+          " He is the son of film director Bertrand Tavernier."
+        ],
+        [
+          "Dans la Nuit is an album by French clarinetist Louis Sclavis recorded in 2000 and released on the ECM label.",
+          " The album was initialised through an invitation of French director Bertrand Tavernier to Sclavis, he agreed and wrote this music to Charles Vanel’s 1929 film “Dans la nuit”."
+        ],
+        [
+          "Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer."
+        ],
+        [
+          "Safe Conduct (French: Laissez-passer ) is a 2002 French historical drama film directed by Bertrand Tavernier and written by Tavernier and Jean Cosmos."
+        ],
+        [
+          "Beatrice (French:La passion Béatrice, Italian:Quarto comandamento) is a 1987 French-Italian historical drama film directed by Bertrand Tavernier and starring Bernard-Pierre Donnadieu, Julie Delpy and Nils Tavernier."
+        ],
+        [
+          "Round Midnight is a 1986 American-French musical drama film directed by Bertrand Tavernier and written by Tavernier and David Rayfiel.",
+          " It stars Dexter Gordon, François Cluzet and Herbie Hancock.",
+          " Martin Scorsese, Philippe Noiret and Wayne Shorter appear in cameos."
+        ],
+        [
+          "The Oubliette is a 1914 American silent drama film directed by Charles Giblyn, featuring Murdock MacQuarrie, Pauline Bush, and Lon Chaney.",
+          " It is part of a four-film series directed by Giblyn called the \"The Adventures of François Villon\".",
+          " \"The Oubliette\" is based on a short story of the same name by George Bronson Howard published in \"The Century Magazine\".",
+          " This film and \"By the Sun's Rays\" are two of Lon Chaney's earliest surviving films."
+        ],
+        [
+          "Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.",
+          " He directed 96 films between 1912 and 1927.",
+          " He also appeared in 23 films between 1914 and 1934.",
+          " He was one of the founders of the Motion Picture Directors Association.",
+          " Founded Albion Productions, a film production company, in 1922.",
+          " He was born in Watertown, New York and died in Los Angeles, California."
+        ],
+        [
+          "The Clockmaker (French: L'Horloger de Saint-Paul , also known as The Clockmaker of St. Paul and The Watchmaker of St. Paul) is a 1974 French crime drama film directed by Bertrand Tavernier.",
+          " Based on the novel \"L'Horloger d'Everton\" by Georges Simenon, it tells the story of a widowed father who first discovers how little he knows about his teenage son, who kills a man and with his girl goes on the run, but then decides that whatever their faults he will stand by the pair."
+        ],
+        [
+          "Holy Lola is a 2004 French drama film that is directed by Bertrand Tavernier.",
+          " Tavernier said that the film was very, very moving, very exciting to do, and it made him fall in love with Cambodia."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Bertrand Tavernier",
+        "Charles Giblyn"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity and at least one passage provides an explicit, identity-aligned statement linking that same named entity (or a clearly indicated alias) to the asserted relation, append exactly one brief corroborating sentence that paraphrases that passage's linking fact and references the corroborating passage. Perform an explicit identity-alignment check (alias or explicit linking); do not treat mere name co-occurrence or a passage that merely mentions the name as sufficient. Do not append this corroboration if the `context` already contains the identical corroborating fact verbatim. Keep this addition short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "fc7f6a240c2e",
+    "rerun_from": null,
+    "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+    "gold_answer": "film director and actor",
+    "context": {
+      "title": [
+        "Nils Tavernier",
+        "Dans la Nuit (Louis Sclavis album)",
+        "Bertrand Tavernier",
+        "Safe Conduct",
+        "Beatrice (film)",
+        "Round Midnight (film)",
+        "The Oubliette",
+        "Charles Giblyn",
+        "The Clockmaker",
+        "Holy Lola"
+      ],
+      "sentences": [
+        [
+          "Nils Tavernier (born 1 September 1965) is a French actor and director.",
+          " He is best known for his film appearances in \"Beatrice\" (1987), \"Valmont\" (1988), and \"Revenge of the Musketeers\" (1993), and for his directorial efforts \"The Other Side of the Tracks\" (1997), \"Etoiles: Dancers of the Paris Opera Ballet\" (2001), and \"Les enfants de Thiès\" (2001).",
+          " He is the son of film director Bertrand Tavernier."
+        ],
+        [
+          "Dans la Nuit is an album by French clarinetist Louis Sclavis recorded in 2000 and released on the ECM label.",
+          " The album was initialised through an invitation of French director Bertrand Tavernier to Sclavis, he agreed and wrote this music to Charles Vanel’s 1929 film “Dans la nuit”."
+        ],
+        [
+          "Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer."
+        ],
+        [
+          "Safe Conduct (French: Laissez-passer ) is a 2002 French historical drama film directed by Bertrand Tavernier and written by Tavernier and Jean Cosmos."
+        ],
+        [
+          "Beatrice (French:La passion Béatrice, Italian:Quarto comandamento) is a 1987 French-Italian historical drama film directed by Bertrand Tavernier and starring Bernard-Pierre Donnadieu, Julie Delpy and Nils Tavernier."
+        ],
+        [
+          "Round Midnight is a 1986 American-French musical drama film directed by Bertrand Tavernier and written by Tavernier and David Rayfiel.",
+          " It stars Dexter Gordon, François Cluzet and Herbie Hancock.",
+          " Martin Scorsese, Philippe Noiret and Wayne Shorter appear in cameos."
+        ],
+        [
+          "The Oubliette is a 1914 American silent drama film directed by Charles Giblyn, featuring Murdock MacQuarrie, Pauline Bush, and Lon Chaney.",
+          " It is part of a four-film series directed by Giblyn called the \"The Adventures of François Villon\".",
+          " \"The Oubliette\" is based on a short story of the same name by George Bronson Howard published in \"The Century Magazine\".",
+          " This film and \"By the Sun's Rays\" are two of Lon Chaney's earliest surviving films."
+        ],
+        [
+          "Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.",
+          " He directed 96 films between 1912 and 1927.",
+          " He also appeared in 23 films between 1914 and 1934.",
+          " He was one of the founders of the Motion Picture Directors Association.",
+          " Founded Albion Productions, a film production company, in 1922.",
+          " He was born in Watertown, New York and died in Los Angeles, California."
+        ],
+        [
+          "The Clockmaker (French: L'Horloger de Saint-Paul , also known as The Clockmaker of St. Paul and The Watchmaker of St. Paul) is a 1974 French crime drama film directed by Bertrand Tavernier.",
+          " Based on the novel \"L'Horloger d'Everton\" by Georges Simenon, it tells the story of a widowed father who first discovers how little he knows about his teenage son, who kills a man and with his girl goes on the run, but then decides that whatever their faults he will stand by the pair."
+        ],
+        [
+          "Holy Lola is a 2004 French drama film that is directed by Bertrand Tavernier.",
+          " Tavernier said that the film was very, very moving, very exciting to do, and it made him fall in love with Cambodia."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Bertrand Tavernier",
+        "Charles Giblyn"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Bertrand Tavernier",
+      "Charles Giblyn"
+    ],
+    "hop1_query": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+    "hop1_docs": [
+      "Bertrand Tavernier | Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.",
+      "Safe Conduct | Safe Conduct (French: Laissez-passer ) is a 2002 French historical drama film directed by Bertrand Tavernier and written by Tavernier and Jean Cosmos.",
+      "Holy Lola | Holy Lola is a 2004 French drama film that is directed by Bertrand Tavernier.  Tavernier said that the film was very, very moving, very exciting to do, and it made him fall in love with Cambodia.",
+      "Beatrice (film) | Beatrice (French:La passion Béatrice, Italian:Quarto comandamento) is a 1987 French-Italian historical drama film directed by Bertrand Tavernier and starring Bernard-Pierre Donnadieu, Julie Delpy and Nils Tavernier.",
+      "Dans la Nuit (Louis Sclavis album) | Dans la Nuit is an album by French clarinetist Louis Sclavis recorded in 2000 and released on the ECM label.  The album was initialised through an invitation of French director Bertrand Tavernier to Sclavis, he agreed and wrote this music to Charles Vanel’s 1929 film “Dans la nuit”.",
+      "Nils Tavernier | Nils Tavernier (born 1 September 1965) is a French actor and director.  He is best known for his film appearances in \"Beatrice\" (1987), \"Valmont\" (1988), and \"Revenge of the Musketeers\" (1993), and for his directorial efforts \"The Other Side of the Tracks\" (1997), \"Etoiles: Dancers of the Paris Opera Ballet\" (2001), and \"Les enfants de Thiès\" (2001).  He is the son of film director Bertrand Tavernier.",
+      "Round Midnight (film) | Round Midnight is a 1986 American-French musical drama film directed by Bertrand Tavernier and written by Tavernier and David Rayfiel.  It stars Dexter Gordon, François Cluzet and Herbie Hancock.  Martin Scorsese, Philippe Noiret and Wayne Shorter appear in cameos."
+    ],
+    "hop1_titles": [
+      "Bertrand Tavernier",
+      "Safe Conduct",
+      "Holy Lola",
+      "Beatrice (film)",
+      "Dans la Nuit (Louis Sclavis album)",
+      "Nils Tavernier",
+      "Round Midnight (film)"
+    ],
+    "summary_1": "Passage [1] states Bertrand Tavernier \"is a French director, screenwriter, actor and producer.\" None of the supplied passages mention Charles Giblyn or his occupations. Next hop: retrieve Charles Giblyn's biography (e.g., \"Charles Giblyn\" Wikipedia or \"Charles Giblyn occupation\") to extract his occupations, then intersect that set with Tavernier's (\"director, screenwriter, actor, producer\") to determine their mutual occupations.",
+    "hop2_query": "Charles Giblyn occupation",
+    "hop2_docs": [
+      "Charles Giblyn | Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.  He directed 96 films between 1912 and 1927.  He also appeared in 23 films between 1914 and 1934.  He was one of the founders of the Motion Picture Directors Association.  Founded Albion Productions, a film production company, in 1922.  He was born in Watertown, New York and died in Los Angeles, California.",
+      "The Oubliette | The Oubliette is a 1914 American silent drama film directed by Charles Giblyn, featuring Murdock MacQuarrie, Pauline Bush, and Lon Chaney.  It is part of a four-film series directed by Giblyn called the \"The Adventures of François Villon\".  \"The Oubliette\" is based on a short story of the same name by George Bronson Howard published in \"The Century Magazine\".  This film and \"By the Sun's Rays\" are two of Lon Chaney's earliest surviving films.",
+      "The Price of a Party | The Price of a Party is a 1924 American silent melodrama film produced by Howard Estabrook and distributed by Associated Exhibitors.  The film is based on a short story of the same name by William Briggs MacHarg with the film's scenario written by Charles F. Roebuck.  It was directed by Charles Giblyn and stars Hope Hampton and Harrison Ford.",
+      "Just for Tonight (film) | Just for Tonight is a surviving 1918 silent film comedy-drama directed by Charles Giblyn and starring Tom Moore.  It was produced and distributed by Goldwyn Pictures, one of the predecessors of MGM.",
+      "The Higher Law (1914 film) | The Higher Law is a 1914 American silent drama film directed by Charles Giblyn and featuring Murdock MacQuarrie, Pauline Bush and Lon Chaney.  The film is now considered to be lost.",
+      "Know Your Men | Know Your Men is a 1921 American silent melodrama film produced and distributed by Fox Film Corporation, directed by Charles Giblyn, and starring Pearl White.  It is now considered to be a lost film.",
+      "Sunshine Nan | Sunshine Nan is a surviving 1918 American silent comedy drama film starring Ann Pennington and directed by Charles Giblyn.  It is based on the novel \"Calvary Alley\" by Alice Hegan Rice.  It was produced by Famous Players-Lasky and distributed by Paramount Pictures."
+    ],
+    "hop2_titles": [
+      "Charles Giblyn",
+      "The Oubliette",
+      "The Price of a Party",
+      "Just for Tonight (film)",
+      "The Higher Law (1914 film)",
+      "Know Your Men",
+      "Sunshine Nan"
+    ],
+    "summary_2": "Both Bertrand Tavernier and Charles Giblyn were film directors and actors. Passage [1] explicitly describes Charles Giblyn as \"an American film director and actor.\"",
+    "answer": "film directors and actors",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Charles Giblyn"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Bertrand Tavernier"
+    ],
+    "hit_titles_total": [
+      "Bertrand Tavernier",
+      "Charles Giblyn"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

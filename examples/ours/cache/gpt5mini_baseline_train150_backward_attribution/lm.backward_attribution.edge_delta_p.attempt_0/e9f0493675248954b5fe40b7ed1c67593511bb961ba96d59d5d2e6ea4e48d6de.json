@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "e9f0493675248954b5fe40b7ed1c67593511bb961ba96d59d5d2e6ea4e48d6de",
+  "created_at": "2026-07-14T13:42:26.047864+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are Leucogenes and Stylophorum from the same country?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are Leucogenes and Stylophorum from the same country?",
+        "summary_1": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China.",
+        "summary_2": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.",
+        "current_output": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are Leucogenes and Stylophorum from the same country?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Leucogenes and Stylophorum from the same country?\",\n  \"summary_1\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China.\",\n  \"summary_2\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.\",\n  \"current_output\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When both summary_1 and summary_2 present the same unambiguous binary conclusion about the question (for example, both state the two genera are not from the same country).\",\n    \"preserve_rule\": \"Continue to use the provided summaries as the authoritative evidence for deciding the binary answer. Retain internal consideration of the summaries' facts, but do not echo those facts in the final answer.\",\n    \"change_rule\": \"If the summaries agree on a clear yes/no conclusion, emit only a single lowercase word corresponding to that binary conclusion (no additional words, punctuation, or explanation) as the answer field.\",\n    \"drop_or_avoid_rule\": \"Do not produce full sentences, explanatory clauses, or repeat summary details in the answer. Avoid capitalization, trailing punctuation, or any extra tokens beyond the single word answer.\",\n    \"output_contract\": \"Populate [[ ## answer ## ]] with exactly one lowercase word that represents the consensus binary answer indicated by the summaries, and nothing else (no punctuation, no surrounding text).\",\n    \"why_local_transition\": \"The source output gives a full-sentence explanation despite both summaries agreeing on the same binary conclusion. This small behavioral change compresses that agreed conclusion into the minimal single-word answer required by the final-answer contract while preserving reliance on the same summary evidence.\"\n  },\n  \"rationale\": \"The required edit is minimal: it does not change how the agent evaluates or uses the summaries, only how the final answer is formatted. Triggering when both summaries agree avoids applied changes in ambiguous cases. The rules preserve evidence usage and prevent hallucination or deletion of the summaries' content, while enforcing the base prompt's demand for a minimal final-answer string. The delta itself is a prompt-behavior instruction and does not include the target answer literal.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 131,
+    "row_index": 131,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

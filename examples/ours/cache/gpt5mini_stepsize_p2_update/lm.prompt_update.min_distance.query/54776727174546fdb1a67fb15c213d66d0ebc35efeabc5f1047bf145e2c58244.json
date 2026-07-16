@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.min_distance.query",
+  "key": "54776727174546fdb1a67fb15c213d66d0ebc35efeabc5f1047bf145e2c58244",
+  "created_at": "2026-07-16T05:06:26.187923+00:00",
+  "request": {
+    "operation": "prompt_update.min_distance.query",
+    "signature": "ours.utils.update_pipeline.SelectNearestDeltaPTraceSignature",
+    "input_dict": {
+      "agent": "query",
+      "anchor_material": {
+        "sample_index": 50,
+        "row_index": 50,
+        "stable_id": "50",
+        "agent": "query",
+        "question": "United 300 and 300 were both made in what country?",
+        "delta_p_trace": [
+          {
+            "edge_index": 0,
+            "delta_p": {
+              "trigger": "When the question contains a short numeric title token (e.g., the bare token '300') and the current summary/query has primarily retrieved aircraft or manufacturer pages (summary_1 anchors like 'airliner', 'trainer', model names), indicating a domain mismatch.",
+              "preserve_rule": "Keep using only visible anchors from question and summary_1 (do not invent new facts). Preserve the single-output contract: produce exactly one compact retrieval query string and nothing else.",
+              "change_rule": "Bias the single-query composition toward the entertainment/film domain by combining the ambiguous numeric title token from the question (the bare '300') with a domain disambiguator such as 'film' or 'movie', and include the other explicit named item already visible (e.g., 'United 300') so the query targets pages about those films rather than aircraft. Keep the query keyword-style (no punctuation, no full sentences).",
+              "drop_or_avoid_rule": "Avoid including long aircraft-maker/model spans or manufacturing-location anchors that previously drew retrieval to aviation pages (for example, drop terms like 'Farman', 'Morane-Saulnier', 'airliner', 'trainer' if they dominated the query). Do not add unseen specific page titles or parenthetical disambiguators.",
+              "output_contract": "Emit exactly one one-line keyword query string that is compact and focused (e.g., combines the visible numeric title token + 'film' or 'movie' + the visible other named item). Do not output explanations, answers, or extra fields.",
+              "why_local_transition": "The prior query was pulled toward aircraft pages because visible anchors in summary_1 were aircraft models. Adding a film/movie disambiguator and the visible 'United 300' anchor steers retrieval to the film domain needed to confirm the country of production."
+            }
+          }
+        ]
+      },
+      "candidate_materials": [
+        {
+          "sample_index": 130,
+          "row_index": 130,
+          "stable_id": "130",
+          "agent": "query",
+          "question": "What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When summary_1 contains the anchor phrase 'Sir Chandrasekhara Venkata Raman ... earned the 1930 Nobel Prize for Physics' and the agent is asked to produce the single compact second-hop retrieval query.",
+                "preserve_rule": "Keep the base contract: emit exactly one single-line retrieval query string and nothing else; continue to prefer concrete anchors from summary_1 and concise relation keywords over full sentences.",
+                "change_rule": "Force the query to include the exact anchor phrase from summary_1 (copy that quoted fragment verbatim) together with concise relation keywords that target founding/establishment of a periodical (for example: journal founded OR journal established OR founded journal). Structure the single-line query as: <exact-anchor-phrase> + <relation-keywords>. Do not add explanatory words, questions, or candidate answers.",
+                "drop_or_avoid_rule": "Do not assert or include any journal name or long target spans; avoid generic queries that omit the anchor (e.g., only 'scientific journal' or 'founded journal'); do not add punctuation or commentary outside a compact keyword-style search.",
+                "output_contract": "Produce one compact, keyword-style, single-line query string that contains the exact anchor phrase from summary_1 and concise founding/establishment keywords, and nothing else.",
+                "why_local_transition": "Appending the exact quoted anchor phrase to short founding-related keywords focuses retrieval on biographical/historical pages that record institutions a named person founded, increasing chances of retrieving the journal-formation statement while making only a minimal change to the agent's produced query."
+              }
+            }
+          ]
+        },
+        {
+          "sample_index": 136,
+          "row_index": 136,
+          "stable_id": "136",
+          "agent": "query",
+          "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 contains the tokens 'Traction City' and 'Mortal Engines Quartet' and also lists the Fever Crumb book titles (e.g., Fever Crumb, A Web of Air, Scrivener's Moon), apply this edit.",
+                "preserve_rule": "Keep the original output contract and style: produce exactly one compact, keyword-style retrieval query string (single line) and no other fields or commentary; continue to use visible anchors from summary_1.",
+                "change_rule": "Bias the single query to target the higher-level series relation by including the series name 'Mortal Engines Quartet' plus the anchor 'Traction City' and relation keywords such as 'prequel' and 'third book' or 'including prequel'. Keep the query short and composed of concrete keywords (no full sentences). Example formulation pattern: <Mortal Engines Quartet> <Traction City> <prequel> <third book/including prequel>.",
+                "drop_or_avoid_rule": "Do not assert that Traction City belongs to the Fever Crumb series or invent any placement; avoid long natural-language questions or explanatory wording; do not add tokens that are not present in the visible anchors.",
+                "output_contract": "Emit exactly one compact, keyword-style search string (single line) that uses visible anchors and relation keywords and nothing else.",
+                "why_local_transition": "Shifts the retrieval focus from placing Traction City inside the Fever Crumb subseries to locating series-level sources that link Traction City and the Mortal Engines Quartet and identify the sequence that would allow determining the 'third book including the prequel'. This is a minimal prompt change that redirects the query target while preserving the single-query constraint and anchor usage."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "rendered_prompt": "You are selecting the local prompt-feedback update that is semantically closest to a fixed anchor update.\n\nEach material contains feedback for the HotpotQA second-hop query generator.\nCompare the anchor against all candidate materials and select exactly one candidate whose feedback represents the most similar query-generation behavior update.\n\nHere, semantic distance means how differently the retrieval query behavior would need to change:\n- which entity, title, alias, location, class, or task anchors to preserve, add, remove, or disambiguate\n- whether an anchor is grounded in the visible inputs, misleading, or an unsupported hypothesized answer\n- which bridge relation, comparison relation, role, property, or information need to emphasize\n- which evidence family, domain, or answer type the query should target\n- which distractors, wrong senses, prior answers, or noisy entity families to avoid\n- whether the candidate scope should be broadened, narrowed, preserved, or re-centered\n- whether the query should use compact keywords, preserve a comparison, or restate an open information need\n- what retrieval failure the feedback is intended to correct\n\nImportant:\n- Judge the semantic update represented by the feedback itself.\n- Do not judge which update is more correct or likely to improve retrieval.\n- Do not select a candidate merely because it shares entities, topics, question wording, or query tokens with the anchor.\n- Do not select a candidate merely because its feedback is longer or more detailed.\n- Source-style details such as infoboxes, lead sentences, cast sections, tables, or list parsing are secondary unless they change the retrieval target.\n- Broadening from one entity to multiple comparison subjects is different from narrowing a broad query to one missing entity.\n- Removing a misleading visible anchor is different from preventing insertion of an unsupported candidate.\n- Changing from a verbose sentence to compact keywords matters only when it changes the retrieval strategy or target.\n- If a material contains multiple delta_p edges, compare the complete ordered trace and its net retrieval-policy change, not only matching individual edges.\n- Select exactly one candidate. If candidates request materially equivalent updates, choose the one with the smallest sample_index.\n\nReturn JSON only:\n{\n  \"selected_sample_index\": 0,\n  \"shared_update_pattern\": \"short description of the retrieval-policy update shared by the anchor and selected candidate\",\n  \"rationale\": \"short explanation of why this candidate is semantically closest to the anchor\",\n  \"confidence\": 0.0\n}\n\nRequirements:\n- selected_sample_index must exactly match one candidate sample_index.\n- confidence must be between 0.0 and 1.0.\n- Do not return markdown or additional keys.\n\nAgent:\nquery\n\nAnchor feedback material:\n{\n  \"sample_index\": 50,\n  \"row_index\": 50,\n  \"stable_id\": \"50\",\n  \"agent\": \"query\",\n  \"question\": \"United 300 and 300 were both made in what country?\",\n  \"delta_p_trace\": [\n    {\n      \"edge_index\": 0,\n      \"delta_p\": {\n        \"trigger\": \"When the question contains a short numeric title token (e.g., the bare token '300') and the current summary/query has primarily retrieved aircraft or manufacturer pages (summary_1 anchors like 'airliner', 'trainer', model names), indicating a domain mismatch.\",\n        \"preserve_rule\": \"Keep using only visible anchors from question and summary_1 (do not invent new facts). Preserve the single-output contract: produce exactly one compact retrieval query string and nothing else.\",\n        \"change_rule\": \"Bias the single-query composition toward the entertainment/film domain by combining the ambiguous numeric title token from the question (the bare '300') with a domain disambiguator such as 'film' or 'movie', and include the other explicit named item already visible (e.g., 'United 300') so the query targets pages about those films rather than aircraft. Keep the query keyword-style (no punctuation, no full sentences).\",\n        \"drop_or_avoid_rule\": \"Avoid including long aircraft-maker/model spans or manufacturing-location anchors that previously drew retrieval to aviation pages (for example, drop terms like 'Farman', 'Morane-Saulnier', 'airliner', 'trainer' if they dominated the query). Do not add unseen specific page titles or parenthetical disambiguators.\",\n        \"output_contract\": \"Emit exactly one one-line keyword query string that is compact and focused (e.g., combines the visible numeric title token + 'film' or 'movie' + the visible other named item). Do not output explanations, answers, or extra fields.\",\n        \"why_local_transition\": \"The prior query was pulled toward aircraft pages because visible anchors in summary_1 were aircraft models. Adding a film/movie disambiguator and the visible 'United 300' anchor steers retrieval to the film domain needed to confirm the country of production.\"\n      }\n    }\n  ]\n}\n\nCandidate feedback materials:\n[\n  {\n    \"sample_index\": 130,\n    \"row_index\": 130,\n    \"stable_id\": \"130\",\n    \"agent\": \"query\",\n    \"question\": \"What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When summary_1 contains the anchor phrase 'Sir Chandrasekhara Venkata Raman ... earned the 1930 Nobel Prize for Physics' and the agent is asked to produce the single compact second-hop retrieval query.\",\n          \"preserve_rule\": \"Keep the base contract: emit exactly one single-line retrieval query string and nothing else; continue to prefer concrete anchors from summary_1 and concise relation keywords over full sentences.\",\n          \"change_rule\": \"Force the query to include the exact anchor phrase from summary_1 (copy that quoted fragment verbatim) together with concise relation keywords that target founding/establishment of a periodical (for example: journal founded OR journal established OR founded journal). Structure the single-line query as: <exact-anchor-phrase> + <relation-keywords>. Do not add explanatory words, questions, or candidate answers.\",\n          \"drop_or_avoid_rule\": \"Do not assert or include any journal name or long target spans; avoid generic queries that omit the anchor (e.g., only 'scientific journal' or 'founded journal'); do not add punctuation or commentary outside a compact keyword-style search.\",\n          \"output_contract\": \"Produce one compact, keyword-style, single-line query string that contains the exact anchor phrase from summary_1 and concise founding/establishment keywords, and nothing else.\",\n          \"why_local_transition\": \"Appending the exact quoted anchor phrase to short founding-related keywords focuses retrieval on biographical/historical pages that record institutions a named person founded, increasing chances of retrieving the journal-formation statement while making only a minimal change to the agent's produced query.\"\n        }\n      }\n    ]\n  },\n  {\n    \"sample_index\": 136,\n    \"row_index\": 136,\n    \"stable_id\": \"136\",\n    \"agent\": \"query\",\n    \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 contains the tokens 'Traction City' and 'Mortal Engines Quartet' and also lists the Fever Crumb book titles (e.g., Fever Crumb, A Web of Air, Scrivener's Moon), apply this edit.\",\n          \"preserve_rule\": \"Keep the original output contract and style: produce exactly one compact, keyword-style retrieval query string (single line) and no other fields or commentary; continue to use visible anchors from summary_1.\",\n          \"change_rule\": \"Bias the single query to target the higher-level series relation by including the series name 'Mortal Engines Quartet' plus the anchor 'Traction City' and relation keywords such as 'prequel' and 'third book' or 'including prequel'. Keep the query short and composed of concrete keywords (no full sentences). Example formulation pattern: <Mortal Engines Quartet> <Traction City> <prequel> <third book/including prequel>.\",\n          \"drop_or_avoid_rule\": \"Do not assert that Traction City belongs to the Fever Crumb series or invent any placement; avoid long natural-language questions or explanatory wording; do not add tokens that are not present in the visible anchors.\",\n          \"output_contract\": \"Emit exactly one compact, keyword-style search string (single line) that uses visible anchors and relation keywords and nothing else.\",\n          \"why_local_transition\": \"Shifts the retrieval focus from placing Traction City inside the Fever Crumb subseries to locating series-level sources that link Traction City and the Mortal Engines Quartet and identify the sequence that would allow determining the 'third book including the prequel'. This is a minimal prompt change that redirects the query target while preserving the single-query constraint and anchor usage.\"\n        }\n      }\n    ]\n  }\n]",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_sample_index\": 136,\n  \"shared_update_pattern\": \"Keep the visible anchors and emit one compact keyword query that adds a domain/relation disambiguator (e.g., 'film', 'prequel', 'third book') to redirect retrieval away from a misleading domain or subseries and toward the correct subject, while avoiding unrelated anchor tokens.\",\n  \"rationale\": \"Both the anchor and candidate 136 preserve only visible anchors and require producing a single-line keyword query that appends a concise disambiguator/relation term to steer retrieval (anchor: add 'film/movie' to the numeric title and include 'United 300' to avoid aircraft results; candidate 136: add 'prequel'/'third book' plus series name to avoid subseries/misplacement). Each update narrows the retrieval scope by adding a relation/domain keyword and explicitly avoids misleading anchors from a wrong domain.\",\n  \"confidence\": 0.89\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.min_distance.query",
+    "signature": "ours.utils.update_pipeline.SelectNearestDeltaPTraceSignature",
+    "agent": "query",
+    "anchor_sample_index": 50,
+    "candidate_sample_indices": [
+      130,
+      136
+    ]
+  }
+}

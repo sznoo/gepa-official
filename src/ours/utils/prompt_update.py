@@ -1,120 +1,58 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import random
 import traceback
-from collections import Counter
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-from gepa.proposer.reflective_mutation.base import LanguageModel, Signature
+from gepa.proposer.reflective_mutation.base import LanguageModel
 
 from ours.analyze_attribute import (
     AGENT_ORDER,
-    AGENT_ROLES,
     AGENT_TO_PROMPT_KEY,
     compact_state,
 )
-from ours.lm import run_signature
 from ours.prompts import save_prompt_candidate, validate_candidate
 from ours.runtime import OursRuntime
-
-
-SCRIPT_VERSION = "2026-07-14-v4-function-aware-updater"
-
-CONDITIONS = (
-    "base",
-    "delta_p_neg_only",
-    "endpoint_delta_neg_only",
-    "delta_p_custom_signed",
-    "endpoint_delta_custom_signed",
-    "endpoint_delta_contrastive_raw_C",
+from ours.utils.prompt_feedback import (
+    SCRIPT_VERSION,
+    FEEDBACK_CANDIDATE_GENERATION_PROMPT_VERSION,
+    FEEDBACK_NORM_SELECTION_PROMPT_VERSION,
+    FEEDBACK_NORM_METHOD_PROMPTS,
+    CONDITIONS,
+    NEG_ONLY_CONDITIONS,
+    MIXED_CONDITIONS,
+    ENDPOINT_CONDITIONS,
+    SIGNED_CONDITIONS,
+    AGENT_OUTPUT_CONTRACTS,
+    AGENT_FUNCTIONS,
+    PROVISIONAL_HYPOTHESIS_FIELDS,
+    INTEGRATED_FEEDBACK_FIELDS,
+    REVISED_FEEDBACK_METADATA_FIELDS,
+    HYPOTHESIS_DECISIONS,
+    EDIT_ACTIONS,
+    _canonical_hash,
+    _integrated_feedback_payload,
+    _json_dumps,
+    _require_text,
+    _validate_condition,
+    evidence_mode_for_condition,
+    generate_provisional_hypothesis,
+    revise_hypothesis_with_positive_cases,
+    generate_candidate_feedbacks_with_positive_cases,
+    select_minimum_norm_feedback,
+    synthesize_batch_feedback,
+    update_agent_prompt,
 )
 
-NEG_ONLY_CONDITIONS = frozenset({
-    "delta_p_neg_only",
-    "endpoint_delta_neg_only",
-})
-
-MIXED_CONDITIONS = frozenset({
-    "delta_p_custom_signed",
-    "endpoint_delta_custom_signed",
-    "endpoint_delta_contrastive_raw_C",
-})
-
-ENDPOINT_CONDITIONS = frozenset({
-    "endpoint_delta_neg_only",
-    "endpoint_delta_custom_signed",
-    "endpoint_delta_contrastive_raw_C",
-})
-
-SIGNED_CONDITIONS = frozenset({
-    "delta_p_custom_signed",
-    "endpoint_delta_custom_signed",
-})
-
-AGENT_OUTPUT_CONTRACTS = {
-    "summary1": (
-        "The prompt must instruct the module to consume question and passages "
-        "and produce one summary field."
-    ),
-    "query": (
-        "The prompt must instruct the module to consume question and summary_1 "
-        "and produce exactly one compact second-hop query field."
-    ),
-    "summary2": (
-        "The prompt must instruct the module to consume question, context, and "
-        "passages and produce one summary field."
-    ),
-    "final": (
-        "The prompt must instruct the module to consume question, summary_1, "
-        "and summary_2 and produce one answer field."
-    ),
-}
-
-AGENT_FUNCTIONS = {
-    "summary1": (
-        "Pipeline position: after first-hop retrieval and before second-hop "
-        "query generation. Inputs are the original question and first-hop "
-        "passages. Functional responsibility: compress grounded first-hop "
-        "evidence into an intermediate state that helps the next agent identify "
-        "and retrieve the missing second-hop information. This agent is not "
-        "responsible for producing the final answer, and its state may normally "
-        "describe an unresolved bridge."
-    ),
-    "query": (
-        "Pipeline position: after summary1 and before second-hop retrieval. "
-        "Inputs are the original question and the first-hop intermediate state. "
-        "Functional responsibility: produce one focused retrieval query that "
-        "is likely to recover the missing evidence needed by the downstream "
-        "agents. Query quality is determined by evidence recovery, not by "
-        "whether the query itself resembles or contains the final answer."
-    ),
-    "summary2": (
-        "Pipeline position: after second-hop retrieval and before final-answer "
-        "generation. Inputs are the original question, the first-hop context, "
-        "and newly retrieved passages. Functional responsibility: integrate "
-        "the accumulated evidence into a grounded post-retrieval state that "
-        "preserves the information needed by the final agent. Resolve the "
-        "earlier bridge when the supplied evidence supports doing so; retain "
-        "uncertainty only when the post-retrieval evidence remains insufficient."
-    ),
-    "final": (
-        "Pipeline position: after both retrieval hops and both summaries. "
-        "summary_1 is a pre-second-hop intermediate state and may normally "
-        "contain unresolved bridge or retrieval-oriented language. summary_2 "
-        "is the later post-retrieval integrated evidence state. Functional "
-        "responsibility: use the accumulated visible evidence, especially the "
-        "later state, to emit the minimal final answer. Do not infer that the "
-        "final state is unresolved merely because summary_1 describes an "
-        "earlier unresolved bridge."
-    ),
-}
 
 __all__ = [
     "SCRIPT_VERSION",
+    "FEEDBACK_CANDIDATE_GENERATION_PROMPT_VERSION",
+    "FEEDBACK_NORM_SELECTION_PROMPT_VERSION",
+    "FEEDBACK_NORM_METHOD_PROMPTS",
     "CONDITIONS",
     "NEG_ONLY_CONDITIONS",
     "MIXED_CONDITIONS",
@@ -122,6 +60,11 @@ __all__ = [
     "SIGNED_CONDITIONS",
     "AGENT_OUTPUT_CONTRACTS",
     "AGENT_FUNCTIONS",
+    "PROVISIONAL_HYPOTHESIS_FIELDS",
+    "INTEGRATED_FEEDBACK_FIELDS",
+    "REVISED_FEEDBACK_METADATA_FIELDS",
+    "HYPOTHESIS_DECISIONS",
+    "EDIT_ACTIONS",
     "successful_attempt",
     "make_w_material",
     "extract_w_materials",
@@ -132,24 +75,21 @@ __all__ = [
     "resolve_manifest_rows",
     "evidence_mode_for_condition",
     "build_condition_evidence",
+    "build_w_only_evidence",
+    "build_c_only_evidence",
+    "generate_provisional_hypothesis",
+    "revise_hypothesis_with_positive_cases",
+    "generate_candidate_feedbacks_with_positive_cases",
+    "select_minimum_norm_feedback",
+    "synthesize_batch_feedback",
     "update_agent_prompt",
     "build_condition_candidate",
 ]
 
 
 # ---------------------------------------------------------------------------
-# Internal JSON / validation helpers
+# Local JSON / file helpers
 # ---------------------------------------------------------------------------
-
-
-def _json_dumps(value: Any, *, indent: int | None = 2) -> str:
-    return json.dumps(
-        value,
-        ensure_ascii=False,
-        indent=indent,
-        default=str,
-        sort_keys=False,
-    )
 
 
 def _read_json(path: str | Path) -> Any:
@@ -186,48 +126,6 @@ def _rewrite_jsonl(path: str | Path, rows: Sequence[Mapping[str, Any]]) -> None:
             file.write(_json_dumps(dict(row), indent=None) + "\n")
 
 
-def _extract_json_object(text: str) -> dict[str, Any]:
-    text = str(text or "").strip()
-
-    if text.startswith("```"):
-        lines = text.splitlines()
-        if lines and lines[0].strip().startswith("```"):
-            lines = lines[1:]
-        if lines and lines[-1].strip() == "```":
-            lines = lines[:-1]
-        text = "\n".join(lines).strip()
-
-    try:
-        value = json.loads(text)
-        if isinstance(value, dict):
-            return value
-    except Exception:
-        pass
-
-    decoder = json.JSONDecoder()
-    for index, character in enumerate(text):
-        if character != "{":
-            continue
-        try:
-            value, _ = decoder.raw_decode(text[index:])
-        except json.JSONDecodeError:
-            continue
-        if isinstance(value, dict):
-            return value
-
-    raise ValueError(
-        "Could not extract a JSON object from LM output: "
-        f"{text[:800]}"
-    )
-
-
-def _require_text(value: Any, *, field: str) -> str:
-    text = str(value or "").strip()
-    if not text:
-        raise ValueError(f"{field} cannot be empty.")
-    return text
-
-
 def _stable_id(row: Mapping[str, Any], fallback_index: int) -> str:
     for key in ("sample_id", "_id", "id"):
         value = row.get(key)
@@ -240,28 +138,6 @@ def _stable_id(row: Mapping[str, Any], fallback_index: int) -> str:
             row.get("sample_index", fallback_index),
         )
     )
-
-
-def _canonical_hash(value: Any) -> str:
-    payload = json.dumps(
-        value,
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-        default=str,
-    ).encode("utf-8")
-    return hashlib.sha256(payload).hexdigest()
-
-
-def _validate_condition(condition: str) -> str:
-    condition = str(condition or "").strip()
-    if condition not in CONDITIONS:
-        raise ValueError(
-            f"Unknown condition {condition!r}. "
-            f"Expected one of {list(CONDITIONS)}."
-        )
-    return condition
-
 
 # ---------------------------------------------------------------------------
 # Canonical W-side extraction
@@ -414,9 +290,8 @@ def find_correct_rows(
         if float(row.get("score") or 0.0) == 1.0
     ]
 
-
 # ---------------------------------------------------------------------------
-# Shared paired batch manifest
+# Legacy shared paired batch manifest
 # ---------------------------------------------------------------------------
 
 
@@ -689,7 +564,6 @@ def resolve_manifest_rows(
 
     return neg_w, mixed_w, mixed_c
 
-
 # ---------------------------------------------------------------------------
 # Condition evidence construction
 # ---------------------------------------------------------------------------
@@ -820,21 +694,6 @@ def _raw_c_evidence(c: Mapping[str, Any]) -> dict[str, Any]:
     }
 
 
-def evidence_mode_for_condition(condition: str) -> str:
-    condition = _validate_condition(condition)
-
-    if condition in {"delta_p_neg_only", "delta_p_custom_signed"}:
-        return "delta_p"
-    if condition == "endpoint_delta_contrastive_raw_C":
-        return "endpoint_delta_raw_C"
-    if condition in ENDPOINT_CONDITIONS:
-        return "endpoint_delta"
-    if condition == "base":
-        return "none"
-
-    raise AssertionError(f"Unhandled condition: {condition}")
-
-
 def build_condition_evidence(
     *,
     condition: str,
@@ -877,255 +736,80 @@ def build_condition_evidence(
     return evidence
 
 
-# ---------------------------------------------------------------------------
-# Batch prompt updater
-# ---------------------------------------------------------------------------
-
-
-class BatchPromptUpdateSignature(Signature):
-    input_keys = [
-        "condition",
-        "agent",
-        "agent_role",
-        "agent_function",
-        "native_output_contract",
-        "base_prompt",
-        "evidence_mode",
-        "batch_evidence",
-    ]
-    output_keys = [
-        "updated_prompt",
-        "rationale",
-        "absorbed_patterns",
-        "preserved_patterns",
-        "avoided_patterns",
-    ]
-
-    @classmethod
-    def prompt_renderer(cls, input_dict: Mapping[str, Any]) -> str:
-        return f"""
-You are generating ONE SHARED prompt for one agent in a fixed multi-agent
-HotpotQA pipeline.
-
-The prompt must be directly usable as the instruction for the selected DSPy
-predictor. It must generalize across samples rather than reproduce any batch
-answer, query, summary, title, or entity.
-
-Primary objective:
-Revise the supplied base prompt so that the selected agent better realizes the
-stated function at its position in the pipeline. Interpret all evidence through
-that function and the temporal meaning of the agent's inputs.
-
-Evidence roles:
-- W_repair / encourage: shows a direction that improved realization of the
-  stated agent function.
-- C_signed_avoid / avoid: shows a transported change that degraded a previously
-  successful realization of the function. Use it to understand which functional
-  capability must not be lost; do not mechanically invert it into a rule.
-- raw_C_success / preserve: shows successful current behavior whose functional
-  capability should remain available after the update.
-
-Representation modes:
-- delta_p: evidence contains ordered structured prompt deltas only.
-- endpoint_delta: evidence contains the ordered state path together with the
-  ordered structured prompt deltas. Use endpoint contrasts to understand what
-  changed functionally.
-- endpoint_delta_raw_C: W evidence uses endpoint paths plus deltas, while C
-  evidence shows successful current behavior to retain.
-
-Strict requirements:
-- Output a PROMPT, not an agent output.
-- Preserve the native input/output interface exactly.
-- Start from the supplied base prompt and make the smallest coherent shared
-  update supported by the batch and the stated agent function.
-- Keep the revised prompt complete and self-contained. Do not refer to an
-  omitted "original prompt", "base rules", or instructions that are no longer
-  written explicitly in the revised prompt.
-- Preserve useful base behavior not contradicted by the functional evidence.
-- Do not hard-code batch answers, queries, summaries, titles, or entities.
-- Do not treat batch-local wording, section labels, formatting tokens, or
-  incidental phrases as direct decision criteria. Interpret intermediate text
-  according to its pipeline position and semantic role.
-- Prefer general capability-level guidance over enumerating sample-specific
-  triggers, exception lists, or local/global decision rules.
-- The task is not to classify W and C examples. Infer one prompt that better
-  realizes the stated function while retaining capabilities demonstrated by
-  successful behavior.
-- Resolve conflicts conservatively and keep instructions operational.
-- Do not mention W, C, polarity labels, states, endpoints, deltas, metrics,
-  attribution, training, batches, or this optimization process in the final
-  prompt.
-
-Condition:
-{input_dict["condition"]}
-
-Agent:
-{input_dict["agent"]}
-
-Agent role:
-{input_dict["agent_role"]}
-
-Agent function and pipeline position:
-{input_dict["agent_function"]}
-
-Native output contract:
-{input_dict["native_output_contract"]}
-
-Base prompt:
-{input_dict["base_prompt"]}
-
-Evidence mode:
-{input_dict["evidence_mode"]}
-
-Batch evidence:
-{input_dict["batch_evidence"]}
-
-Return strict JSON only:
-{{
-  "updated_prompt": "complete directly usable shared prompt",
-  "rationale": "brief batch-level explanation",
-  "absorbed_patterns": ["short function-level improvement"],
-  "preserved_patterns": ["short functional capability retained"],
-  "avoided_patterns": ["short functional regression avoided"]
-}}
-""".strip()
-
-    @classmethod
-    def output_extractor(cls, lm_out: str) -> dict[str, Any]:
-        obj = _extract_json_object(lm_out)
-        updated_prompt = _require_text(
-            obj.get("updated_prompt"),
-            field="updated_prompt",
-        )
-
-        def text_list(key: str) -> list[str]:
-            value = obj.get(key, [])
-            if not isinstance(value, list):
-                raise TypeError(f"{key} must be a JSON list.")
-            return [
-                str(item).strip()
-                for item in value
-                if str(item).strip()
-            ]
-
-        return {
-            "updated_prompt": updated_prompt,
-            "rationale": str(obj.get("rationale") or "").strip(),
-            "absorbed_patterns": text_list("absorbed_patterns"),
-            "preserved_patterns": text_list("preserved_patterns"),
-            "avoided_patterns": text_list("avoided_patterns"),
-        }
-
-
-def update_agent_prompt(
+def build_w_only_evidence(
     *,
-    runtime: OursRuntime,
-    lm: LanguageModel,
-    lm_config: Mapping[str, Any],
     condition: str,
     agent: str,
-    base_prompt: str,
-    evidence: Sequence[Mapping[str, Any]],
-    max_evidence_chars: int,
-) -> dict[str, Any]:
+    w_materials: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
     """
-    Generate one shared prompt for one agent.
+    Build only the W-side evidence used to propose a provisional hypothesis.
 
-    Evidence is never silently truncated. Empty evidence preserves the
-    AgentGrad base prompt without an LM call.
+    Unlike ``build_condition_evidence()``, this helper intentionally excludes
+    all C-side material. It is the first stage of hypothesis-conditioned C
+    selection:
+
+        selected W -> provisional hypothesis -> matched C selection
     """
     condition = _validate_condition(condition)
     if condition == "base":
-        raise ValueError(
-            "The base condition must not call update_agent_prompt()."
-        )
+        return []
     if agent not in AGENT_TO_PROMPT_KEY:
         raise ValueError(f"Unknown agent: {agent!r}.")
 
-    base_prompt = _require_text(base_prompt, field="base_prompt")
-    evidence_list = [dict(item) for item in evidence]
-    evidence_hash = _canonical_hash(evidence_list)
-    base_prompt_hash = _canonical_hash(base_prompt)
-
-    if not evidence_list:
-        return {
-            "script_version": SCRIPT_VERSION,
-            "condition": condition,
-            "agent": agent,
-            "status": "no_evidence_base_preserved",
-            "updated_prompt": base_prompt,
-            "rationale": "No material was assigned to this agent.",
-            "absorbed_patterns": [],
-            "preserved_patterns": [],
-            "avoided_patterns": [],
-            "n_evidence": 0,
-            "evidence_mode": evidence_mode_for_condition(condition),
-            "evidence_kinds": {},
-            "base_prompt_hash": base_prompt_hash,
-            "evidence_hash": evidence_hash,
-            "lm_trace": None,
-        }
-
-    evidence_json = _json_dumps(evidence_list)
-    if len(evidence_json) > max_evidence_chars:
-        raise ValueError(
-            f"Evidence payload for {condition}/{agent} has "
-            f"{len(evidence_json)} chars, exceeding "
-            f"max_evidence_chars={max_evidence_chars}. "
-            "Increase the limit or reduce batch_size; evidence is not "
-            "silently truncated."
+    include_endpoint = condition in ENDPOINT_CONDITIONS
+    return [
+        _w_evidence(
+            material,
+            include_endpoint=include_endpoint,
         )
+        for material in w_materials
+        if str(material.get("agent")) == agent
+    ]
 
-    parsed, prompt, raw, cache_hit = run_signature(
-        runtime=runtime,
-        operation=(
-            f"prompt_update.batch_prompt.{SCRIPT_VERSION}."
-            f"{condition}.{agent}"
-        ),
-        lm=lm,
-        signature_cls=BatchPromptUpdateSignature,
-        input_dict={
-            "condition": condition,
-            "agent": agent,
-            "agent_role": AGENT_ROLES[agent],
-            "agent_function": AGENT_FUNCTIONS[agent],
-            "native_output_contract": AGENT_OUTPUT_CONTRACTS[agent],
-            "base_prompt": base_prompt,
-            "evidence_mode": evidence_mode_for_condition(condition),
-            "batch_evidence": evidence_json,
-        },
-        lm_config=lm_config,
-        metadata={
-            "script_version": SCRIPT_VERSION,
-            "condition": condition,
-            "agent": agent,
-            "n_evidence": len(evidence_list),
-            "base_prompt_hash": base_prompt_hash,
-            "evidence_hash": evidence_hash,
-        },
-        return_cache_hit=True,
-    )
 
-    return {
-        "script_version": SCRIPT_VERSION,
-        "condition": condition,
-        "agent": agent,
-        "status": "updated",
-        **parsed,
-        "n_evidence": len(evidence_list),
-        "evidence_mode": evidence_mode_for_condition(condition),
-        "evidence_kinds": dict(
-            Counter(item["evidence_kind"] for item in evidence_list)
-        ),
-        "base_prompt_hash": base_prompt_hash,
-        "evidence_hash": evidence_hash,
-        "lm_trace": {
-            "rendered_prompt": prompt,
-            "raw_output": raw,
-            "cache_hit": cache_hit,
-        },
-    }
+def build_c_only_evidence(
+    *,
+    condition: str,
+    agent: str,
+    c_materials: Sequence[Mapping[str, Any]],
+) -> list[dict[str, Any]]:
+    """
+    Build only the C-side evidence after matched C rows are materialized.
 
+    Signed conditions expose transported-damage evidence. The raw-C condition
+    exposes the preserved successful state. Neg-only and base conditions do not
+    have C evidence.
+    """
+    condition = _validate_condition(condition)
+    if agent not in AGENT_TO_PROMPT_KEY:
+        raise ValueError(f"Unknown agent: {agent!r}.")
+    if condition == "base" or condition in NEG_ONLY_CONDITIONS:
+        return []
+
+    include_endpoint = condition in ENDPOINT_CONDITIONS
+    evidence: list[dict[str, Any]] = []
+
+    if condition in SIGNED_CONDITIONS:
+        for material in c_materials:
+            if str(material.get("agent")) != agent:
+                continue
+            evidence.append(
+                _c_signed_evidence(
+                    material,
+                    include_endpoint=include_endpoint,
+                )
+            )
+        return evidence
+
+    if condition == "endpoint_delta_contrastive_raw_C":
+        for material in c_materials:
+            if str(material.get("agent")) != agent:
+                continue
+            evidence.append(_raw_c_evidence(material))
+        return evidence
+
+    raise AssertionError(f"Unhandled mixed condition: {condition}")
 
 # ---------------------------------------------------------------------------
 # Single-condition candidate construction
@@ -1173,12 +857,20 @@ def _validate_condition_material_inputs(
             raise ValueError(
                 f"Condition {condition!r} requires non-empty C material."
             )
-        if len(mixed_w) != len(c_materials):
-            raise ValueError(
-                f"Condition {condition!r} requires paired mixed material, "
-                f"but mixed_w={len(mixed_w)} and "
-                f"c_materials={len(c_materials)}."
-            )
+        w_agents = {
+            str(material["agent"])
+            for material in mixed_w
+        }
+        for position, material in enumerate(
+            c_materials
+        ):
+            c_agent = str(material["agent"])
+            if c_agent not in w_agents:
+                raise ValueError(
+                    f"c_materials[{position}] belongs "
+                    f"to agent {c_agent!r}, but that "
+                    "agent has no selected W material."
+                )
 
         if condition in SIGNED_CONDITIONS:
             for position, material in enumerate(c_materials):
@@ -1210,26 +902,32 @@ def _validate_condition_material_inputs(
     raise AssertionError(f"Unhandled non-base condition: {condition}")
 
 
-def _successful_updater_rows(
+def _successful_feedback_rows(
     *,
-    updater_path: Path,
+    feedback_path: Path,
     condition: str,
-) -> dict[tuple[str, str, str, str], dict[str, Any]]:
-    successful: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+) -> dict[
+    tuple[str, str, str, str],
+    dict[str, Any],
+]:
+    successful = {}
 
-    for row in _read_jsonl(updater_path):
+    for row in _read_jsonl(feedback_path):
         if row.get("error"):
             continue
         if str(row.get("condition")) != condition:
             continue
-        if str(row.get("script_version") or "") != SCRIPT_VERSION:
+        if (
+            str(row.get("script_version") or "")
+            != SCRIPT_VERSION
+        ):
             continue
 
         required = (
             "agent",
             "base_prompt_hash",
             "evidence_hash",
-            "updated_prompt",
+            "integrated_feedback",
         )
         if any(key not in row for key in required):
             continue
@@ -1239,6 +937,47 @@ def _successful_updater_rows(
             str(row["agent"]),
             str(row["base_prompt_hash"]),
             str(row["evidence_hash"]),
+        )
+        successful[key] = dict(row)
+
+    return successful
+
+
+def _successful_updater_rows(
+    *,
+    updater_path: Path,
+    condition: str,
+) -> dict[
+    tuple[str, str, str, str],
+    dict[str, Any],
+]:
+    successful = {}
+
+    for row in _read_jsonl(updater_path):
+        if row.get("error"):
+            continue
+        if str(row.get("condition")) != condition:
+            continue
+        if (
+            str(row.get("script_version") or "")
+            != SCRIPT_VERSION
+        ):
+            continue
+
+        required = (
+            "agent",
+            "base_prompt_hash",
+            "integrated_feedback_hash",
+            "updated_prompt",
+        )
+        if any(key not in row for key in required):
+            continue
+
+        key = (
+            condition,
+            str(row["agent"]),
+            str(row["base_prompt_hash"]),
+            str(row["integrated_feedback_hash"]),
         )
         successful[key] = dict(row)
 
@@ -1256,32 +995,45 @@ def build_condition_candidate(
     lm: LanguageModel,
     lm_config: Mapping[str, Any],
     updater_path: str | Path,
+    feedback_path: str | Path | None = None,
     candidate_path: str | Path,
     max_evidence_chars: int,
     overwrite: bool = False,
     program: Any = None,
 ) -> dict[str, str]:
     """
-    Build and save exactly one four-agent prompt candidate.
+    Build one four-agent candidate through two independent LM stages:
 
-    Resume is keyed by:
-        condition + agent + base-prompt hash + evidence hash.
+        batch evidence -> integrated feedback
+        base prompt + integrated feedback -> updated prompt
 
-    Error rows never block reruns.
+    The rewrite stage never receives raw batch evidence.
     """
     condition = _validate_condition(condition)
     updater_path = Path(updater_path)
+    feedback_path = (
+        Path(feedback_path)
+        if feedback_path is not None
+        else updater_path.with_name(
+            "integrated_feedback_rows.jsonl"
+        )
+    )
     candidate_path = Path(candidate_path)
 
     candidate = dict(base_candidate)
-    validate_candidate(candidate, program=program)
+    validate_candidate(
+        candidate,
+        program=program,
+    )
 
     if condition == "base":
         save_prompt_candidate(
             candidate_path,
             name=condition,
             candidate=candidate,
-            description="Unchanged AgentGrad base candidate.",
+            description=(
+                "Unchanged AgentGrad base candidate."
+            ),
             program=program,
         )
         return candidate
@@ -1293,17 +1045,37 @@ def build_condition_candidate(
         c_materials=c_materials,
     )
 
-    if overwrite and updater_path.exists():
-        preserved_rows = [
-            row
-            for row in _read_jsonl(updater_path)
-            if str(row.get("condition")) != condition
-        ]
-        _rewrite_jsonl(updater_path, preserved_rows)
+    if overwrite:
+        for path in (
+            feedback_path,
+            updater_path,
+        ):
+            if not path.exists():
+                continue
+            preserved_rows = [
+                row
+                for row in _read_jsonl(path)
+                if (
+                    str(row.get("condition"))
+                    != condition
+                )
+            ]
+            _rewrite_jsonl(
+                path,
+                preserved_rows,
+            )
 
-    done = _successful_updater_rows(
-        updater_path=updater_path,
-        condition=condition,
+    feedback_done = (
+        _successful_feedback_rows(
+            feedback_path=feedback_path,
+            condition=condition,
+        )
+    )
+    updater_done = (
+        _successful_updater_rows(
+            updater_path=updater_path,
+            condition=condition,
+        )
     )
 
     for agent in AGENT_ORDER:
@@ -1312,6 +1084,10 @@ def build_condition_candidate(
             base_candidate[prompt_key],
             field=f"base prompt for {agent}",
         )
+        base_prompt_hash = _canonical_hash(
+            base_prompt
+        )
+
         evidence = build_condition_evidence(
             condition=condition,
             agent=agent,
@@ -1319,64 +1095,159 @@ def build_condition_candidate(
             mixed_w=mixed_w,
             c_materials=c_materials,
         )
-        base_prompt_hash = _canonical_hash(base_prompt)
+        evidence_list = [
+            dict(item)
+            for item in evidence
+        ]
         evidence_hash = _canonical_hash(
-            [dict(item) for item in evidence]
+            evidence_list
         )
-        resume_key = (
+
+        feedback_key = (
             condition,
             agent,
             base_prompt_hash,
             evidence_hash,
         )
-        row = done.get(resume_key)
+        feedback_row = feedback_done.get(
+            feedback_key
+        )
 
-        if row is None:
+        if feedback_row is None:
             try:
-                row = update_agent_prompt(
+                feedback_row = (
+                    synthesize_batch_feedback(
+                        runtime=runtime,
+                        lm=lm,
+                        lm_config=lm_config,
+                        condition=condition,
+                        agent=agent,
+                        base_prompt=base_prompt,
+                        evidence=evidence_list,
+                        max_evidence_chars=(
+                            max_evidence_chars
+                        ),
+                    )
+                )
+            except Exception as exc:
+                feedback_row = {
+                    "script_version": SCRIPT_VERSION,
+                    "row_type": (
+                        "integrated_feedback"
+                    ),
+                    "condition": condition,
+                    "agent": agent,
+                    "error": True,
+                    "error_type": type(exc).__name__,
+                    "error_message": str(exc),
+                    "base_prompt_hash": (
+                        base_prompt_hash
+                    ),
+                    "evidence_hash": evidence_hash,
+                    "traceback": traceback.format_exc(),
+                }
+
+            _append_jsonl(
+                feedback_path,
+                feedback_row,
+            )
+
+        if feedback_row.get("error"):
+            raise RuntimeError(
+                f"Condition {condition!r} has a "
+                f"failed feedback synthesis for "
+                f"agent {agent!r}. Inspect "
+                f"{feedback_path}."
+            )
+
+        feedback_payload = (
+            _integrated_feedback_payload(
+                feedback_row
+            )
+        )
+        integrated_feedback_hash = (
+            _canonical_hash(
+                feedback_payload
+            )
+        )
+        updater_key = (
+            condition,
+            agent,
+            base_prompt_hash,
+            integrated_feedback_hash,
+        )
+        updater_row = updater_done.get(
+            updater_key
+        )
+
+        if updater_row is None:
+            try:
+                updater_row = update_agent_prompt(
                     runtime=runtime,
                     lm=lm,
                     lm_config=lm_config,
                     condition=condition,
                     agent=agent,
                     base_prompt=base_prompt,
-                    evidence=evidence,
-                    max_evidence_chars=max_evidence_chars,
+                    integrated_feedback_row=(
+                        feedback_row
+                    ),
                 )
             except Exception as exc:
-                row = {
+                updater_row = {
                     "script_version": SCRIPT_VERSION,
+                    "row_type": "prompt_rewrite",
                     "condition": condition,
                     "agent": agent,
                     "error": True,
                     "error_type": type(exc).__name__,
                     "error_message": str(exc),
-                    "base_prompt_hash": base_prompt_hash,
-                    "evidence_hash": evidence_hash,
+                    "base_prompt_hash": (
+                        base_prompt_hash
+                    ),
+                    "evidence_hash": (
+                        evidence_hash
+                    ),
+                    "integrated_feedback_hash": (
+                        integrated_feedback_hash
+                    ),
                     "traceback": traceback.format_exc(),
                 }
 
-            _append_jsonl(updater_path, row)
+            _append_jsonl(
+                updater_path,
+                updater_row,
+            )
 
-        if row.get("error"):
+        if updater_row.get("error"):
             raise RuntimeError(
-                f"Condition {condition!r} has a failed updater for "
-                f"agent {agent!r}. Inspect {updater_path}."
+                f"Condition {condition!r} has a "
+                f"failed prompt rewrite for agent "
+                f"{agent!r}. Inspect "
+                f"{updater_path}."
             )
 
         candidate[prompt_key] = _require_text(
-            row.get("updated_prompt"),
-            field=f"updated prompt for {condition}/{agent}",
+            updater_row.get("updated_prompt"),
+            field=(
+                f"updated prompt for "
+                f"{condition}/{agent}"
+            ),
         )
 
-    validate_candidate(candidate, program=program)
+    validate_candidate(
+        candidate,
+        program=program,
+    )
     save_prompt_candidate(
         candidate_path,
         name=condition,
         candidate=candidate,
         description=(
-            "Four-agent AgentGrad candidate updated from paired "
-            f"positive-safety evidence under {condition}."
+            "Four-agent candidate produced through "
+            "independent batch-feedback synthesis "
+            "and prompt-rewrite stages under "
+            f"{condition}."
         ),
         program=program,
     )

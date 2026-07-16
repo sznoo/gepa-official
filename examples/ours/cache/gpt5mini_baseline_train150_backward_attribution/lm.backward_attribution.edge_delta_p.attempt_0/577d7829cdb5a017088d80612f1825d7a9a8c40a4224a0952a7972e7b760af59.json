@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "577d7829cdb5a017088d80612f1825d7a9a8c40a4224a0952a7972e7b760af59",
+  "created_at": "2026-07-14T13:37:52.594562+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "summary_1": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "current_output": {
+          "query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer)."
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Dallas Green (musician) birth date Brian Johnson (AC/DC) birth date"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Brian Johnson Dallas Green (musician) Who was born earlier, Dallas Green or Brian Johnson?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Brian Price (American football, born 1994)",
+          "Brian Johnson (Bethel Music singer)",
+          "Dallas Green (musician)",
+          "Brian Johnson (footballer, born 1948)",
+          "2004 Dallas Burn season",
+          "Brian Johnson (ice hockey)",
+          "Brian Johnson (athlete)"
+        ],
+        "retrieved_doc_snippets": [
+          "Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL). He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.",
+          "Brian Johnson (Bethel Music singer) | Brian Mark Johnson (born March 17, 1978) is an American contemporary worship musician and worship pastor. He is the president and co-founder of Bethel Music, as well as a member of its Artist Collective and is one-half of the husband-and-wife worship duo, Brian & Jenn Johnson. He is also a senior worship pastor at Bethel Church in Redding, California, and a Senior Overseer of WorshipU, an online school of worship under Bethel Music which he co-founded with J ...[truncated]",
+          "Dallas Green (musician) | Dallas Michael John Albert Green (born September 29, 1980) is a Canadian musician and singer-songwriter who records under the alias City and Colour. He plays melodic acoustic and folk music and is often accompanied by a rotating number of Canadian indie rock musicians, such as Spencer Burton. He is also known for his contributions as the lead singer, rhythm guitarist, and songwriter for the post-hardcore band Alexisonfire. In 2005, he debuted his first full-length album ...[truncated]",
+          "Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.",
+          "2004 Dallas Burn season | The 2004 Dallas Burn season was the eighth season of the Major League Soccer team. The season saw the team fail to make the playoffs for the second consecutive year. The season was also the first full season under head coach Colin Clarke. The team moved from Dragon Stadium back to the Cotton Bowl. It would be the last season for the team in the Cotton Bowl, as they would move to their current stadium in Frisco. It was also the team’s final season as the Burn. With the m ...[truncated]",
+          "Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.",
+          "Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper."
+        ],
+        "summary_2": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "answer": "Dallas Green was born earlier — Dallas Green (born 1934) vs. Brian Johnson (born 1948).",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "Dallas Green (musician)"
+        ],
+        "missing_titles_after_hop2": [
+          "Brian Johnson"
+        ]
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"summary_1\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"current_output\": {\n    \"query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Dallas Green (musician) birth date Brian Johnson (AC/DC) birth date\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Brian Johnson Dallas Green (musician) Who was born earlier, Dallas Green or Brian Johnson?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Brian Price (American football, born 1994)\",\n    \"Brian Johnson (Bethel Music singer)\",\n    \"Dallas Green (musician)\",\n    \"Brian Johnson (footballer, born 1948)\",\n    \"2004 Dallas Burn season\",\n    \"Brian Johnson (ice hockey)\",\n    \"Brian Johnson (athlete)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL). He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.\",\n    \"Brian Johnson (Bethel Music singer) | Brian Mark Johnson (born March 17, 1978) is an American contemporary worship musician and worship pastor. He is the president and co-founder of Bethel Music, as well as a member of its Artist Collective and is one-half of the husband-and-wife worship duo, Brian & Jenn Johnson. He is also a senior worship pastor at Bethel Church in Redding, California, and a Senior Overseer of WorshipU, an online school of worship under Bethel Music which he co-founded with J ...[truncated]\",\n    \"Dallas Green (musician) | Dallas Michael John Albert Green (born September 29, 1980) is a Canadian musician and singer-songwriter who records under the alias City and Colour. He plays melodic acoustic and folk music and is often accompanied by a rotating number of Canadian indie rock musicians, such as Spencer Burton. He is also known for his contributions as the lead singer, rhythm guitarist, and songwriter for the post-hardcore band Alexisonfire. In 2005, he debuted his first full-length album ...[truncated]\",\n    \"Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.\",\n    \"2004 Dallas Burn season | The 2004 Dallas Burn season was the eighth season of the Major League Soccer team. The season saw the team fail to make the playoffs for the second consecutive year. The season was also the first full season under head coach Colin Clarke. The team moved from Dragon Stadium back to the Cotton Bowl. It would be the last season for the team in the Cotton Bowl, as they would move to their current stadium in Frisco. It was also the team’s final season as the Burn. With the m ...[truncated]\",\n    \"Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.\",\n    \"Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper.\"\n  ],\n  \"summary_2\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"answer\": \"Dallas Green was born earlier — Dallas Green (born 1934) vs. Brian Johnson (born 1948).\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"Dallas Green (musician)\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Brian Johnson\"\n  ]\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks which of two people was born earlier and the current query is ambiguous (multiple people share a name) or the current_output contains short role-based disambiguators (e.g., 'baseball manager', 'AC/DC singer').\",\n    \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as context and continue to produce exactly one compact second-hop retrieval query. Preserve any useful disambiguators already present in the agent's current_output.\",\n    \"change_rule\": \"When composing the single retrieval query, explicitly include both person names plus the words 'birth date' and attach at most one short disambiguator (role/occupation) in parentheses for each name if such disambiguators appear in the visible inputs. Produce a compact paired query (no full sentences, no years, no conclusions). Example form: 'Brian Johnson (AC/DC singer) birth date; Dallas Green (baseball manager) birth date'.\",\n    \"drop_or_avoid_rule\": \"Do not include the full question text, do not state or repeat birth years or the final answer, do not append long explanatory phrases or multiple alternative disambiguators, and avoid enumerating many similarly named variants.\",\n    \"output_contract\": \"Return a single short string for `query` that mentions both names, the phrase 'birth date', and optional short parenthetical disambiguators drawn only from existing visible inputs. The string must be a concise retrieval query (no sentences, no answer), focused on getting birth-date pages for the two named persons.\",\n    \"why_local_transition\": \"The previous query was ambiguous and drew in multiple irrelevant name variants. Adding concise role-based disambiguators for each person directs retrieval toward the correct biographical pages for birth dates while preserving the agent's compact single-query output style.\"\n  },\n  \"rationale\": \"This edge requires only a small behavioral edit: make the retrieval query explicitly pair both names with 'birth date' and add short disambiguators available in the visible inputs. That minimal change disambiguates common names (especially 'Brian Johnson') and focuses retrieval on biographical pages without changing the agent's interface or producing an answer. It preserves existing useful behavior (compact single-query output) and avoids forbidden actions (no answers, no target-only spans, no copying of final labels or years). This local prompt delta steers the agent away from retrieving irrelevant variants while remaining narrowly scoped.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 0
+  }
+}

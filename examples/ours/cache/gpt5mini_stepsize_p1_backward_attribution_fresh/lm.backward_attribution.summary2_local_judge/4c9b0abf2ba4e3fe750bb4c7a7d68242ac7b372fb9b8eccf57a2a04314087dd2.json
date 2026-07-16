@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "4c9b0abf2ba4e3fe750bb4c7a7d68242ac7b372fb9b8eccf57a2a04314087dd2",
+  "created_at": "2026-07-16T04:53:11.787790+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Who else did the author of The Power Broker write a biography of?",
+      "source_summary": "Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.",
+      "target_summary": "Summary integrating first- and second-hop evidence: Passage [The Power Broker] identifies The Power Broker as a Pulitzer Prize-winning biography of Robert Moses by Robert Caro. The Robert Caro passage states that Robert Allan Caro is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson. These combined facts establish that the author of The Power Broker, Robert Caro, is also known for a biography of Lyndon B. Johnson.",
+      "candidate_summary": "Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson. The passages identify Robert Caro as an American author known for biographies of Robert Moses and Lyndon B. Johnson."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWho else did the author of The Power Broker write a biography of?\n\nSource summary2:\nRobert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.\n\nTarget summary2:\nSummary integrating first- and second-hop evidence: Passage [The Power Broker] identifies The Power Broker as a Pulitzer Prize-winning biography of Robert Moses by Robert Caro. The Robert Caro passage states that Robert Allan Caro is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson. These combined facts establish that the author of The Power Broker, Robert Caro, is also known for a biography of Lyndon B. Johnson.\n\nCandidate summary2:\nRobert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson. The passages identify Robert Caro as an American author known for biographies of Robert Moses and Lyndon B. Johnson.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate repeats the source claim that Caro wrote the multi-volume Lyndon B. Johnson biography and additionally states that Caro is an American author known for biographies of Robert Moses and Lyndon B. Johnson, matching the target's integrated facts without contradiction.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 76,
+    "row_index": 76,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

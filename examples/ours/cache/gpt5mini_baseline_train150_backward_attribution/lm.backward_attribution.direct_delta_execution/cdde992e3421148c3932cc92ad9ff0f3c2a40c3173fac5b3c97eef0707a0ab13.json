@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "cdde992e3421148c3932cc92ad9ff0f3c2a40c3173fac5b3c97eef0707a0ab13",
+  "created_at": "2026-07-14T13:37:18.975803+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both visible summaries contain the same comma-separated place string (pattern: \"Place, Region\") and the current tentative answer includes that same comma-separated string (or any answer containing a comma-separated place),",
+            "preserve_rule": "Keep all existing behavior that derives the answer from the visible summaries and do not change how the agent determines which place is supported. Preserve use of the summaries as the sole evidence source.",
+            "change_rule": "When triggered, remove the trailing \", Region\" portion from the place string before emitting the final answer. Concretely: map any answer of the form \"X, Y\" to just \"X\" (trim whitespace). Apply only when the shorter form X still appears as a substring in the provided summaries.",
+            "drop_or_avoid_rule": "Do not add extra context, qualifiers, punctuation, or explanatory text to the answer. Avoid expanding the place with additional geographic labels (state, country, county) or parenthetical notes. Do not change other parts of the base prompt or how evidence is used.",
+            "output_contract": "Ensure the [[ ## answer ## ]] block contains only the minimal place-name string (no comma or trailing region/state) that is directly supported by the visible summaries.",
+            "why_local_transition": "The only needed correction is to normalize a comma-separated place to its minimal place-name form (removing the trailing region) so the final answer matches the expected minimal-string format while still being directly supported by the provided summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?",
+        "summary_1": "Waimānalo, Hawaii",
+        "summary_2": "Waimānalo, Hawaii",
+        "current_output": "Waimānalo, Hawaii"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both visible summaries contain the same comma-separated place string (pattern: \\\"Place, Region\\\") and the current tentative answer includes that same comma-separated string (or any answer containing a comma-separated place),\",\n      \"preserve_rule\": \"Keep all existing behavior that derives the answer from the visible summaries and do not change how the agent determines which place is supported. Preserve use of the summaries as the sole evidence source.\",\n      \"change_rule\": \"When triggered, remove the trailing \\\", Region\\\" portion from the place string before emitting the final answer. Concretely: map any answer of the form \\\"X, Y\\\" to just \\\"X\\\" (trim whitespace). Apply only when the shorter form X still appears as a substring in the provided summaries.\",\n      \"drop_or_avoid_rule\": \"Do not add extra context, qualifiers, punctuation, or explanatory text to the answer. Avoid expanding the place with additional geographic labels (state, country, county) or parenthetical notes. Do not change other parts of the base prompt or how evidence is used.\",\n      \"output_contract\": \"Ensure the [[ ## answer ## ]] block contains only the minimal place-name string (no comma or trailing region/state) that is directly supported by the visible summaries.\",\n      \"why_local_transition\": \"The only needed correction is to normalize a comma-separated place to its minimal place-name form (removing the trailing region) so the final answer matches the expected minimal-string format while still being directly supported by the provided summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?\",\n  \"summary_1\": \"Waimānalo, Hawaii\",\n  \"summary_2\": \"Waimānalo, Hawaii\",\n  \"current_output\": \"Waimānalo, Hawaii\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Waimānalo\",\n  \"rationale\": \"Both summaries contained the same 'Place, Region' string; per the ordered delta, the trailing region was removed to produce the minimal place name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 25,
+    "row_index": 25,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

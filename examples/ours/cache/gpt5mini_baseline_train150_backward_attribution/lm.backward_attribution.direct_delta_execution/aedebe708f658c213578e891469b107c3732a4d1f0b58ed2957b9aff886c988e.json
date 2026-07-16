@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "aedebe708f658c213578e891469b107c3732a4d1f0b58ed2957b9aff886c988e",
+  "created_at": "2026-07-14T13:37:25.730018+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both summary_1 and summary_2 explicitly state that each named film is a documentary (i.e., the summaries contain the token 'documentary' applied to the films in question), apply this update.",
+            "preserve_rule": "Keep using the provided summaries as the sole evidence source and retain the agent's obligation to answer concisely and truthfully according to that evidence and the base prompt's final-answer interface.",
+            "change_rule": "When the trigger is met, replace any verbose sentence-level answer with exactly one lowercase single-token answer that conveys affirmation or negation. Determine which token to emit by aggregating the visible summaries: if they consistently assert the films are documentaries, emit the single affirmative token; if they consistently assert they are not, emit the single negative token; if summaries conflict or do not clearly support either, follow the base prompt's default (e.g., abstain or indicate uncertainty) using the minimal single-token form. Do not add any other words, punctuation, explanation, or copy of summary text.",
+            "drop_or_avoid_rule": "Avoid including film titles, dates, explanatory clauses, capitalization, punctuation, quotes, or any extra text outside the single token. Do not reproduce long spans from the summaries or produce multi-word answers.",
+            "output_contract": "The produced field 'answer' must consist of exactly one lowercase token (an affirmative or negative token) and nothing else. Ensure this token is the only content in the final-answer block.",
+            "why_local_transition": "The current output is a full sentence repeating summary details; the final-answer contract requires a minimal answer token. This small behavior change maps the existing correct judgment (supported by both summaries) to the required minimal output format without altering evidence use."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are the Films Nitrate Kisses and Italy in a Day documentaries?",
+        "summary_1": "Yes. Nitrate Kisses is an experimental documentary (1992) and Italy in a Day is a 2014 Italian-British documentary.",
+        "summary_2": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.",
+        "current_output": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both summary_1 and summary_2 explicitly state that each named film is a documentary (i.e., the summaries contain the token 'documentary' applied to the films in question), apply this update.\",\n      \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source and retain the agent's obligation to answer concisely and truthfully according to that evidence and the base prompt's final-answer interface.\",\n      \"change_rule\": \"When the trigger is met, replace any verbose sentence-level answer with exactly one lowercase single-token answer that conveys affirmation or negation. Determine which token to emit by aggregating the visible summaries: if they consistently assert the films are documentaries, emit the single affirmative token; if they consistently assert they are not, emit the single negative token; if summaries conflict or do not clearly support either, follow the base prompt's default (e.g., abstain or indicate uncertainty) using the minimal single-token form. Do not add any other words, punctuation, explanation, or copy of summary text.\",\n      \"drop_or_avoid_rule\": \"Avoid including film titles, dates, explanatory clauses, capitalization, punctuation, quotes, or any extra text outside the single token. Do not reproduce long spans from the summaries or produce multi-word answers.\",\n      \"output_contract\": \"The produced field 'answer' must consist of exactly one lowercase token (an affirmative or negative token) and nothing else. Ensure this token is the only content in the final-answer block.\",\n      \"why_local_transition\": \"The current output is a full sentence repeating summary details; the final-answer contract requires a minimal answer token. This small behavior change maps the existing correct judgment (supported by both summaries) to the required minimal output format without altering evidence use.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are the Films Nitrate Kisses and Italy in a Day documentaries?\",\n  \"summary_1\": \"Yes. Nitrate Kisses is an experimental documentary (1992) and Italy in a Day is a 2014 Italian-British documentary.\",\n  \"summary_2\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\",\n  \"current_output\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"yes\",\n  \"rationale\": \"Both summaries explicitly label both films as documentaries, so the ordered rule requires emitting a single lowercase affirmative token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 65,
+    "row_index": 65,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

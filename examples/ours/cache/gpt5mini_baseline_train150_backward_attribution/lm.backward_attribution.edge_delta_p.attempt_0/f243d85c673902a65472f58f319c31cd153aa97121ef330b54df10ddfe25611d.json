@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "f243d85c673902a65472f58f319c31cd153aa97121ef330b54df10ddfe25611d",
+  "created_at": "2026-07-14T13:37:17.054753+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+        "summary_1": "Both Juliette and the Licks and Civil Twilight have four male band members.",
+        "summary_2": "Four.",
+        "current_output": "Four"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Four",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "4th",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What number of male band members do both Juliette and the Licks and Civil Twilight have?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What number of male band members do both Juliette and the Licks and Civil Twilight have?\",\n  \"summary_1\": \"Both Juliette and the Licks and Civil Twilight have four male band members.\",\n  \"summary_2\": \"Four.\",\n  \"current_output\": \"Four\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Four\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"4th\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 and summary_2 both assert the same numeric count for the queried quantity (they agree on the same integer, whether written as a word or as digits).\",\n    \"preserve_rule\": \"Keep the base behavior of producing only the minimal answer string in the answer field and relying on the visible summaries as evidence. If the summaries disagree or do not contain a clear numeric agreement, do not apply this delta.\",\n    \"change_rule\": \"When triggered, convert the agreed numeric count into its compact digit form (a digit-only string, no words) and emit that digit-only string as the answer. Produce no additional commentary, punctuation, or surrounding text.\",\n    \"drop_or_avoid_rule\": \"Do not output the number spelled out as a word; do not add ordinal suffixes (e.g., 'th', 'st'), explanations, qualifiers, or other tokens. Avoid any extra formatting beyond the bare digit string.\",\n    \"output_contract\": \"The answer field must contain exactly one minimal token: the digit-only string representing the agreed numeric count (no surrounding words or punctuation).\",\n    \"why_local_transition\": \"This edge only requires a small formatting change when both summaries agree on a numeric count: convert the spelled-out or redundant numeric evidence already present in the summaries into the compact digit form so the final-answer contract (single minimal token) is satisfied.\"\n  },\n  \"rationale\": \"The current behavior returns a spelled-out numeric word; the intended local change is only formatting: emit the compact digit-only representation when both summaries agree. This delta is narrowly scoped (it triggers only on clear numeric agreement), preserves the base prompt's minimal-answer requirement, avoids adding new information, and avoids copying any target-only literal. It is the smallest coherent behavioral edit to move the agent's output formatting along this edge while keeping existing useful evidence and interface unchanged.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 16,
+    "row_index": 16,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

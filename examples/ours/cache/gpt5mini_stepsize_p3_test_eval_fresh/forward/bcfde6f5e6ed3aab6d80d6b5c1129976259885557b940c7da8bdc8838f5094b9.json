@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "bcfde6f5e6ed3aab6d80d6b5c1129976259885557b940c7da8bdc8838f5094b9",
+  "created_at": "2026-07-16T07:03:22.976059+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- If summary_1 already includes explicit profession/role/descriptor tokens for an anchor (for example, 'singer', 'director', 'country music artist'), omit those redundant descriptor tokens and emit a compact anchor-only query consisting of the core visible anchors (names, titles, groups). Retain relation tokens only when the question explicitly requests them or when disambiguation rules demand them. Do not remove descriptors when the question explicitly asks for role/occupation evidence or when a short-title disambiguation rule requires adding an entertainment disambiguator.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity (or otherwise names candidate/bridge entities), treat the context claim as the summary anchor and perform explicit identity-alignment checks before using passage facts. For each entity explicitly named in `context` as a candidate or bridge, do the following: if at least one passage provides an explicit, identity-aligned statement linking that named entity (or a clearly indicated alias) to the asserted relation, append a single brief corroborating sentence that paraphrases that linking fact and references the corroborating passage and also include one short clause for that context-named entity giving the passage-supported relation value (e.g., \"Name: [relation value].\"); if no passage provides the relation value for that context-named entity, append a short clause stating that no relation value is provided in the evidence (e.g., \"Name: no [relation] provided in evidence.\"). Do not create such clauses for entities that are only mentioned in `passages` and are not named in `context`. Do not append corroboration if the `context` already contains the identical corroborating fact verbatim. Keep these additions short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n- Vocal-role single-token normalization (narrow scope): If summary_2 (alone or composed with summary_1 where identity links are explicit) explicitly contains vocal-role evidence — i.e., one or more verbalized vocal-role phrases that clearly denote a singing performer (examples: \"lead singer\", \"lead vocals\", \"vocalist\" as presented in the summaries) — then you may prefer to emit the concise single-token common noun for a person who sings (e.g., \"singer\") only when that single-token common noun itself appears verbatim in the summaries or when the vocal-role phrases in the summaries unambiguously denote the same person-role. If those explicit lexical licenses are not present, retain the literal role phrasing as given in summary_2 and do not normalize modifiers or drop qualifiers.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "ab3db3537ee7",
+    "rerun_from": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "gold_answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ],
+    "hop1_query": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "hop1_docs": [
+      "Alex Delaware | Alex Delaware is a literary character created by Jonathan Kellerman.  The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.  Delaware appears in 32 of Kellerman's popular murder mysteries.  Kellerman sets the series in Los Angeles.  Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist.",
+      "Jonathan Kellerman | Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels.",
+      "Bones (Kellerman novel) | Bones is a mystery novel by American author Jonathan Kellerman.",
+      "Gone (Kellerman novel) | Gone is a mystery novel by American author Jonathan Kellerman",
+      "Flesh and Blood (Kellerman novel) | Flesh and Blood is a mystery novel by Jonathan Kellerman",
+      "Therapy (Kellerman novel) | Therapy is a mystery novel by American author Jonathan Kellerman",
+      "Rage (Kellerman novel) | Rage is a mystery novel by American author Jonathan Kellerman"
+    ],
+    "hop1_titles": [
+      "Alex Delaware",
+      "Jonathan Kellerman",
+      "Bones (Kellerman novel)",
+      "Gone (Kellerman novel)",
+      "Flesh and Blood (Kellerman novel)",
+      "Therapy (Kellerman novel)",
+      "Rage (Kellerman novel)"
+    ],
+    "summary_1": "Evidence: \"Jonathan Kellerman (born August 9, 1949) is an American psychologist...\" (passage [2]) — supports that Jonathan Kellerman is American. Missing/next hop: no passage gives James Emanuel's nationality; retrieve James Emanuel's nationality/biography. Retrieval directions/anchors: search for \"James Emanuel nationality\" or \"James Emanuel biography\" and, if needed, disambiguate by adding likely identifiers (e.g., \"James Emanuel poet\" or other occupation) to ensure the correct individual is found.",
+    "hop2_query": "James Emanuel poet nationality",
+    "hop2_docs": [
+      "James Emanuel | James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.  Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.  He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment.",
+      "Emanuel di Pasquale | Emanuel di Pasquale is an American poet and translator.",
+      "Emanuele Tesauro | Emanuele Tesauro (1592–1675) was a rhetorician, dramatist, Marinist poet, and historian from Turin.",
+      "Emanuel Geibel | Emanuel von Geibel (17 October 1815 – 6 April 1884), German poet and playwright.",
+      "Emanuel Calvo | Emanuel Calvo (late-seventeenth century - before 1772) was an Italian physician and Neo-Hebraic poet.",
+      "Abraham Emanuel Fröhlich | Abraham Emanuel Fröhlich (1 February 1796, Brugg, Aargau1 December 1865) was a Swiss poet.",
+      "Lynn Emanuel | Lynn Collins Emanuel (born March 14, 1949) is an American poet.  Some of her poetry collections are \"Then, Suddenly—\" and \"Noose and Hook\" (University of Pittsburgh Press)."
+    ],
+    "hop2_titles": [
+      "James Emanuel",
+      "Emanuel di Pasquale",
+      "Emanuele Tesauro",
+      "Emanuel Geibel",
+      "Emanuel Calvo",
+      "Abraham Emanuel Fröhlich",
+      "Lynn Emanuel"
+    ],
+    "summary_2": "Both James Emanuel and Jonathan Kellerman are American. James Emanuel: American — he was a poet and scholar from Alliance, Nebraska (passage [1]). Jonathan Kellerman: American (context evidence).",
+    "answer": "american",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "James Emanuel"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Jonathan Kellerman"
+    ],
+    "hit_titles_total": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

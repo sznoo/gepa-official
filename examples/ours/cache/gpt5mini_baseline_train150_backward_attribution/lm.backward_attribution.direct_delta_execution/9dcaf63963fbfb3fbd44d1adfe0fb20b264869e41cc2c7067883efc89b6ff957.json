@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "9dcaf63963fbfb3fbd44d1adfe0fb20b264869e41cc2c7067883efc89b6ff957",
+  "created_at": "2026-07-14T13:38:11.893515+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question names a director (e.g. 'Jonathan Kaplan') and asks about an actress's film debut, but the current query is a lone film title (e.g. 'Hangmen (1987)') that returns an unrelated debut result.",
+            "preserve_rule": "Keep producing a single compact second-hop retrieval query (the same output field `query`) and preserve concise phrasing (no extra sentences or explanation).",
+            "change_rule": "Instead of querying only a candidate debut film title, construct a short query that links the director (from the question) to the actress's debut by combining the director or the film description from the question with the phrase 'film debut' and the descriptor 'English actress'. Example pattern: <Director name> English actress film debut. Do not add subordinate clauses or full sentences.",
+            "drop_or_avoid_rule": "Avoid queries that only name a single film title or that target a debut film without referencing the director/question context. Do not attempt to resolve by returning long passages or by listing multiple unrelated film/actor names.",
+            "output_contract": "Return one compact query string that follows the pattern: 'Jonathan Kaplan English actress film debut' (replace 'Jonathan Kaplan' with the director text from the question).",
+            "why_local_transition": "This nudges the agent away from single-title lookups (which returned an unrelated debut) and toward a focused bridge query that will retrieve the Kaplan-directed film and its starring English actress so her debut can be found."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the current `query` already contains a film title and an actress name but omits the question's descriptive clause (e.g., director / film-type) that would disambiguate the target film.",
+            "preserve_rule": "Keep all identifying tokens already in the current `query` (film title and actress name) unchanged and use them as anchors for retrieval.",
+            "change_rule": "Augment the preserved tokens by appending a short, non‑answer phrase drawn from the `question` that disambiguates the film (for example: 'American drama film directed by Jonathan Kaplan' or the minimal clause from the question). Keep the result as one compact retrieval query string (no full sentences or answers).",
+            "drop_or_avoid_rule": "Do not add candidate answers, summaries, or long quoted spans. Avoid adding unrelated film titles (e.g., other films from summary_1) or generic short queries like only 'actor film debut' that lack the disambiguating clause. Do not include punctuation-heavy phrasing or a full interrogative sentence.",
+            "output_contract": "Produce a single-line retrieval query that combines: <film title> + <actress name> + <minimal disambiguating clause from the question (e.g. 'American drama film directed by Jonathan Kaplan')>. The field must be concise, contain no answer text, and be suitable for a search engine.",
+            "why_local_transition": "Adding the question's disambiguating clause to the existing title+actor tokens focuses retrieval on the specific film directed by Jonathan Kaplan, enabling retrieval of pages that link the actress to that film and thereby surface the actress's film‑debut information."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+        "summary_1": "She made her film debut in the 1987 thriller \"Hangmen.\"",
+        "current_output": {
+          "query": "Hangmen (1987)"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question names a director (e.g. 'Jonathan Kaplan') and asks about an actress's film debut, but the current query is a lone film title (e.g. 'Hangmen (1987)') that returns an unrelated debut result.\",\n      \"preserve_rule\": \"Keep producing a single compact second-hop retrieval query (the same output field `query`) and preserve concise phrasing (no extra sentences or explanation).\",\n      \"change_rule\": \"Instead of querying only a candidate debut film title, construct a short query that links the director (from the question) to the actress's debut by combining the director or the film description from the question with the phrase 'film debut' and the descriptor 'English actress'. Example pattern: <Director name> English actress film debut. Do not add subordinate clauses or full sentences.\",\n      \"drop_or_avoid_rule\": \"Avoid queries that only name a single film title or that target a debut film without referencing the director/question context. Do not attempt to resolve by returning long passages or by listing multiple unrelated film/actor names.\",\n      \"output_contract\": \"Return one compact query string that follows the pattern: 'Jonathan Kaplan English actress film debut' (replace 'Jonathan Kaplan' with the director text from the question).\",\n      \"why_local_transition\": \"This nudges the agent away from single-title lookups (which returned an unrelated debut) and toward a focused bridge query that will retrieve the Kaplan-directed film and its starring English actress so her debut can be found.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the current `query` already contains a film title and an actress name but omits the question's descriptive clause (e.g., director / film-type) that would disambiguate the target film.\",\n      \"preserve_rule\": \"Keep all identifying tokens already in the current `query` (film title and actress name) unchanged and use them as anchors for retrieval.\",\n      \"change_rule\": \"Augment the preserved tokens by appending a short, non‑answer phrase drawn from the `question` that disambiguates the film (for example: 'American drama film directed by Jonathan Kaplan' or the minimal clause from the question). Keep the result as one compact retrieval query string (no full sentences or answers).\",\n      \"drop_or_avoid_rule\": \"Do not add candidate answers, summaries, or long quoted spans. Avoid adding unrelated film titles (e.g., other films from summary_1) or generic short queries like only 'actor film debut' that lack the disambiguating clause. Do not include punctuation-heavy phrasing or a full interrogative sentence.\",\n      \"output_contract\": \"Produce a single-line retrieval query that combines: <film title> + <actress name> + <minimal disambiguating clause from the question (e.g. 'American drama film directed by Jonathan Kaplan')>. The field must be concise, contain no answer text, and be suitable for a search engine.\",\n      \"why_local_transition\": \"Adding the question's disambiguating clause to the existing title+actor tokens focuses retrieval on the specific film directed by Jonathan Kaplan, enabling retrieval of pages that link the actress to that film and thereby surface the actress's film‑debut information.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?\",\n  \"summary_1\": \"She made her film debut in the 1987 thriller \\\"Hangmen.\\\"\",\n  \"current_output\": {\n    \"query\": \"Hangmen (1987)\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Jonathan Kaplan English actress film debut\"\n  },\n  \"rationale\": \"Delta 0 applied: replaced the lone film-title query with the director-focused pattern '<Director name> English actress film debut' to target the actress's debut.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 44,
+    "row_index": 44,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

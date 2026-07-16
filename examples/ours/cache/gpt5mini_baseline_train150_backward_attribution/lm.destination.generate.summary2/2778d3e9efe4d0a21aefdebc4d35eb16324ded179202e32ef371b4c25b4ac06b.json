@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "2778d3e9efe4d0a21aefdebc4d35eb16324ded179202e32ef371b4c25b4ac06b",
+  "created_at": "2026-07-14T13:37:17.197556+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?",
+      "current_output": "Jason Bateman has had the more diverse career. He has worked as an actor, director, and producer across TV, film, and voice work; Jan Troell is primarily a Swedish film director/writer/cinematographer.",
+      "upstream_context": {
+        "question": "Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?",
+        "summary_1": "Jason Bateman. He has had a broader, more varied career (actor, director, producer across TV, film, and voice work), whereas Jan Troell is primarily known as a director/writer/cinematographer in Swedish film.",
+        "hop2_query": "Compare careers of Jason Bateman and Jan Troell: Jason Bateman biography and filmography (actor, director, producer, voice roles, TV & film) vs Jan Troell biography and filmography (Swedish director, screenwriter, cinematographer). Sources: Wikipedia, IMDb, official biographies, major profiles/reviews.",
+        "hop2_titles": [
+          "Jan Troell",
+          "Hurricane (1979 film)",
+          "Bryan Cranston filmography",
+          "Judge Reinhold filmography",
+          "Everlasting Moments",
+          "The Hurricane (novel)",
+          "Trey Parker filmography"
+        ],
+        "hop2_docs": [
+          "Jan Troell | Jan Gustaf Troell (born 23 July 1931) is a Swedish film director.  Usually, Troell writes his own scripts and serves as his own director of photography.  His realistic films, with a lyrical photography in which nature is prominent, have placed him in the first rank of modern Swedish film directors along with Ingmar Bergman and Bo Widerberg.",
+          "Hurricane (1979 film) | Hurricane is a 1979 romance and adventure film featuring Mia Farrow and Jason Robards, produced by Dino De Laurentiis and Lorenzo Semple, Jr., and directed by Jan Troell.  It is loosely based on the 1937 film of the same name.",
+          "Bryan Cranston filmography | The following is the filmography of American actor, voice actor, screenwriter, producer, and director Bryan Cranston.",
+          "Judge Reinhold filmography | The following is the filmography of American actor, voice actor, screenwriter, producer, and director, Judge Reinhold.",
+          "Everlasting Moments | Everlasting Moments (Swedish: Maria Larssons eviga ögonblick ) is a 2008 Swedish drama film directed by Jan Troell, starring Maria Heiskanen, Mikael Persbrandt and Jesper Christensen.  It is based on the true story of Maria Larsson, a Swedish working class woman in the early 20th century, who wins a camera in a lottery and goes on to become a photographer.  It has been compared to Troell's previous films \"Here's Your Life\" and \"As White as in Snow\", which are both set around the same period.",
+          "The Hurricane (novel) | The Hurricane is a 1936 novel by Charles Nordhoff and James Norman Hall about a Pacific Ocean hurricane.  It was adapted into two films, \"The Hurricane\" (1937), directed by John Ford, and \"Hurricane\" (1979), by Swedish director Jan Troell.",
+          "Trey Parker filmography | The following is the filmography of American actor, voice artist, animator, screenwriter, director, producer, comedian, singer, and songwriter Trey Parker."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Jan Troell",
+          "sent_id": 0,
+          "sentence": "Jan Gustaf Troell (born 23 July 1931) is a Swedish film director."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nBetween Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?\n\nCurrent agent output:\n\"Jason Bateman has had the more diverse career. He has worked as an actor, director, and producer across TV, film, and voice work; Jan Troell is primarily a Swedish film director/writer/cinematographer.\"\n\nActual upstream context:\n{\n  \"question\": \"Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?\",\n  \"summary_1\": \"Jason Bateman. He has had a broader, more varied career (actor, director, producer across TV, film, and voice work), whereas Jan Troell is primarily known as a director/writer/cinematographer in Swedish film.\",\n  \"hop2_query\": \"Compare careers of Jason Bateman and Jan Troell: Jason Bateman biography and filmography (actor, director, producer, voice roles, TV & film) vs Jan Troell biography and filmography (Swedish director, screenwriter, cinematographer). Sources: Wikipedia, IMDb, official biographies, major profiles/reviews.\",\n  \"hop2_titles\": [\n    \"Jan Troell\",\n    \"Hurricane (1979 film)\",\n    \"Bryan Cranston filmography\",\n    \"Judge Reinhold filmography\",\n    \"Everlasting Moments\",\n    \"The Hurricane (novel)\",\n    \"Trey Parker filmography\"\n  ],\n  \"hop2_docs\": [\n    \"Jan Troell | Jan Gustaf Troell (born 23 July 1931) is a Swedish film director.  Usually, Troell writes his own scripts and serves as his own director of photography.  His realistic films, with a lyrical photography in which nature is prominent, have placed him in the first rank of modern Swedish film directors along with Ingmar Bergman and Bo Widerberg.\",\n    \"Hurricane (1979 film) | Hurricane is a 1979 romance and adventure film featuring Mia Farrow and Jason Robards, produced by Dino De Laurentiis and Lorenzo Semple, Jr., and directed by Jan Troell.  It is loosely based on the 1937 film of the same name.\",\n    \"Bryan Cranston filmography | The following is the filmography of American actor, voice actor, screenwriter, producer, and director Bryan Cranston.\",\n    \"Judge Reinhold filmography | The following is the filmography of American actor, voice actor, screenwriter, producer, and director, Judge Reinhold.\",\n    \"Everlasting Moments | Everlasting Moments (Swedish: Maria Larssons eviga ögonblick ) is a 2008 Swedish drama film directed by Jan Troell, starring Maria Heiskanen, Mikael Persbrandt and Jesper Christensen.  It is based on the true story of Maria Larsson, a Swedish working class woman in the early 20th century, who wins a camera in a lottery and goes on to become a photographer.  It has been compared to Troell's previous films \\\"Here's Your Life\\\" and \\\"As White as in Snow\\\", which are both set around the same period.\",\n    \"The Hurricane (novel) | The Hurricane is a 1936 novel by Charles Nordhoff and James Norman Hall about a Pacific Ocean hurricane.  It was adapted into two films, \\\"The Hurricane\\\" (1937), directed by John Ford, and \\\"Hurricane\\\" (1979), by Swedish director Jan Troell.\",\n    \"Trey Parker filmography | The following is the filmography of American actor, voice artist, animator, screenwriter, director, producer, comedian, singer, and songwriter Trey Parker.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Jan Troell\",\n    \"sent_id\": 0,\n    \"sentence\": \"Jan Gustaf Troell (born 23 July 1931) is a Swedish film director.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated summary: Jason Bateman has had a multifaceted career—working as an actor, director, and producer across television, film, and voice roles (from the first-hop summary). Jan Gustaf Troell (born 23 July 1931) is a Swedish film director (supported by the retrieved Jan Troell document). These retained facts (Bateman's multiple on-screen and behind-the-camera roles; Troell identified as a Swedish film director) provide the evidence needed to assess which filmmaker has had a more diverse career.\",\n  \"rationale\": \"I combined the first-hop summary's characterization of Jason Bateman's varied roles (actor, director, producer across TV, film, voice work) with the second-hop retrieved sentence explicitly stating that Jan Gustaf Troell is a Swedish film director. The Troell statement is the visible gold support; no additional unseen document contents were used.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 8,
+    "row_index": 8
+  }
+}

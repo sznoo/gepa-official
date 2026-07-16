@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "8f1a8a3242722413f478f1c71d0e403ed886f48046341c5b1991da06ec53c487",
+  "created_at": "2026-07-16T01:49:24.870256+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+    "answer": "Whistle Down the Wind",
+    "context": {
+      "title": [
+        "Juliet Mills",
+        "Crispian Mills",
+        "Hayley Mills",
+        "Whistle Down the Wind (musical)",
+        "Whistle Down the Wind (novel)",
+        "Mary Hayley Bell",
+        "Ashley Lloyd",
+        "Sky West and Crooked",
+        "Whistle Down the Wind (film)",
+        "Sir John Mills' Moving Memories"
+      ],
+      "sentences": [
+        [
+          "Juliet Maryon Mills (born 21 November 1941) is a British and American actress.",
+          " She is the daughter of actor Sir John Mills and Mary Hayley Bell and the eldest of three siblings: her younger siblings are actress Hayley Mills and director Jonathan Mills."
+        ],
+        [
+          "Crispian Mills (born 18 January 1973 as Crispian John David Boulting), also known as Krishna Kantha Das, is an English singer-songwriter, guitarist, and film director.",
+          " He is the son of actress Hayley Mills and director Roy Boulting, the grandson of Sir John Mills and Mary Hayley Bell, nephew of Juliet Mills and director Jonathan Mills, and half-brother to Jason Lawson."
+        ],
+        [
+          "Hayley Catherine Rose Vivien Mills (born 18 April 1946) is an English actress.",
+          " The daughter of Sir John Mills and Mary Hayley Bell, and younger sister of actress Juliet Mills, Mills began her acting career as a child and was hailed as a promising newcomer, winning the BAFTA Award for Most Promising Newcomer for her performance in the British crime drama film \"Tiger Bay\" (1959), the Academy Juvenile Award for Disney's \"Pollyanna\" (1960) and Golden Globe Award for New Star of the Year – Actress in 1961.",
+          " During her early career, she appeared in six films for Walt Disney, including her dual role as twins Susan and Sharon in the Disney film \"The Parent Trap\" (1961).",
+          " Her performance in \"Whistle Down the Wind\" (a 1961 adaptation of the novel written by her mother) saw Mills nominated for BAFTA Award for Best British Actress."
+        ],
+        [
+          "Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.",
+          " It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959."
+        ],
+        [
+          "Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.",
+          " It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).",
+          " The central characters are three children — Swallow, Brat and Poor Baby.",
+          " The story of the Great Secret is told by Brat."
+        ],
+        [
+          "Mary Hayley Bell, Lady Mills (22 January 1911 – 1 December 2005) was an English actress and writer, married for 64 years to actor Sir John Mills.",
+          " Her novel \"Whistle Down the Wind\" was adapted as a film, starring her teenaged daughter, actress Hayley Mills."
+        ],
+        [
+          "Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \"Billy Elliot the Musical\" and \"Whistle Down the Wind\".",
+          " In 2012 Lloyd appeared in the new musical \"Loserville\" at the Garrick Theatre in London.",
+          " Lloyd is now appearing in the Original London Cast of Dreamgirls at The Savoy Theatre"
+        ],
+        [
+          "Sky West and Crooked (known in the United States as Gypsy Girl) is a 1965 romantic drama film, featuring actress Hayley Mills.",
+          " The film was directed by her father, John Mills, and was co-written by her mother, Mary Hayley Bell."
+        ],
+        [
+          "Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.",
+          " The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills."
+        ],
+        [
+          "Sir John Mills' Moving Memories is a British documentary film featuring 16mm color home movies shot by the actor Sir John Mills.",
+          " It documents his life between 1946 and 1969, directed and edited by Marcus Dillistone and produced by his son Jonathan Mills.",
+          " Commentary was provided by Sir John (who was over 90 years old at the time), Hayley Mills, Juliet Mills and Sir Richard Attenborough.",
+          " His wife Mary Hayley Bell is also seen towards the end of the film listening to her husband singing at the piano.",
+          " The scene was later to be screened in full when Sir John appeared on the Parkinson show."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ashley Lloyd",
+        "Whistle Down the Wind (musical)",
+        "Whistle Down the Wind (musical)"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+    "gold_answer": "Whistle Down the Wind",
+    "context": {
+      "title": [
+        "Juliet Mills",
+        "Crispian Mills",
+        "Hayley Mills",
+        "Whistle Down the Wind (musical)",
+        "Whistle Down the Wind (novel)",
+        "Mary Hayley Bell",
+        "Ashley Lloyd",
+        "Sky West and Crooked",
+        "Whistle Down the Wind (film)",
+        "Sir John Mills' Moving Memories"
+      ],
+      "sentences": [
+        [
+          "Juliet Maryon Mills (born 21 November 1941) is a British and American actress.",
+          " She is the daughter of actor Sir John Mills and Mary Hayley Bell and the eldest of three siblings: her younger siblings are actress Hayley Mills and director Jonathan Mills."
+        ],
+        [
+          "Crispian Mills (born 18 January 1973 as Crispian John David Boulting), also known as Krishna Kantha Das, is an English singer-songwriter, guitarist, and film director.",
+          " He is the son of actress Hayley Mills and director Roy Boulting, the grandson of Sir John Mills and Mary Hayley Bell, nephew of Juliet Mills and director Jonathan Mills, and half-brother to Jason Lawson."
+        ],
+        [
+          "Hayley Catherine Rose Vivien Mills (born 18 April 1946) is an English actress.",
+          " The daughter of Sir John Mills and Mary Hayley Bell, and younger sister of actress Juliet Mills, Mills began her acting career as a child and was hailed as a promising newcomer, winning the BAFTA Award for Most Promising Newcomer for her performance in the British crime drama film \"Tiger Bay\" (1959), the Academy Juvenile Award for Disney's \"Pollyanna\" (1960) and Golden Globe Award for New Star of the Year – Actress in 1961.",
+          " During her early career, she appeared in six films for Walt Disney, including her dual role as twins Susan and Sharon in the Disney film \"The Parent Trap\" (1961).",
+          " Her performance in \"Whistle Down the Wind\" (a 1961 adaptation of the novel written by her mother) saw Mills nominated for BAFTA Award for Best British Actress."
+        ],
+        [
+          "Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.",
+          " It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959."
+        ],
+        [
+          "Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.",
+          " It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).",
+          " The central characters are three children — Swallow, Brat and Poor Baby.",
+          " The story of the Great Secret is told by Brat."
+        ],
+        [
+          "Mary Hayley Bell, Lady Mills (22 January 1911 – 1 December 2005) was an English actress and writer, married for 64 years to actor Sir John Mills.",
+          " Her novel \"Whistle Down the Wind\" was adapted as a film, starring her teenaged daughter, actress Hayley Mills."
+        ],
+        [
+          "Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \"Billy Elliot the Musical\" and \"Whistle Down the Wind\".",
+          " In 2012 Lloyd appeared in the new musical \"Loserville\" at the Garrick Theatre in London.",
+          " Lloyd is now appearing in the Original London Cast of Dreamgirls at The Savoy Theatre"
+        ],
+        [
+          "Sky West and Crooked (known in the United States as Gypsy Girl) is a 1965 romantic drama film, featuring actress Hayley Mills.",
+          " The film was directed by her father, John Mills, and was co-written by her mother, Mary Hayley Bell."
+        ],
+        [
+          "Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.",
+          " The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills."
+        ],
+        [
+          "Sir John Mills' Moving Memories is a British documentary film featuring 16mm color home movies shot by the actor Sir John Mills.",
+          " It documents his life between 1946 and 1969, directed and edited by Marcus Dillistone and produced by his son Jonathan Mills.",
+          " Commentary was provided by Sir John (who was over 90 years old at the time), Hayley Mills, Juliet Mills and Sir Richard Attenborough.",
+          " His wife Mary Hayley Bell is also seen towards the end of the film listening to her husband singing at the piano.",
+          " The scene was later to be screened in full when Sir John appeared on the Parkinson show."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ashley Lloyd",
+        "Whistle Down the Wind (musical)",
+        "Whistle Down the Wind (musical)"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "gold_support_titles": [
+      "Ashley Lloyd",
+      "Whistle Down the Wind (musical)"
+    ],
+    "hop1_query": "Which film based on a novel written by Mary Hayley Bell in 1959, had cast member Ashley Lloyd?",
+    "hop1_docs": [
+      "Whistle Down the Wind (musical) | Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.  It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959.",
+      "Whistle Down the Wind (film) | Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.  The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills.",
+      "Mary Hayley Bell | Mary Hayley Bell, Lady Mills (22 January 1911 – 1 December 2005) was an English actress and writer, married for 64 years to actor Sir John Mills.  Her novel \"Whistle Down the Wind\" was adapted as a film, starring her teenaged daughter, actress Hayley Mills.",
+      "Whistle Down the Wind (novel) | Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.  It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).  The central characters are three children — Swallow, Brat and Poor Baby.  The story of the Great Secret is told by Brat.",
+      "Hayley Mills | Hayley Catherine Rose Vivien Mills (born 18 April 1946) is an English actress.  The daughter of Sir John Mills and Mary Hayley Bell, and younger sister of actress Juliet Mills, Mills began her acting career as a child and was hailed as a promising newcomer, winning the BAFTA Award for Most Promising Newcomer for her performance in the British crime drama film \"Tiger Bay\" (1959), the Academy Juvenile Award for Disney's \"Pollyanna\" (1960) and Golden Globe Award for New Star of the Year – Actress in 1961.  During her early career, she appeared in six films for Walt Disney, including her dual role as twins Susan and Sharon in the Disney film \"The Parent Trap\" (1961).  Her performance in \"Whistle Down the Wind\" (a 1961 adaptation of the novel written by her mother) saw Mills nominated for BAFTA Award for Best British Actress.",
+      "Sky West and Crooked | Sky West and Crooked (known in the United States as Gypsy Girl) is a 1965 romantic drama film, featuring actress Hayley Mills.  The film was directed by her father, John Mills, and was co-written by her mother, Mary Hayley Bell.",
+      "Whistle Down the Wind (1989 musical) | Whistle Down the Wind is a musical based on the novel by Mary Hayley Bell, adapted by Richard Taylor and Russell Labey, with music and lyrics by Richard Taylor."
+    ],
+    "hop1_titles": [
+      "Whistle Down the Wind (musical)",
+      "Whistle Down the Wind (film)",
+      "Mary Hayley Bell",
+      "Whistle Down the Wind (novel)",
+      "Hayley Mills",
+      "Sky West and Crooked",
+      "Whistle Down the Wind (1989 musical)"
+    ],
+    "summary_1": "Evidence: passages identify the work as \"Whistle Down the Wind\" and state it is \"based on the 1959 novel of the same name by Mary Hayley Bell\" and refer to \"the 1961 British film\" Whistle Down the Wind (quotes: \"based on the 1959 novel of the same name by Mary Hayley Bell\"; \"Whistle Down the Wind is a 1961 British film\"). Missing fact / bridge: whether Ashley Lloyd appears in the cast of Whistle Down the Wind (the 1961 film) or in any later adaptation. Next retrieval direction: retrieve Ashley Lloyd's filmography/credits and the cast lists for Whistle Down the Wind (1961) and for later adaptations/musical/film/TV productions titled \"Whistle Down the Wind\" to find which production (if any) lists Ashley Lloyd.",
+    "hop2_query": "Ashley Lloyd Whistle Down the Wind cast filmography",
+    "hop2_docs": [
+      "Ashley Lloyd | Ashley Lloyd (billed as Ashley Luke Lloyd) (born (1991--)6 1991 ) is a British actor and dancer, who has performed in hit musical theatre shows such as \"Billy Elliot the Musical\" and \"Whistle Down the Wind\".  In 2012 Lloyd appeared in the new musical \"Loserville\" at the Garrick Theatre in London.  Lloyd is now appearing in the Original London Cast of Dreamgirls at The Savoy Theatre",
+      "Whistle Down the Wind (musical) | Whistle Down the Wind is a musical with music composed by Andrew Lloyd Webber, who also co-wrote its book with Patricia Knop and Gale Edwards, and its lyrics were written by Jim Steinman.  It is based on the 1961 film \"Whistle Down the Wind\", whose source novel of the same name was written by Mary Hayley Bell in 1959.",
+      "Whistle Down the Wind (1989 musical) | Whistle Down the Wind is a musical based on the novel by Mary Hayley Bell, adapted by Richard Taylor and Russell Labey, with music and lyrics by Richard Taylor.",
+      "Whistle Down the Wind (film) | Whistle Down the Wind is a 1961 British film, directed by Bryan Forbes and with screenplay by Keith Waterhouse and Willis Hall.  The film is based on the 1959 novel of the same name by Mary Hayley Bell and stars her daughter, Hayley Mills.",
+      "Whistle Down the Wind (novel) | Whistle Down the Wind was a novella written by Mary Hayley Bell and illustrated by Owen Edwards.  It was published in 1959 by Boardman and retailed for 12 shillings and sixpence (62½p).  The central characters are three children — Swallow, Brat and Poor Baby.  The story of the Great Secret is told by Brat.",
+      "A Timeless Evening with Sarah Brightman | A Timeless Evening With Sarah Brightman was the first concert tour by English soprano Sarah Brightman accompanied by the London Symphony Orchestra.  The repertoire performed by Brightman was a balanced combination between well-known Classical and Broadway pieces by composers such as Puccini, Gershwin, Delibes, Bernstein and Andrew Lloyd Webber.  Lloyd Webber joined Brightman on stage to perform together the song \"Whistle Down the Wind\".  Italian tenor Andrea Bocelli sang \"Time to Say Goodbye\" in a duet with Brightman.",
+      "No Matter What (Boyzone song) | \"No Matter What\" is a song from the 1996 musical \"Whistle Down the Wind\" and popularised by Irish boyband Boyzone in 1998 when they recorded it to tie in with the show's first UK production.  The recording was written and produced by Andrew Lloyd Webber, Jim Steinman, Nigel Wright with additional production by Franglen & Lupino.  The song was also featured on the US edition of the soundtrack to the 1999 film \"Notting Hill\", and was released to American radio on 10 May 1999."
+    ],
+    "hop2_titles": [
+      "Ashley Lloyd",
+      "Whistle Down the Wind (musical)",
+      "Whistle Down the Wind (1989 musical)",
+      "Whistle Down the Wind (film)",
+      "Whistle Down the Wind (novel)",
+      "A Timeless Evening with Sarah Brightman",
+      "No Matter What (Boyzone song)"
+    ],
+    "summary_2": "The film is Whistle Down the Wind (the 1961 British film) based on Mary Hayley Bell's 1959 novel. Passages show Ashley Lloyd performed in a stage/musical production of Whistle Down the Wind, but do not show he appeared in the 1961 film, so his film cast membership is uncertain.",
+    "answer": "unknown",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Ashley Lloyd"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Whistle Down the Wind (musical)"
+    ],
+    "hit_titles_total": [
+      "Ashley Lloyd",
+      "Whistle Down the Wind (musical)"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

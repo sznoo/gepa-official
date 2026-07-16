@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c76104c957bb23733fa7fe7c5a96e3ddf2646ec966183f3a13f1aeb87fb72c84",
+  "created_at": "2026-07-14T13:37:19.186940+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the provided summaries assert the subject's nationality (e.g., both summaries contain the same nationality phrase).",
+            "preserve_rule": "Keep using the visible summaries as the authoritative source. Preserve the requirement that the final output appears only inside the [[ ## answer ## ]] block and remains a minimal, single-string answer.",
+            "change_rule": "Normalize the nationality phrase by removing hyphens and normalizing spacing/capitalization to match the summaries. Then format the minimal answer as: \"<Nationality> citizen\" (take the unhyphenated nationality phrase from the summaries and append the single word 'citizen' separated by a space). Prefer the exact wording shown in the summaries (majority/first non-empty summary) for the <Nationality> token.",
+            "drop_or_avoid_rule": "Avoid hyphenating the nationality (do not output forms like 'Polish-American'). Do not add extra explanation, context, punctuation, or qualifiers beyond the single string '<Nationality> citizen'. Do not invent or introduce additional claims beyond what the summaries support.",
+            "output_contract": "Produce exactly one minimal answer string inside [[ ## answer ## ]] and nothing else. The string must be the normalized nationality phrase followed by a single space and the word 'citizen' (for example: '<Nationality> citizen'), matching capitalization from the summaries.",
+            "why_local_transition": "The source output used a hyphenated form and omitted the word 'citizen'. This small rule enforces normalization (no hyphen) and appends the generic descriptor 'citizen' when the summaries explicitly state a nationality, producing the desired concise answer format without changing other behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?",
+        "summary_1": "He was Polish American.",
+        "summary_2": "Polish American",
+        "current_output": "Polish-American"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the provided summaries assert the subject's nationality (e.g., both summaries contain the same nationality phrase).\",\n      \"preserve_rule\": \"Keep using the visible summaries as the authoritative source. Preserve the requirement that the final output appears only inside the [[ ## answer ## ]] block and remains a minimal, single-string answer.\",\n      \"change_rule\": \"Normalize the nationality phrase by removing hyphens and normalizing spacing/capitalization to match the summaries. Then format the minimal answer as: \\\"<Nationality> citizen\\\" (take the unhyphenated nationality phrase from the summaries and append the single word 'citizen' separated by a space). Prefer the exact wording shown in the summaries (majority/first non-empty summary) for the <Nationality> token.\",\n      \"drop_or_avoid_rule\": \"Avoid hyphenating the nationality (do not output forms like 'Polish-American'). Do not add extra explanation, context, punctuation, or qualifiers beyond the single string '<Nationality> citizen'. Do not invent or introduce additional claims beyond what the summaries support.\",\n      \"output_contract\": \"Produce exactly one minimal answer string inside [[ ## answer ## ]] and nothing else. The string must be the normalized nationality phrase followed by a single space and the word 'citizen' (for example: '<Nationality> citizen'), matching capitalization from the summaries.\",\n      \"why_local_transition\": \"The source output used a hyphenated form and omitted the word 'citizen'. This small rule enforces normalization (no hyphen) and appends the generic descriptor 'citizen' when the summaries explicitly state a nationality, producing the desired concise answer format without changing other behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?\",\n  \"summary_1\": \"He was Polish American.\",\n  \"summary_2\": \"Polish American\",\n  \"current_output\": \"Polish-American\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nPolish American citizen\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries state 'Polish American'; following the ordered rule, I used that exact phrase (unhyphenated) and appended the word 'citizen' inside the [[ ## answer ## ]] block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 39,
+    "row_index": 39,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

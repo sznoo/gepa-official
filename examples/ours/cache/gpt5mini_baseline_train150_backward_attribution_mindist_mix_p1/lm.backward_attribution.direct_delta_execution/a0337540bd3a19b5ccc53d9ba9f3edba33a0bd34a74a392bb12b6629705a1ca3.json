@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a0337540bd3a19b5ccc53d9ba9f3edba33a0bd34a74a392bb12b6629705a1ca3",
+  "created_at": "2026-07-14T19:01:35.941842+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).",
+            "preserve_rule": "Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.",
+            "change_rule": "Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.",
+            "drop_or_avoid_rule": "Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.",
+            "output_contract": "Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.",
+            "why_local_transition": "The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are Libocedrus and Helianthus both types of plants?",
+        "summary_1": "Yes. Libocedrus is a genus of coniferous trees and Helianthus is a genus of sunflowers (flowering plants).",
+        "summary_2": "Yes. Both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).",
+        "current_output": "Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).\",\n      \"preserve_rule\": \"Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.\",\n      \"change_rule\": \"Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.\",\n      \"drop_or_avoid_rule\": \"Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.\",\n      \"output_contract\": \"Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.\",\n      \"why_local_transition\": \"The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are Libocedrus and Helianthus both types of plants?\",\n  \"summary_1\": \"Yes. Libocedrus is a genus of coniferous trees and Helianthus is a genus of sunflowers (flowering plants).\",\n  \"summary_2\": \"Yes. Both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\",\n  \"current_output\": \"Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Yes\",\n  \"rationale\": \"Both summaries explicitly agree they are plants; applied the delta to emit a single-token affirmative.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 28,
+    "row_index": 28,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

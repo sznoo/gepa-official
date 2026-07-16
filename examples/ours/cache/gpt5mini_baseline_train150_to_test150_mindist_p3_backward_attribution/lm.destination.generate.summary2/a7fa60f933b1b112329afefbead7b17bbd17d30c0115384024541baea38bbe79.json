@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "a7fa60f933b1b112329afefbead7b17bbd17d30c0115384024541baea38bbe79",
+  "created_at": "2026-07-14T17:54:34.253203+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+      "current_output": "Chelsea Peretti is an American comedian, actress, and writer best known for portraying Gina Linetti on Brooklyn Nine-Nine. Chelsea Peretti was born February 20, 1978.",
+      "upstream_context": {
+        "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+        "summary_1": "Primary topic: Brooklyn Nine-Nine supporting cast — comedian/writer\n- Chelsea Peretti — \"is an American comedian, actress, and writer\"; \"best known for portraying Gina Linetti\" on \"Brooklyn Nine-Nine\". \n- Ken Marino — \"is an American actor, comedian, director, and screenwriter\" and is noted to have \"starred in\" shows including \"Brooklyn Nine-Nine\" (possible bridge entity; unverified here as a supporting cast member).\n- Missing bridge fact: none — passages explicitly list Chelsea Peretti as a supporting cast member and as a \"comedian ... and writer\"; no additional retrieval needed.\n- Next-hop retrieval (optional verification): check \"Chelsea Peretti\" article lede/infobox and the \"Brooklyn Nine-Nine\" article's lede/Cast or \"Supporting cast\" section to confirm role wording and dates.",
+        "hop2_query": "Chelsea Peretti comedian writer",
+        "hop2_titles": [
+          "Chelsea Peretti",
+          "Chelsea Handler",
+          "Lies That Chelsea Handler Told Me",
+          "Josh Wolf (comedian)",
+          "Julian McCullough",
+          "Chelsea Does",
+          "Sarah Colonna"
+        ],
+        "hop2_docs": [
+          "Chelsea Peretti | Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.  She is best known for portraying Gina Linetti on the Fox comedy series \"Brooklyn Nine-Nine\". \" Paste\" ranked her Twitter account #75 on \"The 75 Best Twitter Accounts of 2014\".",
+          "Chelsea Handler | Chelsea Joy Handler (born February 25, 1975) is an American comedian, actress, writer, television host, and producer.  She hosted the late-night talk show \"Chelsea Lately\" on the E! network from 2007 to 2014, and released a documentary series, \"Chelsea Does\", on Netflix in January 2016.  In 2012, \"Time\" named Handler one of the 100 most influential people in the world on their annual \"Time\" 100 list.",
+          "Lies That Chelsea Handler Told Me | Lies That Chelsea Handler Told Me is the fourth book by American comedian Chelsea Handler that was published in May 2011.  This book was a part of a three book deal Handler signed in November 2010.  The book was followed by a \"Lies That Chelsea Handler Told Me\" Tour, on which Handler was accompanied by the Comedians of Chelsea Lately.",
+          "Josh Wolf (comedian) | Josh Wolf (born October 19, 1970) is an American stand-up comedian, actor, and writer.  He has written for a number of sitcoms, including \"All of Us\" and \"Cuts\".  He is best known for his regular appearances on the round table of E!'s late night talk show \"Chelsea Lately\".",
+          "Julian McCullough | Julian McCullough (born May 29, 1979) is an American actor, writer, producer, and comedian best known for his appearances on \"Love You, Mean It with Whitney Cummings\", \"Chelsea Lately\", and \"Guy Code\".",
+          "Chelsea Does | Chelsea Does is an American web television documentary series first released on Netflix on January 22, 2016.  The episodes follow comedian Chelsea Handler as she explores different subjects.  Most of the episodes include discussions between Handler and her friends (often fellow comedians), family, and psychologists about the topic at hand.  Handler also travels for the show visiting destinations relevant to the topic.",
+          "Sarah Colonna | Sarah Noel Colonna (born December 29, 1974) is an American stand-up comedian, actress, and comedy writer.  She appeared as a roundtable regular on the hit E! cable TV network comedy/talk show \"Chelsea Lately\"."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Chelsea Peretti",
+          "sent_id": 0,
+          "sentence": "Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nBrooklyn Nine-Nine had a supporting cast that included which comedian and writer?\n\nCurrent agent output:\n\"Chelsea Peretti is an American comedian, actress, and writer best known for portraying Gina Linetti on Brooklyn Nine-Nine. Chelsea Peretti was born February 20, 1978.\"\n\nActual upstream context:\n{\n  \"question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n  \"summary_1\": \"Primary topic: Brooklyn Nine-Nine supporting cast — comedian/writer\\n- Chelsea Peretti — \\\"is an American comedian, actress, and writer\\\"; \\\"best known for portraying Gina Linetti\\\" on \\\"Brooklyn Nine-Nine\\\". \\n- Ken Marino — \\\"is an American actor, comedian, director, and screenwriter\\\" and is noted to have \\\"starred in\\\" shows including \\\"Brooklyn Nine-Nine\\\" (possible bridge entity; unverified here as a supporting cast member).\\n- Missing bridge fact: none — passages explicitly list Chelsea Peretti as a supporting cast member and as a \\\"comedian ... and writer\\\"; no additional retrieval needed.\\n- Next-hop retrieval (optional verification): check \\\"Chelsea Peretti\\\" article lede/infobox and the \\\"Brooklyn Nine-Nine\\\" article's lede/Cast or \\\"Supporting cast\\\" section to confirm role wording and dates.\",\n  \"hop2_query\": \"Chelsea Peretti comedian writer\",\n  \"hop2_titles\": [\n    \"Chelsea Peretti\",\n    \"Chelsea Handler\",\n    \"Lies That Chelsea Handler Told Me\",\n    \"Josh Wolf (comedian)\",\n    \"Julian McCullough\",\n    \"Chelsea Does\",\n    \"Sarah Colonna\"\n  ],\n  \"hop2_docs\": [\n    \"Chelsea Peretti | Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.  She is best known for portraying Gina Linetti on the Fox comedy series \\\"Brooklyn Nine-Nine\\\". \\\" Paste\\\" ranked her Twitter account #75 on \\\"The 75 Best Twitter Accounts of 2014\\\".\",\n    \"Chelsea Handler | Chelsea Joy Handler (born February 25, 1975) is an American comedian, actress, writer, television host, and producer.  She hosted the late-night talk show \\\"Chelsea Lately\\\" on the E! network from 2007 to 2014, and released a documentary series, \\\"Chelsea Does\\\", on Netflix in January 2016.  In 2012, \\\"Time\\\" named Handler one of the 100 most influential people in the world on their annual \\\"Time\\\" 100 list.\",\n    \"Lies That Chelsea Handler Told Me | Lies That Chelsea Handler Told Me is the fourth book by American comedian Chelsea Handler that was published in May 2011.  This book was a part of a three book deal Handler signed in November 2010.  The book was followed by a \\\"Lies That Chelsea Handler Told Me\\\" Tour, on which Handler was accompanied by the Comedians of Chelsea Lately.\",\n    \"Josh Wolf (comedian) | Josh Wolf (born October 19, 1970) is an American stand-up comedian, actor, and writer.  He has written for a number of sitcoms, including \\\"All of Us\\\" and \\\"Cuts\\\".  He is best known for his regular appearances on the round table of E!'s late night talk show \\\"Chelsea Lately\\\".\",\n    \"Julian McCullough | Julian McCullough (born May 29, 1979) is an American actor, writer, producer, and comedian best known for his appearances on \\\"Love You, Mean It with Whitney Cummings\\\", \\\"Chelsea Lately\\\", and \\\"Guy Code\\\".\",\n    \"Chelsea Does | Chelsea Does is an American web television documentary series first released on Netflix on January 22, 2016.  The episodes follow comedian Chelsea Handler as she explores different subjects.  Most of the episodes include discussions between Handler and her friends (often fellow comedians), family, and psychologists about the topic at hand.  Handler also travels for the show visiting destinations relevant to the topic.\",\n    \"Sarah Colonna | Sarah Noel Colonna (born December 29, 1974) is an American stand-up comedian, actress, and comedy writer.  She appeared as a roundtable regular on the hit E! cable TV network comedy/talk show \\\"Chelsea Lately\\\".\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Chelsea Peretti\",\n    \"sent_id\": 0,\n    \"sentence\": \"Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"From the provided context: Brooklyn Nine-Nine's supporting cast includes Chelsea Peretti. Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer; she is best known for portraying Gina Linetti on Brooklyn Nine-Nine.\",\n  \"rationale\": \"summary_1 lists Chelsea Peretti as a Brooklyn Nine-Nine supporting cast member and as best known for portraying Gina Linetti; the visible gold support confirms the factual statement that \\\"Chelsea Vanessa Peretti ... is an American comedian, actress, and writer.\\\"\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 5,
+    "row_index": 5
+  }
+}

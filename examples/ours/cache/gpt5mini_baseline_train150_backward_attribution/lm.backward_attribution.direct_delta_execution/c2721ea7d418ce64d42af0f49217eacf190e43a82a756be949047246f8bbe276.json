@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c2721ea7d418ce64d42af0f49217eacf190e43a82a756be949047246f8bbe276",
+  "created_at": "2026-07-14T13:41:36.328618+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question and summaries concern a person's name and at least one summary contains a longer name form that includes all tokens of a shorter form present elsewhere in the visible inputs (i.e., one name string is a superset of another), activate this delta.",
+            "preserve_rule": "Keep existing behavior for producing a single minimal answer string from the visible summaries; continue to rely only on the provided summaries and question as evidence.",
+            "change_rule": "When the trigger condition holds, prefer the longest name variant that is fully supported by tokens appearing verbatim in the visible summaries. Concretely, if one summary's name string contains every token of the other summary's name plus additional name tokens (for example, a middle name or patronymic), output that longer, supported name string as the answer.",
+            "drop_or_avoid_rule": "Do not invent or add name tokens that do not appear in any visible summary or the question. Do not copy content from outside the provided inputs, and do not merge tokens from different distinct entities unless they form a single supported superset in the visible inputs.",
+            "output_contract": "As before, place only the minimal answer string in the [[ ## answer ## ]] block. If a longer name form is selected per the change_rule, output that exact verbatim string (no extra explanation). If no longer supported variant exists, fall back to the original minimal-string behavior.",
+            "why_local_transition": "This targeted tweak causes the agent to prefer a fuller person-name variant when that fuller variant is explicitly present in the visible summaries, producing a more complete name while still relying only on available evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "summary_1": "Nikita Katsalapov",
+        "summary_2": "Nikita Katsalapov",
+        "current_output": "Nikita Katsalapov"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question and summaries concern a person's name and at least one summary contains a longer name form that includes all tokens of a shorter form present elsewhere in the visible inputs (i.e., one name string is a superset of another), activate this delta.\",\n      \"preserve_rule\": \"Keep existing behavior for producing a single minimal answer string from the visible summaries; continue to rely only on the provided summaries and question as evidence.\",\n      \"change_rule\": \"When the trigger condition holds, prefer the longest name variant that is fully supported by tokens appearing verbatim in the visible summaries. Concretely, if one summary's name string contains every token of the other summary's name plus additional name tokens (for example, a middle name or patronymic), output that longer, supported name string as the answer.\",\n      \"drop_or_avoid_rule\": \"Do not invent or add name tokens that do not appear in any visible summary or the question. Do not copy content from outside the provided inputs, and do not merge tokens from different distinct entities unless they form a single supported superset in the visible inputs.\",\n      \"output_contract\": \"As before, place only the minimal answer string in the [[ ## answer ## ]] block. If a longer name form is selected per the change_rule, output that exact verbatim string (no extra explanation). If no longer supported variant exists, fall back to the original minimal-string behavior.\",\n      \"why_local_transition\": \"This targeted tweak causes the agent to prefer a fuller person-name variant when that fuller variant is explicitly present in the visible summaries, producing a more complete name while still relying only on available evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"summary_1\": \"Nikita Katsalapov\",\n  \"summary_2\": \"Nikita Katsalapov\",\n  \"current_output\": \"Nikita Katsalapov\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nNikita Katsalapov\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries give the same full name and no longer variant exists, so the minimal supported name is returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 119,
+    "row_index": 119,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

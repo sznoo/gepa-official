@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "e02ddf78c8bb503ec87ffd7f11fe7ca7cdac5f3e0aba833aef7b4c0797c84d11",
+  "created_at": "2026-07-16T04:46:10.390454+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "The winner of the 1976 United States Senate election in Missouri was what kind of priest?",
+    "answer": "Episcopal",
+    "context": {
+      "title": [
+        "United States Senate election in Vermont, 1976",
+        "United States Senate election in Indiana, 2010",
+        "United States Senate election in Missouri, 2016",
+        "United States Senate election in Nevada, 1976",
+        "United States Senate election in Utah, 1976",
+        "United States Senate election in Missouri, 1976",
+        "United States Senate election in Texas, 1976",
+        "United States Senate election in Montana, 1976",
+        "John Danforth",
+        "United States Senate election in New York, 1976"
+      ],
+      "sentences": [
+        [
+          "The 1976 United States Senate election in Vermont took place on November 2, 1976.",
+          " Incumbent Republican Robert Stafford successfully ran for re-election to another term in the United States Senate, defeating Democratic candidate Governor Thomas P. Salmon."
+        ],
+        [
+          "The 2010 United States Senate election in Indiana took place on November 2, 2010, alongside 33 other elections to the United States Senate in other states and elections to the United States House of Representatives and various state and local elections to fill Indiana's class III United States Senate seat.",
+          " Incumbent Democratic U.S. Senator Evan Bayh decided in February 2010 to retire instead of seeking a third term shortly after former U.S. Senator Dan Coats announced his candidacy for Bayh's contested seat.",
+          " No Democratic candidate submitted enough signatures by the deadline to run, leading Democratic officials to choose U.S. Congressman Brad Ellsworth to be the nominee.",
+          " The Libertarian Party nominated YMCA instructor Rebecca Sink-Burris, who had previously run against Evan Bayh in the United States Senate election in Indiana, 1998 but with less success than in this election.",
+          " Republican nominee and former U.S. Senator Dan Coats won the open seat."
+        ],
+        [
+          "The 2016 United States Senate election in Missouri was held on November 8, 2016, to elect a member of the United States Senate to represent the State of Missouri, concurrently with the 2016 U.S. presidential election, as well as other elections to the United States Senate in other states and elections to the United States House of Representatives and various state and local elections.",
+          " The primaries were held on August 2."
+        ],
+        [
+          "The 1976 United States Senate election in Nevada was held on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Howard Cannon won re-election to a fourth term."
+        ],
+        [
+          "The 1976 United States Senate election in Utah took place on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Frank Moss ran for re-election to a fourth term but was defeated by his Republican opponent Orrin Hatch.",
+          " 40 years after the election, Hatch is currently the longest-serving Republican Senator, having been re-elected for seven terms."
+        ],
+        [
+          "The 1976 United States Senate election in Missouri took place on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Stuart Symington decided to retire, instead of seeking a fifth term.",
+          " Republican John Danforth won the open seat, defeating Democrat Warren Hearnes.",
+          " (Jerry Litton had won the Democratic nomination earlier, but was killed in a plane crash, and Hearnes was chosen by the party committee.)"
+        ],
+        [
+          "The 1976 United States Senate election in Texas was held on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Lloyd Bentsen won re-election to a second term."
+        ],
+        [
+          "The 1976 United States Senate election in Montana took place on November 2, 1976.",
+          " Rather than seek a fifth term, incumbent United States Senator Mike Mansfield, a Democrat, opted to retire, creating an open seat.",
+          " United States Congressman John Melcher, who had represented Montana's 2nd congressional district from 1969 to 1977, won the Democratic nomination and defeated Stanley C. Burger, the Republican nominee, by a wide margin in the general election."
+        ],
+        [
+          "John Claggett Danforth (born September 5, 1936) is a retired American politician who began his career in 1968 as the Attorney General of Missouri and served three terms as United States Senator from Missouri.",
+          " In 2004, he served briefly as United States Ambassador to the United Nations.",
+          " Danforth is an ordained Episcopal priest."
+        ],
+        [
+          "The 1976 United States Senate election in New York was held on November 2, 1976.",
+          " Incumbent Republican U.S. Senator James Buckley ran for re-election to a second term, but was defeated by Pat Moynihan."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "United States Senate election in Missouri, 1976",
+        "John Danforth"
+      ],
+      "sent_id": [
+        1,
+        2
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "The winner of the 1976 United States Senate election in Missouri was what kind of priest?",
+    "gold_answer": "Episcopal",
+    "context": {
+      "title": [
+        "United States Senate election in Vermont, 1976",
+        "United States Senate election in Indiana, 2010",
+        "United States Senate election in Missouri, 2016",
+        "United States Senate election in Nevada, 1976",
+        "United States Senate election in Utah, 1976",
+        "United States Senate election in Missouri, 1976",
+        "United States Senate election in Texas, 1976",
+        "United States Senate election in Montana, 1976",
+        "John Danforth",
+        "United States Senate election in New York, 1976"
+      ],
+      "sentences": [
+        [
+          "The 1976 United States Senate election in Vermont took place on November 2, 1976.",
+          " Incumbent Republican Robert Stafford successfully ran for re-election to another term in the United States Senate, defeating Democratic candidate Governor Thomas P. Salmon."
+        ],
+        [
+          "The 2010 United States Senate election in Indiana took place on November 2, 2010, alongside 33 other elections to the United States Senate in other states and elections to the United States House of Representatives and various state and local elections to fill Indiana's class III United States Senate seat.",
+          " Incumbent Democratic U.S. Senator Evan Bayh decided in February 2010 to retire instead of seeking a third term shortly after former U.S. Senator Dan Coats announced his candidacy for Bayh's contested seat.",
+          " No Democratic candidate submitted enough signatures by the deadline to run, leading Democratic officials to choose U.S. Congressman Brad Ellsworth to be the nominee.",
+          " The Libertarian Party nominated YMCA instructor Rebecca Sink-Burris, who had previously run against Evan Bayh in the United States Senate election in Indiana, 1998 but with less success than in this election.",
+          " Republican nominee and former U.S. Senator Dan Coats won the open seat."
+        ],
+        [
+          "The 2016 United States Senate election in Missouri was held on November 8, 2016, to elect a member of the United States Senate to represent the State of Missouri, concurrently with the 2016 U.S. presidential election, as well as other elections to the United States Senate in other states and elections to the United States House of Representatives and various state and local elections.",
+          " The primaries were held on August 2."
+        ],
+        [
+          "The 1976 United States Senate election in Nevada was held on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Howard Cannon won re-election to a fourth term."
+        ],
+        [
+          "The 1976 United States Senate election in Utah took place on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Frank Moss ran for re-election to a fourth term but was defeated by his Republican opponent Orrin Hatch.",
+          " 40 years after the election, Hatch is currently the longest-serving Republican Senator, having been re-elected for seven terms."
+        ],
+        [
+          "The 1976 United States Senate election in Missouri took place on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Stuart Symington decided to retire, instead of seeking a fifth term.",
+          " Republican John Danforth won the open seat, defeating Democrat Warren Hearnes.",
+          " (Jerry Litton had won the Democratic nomination earlier, but was killed in a plane crash, and Hearnes was chosen by the party committee.)"
+        ],
+        [
+          "The 1976 United States Senate election in Texas was held on November 2, 1976.",
+          " Incumbent Democratic U.S. Senator Lloyd Bentsen won re-election to a second term."
+        ],
+        [
+          "The 1976 United States Senate election in Montana took place on November 2, 1976.",
+          " Rather than seek a fifth term, incumbent United States Senator Mike Mansfield, a Democrat, opted to retire, creating an open seat.",
+          " United States Congressman John Melcher, who had represented Montana's 2nd congressional district from 1969 to 1977, won the Democratic nomination and defeated Stanley C. Burger, the Republican nominee, by a wide margin in the general election."
+        ],
+        [
+          "John Claggett Danforth (born September 5, 1936) is a retired American politician who began his career in 1968 as the Attorney General of Missouri and served three terms as United States Senator from Missouri.",
+          " In 2004, he served briefly as United States Ambassador to the United Nations.",
+          " Danforth is an ordained Episcopal priest."
+        ],
+        [
+          "The 1976 United States Senate election in New York was held on November 2, 1976.",
+          " Incumbent Republican U.S. Senator James Buckley ran for re-election to a second term, but was defeated by Pat Moynihan."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "United States Senate election in Missouri, 1976",
+        "John Danforth"
+      ],
+      "sent_id": [
+        1,
+        2
+      ]
+    },
+    "gold_support_titles": [
+      "United States Senate election in Missouri, 1976",
+      "John Danforth"
+    ],
+    "hop1_query": "The winner of the 1976 United States Senate election in Missouri was what kind of priest?",
+    "hop1_docs": [
+      "United States Senate election in Missouri, 1976 | The 1976 United States Senate election in Missouri took place on November 2, 1976.  Incumbent Democratic U.S. Senator Stuart Symington decided to retire, instead of seeking a fifth term.  Republican John Danforth won the open seat, defeating Democrat Warren Hearnes.  (Jerry Litton had won the Democratic nomination earlier, but was killed in a plane crash, and Hearnes was chosen by the party committee.)",
+      "United States Senate election in Missouri, 2018 | The 2018 United States Senate election in Missouri will take place on November 6, 2018, to elect a member of the United States Senate to represent the State of Missouri, concurrently with other elections to the United States Senate, elections to the United States House of Representatives, and various state and local elections.",
+      "United States Senate election in Missouri, 2016 | The 2016 United States Senate election in Missouri was held on November 8, 2016, to elect a member of the United States Senate to represent the State of Missouri, concurrently with the 2016 U.S. presidential election, as well as other elections to the United States Senate in other states and elections to the United States House of Representatives and various state and local elections.  The primaries were held on August 2.",
+      "United States Senate election in Missouri, 1988 | The 1988 United States Senate election in Missouri was held on November 8, 1988 to select the U.S. Senator from the state of Missouri.  Incumbent Republican U.S. Senator John Danforth won re-election.",
+      "Missouri bellwether | The Missouri bellwether is a political phenomenon that notes that the state of Missouri voted for the winner in all but three U.S. Presidential election from 1904 to 2016 (the exceptions are 1956, 2008 and 2012).  While states like Ohio, Iowa, Nevada, and New Mexico have been arguably stronger indicators of political trends in recent years, Missouri was a consistent swing state throughout the 20th century.  Nevada has voted for the winner of every presidential election from United States presidential election, 1912 to the present, excluding United States presidential election, 1976 and United States presidential election, 2016, perhaps making it the new bellwether state.  Prior to the 2008 elections, Lincoln County, Missouri was said to be the only bellwether county in a bellwether state.  Missouri is also considered a bellwether of U.S. views on hot-button social issues such as stem cell research, gay rights, and school vouchers.  Some economists also consider the state a bellwether for economic trends such as consumer confidence and unemployment.",
+      "United States presidential election, 1976 | The United States presidential election of 1976 was the 48th quadrennial presidential election, held on Tuesday, November 2, 1976.  The winner was the Dark horse candidate Jimmy Carter, a former Governor from Georgia with his running mate, Walter Mondale, a U.S. Senator from Minnesota, the Democratic candidates, over the incumbent President Gerald Ford from Michigan and his running mate, Bob Dole, a U.S. Senator from Kansas, the Republican candidates.",
+      "United States Senate election in Missouri, 2000 | The 2000 United States Senate election in Missouri was held on November 7, 2000, to select the next U.S. Senator from Missouri.  Incumbent Senator John Ashcroft lost the election to Mel Carnahan, despite the fact that Carnahan had died in a plane crash three weeks before election day."
+    ],
+    "hop1_titles": [
+      "United States Senate election in Missouri, 1976",
+      "United States Senate election in Missouri, 2018",
+      "United States Senate election in Missouri, 2016",
+      "United States Senate election in Missouri, 1988",
+      "Missouri bellwether",
+      "United States presidential election, 1976",
+      "United States Senate election in Missouri, 2000"
+    ],
+    "summary_1": "Passage [1]: \"Republican John Danforth won the open seat\" in the 1976 United States Senate election in Missouri (held on November 2, 1976). Missing fact/bridge: the passages do not state John Danforth's clerical denomination or \"what kind of priest\" he was. Retrieval direction: fetch John Danforth's biography or authoritative sources (e.g., his Wikipedia page or biographical profiles) and search for phrases like \"John Danforth\" + \"priest\", \"cleric\", or \"Episcopal\" to find his priestly affiliation.",
+    "hop2_query": "John Danforth Episcopal priest",
+    "hop2_docs": [
+      "John Danforth | John Claggett Danforth (born September 5, 1936) is a retired American politician who began his career in 1968 as the Attorney General of Missouri and served three terms as United States Senator from Missouri.  In 2004, he served briefly as United States Ambassador to the United Nations.  Danforth is an ordained Episcopal priest.",
+      "John Mantle (bishop) | John Ambrose Cyril Mantle was the Bishop of Brechin in the Scottish Episcopal Church; he was born in 1946 in Brechin, the son of an Episcopal (SEC) priest with a long ministry in Dundee and Aberdeen.",
+      "John C. Ward | John Chamberlain Ward (August 27, 1873 - February 15, 1949) was second bishop of the Episcopal Diocese of Erie, now Northwestern Pennsylvania.  After studies at Harvard College and the General Theological Seminary, he was ordained deacon in 1899 and priest in 1900; he was consecrated to the episcopate on September 22, 1921 following work as rector of the former Grace Episcopal Church in Buffalo, New York.",
+      "John Comper | Reverend John Comper (1823–1903) was a Priest of the Episcopal Church in Scotland who dedicated his life to helping the street children and prostitutes of Victorian Aberdeen.  In 2003 Father Comper was declared a 'Hero of the Faith' by the Scottish Episcopal Church - the equivalent of a saint and the greatest honour the Church can bestow.  In the Calendar of the Scottish Episcopal Church he is remembered on 27 July, the day of his death.",
+      "John Bracken (priest) | John Bracken was an American priest of the Episcopal Church who was the rector of Bruton Parish Church and the ninth president of the College of William and Mary, serving from 1812 to 1814.  In 1792, Bracken helped to reestablish the Grammar School at the College of William and Mary.",
+      "John D. McCarty | John D. McCarty (June 7, 1798 – May 10, 1881) was the first missionary Episcopal priest in the Washington Territory.  He served as the only United States Army chaplain at the front during the Mexican War.  He was instrumental in founding and establishing numerous Episcopal churches in Western New York and the Northwest.",
+      "John A. Sanford | John A. \"Jack\" Sanford (26 July 1929 – 17 October 2005) was an American Jungian analyst and Episcopal priest."
+    ],
+    "hop2_titles": [
+      "John Danforth",
+      "John Mantle (bishop)",
+      "John C. Ward",
+      "John Comper",
+      "John Bracken (priest)",
+      "John D. McCarty",
+      "John A. Sanford"
+    ],
+    "summary_2": "The winner, John Danforth, was an ordained Episcopal priest (John Claggett Danforth \"is an ordained Episcopal priest\").",
+    "answer": "Episcopal priest",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "John Danforth"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "United States Senate election in Missouri, 1976"
+    ],
+    "hit_titles_total": [
+      "John Danforth",
+      "United States Senate election in Missouri, 1976"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

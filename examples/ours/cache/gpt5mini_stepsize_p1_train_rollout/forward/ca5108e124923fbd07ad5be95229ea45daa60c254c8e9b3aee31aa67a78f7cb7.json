@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "ca5108e124923fbd07ad5be95229ea45daa60c254c8e9b3aee31aa67a78f7cb7",
+  "created_at": "2026-07-16T02:46:21.264643+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "51824 Mikeanderson is an asteroid named for the recipient of what United States award?",
+    "answer": "Congressional Space Medal of Honor",
+    "context": {
+      "title": [
+        "31641 Cevasco",
+        "1767 Lampland",
+        "17198 Gorjup",
+        "1827 Atkinson",
+        "Michael P. Anderson",
+        "2227 Otto Struve",
+        "26858 Misterrogers",
+        "25924 Douglasadams",
+        "51824 Mikeanderson",
+        "2007 McCuskey"
+      ],
+      "sentences": [
+        [
+          "31641 Cevasco, provisional designation 1999 GW, is a stony asteroid from the inner regions of the asteroid belt, approximately 3.3 kilometers in diameter.",
+          " It was discovered on 6 April 1999, by the Lincoln Near-Earth Asteroid Research project at Lincoln Laboratory's Experimental Test Site in Socorro, New Mexico, United States.",
+          " The asteroid was named for Hannah Cevasco, a 2015 Broadcom MASTERS awardee."
+        ],
+        [
+          "1767 Lampland, provisional designation 1962 RJ, is an Eoan asteroid from the outer regions of the asteroid belt, approximately 15 kilometers in diameter.",
+          " It was discovered on 7 September 1962, by astronomers of the Indiana Asteroid Program at Goethe Link Observatory in Indiana, United States.",
+          " The asteroid was named after American astronomer Carl Lampland."
+        ],
+        [
+          "17198 Gorjup, provisional designation 2000 AA, is a stony Flora asteroid and asteroid pair from the inner regions of the asteroid belt, approximately 2.7 kilometers in diameter.",
+          " It was discovered on 3 January 2000, by the Lincoln Near-Earth Asteroid Research team at the Lincoln Laboratory Experimental Test Site in Socorro, New Mexico, United States.",
+          " The asteroid was named for Slovenian Niko Gorjup, a 2003 awardee of the ISEF contest."
+        ],
+        [
+          "1827 Atkinson, provisional designation 1962 RK, is a background asteroid from the central regions of the asteroid belt, approximately 9 kilometers in diameter.",
+          " It was discovered on 7 September 1962, by IU's Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " The asteroid was named after British astronomer Robert d'Escourt Atkinson."
+        ],
+        [
+          "Michael Phillip Anderson (December 25, 1959 – February 1, 2003) was a United States Air Force officer and NASA astronaut.",
+          " Anderson and his six fellow crew members were killed in the Space Shuttle \"Columbia\" disaster when the craft disintegrated during its re-entry into the Earth's atmosphere.",
+          " Anderson served as the payload commander and lieutenant colonel in charge of science experiments on the Columbia.",
+          " Anderson is a recipient of the Congressional Space Medal of Honor."
+        ],
+        [
+          "2227 Otto Struve, provisional designation 1955 RX, is an asteroid from the inner regions of the asteroid belt, approximately 4.7 kilometers in diameter.",
+          " The asteroid was discovered on 13 September 1955, by the Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " It was named after Russian astronomer Otto Struve."
+        ],
+        [
+          "26858 Misterrogers is a Mars crossing asteroid named after children's television host Fred Rogers.",
+          " Rogers, who had a lifelong fascination with the sky and astronomy—he obtained a pilot's license while still in high school —also produced with the Carnegie Science Center in Pittsburgh a planetarium show called \"The Sky above Mister Rogers' Neighborhood\", which is still shown at many planetariums across the United States."
+        ],
+        [
+          "25924 Douglasadams, provisional designation 2001 DA, is a Nysian asteroid from the inner regions of the asteroid belt, approximately 2.4 kilometers in diameter.",
+          " It was discovered on 19 February 2001, by astronomers of the Lincoln Near-Earth Asteroid Research at the Lincoln Laboratory's Experimental Test Site in New Mexico, United States.",
+          " The asteroid was named for novelist Douglas Adams."
+        ],
+        [
+          "51824 Mikeanderson (2001 OE ) is an asteroid named for astronaut Mike Anderson, who was killed in the STS-107 (\"Columbia\") space shuttle reentry disaster on February 1, 2003.",
+          " 51824 Mikeanderson was discovered on July 19, 2001, at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program."
+        ],
+        [
+          "2007 McCuskey, provisional designation 1963 SQ, is a carbonaceous asteroid from the inner regions of the asteroid belt, approximately 22 kilometers in diameter.",
+          " It was discovered on 22 September 1963, by astronomers of the Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " The asteroid was later named after American astronomer Sidney McCuskey."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "51824 Mikeanderson",
+        "Michael P. Anderson"
+      ],
+      "sent_id": [
+        0,
+        3
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "51824 Mikeanderson is an asteroid named for the recipient of what United States award?",
+    "gold_answer": "Congressional Space Medal of Honor",
+    "context": {
+      "title": [
+        "31641 Cevasco",
+        "1767 Lampland",
+        "17198 Gorjup",
+        "1827 Atkinson",
+        "Michael P. Anderson",
+        "2227 Otto Struve",
+        "26858 Misterrogers",
+        "25924 Douglasadams",
+        "51824 Mikeanderson",
+        "2007 McCuskey"
+      ],
+      "sentences": [
+        [
+          "31641 Cevasco, provisional designation 1999 GW, is a stony asteroid from the inner regions of the asteroid belt, approximately 3.3 kilometers in diameter.",
+          " It was discovered on 6 April 1999, by the Lincoln Near-Earth Asteroid Research project at Lincoln Laboratory's Experimental Test Site in Socorro, New Mexico, United States.",
+          " The asteroid was named for Hannah Cevasco, a 2015 Broadcom MASTERS awardee."
+        ],
+        [
+          "1767 Lampland, provisional designation 1962 RJ, is an Eoan asteroid from the outer regions of the asteroid belt, approximately 15 kilometers in diameter.",
+          " It was discovered on 7 September 1962, by astronomers of the Indiana Asteroid Program at Goethe Link Observatory in Indiana, United States.",
+          " The asteroid was named after American astronomer Carl Lampland."
+        ],
+        [
+          "17198 Gorjup, provisional designation 2000 AA, is a stony Flora asteroid and asteroid pair from the inner regions of the asteroid belt, approximately 2.7 kilometers in diameter.",
+          " It was discovered on 3 January 2000, by the Lincoln Near-Earth Asteroid Research team at the Lincoln Laboratory Experimental Test Site in Socorro, New Mexico, United States.",
+          " The asteroid was named for Slovenian Niko Gorjup, a 2003 awardee of the ISEF contest."
+        ],
+        [
+          "1827 Atkinson, provisional designation 1962 RK, is a background asteroid from the central regions of the asteroid belt, approximately 9 kilometers in diameter.",
+          " It was discovered on 7 September 1962, by IU's Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " The asteroid was named after British astronomer Robert d'Escourt Atkinson."
+        ],
+        [
+          "Michael Phillip Anderson (December 25, 1959 – February 1, 2003) was a United States Air Force officer and NASA astronaut.",
+          " Anderson and his six fellow crew members were killed in the Space Shuttle \"Columbia\" disaster when the craft disintegrated during its re-entry into the Earth's atmosphere.",
+          " Anderson served as the payload commander and lieutenant colonel in charge of science experiments on the Columbia.",
+          " Anderson is a recipient of the Congressional Space Medal of Honor."
+        ],
+        [
+          "2227 Otto Struve, provisional designation 1955 RX, is an asteroid from the inner regions of the asteroid belt, approximately 4.7 kilometers in diameter.",
+          " The asteroid was discovered on 13 September 1955, by the Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " It was named after Russian astronomer Otto Struve."
+        ],
+        [
+          "26858 Misterrogers is a Mars crossing asteroid named after children's television host Fred Rogers.",
+          " Rogers, who had a lifelong fascination with the sky and astronomy—he obtained a pilot's license while still in high school —also produced with the Carnegie Science Center in Pittsburgh a planetarium show called \"The Sky above Mister Rogers' Neighborhood\", which is still shown at many planetariums across the United States."
+        ],
+        [
+          "25924 Douglasadams, provisional designation 2001 DA, is a Nysian asteroid from the inner regions of the asteroid belt, approximately 2.4 kilometers in diameter.",
+          " It was discovered on 19 February 2001, by astronomers of the Lincoln Near-Earth Asteroid Research at the Lincoln Laboratory's Experimental Test Site in New Mexico, United States.",
+          " The asteroid was named for novelist Douglas Adams."
+        ],
+        [
+          "51824 Mikeanderson (2001 OE ) is an asteroid named for astronaut Mike Anderson, who was killed in the STS-107 (\"Columbia\") space shuttle reentry disaster on February 1, 2003.",
+          " 51824 Mikeanderson was discovered on July 19, 2001, at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program."
+        ],
+        [
+          "2007 McCuskey, provisional designation 1963 SQ, is a carbonaceous asteroid from the inner regions of the asteroid belt, approximately 22 kilometers in diameter.",
+          " It was discovered on 22 September 1963, by astronomers of the Indiana Asteroid Program at Goethe Link Observatory near Brooklyn, Indiana, United States.",
+          " The asteroid was later named after American astronomer Sidney McCuskey."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "51824 Mikeanderson",
+        "Michael P. Anderson"
+      ],
+      "sent_id": [
+        0,
+        3
+      ]
+    },
+    "gold_support_titles": [
+      "51824 Mikeanderson",
+      "Michael P. Anderson"
+    ],
+    "hop1_query": "51824 Mikeanderson is an asteroid named for the recipient of what United States award?",
+    "hop1_docs": [
+      "51824 Mikeanderson | 51824 Mikeanderson (2001 OE ) is an asteroid named for astronaut Mike Anderson, who was killed in the STS-107 (\"Columbia\") space shuttle reentry disaster on February 1, 2003.  51824 Mikeanderson was discovered on July 19, 2001, at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program.",
+      "Milken Educator Award | The Milken Educator Awards is an educator recognition program in the United States that provides unrestricted grants of $25,000 cash to teachers deemed successful, in surprise ceremonies.  Established in 1985 and first presented in 1987, the initiative of the Milken Family Foundation has traveled to schools across the United States presenting awards to over 2,600 teachers, averaging around 30-40 teachers per year.  \"Teacher Magazine\" nicknamed the program the \"Oscars of Teaching.\"  The award currently gives $25,000 in unrestricted funds to teachers who are early in their career, or mid-career, to reward them \"for what they have achieved—and for the promise of what they will accomplish in the future.\"  Recipients are ambushed at school assemblies or other public events to be publicly celebrated with the surprise announcement of the awards.  For example, in January 2016, a Hawaii high school science teacher was \"shocked\" to receive the award, given at a school-wide assembly.",
+      "Elmer S. Best Memorial Award | Elmer S. Best Memorial Award is an annual award named in memory of the founder of the Pierre Fauchard Academy.  It was established by the Board of Trustees in 1962.  Recipients of the award must be members of the dental profession and from outside the United States.",
+      "Randall Kenan | Randall Kenan (born March 12, 1963) is an American author of fiction and non-fiction.  Raised in a rural community in North Carolina, Kenan has focused his fiction on what it means to be black and gay in the southern United States.  Among his books is the collection of short stories \"Let the Dead Bury Their Dead\", which was named a New York Times Notable Book in 1992.  Kenan is the recipient of a Guggenheim Fellowship, a Whiting Award and the John Dos Passos Prize.",
+      "Bispham Memorial Medal Award | The Bispham Memorial Medal Award was an award for operas written in English which was presented annually by the American Opera Society of Chicago from 1921 until 1932.  The award was named for baritone David Bispham, who was a great proponent of performing opera in English in the United States.  It was traditionally awarded to American composers, frequently for an opera on an American subject.  It was funded, in part, by composer Eleanor Everest Freer, who was also one of its recipients (for \"The Legend of the Piper\").  Other recipients include (alphabetically by author):",
+      "Clara Ingram Judson Award | The Clara Ingram Judson Award (officially: Clara Ingram Judson Memorial Award) is given annually to the most creative children's writing in the Midwest United States since 1960 by the Society of Midland Authors.  It was named after Clara Ingram Judson, the first recipient of the award.",
+      "List of Presidential Medal of Freedom recipients | This is an alphabetized, partial list of recipients of the Presidential Medal of Freedom, grouped by the aspect of life in which they are/were renowned.  The Presidential Medal of Freedom is awarded by the President of the United States \"for especially meritorious contribution to (1) the security or national interests of the United States, or (2) world peace, or (3) cultural or other significant public or private endeavors\"; it is awarded to individuals selected by the President or recommended to him by the Distinguished Civilian Service Awards Board.  The only exception to the rule for the sitting president choosing those to be honored, was that the first recipients were selected by President John F. Kennedy before his assassination, and formally awarded by his successor in office, Lyndon B. Johnson.  President Barack Obama awarded 123 Medals, the most ever, followed by President Ronald Reagan with 102 Medal recipients."
+    ],
+    "hop1_titles": [
+      "51824 Mikeanderson",
+      "Milken Educator Award",
+      "Elmer S. Best Memorial Award",
+      "Randall Kenan",
+      "Bispham Memorial Medal Award",
+      "Clara Ingram Judson Award",
+      "List of Presidential Medal of Freedom recipients"
+    ],
+    "summary_1": "Passage evidence: \"51824 Mikeanderson ... is an asteroid named for astronaut Mike Anderson\" and that he \"was killed in the STS-107 ('Columbia') space shuttle reentry disaster on February 1, 2003.\" Missing fact/bridge: which United States award was received by astronaut Mike Anderson. Retrieval direction: fetch Mike Anderson (astronaut) biography or \"awards/honors\" section (search terms: \"Mike Anderson astronaut awards\", \"Michael Anderson honors\", or the STS-107/Columbia crew biographies) and check lists of U.S. awards for his name. Quoteable anchors to use: \"51824 Mikeanderson\", \"astronaut Mike Anderson\", \"STS-107 ('Columbia')\", \"February 1, 2003\".",
+    "hop2_query": "Mike Anderson astronaut awards STS-107 Columbia",
+    "hop2_docs": [
+      "51824 Mikeanderson | 51824 Mikeanderson (2001 OE ) is an asteroid named for astronaut Mike Anderson, who was killed in the STS-107 (\"Columbia\") space shuttle reentry disaster on February 1, 2003.  51824 Mikeanderson was discovered on July 19, 2001, at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program.",
+      "Rick Husband | Richard Douglas \"Rick\" Husband (July 12, 1957 – February 1, 2003) (Colonel, USAF) was an American astronaut and fighter pilot.  He traveled into space twice: as Pilot of STS-96 and Commander of STS-107.  He and the rest of the crew of STS-107 were killed when \"Columbia\" disintegrated during reentry into the Earth's atmosphere.  Husband is a recipient of the Congressional Space Medal of Honor.",
+      "William C. McCool | William Cameron \"Willie\" McCool (September 23, 1961 – February 1, 2003), (Cmdr, USN), was an American naval officer and aviator, test pilot, aeronautical engineer, and NASA astronaut, who was the pilot of Space Shuttle \"Columbia\" mission STS-107.  He and the rest of the crew of STS-107 were killed when \"Columbia\" disintegrated during re-entry into the atmosphere.  He was the youngest male member of the crew.",
+      "David M. Brown | David McDowell Brown (April 16, 1956 – February 1, 2003) was a United States Navy captain and a NASA astronaut.  He died on his first spaceflight, when the Space Shuttle \"Columbia\" (STS-107) disintegrated during orbital reentry into the Earth's atmosphere.  Brown became an astronaut in 1996, but had not served on a space mission prior to the \"Columbia\" disaster.  Brown is a recipient of the Congressional Space Medal of Honor.",
+      "51828 Ilanramon | 51828 Ilanramon (2001 OU ) is an asteroid named for astronaut Ilan Ramon, who was killed in the STS-107 (Columbia) space shuttle reentry disaster on February 1, 2003.  51828 Ilanramon was discovered on July 20, 2001 at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program.",
+      "51827 Laurelclark | 51827 Laurelclark (2001 OH ) is an asteroid named for astronaut Laurel Clark, who was killed in the STS-107 (Columbia) space shuttle reentry disaster on February 1, 2003.  51827 Laurelclark was discovered on July 20, 2001 at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program.",
+      "51825 Davidbrown | 51825 Davidbrown (2001 OQ ) is an asteroid named for astronaut David Brown, who was killed in the STS-107 (Columbia) space shuttle reentry disaster on February 1, 2003.  51825 Davidbrown was discovered on July 19, 2001 at Palomar Observatory by the JPL Near Earth Asteroid Tracking Program."
+    ],
+    "hop2_titles": [
+      "51824 Mikeanderson",
+      "Rick Husband",
+      "William C. McCool",
+      "David M. Brown",
+      "51828 Ilanramon",
+      "51827 Laurelclark",
+      "51825 Davidbrown"
+    ],
+    "summary_2": "51824 Mikeanderson is named for astronaut Mike Anderson, who was killed in the STS-107 (Columbia) reentry disaster on February 1, 2003. The retrieved passages do not state which U.S. award he received; they only list Rick Husband and David Brown as recipients of the Congressional Space Medal of Honor.",
+    "answer": "unknown",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Michael P. Anderson"
+    ],
+    "hit_titles_hop1": [
+      "51824 Mikeanderson"
+    ],
+    "hit_titles_total": [
+      "51824 Mikeanderson"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

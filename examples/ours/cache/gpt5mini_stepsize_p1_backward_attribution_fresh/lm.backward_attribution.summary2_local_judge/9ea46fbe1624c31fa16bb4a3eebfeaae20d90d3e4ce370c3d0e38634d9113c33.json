@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "9ea46fbe1624c31fa16bb4a3eebfeaae20d90d3e4ce370c3d0e38634d9113c33",
+  "created_at": "2026-07-16T04:53:26.651011+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Rock 'n' Roll Music was an American compilation of album tracks, including the 1965 album opener, with cover versions released by which iconic band?",
+      "source_summary": "The 1965 opener is \"Drive My Car,\" and cover versions of that song have been released by artists including Melanie C (a former Spice Girls member), Lulu, and the U.S. band Breakfast Club.",
+      "target_summary": "Evidence summary: 'Rock 'n' Roll Music' is a compilation album by The Beatles consisting of previously released Beatles tracks. The compilation's tracklist includes notable Lennon–McCartney originals such as \"Drive My Car.\" The upbeat, lighthearted \"Drive My Car\" was used as the opening track for both albums. Retain the identification of the 1965 album opener as \"Drive My Car\" (and its presence on the Rock 'n' Roll Music compilation) as the retrieval anchor for finding which band released cover versions of that song.",
+      "candidate_summary": "Evidence summary: 'Rock 'n' Roll Music' is a compilation album by The Beatles consisting of previously released Beatles tracks. The compilation's tracklist includes notable Lennon–McCartney originals such as \"Drive My Car.\" The upbeat, lighthearted \"Drive My Car\" was used as the opening track for both albums. Retain the identification of the 1965 album opener as \"Drive My Car\" (and its presence on the Rock 'n' Roll Music compilation) as the retrieval anchor for finding which band released cover versions of that song."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nRock 'n' Roll Music was an American compilation of album tracks, including the 1965 album opener, with cover versions released by which iconic band?\n\nSource summary2:\nThe 1965 opener is \"Drive My Car,\" and cover versions of that song have been released by artists including Melanie C (a former Spice Girls member), Lulu, and the U.S. band Breakfast Club.\n\nTarget summary2:\nEvidence summary: 'Rock 'n' Roll Music' is a compilation album by The Beatles consisting of previously released Beatles tracks. The compilation's tracklist includes notable Lennon–McCartney originals such as \"Drive My Car.\" The upbeat, lighthearted \"Drive My Car\" was used as the opening track for both albums. Retain the identification of the 1965 album opener as \"Drive My Car\" (and its presence on the Rock 'n' Roll Music compilation) as the retrieval anchor for finding which band released cover versions of that song.\n\nCandidate summary2:\nEvidence summary: 'Rock 'n' Roll Music' is a compilation album by The Beatles consisting of previously released Beatles tracks. The compilation's tracklist includes notable Lennon–McCartney originals such as \"Drive My Car.\" The upbeat, lighthearted \"Drive My Car\" was used as the opening track for both albums. Retain the identification of the 1965 album opener as \"Drive My Car\" (and its presence on the Rock 'n' Roll Music compilation) as the retrieval anchor for finding which band released cover versions of that song.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate preserves the target's core evidence: that Rock 'n' Roll Music is a Beatles compilation and that the 1965 opener is 'Drive My Car' (so target_reconstructed=true). It omits the source's listed cover artists (Melanie C, Lulu, Breakfast Club), thus it removes useful source information (preserves_source=false). It does add the Beatles compilation identification present in the target but absent from the source, so it provides a task-relevant gain (meaningful_gain=true).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 80,
+    "row_index": 80,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

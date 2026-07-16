@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c015db281f9dff346d58553423ce2f5c64d1c8caaf894aed734810bf23929327",
+  "created_at": "2026-07-14T19:01:50.435810+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the inputs contain the two names 'Dallas Green' and 'Brian Johnson' and the current query string contains a verification-style phrase such as 'Verify birth dates' or otherwise lists multiple verification steps, apply this delta.",
+            "preserve_rule": "Keep the agent's role of producing a single compact second-hop retrieval query and preserve any disambiguators already present in the visible inputs (e.g., 'AC/DC singer', 'baseball manager'). Maintain the intent to retrieve birth-date evidence for the comparison.",
+            "change_rule": "Replace the verbose, multi-part verification instruction with one concise retrieval query that targets the other person needed for the second hop. Form the query as: '<Person Name> <disambiguator-if-available> birth date'. Prefer the name that still needs direct evidence (e.g. 'Brian Johnson AC/DC singer birth date'). Do not include candidate answers, full dates, or comparison instructions in the query.",
+            "drop_or_avoid_rule": "Avoid long parentheticals, quoted verification commands (e.g., 'Verify...'), multiple-person conjunctions, explicit answer candidates or literal dates, and inventing disambiguators not present in the visible inputs. Do not instruct the model to perform the comparison in the query itself—the query must only retrieve supporting pages.",
+            "output_contract": "Produce the field 'query' whose value is a single, short retrieval-query string (recommended ≤7 tokens) composed of: target person name + optional disambiguator drawn from visible inputs + the phrase 'birth date'. No extra commentary, punctuation-heavy formatting, or surrounding quotes.",
+            "why_local_transition": "Making the query compact and focused on the second-hop person's birth-date page increases the chance of retrieving the specific supporting page needed for the comparison while preserving the existing disambiguation cues already provided."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "summary_1": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "current_output": {
+          "query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer)."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the inputs contain the two names 'Dallas Green' and 'Brian Johnson' and the current query string contains a verification-style phrase such as 'Verify birth dates' or otherwise lists multiple verification steps, apply this delta.\",\n      \"preserve_rule\": \"Keep the agent's role of producing a single compact second-hop retrieval query and preserve any disambiguators already present in the visible inputs (e.g., 'AC/DC singer', 'baseball manager'). Maintain the intent to retrieve birth-date evidence for the comparison.\",\n      \"change_rule\": \"Replace the verbose, multi-part verification instruction with one concise retrieval query that targets the other person needed for the second hop. Form the query as: '<Person Name> <disambiguator-if-available> birth date'. Prefer the name that still needs direct evidence (e.g. 'Brian Johnson AC/DC singer birth date'). Do not include candidate answers, full dates, or comparison instructions in the query.\",\n      \"drop_or_avoid_rule\": \"Avoid long parentheticals, quoted verification commands (e.g., 'Verify...'), multiple-person conjunctions, explicit answer candidates or literal dates, and inventing disambiguators not present in the visible inputs. Do not instruct the model to perform the comparison in the query itself—the query must only retrieve supporting pages.\",\n      \"output_contract\": \"Produce the field 'query' whose value is a single, short retrieval-query string (recommended ≤7 tokens) composed of: target person name + optional disambiguator drawn from visible inputs + the phrase 'birth date'. No extra commentary, punctuation-heavy formatting, or surrounding quotes.\",\n      \"why_local_transition\": \"Making the query compact and focused on the second-hop person's birth-date page increases the chance of retrieving the specific supporting page needed for the comparison while preserving the existing disambiguation cues already provided.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"summary_1\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"current_output\": {\n    \"query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Brian Johnson AC/DC singer birth date\"\n  },\n  \"rationale\": \"The verification-style current query triggered the delta; replaced the multi-part instruction with one compact second-hop query targeting Brian Johnson and preserved the visible disambiguator.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

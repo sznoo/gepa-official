@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a3a20d68a6f3fa3c24b29ce9d10e34aa1bf7e33f68e75f081b3e79a748f06174",
+  "created_at": "2026-07-14T13:42:20.881107+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 and summary_2 both name the same individual with the exact same full-name string as the coach referenced in the question, and neither summary supplies that individual's middle name, and the question asks specifically for that individual's middle name.",
+            "preserve_rule": "Continue to treat the provided summaries as the primary evidence source. If the summaries disagree about the coach's identity, omit an asserted middle name and return the canonical 'cannot be determined' response.",
+            "change_rule": "When the trigger condition holds, permit the model to use its internal, widely known general-knowledge memory to supply the person's commonly documented middle name — but only if the model is confident this is a well-documented public fact. If supplying a name, put only the single middle-name token as the answer. If not confident, revert to the preserved behavior (reporting that it cannot be determined from the supplied passages).",
+            "drop_or_avoid_rule": "Do not invent or guess a middle name when confidence is low. Do not use partial or fuzzy name matches as the trigger; require exact same full-name string in both summaries. Do not instruct or perform external searches. Do not add explanatory text or extra tokens outside the mandated minimal answer.",
+            "output_contract": "Return exactly one minimal answer string inside the final-answer output block: either the single middle-name token (if produced under the trigger and confidence rule) or the short canonical phrase 'Cannot be determined from the supplied passages.' No additional words, sentences, or justification may be added.",
+            "why_local_transition": "The summaries consistently identify the same coach but lack the middle name. This small rule lets the agent responsibly fill a factual gap using confident internal knowledge when the identity is unambiguous, producing a concise answer instead of a default 'cannot determine' only when justified."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+        "summary_1": "The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.",
+        "summary_2": "Cannot determine — the supplied passages do not provide John Calipari's middle name (the coach in 1992–93), so it is not available from these sources.",
+        "current_output": "Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 and summary_2 both name the same individual with the exact same full-name string as the coach referenced in the question, and neither summary supplies that individual's middle name, and the question asks specifically for that individual's middle name.\",\n      \"preserve_rule\": \"Continue to treat the provided summaries as the primary evidence source. If the summaries disagree about the coach's identity, omit an asserted middle name and return the canonical 'cannot be determined' response.\",\n      \"change_rule\": \"When the trigger condition holds, permit the model to use its internal, widely known general-knowledge memory to supply the person's commonly documented middle name — but only if the model is confident this is a well-documented public fact. If supplying a name, put only the single middle-name token as the answer. If not confident, revert to the preserved behavior (reporting that it cannot be determined from the supplied passages).\",\n      \"drop_or_avoid_rule\": \"Do not invent or guess a middle name when confidence is low. Do not use partial or fuzzy name matches as the trigger; require exact same full-name string in both summaries. Do not instruct or perform external searches. Do not add explanatory text or extra tokens outside the mandated minimal answer.\",\n      \"output_contract\": \"Return exactly one minimal answer string inside the final-answer output block: either the single middle-name token (if produced under the trigger and confidence rule) or the short canonical phrase 'Cannot be determined from the supplied passages.' No additional words, sentences, or justification may be added.\",\n      \"why_local_transition\": \"The summaries consistently identify the same coach but lack the middle name. This small rule lets the agent responsibly fill a factual gap using confident internal knowledge when the identity is unambiguous, producing a concise answer instead of a default 'cannot determine' only when justified.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\",\n  \"summary_1\": \"The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.\",\n  \"summary_2\": \"Cannot determine — the supplied passages do not provide John Calipari's middle name (the coach in 1992–93), so it is not available from these sources.\",\n  \"current_output\": \"Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Cannot be determined from the supplied passages.\",\n  \"rationale\": \"Both summaries identify John Calipari but do not give a middle name; under the ordered rules the trigger applied but internal confidence was insufficient, so the canonical response was returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 120,
+    "row_index": 120,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "dfc514a1d6b0f3ac7d67d75f33c195fce8ad61e2fb8cbc068e32cbe3eea03cd4",
+  "created_at": "2026-07-16T01:04:09.621790+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 83,
+        "stable_id": "83",
+        "question": "The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?",
+        "summary_1": "30 August 2009",
+        "hop2_query": "2009 Belgian Grand Prix date \"Sebastian Vettel\" \"started eighth\" \"came third\" \"30 August 2009\"",
+        "summary_2": "30 August 2009",
+        "answer": "30 August 2009",
+        "gold_support_titles": [
+          "2009 Belgian Grand Prix",
+          "Sebastian Vettel"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 28,
+          "w_stable_id": "28",
+          "agent": "final",
+          "w_question": "Are Libocedrus and Helianthus both types of plants?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "yes",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).",
+                "preserve_rule": "Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.",
+                "change_rule": "Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.",
+                "drop_or_avoid_rule": "Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.",
+                "output_contract": "Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.",
+                "why_local_transition": "The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "30 August 2009",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 6,
+          "w_stable_id": "6",
+          "agent": "final",
+          "w_question": "Are the Sternbergia and Echinopsis genuses of plants both native to the same regions?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "No. Sternbergia is native to Eurasia and North Africa, while Echinopsis is native to South America; their native regions do not match.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "no",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If both summary_1 and summary_2 convey the same clear judgment about whether the two genera share native regions (e.g., both assert they are native to different regions or both assert they are native to the same regions), apply this prompt edit.",
+                "preserve_rule": "Keep using the provided summaries as the sole evidence source; do not invent or add factual content. Preserve the original input/output field names and the agent's role to produce a final answer.",
+                "change_rule": "When the two summaries agree, replace any multi-sentence or explanatory final output with a single lower-case word token that expresses the consensus (a single-word affirmative or negative response). Place only that single token into the answer field; produce no additional words, sentences, punctuation, or explanation.",
+                "drop_or_avoid_rule": "Do not include supporting details, explanatory sentences, example lists, or justification. Do not repeat or copy long spans from the summaries. Avoid any prefatory capitalization, periods, or extra formatting surrounding the single-token answer.",
+                "output_contract": "The answer must be exactly one lower-case word token indicating the summaries' consensus (one token only), placed inside the final-answer block and nothing else.",
+                "why_local_transition": "The source output is a full explanatory sentence while the final-agent contract requires a minimal single-token answer when the summaries already agree. This edit only tightens formatting/verbosity to produce the minimal final answer while preserving the summaries' content."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "30 August 2009",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 63,
+          "w_stable_id": "63",
+          "agent": "final",
+          "w_question": "Are both Anglo-Français de Petite Vénerie and Hawaiian Poi Dog extinct breeds of dogs?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "No. The Anglo-Français de Petite Vénerie is a living hunting scenthound, while the Hawaiian Poi Dog is an extinct breed.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "no",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When producing the field `answer` from the provided `summary_1` and `summary_2`, and both summaries support the same binary conclusion (a clear yes/no outcome).",
+                "preserve_rule": "Keep using summary_1 and summary_2 as the only evidence sources for the answer. Preserve all other existing prompt behavior and the input/output interface.",
+                "change_rule": "Instead of composing a full sentence, output only a single lowercase binary token — 'yes' or 'no' — that matches the conclusion supported by both summaries. Choose 'yes' if both summaries clearly indicate the fact is true, or 'no' if both clearly indicate it is false. If the summaries conflict or are ambiguous, fall back to the base prompt's original behavior (do not invent a binary answer).",
+                "drop_or_avoid_rule": "Do not include any explanatory text, supporting details, punctuation, capitalization, or surrounding markup in the answer field. Avoid restating the summaries or adding new facts. Do not expand the output into a sentence or paragraph.",
+                "output_contract": "The [[ ## answer ## ]] block must contain exactly one lowercase token (either 'yes' or 'no') when both summaries clearly agree; nothing else should appear in that block. If summaries do not clearly agree, produce whatever the base prompt would have produced in its original format.",
+                "why_local_transition": "The current behavior produces a full-sentence verdict. This minimal edit enforces the final-answer contract (a single minimal answer token) while using the same evidence already present, without changing factual conclusions or the agent's interface."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "30 August 2009",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 30,
+          "w_stable_id": "30",
+          "agent": "final",
+          "w_question": "Are both Warren County Canal and Dismal Swamp Canal located in the same state?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "no",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question is a yes/no (binary) question and both summary_1 and summary_2 present the same clear conclusion that the two items are not in the same state (both summaries express a negative conclusion or state different locations).",
+                "preserve_rule": "Continue to read and use summary_1 and summary_2 as the evidence source and preserve the base prompt's final-answer interface (the single 'answer' field). Do not discard or alter the summaries themselves.",
+                "change_rule": "Replace any longer explanatory final sentence with a single-word, lowercase, minimal answer that directly matches the consensus of the summaries. Emit only that one word in the answer field; do not add explanation, supporting facts, or surrounding text.",
+                "drop_or_avoid_rule": "Do not include any additional sentences, punctuation, capitalization, qualifiers, or justification in the answer field. Avoid copying multi-clause sentences from the summaries as the final answer. Do not attempt to restate supporting details; avoid producing a full sentence or paragraph as the final output.",
+                "output_contract": "Produce the field 'answer' whose value is exactly one lowercase word (an affirmative or negative response) that matches the conclusion supported by summary_1 and summary_2. The 'answer' value must contain no extra characters, punctuation, or explanatory text.",
+                "why_local_transition": "The only needed change is formatting the agreed-upon conclusion into the minimal final-answer form. This is a narrow behavior shift — keep evidence use but shorten the final output to the required one-word answer when both summaries agree."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "30 August 2009",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 65,
+          "w_stable_id": "65",
+          "agent": "final",
+          "w_question": "Are the Films Nitrate Kisses and Italy in a Day documentaries?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "yes",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If both summary_1 and summary_2 explicitly state that each named film is a documentary (i.e., the summaries contain the token 'documentary' applied to the films in question), apply this update.",
+                "preserve_rule": "Keep using the provided summaries as the sole evidence source and retain the agent's obligation to answer concisely and truthfully according to that evidence and the base prompt's final-answer interface.",
+                "change_rule": "When the trigger is met, replace any verbose sentence-level answer with exactly one lowercase single-token answer that conveys affirmation or negation. Determine which token to emit by aggregating the visible summaries: if they consistently assert the films are documentaries, emit the single affirmative token; if they consistently assert they are not, emit the single negative token; if summaries conflict or do not clearly support either, follow the base prompt's default (e.g., abstain or indicate uncertainty) using the minimal single-token form. Do not add any other words, punctuation, explanation, or copy of summary text.",
+                "drop_or_avoid_rule": "Avoid including film titles, dates, explanatory clauses, capitalization, punctuation, quotes, or any extra text outside the single token. Do not reproduce long spans from the summaries or produce multi-word answers.",
+                "output_contract": "The produced field 'answer' must consist of exactly one lowercase token (an affirmative or negative token) and nothing else. Ensure this token is the only content in the final-answer block.",
+                "why_local_transition": "The current output is a full sentence repeating summary details; the final-answer contract requires a minimal answer token. This small behavior change maps the existing correct judgment (supported by both summaries) to the required minimal output format without altering evidence use."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "30 August 2009",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 83,\n  \"stable_id\": \"83\",\n  \"question\": \"The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?\",\n  \"summary_1\": \"30 August 2009\",\n  \"hop2_query\": \"2009 Belgian Grand Prix date \\\"Sebastian Vettel\\\" \\\"started eighth\\\" \\\"came third\\\" \\\"30 August 2009\\\"\",\n  \"summary_2\": \"30 August 2009\",\n  \"answer\": \"30 August 2009\",\n  \"gold_support_titles\": [\n    \"2009 Belgian Grand Prix\",\n    \"Sebastian Vettel\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 28,\n    \"w_stable_id\": \"28\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are Libocedrus and Helianthus both types of plants?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"yes\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).\",\n          \"preserve_rule\": \"Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.\",\n          \"change_rule\": \"Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.\",\n          \"drop_or_avoid_rule\": \"Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.\",\n          \"output_contract\": \"Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.\",\n          \"why_local_transition\": \"The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"30 August 2009\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 6,\n    \"w_stable_id\": \"6\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are the Sternbergia and Echinopsis genuses of plants both native to the same regions?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"No. Sternbergia is native to Eurasia and North Africa, while Echinopsis is native to South America; their native regions do not match.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"no\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If both summary_1 and summary_2 convey the same clear judgment about whether the two genera share native regions (e.g., both assert they are native to different regions or both assert they are native to the same regions), apply this prompt edit.\",\n          \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source; do not invent or add factual content. Preserve the original input/output field names and the agent's role to produce a final answer.\",\n          \"change_rule\": \"When the two summaries agree, replace any multi-sentence or explanatory final output with a single lower-case word token that expresses the consensus (a single-word affirmative or negative response). Place only that single token into the answer field; produce no additional words, sentences, punctuation, or explanation.\",\n          \"drop_or_avoid_rule\": \"Do not include supporting details, explanatory sentences, example lists, or justification. Do not repeat or copy long spans from the summaries. Avoid any prefatory capitalization, periods, or extra formatting surrounding the single-token answer.\",\n          \"output_contract\": \"The answer must be exactly one lower-case word token indicating the summaries' consensus (one token only), placed inside the final-answer block and nothing else.\",\n          \"why_local_transition\": \"The source output is a full explanatory sentence while the final-agent contract requires a minimal single-token answer when the summaries already agree. This edit only tightens formatting/verbosity to produce the minimal final answer while preserving the summaries' content.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"30 August 2009\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 63,\n    \"w_stable_id\": \"63\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are both Anglo-Français de Petite Vénerie and Hawaiian Poi Dog extinct breeds of dogs?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"No. The Anglo-Français de Petite Vénerie is a living hunting scenthound, while the Hawaiian Poi Dog is an extinct breed.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"no\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When producing the field `answer` from the provided `summary_1` and `summary_2`, and both summaries support the same binary conclusion (a clear yes/no outcome).\",\n          \"preserve_rule\": \"Keep using summary_1 and summary_2 as the only evidence sources for the answer. Preserve all other existing prompt behavior and the input/output interface.\",\n          \"change_rule\": \"Instead of composing a full sentence, output only a single lowercase binary token — 'yes' or 'no' — that matches the conclusion supported by both summaries. Choose 'yes' if both summaries clearly indicate the fact is true, or 'no' if both clearly indicate it is false. If the summaries conflict or are ambiguous, fall back to the base prompt's original behavior (do not invent a binary answer).\",\n          \"drop_or_avoid_rule\": \"Do not include any explanatory text, supporting details, punctuation, capitalization, or surrounding markup in the answer field. Avoid restating the summaries or adding new facts. Do not expand the output into a sentence or paragraph.\",\n          \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly one lowercase token (either 'yes' or 'no') when both summaries clearly agree; nothing else should appear in that block. If summaries do not clearly agree, produce whatever the base prompt would have produced in its original format.\",\n          \"why_local_transition\": \"The current behavior produces a full-sentence verdict. This minimal edit enforces the final-answer contract (a single minimal answer token) while using the same evidence already present, without changing factual conclusions or the agent's interface.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"30 August 2009\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 30,\n    \"w_stable_id\": \"30\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are both Warren County Canal and Dismal Swamp Canal located in the same state?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"no\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question is a yes/no (binary) question and both summary_1 and summary_2 present the same clear conclusion that the two items are not in the same state (both summaries express a negative conclusion or state different locations).\",\n          \"preserve_rule\": \"Continue to read and use summary_1 and summary_2 as the evidence source and preserve the base prompt's final-answer interface (the single 'answer' field). Do not discard or alter the summaries themselves.\",\n          \"change_rule\": \"Replace any longer explanatory final sentence with a single-word, lowercase, minimal answer that directly matches the consensus of the summaries. Emit only that one word in the answer field; do not add explanation, supporting facts, or surrounding text.\",\n          \"drop_or_avoid_rule\": \"Do not include any additional sentences, punctuation, capitalization, qualifiers, or justification in the answer field. Avoid copying multi-clause sentences from the summaries as the final answer. Do not attempt to restate supporting details; avoid producing a full sentence or paragraph as the final output.\",\n          \"output_contract\": \"Produce the field 'answer' whose value is exactly one lowercase word (an affirmative or negative response) that matches the conclusion supported by summary_1 and summary_2. The 'answer' value must contain no extra characters, punctuation, or explanatory text.\",\n          \"why_local_transition\": \"The only needed change is formatting the agreed-upon conclusion into the minimal final-answer form. This is a narrow behavior shift — keep evidence use but shorten the final output to the required one-word answer when both summaries agree.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"30 August 2009\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 65,\n    \"w_stable_id\": \"65\",\n    \"agent\": \"final\",\n    \"w_question\": \"Are the Films Nitrate Kisses and Italy in a Day documentaries?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"yes\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If both summary_1 and summary_2 explicitly state that each named film is a documentary (i.e., the summaries contain the token 'documentary' applied to the films in question), apply this update.\",\n          \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source and retain the agent's obligation to answer concisely and truthfully according to that evidence and the base prompt's final-answer interface.\",\n          \"change_rule\": \"When the trigger is met, replace any verbose sentence-level answer with exactly one lowercase single-token answer that conveys affirmation or negation. Determine which token to emit by aggregating the visible summaries: if they consistently assert the films are documentaries, emit the single affirmative token; if they consistently assert they are not, emit the single negative token; if summaries conflict or do not clearly support either, follow the base prompt's default (e.g., abstain or indicate uncertainty) using the minimal single-token form. Do not add any other words, punctuation, explanation, or copy of summary text.\",\n          \"drop_or_avoid_rule\": \"Avoid including film titles, dates, explanatory clauses, capitalization, punctuation, quotes, or any extra text outside the single token. Do not reproduce long spans from the summaries or produce multi-word answers.\",\n          \"output_contract\": \"The produced field 'answer' must consist of exactly one lowercase token (an affirmative or negative token) and nothing else. Ensure this token is the only content in the final-answer block.\",\n          \"why_local_transition\": \"The current output is a full sentence repeating summary details; the final-answer contract requires a minimal answer token. This small behavior change maps the existing correct judgment (supported by both summaries) to the required minimal output format without altering evidence use.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"30 August 2009\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 28,\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"Apply a single-token final-answer constraint so a multi-token date like '30 August 2009' is truncated to one token (e.g., '30' or 'August').\",\n  \"expected_damaged_behavior\": \"The final agent emits exactly one token instead of the full date, producing an incomplete date string that is a local neighbor of the correct answer.\",\n  \"rationale\": \"The chosen W failure is a purely output-format/shape edit: when evidence summaries clearly agree the agent is forced to emit a single-token binary answer. That same narrow contract change can be applied to date outputs — it doesn't change facts or require a different reasoning chain, only the final-output shape. Transporting this failure will produce a plausible local damage at the target boundary (truncating the correct multi-token date to one token) without flipping the answer or inventing new content. This matches the transfer criteria: same kind of output-shape/selection failure, local neighbor of C_plus, and preserves underlying evidence use.\",\n  \"confidence\": 0.75\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 83,
+    "c_stable_id": "83",
+    "candidate_w_sample_indices": [
+      6,
+      28,
+      30,
+      63,
+      65
+    ],
+    "match_fingerprint": "a8f9273d2cfbfef7d5b21a7e7bcd913976bd00b042e79a4e334d20d06f91dd7b"
+  }
+}

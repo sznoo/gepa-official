@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "7205768734cadc18ee60bf536e4d89c4f26e60c2fd6ef02f91c86a8328c8f12b",
+  "created_at": "2026-07-16T05:11:39.994102+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 59,
+        "stable_id": "59",
+        "question": "Between LaIsha and Glamour, which was founded first?",
+        "summary_1": "Passage 2 states Glamour was \"Founded in 1939\" and \"first published in April 1939\" (Glamour (magazine)). The passages contain no information about a magazine named \"LaIsha\" (they include similarly spelled personal names such as \"Laisha Wilkins\"), so the missing fact is LaIsha's founding date/year (and confirmation that the target \"LaIsha\" is the magazine). Next retrieval should target \"LaIsha (magazine) founding date\" or \"LaIsha magazine founded\" (verify spelling/case to disambiguate from personal names).",
+        "hop2_query": "LaIsha magazine founded",
+        "summary_2": "Glamour was founded in 1939, while La'Isha (La'Isha) has been published since 1947; therefore Glamour was founded first.",
+        "answer": "glamour",
+        "gold_support_titles": [
+          "LaIsha",
+          "Glamour (magazine)"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 10,
+          "w_stable_id": "10",
+          "agent": "final",
+          "w_question": "What artist created a traditional folk song among prisoners in the American South as well as Maybellene?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "No single artist is credited with creating both",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Johnny Rivers",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question asks which artist \"created\" or is credited with two named songs (for example: one named as a traditional song such as \"Midnight Special\" and another named like \"Maybellene\") and the supplied summaries do not assert a single author for the traditional song but do state that the same named artist \"recorded\" or \"recorded both\" songs, apply the change rule below.",
+                "preserve_rule": "Keep the base constraints: use only the provided summaries as evidence; do not invent facts or consult outside knowledge; preserve the minimal-answer formatting rule (emit exactly the literal string from the summaries when supported); emit no explanation or extra text.",
+                "change_rule": "Allow the agent to treat the question's verb 'created' as satisfied by a same-artist recording/performing relationship when the summaries explicitly report that the same artist recorded or recorded both of the named songs. In that case, answer with the artist's full name exactly as it appears verbatim in the summaries (no additions).",
+                "drop_or_avoid_rule": "Do not default to answering that 'no single artist is credited with creating both' merely because one song is described as 'traditional' if the summaries explicitly attribute recordings of both songs to the same artist. Avoid treating 'traditional' origin as a prohibition on answering when a same-artist recording link is present in the summaries.",
+                "output_contract": "The final output must remain the minimal answer string only: emit exactly the artist name verbatim as it appears in the provided summaries (single literal, no punctuation or explanation). If the summaries do not jointly license a single definitive literal artist name, emit uncertainty per the base prompt rules.",
+                "why_local_transition": "This small prompt change corrects an overly strict interpretation of 'created' that prevented using recording-based identity links present in the summaries. It preserves the original evidence-only and minimal-answer constraints while permitting a licensed composition: when summaries show the same artist recorded both songs, that artist's verbatim name is a supported minimal answer."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "glamour",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 79,
+          "w_stable_id": "79",
+          "agent": "final",
+          "w_question": "51824 Mikeanderson is an asteroid named for the recipient of what United States award?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "unknown",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Congressional Space Medal of Honor",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the summaries together (a) identify the question subject as a named member of a specific event/crew (for example: an 'astronaut' tied to 'STS-107 (\"Columbia\")') AND (b) a later summary explicitly lists one or more named members of that same event/crew as 'recipients of' a particular United States award.",
+                "preserve_rule": "Continue to use only the information present in the provided summaries; preserve the base requirement to emit only the minimal answer string with no extra text; do not introduce outside knowledge or invent facts.",
+                "change_rule": "Permit a narrow transitive composition: if the trigger conditions hold and no summary explicitly contradicts or restricts who received the award, treat the award named in the summaries as applicable to the subject (i.e., infer that the subject received the same award). When applying this composition, emit the award name exactly as it appears verbatim in the summaries (no paraphrase).",
+                "drop_or_avoid_rule": "Do not apply this inference if the summaries explicitly state that only the listed individuals received the award, if the summaries indicate the recipient list is partial/uncertain, or if there is no clear identity link tying the subject to the same event/crew. Do not invent or add any award name that does not appear in the summaries.",
+                "output_contract": "Keep the base final-answer contract: the answer field must contain exactly the minimal answer string and nothing else. If the composition licenses a single award literal that appears verbatim in the summaries, emit that literal exactly. If the required identity link or award attribution is missing or ambiguous under these rules, emit an uncertainty response per the original prompt.",
+                "why_local_transition": "This small rule lets the agent combine: (1) the subject being identified as a member of a named crew/event and (2) a summary explicitly naming other members of that same crew as recipients of a particular U.S. award — to conclude the same award applies to the subject when no summary information contradicts that attribution. It is limited in scope and preserves the base constraint of using only summary contents."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "glamour",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 77,
+          "w_stable_id": "77",
+          "agent": "final",
+          "w_question": "Which film was released first, The Saved or Grey Gardens?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "The passages do not allow determining which film was released first.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Grey Gardens",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the provided summaries include an explicit release year/date for one of the two films named in the question (for example, summary_2: \"Grey Gardens is a 1975 American documentary film\") AND neither summary supplies any release date or year for the other film named in the question (for example, no dates for \"The Saved\").",
+                "preserve_rule": "Keep all existing base-prompt constraints: use only the provided summaries as evidence (summary_2 as primary), preserve minimal-answer formatting, emit no explanations or extra text, and keep the same input/output interface.",
+                "change_rule": "When the trigger condition holds, select as the answer the film whose name in the summaries is accompanied by an explicit release year/date. Emit that film name verbatim exactly as it appears in the summaries (no added words). Do not invent or fetch any dates or other facts.",
+                "drop_or_avoid_rule": "Do not emit uncertainty or 'cannot determine' when the trigger condition is met. Avoid introducing outside knowledge, hypotheses about the missing film, or any additional text beyond the single minimal literal required by the base prompt.",
+                "output_contract": "Produce only the minimal answer string in the `answer` field: exactly the film name (verbatim as in the summaries) that has an explicit release year in the provided summaries when the other film lacks any release date. No explanation, justification, or other content.",
+                "why_local_transition": "This is a narrowly scoped tie-breaking rule: summary_2 provides a concrete release year for one film while the other film lacks any date in the summaries. Treating the explicitly dated film as the earlier release (and emitting its name verbatim) is the smallest behavior change needed to prefer the dated film as the minimal answer while still relying only on the visible summaries."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "glamour",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 85,
+          "w_stable_id": "85",
+          "agent": "final",
+          "w_question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Jooheon",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Lee Joo-heon",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the provided summaries contain two name variants that clearly refer to the same person (for example: a short single-token alias and, in the same or a later summary, a multi-token full name presented alongside it, e.g. in parentheses),",
+                "preserve_rule": "Keep all existing base behaviors: use only the provided summaries as evidence (summary_2 as primary), emit only the minimal answer string, do not add explanation, and preserve multi-hop composition rules.",
+                "change_rule": "When the trigger condition is met, prefer the multi-token full-name literal (the contiguous multi-word form) that appears verbatim in the summaries as the minimal answer. Emit that full literal exactly as it appears in the summaries (verbatim). Only fall back to the shorter alias if no multi-token full literal is present in the visible summaries.",
+                "drop_or_avoid_rule": "Avoid emitting the short single-token alias when a multi-token full-name literal for the same person is present in the summaries. Do not add commentary, alternate forms, or parentheses; do not invent or normalize spellings beyond what is verbatim in the summaries.",
+                "output_contract": "Produce only the single minimal answer string in the answer field, following the base prompt's minimal-answer formatting rules. If a multi-token full literal is available in the summaries for the referenced person, output that exact literal and nothing else.",
+                "why_local_transition": "The base prompt allowed emitting a short alias; this local change biases the final output toward the full multi-token name when that exact form is present in the summaries, yielding the more complete literal required by the minimal-answer formatting rule."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "glamour",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 103,
+          "w_stable_id": "103",
+          "agent": "final",
+          "w_question": "What does Sam Weir and Gold Coast, Queensland have in common?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "the Gold Coast, Queensland",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Australia",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks what two entities have in common AND the provided summaries explicitly state location facts for both entities that share the same country token (i.e., the summaries contain the same country name verbatim for each entity).",
+                "preserve_rule": "Keep all original base rules: use only the provided summaries as evidence, treat summary_2 as the primary integrated source, emit only the minimal answer string, and do not add explanation or extra text.",
+                "change_rule": "When the trigger matches, prefer the shared country-level literal named verbatim in the summaries as the minimal commonality. Concretely: if both entities are described in the summaries as being located in the same country (the identical country token appears in the summaries for each), select that country token as the minimal answer.",
+                "drop_or_avoid_rule": "Avoid returning a more specific place name (e.g., a city or region) or any phrasing such as 'both are in X' when the summaries license a single-country literal. Do not add qualifiers, explanations, or multi-token phrases beyond the single literal country token supported verbatim by the summaries. Do not consult or invent outside facts.",
+                "output_contract": "Produce exactly the minimal literal token that names the shared country as it appears verbatim in the summaries (no surrounding words, punctuation, or explanation). Preserve the base prompt's requirement that the answer field contain only this minimal answer string.",
+                "why_local_transition": "The source output returned a specific locality instead of the higher-level shared country. This rule nudges the final step to select the country-level literal when both summaries explicitly name the same country, producing the minimal, supported commonality."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "glamour",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 59,\n  \"stable_id\": \"59\",\n  \"question\": \"Between LaIsha and Glamour, which was founded first?\",\n  \"summary_1\": \"Passage 2 states Glamour was \\\"Founded in 1939\\\" and \\\"first published in April 1939\\\" (Glamour (magazine)). The passages contain no information about a magazine named \\\"LaIsha\\\" (they include similarly spelled personal names such as \\\"Laisha Wilkins\\\"), so the missing fact is LaIsha's founding date/year (and confirmation that the target \\\"LaIsha\\\" is the magazine). Next retrieval should target \\\"LaIsha (magazine) founding date\\\" or \\\"LaIsha magazine founded\\\" (verify spelling/case to disambiguate from personal names).\",\n  \"hop2_query\": \"LaIsha magazine founded\",\n  \"summary_2\": \"Glamour was founded in 1939, while La'Isha (La'Isha) has been published since 1947; therefore Glamour was founded first.\",\n  \"answer\": \"glamour\",\n  \"gold_support_titles\": [\n    \"LaIsha\",\n    \"Glamour (magazine)\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 10,\n    \"w_stable_id\": \"10\",\n    \"agent\": \"final\",\n    \"w_question\": \"What artist created a traditional folk song among prisoners in the American South as well as Maybellene?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"No single artist is credited with creating both\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Johnny Rivers\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question asks which artist \\\"created\\\" or is credited with two named songs (for example: one named as a traditional song such as \\\"Midnight Special\\\" and another named like \\\"Maybellene\\\") and the supplied summaries do not assert a single author for the traditional song but do state that the same named artist \\\"recorded\\\" or \\\"recorded both\\\" songs, apply the change rule below.\",\n          \"preserve_rule\": \"Keep the base constraints: use only the provided summaries as evidence; do not invent facts or consult outside knowledge; preserve the minimal-answer formatting rule (emit exactly the literal string from the summaries when supported); emit no explanation or extra text.\",\n          \"change_rule\": \"Allow the agent to treat the question's verb 'created' as satisfied by a same-artist recording/performing relationship when the summaries explicitly report that the same artist recorded or recorded both of the named songs. In that case, answer with the artist's full name exactly as it appears verbatim in the summaries (no additions).\",\n          \"drop_or_avoid_rule\": \"Do not default to answering that 'no single artist is credited with creating both' merely because one song is described as 'traditional' if the summaries explicitly attribute recordings of both songs to the same artist. Avoid treating 'traditional' origin as a prohibition on answering when a same-artist recording link is present in the summaries.\",\n          \"output_contract\": \"The final output must remain the minimal answer string only: emit exactly the artist name verbatim as it appears in the provided summaries (single literal, no punctuation or explanation). If the summaries do not jointly license a single definitive literal artist name, emit uncertainty per the base prompt rules.\",\n          \"why_local_transition\": \"This small prompt change corrects an overly strict interpretation of 'created' that prevented using recording-based identity links present in the summaries. It preserves the original evidence-only and minimal-answer constraints while permitting a licensed composition: when summaries show the same artist recorded both songs, that artist's verbatim name is a supported minimal answer.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"glamour\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 79,\n    \"w_stable_id\": \"79\",\n    \"agent\": \"final\",\n    \"w_question\": \"51824 Mikeanderson is an asteroid named for the recipient of what United States award?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"unknown\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Congressional Space Medal of Honor\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the summaries together (a) identify the question subject as a named member of a specific event/crew (for example: an 'astronaut' tied to 'STS-107 (\\\"Columbia\\\")') AND (b) a later summary explicitly lists one or more named members of that same event/crew as 'recipients of' a particular United States award.\",\n          \"preserve_rule\": \"Continue to use only the information present in the provided summaries; preserve the base requirement to emit only the minimal answer string with no extra text; do not introduce outside knowledge or invent facts.\",\n          \"change_rule\": \"Permit a narrow transitive composition: if the trigger conditions hold and no summary explicitly contradicts or restricts who received the award, treat the award named in the summaries as applicable to the subject (i.e., infer that the subject received the same award). When applying this composition, emit the award name exactly as it appears verbatim in the summaries (no paraphrase).\",\n          \"drop_or_avoid_rule\": \"Do not apply this inference if the summaries explicitly state that only the listed individuals received the award, if the summaries indicate the recipient list is partial/uncertain, or if there is no clear identity link tying the subject to the same event/crew. Do not invent or add any award name that does not appear in the summaries.\",\n          \"output_contract\": \"Keep the base final-answer contract: the answer field must contain exactly the minimal answer string and nothing else. If the composition licenses a single award literal that appears verbatim in the summaries, emit that literal exactly. If the required identity link or award attribution is missing or ambiguous under these rules, emit an uncertainty response per the original prompt.\",\n          \"why_local_transition\": \"This small rule lets the agent combine: (1) the subject being identified as a member of a named crew/event and (2) a summary explicitly naming other members of that same crew as recipients of a particular U.S. award — to conclude the same award applies to the subject when no summary information contradicts that attribution. It is limited in scope and preserves the base constraint of using only summary contents.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"glamour\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 77,\n    \"w_stable_id\": \"77\",\n    \"agent\": \"final\",\n    \"w_question\": \"Which film was released first, The Saved or Grey Gardens?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"The passages do not allow determining which film was released first.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Grey Gardens\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the provided summaries include an explicit release year/date for one of the two films named in the question (for example, summary_2: \\\"Grey Gardens is a 1975 American documentary film\\\") AND neither summary supplies any release date or year for the other film named in the question (for example, no dates for \\\"The Saved\\\").\",\n          \"preserve_rule\": \"Keep all existing base-prompt constraints: use only the provided summaries as evidence (summary_2 as primary), preserve minimal-answer formatting, emit no explanations or extra text, and keep the same input/output interface.\",\n          \"change_rule\": \"When the trigger condition holds, select as the answer the film whose name in the summaries is accompanied by an explicit release year/date. Emit that film name verbatim exactly as it appears in the summaries (no added words). Do not invent or fetch any dates or other facts.\",\n          \"drop_or_avoid_rule\": \"Do not emit uncertainty or 'cannot determine' when the trigger condition is met. Avoid introducing outside knowledge, hypotheses about the missing film, or any additional text beyond the single minimal literal required by the base prompt.\",\n          \"output_contract\": \"Produce only the minimal answer string in the `answer` field: exactly the film name (verbatim as in the summaries) that has an explicit release year in the provided summaries when the other film lacks any release date. No explanation, justification, or other content.\",\n          \"why_local_transition\": \"This is a narrowly scoped tie-breaking rule: summary_2 provides a concrete release year for one film while the other film lacks any date in the summaries. Treating the explicitly dated film as the earlier release (and emitting its name verbatim) is the smallest behavior change needed to prefer the dated film as the minimal answer while still relying only on the visible summaries.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"glamour\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 85,\n    \"w_stable_id\": \"85\",\n    \"agent\": \"final\",\n    \"w_question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Jooheon\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Lee Joo-heon\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the provided summaries contain two name variants that clearly refer to the same person (for example: a short single-token alias and, in the same or a later summary, a multi-token full name presented alongside it, e.g. in parentheses),\",\n          \"preserve_rule\": \"Keep all existing base behaviors: use only the provided summaries as evidence (summary_2 as primary), emit only the minimal answer string, do not add explanation, and preserve multi-hop composition rules.\",\n          \"change_rule\": \"When the trigger condition is met, prefer the multi-token full-name literal (the contiguous multi-word form) that appears verbatim in the summaries as the minimal answer. Emit that full literal exactly as it appears in the summaries (verbatim). Only fall back to the shorter alias if no multi-token full literal is present in the visible summaries.\",\n          \"drop_or_avoid_rule\": \"Avoid emitting the short single-token alias when a multi-token full-name literal for the same person is present in the summaries. Do not add commentary, alternate forms, or parentheses; do not invent or normalize spellings beyond what is verbatim in the summaries.\",\n          \"output_contract\": \"Produce only the single minimal answer string in the answer field, following the base prompt's minimal-answer formatting rules. If a multi-token full literal is available in the summaries for the referenced person, output that exact literal and nothing else.\",\n          \"why_local_transition\": \"The base prompt allowed emitting a short alias; this local change biases the final output toward the full multi-token name when that exact form is present in the summaries, yielding the more complete literal required by the minimal-answer formatting rule.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"glamour\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 103,\n    \"w_stable_id\": \"103\",\n    \"agent\": \"final\",\n    \"w_question\": \"What does Sam Weir and Gold Coast, Queensland have in common?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"the Gold Coast, Queensland\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Australia\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks what two entities have in common AND the provided summaries explicitly state location facts for both entities that share the same country token (i.e., the summaries contain the same country name verbatim for each entity).\",\n          \"preserve_rule\": \"Keep all original base rules: use only the provided summaries as evidence, treat summary_2 as the primary integrated source, emit only the minimal answer string, and do not add explanation or extra text.\",\n          \"change_rule\": \"When the trigger matches, prefer the shared country-level literal named verbatim in the summaries as the minimal commonality. Concretely: if both entities are described in the summaries as being located in the same country (the identical country token appears in the summaries for each), select that country token as the minimal answer.\",\n          \"drop_or_avoid_rule\": \"Avoid returning a more specific place name (e.g., a city or region) or any phrasing such as 'both are in X' when the summaries license a single-country literal. Do not add qualifiers, explanations, or multi-token phrases beyond the single literal country token supported verbatim by the summaries. Do not consult or invent outside facts.\",\n          \"output_contract\": \"Produce exactly the minimal literal token that names the shared country as it appears verbatim in the summaries (no surrounding words, punctuation, or explanation). Preserve the base prompt's requirement that the answer field contain only this minimal answer string.\",\n          \"why_local_transition\": \"The source output returned a specific locality instead of the higher-level shared country. This rule nudges the final step to select the country-level literal when both summaries explicitly name the same country, producing the minimal, supported commonality.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"glamour\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 77,\n  \"dominant_gap_type\": \"answer_selection\",\n  \"transported_damage_hypothesis\": \"When one magazine in the summaries has an explicit founding year and the other lacks any founding date, the damaged agent will refuse to pick the dated magazine and instead return an uncertainty/‘cannot determine’ response.\",\n  \"expected_damaged_behavior\": \"Even though Glamour's founding year is present in the passages and LaIsha's is missing, the agent will abstain or answer that the passages do not allow determining which was founded first.\",\n  \"rationale\": \"W sample 77 implements a narrowly scoped tie-breaking rule: prefer the item with an explicit date when its counterpart lacks any date. That structure maps directly to the LaIsha vs. Glamour case (Glamour dated, LaIsha undated). Transporting the failure pattern means removing/omitting this tie-breaker so the agent fails to use the explicit date and abstains. This transfers cleanly because it preserves locality (only the decision rule at the final selection boundary changes), requires no entity-specific content, keeps the damaged output a local neighbor of the correct C_plus, and does not require an answer flip.\",\n  \"confidence\": 0.84\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 59,
+    "c_stable_id": "59",
+    "candidate_w_sample_indices": [
+      10,
+      77,
+      79,
+      85,
+      103
+    ],
+    "match_fingerprint": "0264a1581c294695cb04fe4015e451dac6716363b4e35593486d6774932096e8"
+  }
+}

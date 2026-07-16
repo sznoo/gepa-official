@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "cac26f565d984c72bdae68e372c5a82229a0b510772097f05dccc0a06d8a4b31",
+  "created_at": "2026-07-16T04:53:43.174694+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "summary_1": "- Feodor Chin is described as \"an American actor\" who \"starred as the antagonist 'Benny' in Juwan Chung's 'Baby'\" and is given as born \"August 18, 1974.\" \n- Matthew Godfrey is listed as \"born October 20, 1971\" (October 20, 1971) but is identified as a Canadian actor; he is not shown as part of Baby in these passages.\n- Missing link: none of the passages identify an American actor born October 20, 1971 who starred in Baby. Next hop: retrieve the full cast/credits for Juwan Chung's film \"Baby\" (or search cast lists for any film titled \"Baby\") and check each cast member's birthdates to find any American actor born October 20, 1971.",
+        "current_output": {
+          "query": "Baby Juwan Chung cast \"born October 20, 1971\""
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Baby Juwan Chung cast \"born October 20, 1971\""
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Juwan Chung",
+          "Baby (2007 film)",
+          "Feodor Chin",
+          "Juwan Fuad Masum",
+          "Connie Chung",
+          "Juwan Simpson",
+          "Baby I'm-a Want You (song)"
+        ],
+        "retrieved_doc_snippets": [
+          "Juwan Chung | Juwan Chung (born 1983) is an American director and writer. His gangland film \"Baby\" won a Special Jury Prize for Best Feature, Narrative at the 2007 Los Angeles Asian Pacific Film Festival and lead Actor David Huynh won a Special Jury Prize at the 2007 Los Angeles Asian Pacific Film Festival for Outstanding Newcomer and Best Emerging Actor for his performance in the film. For \"Baby\", Chung also won Best Director at the 2008 DisOrient Film Festival.",
+          "Baby (2007 film) | Baby is a 2007 independent film, considered part of the hood film genre. The film tells the story of an Asian-American youth's gang life in East Los Angeles, set during the mid '80s to the early '90s. Directed by Juwan Chung and starring David Huynh, Tzi Ma, Feodor Chin, Ron Yuan and Kenneth Choi. It has been called \"the Asian American Boyz n the Hood\" by the San Francisco Chronicle. The film won Best Narrative Feature at the 2007 Los Angeles Asian Pacific Film Festival and a  ...[truncated]",
+          "Feodor Chin | Feodor Chin (born August 18, 1974) is an American actor, writer, voiceover artist, producer and director. Chin starred as the antagonist \"Benny\" in Juwan Chung's \"Baby\" opposite David Huynh, the protagonist. \"Baby\" won a Special Jury Award for Best Feature Length Film, Narrative at the 2007 Los Angeles Asian Pacific Film Festival, among other awards. He also starred as pioneering actor and artist Keye Luke in Timothy Tau's short film bio-pic \"Keye Luke\", which premiered at the 2012 ...[truncated]",
+          "Juwan Fuad Masum | Juwan Fuad Masum (born 1970) was the Telecommunications Minister in the Iraqi Transitional Government.",
+          "Connie Chung | Constance Yu-Hwa Chung Povich (; born August 20, 1946), known as Connie Chung, is an American journalist.",
+          "Juwan Simpson | Juwan Simpson (born Juwan Garth on July 8, 1984) is a Canadian football linebacker who is currently a free agent. He recently played for the Calgary Stampeders of the Canadian Football League. He was signed by the Green Bay Packers as an undrafted free agent in 2007. He played college football at Alabama.",
+          "Baby I'm-a Want You (song) | \"Baby I'm-a Want You\" is a popular song by the American pop-rock band Bread. The single was released in October 1971 (see 1971 in music). It became the title track for the album of the same name, released in January 1972."
+        ],
+        "summary_2": "No—none of the sources identify an American actor born October 20, 1971 as starring in Juwan Chung's Baby; the cited cast is David Huynh, Tzi Ma, Feodor Chin (b. Aug 18, 1974), Ron Yuan and Kenneth Choi, and Matthew Godfrey (b. Oct 20, 1971) is shown as a Canadian actor and not listed in the film.",
+        "answer": "No—none of the sources identify an American actor born October 20, 1971 as starring in Juwan Chung's Baby; the cited cast is David Huynh, Tzi Ma, Feodor Chin (b. Aug 18, 1974), Ron Yuan and Kenneth Choi, and Matthew Godfrey (b. Oct 20, 1971) is shown as a Canadian actor and not listed in the film.",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "Baby (2007 film)"
+        ],
+        "missing_titles_after_hop2": [
+          "Kenneth Choi"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Kenneth Choi born October 20 1971 Baby cast"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Kenneth Choi"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"summary_1\": \"- Feodor Chin is described as \\\"an American actor\\\" who \\\"starred as the antagonist 'Benny' in Juwan Chung's 'Baby'\\\" and is given as born \\\"August 18, 1974.\\\" \\n- Matthew Godfrey is listed as \\\"born October 20, 1971\\\" (October 20, 1971) but is identified as a Canadian actor; he is not shown as part of Baby in these passages.\\n- Missing link: none of the passages identify an American actor born October 20, 1971 who starred in Baby. Next hop: retrieve the full cast/credits for Juwan Chung's film \\\"Baby\\\" (or search cast lists for any film titled \\\"Baby\\\") and check each cast member's birthdates to find any American actor born October 20, 1971.\",\n  \"current_output\": {\n    \"query\": \"Baby Juwan Chung cast \\\"born October 20, 1971\\\"\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Baby Juwan Chung cast \\\"born October 20, 1971\\\"\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Juwan Chung\",\n    \"Baby (2007 film)\",\n    \"Feodor Chin\",\n    \"Juwan Fuad Masum\",\n    \"Connie Chung\",\n    \"Juwan Simpson\",\n    \"Baby I'm-a Want You (song)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Juwan Chung | Juwan Chung (born 1983) is an American director and writer. His gangland film \\\"Baby\\\" won a Special Jury Prize for Best Feature, Narrative at the 2007 Los Angeles Asian Pacific Film Festival and lead Actor David Huynh won a Special Jury Prize at the 2007 Los Angeles Asian Pacific Film Festival for Outstanding Newcomer and Best Emerging Actor for his performance in the film. For \\\"Baby\\\", Chung also won Best Director at the 2008 DisOrient Film Festival.\",\n    \"Baby (2007 film) | Baby is a 2007 independent film, considered part of the hood film genre. The film tells the story of an Asian-American youth's gang life in East Los Angeles, set during the mid '80s to the early '90s. Directed by Juwan Chung and starring David Huynh, Tzi Ma, Feodor Chin, Ron Yuan and Kenneth Choi. It has been called \\\"the Asian American Boyz n the Hood\\\" by the San Francisco Chronicle. The film won Best Narrative Feature at the 2007 Los Angeles Asian Pacific Film Festival and a  ...[truncated]\",\n    \"Feodor Chin | Feodor Chin (born August 18, 1974) is an American actor, writer, voiceover artist, producer and director. Chin starred as the antagonist \\\"Benny\\\" in Juwan Chung's \\\"Baby\\\" opposite David Huynh, the protagonist. \\\"Baby\\\" won a Special Jury Award for Best Feature Length Film, Narrative at the 2007 Los Angeles Asian Pacific Film Festival, among other awards. He also starred as pioneering actor and artist Keye Luke in Timothy Tau's short film bio-pic \\\"Keye Luke\\\", which premiered at the 2012 ...[truncated]\",\n    \"Juwan Fuad Masum | Juwan Fuad Masum (born 1970) was the Telecommunications Minister in the Iraqi Transitional Government.\",\n    \"Connie Chung | Constance Yu-Hwa Chung Povich (; born August 20, 1946), known as Connie Chung, is an American journalist.\",\n    \"Juwan Simpson | Juwan Simpson (born Juwan Garth on July 8, 1984) is a Canadian football linebacker who is currently a free agent. He recently played for the Calgary Stampeders of the Canadian Football League. He was signed by the Green Bay Packers as an undrafted free agent in 2007. He played college football at Alabama.\",\n    \"Baby I'm-a Want You (song) | \\\"Baby I'm-a Want You\\\" is a popular song by the American pop-rock band Bread. The single was released in October 1971 (see 1971 in music). It became the title track for the album of the same name, released in January 1972.\"\n  ],\n  \"summary_2\": \"No—none of the sources identify an American actor born October 20, 1971 as starring in Juwan Chung's Baby; the cited cast is David Huynh, Tzi Ma, Feodor Chin (b. Aug 18, 1974), Ron Yuan and Kenneth Choi, and Matthew Godfrey (b. Oct 20, 1971) is shown as a Canadian actor and not listed in the film.\",\n  \"answer\": \"No—none of the sources identify an American actor born October 20, 1971 as starring in Juwan Chung's Baby; the cited cast is David Huynh, Tzi Ma, Feodor Chin (b. Aug 18, 1974), Ron Yuan and Kenneth Choi, and Matthew Godfrey (b. Oct 20, 1971) is shown as a Canadian actor and not listed in the film.\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"Baby (2007 film)\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Kenneth Choi\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Kenneth Choi born October 20 1971 Baby cast\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Kenneth Choi\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 names the film (e.g., \\\"Baby\\\" or \\\"Juwan Chung\\\") and also mentions the birthdate token \\\"October 20, 1971\\\" or requests a cast/credits lookup for that date.\",\n    \"preserve_rule\": \"Keep the single-line, compact query output contract unchanged. Continue to base query tokens only on visible anchors from `question` and `summary_1` (film title, director, dates, nationality tokens) and relation keywords like \\\"cast\\\" or \\\"born\\\".\",\n    \"change_rule\": \"When triggered, replace the broad cast search with a focused second-hop query that combines the film title anchor, a cast/castlist keyword, and the explicit birthdate and nationality relation tokens from the visible inputs. Construct the query as a concise keyword phrase (no sentence), e.g.: [FilmTitle] cast born October 20, 1971 American actor. Do not introduce any personal names or other new facts.\",\n    \"drop_or_avoid_rule\": \"Do not add or invent any actor names, long quoted spans, or any literals that do not already appear in the visible inputs. Avoid full sentences, explanatory text, or extra punctuation. Do not replicate retrieved-only literals that are not present in `summary_1` or `question`.\",\n    \"output_contract\": \"Emit exactly one compact retrieval query string (single line) that uses only visible anchors and relation tokens (film title, 'cast', 'born', the date 'October 20, 1971', and 'American actor' if present). No other fields or commentary.\",\n    \"why_local_transition\": \"This small change narrows the next retrieval to find whether any cast member of the named film matches the specific birthdate and nationality constraint mentioned in the visible inputs, producing the missing bridging evidence for the downstream step.\"\n  },\n  \"rationale\": \"The edit is a minimal behavioral tweak: when the summary signals a missing cast member tied to a specific birthdate, steer the single query to explicitly combine the film anchor with 'cast' and the exact date + nationality tokens. It preserves the one-line output format and only uses anchors present in the visible inputs, preventing introduction of new personal names or leaked literals while making the retrieval target more specific and likely to recover the needed supporting passage.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 64,
+    "row_index": 64,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 1
+  }
+}

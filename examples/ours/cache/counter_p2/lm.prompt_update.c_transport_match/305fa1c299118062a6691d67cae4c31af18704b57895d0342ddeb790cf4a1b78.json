@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "305fa1c299118062a6691d67cae4c31af18704b57895d0342ddeb790cf4a1b78",
+  "created_at": "2026-07-15T22:33:44.915393+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 42,
+        "stable_id": "42",
+        "question": "Which district was Miss Universe 2013 held in?",
+        "summary_1": "- evidence:\n  - Miss Universe 2013: passage [5] \"Crocus City Hall, Krasnogorsk, a suburb of Moscow, Russia.\" (passage title: \"Miss Universe 2013\")\n  - Crocus City Hall / Krasnogorsk: mentioned only within passage [5] as above.\n  - No passage explicitly names an administrative district.\n\n- ambiguities_or_missing:\n  - The passages name Krasnogorsk (town/suburb) but do not state the administrative district (e.g., Krasnogorsky District) that contains the venue.\n  - It is unclear whether the question expects the municipal district within Moscow Oblast or a different administrative division.\n\n- missing_facts_or_bridge:\n  - Exact administrative district name for Crocus City Hall / Krasnogorsk (e.g., \"Krasnogorsky District\" or other official district).\n\n- retrieval_direction (prioritized):\n  1. Page \"Crocus City Hall\" — check address/administrative district.\n  2. Page \"Krasnogorsk, Moscow Oblast\" (or \"Krasnogorsk\") — confirm which district it belongs to.\n  3. Page \"Krasnogorsky District\" — verify district name and that Crocus City Hall/Krasnogorsk are within it.\n  4. Search query: \"Crocus City Hall district\" or \"Which district is Krasnogorsk in\" for a quick confirmation.",
+        "hop2_query": "Crocus City Hall Krasnogorsk district",
+        "summary_2": "Krasnogorsky District. Miss Universe 2013 was held at Crocus City Hall in Krasnogorsk, which is administratively located in Krasnogorsky District, Moscow Oblast.",
+        "answer": "Krasnogorsky District",
+        "gold_support_titles": [
+          "Miss Universe 2013",
+          "Crocus City Hall"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 3,
+          "w_stable_id": "3",
+          "agent": "final",
+          "w_question": "What was Robert Tree Cody's adopted father's most prominent PSA role?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "the \"Crying Indian\" in the Keep America Beautiful anti-littering PSA",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Keep America Beautiful",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question asks about a person's \"PSA role\" (or otherwise requests the role/title associated with a public-service advertisement) AND summary_2 names both a portrayed character/label and a named ad campaign or organizing body that the portrayal is tied to.",
+                "preserve_rule": "Keep all existing base-prompt behavior: produce exactly one field named answer; use only summary_1 and summary_2 as evidence; prioritize summary_2 when reconciling; emit a single minimal plain-text string (or single token for binary intent) with no explanation or surrounding formatting.",
+                "change_rule": "When the trigger condition holds, prefer returning only the campaign/organization title (the named ad campaign or sponsor string that identifies the PSA) as the minimal factual answer, rather than a descriptive phrase that combines the character label plus campaign or other qualifiers. Choose the shortest explicit title-like string present in the summaries that identifies the PSA (for example, the campaign or campaign sponsor name mentioned in summary_2).",
+                "drop_or_avoid_rule": "Avoid emitting character-descriptive phrases (e.g., 'the \"Crying Indian\"' or 'the Native American shown shedding a tear') or additional explanatory clauses ('in the ... PSA', 'anti-littering') when a campaign/organization title is explicitly present in the summaries. Do not add extra context, punctuation, or paraphrases beyond that minimal title string.",
+                "output_contract": "Produce the answer field exactly as the base prompt requires: a single plain-text minimal string (no surrounding quotes or JSON) that is the campaign/organization title present in the provided summaries when the trigger applies. Do not add explanation, justification, or any other fields.",
+                "why_local_transition": "The summaries contain both a character label and an explicit campaign title. This small preference change makes the agent choose the named campaign/organization as the concise identifier for a PSA role (which is a more official, title-like minimal answer) instead of returning a longer descriptive phrase that combines character + campaign. It preserves the base output format while steering selection to the shorter, title-form answer supported by summary_2."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Krasnogorsky District",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 1,
+          "w_stable_id": "1",
+          "agent": "final",
+          "w_question": "Where is the official residence of the head of state of Germany?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Bellevue Palace (Schloss Bellevue) in Berlin.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Schloss Bellevue",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "summary_2 contains an entity presented in the form: EnglishName (AlternateName) and summary_1 does not contradict that entity (both summaries refer to the same place/entity).",
+                "preserve_rule": "Keep all existing base rules: treat summary_2 as later/prioritized evidence, use summary_1 only as earlier context, decide intent semantically, and emit exactly one plain-text minimal answer string in the answer field with no explanation or wrappers.",
+                "change_rule": "When the trigger condition holds, prefer the parenthetical alternate/native name as the canonical minimal answer: extract the text inside the parentheses from summary_2 and emit that extracted text (without surrounding parentheses or added words). Do not append location qualifiers (e.g., 'in Berlin') or descriptive prefixes. If the parentheses are empty or contain only punctuation, fall back to emitting the shortest unambiguous name token sequence from summary_2 that both summaries support.",
+                "drop_or_avoid_rule": "Avoid emitting both the English and parenthetical names together, avoid adding locational phrases ('in Berlin') or preambles ('The official residence is'), and avoid adding punctuation or formatting beyond the exact extracted name string.",
+                "output_contract": "The answer field must contain only the minimal plain-text canonical name extracted per change_rule; no explanations, no extra tokens, no JSON, no quotes, and nothing else.",
+                "why_local_transition": "This edge enforces choosing the shorter canonical/native label already present in the later summary (the parenthetical form) so the final answer is the minimal entity string supported by the visible evidence, removing redundant English descriptor and location phrase."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Krasnogorsky District",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 147,
+          "w_stable_id": "147",
+          "agent": "final",
+          "w_question": "What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Tactical Studies Rules (TSR)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Tactical Studies Rules",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the prioritized summary_2 contains an organization name that is shown with a parenthetical abbreviation (e.g. '(TSR)') or when both summaries present the same publisher name with and without such parentheses.",
+                "preserve_rule": "Keep the base prompt's minimal-answer behavior: use only summary_1 and summary_2 as evidence, prioritize summary_2, and emit a single plain-text minimal answer string with no extra explanation or surrounding formatting.",
+                "change_rule": "If a parenthetical abbreviation (for example '(TSR)') or a trailing legal suffix like ', Inc.' appears in the summaries AND the full organization name without that parenthetical or suffix also appears in the visible summaries (especially in summary_2), strip the parenthetical abbreviation and common legal suffixes from the emitted answer. Emit the canonical full name (unabbreviated, without parentheses or ', Inc.') as the minimal answer string.",
+                "drop_or_avoid_rule": "Do not emit parenthetical acronyms (e.g. '(TSR)') or trailing legal suffixes in the final answer when the unabbreviated name is present in the summaries. Avoid adding parentheses, abbreviations, explanatory text, or extra punctuation. If the full, unabbreviated name does not appear anywhere in the visible summaries, do not invent or remove components—follow the base prompt's fallback behavior.",
+                "output_contract": "Produce exactly the minimal plain-text answer string (the value for the 'answer' field) and nothing else. Respect the base prompt's binary vs non-binary decision rules and the requirement to use only summary_1 and summary_2 as evidence, with priority to summary_2.",
+                "why_local_transition": "The only needed change is formatting: remove a redundant parenthetical abbreviation so the minimal answer is the canonical organization name that the summaries already support (with priority to summary_2). This is a small, local prompt edit that preserves existing evidence use and the required minimal-answer contract."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Krasnogorsky District",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 84,
+          "w_stable_id": "84",
+          "agent": "final",
+          "w_question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Mākaha Sons of Niʻihau",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Mākaha Sons",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the visible summaries contain a group name written in the longer 'X of Y' form (for example, a phrase like \"Mākaha Sons of Niʻihau\") and the leading substring X (the shorter form) also appears verbatim within the summaries.",
+                "preserve_rule": "Keep the base prompt's behavior: produce the minimal final answer string supported by the visible summaries, prioritize summary_2 over summary_1, and emit only the plain-text answer with no explanation or extra tokens.",
+                "change_rule": "If a group name appears in the summaries as 'X of Y' and the contiguous prefix X appears exactly as part of that string in the summaries, prefer emitting X (the shorter canonical name) as the minimal answer instead of the full 'X of Y' form. Only perform this truncation when X is literally present in the visible summaries and doing so does not introduce ambiguity with other content.",
+                "drop_or_avoid_rule": "Do not emit the longer disambiguating suffix 'of <Place>' when the shorter leading name X is present and unambiguous. Avoid inventing alternate names, adding explanation, or removing other essential parts of names (do not trim internal words that are not simple 'of <Place>' qualifiers). If ambiguity remains, fall back to the base prompt's fallback behavior.",
+                "output_contract": "Unchanged: the final answer must be the single minimal plain-text string supported by the summaries (no explanation, no surrounding markup). For non-binary questions, emit the concise canonical name after trimming an unneeded 'of <Place>' qualifier only when supported by the summaries.",
+                "why_local_transition": "This is a minimal, evidence-preserving edit that removes an unnecessary locative qualifier from a group name already present in the summaries (e.g., trimming 'of Niʻihau' from a visible 'X of Y' string). It nudges the agent to produce the concise canonical name that the summaries support without adding or inventing information."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Krasnogorsky District",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 138,
+          "w_stable_id": "138",
+          "agent": "final",
+          "w_question": "Peston on Sunday is hosted by the reporter who got the scoop on which financial crisis in the late-2000s?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Northern Rock crisis",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Northern Rock",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question explicitly requests an instance of a category (e.g. contains words like 'which ... crisis', 'what financial crisis', or similar) AND the prioritized summary_2 expresses the answer as an entity phrase that appends that same category word (for example: '... crisis' appended to an entity), then fire this delta.",
+                "preserve_rule": "Keep all existing base-prompt behavior: treat summary_2 as the later, authoritative evidence and summary_1 as earlier context; decide binary vs non-binary semantically; emit exactly one field named 'answer' whose value is the minimal plain-text final answer supported by the summaries and nothing else.",
+                "change_rule": "When the trigger fires, remove the redundant category token from the end of the supported phrase when producing the minimal answer. Concretely, if summary_2 gives a phrase of the form '<Entity> <Category>' and the question already names that Category, emit only '<Entity>' as the answer string, provided that '<Entity>' (the head noun) appears verbatim in the visible summaries or is the clear head of the phrase. Preserve original capitalization and spacing from the summaries for the remaining tokens.",
+                "drop_or_avoid_rule": "Avoid including the redundant category word (e.g., 'crisis') in the final answer when the question already specifies that category. Do not drop the category if removing it would make the answer unsupported or ambiguous given the summaries (for example, if the summaries never display the bare entity or if multiple distinct entities could match the bare form). Do not invent or infer alternate names or abbreviations — only drop the category when the remaining token(s) are present or clearly supported in the visible summaries.",
+                "output_contract": "Produce exactly one field 'answer' whose value is the minimal final answer string supported by the visible summaries. If the change_rule applies, that string will be the entity head without the redundant category token. The answer must be plain text only (no explanation, no JSON wrappers, no extra tokens).",
+                "why_local_transition": "This single, focused rule fixes an over-specific phrasing that repeats the question's category by stripping the redundant category word when it is unnecessary. It preserves the base-prompt's evidence priority and minimal-answer requirement while producing the shorter, still-supported entity string."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Krasnogorsky District",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 42,\n  \"stable_id\": \"42\",\n  \"question\": \"Which district was Miss Universe 2013 held in?\",\n  \"summary_1\": \"- evidence:\\n  - Miss Universe 2013: passage [5] \\\"Crocus City Hall, Krasnogorsk, a suburb of Moscow, Russia.\\\" (passage title: \\\"Miss Universe 2013\\\")\\n  - Crocus City Hall / Krasnogorsk: mentioned only within passage [5] as above.\\n  - No passage explicitly names an administrative district.\\n\\n- ambiguities_or_missing:\\n  - The passages name Krasnogorsk (town/suburb) but do not state the administrative district (e.g., Krasnogorsky District) that contains the venue.\\n  - It is unclear whether the question expects the municipal district within Moscow Oblast or a different administrative division.\\n\\n- missing_facts_or_bridge:\\n  - Exact administrative district name for Crocus City Hall / Krasnogorsk (e.g., \\\"Krasnogorsky District\\\" or other official district).\\n\\n- retrieval_direction (prioritized):\\n  1. Page \\\"Crocus City Hall\\\" — check address/administrative district.\\n  2. Page \\\"Krasnogorsk, Moscow Oblast\\\" (or \\\"Krasnogorsk\\\") — confirm which district it belongs to.\\n  3. Page \\\"Krasnogorsky District\\\" — verify district name and that Crocus City Hall/Krasnogorsk are within it.\\n  4. Search query: \\\"Crocus City Hall district\\\" or \\\"Which district is Krasnogorsk in\\\" for a quick confirmation.\",\n  \"hop2_query\": \"Crocus City Hall Krasnogorsk district\",\n  \"summary_2\": \"Krasnogorsky District. Miss Universe 2013 was held at Crocus City Hall in Krasnogorsk, which is administratively located in Krasnogorsky District, Moscow Oblast.\",\n  \"answer\": \"Krasnogorsky District\",\n  \"gold_support_titles\": [\n    \"Miss Universe 2013\",\n    \"Crocus City Hall\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 3,\n    \"w_stable_id\": \"3\",\n    \"agent\": \"final\",\n    \"w_question\": \"What was Robert Tree Cody's adopted father's most prominent PSA role?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"the \\\"Crying Indian\\\" in the Keep America Beautiful anti-littering PSA\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Keep America Beautiful\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question asks about a person's \\\"PSA role\\\" (or otherwise requests the role/title associated with a public-service advertisement) AND summary_2 names both a portrayed character/label and a named ad campaign or organizing body that the portrayal is tied to.\",\n          \"preserve_rule\": \"Keep all existing base-prompt behavior: produce exactly one field named answer; use only summary_1 and summary_2 as evidence; prioritize summary_2 when reconciling; emit a single minimal plain-text string (or single token for binary intent) with no explanation or surrounding formatting.\",\n          \"change_rule\": \"When the trigger condition holds, prefer returning only the campaign/organization title (the named ad campaign or sponsor string that identifies the PSA) as the minimal factual answer, rather than a descriptive phrase that combines the character label plus campaign or other qualifiers. Choose the shortest explicit title-like string present in the summaries that identifies the PSA (for example, the campaign or campaign sponsor name mentioned in summary_2).\",\n          \"drop_or_avoid_rule\": \"Avoid emitting character-descriptive phrases (e.g., 'the \\\"Crying Indian\\\"' or 'the Native American shown shedding a tear') or additional explanatory clauses ('in the ... PSA', 'anti-littering') when a campaign/organization title is explicitly present in the summaries. Do not add extra context, punctuation, or paraphrases beyond that minimal title string.\",\n          \"output_contract\": \"Produce the answer field exactly as the base prompt requires: a single plain-text minimal string (no surrounding quotes or JSON) that is the campaign/organization title present in the provided summaries when the trigger applies. Do not add explanation, justification, or any other fields.\",\n          \"why_local_transition\": \"The summaries contain both a character label and an explicit campaign title. This small preference change makes the agent choose the named campaign/organization as the concise identifier for a PSA role (which is a more official, title-like minimal answer) instead of returning a longer descriptive phrase that combines character + campaign. It preserves the base output format while steering selection to the shorter, title-form answer supported by summary_2.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Krasnogorsky District\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 1,\n    \"w_stable_id\": \"1\",\n    \"agent\": \"final\",\n    \"w_question\": \"Where is the official residence of the head of state of Germany?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Bellevue Palace (Schloss Bellevue) in Berlin.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Schloss Bellevue\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"summary_2 contains an entity presented in the form: EnglishName (AlternateName) and summary_1 does not contradict that entity (both summaries refer to the same place/entity).\",\n          \"preserve_rule\": \"Keep all existing base rules: treat summary_2 as later/prioritized evidence, use summary_1 only as earlier context, decide intent semantically, and emit exactly one plain-text minimal answer string in the answer field with no explanation or wrappers.\",\n          \"change_rule\": \"When the trigger condition holds, prefer the parenthetical alternate/native name as the canonical minimal answer: extract the text inside the parentheses from summary_2 and emit that extracted text (without surrounding parentheses or added words). Do not append location qualifiers (e.g., 'in Berlin') or descriptive prefixes. If the parentheses are empty or contain only punctuation, fall back to emitting the shortest unambiguous name token sequence from summary_2 that both summaries support.\",\n          \"drop_or_avoid_rule\": \"Avoid emitting both the English and parenthetical names together, avoid adding locational phrases ('in Berlin') or preambles ('The official residence is'), and avoid adding punctuation or formatting beyond the exact extracted name string.\",\n          \"output_contract\": \"The answer field must contain only the minimal plain-text canonical name extracted per change_rule; no explanations, no extra tokens, no JSON, no quotes, and nothing else.\",\n          \"why_local_transition\": \"This edge enforces choosing the shorter canonical/native label already present in the later summary (the parenthetical form) so the final answer is the minimal entity string supported by the visible evidence, removing redundant English descriptor and location phrase.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Krasnogorsky District\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 147,\n    \"w_stable_id\": \"147\",\n    \"agent\": \"final\",\n    \"w_question\": \"What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Tactical Studies Rules (TSR)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Tactical Studies Rules\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the prioritized summary_2 contains an organization name that is shown with a parenthetical abbreviation (e.g. '(TSR)') or when both summaries present the same publisher name with and without such parentheses.\",\n          \"preserve_rule\": \"Keep the base prompt's minimal-answer behavior: use only summary_1 and summary_2 as evidence, prioritize summary_2, and emit a single plain-text minimal answer string with no extra explanation or surrounding formatting.\",\n          \"change_rule\": \"If a parenthetical abbreviation (for example '(TSR)') or a trailing legal suffix like ', Inc.' appears in the summaries AND the full organization name without that parenthetical or suffix also appears in the visible summaries (especially in summary_2), strip the parenthetical abbreviation and common legal suffixes from the emitted answer. Emit the canonical full name (unabbreviated, without parentheses or ', Inc.') as the minimal answer string.\",\n          \"drop_or_avoid_rule\": \"Do not emit parenthetical acronyms (e.g. '(TSR)') or trailing legal suffixes in the final answer when the unabbreviated name is present in the summaries. Avoid adding parentheses, abbreviations, explanatory text, or extra punctuation. If the full, unabbreviated name does not appear anywhere in the visible summaries, do not invent or remove components—follow the base prompt's fallback behavior.\",\n          \"output_contract\": \"Produce exactly the minimal plain-text answer string (the value for the 'answer' field) and nothing else. Respect the base prompt's binary vs non-binary decision rules and the requirement to use only summary_1 and summary_2 as evidence, with priority to summary_2.\",\n          \"why_local_transition\": \"The only needed change is formatting: remove a redundant parenthetical abbreviation so the minimal answer is the canonical organization name that the summaries already support (with priority to summary_2). This is a small, local prompt edit that preserves existing evidence use and the required minimal-answer contract.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Krasnogorsky District\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 84,\n    \"w_stable_id\": \"84\",\n    \"agent\": \"final\",\n    \"w_question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Mākaha Sons of Niʻihau\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Mākaha Sons\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the visible summaries contain a group name written in the longer 'X of Y' form (for example, a phrase like \\\"Mākaha Sons of Niʻihau\\\") and the leading substring X (the shorter form) also appears verbatim within the summaries.\",\n          \"preserve_rule\": \"Keep the base prompt's behavior: produce the minimal final answer string supported by the visible summaries, prioritize summary_2 over summary_1, and emit only the plain-text answer with no explanation or extra tokens.\",\n          \"change_rule\": \"If a group name appears in the summaries as 'X of Y' and the contiguous prefix X appears exactly as part of that string in the summaries, prefer emitting X (the shorter canonical name) as the minimal answer instead of the full 'X of Y' form. Only perform this truncation when X is literally present in the visible summaries and doing so does not introduce ambiguity with other content.\",\n          \"drop_or_avoid_rule\": \"Do not emit the longer disambiguating suffix 'of <Place>' when the shorter leading name X is present and unambiguous. Avoid inventing alternate names, adding explanation, or removing other essential parts of names (do not trim internal words that are not simple 'of <Place>' qualifiers). If ambiguity remains, fall back to the base prompt's fallback behavior.\",\n          \"output_contract\": \"Unchanged: the final answer must be the single minimal plain-text string supported by the summaries (no explanation, no surrounding markup). For non-binary questions, emit the concise canonical name after trimming an unneeded 'of <Place>' qualifier only when supported by the summaries.\",\n          \"why_local_transition\": \"This is a minimal, evidence-preserving edit that removes an unnecessary locative qualifier from a group name already present in the summaries (e.g., trimming 'of Niʻihau' from a visible 'X of Y' string). It nudges the agent to produce the concise canonical name that the summaries support without adding or inventing information.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Krasnogorsky District\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 138,\n    \"w_stable_id\": \"138\",\n    \"agent\": \"final\",\n    \"w_question\": \"Peston on Sunday is hosted by the reporter who got the scoop on which financial crisis in the late-2000s?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Northern Rock crisis\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Northern Rock\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question explicitly requests an instance of a category (e.g. contains words like 'which ... crisis', 'what financial crisis', or similar) AND the prioritized summary_2 expresses the answer as an entity phrase that appends that same category word (for example: '... crisis' appended to an entity), then fire this delta.\",\n          \"preserve_rule\": \"Keep all existing base-prompt behavior: treat summary_2 as the later, authoritative evidence and summary_1 as earlier context; decide binary vs non-binary semantically; emit exactly one field named 'answer' whose value is the minimal plain-text final answer supported by the summaries and nothing else.\",\n          \"change_rule\": \"When the trigger fires, remove the redundant category token from the end of the supported phrase when producing the minimal answer. Concretely, if summary_2 gives a phrase of the form '<Entity> <Category>' and the question already names that Category, emit only '<Entity>' as the answer string, provided that '<Entity>' (the head noun) appears verbatim in the visible summaries or is the clear head of the phrase. Preserve original capitalization and spacing from the summaries for the remaining tokens.\",\n          \"drop_or_avoid_rule\": \"Avoid including the redundant category word (e.g., 'crisis') in the final answer when the question already specifies that category. Do not drop the category if removing it would make the answer unsupported or ambiguous given the summaries (for example, if the summaries never display the bare entity or if multiple distinct entities could match the bare form). Do not invent or infer alternate names or abbreviations — only drop the category when the remaining token(s) are present or clearly supported in the visible summaries.\",\n          \"output_contract\": \"Produce exactly one field 'answer' whose value is the minimal final answer string supported by the visible summaries. If the change_rule applies, that string will be the entity head without the redundant category token. The answer must be plain text only (no explanation, no JSON wrappers, no extra tokens).\",\n          \"why_local_transition\": \"This single, focused rule fixes an over-specific phrasing that repeats the question's category by stripping the redundant category word when it is unnecessary. It preserves the base-prompt's evidence priority and minimal-answer requirement while producing the shorter, still-supported entity string.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Krasnogorsky District\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 138,\n  \"dominant_gap_type\": \"missing_qualifier\",\n  \"transported_damage_hypothesis\": \"When the question names the category 'district' and the summaries show 'X District', the agent will drop the trailing category token and answer only 'X' (e.g., 'Krasnogorsky').\",\n  \"expected_damaged_behavior\": \"The agent returns 'Krasnogorsky' (omitting the word 'District') instead of the full 'Krasnogorsky District'.\",\n  \"rationale\": \"W sample 138's failure pattern explicitly targets cases where the question already specifies a category (e.g., 'crisis') and summary_2 presents the answer as '<Entity> <Category>'; it removes the redundant category token. That trigger and edit transfer directly to this target: the question asks 'Which district...' and summary_2 contains 'Krasnogorsky District', so the same local rule would plausibly strip 'District', producing a locally adjacent but under-specified answer. This transports only the failure pattern (dropping the category token) without importing any W-side entities, preserves locality, doesn't require an answer flip, and matches the same evidence-and-question anchor structure.\",\n  \"confidence\": 0.85\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 42,
+    "c_stable_id": "42",
+    "candidate_w_sample_indices": [
+      1,
+      3,
+      84,
+      138,
+      147
+    ],
+    "match_fingerprint": "b00e66ce2757658f23f60fb802a2356ddf26074ea012c8bce47dc2822aca4679"
+  }
+}

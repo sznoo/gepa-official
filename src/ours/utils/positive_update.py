@@ -26,7 +26,7 @@ from ours.utils.materialize import (
 )
 
 
-SCRIPT_VERSION = "2026-07-14-v2-positive-update-utils"
+SCRIPT_VERSION = "2026-07-15-v3-decoupled-c-budget"
 
 MAX_VISIBLE_INPUT_CHARS = 12000
 MAX_CANDIDATE_STATE_CHARS = 7000
@@ -232,12 +232,6 @@ def _validate_selected_inputs(
         raise ValueError("selected_c_rows cannot be empty.")
     if not selected_w_materials:
         raise ValueError("selected_w_materials cannot be empty.")
-    if len(selected_c_rows) != len(selected_w_materials):
-        raise ValueError(
-            "Mixed positive material requires equal W and C counts: "
-            f"W={len(selected_w_materials)}, C={len(selected_c_rows)}."
-        )
-
     c_positions = [int(position) for position, _ in selected_c_rows]
     if len(set(c_positions)) != len(c_positions):
         raise ValueError("selected_c_rows contains duplicate eval positions.")

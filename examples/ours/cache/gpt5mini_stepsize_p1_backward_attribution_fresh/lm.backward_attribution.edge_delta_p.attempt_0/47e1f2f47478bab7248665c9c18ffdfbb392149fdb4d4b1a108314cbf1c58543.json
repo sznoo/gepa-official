@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "47e1f2f47478bab7248665c9c18ffdfbb392149fdb4d4b1a108314cbf1c58543",
+  "created_at": "2026-07-16T04:58:16.666270+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?",
+        "summary_1": "Passage 1: \"Billy R. Hamilton (born September 9, 1990) ... He also holds the Cincinnati Reds record for most stolen bases by a rookie in a season.\" Evidence shows the record-holder is Billy Hamilton (born September 9, 1990) but does not state his birthplace or native city. Next hop: retrieve Billy Hamilton's place of birth / the city he is a native of (search \"Billy Hamilton birthplace\" or the \"Billy Hamilton (baseball, born 1990)\" article) to answer which city he is a native of.",
+        "current_output": {
+          "query": "Billy Hamilton born 1990 birthplace"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Billy Hamilton born 1990 birthplace"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Billy Hamilton (baseball, born 1990)",
+          "Billy &quot;Harp&quot; Hamilton",
+          "Billy Hamilton (footballer)",
+          "Billy Thompson (soccer, born 1990)",
+          "Billie Livingston",
+          "Billy Ray Hamilton",
+          "Justin Hamilton (basketball, born 1990)"
+        ],
+        "retrieved_doc_snippets": [
+          "Billy Hamilton (baseball, born 1990) | Billy R. Hamilton (born September 9, 1990) is an American professional baseball center fielder for the Cincinnati Reds of Major League Baseball. Hamilton holds the Minor League Baseball single-season stolen base record with 155 steals—10 higher than the previous Minor League record set by Vince Coleman and 25 more than Rickey Henderson's record set on the Major League level. He also holds the Cincinnati Reds record for most stolen bases by a rookie in a sea ...[truncated]",
+          "Billy &quot;Harp&quot; Hamilton | Billy \"Harp\" Hamilton (born March 25, 1952) is an American blues/soul-R&B singer, songwriter, harmonica-guitar player.",
+          "Billy Hamilton (footballer) | William (\"Billy\") Robert Hamilton (born 9 May 1957 in Gilnahirk, County Down) is a former Northern Ireland international footballer who played as a forward.",
+          "Billy Thompson (soccer, born 1990) | William \"Billy\" Aaron Thompson (born October 22, 1990) is an American soccer player who plays for Puerto Rico FC in the North American Soccer League.",
+          "Billie Livingston | Billie Livingston is a Canadian novelist, short story writer, essayist, and poet. Born in Hamilton, Ontario, Livingston grew up in Toronto and Vancouver, British Columbia. She lives in Vancouver.",
+          "Billy Ray Hamilton | Billy Ray Hamilton (a.k.a. \"Country\") (1950–October 22, 2007) was an American convicted murderer who conspired with Clarence Ray Allen to murder eight witnesses to a crime committed by Allen in 1974. Hamilton met Allen in Folsom Prison in 1979. Allen befriended Hamilton and allegedly offered to pay him $25,000 to carry out the murders. At Folsom Prison, Allen used to refer to Hamilton as his \"good dog\", though at the time of Allen's trial, he claimed to only have met Hamilto ...[truncated]",
+          "Justin Hamilton (basketball, born 1990) | Justin Anthony Hamilton (born April 1, 1990) is an American professional basketball player for the Beijing Ducks of the Chinese Basketball Association. He plays the center position."
+        ],
+        "summary_2": "The record-holder is Billy R. Hamilton (born September 9, 1990); the supplied passages confirm he \"holds the Cincinnati Reds record for most stolen bases by a rookie in a season\" but do not state his place of birth or native city.",
+        "answer": "not stated",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Taylorsville, Mississippi"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Billy Hamilton birthplace Taylorsville Mississippi"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The Cincinnati Reds record holder for most stolen bases by a rookie in a season is a native of which city ?\",\n  \"summary_1\": \"Passage 1: \\\"Billy R. Hamilton (born September 9, 1990) ... He also holds the Cincinnati Reds record for most stolen bases by a rookie in a season.\\\" Evidence shows the record-holder is Billy Hamilton (born September 9, 1990) but does not state his birthplace or native city. Next hop: retrieve Billy Hamilton's place of birth / the city he is a native of (search \\\"Billy Hamilton birthplace\\\" or the \\\"Billy Hamilton (baseball, born 1990)\\\" article) to answer which city he is a native of.\",\n  \"current_output\": {\n    \"query\": \"Billy Hamilton born 1990 birthplace\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Billy Hamilton born 1990 birthplace\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Billy Hamilton (baseball, born 1990)\",\n    \"Billy &quot;Harp&quot; Hamilton\",\n    \"Billy Hamilton (footballer)\",\n    \"Billy Thompson (soccer, born 1990)\",\n    \"Billie Livingston\",\n    \"Billy Ray Hamilton\",\n    \"Justin Hamilton (basketball, born 1990)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Billy Hamilton (baseball, born 1990) | Billy R. Hamilton (born September 9, 1990) is an American professional baseball center fielder for the Cincinnati Reds of Major League Baseball. Hamilton holds the Minor League Baseball single-season stolen base record with 155 steals—10 higher than the previous Minor League record set by Vince Coleman and 25 more than Rickey Henderson's record set on the Major League level. He also holds the Cincinnati Reds record for most stolen bases by a rookie in a sea ...[truncated]\",\n    \"Billy &quot;Harp&quot; Hamilton | Billy \\\"Harp\\\" Hamilton (born March 25, 1952) is an American blues/soul-R&B singer, songwriter, harmonica-guitar player.\",\n    \"Billy Hamilton (footballer) | William (\\\"Billy\\\") Robert Hamilton (born 9 May 1957 in Gilnahirk, County Down) is a former Northern Ireland international footballer who played as a forward.\",\n    \"Billy Thompson (soccer, born 1990) | William \\\"Billy\\\" Aaron Thompson (born October 22, 1990) is an American soccer player who plays for Puerto Rico FC in the North American Soccer League.\",\n    \"Billie Livingston | Billie Livingston is a Canadian novelist, short story writer, essayist, and poet. Born in Hamilton, Ontario, Livingston grew up in Toronto and Vancouver, British Columbia. She lives in Vancouver.\",\n    \"Billy Ray Hamilton | Billy Ray Hamilton (a.k.a. \\\"Country\\\") (1950–October 22, 2007) was an American convicted murderer who conspired with Clarence Ray Allen to murder eight witnesses to a crime committed by Allen in 1974. Hamilton met Allen in Folsom Prison in 1979. Allen befriended Hamilton and allegedly offered to pay him $25,000 to carry out the murders. At Folsom Prison, Allen used to refer to Hamilton as his \\\"good dog\\\", though at the time of Allen's trial, he claimed to only have met Hamilto ...[truncated]\",\n    \"Justin Hamilton (basketball, born 1990) | Justin Anthony Hamilton (born April 1, 1990) is an American professional basketball player for the Beijing Ducks of the Chinese Basketball Association. He plays the center position.\"\n  ],\n  \"summary_2\": \"The record-holder is Billy R. Hamilton (born September 9, 1990); the supplied passages confirm he \\\"holds the Cincinnati Reds record for most stolen bases by a rookie in a season\\\" but do not state his place of birth or native city.\",\n  \"answer\": \"not stated\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Taylorsville, Mississippi\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Billy Hamilton birthplace Taylorsville Mississippi\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 names a specific person (a candidate record-holder) but does not state their place of birth, and the current_output is a short birthplace-style query (contains words like \\\"birthplace\\\" or \\\"born\\\"),\",\n    \"preserve_rule\": \"Keep the single-line, compact query format and retain visible anchors from summary_1 (the person's full name and birth year if present). Do not add explanatory text or extra fields.\",\n    \"change_rule\": \"Modify the query to include a concise disambiguator drawn from the question (e.g., team/organization or role) plus the birthplace keyword. Form the query as: <FullName> birthplace <disambiguator> <birthyear_if_present>. Use only tokens already visible in inputs (name, birth year, team/role).\",\n    \"drop_or_avoid_rule\": \"Do not introduce new sample-specific place names or long quoted spans that do not appear in the visible inputs. Avoid natural-language phrasing, punctuation beyond simple separators, and any instructions or commentary in the query.\",\n    \"output_contract\": \"Produce exactly one compact retrieval query string (single line) that uses only visible anchors and the keyword 'birthplace' to target the missing place-of-birth evidence.\",\n    \"why_local_transition\": \"Adding a concrete disambiguator from the question (such as the team) to an otherwise generic birthplace query reduces ambiguity among same-named individuals and increases the chance of retrieving a passage that states the person's native city.\"\n  },\n  \"rationale\": \"The baseline query already asks for the person's birthplace but can retrieve ambiguous hits for multiple people named Billy Hamilton. The minimal, local behavioral change is to append a compact, visible-anchor disambiguator (team/role) and keep the 'birthplace' keyword while preserving the agent's single-line output contract. This change uses only anchors present in the visible inputs (person name, birth year, Cincinnati Reds) and avoids adding any sample-specific city names that do not appear in the visible context, satisfying the anti-cheating constraints while improving retrieval focus.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 139,
+    "row_index": 139,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

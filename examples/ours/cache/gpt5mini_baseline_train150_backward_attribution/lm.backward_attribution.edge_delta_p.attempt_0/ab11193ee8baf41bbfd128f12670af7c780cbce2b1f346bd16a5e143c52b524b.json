@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ab11193ee8baf41bbfd128f12670af7c780cbce2b1f346bd16a5e143c52b524b",
+  "created_at": "2026-07-14T13:43:25.754971+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?",
+        "summary_1": "Tactical Studies Rules, Inc. (TSR)",
+        "summary_2": "Tactical Studies Rules, Inc. (TSR)",
+        "current_output": "Tactical Studies Rules, Inc. (TSR)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Tactical Studies Rules, Inc. (TSR)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Tactical Studies Rules",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?\",\n  \"summary_1\": \"Tactical Studies Rules, Inc. (TSR)\",\n  \"summary_2\": \"Tactical Studies Rules, Inc. (TSR)\",\n  \"current_output\": \"Tactical Studies Rules, Inc. (TSR)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Tactical Studies Rules, Inc. (TSR)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Tactical Studies Rules\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When assembling the final [[ ## answer ## ]] and the visible summaries or current_output contain a publisher name that includes a legal/corporate suffix (e.g. 'Inc.', 'Ltd.', 'LLC', 'Co.') or a parenthetical acronym.\",\n    \"preserve_rule\": \"Preserve the core publisher words and their capitalization exactly as they appear in the visible summaries/current_output (the factual identity of the publisher must not be altered or paraphrased beyond trimming suffixes).\",\n    \"change_rule\": \"Before writing into [[ ## answer ## ]], remove trailing corporate/legal suffixes (', Inc.', ', Ltd.', ', LLC', ', Co.', etc.), any preceding comma tied to that suffix, and strip parenthetical acronyms (e.g. '(TSR)'). Output only the remaining core name words.\",\n    \"drop_or_avoid_rule\": \"Do not include corporate suffixes, commas before suffixes, parenthetical acronyms, explanatory phrases, or extra punctuation in the final answer. Avoid adding qualifiers, expansions, or additional context—the answer must be the minimal publisher name string.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal publisher name string: the core company name words and capitalization as present in the summaries, with all legal suffixes and parenthetical acronyms removed, and no other text.\",\n    \"why_local_transition\": \"The current output contains a legal suffix and an acronym (e.g., ', Inc.' and '(TSR)'); the desired minimal final answer is the core company name only. This small targeted rule trims those affixes while preserving the identified entity.\"\n  },\n  \"rationale\": \"The agent already identifies the correct publisher but includes legal suffixes and an acronym that the final minimal-answer contract requires removing. This delta makes a narrowly scoped behavioral change — strip common corporate suffixes and parenthetical acronyms when producing the final answer — without changing the recognized entity or adding new behaviors. It preserves existing correct evidence and enforces the output format required by the final-answer contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 147,
+    "row_index": 147,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

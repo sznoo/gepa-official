@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "19c20c9d56f9bb2d5932d1a7060f117a6ac0c60d3265746369f9ed0abdf94e3f",
+  "created_at": "2026-07-14T19:01:52.804612+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+        "summary_1": "Makaha Sons of Niʻihau",
+        "summary_2": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+        "current_output": "The Mākaha Sons of Niʻihau (also known as The Makaha Sons)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "The Mākaha Sons of Niʻihau (also known as The Makaha Sons).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Mākaha Sons",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n  \"summary_1\": \"Makaha Sons of Niʻihau\",\n  \"summary_2\": \"He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\",\n  \"current_output\": \"The Mākaha Sons of Niʻihau (also known as The Makaha Sons).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"The Mākaha Sons of Niʻihau (also known as The Makaha Sons).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Mākaha Sons\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If either summary_1 or summary_2 contains multiple verbal forms of the same group name (for example a long form and a shorter alias, or the long form plus a parenthetical alias), or if the current output contains a parenthetical alias or a leading article like \\\"The\\\".\",\n    \"preserve_rule\": \"Keep using only information present in summary_1 and summary_2 as evidence. Preserve the base prompt's requirement to produce the `answer` field and to place the final minimal answer string in the [[ ## answer ## ]] block. Preserve any correct extraction of the group's name from the summaries.\",\n    \"change_rule\": \"When multiple name variants appear in the visible summaries, select the shortest verbatim group-name string that appears in either summary (after removing any leading article 'The'). Produce exactly that short name string as the answer. Strip parenthetical aliases, explanatory parentheses, and trailing descriptive clauses; do not add clarifying words or punctuation.\",\n    \"drop_or_avoid_rule\": \"Avoid including leading articles (e.g., 'The'), parenthetical aliases or explanations, extra punctuation, and descriptive phrases beyond the core group name. Do not invent abbreviations or reorder words not present verbatim in the summaries.\",\n    \"output_contract\": \"Return only the minimal canonical group name string (the shortest verbatim form present in the summaries, with any leading 'The' removed) as the `answer`. Place that single string inside the [[ ## answer ## ]] block and nothing else.\",\n    \"why_local_transition\": \"The current output includes a parenthetical alias and a leading article, making the answer longer than necessary. This rule nudges the agent to prefer the concise alias already present in the summaries so the final answer is the minimal, well-supported group name.\"\n  },\n  \"rationale\": \"The agent already extracts the correct group but outputs extra parenthetical and article text. The smallest coherent edit is a selection rule: prefer the shortest verbatim name from the visible summaries and remove leading 'The' and parenthetical material. This preserves reliance on the provided summaries, keeps other behaviors unchanged, and enforces the final-answer contract to produce a minimal, evidence-supported string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 84,
+    "row_index": 84,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

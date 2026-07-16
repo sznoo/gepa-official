@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "fb743d58727a4606c55a9b01080e1398133f1e42a233a2236848412b903754ec",
+  "created_at": "2026-07-16T04:50:17.410973+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "What was Robert Tree Cody's adopted father's most prominent PSA role?",
+      "current_output": "Passage [1] states: \"Robert is an adopted son of Hollywood actor Iron Eyes Cody\" (Robert Tree Cody was born April 20, 1951). Bridge entity: Iron Eyes Cody. Missing fact: which public-service announcement (PSA)/advertising role Iron Eyes Cody was most prominently known for. Retrieval direction/evidence anchors: look up Iron Eyes Cody's biography or filmography and sources about PSAs/advertising—search for \"Iron Eyes Cody PSA\", \"Keep America Beautiful\", or \"Crying Indian\" to locate the specific PSA role.",
+      "upstream_context": {
+        "question": "What was Robert Tree Cody's adopted father's most prominent PSA role?",
+        "hop1_query": "What was Robert Tree Cody's adopted father's most prominent PSA role?",
+        "hop1_titles": [
+          "Robert Tree Cody",
+          "Buffalo Bill Boyhood Home",
+          "Cody Estes",
+          "LGBT adoption and parenting in Australia",
+          "The Father Clements Story",
+          "Murder of Robert Schwartz",
+          "Reed A. Albee"
+        ],
+        "hop1_docs": [
+          "Robert Tree Cody | Robert Tree Cody (born April 20, 1951) is a Native American musician, dancer, and educator.  He graduated from John Marshall High School in 1969.  Robert is an adopted son of Hollywood actor Iron Eyes Cody.",
+          "Buffalo Bill Boyhood Home | The Buffalo Bill Boyhood Home was built by Isaac Cody, the father of Buffalo Bill Cody in 1841 at LeClaire, Iowa.  The house was purchased as a tourist attraction by the Chicago, Burlington and Quincy Railroad and was moved to Cody, Wyoming, Buffalo Bill's adopted hometown, in 1933.",
+          "Cody Estes | Cody Estes (born March 13, 1994) is an American actor.  His most recent role was as Charlie Cohen in \"Crossing Jordan\", but his most frequent role has been younger versions of John \"J.D.\" Dorian on the medical comedy \"Scrubs\".",
+          "LGBT adoption and parenting in Australia | Family law in Australia with regard to children is often based on what is considered to be in the best interest of the child.  The traditional and often used assumption is that children need both a mother and a father, which plays an important role in divorce and custodial proceedings, and has carried over into adoption and fertility procedures.  As of February 2017 all Australian states and territories except for the Northern Territory allow adoption by same-sex couples.",
+          "The Father Clements Story | The Father Clements Story is a 1987 made-for-television movie about the life of Father George Clements, an African-American Roman Catholic priest who became famous for being the first United States priest to legally adopt a child.  The movie starred actors Lou Gossett, Jr., Malcolm-Jamal Warner, and Carroll O'Connor.  Gossett, Jr. played Clements, Warner played Clements' adopted son, and O'Connor played Cardinal John Cody, the Archbishop of Chicago.  The movie was directed by Edwin Sherin.  The film score was composed by Mark Snow.",
+          "Murder of Robert Schwartz | The murder of Robert Schwartz occurred on December 8, 2001 in Leesburg, Virginia.  The crime was orchestrated by his 20-year-old daughter, Clara Jane Schwartz, as part of a fantasy role-playing game.  Clara was convicted of first-degree murder for orchestrating her father's murder.  The case made national headlines due to Robert Schwartz's prominence in the scientific community and for claims that his murder was related to role-playing games and the occult.",
+          "Reed A. Albee | Reed Adalbert Albee (8 September 1885 – 2 August 1961) was an American businessman.  He is most noted as the adoptive father of the American playwright Edward Albee and for being a member of a prominent East Coast family who owned several theaters."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Robert Tree Cody",
+          "sent_id": 2,
+          "sentence": "Robert is an adopted son of Hollywood actor Iron Eyes Cody."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Iron Eyes Cody"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhat was Robert Tree Cody's adopted father's most prominent PSA role?\n\nCurrent agent output:\n\"Passage [1] states: \\\"Robert is an adopted son of Hollywood actor Iron Eyes Cody\\\" (Robert Tree Cody was born April 20, 1951). Bridge entity: Iron Eyes Cody. Missing fact: which public-service announcement (PSA)/advertising role Iron Eyes Cody was most prominently known for. Retrieval direction/evidence anchors: look up Iron Eyes Cody's biography or filmography and sources about PSAs/advertising—search for \\\"Iron Eyes Cody PSA\\\", \\\"Keep America Beautiful\\\", or \\\"Crying Indian\\\" to locate the specific PSA role.\"\n\nActual upstream context:\n{\n  \"question\": \"What was Robert Tree Cody's adopted father's most prominent PSA role?\",\n  \"hop1_query\": \"What was Robert Tree Cody's adopted father's most prominent PSA role?\",\n  \"hop1_titles\": [\n    \"Robert Tree Cody\",\n    \"Buffalo Bill Boyhood Home\",\n    \"Cody Estes\",\n    \"LGBT adoption and parenting in Australia\",\n    \"The Father Clements Story\",\n    \"Murder of Robert Schwartz\",\n    \"Reed A. Albee\"\n  ],\n  \"hop1_docs\": [\n    \"Robert Tree Cody | Robert Tree Cody (born April 20, 1951) is a Native American musician, dancer, and educator.  He graduated from John Marshall High School in 1969.  Robert is an adopted son of Hollywood actor Iron Eyes Cody.\",\n    \"Buffalo Bill Boyhood Home | The Buffalo Bill Boyhood Home was built by Isaac Cody, the father of Buffalo Bill Cody in 1841 at LeClaire, Iowa.  The house was purchased as a tourist attraction by the Chicago, Burlington and Quincy Railroad and was moved to Cody, Wyoming, Buffalo Bill's adopted hometown, in 1933.\",\n    \"Cody Estes | Cody Estes (born March 13, 1994) is an American actor.  His most recent role was as Charlie Cohen in \\\"Crossing Jordan\\\", but his most frequent role has been younger versions of John \\\"J.D.\\\" Dorian on the medical comedy \\\"Scrubs\\\".\",\n    \"LGBT adoption and parenting in Australia | Family law in Australia with regard to children is often based on what is considered to be in the best interest of the child.  The traditional and often used assumption is that children need both a mother and a father, which plays an important role in divorce and custodial proceedings, and has carried over into adoption and fertility procedures.  As of February 2017 all Australian states and territories except for the Northern Territory allow adoption by same-sex couples.\",\n    \"The Father Clements Story | The Father Clements Story is a 1987 made-for-television movie about the life of Father George Clements, an African-American Roman Catholic priest who became famous for being the first United States priest to legally adopt a child.  The movie starred actors Lou Gossett, Jr., Malcolm-Jamal Warner, and Carroll O'Connor.  Gossett, Jr. played Clements, Warner played Clements' adopted son, and O'Connor played Cardinal John Cody, the Archbishop of Chicago.  The movie was directed by Edwin Sherin.  The film score was composed by Mark Snow.\",\n    \"Murder of Robert Schwartz | The murder of Robert Schwartz occurred on December 8, 2001 in Leesburg, Virginia.  The crime was orchestrated by his 20-year-old daughter, Clara Jane Schwartz, as part of a fantasy role-playing game.  Clara was convicted of first-degree murder for orchestrating her father's murder.  The case made national headlines due to Robert Schwartz's prominence in the scientific community and for claims that his murder was related to role-playing games and the occult.\",\n    \"Reed A. Albee | Reed Adalbert Albee (8 September 1885 – 2 August 1961) was an American businessman.  He is most noted as the adoptive father of the American playwright Edward Albee and for being a member of a prominent East Coast family who owned several theaters.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Robert Tree Cody\",\n    \"sent_id\": 2,\n    \"sentence\": \"Robert is an adopted son of Hollywood actor Iron Eyes Cody.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Iron Eyes Cody\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary of first-hop evidence: The available first-hop passage states that Robert Tree Cody is an adopted son of Hollywood actor Iron Eyes Cody. Bridge entity / missing fact for next hop: Iron Eyes Cody — we need the specific public-service announcement (PSA) or advertising role for which Iron Eyes Cody is most prominently known. Retrieval direction / evidence anchors for the next agent: retrieve the Iron Eyes Cody biography or filmography (target title: \\\"Iron Eyes Cody\\\") and look for sources about his PSA/advertising work. Useful queries/anchors: \\\"Iron Eyes Cody PSA\\\", \\\"Iron Eyes Cody Keep America Beautiful\\\", \\\"Iron Eyes Cody Crying Indian\\\", \\\"Iron Eyes Cody advertising role\\\". This output is a summary1 (not a final answer) and specifies the next retrieval target and queries without asserting unseen facts.\",\n  \"rationale\": \"The only visible supporting sentence identifies Iron Eyes Cody as Robert Tree Cody's adoptive father. To answer which PSA role that father was most prominent for requires information from Iron Eyes Cody's biography or documentation of his PSA/advertising work, none of which is present in the given first-hop evidence. Therefore the next retrieval should target the \\\"Iron Eyes Cody\\\" page and related PSA-focused queries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 3,
+    "row_index": 3
+  }
+}

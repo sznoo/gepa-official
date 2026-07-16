@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "93cc56118d4a75056a79f1ecc082ca1c4739f74d1ccf3183a5665be4a3c679b4",
+  "created_at": "2026-07-14T13:37:22.671433+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When both summary_1 and summary_2 assert the same specific location (the identical location string appears in both summaries, e.g. the phrase 'Northwest Territories' appears in each),",
+            "preserve_rule": "Keep and use the factual content present in the summaries (for example: that both items are mines and that they share the same location). Do not invent new facts or drop evidence already asserted in the summaries.",
+            "change_rule": "Replace any full-sentence explanation with a single, minimal noun-phrase that names the shared property identified in the summaries — specifically the identical location string that appears in both summaries. Place only that short phrase as the content of the [[ ## answer ## ]] field.",
+            "drop_or_avoid_rule": "Do not produce a sentence, explanation, or status token. Avoid leading words like 'They are', avoid trailing markers (e.g. '([[ ## completed ## ]])'), avoid added qualifiers or extra punctuation, and avoid quoting or expanding the phrase beyond the identical string found in the summaries.",
+            "output_contract": "The output must be exactly one short phrase: the minimal shared attribute (the identical location string supported by both summaries). That phrase must be the sole content inside [[ ## answer ## ]] with no additional text, commentary, or tokens.",
+            "why_local_transition": "The agent currently returns a full sentence and a completion marker; the final-answer role requires the minimal answer string in the answer block. This edit narrows output format to emit only the shared location phrase already present in both summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What do the Lost McLeod Mine and the Colomac Mine have in common?",
+        "summary_1": "Both are mines (or mine-related) located in the Northwest Territories of Canada; both are associated with mining (the Colomac is an actual gold mine, the Lost McLeod is a legendary lost mine).",
+        "summary_2": "Both are mining-related sites in the Northwest Territories of Canada — the Colomac is an actual gold mine and the Lost McLeod Mine is a legendary lost mine.",
+        "current_output": "They are both mining-related sites in the Northwest Territories of Canada. ([[ ## completed ## ]])"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When both summary_1 and summary_2 assert the same specific location (the identical location string appears in both summaries, e.g. the phrase 'Northwest Territories' appears in each),\",\n      \"preserve_rule\": \"Keep and use the factual content present in the summaries (for example: that both items are mines and that they share the same location). Do not invent new facts or drop evidence already asserted in the summaries.\",\n      \"change_rule\": \"Replace any full-sentence explanation with a single, minimal noun-phrase that names the shared property identified in the summaries — specifically the identical location string that appears in both summaries. Place only that short phrase as the content of the [[ ## answer ## ]] field.\",\n      \"drop_or_avoid_rule\": \"Do not produce a sentence, explanation, or status token. Avoid leading words like 'They are', avoid trailing markers (e.g. '([[ ## completed ## ]])'), avoid added qualifiers or extra punctuation, and avoid quoting or expanding the phrase beyond the identical string found in the summaries.\",\n      \"output_contract\": \"The output must be exactly one short phrase: the minimal shared attribute (the identical location string supported by both summaries). That phrase must be the sole content inside [[ ## answer ## ]] with no additional text, commentary, or tokens.\",\n      \"why_local_transition\": \"The agent currently returns a full sentence and a completion marker; the final-answer role requires the minimal answer string in the answer block. This edit narrows output format to emit only the shared location phrase already present in both summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What do the Lost McLeod Mine and the Colomac Mine have in common?\",\n  \"summary_1\": \"Both are mines (or mine-related) located in the Northwest Territories of Canada; both are associated with mining (the Colomac is an actual gold mine, the Lost McLeod is a legendary lost mine).\",\n  \"summary_2\": \"Both are mining-related sites in the Northwest Territories of Canada — the Colomac is an actual gold mine and the Lost McLeod Mine is a legendary lost mine.\",\n  \"current_output\": \"They are both mining-related sites in the Northwest Territories of Canada. ([[ ## completed ## ]])\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Northwest Territories of Canada\",\n  \"rationale\": \"Both summaries contain the identical location string 'Northwest Territories of Canada'; per the ordered rules, the full sentence was replaced with that exact phrase.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

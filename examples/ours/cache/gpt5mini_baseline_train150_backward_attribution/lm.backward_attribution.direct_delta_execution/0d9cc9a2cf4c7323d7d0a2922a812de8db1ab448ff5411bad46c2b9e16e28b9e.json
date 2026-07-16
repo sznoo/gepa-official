@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "0d9cc9a2cf4c7323d7d0a2922a812de8db1ab448ff5411bad46c2b9e16e28b9e",
+  "created_at": "2026-07-14T13:39:27.836512+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If `summary_1` is a specific year (e.g., a 4-digit year) and the current `query` asserts that year (contains phrases like \"established <year>\" or quotes that lock the year),",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` and continue to produce a single compact retrieval `query` string suitable for a second-hop search.",
+            "change_rule": "Do not assert the candidate year inside the query. Instead, if a named organization/entity was discovered in prior retrievals (as a 'pioneer' or similar), produce a short query that targets that entity's founding date (format: \"[Entity name] established\" or \"[Entity name] founding year\"). If no specific entity name is available from prior retrievals, produce a short neutral query that asks which organization was a pioneer established in the given year (format examples: \"which organization pioneer of managed care established 1947\" or \"pioneer of managed care founded 1947\").",
+            "drop_or_avoid_rule": "Avoid queries that quote or assert the candidate year as a fact (e.g., avoid \"established 1947\" as a presumption in a quoted conjunctive search). Avoid long multi-clause quoted searches that narrowly match snippets rather than retrieving the authoritative page for an organization.",
+            "output_contract": "Return `query` as a single concise retrieval phrase (preferably under ~10 words). Either: (a) if an entity name exists from prior retrievals, the query must be the entity name plus a short phrase indicating founding year (e.g., \"[Entity name] established\"), or (b) otherwise a short neutral year-targeting query referencing the question and the year (e.g., \"pioneer of managed care founded 1947\").",
+            "why_local_transition": "The previous query asserted the candidate year, which narrows retrievals to incidental matches. Asking specifically for an entity's founding year (or asking which organization was the pioneer in that year) focuses the second-hop on authoritative pages about the organization and its establishment date, improving recovery of the missing supporting title."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "In what year were the pioneers of managed care in the United States established?",
+        "summary_1": "1947",
+        "current_output": {
+          "query": "\"pioneers of managed care\" \"established 1947\" United States"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If `summary_1` is a specific year (e.g., a 4-digit year) and the current `query` asserts that year (contains phrases like \\\"established <year>\\\" or quotes that lock the year),\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` and continue to produce a single compact retrieval `query` string suitable for a second-hop search.\",\n      \"change_rule\": \"Do not assert the candidate year inside the query. Instead, if a named organization/entity was discovered in prior retrievals (as a 'pioneer' or similar), produce a short query that targets that entity's founding date (format: \\\"[Entity name] established\\\" or \\\"[Entity name] founding year\\\"). If no specific entity name is available from prior retrievals, produce a short neutral query that asks which organization was a pioneer established in the given year (format examples: \\\"which organization pioneer of managed care established 1947\\\" or \\\"pioneer of managed care founded 1947\\\").\",\n      \"drop_or_avoid_rule\": \"Avoid queries that quote or assert the candidate year as a fact (e.g., avoid \\\"established 1947\\\" as a presumption in a quoted conjunctive search). Avoid long multi-clause quoted searches that narrowly match snippets rather than retrieving the authoritative page for an organization.\",\n      \"output_contract\": \"Return `query` as a single concise retrieval phrase (preferably under ~10 words). Either: (a) if an entity name exists from prior retrievals, the query must be the entity name plus a short phrase indicating founding year (e.g., \\\"[Entity name] established\\\"), or (b) otherwise a short neutral year-targeting query referencing the question and the year (e.g., \\\"pioneer of managed care founded 1947\\\").\",\n      \"why_local_transition\": \"The previous query asserted the candidate year, which narrows retrievals to incidental matches. Asking specifically for an entity's founding year (or asking which organization was the pioneer in that year) focuses the second-hop on authoritative pages about the organization and its establishment date, improving recovery of the missing supporting title.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"In what year were the pioneers of managed care in the United States established?\",\n  \"summary_1\": \"1947\",\n  \"current_output\": {\n    \"query\": \"\\\"pioneers of managed care\\\" \\\"established 1947\\\" United States\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"pioneer of managed care founded 1947\"\n  },\n  \"rationale\": \"summary_1 is a year and the current query asserted it; no specific entity name was available, so I produced a short neutral year-targeting query per the ordered delta rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 97,
+    "row_index": 97,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

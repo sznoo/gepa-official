@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "55b3cb1315bfb81d36c8598271cfe6b16eda7ca3cd67221963e4a1a535332ea3",
+  "created_at": "2026-07-14T13:59:51.047847+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the field `summary`.\n\nRole: This agent summarizes first-hop evidence and exposes the bridge entity, any missing fact(s), ambiguity, and concrete next-hop retrieval directions. Do not attempt to produce the final answer—the summary should tell the next agent exactly what to fetch to finish the multi-hop chain.\n\nOutput requirements (single `summary` value only):\n- Start the summary with the header: First-hop findings:\n- Include these labeled parts (use a short bullet list or 2–4 concise sentences; keep overall output brief):\n  1) Evidence found: For each person/entity named in the question, list which passage(s) mention matching candidate pages/titles and quote any explicit fact tokens found there (names, birth years, publication years, short parenthetical notes). Keep quoted fragments <=15 words and cite the passage title/label for each fact.\n  2) Ambiguities: If a name yields multiple candidate pages or variants in the passages, explicitly enumerate those candidate titles/labels as they appear; if an expected page/variant is missing, note that too.\n  3) Bridge entity / Missing fact: Explicitly name the bridge entity exactly as it appears in the passages (the person, work, or organization that links to the next hop) and state the precise missing fact needed to answer the question (e.g., a birth date, founding year, canonical series ordering).\n  4) Retrieval direction: Provide 2–4 concrete, prioritized next-hop targets (specific page titles or disambiguation pages to fetch, and/or exact sections to check such as lede/infobox/Career/History). Include short example search keywords or one-line instructions (e.g., \"open '<Name>' page and check lede/infobox and 'Career' section for 'Italian champion' year\").\n- End with a brief explicit note that the final answer is deferred until those pages are retrieved.\n\nHard constraints (do not violate):\n- Do not provide a final comparison or answer here. Do not guess or invent facts not present in the provided passages or introduce outside knowledge.\n- Do not assume which candidate is intended when multiple candidates exist.\n- Avoid long verbatim copying of passages (>15 words).\n- Preserve concise factual phrasing and verbatim tokens that appear in the passages (names, dates, page titles) when reporting evidence.\n\nKeep the summary concise and focused—just the first-hop findings needed to guide the next retrieval hop.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nOutput contract:\n- Produce exactly one field named `query` whose value is a single short retrieval query string (one line, no surrounding explanation or extra fields).\n- Do not answer, summarize, or explain anything in `query`. Do not include fallback instructions or user-facing requests for more info in this field.\n\nConstruction rules (apply the most specific rule that fits the inputs):\n1) Linking two named works: If `question` or `summary_1` names two or more specific works (songs, tracks, titles) and the missing evidence is the bridge between them, emit a concise interrogative that names both works and requests the linking evidence (artist / album / recording). Keep it short (about ≤ 12 words). Example form: \"Which artist or album recorded both 'Work A' and 'Work B'?\"\n2) Missing album artist/genre: If `summary_1` indicates the album title is present but the artist or genre is unknown, emit a compact search string of the form: <AlbumTitle> album artist genre\n   - No punctuation, no question phrasing, no extra words. Example: \"Levitate album artist genre\"\n3) Sports season-year lookups: If the `question` contains a specific season-year token and the missing bridge is a league-season page, emit a short query that includes the year token, a league identifier (e.g., \"NHL\" or \"National Hockey League\"), and a cue such as \"regular season\" or \"season count\". Keep it concise (≤ ~10 tokens).\n4) Default: Otherwise, produce one concise search-style query (≤ ~12 words) that uses visible tokens from `question` and `summary_1` targeted at retrieving the missing supporting evidence (artist, album, recording, genre, season page, etc.).\n\nGeneral guidance:\n- Keep queries compact; avoid lists, long page titles, or copying large spans from hidden targets.\n- Do not invent facts or candidate answers; use only visible tokens or neutral retrieval cues.\n- Prefer a short search string; use an interrogative only for the two-works linking case in rule 1.\n- The goal is to maximize recovery of the missing bridge evidence for the downstream retriever.\n\nReturn only the single `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nPrimary function: integrate the newly retrieved `passages` (second-hop evidence) with the provided `context` (first-hop) so the output is a grounded post-retrieval state that preserves the facts the final-answer generator needs. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when evidence is insufficient.\n\nBehavior rules (minimal, general):\n1) Preserve concise-answer behavior. If `context` already contains a concise direct answer (a short sentence or phrase), keep that text exactly as the first sentence of `summary`, unless it contradicts the `passages`.\n2) When `passages` supply additional, directly supported facts about entities named in the `question` or `context`, append up to one brief supporting sentence per distinct named entity (keep total `summary` to 1–3 sentences, preferably 1–2). Each supporting sentence should: start with the entity's full name as shown in the passages, include a short paraphrased attribution drawn only from the passages (no more than ~10–12 words) such as nationality, a notable achievement, a birth date, or a current affiliation, and avoid inventing or inferring facts not present in the inputs.\n3) When an object/entity page (for example, a car page, group page, or similar) lists associated people and a separate passage provides a biography for one of those listed people, produce a 1–2 sentence integrated summary: (a) first sentence: name the people as listed on the object page (e.g., \"driven by X and Y\" or \"member of Group Z\"); (b) optional second short clause/sentence: paraphrase key biographical facts from the person's passage (only facts present there — e.g., nationality, notable wins/awards, birth date, current team/affiliation). Keep wording compact and factual.\n4) Ground everything in the provided `passages` and `context`. Do not add new claims, dates, roles, or affiliations not explicitly supported. Avoid long verbatim quotations from the passages; you may paraphrase short phrases (≤10 words) only if they appear in the sources, and you may copy short strings such as names or dates exactly as shown.\n5) If the passages do not provide enough evidence to resolve the bridge, state that the passages do not specify the requested fact while still listing any supported names or facts. Do not guess or fabricate missing information.\n6) Output contract: return only the field `summary` containing 1–3 concise sentences (preferably 1–2) that integrate the first-hop `context` and second-hop `passages` according to the rules above. Do not add commentary, answer-labels, or extraneous text.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer`.\n\nInstructions:\n- Use only the visible summaries (summary_1 and summary_2) together with the question as your evidence. Do not introduce external facts, sources, or claims not present in those summaries.\n- Treat summary_2 (the later, integrated post-retrieval state) as primary evidence while still considering summary_1. Do not assume the final state is unresolved simply because summary_1 describes an earlier unresolved bridge; rely on the combined visible summaries to reach a conclusion.\n- If summary_1 and summary_2 both clearly and unambiguously support the same binary (yes/no) conclusion to the question, then the value of the `answer` field must be exactly one lowercase token: either \"yes\" (if both summaries affirm the fact) or \"no\" (if both summaries deny the fact). The `answer` field must contain only that single token and nothing else (no punctuation, no capitalization, no explanation, no additional words).\n- If the summaries conflict, are ambiguous, or do not together provide a clear binary yes/no verdict, produce a concise answer string in the `answer` field that best reflects what the summaries support. This concise answer may be a short phrase or sentence, but must still be supported solely by the summaries and must avoid adding new facts.\n- Always minimize verbosity: prefer the single-token binary response when the summaries unambiguously agree; otherwise keep the answer brief and directly tied to the visible summaries.\n\nProduce only the `answer` field as output."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "7935745c042b",
+    "rerun_from": null,
+    "question": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "gold_answer": "American",
+    "context": {
+      "title": [
+        "When the Bough Breaks (1986 film)",
+        "Therapy (Kellerman novel)",
+        "Survival of the Fittest (novel)",
+        "Rage (Kellerman novel)",
+        "Blood Test (novel)",
+        "James Emanuel",
+        "Jesse Kellerman",
+        "Obsession (novel)",
+        "Alex Delaware",
+        "Jonathan Kellerman"
+      ],
+      "sentences": [
+        [
+          "When the Bough Breaks is a 1986 television film directed by Waris Hussein and starring Ted Danson.",
+          " The screenplay by Phil Penningroth was adapted from a 1985 novel by Jonathan Kellerman, also titled \"When the Bough Breaks\".",
+          " Danson, who also co-produced, plays the crime-solving forensic psychologist Alex Delaware, a character who appears in a series of novels by Kellerman."
+        ],
+        [
+          "Therapy is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Survival of the Fittest is the thirteenth novel by Jonathan Kellerman and is told through the first person point of view of Kellerman's main character, Dr. Alex Delaware.",
+          " LAPD Detective Milo Sturgis has asked Alex to help him with another whodunit.",
+          " It reached number two in the New York Times Best Seller list for paperbacks."
+        ],
+        [
+          "Rage is a mystery novel by American author Jonathan Kellerman"
+        ],
+        [
+          "Blood Test is the second novel by Jonathan Kellerman, published in 1986.",
+          " It is told from the first-person point of view of Dr. Alex Delaware, a child psychologist who is Kellerman's main character in the majority of his novels.",
+          " The novel also includes Delaware's best friend, LAPD Detective, Milo Sturgis."
+        ],
+        [
+          "James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.",
+          " Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.",
+          " He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment."
+        ],
+        [
+          "Jesse Oren Kellerman (born September 1, 1978) is an American novelist and playwright.",
+          " He has published the novels: \"Sunstroke\" (2006), \"Trouble\" (2007), \"The Genius\" (2008), \"The Executor\" (2010), \"I'll Catch You\" (2012), and with his father, Jonathan Kellerman, \"The Golem of Hollywood\" (2014).",
+          " For his play, \"Things Beyond Our Control\" (2004) he was honored with a Princess Grace Award, which recognizes emerging talent in theater, dance, and film in the U.S."
+        ],
+        [
+          "Obsession is a mystery novel by American author Jonathan Kellerman.",
+          " It is the 21st novel in the Alex Delaware series."
+        ],
+        [
+          "Alex Delaware is a literary character created by Jonathan Kellerman.",
+          " The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.",
+          " Delaware appears in 32 of Kellerman's popular murder mysteries.",
+          " Kellerman sets the series in Los Angeles.",
+          " Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist."
+        ],
+        [
+          "Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "James Emanuel",
+        "Jonathan Kellerman"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ],
+    "hop1_query": "James Emanuel and Jonathan Kellerman, are of which nationality?",
+    "hop1_docs": [
+      "Alex Delaware | Alex Delaware is a literary character created by Jonathan Kellerman.  The Alex Delaware detective series begins with \"When the Bough Breaks\", published in 1985.  Delaware appears in 32 of Kellerman's popular murder mysteries.  Kellerman sets the series in Los Angeles.  Delaware is a forensic psychologist; although Kellerman writes a back story in which Delaware practiced as a child psychologist.",
+      "Jonathan Kellerman | Jonathan Kellerman (born August 9, 1949) is an American psychologist, and Edgar and Anthony Award-winning author of numerous bestselling suspense novels.",
+      "Bones (Kellerman novel) | Bones is a mystery novel by American author Jonathan Kellerman.",
+      "Gone (Kellerman novel) | Gone is a mystery novel by American author Jonathan Kellerman",
+      "Flesh and Blood (Kellerman novel) | Flesh and Blood is a mystery novel by Jonathan Kellerman",
+      "Therapy (Kellerman novel) | Therapy is a mystery novel by American author Jonathan Kellerman",
+      "Rage (Kellerman novel) | Rage is a mystery novel by American author Jonathan Kellerman"
+    ],
+    "hop1_titles": [
+      "Alex Delaware",
+      "Jonathan Kellerman",
+      "Bones (Kellerman novel)",
+      "Gone (Kellerman novel)",
+      "Flesh and Blood (Kellerman novel)",
+      "Therapy (Kellerman novel)",
+      "Rage (Kellerman novel)"
+    ],
+    "summary_1": "First-hop findings:\n- Evidence found:\n  - Jonathan Kellerman — passage [2] states \"Jonathan Kellerman (born August 9, 1949) is an American psychologist\" (quote: \"is an American psychologist\") and passages [3–7] refer to \"American author Jonathan Kellerman\" (quote: \"American author Jonathan Kellerman\") — see passage labels [2], [3–7].\n  - James Emanuel — no passages mention \"James Emanuel\" or provide any facts about him (no matching passage found).\n- Ambiguities:\n  - \"James Emanuel\" has no candidate page in the provided passages; there may be multiple persons with that name (disambiguation possible). Passage-set provides multiple Kellerman variants (novel pages) but no Emanuel variants.\n- Bridge entity / Missing fact:\n  - Bridge entity to fetch next: \"James Emanuel\" (the person named in the question).\n  - Missing fact needed: James Emanuel's nationality (e.g., whether he is American or another nationality).\n- Retrieval direction (prioritized):\n  1) Open the \"James Emanuel\" Wikipedia page — check the lede and infobox and the 'Biography' or 'Life' section for nationality (search keywords: \"James Emanuel nationality\", \"James Emanuel Wikipedia lede/infobox\").\n  2) If no single page, open \"James Emanuel (disambiguation)\" and inspect candidate pages (check each candidate's lede/infobox for nationality).\n  3) Confirm Jonathan Kellerman by opening \"Jonathan Kellerman\" page lede/infobox and 'Career' for corroboration (passage [2] already indicates \"American\").\nFinal answer deferred until the James Emanuel page(s) (and any disambiguation) and the Kellerman lede/infobox are retrieved.",
+    "hop2_query": "James Emanuel nationality",
+    "hop2_docs": [
+      "James Emanuel | James Emanuel (born June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska.  Emanuel, who is ranked by some critics as one of the best and most neglected poets of the 20th century, published more than 300 poems, 13 individual books, an influential anthology of African American literature, an autobiography, and more.  He is also credited with creating a new literary genre, jazz-and-blues haiku, often read with musical accompaniment.",
+      "David Emanuel (Governor of Georgia) | David Emanuel (1744 – February 19, 1808) became 24th Governor of Georgia on March 3, 1801 upon the resignation of James Jackson to become U.S. Senator from Georgia.  Emanuel served until November 7, 1801, the remainder of Jackson's term, but did not seek re-election.  Emanuel was a member of the Democratic Republican Party.  Prior to serving as governor he was the President of the Georgia Senate.",
+      "Jim Ricca | James Emanuel \"Big Jim\" Ricca (October 8, 1927 – February 11, 2007) was a professional American football defensive tackle and guard for six seasons in the National Football League for the Washington Redskins, Philadelphia Eagles and Detroit Lions.",
+      "National Register of Historic Places listings in Emanuel County, Georgia | National Register of Historic Places listings in Emanuel County, Georgia",
+      "William Emanuel | William Emanuel is an American lawyer and government official.  He is a shareholder at the law firm Littler Mendelson.  In June 2017, President Donald Trump nominated Emanuel to be a member of the National Labor Relations Board.  He was confirmed on September 25, 2017.",
+      "Ari Emanuel | Born to a Jewish family in Chicago, Emanuel was raised in suburban Wilmette, Illinois.  Emanuel is the brother of former White House Chief of Staff and current Mayor of Chicago Rahm Emanuel, National Institutes of Health bioethicist Ezekiel J. Emanuel, and adopted sister Shoshana Emanuel.  His father, Jerusalem-born Dr. Benjamin M. Emanuel, is a pediatrician who was active in the Irgun, a hardline Zionist militant group whose activities in Mandatory Palestine during the 1930s and 1940s led to its listing as a terrorist organization by the British authorities, the Jewish Agency and the 1946 Zionist Congress.  His mother, Marsha Emanuel (\"née\" Smulevitz), was a civil rights activist, and the one-time owner of a Chicago-area rock and roll club.  As a child, Ari was diagnosed as both hyperactive and dyslexic, and his mother spent many hours helping him to learn to read.  He is a graduate of New Trier High School and of Macalester College in St Paul, Minnesota, where he was roommates with director Peter Berg.",
+      "Emanuel and Christina Anderson House | The Emanuel and Christina Anderson House, located in Gresham, Oregon, is a house listed on the National Register of Historic Places."
+    ],
+    "hop2_titles": [
+      "James Emanuel",
+      "David Emanuel (Governor of Georgia)",
+      "Jim Ricca",
+      "National Register of Historic Places listings in Emanuel County, Georgia",
+      "William Emanuel",
+      "Ari Emanuel",
+      "Emanuel and Christina Anderson House"
+    ],
+    "summary_2": "Jonathan Kellerman (born August 9, 1949) is an American psychologist. James Emanuel (June 15, 1921 – September 28, 2013) was a poet and scholar from Alliance, Nebraska; the passages do not explicitly state his nationality.",
+    "answer": "Jonathan Kellerman: American. James Emanuel: nationality not stated in the summaries (from Alliance, Nebraska).",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "James Emanuel"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Jonathan Kellerman"
+    ],
+    "hit_titles_total": [
+      "James Emanuel",
+      "Jonathan Kellerman"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

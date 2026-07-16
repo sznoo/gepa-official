@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "e20baa7b09a75aca5dcd9ba41fdbf8c061ac18a4e7083df7faecce58de43bc65",
+  "created_at": "2026-07-14T13:37:20.398189+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the minimal final answer to produce is a person's name (one or two tokens) and the visible summaries or current output use a shortened or familiar first name form (a nickname or abbreviation) while the surname is consistent across summaries.",
+            "preserve_rule": "Keep the surname exactly as it appears in the summaries (including diacritics) and prefer wording already present in the visible summaries for all tokens unless a safe canonicalization is applied to the first name as described below.",
+            "change_rule": "If the first name is a common short form or nickname and you can unambiguously identify the canonical/full given name for that public figure from general knowledge, replace only the first name with its canonical/full form while leaving the surname unchanged. Apply this only when the identity is unambiguous from the summaries (no conflicting names or multiple possible people with the same surname).",
+            "drop_or_avoid_rule": "Do not append titles, qualifiers, explanations, or extra tokens. Do not introduce alternate surnames, dates, teams, or any content not directly required to produce the canonical minimal name. Avoid making an expansion when the identity would be ambiguous.",
+            "output_contract": "Produce only the minimal answer string (the canonical person's name) in the final answer block [[ ## answer ## ]] and nothing else. The output must be supported by the visible summaries and follow the preserve/change rules above.",
+            "why_local_transition": "This change standardizes shortened first names to their canonical/full forms when unambiguous, so the final minimal name is in a canonical form while preserving evidence from the summaries (surname and diacritics)."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+        "summary_1": "Nico Hülkenberg",
+        "summary_2": "Nico Hülkenberg",
+        "current_output": "Nico Hülkenberg"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the minimal final answer to produce is a person's name (one or two tokens) and the visible summaries or current output use a shortened or familiar first name form (a nickname or abbreviation) while the surname is consistent across summaries.\",\n      \"preserve_rule\": \"Keep the surname exactly as it appears in the summaries (including diacritics) and prefer wording already present in the visible summaries for all tokens unless a safe canonicalization is applied to the first name as described below.\",\n      \"change_rule\": \"If the first name is a common short form or nickname and you can unambiguously identify the canonical/full given name for that public figure from general knowledge, replace only the first name with its canonical/full form while leaving the surname unchanged. Apply this only when the identity is unambiguous from the summaries (no conflicting names or multiple possible people with the same surname).\",\n      \"drop_or_avoid_rule\": \"Do not append titles, qualifiers, explanations, or extra tokens. Do not introduce alternate surnames, dates, teams, or any content not directly required to produce the canonical minimal name. Avoid making an expansion when the identity would be ambiguous.\",\n      \"output_contract\": \"Produce only the minimal answer string (the canonical person's name) in the final answer block [[ ## answer ## ]] and nothing else. The output must be supported by the visible summaries and follow the preserve/change rules above.\",\n      \"why_local_transition\": \"This change standardizes shortened first names to their canonical/full forms when unambiguous, so the final minimal name is in a canonical form while preserving evidence from the summaries (surname and diacritics).\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n  \"summary_1\": \"Nico Hülkenberg\",\n  \"summary_2\": \"Nico Hülkenberg\",\n  \"current_output\": \"Nico Hülkenberg\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Nico Hülkenberg\",\n  \"rationale\": \"Both summaries provide 'Nico Hülkenberg'; per the ordered rules, the surname is preserved exactly and the given name from the summaries is used without expansion.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 48,
+    "row_index": 48,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

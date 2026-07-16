@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "530ea474bdc4d2d2d69231e37b3a275e81c96929e72931cd760c47b2fee920b0",
+  "created_at": "2026-07-14T13:42:28.632235+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which president was present for the Mexican Civil War who originated from Oaxaca?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which president was present for the Mexican Civil War who originated from Oaxaca?",
+        "summary_1": "Benito Juárez — born in Oaxaca — was the Mexican president during the Reform War (the 19th-century civil conflict) and the subsequent French Intervention.",
+        "summary_2": "Benito Juárez",
+        "current_output": "Benito Juárez"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Benito Juárez",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "liberal politician of Zapotec origin from Oaxaca.",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which president was present for the Mexican Civil War who originated from Oaxaca?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which president was present for the Mexican Civil War who originated from Oaxaca?\",\n  \"summary_1\": \"Benito Juárez — born in Oaxaca — was the Mexican president during the Reform War (the 19th-century civil conflict) and the subsequent French Intervention.\",\n  \"summary_2\": \"Benito Juárez\",\n  \"current_output\": \"Benito Juárez\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Benito Juárez\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"liberal politician of Zapotec origin from Oaxaca.\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks who 'originated from', 'born in', 'from', or otherwise names a place (here: 'Oaxaca') AND at least one visible summary explicitly states the subject's birthplace/place-of-origin.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of producing a single minimal answer string in the [[ ## answer ## ]] block derived only from the provided summaries; do not add explanatory sentences or extra fields.\",\n    \"change_rule\": \"When the trigger matches, modify the minimal answer by appending a brief place-of-origin tag immediately after the name, using only wording present in the visible summaries (examples of allowed formats: 'Name (born in Oaxaca)' or 'Name, born in Oaxaca'). Do not change the named entity itself or add additional claims.\",\n    \"drop_or_avoid_rule\": \"Do not invent or append ethnicities, political labels, dates, or any facts that do not appear in the visible summaries; do not produce full sentences, questions, or commentary; do not copy any text that exists only in hidden/target data.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string (name plus the minimal birthplace tag if triggered), e.g. 'Benito Juárez (born in Oaxaca)'. No other text, punctuation, explanation, or metadata may appear.\",\n    \"why_local_transition\": \"This small edit ensures the agent answers origin-focused questions by including an explicit, summary-supported birthplace tag after the name, matching the user's focus on origin while preserving the minimal-answer format.\"\n  },\n  \"rationale\": \"The source output provided only the name. The target requires indicating origin. The smallest safe change is to append a short birthplace tag when the summaries explicitly state it. This preserves the original minimal-answer contract, avoids adding unsupported facts (such as ethnic or political labels not present in the summaries), and uses only information already visible to the agent, minimizing risk of hallucination.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 132,
+    "row_index": 132,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

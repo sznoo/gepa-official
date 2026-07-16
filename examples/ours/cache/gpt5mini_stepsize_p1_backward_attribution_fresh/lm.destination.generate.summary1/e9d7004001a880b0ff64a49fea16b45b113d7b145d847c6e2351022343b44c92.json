@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "e9d7004001a880b0ff64a49fea16b45b113d7b145d847c6e2351022343b44c92",
+  "created_at": "2026-07-16T04:50:09.026085+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+      "current_output": "Passage 1: The Hiller Brothers (Tony Hiller) \"appeared with many artists of the time including ... Rip Taylor.\" Passage 2: Rip Taylor \"is known for his exuberance ... including his habit of showering himself (and others) with confetti.\" Bridge entity: Rip Taylor — next hop can verify the performance/appearance link between Tony Hiller (The Hiller Brothers) and Rip Taylor in independent sources if needed.",
+      "upstream_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "hop1_query": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "hop1_titles": [
+          "Tony Hiller",
+          "Rip Taylor",
+          "Ichthyosis with confetti",
+          "Tony Booth (artist)",
+          "Scurfield",
+          "Tony Reali",
+          "The Careless Years"
+        ],
+        "hop1_docs": [
+          "Tony Hiller | Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.",
+          "Rip Taylor | Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.",
+          "Ichthyosis with confetti | Ichthyosis en confetti, also known as ichthyosis with confetti, congenital reticular ichthyosiform erythroderma (CRIE) and ichthyosis variegata, is a very rare form of congenital ichthyosis in which healthy patches of normal skin co-exist within the abnormal skin areas.  The condition is caused by a frameshift mutation in the keratin 10 gene (KRT10); mutant keratin 10 accumulates in the nucleolus, a sub-nuclear structure, rather than within cellular intermedite filaments like the wild-type protein.  Children with the condition exhibit red, flaky skin; however, for reasons not yet totally clear, wild type clonal patches of skin start to appear, in place of the red, flaky skin.  Due to the clonal nature of the growth of the normal skin cells, it appears the patient is covered with confetti, hence the name of the condition.  It has been hypothesized that this is the result of a combination of mitotic recombination and natural selection within the skin.",
+          "Tony Booth (artist) | Anthony \"Tony\" Booth (22 June 1933 – 11 January 2017) was a British commercial artist best known as the original poster artist for The Beatles and other bands in the Merseybeat era.  He was known around Liverpool in the early 1960s as Brian Epstein's \"right-hand man\".",
+          "Scurfield | The family name Scurfield appears to be of Old Norse, or Viking origin.  “Scur” in Old English is “shower” as in rain.  In Old Norse “skur” also carries the meaning shower, as in shower of rain, or a shower of arrows.  The most likely origin of the surname Scurfield, therefore, is the name of an ancient field of battle.",
+          "Tony Reali | Anthony Joseph Paul \"Tony\" Reali (born July 4, 1978) is an American sports personality and television host of \"Around the Horn\" on ESPN.  In April 2014 it was announced he would be a contributor on social media for \"Good Morning America\", which he began on October 8, 2014 but has not appeared in 2015, other than a couple sports related segments introduced as \"ESPN's Tony Reali\".  He was \"Stat Boy\" on \"Pardon the Interruption\" from the show's debut in 2001 until late 2014.",
+          "The Careless Years | The Careless Years is a 1957 film from United Artists directed by Arthur Hiller and produced by Edward Lewis.  The film was the directorial debut for Hiller.  The film stars Dean Stockwell and Natalie Trundy in an early film appearance."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Tony Hiller",
+          "sent_id": 0,
+          "sentence": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter."
+        },
+        {
+          "title": "Tony Hiller",
+          "sent_id": 2,
+          "sentence": "The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns."
+        },
+        {
+          "title": "Rip Taylor",
+          "sent_id": 0,
+          "sentence": "Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian."
+        },
+        {
+          "title": "Rip Taylor",
+          "sent_id": 1,
+          "sentence": "He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhich artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?\n\nCurrent agent output:\n\"Passage 1: The Hiller Brothers (Tony Hiller) \\\"appeared with many artists of the time including ... Rip Taylor.\\\" Passage 2: Rip Taylor \\\"is known for his exuberance ... including his habit of showering himself (and others) with confetti.\\\" Bridge entity: Rip Taylor — next hop can verify the performance/appearance link between Tony Hiller (The Hiller Brothers) and Rip Taylor in independent sources if needed.\"\n\nActual upstream context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"hop1_query\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"hop1_titles\": [\n    \"Tony Hiller\",\n    \"Rip Taylor\",\n    \"Ichthyosis with confetti\",\n    \"Tony Booth (artist)\",\n    \"Scurfield\",\n    \"Tony Reali\",\n    \"The Careless Years\"\n  ],\n  \"hop1_docs\": [\n    \"Tony Hiller | Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\",\n    \"Rip Taylor | Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\",\n    \"Ichthyosis with confetti | Ichthyosis en confetti, also known as ichthyosis with confetti, congenital reticular ichthyosiform erythroderma (CRIE) and ichthyosis variegata, is a very rare form of congenital ichthyosis in which healthy patches of normal skin co-exist within the abnormal skin areas.  The condition is caused by a frameshift mutation in the keratin 10 gene (KRT10); mutant keratin 10 accumulates in the nucleolus, a sub-nuclear structure, rather than within cellular intermedite filaments like the wild-type protein.  Children with the condition exhibit red, flaky skin; however, for reasons not yet totally clear, wild type clonal patches of skin start to appear, in place of the red, flaky skin.  Due to the clonal nature of the growth of the normal skin cells, it appears the patient is covered with confetti, hence the name of the condition.  It has been hypothesized that this is the result of a combination of mitotic recombination and natural selection within the skin.\",\n    \"Tony Booth (artist) | Anthony \\\"Tony\\\" Booth (22 June 1933 – 11 January 2017) was a British commercial artist best known as the original poster artist for The Beatles and other bands in the Merseybeat era.  He was known around Liverpool in the early 1960s as Brian Epstein's \\\"right-hand man\\\".\",\n    \"Scurfield | The family name Scurfield appears to be of Old Norse, or Viking origin.  “Scur” in Old English is “shower” as in rain.  In Old Norse “skur” also carries the meaning shower, as in shower of rain, or a shower of arrows.  The most likely origin of the surname Scurfield, therefore, is the name of an ancient field of battle.\",\n    \"Tony Reali | Anthony Joseph Paul \\\"Tony\\\" Reali (born July 4, 1978) is an American sports personality and television host of \\\"Around the Horn\\\" on ESPN.  In April 2014 it was announced he would be a contributor on social media for \\\"Good Morning America\\\", which he began on October 8, 2014 but has not appeared in 2015, other than a couple sports related segments introduced as \\\"ESPN's Tony Reali\\\".  He was \\\"Stat Boy\\\" on \\\"Pardon the Interruption\\\" from the show's debut in 2001 until late 2014.\",\n    \"The Careless Years | The Careless Years is a 1957 film from United Artists directed by Arthur Hiller and produced by Edward Lewis.  The film was the directorial debut for Hiller.  The film stars Dean Stockwell and Natalie Trundy in an early film appearance.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 0,\n    \"sentence\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.\"\n  },\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 2,\n    \"sentence\": \"The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\"\n  },\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 0,\n    \"sentence\": \"Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.\"\n  },\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 1,\n    \"sentence\": \"He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary of first-hop evidence: The Tony Hiller page lists The Hiller Brothers as having appeared with many artists, explicitly naming Rip Taylor. The Rip Taylor page describes him as an exuberant performer known for showering himself (and others) with confetti. Bridge entity / relation needed for next hop: Rip Taylor — specifically the appearance/ performance link between Tony Hiller (The Hiller Brothers) and Rip Taylor. Retrieval direction for the next agent: find independent corroboration that Tony Hiller (or The Hiller Brothers) actually appeared with Rip Taylor (e.g., concert bills, show lineups, contemporary reviews, Tony Hiller biographies or interviews) and the context/date of that appearance.\",\n  \"rationale\": \"Visible supporting sentences show (1) the Hiller Brothers appeared with many artists including Rip Taylor (Tony Hiller doc, sentence listing artists) and (2) Rip Taylor is known for showering himself (and others) with confetti (Rip Taylor doc, sentence on his habit). These two first-hop facts identify Rip Taylor as the bridge entity; the next hop should retrieve sources that directly confirm the performance/appearance connection between Tony Hiller/The Hiller Brothers and Rip Taylor.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 14,
+    "row_index": 14
+  }
+}

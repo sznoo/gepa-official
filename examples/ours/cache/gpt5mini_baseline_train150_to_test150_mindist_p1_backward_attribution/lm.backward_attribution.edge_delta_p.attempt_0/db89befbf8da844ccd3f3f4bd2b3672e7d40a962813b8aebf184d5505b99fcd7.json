@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "db89befbf8da844ccd3f3f4bd2b3672e7d40a962813b8aebf184d5505b99fcd7",
+  "created_at": "2026-07-14T16:16:15.578719+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What type of profession does Yang Seung-ho and Tanya Donelly have in common?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What type of profession does Yang Seung-ho and Tanya Donelly have in common?",
+        "summary_1": "Primary topic: professions of Yang Seung-ho and Tanya Donelly\n\n- Yang Seung-ho — passage 1: \"is a South Korean idol singer, dancer, actor, model\" and \"leader of Korean male group MBLAQ\".\n- Tanya Donelly — passage 4: \"is an American Grammy Award-nominated singer-songwriter and guitarist\"; passages 2–5 also note guest vocals and solo albums.\n- Overlap / ambiguity: both passages explicitly identify them as singers; no ambiguous candidate names or missing linking facts.\n- Next-hop directives (priority): 1) \"No additional retrieval needed\" — passages already show both are singers. 2) (If desired) fetch \"Yang Seung-ho\" lede/infobox and \"Tanya Donelly\" lede/infobox for confirmation.",
+        "summary_2": "both passages explicitly identify them as singers; no ambiguous candidate names or missing linking facts. Yang Seung-ho is a South Korean idol singer and the leader of Korean male group MBLAQ. Tanya Donelly is an American Grammy Award-nominated singer-songwriter and guitarist.",
+        "current_output": "They are both singers."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nInstructions:\n- Use only `summary_1` and `summary_2` as the evidential basis for the final decision; do not add new facts or external information.\n- First determine whether the question is a binary (yes/no) proposition and whether both `summary_1` and `summary_2` clearly and unambiguously support the same binary outcome.\n- If BOTH summaries unambiguously assert the same binary conclusion, emit exactly one lowercase token as the entire content of `answer`: use \"yes\" for an affirmative conclusion and \"no\" for a negative conclusion. The `answer` field must contain that single token and nothing else (no punctuation, no extra whitespace, no explanation).\n- Prefer `summary_2` as the decisive statement when it clarifies or restates `summary_1`, but still require that both summaries support the same binary judgment before emitting the single-token `answer`.\n- If the summaries conflict, if either summary hedges, is ambiguous, silent about the binary relation, or otherwise fails to clearly agree, do NOT apply the single-token rule; instead produce the module's normal fallback/unresolved output for `answer`.\n- Always remain truthful to the visible summaries and do not alter their factual conclusions.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are both singers.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "singer",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What type of profession does Yang Seung-ho and Tanya Donelly have in common?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What type of profession does Yang Seung-ho and Tanya Donelly have in common?\",\n  \"summary_1\": \"Primary topic: professions of Yang Seung-ho and Tanya Donelly\\n\\n- Yang Seung-ho — passage 1: \\\"is a South Korean idol singer, dancer, actor, model\\\" and \\\"leader of Korean male group MBLAQ\\\".\\n- Tanya Donelly — passage 4: \\\"is an American Grammy Award-nominated singer-songwriter and guitarist\\\"; passages 2–5 also note guest vocals and solo albums.\\n- Overlap / ambiguity: both passages explicitly identify them as singers; no ambiguous candidate names or missing linking facts.\\n- Next-hop directives (priority): 1) \\\"No additional retrieval needed\\\" — passages already show both are singers. 2) (If desired) fetch \\\"Yang Seung-ho\\\" lede/infobox and \\\"Tanya Donelly\\\" lede/infobox for confirmation.\",\n  \"summary_2\": \"both passages explicitly identify them as singers; no ambiguous candidate names or missing linking facts. Yang Seung-ho is a South Korean idol singer and the leader of Korean male group MBLAQ. Tanya Donelly is an American Grammy Award-nominated singer-songwriter and guitarist.\",\n  \"current_output\": \"They are both singers.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nInstructions:\n- Use only `summary_1` and `summary_2` as the evidential basis for the final decision; do not add new facts or external information.\n- First determine whether the question is a binary (yes/no) proposition and whether both `summary_1` and `summary_2` clearly and unambiguously support the same binary outcome.\n- If BOTH summaries unambiguously assert the same binary conclusion, emit exactly one lowercase token as the entire content of `answer`: use \"yes\" for an affirmative conclusion and \"no\" for a negative conclusion. The `answer` field must contain that single token and nothing else (no punctuation, no extra whitespace, no explanation).\n- Prefer `summary_2` as the decisive statement when it clarifies or restates `summary_1`, but still require that both summaries support the same binary judgment before emitting the single-token `answer`.\n- If the summaries conflict, if either summary hedges, is ambiguous, silent about the binary relation, or otherwise fails to clearly agree, do NOT apply the single-token rule; instead produce the module's normal fallback/unresolved output for `answer`.\n- Always remain truthful to the visible summaries and do not alter their factual conclusions.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are both singers.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"singer\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"The user question asks for the profession two people \\\"have in common\\\" (a shared profession/occupation), and both summary_1 and summary_2 explicitly identify the same profession for each person.\",\n    \"preserve_rule\": \"Keep all existing instructions to use only summary_1 and summary_2 as evidence, prefer summary_2 when it clarifies summary_1, and otherwise retain the current final-answer output contract and interface.\",\n    \"change_rule\": \"When the trigger condition holds, replace any full-sentence or explanatory final answer with a single, minimal token: emit exactly one lowercase token naming the shared profession/occupation mentioned in the summaries. The answer must be the sole content of the answer field (no punctuation, no surrounding text, no explanation).\",\n    \"drop_or_avoid_rule\": \"Do not produce a full-sentence reply (e.g., \\\"They are both ...\\\"), any extra words, yes/no tokens, clarifying parentheticals, or additional punctuation. Do not fetch external information or alter the evidence used; do not change the question or the summaries.\",\n    \"output_contract\": \"If both summaries unambiguously assert the same profession for the two people, the module's answer must be exactly one lowercase token consisting of the profession name and nothing else. If the summaries do not unambiguously agree on a single profession, fall back to the module's normal unresolved/fallback output behavior.\",\n    \"why_local_transition\": \"The base prompt allowed verbose final sentences; this small rule enforces the required minimal-answer format for shared-profession questions so the final output is the single, minimal profession token supported by the visible summaries.\"\n  },\n  \"rationale\": \"The agent produced a short sentence instead of the minimal noun expected. The smallest coherent change is to add a targeted rule: when both summaries clearly state the same profession and the question requests the profession they have in common, the agent should output exactly one lowercase token naming that profession. This preserves the existing evidence-use constraints and binary-handling rules while only changing the final-answer formatting for this narrow question type.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 35,
+    "row_index": 35,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

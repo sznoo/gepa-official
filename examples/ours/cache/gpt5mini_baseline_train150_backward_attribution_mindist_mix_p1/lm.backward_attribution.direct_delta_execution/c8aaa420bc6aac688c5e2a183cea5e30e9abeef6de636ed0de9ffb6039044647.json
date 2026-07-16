@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c8aaa420bc6aac688c5e2a183cea5e30e9abeef6de636ed0de9ffb6039044647",
+  "created_at": "2026-07-14T19:01:54.079933+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the inputs mention the 1950 Indianapolis 500 and a retrieved snippet reports a person whose car 'never arrived' or 'did not arrive' for that race.",
+            "preserve_rule": "Keep the agent's output format: produce exactly one compact second-hop retrieval query (the field `query`) using the visible inputs (`question`, `summary_1`) as context.",
+            "change_rule": "Shift from repeating broad quoted terms to a focused retrieval-query template that links the event/incident phrase to a championship-year lookup. Concretely, build a short query that combines the event phrase (e.g. '1950 Indianapolis 500' or '1950 Indy 500') or the snippet phrase 'car never arrived' with the keywords 'Italian champion' and 'year' (no personal names). Keep the query concise (a single short phrase or clause) and unquoted.",
+            "drop_or_avoid_rule": "Do not include any personal names or other sample-specific unique literals (even if they appear in retrieved snippets). Do not output an answer, summary, or long literal spans from any document. Avoid multi-sentence or multi-part queries; avoid quotation of long spans.",
+            "output_contract": "Return a single short retrieval query string (one phrase/clause, <= ~7 words) that will retrieve the identity and championship-year of the person referenced by the 'car never arrived' snippet, without naming that person.",
+            "why_local_transition": "The first-hop discovered a person referenced only by an incident ('car never arrived'); the next retrieval should target that person's championship-year. This delta nudges the query generator to produce a concise, event+incident+keyword query that finds the individual's Italian championship year while avoiding leaking the person's name."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If summary_1 is present and the current query has not yet retrieved the specific championship-year evidence for the person connected to the 1950 Indianapolis 500 (i.e., second-hop is needed),",
+            "preserve_rule": "Keep the event context already in the input (the 1950 Indianapolis 500 and the phrase about a car failing to arrive) and the intent to obtain a year for an Italian-champion attribution.",
+            "change_rule": "Replace terse keyword-style queries with a single compact natural-language retrieval question that combines the event context and the precise information need. Construct the query to ask: 'What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?' (Use the event phrase '1950 Indianapolis 500' and 'car failed to arrive' plus the target fact request 'first the Italian champion' to guide retrieval.) Do not inject any specific person-name literals that are not already visible in the agent inputs.",
+            "drop_or_avoid_rule": "Avoid producing bare name-only queries, long quoted spans, or including any specific individual full-name that does not appear in the visible agent inputs. Also avoid additional reasoning, multiple alternative questions, or appended commentary—output only the single compact retrieval query.",
+            "output_contract": "Return exactly one compact natural-language query string that: (a) includes the event context '1950 Indianapolis 500' and the phrase 'car failed to arrive' (or an equivalent concise wording), (b) explicitly asks for the year the relevant man was first the Italian champion, (c) contains no extra explanation, and (d) does not introduce person-name literals absent from the visible inputs.",
+            "why_local_transition": "This change focuses the second-hop retrieval on the bridge fact (which person tied to the 1950 Indy non-arrival and the year they first became Italian champion) by combining event context and the precise year question into a single targeted query, increasing chance of retrieving the person's page with championship-year details."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?",
+        "summary_1": "1950",
+        "current_output": {
+          "query": "\"1950 Indianapolis 500\" \"car failed to arrive\" \"Italian champion\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the inputs mention the 1950 Indianapolis 500 and a retrieved snippet reports a person whose car 'never arrived' or 'did not arrive' for that race.\",\n      \"preserve_rule\": \"Keep the agent's output format: produce exactly one compact second-hop retrieval query (the field `query`) using the visible inputs (`question`, `summary_1`) as context.\",\n      \"change_rule\": \"Shift from repeating broad quoted terms to a focused retrieval-query template that links the event/incident phrase to a championship-year lookup. Concretely, build a short query that combines the event phrase (e.g. '1950 Indianapolis 500' or '1950 Indy 500') or the snippet phrase 'car never arrived' with the keywords 'Italian champion' and 'year' (no personal names). Keep the query concise (a single short phrase or clause) and unquoted.\",\n      \"drop_or_avoid_rule\": \"Do not include any personal names or other sample-specific unique literals (even if they appear in retrieved snippets). Do not output an answer, summary, or long literal spans from any document. Avoid multi-sentence or multi-part queries; avoid quotation of long spans.\",\n      \"output_contract\": \"Return a single short retrieval query string (one phrase/clause, <= ~7 words) that will retrieve the identity and championship-year of the person referenced by the 'car never arrived' snippet, without naming that person.\",\n      \"why_local_transition\": \"The first-hop discovered a person referenced only by an incident ('car never arrived'); the next retrieval should target that person's championship-year. This delta nudges the query generator to produce a concise, event+incident+keyword query that finds the individual's Italian championship year while avoiding leaking the person's name.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 is present and the current query has not yet retrieved the specific championship-year evidence for the person connected to the 1950 Indianapolis 500 (i.e., second-hop is needed),\",\n      \"preserve_rule\": \"Keep the event context already in the input (the 1950 Indianapolis 500 and the phrase about a car failing to arrive) and the intent to obtain a year for an Italian-champion attribution.\",\n      \"change_rule\": \"Replace terse keyword-style queries with a single compact natural-language retrieval question that combines the event context and the precise information need. Construct the query to ask: 'What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?' (Use the event phrase '1950 Indianapolis 500' and 'car failed to arrive' plus the target fact request 'first the Italian champion' to guide retrieval.) Do not inject any specific person-name literals that are not already visible in the agent inputs.\",\n      \"drop_or_avoid_rule\": \"Avoid producing bare name-only queries, long quoted spans, or including any specific individual full-name that does not appear in the visible agent inputs. Also avoid additional reasoning, multiple alternative questions, or appended commentary—output only the single compact retrieval query.\",\n      \"output_contract\": \"Return exactly one compact natural-language query string that: (a) includes the event context '1950 Indianapolis 500' and the phrase 'car failed to arrive' (or an equivalent concise wording), (b) explicitly asks for the year the relevant man was first the Italian champion, (c) contains no extra explanation, and (d) does not introduce person-name literals absent from the visible inputs.\",\n      \"why_local_transition\": \"This change focuses the second-hop retrieval on the bridge fact (which person tied to the 1950 Indy non-arrival and the year they first became Italian champion) by combining event context and the precise year question into a single targeted query, increasing chance of retrieving the person's page with championship-year details.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\",\n  \"summary_1\": \"1950\",\n  \"current_output\": {\n    \"query\": \"\\\"1950 Indianapolis 500\\\" \\\"car failed to arrive\\\" \\\"Italian champion\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\"\n  },\n  \"rationale\": \"Included the event phrase and 'car failed to arrive' and explicitly asked for the year he was first Italian champion, with no personal names, per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 93,
+    "row_index": 93,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

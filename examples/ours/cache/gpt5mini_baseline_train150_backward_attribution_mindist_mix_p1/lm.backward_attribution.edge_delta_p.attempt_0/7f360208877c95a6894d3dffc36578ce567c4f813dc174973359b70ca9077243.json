@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "7f360208877c95a6894d3dffc36578ce567c4f813dc174973359b70ca9077243",
+  "created_at": "2026-07-14T19:01:54.189863+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?",
+        "summary_1": "0–1",
+        "summary_2": "0–1",
+        "current_output": "0–1"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "0–1",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "compiling a record of 9–5",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?\",\n  \"summary_1\": \"0–1\",\n  \"summary_2\": \"0–1\",\n  \"current_output\": \"0–1\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"0–1\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"compiling a record of 9–5\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 or summary_2 is present and at least one of the summaries is more descriptive than the currently selected output (measured by having greater character length or containing alphabetic words in addition to digits), activate this rule.\",\n    \"preserve_rule\": \"Keep the original behavior of producing a single minimal answer string inside [[ ## answer ## ]]. If the two summaries are identical short numeric records, continue to output that numeric string unchanged.\",\n    \"change_rule\": \"Instead of unconditionally echoing the current output, select the single summary (summary_1 or summary_2) that is most descriptive: prefer the summary with greater character length and/or that contains alphabetic words (i.e., full-sentence phrasing) over a terse numeric-only record. Set the answer to that chosen summary string exactly (no extra text).\",\n    \"drop_or_avoid_rule\": \"Do not invent or alter numeric values, do not combine or synthesize multiple summaries into a new phrase, and do not add commentary or explanatory text. If both summaries are equally terse and identical, avoid changing the output.\",\n    \"output_contract\": \"Place only the chosen summary string as the minimal answer inside [[ ## answer ## ]], preserving its punctuation and formatting exactly and without surrounding explanation.\",\n    \"why_local_transition\": \"This change only adjusts the selection rule used by the final agent to pick among available summaries, making it prefer a more descriptive upstream summary when present; it leaves the base output format and other behaviors unchanged.\"\n  },\n  \"rationale\": \"A minimal, local behavioral change is needed so the final agent will prefer a more informative upstream summary when one exists while preserving the existing minimal-answer contract. The rules avoid fabricating or combining information and only change which provided summary is echoed. This preserves safe behavior when summaries are identical short numeric records and is compatible with other independent edge deltas that may have modified the summaries earlier in the pipeline.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 116,
+    "row_index": 116,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

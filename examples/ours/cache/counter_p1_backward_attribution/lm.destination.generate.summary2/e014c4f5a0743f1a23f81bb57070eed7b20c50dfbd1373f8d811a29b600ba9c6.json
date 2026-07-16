@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "e014c4f5a0743f1a23f81bb57070eed7b20c50dfbd1373f8d811a29b600ba9c6",
+  "created_at": "2026-07-15T22:01:21.217870+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+      "current_output": "Punk bands.",
+      "upstream_context": {
+        "question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+        "summary_1": "Both are punk bands. (Mindless Self Indulgence — \"American electropunk band\" [passage 5]; Tappi Tíkarrass — \"Icelandic punk band\" [passage 4])",
+        "hop2_query": "Mindless Self Indulgence genre Tappi Tíkarrass genre",
+        "hop2_titles": [
+          "How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence",
+          "If (Mindless Self Indulgence album)",
+          "The Left Rights (album)",
+          "Tappi Tíkarrass",
+          "Mindless Self Indulgence",
+          "It Gets Worse",
+          "On It"
+        ],
+        "hop2_docs": [
+          "How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence | How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence",
+          "If (Mindless Self Indulgence album) | If is the fourth studio album by Mindless Self Indulgence.  It was released through The End Records on April 28, 2008 in the UK and on April 29, 2008 in the US.",
+          "The Left Rights (album) | The Left Rights is the self-titled debut album by the Mindless Self Indulgence side project featuring members Little Jimmy Urine and Steve, Righ? .  The album also contains a video of Mindless Self Indulgence performing \"Panty Shot\" live at CBGBs in New York City.",
+          "Tappi Tíkarrass | Tappi Tíkarrass was an Icelandic punk band which added elements of funk, rock and jazz to their music, marking a difference from other traditional bands at that time.  The band is also considered the first serious music project of now renowned singer Björk Guðmundsdóttir.",
+          "Mindless Self Indulgence | Mindless Self Indulgence (often shortened to MSI) is an American electropunk band formed in New York City in 1997.  Their music has a mixed style which includes punk rock, alternative rock, electronica, techno, industrial, hip hop and breakbeat hardcore.  Their group name is derived from an Ayn Rand quote found in the book \"Atlas Shrugged\".",
+          "It Gets Worse | \"It Gets Worse\" is a single by Mindless Self Indulgence, released worldwide through Bandcamp, iTunes, and Amazon as a MP3 download on December 3, 2013.",
+          "On It | \"On It\" is a single by American electropunk band Mindless Self Indulgence, released in the U.S. on July 8, 2008.  The single reached number 2 on the \"Billboard\" Hot 100 Singles Sales chart."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Mindless Self Indulgence",
+          "sent_id": 0,
+          "sentence": "Mindless Self Indulgence (often shortened to MSI) is an American electropunk band formed in New York City in 1997."
+        },
+        {
+          "title": "Tappi Tíkarrass",
+          "sent_id": 0,
+          "sentence": "Tappi Tíkarrass was an Icelandic punk band which added elements of funk, rock and jazz to their music, marking a difference from other traditional bands at that time."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nMindless Self Indulgence and Tappi Tíkarrass are both what?\n\nCurrent agent output:\n\"Punk bands.\"\n\nActual upstream context:\n{\n  \"question\": \"Mindless Self Indulgence and Tappi Tíkarrass are both what?\",\n  \"summary_1\": \"Both are punk bands. (Mindless Self Indulgence — \\\"American electropunk band\\\" [passage 5]; Tappi Tíkarrass — \\\"Icelandic punk band\\\" [passage 4])\",\n  \"hop2_query\": \"Mindless Self Indulgence genre Tappi Tíkarrass genre\",\n  \"hop2_titles\": [\n    \"How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence\",\n    \"If (Mindless Self Indulgence album)\",\n    \"The Left Rights (album)\",\n    \"Tappi Tíkarrass\",\n    \"Mindless Self Indulgence\",\n    \"It Gets Worse\",\n    \"On It\"\n  ],\n  \"hop2_docs\": [\n    \"How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence | How I Learned to Stop Giving a Shit and Love Mindless Self Indulgence\",\n    \"If (Mindless Self Indulgence album) | If is the fourth studio album by Mindless Self Indulgence.  It was released through The End Records on April 28, 2008 in the UK and on April 29, 2008 in the US.\",\n    \"The Left Rights (album) | The Left Rights is the self-titled debut album by the Mindless Self Indulgence side project featuring members Little Jimmy Urine and Steve, Righ? .  The album also contains a video of Mindless Self Indulgence performing \\\"Panty Shot\\\" live at CBGBs in New York City.\",\n    \"Tappi Tíkarrass | Tappi Tíkarrass was an Icelandic punk band which added elements of funk, rock and jazz to their music, marking a difference from other traditional bands at that time.  The band is also considered the first serious music project of now renowned singer Björk Guðmundsdóttir.\",\n    \"Mindless Self Indulgence | Mindless Self Indulgence (often shortened to MSI) is an American electropunk band formed in New York City in 1997.  Their music has a mixed style which includes punk rock, alternative rock, electronica, techno, industrial, hip hop and breakbeat hardcore.  Their group name is derived from an Ayn Rand quote found in the book \\\"Atlas Shrugged\\\".\",\n    \"It Gets Worse | \\\"It Gets Worse\\\" is a single by Mindless Self Indulgence, released worldwide through Bandcamp, iTunes, and Amazon as a MP3 download on December 3, 2013.\",\n    \"On It | \\\"On It\\\" is a single by American electropunk band Mindless Self Indulgence, released in the U.S. on July 8, 2008.  The single reached number 2 on the \\\"Billboard\\\" Hot 100 Singles Sales chart.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Mindless Self Indulgence\",\n    \"sent_id\": 0,\n    \"sentence\": \"Mindless Self Indulgence (often shortened to MSI) is an American electropunk band formed in New York City in 1997.\"\n  },\n  {\n    \"title\": \"Tappi Tíkarrass\",\n    \"sent_id\": 0,\n    \"sentence\": \"Tappi Tíkarrass was an Icelandic punk band which added elements of funk, rock and jazz to their music, marking a difference from other traditional bands at that time.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary: Mindless Self Indulgence (MSI) is described as an American electropunk band formed in New York City in 1997. Tappi Tíkarrass is described as an Icelandic punk band which added elements of funk, rock and jazz to their music. The cited passages identify the two groups by those punk-related genres (MSI as an American electropunk band; Tappi Tíkarrass as an Icelandic punk band).\",\n  \"rationale\": \"The summary uses only the visible supporting sentences: MSI is explicitly called an \\\"American electropunk band formed in New York City in 1997,\\\" and Tappi Tíkarrass is explicitly called an \\\"Icelandic punk band which added elements of funk, rock and jazz.\\\" These facts supply the genre information needed by the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 9,
+    "row_index": 9
+  }
+}

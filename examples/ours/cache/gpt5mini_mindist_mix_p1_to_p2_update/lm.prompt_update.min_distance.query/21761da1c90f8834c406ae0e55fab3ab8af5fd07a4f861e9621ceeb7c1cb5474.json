@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.min_distance.query",
+  "key": "21761da1c90f8834c406ae0e55fab3ab8af5fd07a4f861e9621ceeb7c1cb5474",
+  "created_at": "2026-07-14T21:22:14.388308+00:00",
+  "request": {
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "input_dict": {
+      "agent": "query",
+      "anchor_material": {
+        "sample_index": 43,
+        "row_index": 43,
+        "stable_id": "43",
+        "agent": "query",
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "delta_p_trace": [
+          {
+            "edge_index": 0,
+            "delta_p": {
+              "trigger": "current_output.query contains both the tokens \"Dallas Green\" and \"Brian Johnson\"",
+              "preserve_rule": "Keep the original output contract: emit exactly one field named `query` as a single short keyword-style search string, no full sentences, no clause punctuation, and use only tokens visible in `question` and/or `summary_1` (allowing at most one minimal connector token). Maintain brevity and the single-token-string format.",
+              "change_rule": "When triggered, modify the query-generation behavior so the agent composes a terse retrieval query that (a) includes both entity name tokens 'Brian Johnson' and 'Dallas Green' from the inputs, (b) attaches the visible disambiguator token 'musician' adjacent to Dallas Green to prefer the musician page, and (c) includes a single minimal connector token that targets birth date evidence (use the visible token 'born' or 'birth'). Do not produce sentences or additional explanatory tokens.",
+              "drop_or_avoid_rule": "Avoid emitting vague single-entity queries, full user questions, or adding new entity names or facts. Do not produce a query that omits the Dallas Green disambiguator ('musician') when that token is visible, and avoid including extra Brian Johnson qualifiers not present in the visible inputs.",
+              "output_contract": "Output must still be exactly one `query` string. The string must be terse (preferably <=12 words), contain only tokens from `question`/`summary_1` plus at most one connector, have no sentence grammar or clause punctuation, and target retrieval of Dallas Green's birth information by pairing the two entity tokens with the connector.",
+              "why_local_transition": "This small prompt edit nudges the agent to form a second-hop query that explicitly ties the ambiguous Brian Johnson token to the missing Dallas Green birth date by adding the visible disambiguator 'musician' and a birth-related connector. It targets the exact missing bridge (Dallas Green's birth info) without changing other query-generation constraints."
+            }
+          }
+        ]
+      },
+      "candidate_materials": [
+        {
+          "sample_index": 136,
+          "row_index": 136,
+          "stable_id": "136",
+          "agent": "query",
+          "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 contains the token \"Mortal Engines Quartet\" and the current_output.query does not include that token",
+                "preserve_rule": "Keep producing exactly one short keyword-style search string. Preserve brevity, no sentence grammar, no punctuation, and use only tokens present in question or summary_1 (allowing one neutral connector token).",
+                "change_rule": "Include the series-level token \"Mortal Engines Quartet\" in the query alongside the most specific prequel token present in the inputs (prefer the exact token from the question if present, e.g., \"Traction City\", otherwise use \"Fever Crumb\"). Place the two entity tokens together and append the single neutral connector token \"series\". Example form: \"Mortal Engines Quartet Traction City series\".",
+                "drop_or_avoid_rule": "Do not add verbs, full sentences, punctuation, invented entity names, or additional explanatory words; do not output answers or summaries; avoid introducing tokens not visible in question or summary_1.",
+                "output_contract": "Produce exactly one field named `query` whose value is a single short keyword-style search string (<=12 words), composed only from tokens visible in question/summary_1 plus at most one neutral connector token, and formatted with no sentence grammar or punctuation.",
+                "why_local_transition": "The source query omitted the series-level anchor. Adding \"Mortal Engines Quartet\" with the prequel token and the connector \"series\" minimally directs retrieval toward documents that tie the novella/prequel to the broader series, resolving the specific ambiguity for this hop."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "rendered_prompt": "You are selecting the local prompt-feedback update that is semantically closest to a fixed anchor update.\n\nEach material contains feedback for the HotpotQA second-hop query generator.\nCompare the anchor against all candidate materials and select exactly one candidate whose feedback represents the most similar query-generation behavior update.\n\nHere, semantic distance means how differently the retrieval query behavior would need to change:\n- which entity, title, alias, location, class, or task anchors to preserve, add, remove, or disambiguate\n- whether an anchor is grounded in the visible inputs, misleading, or an unsupported hypothesized answer\n- which bridge relation, comparison relation, role, property, or information need to emphasize\n- which evidence family, domain, or answer type the query should target\n- which distractors, wrong senses, prior answers, or noisy entity families to avoid\n- whether the candidate scope should be broadened, narrowed, preserved, or re-centered\n- whether the query should use compact keywords, preserve a comparison, or restate an open information need\n- what retrieval failure the feedback is intended to correct\n\nImportant:\n- Judge the semantic update represented by the feedback itself.\n- Do not judge which update is more correct or likely to improve retrieval.\n- Do not select a candidate merely because it shares entities, topics, question wording, or query tokens with the anchor.\n- Do not select a candidate merely because its feedback is longer or more detailed.\n- Source-style details such as infoboxes, lead sentences, cast sections, tables, or list parsing are secondary unless they change the retrieval target.\n- Broadening from one entity to multiple comparison subjects is different from narrowing a broad query to one missing entity.\n- Removing a misleading visible anchor is different from preventing insertion of an unsupported candidate.\n- Changing from a verbose sentence to compact keywords matters only when it changes the retrieval strategy or target.\n- If a material contains multiple delta_p edges, compare the complete ordered trace and its net retrieval-policy change, not only matching individual edges.\n- Select exactly one candidate. If candidates request materially equivalent updates, choose the one with the smallest sample_index.\n\nReturn JSON only:\n{\n  \"selected_sample_index\": 0,\n  \"shared_update_pattern\": \"short description of the retrieval-policy update shared by the anchor and selected candidate\",\n  \"rationale\": \"short explanation of why this candidate is semantically closest to the anchor\",\n  \"confidence\": 0.0\n}\n\nRequirements:\n- selected_sample_index must exactly match one candidate sample_index.\n- confidence must be between 0.0 and 1.0.\n- Do not return markdown or additional keys.\n\nAgent:\nquery\n\nAnchor feedback material:\n{\n  \"sample_index\": 43,\n  \"row_index\": 43,\n  \"stable_id\": \"43\",\n  \"agent\": \"query\",\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"delta_p_trace\": [\n    {\n      \"edge_index\": 0,\n      \"delta_p\": {\n        \"trigger\": \"current_output.query contains both the tokens \\\"Dallas Green\\\" and \\\"Brian Johnson\\\"\",\n        \"preserve_rule\": \"Keep the original output contract: emit exactly one field named `query` as a single short keyword-style search string, no full sentences, no clause punctuation, and use only tokens visible in `question` and/or `summary_1` (allowing at most one minimal connector token). Maintain brevity and the single-token-string format.\",\n        \"change_rule\": \"When triggered, modify the query-generation behavior so the agent composes a terse retrieval query that (a) includes both entity name tokens 'Brian Johnson' and 'Dallas Green' from the inputs, (b) attaches the visible disambiguator token 'musician' adjacent to Dallas Green to prefer the musician page, and (c) includes a single minimal connector token that targets birth date evidence (use the visible token 'born' or 'birth'). Do not produce sentences or additional explanatory tokens.\",\n        \"drop_or_avoid_rule\": \"Avoid emitting vague single-entity queries, full user questions, or adding new entity names or facts. Do not produce a query that omits the Dallas Green disambiguator ('musician') when that token is visible, and avoid including extra Brian Johnson qualifiers not present in the visible inputs.\",\n        \"output_contract\": \"Output must still be exactly one `query` string. The string must be terse (preferably <=12 words), contain only tokens from `question`/`summary_1` plus at most one connector, have no sentence grammar or clause punctuation, and target retrieval of Dallas Green's birth information by pairing the two entity tokens with the connector.\",\n        \"why_local_transition\": \"This small prompt edit nudges the agent to form a second-hop query that explicitly ties the ambiguous Brian Johnson token to the missing Dallas Green birth date by adding the visible disambiguator 'musician' and a birth-related connector. It targets the exact missing bridge (Dallas Green's birth info) without changing other query-generation constraints.\"\n      }\n    }\n  ]\n}\n\nCandidate feedback materials:\n[\n  {\n    \"sample_index\": 136,\n    \"row_index\": 136,\n    \"stable_id\": \"136\",\n    \"agent\": \"query\",\n    \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 contains the token \\\"Mortal Engines Quartet\\\" and the current_output.query does not include that token\",\n          \"preserve_rule\": \"Keep producing exactly one short keyword-style search string. Preserve brevity, no sentence grammar, no punctuation, and use only tokens present in question or summary_1 (allowing one neutral connector token).\",\n          \"change_rule\": \"Include the series-level token \\\"Mortal Engines Quartet\\\" in the query alongside the most specific prequel token present in the inputs (prefer the exact token from the question if present, e.g., \\\"Traction City\\\", otherwise use \\\"Fever Crumb\\\"). Place the two entity tokens together and append the single neutral connector token \\\"series\\\". Example form: \\\"Mortal Engines Quartet Traction City series\\\".\",\n          \"drop_or_avoid_rule\": \"Do not add verbs, full sentences, punctuation, invented entity names, or additional explanatory words; do not output answers or summaries; avoid introducing tokens not visible in question or summary_1.\",\n          \"output_contract\": \"Produce exactly one field named `query` whose value is a single short keyword-style search string (<=12 words), composed only from tokens visible in question/summary_1 plus at most one neutral connector token, and formatted with no sentence grammar or punctuation.\",\n          \"why_local_transition\": \"The source query omitted the series-level anchor. Adding \\\"Mortal Engines Quartet\\\" with the prequel token and the connector \\\"series\\\" minimally directs retrieval toward documents that tie the novella/prequel to the broader series, resolving the specific ambiguity for this hop.\"\n        }\n      }\n    ]\n  }\n]",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_sample_index\": 136,\n  \"shared_update_pattern\": \"When a specific visible token is present, modify the terse single-string keyword query to include an extra visible context/disambiguator token (series-level or role) plus one minimal connector token to target the needed relation, while preserving the single short keyword-style output format.\",\n  \"rationale\": \"Both the anchor and candidate trigger on a visible token and instruct the agent to add an extra, input-visible contextual token (anchor/disambiguator: 'musician' vs 'Mortal Engines Quartet') together with a single connector token ('born'/'birth' vs 'series') to steer retrieval. Each preserves the terse one-field keyword-query format and forbids adding new entities or full sentences, so the retrieval-policy change is the same: augment the compact query with a visible disambiguator and a relation connector to better target the missing bridge.\",\n  \"confidence\": 0.86\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "agent": "query",
+    "anchor_sample_index": 43,
+    "candidate_sample_indices": [
+      136
+    ]
+  }
+}

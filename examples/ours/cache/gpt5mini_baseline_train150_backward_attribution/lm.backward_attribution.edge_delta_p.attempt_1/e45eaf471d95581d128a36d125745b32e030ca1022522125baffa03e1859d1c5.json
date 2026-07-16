@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "e45eaf471d95581d128a36d125745b32e030ca1022522125baffa03e1859d1c5",
+  "created_at": "2026-07-14T13:44:27.767911+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "current_output": {
+          "query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Pony Express Trout Creek Utah delivered items"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Pony Express What items could you find delivered to Trout Creek, Utah?"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Trout Creek, Utah",
+          "Mammoth Creek",
+          "Pony Express",
+          "Google Express",
+          "Ibapah Peak",
+          "Find What You Love and Let It Kill You",
+          "Find What You Love and Let It Kill You (Jonny Craig EP)"
+        ],
+        "retrieved_doc_snippets": [
+          "Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States. It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao. It is named after the creek that flows from the west off of the Deep Creek Mountains. It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .",
+          "Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah). The creek contains wild brown trout and hatchery rainbow trout.",
+          "Pony Express | The Pony Express was a mail service delivering messages, newspapers, and mail.",
+          "Google Express | Google Express, formerly Google Shopping Express, is a shopping service from Google available in some parts of the United States that was launched on a free trial basis in San Francisco and Silicon Valley in spring 2013. Originally it was a same-day service; later offering same-day and overnight delivery. Originally, pricing was the same as in-person shopping, but later prices became typically US$4-$10 more per item; Google Express Help said \"Because item prices are set by store ...[truncated]",
+          "Ibapah Peak | Ibapah Peak is a 12018 ft summit in Juab County, Utah in the United States. It is the highest point of the Deep Creek Range and is located less than 5 mi east of the Utah-Nevada border, and about 10 mi northwest of the town of Trout Creek, Utah. With a topographic prominence of 5247 ft it is the fifth-most prominent summit in Utah.",
+          "Find What You Love and Let It Kill You | \"Find What You Love and Let It Kill You\" may refer to:",
+          "Find What You Love and Let It Kill You (Jonny Craig EP) | Find What You Love and Let It Kill You (Jonny Craig EP)"
+        ],
+        "summary_2": "Messages, newspapers, and mail (letters).",
+        "answer": "Messages, newspapers, and mail (letters).",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Pony Express"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Pony Express"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"current_output\": {\n    \"query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Pony Express Trout Creek Utah delivered items\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Pony Express What items could you find delivered to Trout Creek, Utah?\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Trout Creek, Utah\",\n    \"Mammoth Creek\",\n    \"Pony Express\",\n    \"Google Express\",\n    \"Ibapah Peak\",\n    \"Find What You Love and Let It Kill You\",\n    \"Find What You Love and Let It Kill You (Jonny Craig EP)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States. It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao. It is named after the creek that flows from the west off of the Deep Creek Mountains. It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .\",\n    \"Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah). The creek contains wild brown trout and hatchery rainbow trout.\",\n    \"Pony Express | The Pony Express was a mail service delivering messages, newspapers, and mail.\",\n    \"Google Express | Google Express, formerly Google Shopping Express, is a shopping service from Google available in some parts of the United States that was launched on a free trial basis in San Francisco and Silicon Valley in spring 2013. Originally it was a same-day service; later offering same-day and overnight delivery. Originally, pricing was the same as in-person shopping, but later prices became typically US$4-$10 more per item; Google Express Help said \\\"Because item prices are set by store ...[truncated]\",\n    \"Ibapah Peak | Ibapah Peak is a 12018 ft summit in Juab County, Utah in the United States. It is the highest point of the Deep Creek Range and is located less than 5 mi east of the Utah-Nevada border, and about 10 mi northwest of the town of Trout Creek, Utah. With a topographic prominence of 5247 ft it is the fifth-most prominent summit in Utah.\",\n    \"Find What You Love and Let It Kill You | \\\"Find What You Love and Let It Kill You\\\" may refer to:\",\n    \"Find What You Love and Let It Kill You (Jonny Craig EP) | Find What You Love and Let It Kill You (Jonny Craig EP)\"\n  ],\n  \"summary_2\": \"Messages, newspapers, and mail (letters).\",\n  \"answer\": \"Messages, newspapers, and mail (letters).\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Pony Express\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Pony Express\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 indicates mail/letters and the agent is expected to produce a second-hop retrieval query (the `query` field) for that question.\",\n    \"preserve_rule\": \"Keep the agent's current concise, single-query output style and retain use of place-name and mail-related tokens already present in the visible inputs.\",\n    \"change_rule\": \"Add a focused instruction: produce one compact retrieval query string that (1) explicitly includes the place name from the question (e.g. 'Trout Creek' or 'Trout Creek, UT'), (2) targets historical/mail-route phrasing (for example, terms such as 'historic mail service', 'mail route', or 'delivery history'), and (3) includes wording that seeks the kinds or 'items' delivered (for example, 'items delivered' or 'types of items delivered'). Output a short search-query phrase rather than a full sentence or an answer.\",\n    \"drop_or_avoid_rule\": \"Do not include specific carrier or service brand names or other named entities that are not present in the visible inputs. Avoid outputting final answers, copying long verbatim spans from hidden documents, or reproducing any leaked literal tokens referenced in prior feedback.\",\n    \"output_contract\": \"Produce exactly one compact retrieval query string in the `query` field. The query must contain the place name, at least one mail-related phrase, and a phrase indicating 'items' or 'types of items' delivered. The query must be concise and suitable for retrieval, must not include disallowed carrier/service names or final answers, and must not reproduce long hidden-document spans.\",\n    \"why_local_transition\": \"This minimal prompt edit redirects the agent from relying on a specific named carrier to issuing a targeted historical-mail/delivery query for Trout Creek that will surface supporting pages about what was delivered there. It preserves the mail-focused, concise behavior while removing the temptation to emit forbidden named literals.\"\n  },\n  \"rationale\": \"The source query relied on a carrier-specific token and was rejected for literal leakage. The smallest coherent behavioral change is to instruct the agent to build a concise, place-centered retrieval query that targets 'historic mail service' or 'delivery history' and explicitly requests 'items delivered' information. This preserves existing useful behavior (conciseness, inclusion of town and mail concepts) while preventing emission of specific carrier/service names or other leaked literals. The delta is a prompt-level constraint and output-format rule (not a target answer), so it complies with the anti-cheating restrictions and makes the second-hop search more robust without copying hidden support content.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 1
+  }
+}

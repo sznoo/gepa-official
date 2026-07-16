@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "dd6785cbff0e7e92f0361505e746c0e4ba4eff4da6e2f32a741f1f8cf8529576",
+  "created_at": "2026-07-15T21:09:37.703363+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?",
+        "summary_1": "Washington, D.C.",
+        "summary_2": "Washington, D.C.",
+        "current_output": "Washington, D.C."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Washington, D.C.",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "{'query': 'Washington'}",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?\",\n  \"summary_1\": \"Washington, D.C.\",\n  \"summary_2\": \"Washington, D.C.\",\n  \"current_output\": \"Washington, D.C.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Washington, D.C.\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"{'query': 'Washington'}\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When both summary_1 and summary_2 are present and they agree on the same concise location/entity (i.e., both summaries are short, matching place names or identical strings), activate this delta.\",\n    \"preserve_rule\": \"Retain the base behavior of using the given summaries as the sole evidence source and producing a single minimal final answer string. Do not discard or re-query external systems when summaries already provide a clear, identical result.\",\n    \"change_rule\": \"If the summaries agree on a concise place/entity, produce only that agreed-upon plain text string as the final answer. Do not emit internal debugging structures, serialized queries, or JSON/dict-style objects. Format the response exactly according to the final-answer contract (no extra commentary, explanation, or markup around the minimal answer).\",\n    \"drop_or_avoid_rule\": \"Avoid returning any JSON-like or dictionary objects (for example, {'query': ...}), internal search requests, or other transport/debug artifacts in the final output. Also avoid adding surrounding sentences, qualifiers, or justification text when summaries already agree.\",\n    \"output_contract\": \"Fill the [[ ## answer ## ]] block with exactly one minimal plain-text answer string supported by the visible summaries and nothing else (no braces, keys, commentary, or metadata).\",\n    \"why_local_transition\": \"This minimal edit blocks a regression where the agent emits a transport/debug artifact (a serialized query or dict) instead of the concise final answer. When both summaries already agree, the correct behavior is to output that agreed concise string; preventing JSON/dict-like outputs ensures the final output stays a minimal answer string.\"\n  },\n  \"rationale\": \"The target failure is a transport/debug artifact (a serialized query object) replacing the concise final answer. The smallest coherent prompt change is to detect when the two provided summaries already agree on a concise place/entity and then force production of only that plain-text string, while explicitly forbidding JSON/dict-style outputs. This preserves the base prompt's reliance on the visible summaries and keeps useful behavior (using consensus evidence) while preventing the specific regression of emitting internal query structures.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 141,
+    "row_index": 141,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "eb3f56d2cb423f7408f18a2ee68ddb5eee852548970eafeb27f1940e737728c3",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "34287da0a10c29512ec2928eccf6a7fc8a90d31f521728c8d7f147a643263546",
+  "created_at": "2026-07-14T19:01:54.785323+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question names a band and summary_1 is a person name and the current query simply re-searches that same person, apply this update.",
+            "preserve_rule": "Keep producing exactly one compact second-hop retrieval query (a single-line string) and continue to include the question's tour keywords (e.g., the artist 'Bruce Springsteen' and year). Preserve use of concise keywords/phrases rather than full sentences.",
+            "change_rule": "Stop anchoring the second-hop query to the person in summary_1. Instead, produce a short query that pairs the band name 'Hesitation Wounds' with terms that will surface the band's lineup or which member 'toured with' Bruce Springsteen in 2009 (examples of useful tokens: lineup, member, 'toured with', tour, 2009). Do not include the name in summary_1 in this new query.",
+            "drop_or_avoid_rule": "Do not repeat the first-hop person name from summary_1 in the new query. Avoid overly broad album-only keywords or unrelated tour years; avoid explanatory text, punctuation-heavy clauses, or multiple alternative OR-ed names. Output must be a query string only.",
+            "output_contract": "Return a single compact query string (no commentary) that includes the band name (Hesitation Wounds), the performer 'Bruce Springsteen' and the year '2009', plus one concise token such as 'lineup', 'member' or 'toured' to target which band member toured in 2009.",
+            "why_local_transition": "The previous query re-searched the already-known person and re-returned their page; the minimal change redirects the second-hop toward the band's lineup/tour information so the retrieval can find which band member toured with Springsteen in 2009 without discarding existing concise-query behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If summary_1 is a single person name (a candidate) and the current generated query embeds that name verbatim.",
+            "preserve_rule": "Keep using the given `question` and `summary_1` as inputs and continue to produce one compact retrieval `query` string (no additional fields or commentary).",
+            "change_rule": "Do not anchor the query solely on the candidate name from summary_1. Instead, emit a concise second-hop query that explicitly asks which member of the given band toured with Bruce Springsteen in 2009. Concretely, build a short query that contains the band name, the phrase or token 'Bruce Springsteen', and the year '2009', phrased to retrieve 'which band member' (e.g. a compact natural-language or quoted-term query). Do not introduce any new person names that are not already present in the visible inputs.",
+            "drop_or_avoid_rule": "Avoid queries that assume the candidate name is correct by only combining the band name with that person's name and 'Bruce Springsteen' and the year. Avoid adding any sample-specific person names that do not appear in the visible inputs. Do not output answers or extra instructions—only the retrieval query string.",
+            "output_contract": "Return exactly one compact retrieval query string (single line, <= ~15 words) that includes the band name, 'Bruce Springsteen', and '2009', and is phrased to retrieve which Hesitation Wounds band member toured with Bruce Springsteen that year. No answer, explanation, or additional text.",
+            "why_local_transition": "Shifts queries from narrowly reusing a candidate name to a targeted 'which member' formulation that will surface documents listing members and touring credits for 2009, without adding new person names or altering other prompt behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which Hesitation Wounds band member toured with Bruce Springsteen's band in 2009?",
+        "summary_1": "Ed Manion",
+        "current_output": {
+          "query": "\"Hesitation Wounds\" \"Ed Manion\" \"Bruce Springsteen\" 2009 tour"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question names a band and summary_1 is a person name and the current query simply re-searches that same person, apply this update.\",\n      \"preserve_rule\": \"Keep producing exactly one compact second-hop retrieval query (a single-line string) and continue to include the question's tour keywords (e.g., the artist 'Bruce Springsteen' and year). Preserve use of concise keywords/phrases rather than full sentences.\",\n      \"change_rule\": \"Stop anchoring the second-hop query to the person in summary_1. Instead, produce a short query that pairs the band name 'Hesitation Wounds' with terms that will surface the band's lineup or which member 'toured with' Bruce Springsteen in 2009 (examples of useful tokens: lineup, member, 'toured with', tour, 2009). Do not include the name in summary_1 in this new query.\",\n      \"drop_or_avoid_rule\": \"Do not repeat the first-hop person name from summary_1 in the new query. Avoid overly broad album-only keywords or unrelated tour years; avoid explanatory text, punctuation-heavy clauses, or multiple alternative OR-ed names. Output must be a query string only.\",\n      \"output_contract\": \"Return a single compact query string (no commentary) that includes the band name (Hesitation Wounds), the performer 'Bruce Springsteen' and the year '2009', plus one concise token such as 'lineup', 'member' or 'toured' to target which band member toured in 2009.\",\n      \"why_local_transition\": \"The previous query re-searched the already-known person and re-returned their page; the minimal change redirects the second-hop toward the band's lineup/tour information so the retrieval can find which band member toured with Springsteen in 2009 without discarding existing concise-query behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 is a single person name (a candidate) and the current generated query embeds that name verbatim.\",\n      \"preserve_rule\": \"Keep using the given `question` and `summary_1` as inputs and continue to produce one compact retrieval `query` string (no additional fields or commentary).\",\n      \"change_rule\": \"Do not anchor the query solely on the candidate name from summary_1. Instead, emit a concise second-hop query that explicitly asks which member of the given band toured with Bruce Springsteen in 2009. Concretely, build a short query that contains the band name, the phrase or token 'Bruce Springsteen', and the year '2009', phrased to retrieve 'which band member' (e.g. a compact natural-language or quoted-term query). Do not introduce any new person names that are not already present in the visible inputs.\",\n      \"drop_or_avoid_rule\": \"Avoid queries that assume the candidate name is correct by only combining the band name with that person's name and 'Bruce Springsteen' and the year. Avoid adding any sample-specific person names that do not appear in the visible inputs. Do not output answers or extra instructions—only the retrieval query string.\",\n      \"output_contract\": \"Return exactly one compact retrieval query string (single line, <= ~15 words) that includes the band name, 'Bruce Springsteen', and '2009', and is phrased to retrieve which Hesitation Wounds band member toured with Bruce Springsteen that year. No answer, explanation, or additional text.\",\n      \"why_local_transition\": \"Shifts queries from narrowly reusing a candidate name to a targeted 'which member' formulation that will surface documents listing members and touring credits for 2009, without adding new person names or altering other prompt behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which Hesitation Wounds band member toured with Bruce Springsteen's band in 2009?\",\n  \"summary_1\": \"Ed Manion\",\n  \"current_output\": {\n    \"query\": \"\\\"Hesitation Wounds\\\" \\\"Ed Manion\\\" \\\"Bruce Springsteen\\\" 2009 tour\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Hesitation Wounds which member toured with Bruce Springsteen 2009\"\n  },\n  \"rationale\": \"Applied both deltas: removed the summary_1 name from the query and reformulated a compact 'which member' query including the band, 'Bruce Springsteen', and '2009' to target lineup/tour evidence.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 110,
+    "row_index": 110,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

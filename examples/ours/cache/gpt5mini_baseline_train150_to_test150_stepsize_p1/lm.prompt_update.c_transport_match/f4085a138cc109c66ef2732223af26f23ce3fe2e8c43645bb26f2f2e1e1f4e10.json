@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "f4085a138cc109c66ef2732223af26f23ce3fe2e8c43645bb26f2f2e1e1f4e10",
+  "created_at": "2026-07-16T01:10:42.436618+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 123,
+        "stable_id": "123",
+        "question": "Which of the following directed \"House on Haunted Hill\": John Schwert or William Malone?",
+        "summary_1": "William Malone",
+        "hop2_query": "William Malone",
+        "summary_2": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+        "answer": "William Malone",
+        "gold_support_titles": [
+          "John Schwert",
+          "William Malone (director)"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 48,
+          "w_stable_id": "48",
+          "agent": "summary2",
+          "w_question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nico Hülkenberg",
+            "score": 0.0,
+            "answer": "Nico Hülkenberg"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+            "score": 0.0,
+            "answer": "Nico Hülkenberg"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),",
+                "preserve_rule": "Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.",
+                "change_rule": "When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.",
+                "drop_or_avoid_rule": "Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.",
+                "output_contract": "Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.",
+                "why_local_transition": "This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+            "score": 1.0,
+            "answer": "William Malone"
+          }
+        },
+        {
+          "w_sample_index": 68,
+          "w_stable_id": "68",
+          "agent": "summary2",
+          "w_question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "They were both novelists.",
+            "score": 0.0,
+            "answer": "They were both novelists."
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary1 states: \"They were both novelists.\" Second-hop evidence: Carlo Emilio Gadda is described as an Italian writer and poet who \"belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.\" Katharine Kerr is described as an American science fiction and fantasy novelist, best known for her Celtic-influenced Deverry series.",
+            "score": 0.0,
+            "answer": "They were both novelists."
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the incoming `context` is a concise answer (a short sentence like 'They were both ...') AND the `passages` include separate biographical lines for the named individuals from the question, apply this prompt update.",
+                "preserve_rule": "Keep the original concise answer as the first sentence of `summary` exactly as given unless it contradicts the passages.",
+                "change_rule": "Append exactly one brief supporting sentence per person named in the question. Each supporting sentence must (a) start with the person's full name as it appears in the passages, (b) follow with a short attribution phrase drawn directly from that person's passage (no more than ~10 words), and (c) use neutral language such as 'is described as' or 'was an' (e.g. 'Carlo Emilio Gadda is described as an Italian writer and poet.'). Use quotation marks only around short phrases (≤10 words) already present in the passages.",
+                "drop_or_avoid_rule": "Do not add new claims, do not copy long literal spans from passages, do not paraphrase into new unsupported facts, do not change the original concise answer, and do not include editorial commentary or evaluation. Avoid long quotations and avoid repeating entire passage lines.",
+                "output_contract": "Produce a `summary` consisting of: (1) the original concise answer as the first sentence; (2) one short supporting sentence per named person (at most two additional sentences total) that cites a short phrase from that person's passage as specified. Keep the full `summary` to 1–3 sentences.",
+                "why_local_transition": "This minimal edit preserves the existing short answer while adding exactly the second-hop evidence required: one compact, passage-grounded supporting sentence per person. That helps the pipeline retain the answer and include the second-hop facts the next agent expects."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+            "score": 1.0,
+            "answer": "William Malone"
+          }
+        },
+        {
+          "w_sample_index": 84,
+          "w_stable_id": "84",
+          "agent": "summary2",
+          "w_question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Niʻihau (also known as The Makaha Sons)."
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Israel Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Niʻihau (Makaha Sons of Niʻihau)"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks which group the musician known as \"Braddah Iz\" belongs to AND the provided passages include both the musician's page (showing the alias) and a passage describing a musical group (e.g., Mākaha/Makaha Sons of Niʻihau).",
+                "preserve_rule": "Keep the agent's current concise-answer style and preserve any accurate identification already extracted from the musician passage (e.g., that the musician is Israel Kamakawiwoʻole, aka \"Braddah Iz\"). Do not remove or contradict facts already present in the source passages.",
+                "change_rule": "Merge the two relevant passages into a 1–2 sentence summary that (a) names the musician using the canonical name found in the passages, (b) states their membership relationship to the group and—only if the passages explicitly state it—notes that they were a founding member, and (c) supplies one brief descriptive fact about the group (for example: that it is a Hawaiian musical group and the year/place of formation if given). Paraphrase the source text rather than reproducing long verbatim spans. Use the group name shown in the 'context' field as the primary label.",
+                "drop_or_avoid_rule": "Do not add unrelated album details, chart information, or biographical digressions. Avoid listing every band member unless required by the passages. Do not copy long literal spans verbatim from the passages. Do not invent dates, roles, or membership beyond what the visible passages support.",
+                "output_contract": "Produce the field 'summary' as 1–2 concise sentences that (1) identify the musician (using the canonical name from the passages), (2) state the group they are a member of (using the context/group name), and (3) include at most one short clause giving the group's basic descriptor (e.g., 'a Hawaiian musical group formed in 1976 on Oahu') if that fact appears in the passages. Keep language factual, paraphrased, and directly supported by the provided passages.",
+                "why_local_transition": "The current output only names the group; this transition instructs the agent to integrate the musician page with the group passage so the summary also captures membership context (and founding-member/formation details when explicitly present), increasing completeness while keeping the response concise."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+            "score": 1.0,
+            "answer": "William Malone"
+          }
+        },
+        {
+          "w_sample_index": 14,
+          "w_stable_id": "14",
+          "agent": "summary2",
+          "w_question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Rip Taylor",
+            "score": 0.0,
+            "answer": "Rip Taylor"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his habit of showering himself (and others) with confetti.",
+            "score": 0.0,
+            "answer": "Rip Taylor (Charles Elmer \"Rip\" Taylor, Jr.)"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question mentions Anthony Toby \"Tony\" Hiller (or \"Tony Hiller\") and asks which artist liked showering himself (or others) with confetti (keywords: \"shower\", \"confetti\"), or if the `context` field names an artist and passages contain a Tony Hiller passage, apply this rule.",
+                "preserve_rule": "Keep the agent's existing behavior of using the `context` field as the first-hop entity and extracting factual lines from `passages`. Preserve concise, factual phrasing and only use facts that appear verbatim or are directly supported in the provided passages.",
+                "change_rule": "When triggered, produce a short integrated summary (1–2 sentences) that (a) links Tony Hiller (or The Hiller Brothers) to the artist named in `context` by stating that Tony Hiller/The Hiller Brothers appeared with that artist, and (b) states the artist's notable habit of showering himself (and others) with confetti if that habit is described in the passages for that artist. Use the names and descriptions as they appear in the inputs and do not introduce new entities or claims.",
+                "drop_or_avoid_rule": "Do not add unrelated passage content (e.g., meteor showers, baby showers), do not invent additional collaborators or biographical details not present in the passages, and avoid long verbatim copying of full biography paragraphs. Do not output the final answer as a separate label or directive — only produce the `summary` field content per the original interface.",
+                "output_contract": "Return the `summary` field as a concise (one or two sentence) integrated statement that: (1) names Tony Hiller (or The Hiller Brothers) and affirms they appeared with the artist named in `context`, and (2) names that artist and notes the confetti-showering habit described in the passages. All claims must be directly supported by the provided `passages` or `context`.",
+                "why_local_transition": "The current output only gives the artist name from the context. The task requires integrating second-hop evidence about Tony Hiller with the first-hop context so the summary connects Tony Hiller's appearances to the context artist and preserves the confetti habit fact needed to answer the question."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+            "score": 1.0,
+            "answer": "William Malone"
+          }
+        },
+        {
+          "w_sample_index": 119,
+          "w_stable_id": "119",
+          "agent": "summary2",
+          "w_question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nikita Katsalapov",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks who won the 2016 Russian national silver medal 'with' another person and the passages include the context person plus a different passage that contains the partner's name and the birth date '29 April 1995'.",
+                "preserve_rule": "Keep the agent's existing concise-answer behavior and retain any facts already used from `context` and `passages` (e.g., the context person's identity). Continue to produce the `summary` field as the output.",
+                "change_rule": "Also integrate the second-hop passage that names the partner: produce a short 1–2 sentence summary that (a) names both people (use the full names as given in the passages), (b) includes birth dates when they appear in the passages, and (c) explicitly states that the two skaters were the 2016 Russian national silver medalists together. Stay concise and factual; do not add new facts beyond the passages.",
+                "drop_or_avoid_rule": "Do not output only a single name (avoid the current one-word output). Do not invent or infer facts not present in the provided passages. Avoid long verbatim quotations of passage text and avoid unrelated passage content.",
+                "output_contract": "Return the field `summary` as a short (1–2 sentence) integrated statement that mentions both partners' full names, includes birth dates if present in the passages, and states they jointly won the 2016 Russian national silver medal. Keep the language factual and minimal.",
+                "why_local_transition": "The current output only repeats the context person. This minimal change forces the agent to incorporate the partner information (including the 29 April 1995 birth date when present) from the passages so the summary directly links both skaters and the 2016 silver-medal partnership required to answer the question."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "William Malone directed \"House on Haunted Hill\" (the 1999 remake).",
+            "score": 1.0,
+            "answer": "William Malone"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 123,\n  \"stable_id\": \"123\",\n  \"question\": \"Which of the following directed \\\"House on Haunted Hill\\\": John Schwert or William Malone?\",\n  \"summary_1\": \"William Malone\",\n  \"hop2_query\": \"William Malone\",\n  \"summary_2\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n  \"answer\": \"William Malone\",\n  \"gold_support_titles\": [\n    \"John Schwert\",\n    \"William Malone (director)\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 48,\n    \"w_stable_id\": \"48\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nico Hülkenberg\",\n      \"score\": 0.0,\n      \"answer\": \"Nico Hülkenberg\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n      \"score\": 0.0,\n      \"answer\": \"Nico Hülkenberg\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.\",\n          \"change_rule\": \"When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.\",\n          \"drop_or_avoid_rule\": \"Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.\",\n          \"output_contract\": \"Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.\",\n          \"why_local_transition\": \"This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n      \"score\": 1.0,\n      \"answer\": \"William Malone\"\n    }\n  },\n  {\n    \"w_sample_index\": 68,\n    \"w_stable_id\": \"68\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Carlo Emilio Gadda and Katharine Kerr both were considered what?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"They were both novelists.\",\n      \"score\": 0.0,\n      \"answer\": \"They were both novelists.\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary1 states: \\\"They were both novelists.\\\" Second-hop evidence: Carlo Emilio Gadda is described as an Italian writer and poet who \\\"belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.\\\" Katharine Kerr is described as an American science fiction and fantasy novelist, best known for her Celtic-influenced Deverry series.\",\n      \"score\": 0.0,\n      \"answer\": \"They were both novelists.\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the incoming `context` is a concise answer (a short sentence like 'They were both ...') AND the `passages` include separate biographical lines for the named individuals from the question, apply this prompt update.\",\n          \"preserve_rule\": \"Keep the original concise answer as the first sentence of `summary` exactly as given unless it contradicts the passages.\",\n          \"change_rule\": \"Append exactly one brief supporting sentence per person named in the question. Each supporting sentence must (a) start with the person's full name as it appears in the passages, (b) follow with a short attribution phrase drawn directly from that person's passage (no more than ~10 words), and (c) use neutral language such as 'is described as' or 'was an' (e.g. 'Carlo Emilio Gadda is described as an Italian writer and poet.'). Use quotation marks only around short phrases (≤10 words) already present in the passages.\",\n          \"drop_or_avoid_rule\": \"Do not add new claims, do not copy long literal spans from passages, do not paraphrase into new unsupported facts, do not change the original concise answer, and do not include editorial commentary or evaluation. Avoid long quotations and avoid repeating entire passage lines.\",\n          \"output_contract\": \"Produce a `summary` consisting of: (1) the original concise answer as the first sentence; (2) one short supporting sentence per named person (at most two additional sentences total) that cites a short phrase from that person's passage as specified. Keep the full `summary` to 1–3 sentences.\",\n          \"why_local_transition\": \"This minimal edit preserves the existing short answer while adding exactly the second-hop evidence required: one compact, passage-grounded supporting sentence per person. That helps the pipeline retain the answer and include the second-hop facts the next agent expects.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n      \"score\": 1.0,\n      \"answer\": \"William Malone\"\n    }\n  },\n  {\n    \"w_sample_index\": 84,\n    \"w_stable_id\": \"84\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Niʻihau (also known as The Makaha Sons).\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Israel Kaʻanoʻi Kamakawiwoʻole, also called \\\"Braddah Iz\\\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Niʻihau (Makaha Sons of Niʻihau)\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks which group the musician known as \\\"Braddah Iz\\\" belongs to AND the provided passages include both the musician's page (showing the alias) and a passage describing a musical group (e.g., Mākaha/Makaha Sons of Niʻihau).\",\n          \"preserve_rule\": \"Keep the agent's current concise-answer style and preserve any accurate identification already extracted from the musician passage (e.g., that the musician is Israel Kamakawiwoʻole, aka \\\"Braddah Iz\\\"). Do not remove or contradict facts already present in the source passages.\",\n          \"change_rule\": \"Merge the two relevant passages into a 1–2 sentence summary that (a) names the musician using the canonical name found in the passages, (b) states their membership relationship to the group and—only if the passages explicitly state it—notes that they were a founding member, and (c) supplies one brief descriptive fact about the group (for example: that it is a Hawaiian musical group and the year/place of formation if given). Paraphrase the source text rather than reproducing long verbatim spans. Use the group name shown in the 'context' field as the primary label.\",\n          \"drop_or_avoid_rule\": \"Do not add unrelated album details, chart information, or biographical digressions. Avoid listing every band member unless required by the passages. Do not copy long literal spans verbatim from the passages. Do not invent dates, roles, or membership beyond what the visible passages support.\",\n          \"output_contract\": \"Produce the field 'summary' as 1–2 concise sentences that (1) identify the musician (using the canonical name from the passages), (2) state the group they are a member of (using the context/group name), and (3) include at most one short clause giving the group's basic descriptor (e.g., 'a Hawaiian musical group formed in 1976 on Oahu') if that fact appears in the passages. Keep language factual, paraphrased, and directly supported by the provided passages.\",\n          \"why_local_transition\": \"The current output only names the group; this transition instructs the agent to integrate the musician page with the group passage so the summary also captures membership context (and founding-member/formation details when explicitly present), increasing completeness while keeping the response concise.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n      \"score\": 1.0,\n      \"answer\": \"William Malone\"\n    }\n  },\n  {\n    \"w_sample_index\": 14,\n    \"w_stable_id\": \"14\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Rip Taylor\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his habit of showering himself (and others) with confetti.\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor (Charles Elmer \\\"Rip\\\" Taylor, Jr.)\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question mentions Anthony Toby \\\"Tony\\\" Hiller (or \\\"Tony Hiller\\\") and asks which artist liked showering himself (or others) with confetti (keywords: \\\"shower\\\", \\\"confetti\\\"), or if the `context` field names an artist and passages contain a Tony Hiller passage, apply this rule.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of using the `context` field as the first-hop entity and extracting factual lines from `passages`. Preserve concise, factual phrasing and only use facts that appear verbatim or are directly supported in the provided passages.\",\n          \"change_rule\": \"When triggered, produce a short integrated summary (1–2 sentences) that (a) links Tony Hiller (or The Hiller Brothers) to the artist named in `context` by stating that Tony Hiller/The Hiller Brothers appeared with that artist, and (b) states the artist's notable habit of showering himself (and others) with confetti if that habit is described in the passages for that artist. Use the names and descriptions as they appear in the inputs and do not introduce new entities or claims.\",\n          \"drop_or_avoid_rule\": \"Do not add unrelated passage content (e.g., meteor showers, baby showers), do not invent additional collaborators or biographical details not present in the passages, and avoid long verbatim copying of full biography paragraphs. Do not output the final answer as a separate label or directive — only produce the `summary` field content per the original interface.\",\n          \"output_contract\": \"Return the `summary` field as a concise (one or two sentence) integrated statement that: (1) names Tony Hiller (or The Hiller Brothers) and affirms they appeared with the artist named in `context`, and (2) names that artist and notes the confetti-showering habit described in the passages. All claims must be directly supported by the provided `passages` or `context`.\",\n          \"why_local_transition\": \"The current output only gives the artist name from the context. The task requires integrating second-hop evidence about Tony Hiller with the first-hop context so the summary connects Tony Hiller's appearances to the context artist and preserves the confetti habit fact needed to answer the question.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n      \"score\": 1.0,\n      \"answer\": \"William Malone\"\n    }\n  },\n  {\n    \"w_sample_index\": 119,\n    \"w_stable_id\": \"119\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nikita Katsalapov\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks who won the 2016 Russian national silver medal 'with' another person and the passages include the context person plus a different passage that contains the partner's name and the birth date '29 April 1995'.\",\n          \"preserve_rule\": \"Keep the agent's existing concise-answer behavior and retain any facts already used from `context` and `passages` (e.g., the context person's identity). Continue to produce the `summary` field as the output.\",\n          \"change_rule\": \"Also integrate the second-hop passage that names the partner: produce a short 1–2 sentence summary that (a) names both people (use the full names as given in the passages), (b) includes birth dates when they appear in the passages, and (c) explicitly states that the two skaters were the 2016 Russian national silver medalists together. Stay concise and factual; do not add new facts beyond the passages.\",\n          \"drop_or_avoid_rule\": \"Do not output only a single name (avoid the current one-word output). Do not invent or infer facts not present in the provided passages. Avoid long verbatim quotations of passage text and avoid unrelated passage content.\",\n          \"output_contract\": \"Return the field `summary` as a short (1–2 sentence) integrated statement that mentions both partners' full names, includes birth dates if present in the passages, and states they jointly won the 2016 Russian national silver medal. Keep the language factual and minimal.\",\n          \"why_local_transition\": \"The current output only repeats the context person. This minimal change forces the agent to incorporate the partner information (including the 29 April 1995 birth date when present) from the passages so the summary directly links both skaters and the 2016 silver-medal partnership required to answer the question.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"William Malone directed \\\"House on Haunted Hill\\\" (the 1999 remake).\",\n      \"score\": 1.0,\n      \"answer\": \"William Malone\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 48,\n  \"dominant_gap_type\": \"evidence_family\",\n  \"transported_damage_hypothesis\": \"Remove the integrated second-hop biographical clause so the summary2 agent returns only the bare director name instead of the 1–2 sentence film+director summary.\",\n  \"expected_damaged_behavior\": \"At the summary2 endpoint the agent will output only the director's name (e.g., 'William Malone') with no supporting second-hop evidence linking the director and the film.\",\n  \"rationale\": \"W#48's repair instructs the agent to merge a first-hop page (car page listing drivers) with a second-hop biographical passage into a compact 1–2 sentence summary; the same cross-hop integration is required for a film page and a director bio. Transporting the inverse of that repair (i.e., dropping the second-hop integration) plausibly produces a local C-side failure that preserves the correct answer but removes supporting evidence—matching the criteria: same kind of multi-hop evidence-family gap, no answer flip, local neighbor of the correct summary, and no entity-specific content is transferred.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 123,
+    "c_stable_id": "123",
+    "candidate_w_sample_indices": [
+      14,
+      48,
+      68,
+      84,
+      119
+    ],
+    "match_fingerprint": "1a655c2c840f9900e1ce9285eba857f61d2f480938ebca195bc227694ece58c8"
+  }
+}

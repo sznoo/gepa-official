@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "0acf01a91504c0b54c796441bdd827000879d2953e0b9e4af066936e4f02fbd5",
+  "created_at": "2026-07-16T02:44:44.820613+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+    "answer": "Much Ado About Nothing",
+    "context": {
+      "title": [
+        "Bad Girls (1994 film)",
+        "Brokedown Palace (disambiguation)",
+        "The Accused (1988 film)",
+        "Brokedown Palace",
+        "Kate Beckinsale",
+        "Immediate Family (film)",
+        "Love Field (film)",
+        "Over the Edge (film)",
+        "Unlawful Entry (film)",
+        "Reform School Girl (1994 film)"
+      ],
+      "sentences": [
+        [
+          "Bad Girls is a 1994 American western film directed by Jonathan Kaplan, and written by Ken Friedman and Yolande Turner.",
+          " It stars Madeleine Stowe, Mary Stuart Masterson, Andie MacDowell and Drew Barrymore."
+        ],
+        [
+          "Brokedown Palace is a 1999 American drama film by Jonathan Kaplan."
+        ],
+        [
+          "The Accused is a 1988 Canadian-American drama film written by Tom Topor and directed by Jonathan Kaplan.",
+          " It stars Jodie Foster and Kelly McGillis.",
+          " The film is set in Washington state and was filmed in Vancouver, British Columbia, Canada.",
+          " The film was loosely based on the 1983 gang rape of Cheryl Araujo in New Bedford, Massachusetts, and the resulting trial, which received national coverage.",
+          " This film was one of the first Hollywood films to portray rape graphically."
+        ],
+        [
+          "Brokedown Palace is a 1999 American drama film directed by Jonathan Kaplan, and starring Claire Danes, Kate Beckinsale, Bill Pullman and Lim Kay Tong.",
+          " It deals with two American friends imprisoned in Thailand for drug smuggling.",
+          " Because it presents a critical view of the Thai legal system, most scenes were filmed in the Philippines; however, some panoramas and views were filmed in Bangkok.",
+          " Its title is taken from a Grateful Dead song written by Jerry Garcia and Robert Hunter from their 1970 album \"American Beauty\"."
+        ],
+        [
+          "Kathrin Romary Beckinsale (born 26 July 1973) is an English actress.",
+          " After some minor television roles, she made her film debut in \"Much Ado About Nothing\" (1993) while still a student at the University of Oxford.",
+          " She appeared in British costume dramas such as \"Prince of Jutland\" (1994), \"Cold Comfort Farm\" (1995), \"Emma\" (1996), and \"The Golden Bowl\" (2000), in addition to various stage and radio productions.",
+          " She began to seek film work in the United States in the late 1990s and, after appearing in small-scale dramas \"The Last Days of Disco\" (1998) and \"Brokedown Palace\" (1999), she had starring roles in the war drama \"Pearl Harbor\" and the romantic comedy \"Serendipity\".",
+          " She followed those with appearances in \"The Aviator\" (2004) and \"Click\" (2006)."
+        ],
+        [
+          "Immediate Family is a 1989 drama film directed by Jonathan Kaplan.",
+          " It stars Glenn Close and James Woods as a married childless couple who want a baby.",
+          " They decide to adopt from a pregnant teenage girl who later gets second thoughts."
+        ],
+        [
+          "Love Field is a 1992 American independent drama film written by Don Roos and directed by Jonathan Kaplan, starring Michelle Pfeiffer and Dennis Haysbert.",
+          " It was released on December 11, 1992 in the United States by Orion Pictures.",
+          " This film is an example of a representation of the assassination of John F. Kennedy in popular culture."
+        ],
+        [
+          "Over the Edge is a coming-of-age crime drama film directed by Jonathan Kaplan and released in May 1979.",
+          " The film, based on a newspaper article, had a limited theatrical release but has since achieved cult film status.",
+          " It was Matt Dillon's film debut."
+        ],
+        [
+          "Unlawful Entry is a 1992 American psychological thriller film directed by Jonathan Kaplan.",
+          " The film stars Kurt Russell, Madeleine Stowe and Ray Liotta."
+        ],
+        [
+          "Reform School Girl is a 1994 American drama film directed by Jonathan Kaplan."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brokedown Palace",
+        "Kate Beckinsale",
+        "Kate Beckinsale"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+    "gold_answer": "Much Ado About Nothing",
+    "context": {
+      "title": [
+        "Bad Girls (1994 film)",
+        "Brokedown Palace (disambiguation)",
+        "The Accused (1988 film)",
+        "Brokedown Palace",
+        "Kate Beckinsale",
+        "Immediate Family (film)",
+        "Love Field (film)",
+        "Over the Edge (film)",
+        "Unlawful Entry (film)",
+        "Reform School Girl (1994 film)"
+      ],
+      "sentences": [
+        [
+          "Bad Girls is a 1994 American western film directed by Jonathan Kaplan, and written by Ken Friedman and Yolande Turner.",
+          " It stars Madeleine Stowe, Mary Stuart Masterson, Andie MacDowell and Drew Barrymore."
+        ],
+        [
+          "Brokedown Palace is a 1999 American drama film by Jonathan Kaplan."
+        ],
+        [
+          "The Accused is a 1988 Canadian-American drama film written by Tom Topor and directed by Jonathan Kaplan.",
+          " It stars Jodie Foster and Kelly McGillis.",
+          " The film is set in Washington state and was filmed in Vancouver, British Columbia, Canada.",
+          " The film was loosely based on the 1983 gang rape of Cheryl Araujo in New Bedford, Massachusetts, and the resulting trial, which received national coverage.",
+          " This film was one of the first Hollywood films to portray rape graphically."
+        ],
+        [
+          "Brokedown Palace is a 1999 American drama film directed by Jonathan Kaplan, and starring Claire Danes, Kate Beckinsale, Bill Pullman and Lim Kay Tong.",
+          " It deals with two American friends imprisoned in Thailand for drug smuggling.",
+          " Because it presents a critical view of the Thai legal system, most scenes were filmed in the Philippines; however, some panoramas and views were filmed in Bangkok.",
+          " Its title is taken from a Grateful Dead song written by Jerry Garcia and Robert Hunter from their 1970 album \"American Beauty\"."
+        ],
+        [
+          "Kathrin Romary Beckinsale (born 26 July 1973) is an English actress.",
+          " After some minor television roles, she made her film debut in \"Much Ado About Nothing\" (1993) while still a student at the University of Oxford.",
+          " She appeared in British costume dramas such as \"Prince of Jutland\" (1994), \"Cold Comfort Farm\" (1995), \"Emma\" (1996), and \"The Golden Bowl\" (2000), in addition to various stage and radio productions.",
+          " She began to seek film work in the United States in the late 1990s and, after appearing in small-scale dramas \"The Last Days of Disco\" (1998) and \"Brokedown Palace\" (1999), she had starring roles in the war drama \"Pearl Harbor\" and the romantic comedy \"Serendipity\".",
+          " She followed those with appearances in \"The Aviator\" (2004) and \"Click\" (2006)."
+        ],
+        [
+          "Immediate Family is a 1989 drama film directed by Jonathan Kaplan.",
+          " It stars Glenn Close and James Woods as a married childless couple who want a baby.",
+          " They decide to adopt from a pregnant teenage girl who later gets second thoughts."
+        ],
+        [
+          "Love Field is a 1992 American independent drama film written by Don Roos and directed by Jonathan Kaplan, starring Michelle Pfeiffer and Dennis Haysbert.",
+          " It was released on December 11, 1992 in the United States by Orion Pictures.",
+          " This film is an example of a representation of the assassination of John F. Kennedy in popular culture."
+        ],
+        [
+          "Over the Edge is a coming-of-age crime drama film directed by Jonathan Kaplan and released in May 1979.",
+          " The film, based on a newspaper article, had a limited theatrical release but has since achieved cult film status.",
+          " It was Matt Dillon's film debut."
+        ],
+        [
+          "Unlawful Entry is a 1992 American psychological thriller film directed by Jonathan Kaplan.",
+          " The film stars Kurt Russell, Madeleine Stowe and Ray Liotta."
+        ],
+        [
+          "Reform School Girl is a 1994 American drama film directed by Jonathan Kaplan."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brokedown Palace",
+        "Kate Beckinsale",
+        "Kate Beckinsale"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "gold_support_titles": [
+      "Brokedown Palace",
+      "Kate Beckinsale"
+    ],
+    "hop1_query": "This American drama film directed by Jonathan Kaplan starred an English actress who made her film debut in what?",
+    "hop1_docs": [
+      "Jonathan Kaplan | Jonathan Kaplan (born November 25, 1947) is an American film producer and director.  His film \"The Accused\" (1988) earned actress Jodie Foster her first Oscar for Best Actress and was nominated for the Golden Bear at the 39th Berlin International Film Festival.  Kaplan received five Emmy nominations for his roles directing and producing \"ER\".",
+      "Immediate Family (film) | Immediate Family is a 1989 drama film directed by Jonathan Kaplan.  It stars Glenn Close and James Woods as a married childless couple who want a baby.  They decide to adopt from a pregnant teenage girl who later gets second thoughts.",
+      "Project X (1987 film) | Project X is a 1987 American science fiction comedy-drama film produced by Walter F. Parkes and Lawrence Lasker, directed by Jonathan Kaplan, and starring Matthew Broderick and Helen Hunt.  The plot revolves around a USAF Airman (Broderick) and a graduate student (Hunt) who are assigned to care for chimpanzees used in a secret Air Force project.",
+      "Swing Shift (film) | Swing Shift is a 1984 American romantic drama war film directed by Jonathan Demme and produced by and starring Goldie Hawn with Kurt Russell.  It also starred Christine Lahti, Fred Ward and Ed Harris.  Lahti earned an Academy Award nomination for Best Supporting Actress for her tragic portrayal of heart-broken ex-singer and Hawn's character's close friend Hazel, losing to Peggy Ashcroft for \"A Passage to India\".  Singer Belinda Carlisle made a foray into the film, and Holly Hunter can be seen in one of her first movie roles.",
+      "Love Field (film) | Love Field is a 1992 American independent drama film written by Don Roos and directed by Jonathan Kaplan, starring Michelle Pfeiffer and Dennis Haysbert.  It was released on December 11, 1992 in the United States by Orion Pictures.  This film is an example of a representation of the assassination of John F. Kennedy in popular culture.",
+      "Sandra Bullock filmography | Sandra Bullock is an American actress who made her film debut with a minor role in the 1987 thriller \"Hangmen\".  She made her television debut in the television film \"Bionic Showdown: The Six Million Dollar Man and the Bionic Woman\" (1989) and played the lead role in the short-lived sitcom \"Working Girl\" (1990) before making her breakthrough starring in the action film \"Speed\" (1994).  She starred with Sylvester Stallone in \"Demolition Man\" (1994).  Bullock founded her own production company, Fortis Films, and starred in the romantic comedy \"While You Were Sleeping\" in 1995.  Her performance in the film earned her first nomination for the Golden Globe Award for Best Actress – Motion Picture Comedy or Musical.  The following year, Bullock starred with Matthew McConaughey in the film adaptation of John Grisham's novel \"A Time to Kill\" (1996).  In 1997, she reprised her \"Speed\" role in the sequel, \"\".  The following year, Bullock starred in the romantic comedy \"Practical Magic\", voiced Miriam in the animated biblical film \"The Prince of Egypt\" and also executive produced her first film, the romantic drama \"Hope Floats\".",
+      "Madison Wolfe | Madison Wolfe (born October 16, 2002) is an American actress.  She made her film debut in the adventure drama \"On the Road\" (2012) and her television debut in the HBO series \"True Detective\" (2014).  She starred in the horror film \"The Conjuring 2\" (2016)."
+    ],
+    "hop1_titles": [
+      "Jonathan Kaplan",
+      "Immediate Family (film)",
+      "Project X (1987 film)",
+      "Swing Shift (film)",
+      "Love Field (film)",
+      "Sandra Bullock filmography",
+      "Madison Wolfe"
+    ],
+    "summary_1": "Evidence: Jonathan Kaplan directed multiple American drama films cited here — e.g., \"Immediate Family\" (described as \"a drama film directed by Jonathan Kaplan\" that \"stars Glenn Close and James Woods\"), \"Project X\" (noted as \"directed by Jonathan Kaplan, and starring Matthew Broderick and Helen Hunt\"), \"Love Field\" (\"an American independent drama film ... directed by Jonathan Kaplan, starring Michelle Pfeiffer and Dennis Haysbert\"), and Kaplan's film \"The Accused\" is mentioned with Jodie Foster. Missing link / next-hop direction: none of these passages identify an English actress among those named, so retrieve Jonathan Kaplan's full filmography or the cast lists of his drama films to find which Kaplan-directed American drama \"starred an English actress\"; then open that English actress's biography/page to find the exact film in which she \"made her film debut.\" Use the film title or the actress's name as the retrieval anchor.",
+    "hop2_query": "Jonathan Kaplan filmography cast list English actress film debut",
+    "hop2_docs": [
+      "Jonathan Kaplan | Jonathan Kaplan (born November 25, 1947) is an American film producer and director.  His film \"The Accused\" (1988) earned actress Jodie Foster her first Oscar for Best Actress and was nominated for the Golden Bear at the 39th Berlin International Film Festival.  Kaplan received five Emmy nominations for his roles directing and producing \"ER\".",
+      "Wendy Richard filmography | The Wendy Richard filmography lists the film and TV appearances of English actress Wendy Richard.",
+      "Joan Sims filmography | The Joan Sims filmography lists the film and television appearances of English actress Joan Sims (1930–2001).",
+      "Božidara Turzonovová filmography | The filmography of Bulgarian-born Slovak actress Božidara Turzonovová chronicles her work through the artist's fifty years as a film, television and stage actress.  She entered film industry in 1961, and made her official cinematic debut in the Vladislav Pavlovič's production of \"Most na tú stranu\".  Overall, she appeared in one-hundred-sixty-eight titles to date, of which thirty-five are feature, and one-hundred-thirty-five television films or series.  While on stage, Turzonovová was cast in one-hundred-seven plays or musicals, eight of which have been also televised.",
+      "Marlee Matlin filmography | The following is a list of the film and television appearances of American actress Marlee Matlin.  Matlin, who had previously acted in stage productions, made her screen debut as the female lead in the 1986 film \"Children of a Lesser God\", for which she won the Academy Award for Best Actress and a Golden Globe Award.",
+      "Spice Girls filmography | English pop girl group the Spice Girls have starred in one feature film, as well as several television specials, documentaries and commercials.  They made their film debut in 1997, starring in their feature film \"Spice World\".  The film was a commercial success, but was widely panned by critics, earning the group the Golden Raspberry Award for Worst Actress.",
+      "Over the Edge (film) | Over the Edge is a coming-of-age crime drama film directed by Jonathan Kaplan and released in May 1979.  The film, based on a newspaper article, had a limited theatrical release but has since achieved cult film status.  It was Matt Dillon's film debut."
+    ],
+    "hop2_titles": [
+      "Jonathan Kaplan",
+      "Wendy Richard filmography",
+      "Joan Sims filmography",
+      "Božidara Turzonovová filmography",
+      "Marlee Matlin filmography",
+      "Spice Girls filmography",
+      "Over the Edge (film)"
+    ],
+    "summary_2": "The context lists several Kaplan-directed American dramas but none name an English actress, and the retrieved passages do not provide an identity-aligned link; they only show separate English-actress filmographies (Wendy Richard, Joan Sims) and note that Kaplan’s Over the Edge was Matt Dillon’s film debut—so the passages do not supply the English actress’s film-debut information.",
+    "answer": "Not provided in the summaries.",
+    "score": 0.0,
+    "support_recall_hop1": 0.0,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Brokedown Palace",
+      "Kate Beckinsale"
+    ],
+    "hit_titles_hop1": [],
+    "hit_titles_total": []
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

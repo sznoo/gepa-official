@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "5ffe46eb0cfe65c92858f7d1600be0648ea5b1b90983e3e60223ad5f63347cd0",
+  "created_at": "2026-07-14T19:01:54.927617+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 indicates inability to determine the album's genre and requests the artist name or a passage (e.g., contains phrases like \"can't determine\" or asks for the artist/release year/passage), apply this delta.",
+            "preserve_rule": "Keep the agent's existing fallback behavior: if an automated retrieval using the generated query fails to produce supporting evidence, then revert to asking the user for the artist/relevant passage. Preserve the polite, user-facing tone for that fallback.",
+            "change_rule": "Instead of outputting a verbose user instruction asking for more context, replace the 'query' output with a single compact retrieval query formed from the album title and targeted keywords to find the album's artist/genre. Concretely, emit one short search string: the album title plus the tokens 'album artist genre' (for example: \"Levitate album artist genre\"). Do not add explanatory text, questions, or fallback instructions in the query field.",
+            "drop_or_avoid_rule": "Do not enumerate or suggest specific artist/band names or other candidate titles in the query. Do not copy long literal spans from any hidden target. Avoid user-facing instructions or multi-sentence prompts inside the 'query' field. Do not include release years, labels, or other specifics unless they already appear in visible inputs.",
+            "output_contract": "Produce a single short string for the 'query' field containing only the compact search query (album title plus keywords 'album artist genre'), with no extra punctuation or explanatory text. If retrieval from that query yields no result, the agent may then emit the original user-facing fallback in a later step.",
+            "why_local_transition": "This small change makes the agent proactively issue a focused second-hop retrieval query to discover the album's artist/genre using only the visible album title, while avoiding leaking or inventing specific artist names. It preserves the original fallback to ask the user if automated retrieval fails."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What genre does the album \"Levitate\" come from?",
+        "summary_1": "I can't determine the genre of the album \"Levitate\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.",
+        "current_output": {
+          "query": "Please provide the artist name (or the album's release year) for \"Levitate\", or paste the passage or link that mentions the album. If you don't have that, any additional context (country, decade, or a song title from the album) will help."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 indicates inability to determine the album's genre and requests the artist name or a passage (e.g., contains phrases like \\\"can't determine\\\" or asks for the artist/release year/passage), apply this delta.\",\n      \"preserve_rule\": \"Keep the agent's existing fallback behavior: if an automated retrieval using the generated query fails to produce supporting evidence, then revert to asking the user for the artist/relevant passage. Preserve the polite, user-facing tone for that fallback.\",\n      \"change_rule\": \"Instead of outputting a verbose user instruction asking for more context, replace the 'query' output with a single compact retrieval query formed from the album title and targeted keywords to find the album's artist/genre. Concretely, emit one short search string: the album title plus the tokens 'album artist genre' (for example: \\\"Levitate album artist genre\\\"). Do not add explanatory text, questions, or fallback instructions in the query field.\",\n      \"drop_or_avoid_rule\": \"Do not enumerate or suggest specific artist/band names or other candidate titles in the query. Do not copy long literal spans from any hidden target. Avoid user-facing instructions or multi-sentence prompts inside the 'query' field. Do not include release years, labels, or other specifics unless they already appear in visible inputs.\",\n      \"output_contract\": \"Produce a single short string for the 'query' field containing only the compact search query (album title plus keywords 'album artist genre'), with no extra punctuation or explanatory text. If retrieval from that query yields no result, the agent may then emit the original user-facing fallback in a later step.\",\n      \"why_local_transition\": \"This small change makes the agent proactively issue a focused second-hop retrieval query to discover the album's artist/genre using only the visible album title, while avoiding leaking or inventing specific artist names. It preserves the original fallback to ask the user if automated retrieval fails.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What genre does the album \\\"Levitate\\\" come from?\",\n  \"summary_1\": \"I can't determine the genre of the album \\\"Levitate\\\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.\",\n  \"current_output\": {\n    \"query\": \"Please provide the artist name (or the album's release year) for \\\"Levitate\\\", or paste the passage or link that mentions the album. If you don't have that, any additional context (country, decade, or a song title from the album) will help.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\"query\": \"Levitate album artist genre\"},\n  \"rationale\": \"Summary_1 requested the artist; per the delta, replaced the verbose fallback with a single compact search string consisting of the album title plus 'album artist genre'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

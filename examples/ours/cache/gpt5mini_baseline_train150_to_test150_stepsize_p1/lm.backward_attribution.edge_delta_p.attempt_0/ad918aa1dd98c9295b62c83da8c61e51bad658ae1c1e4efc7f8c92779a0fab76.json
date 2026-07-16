@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ad918aa1dd98c9295b62c83da8c61e51bad658ae1c1e4efc7f8c92779a0fab76",
+  "created_at": "2026-07-16T01:04:41.184335+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?",
+        "summary_1": "30 August 2009",
+        "summary_2": "30 August 2009",
+        "current_output": "30 August 2009"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "30 August 2009",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "{'query': '30'}",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The 2009 Belgian Grand Prix (formally the LXV ING Belgian Grand Prix) was a Formula One motor race held on which date, Sebastian Vettel came third after starting from eighth on the grid?\",\n  \"summary_1\": \"30 August 2009\",\n  \"summary_2\": \"30 August 2009\",\n  \"current_output\": \"30 August 2009\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"30 August 2009\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"{'query': '30'}\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 are both present and identical (exact string equality), and they constitute a short factual value (a single date/number/name token sequence), activate this rule.\",\n    \"preserve_rule\": \"Keep existing behavior of using the concise answer present in the summaries as the source of the final answer; do not change how the agent selects which summary to trust (prefer summary_1 when identical).\",\n    \"change_rule\": \"When triggered, emit exactly the concise string found in the summaries as the final answer. Place only that plain text string inside the [[ ## answer ## ]] block. Do not add surrounding keys, labels, markup, or explanatory text.\",\n    \"drop_or_avoid_rule\": \"Never emit JSON-like or dictionary structures, key:value pairs, 'query' fields, or any metadata wrappers around the answer. Avoid adding braces, brackets, colons with keys, quotes used as structural syntax, or any additional commentary or annotations.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string supported by the visible summaries (no extra characters, keys, JSON, or explanatory text).\",\n    \"why_local_transition\": \"A narrowly scoped guard prevents converting a correct, minimal summary answer into a structured/query-like object while preserving the agent's normal selection and formatting behavior for short factual answers.\"\n  },\n  \"rationale\": \"The observed failure mode is a small formatting corruption turning a simple answer into a structured query/dictionary. Applying a minimal, trigger-activated formatting guard preserves the existing selection logic and the concise final-answer contract while forbidding JSON/dictionary wrappers. This is the smallest coherent prompt change that prevents the specific corruption without altering other behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 83,
+    "row_index": 83,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "57ce6a6d14d5efed1e464776eebb530351a0015c7194cee4ccea2aaae9f68f6e",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

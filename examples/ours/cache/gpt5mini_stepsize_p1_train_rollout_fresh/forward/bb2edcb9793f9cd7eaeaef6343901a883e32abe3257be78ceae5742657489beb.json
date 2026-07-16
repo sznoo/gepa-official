@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "bb2edcb9793f9cd7eaeaef6343901a883e32abe3257be78ceae5742657489beb",
+  "created_at": "2026-07-16T04:46:09.658698+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Who else did the author of The Power Broker write a biography of?",
+    "answer": "Lyndon B. Johnson",
+    "context": {
+      "title": [
+        "The Power Broker",
+        "Capitol Punishment (book)",
+        "Robert Caro",
+        "Captan Jack Wyly",
+        "Stephen M. Sweeney",
+        "Power broker (politics)",
+        "Raymond Lesniak",
+        "Joachim Kempin",
+        "Edward Dean Adams",
+        "Shaun Going"
+      ],
+      "sentences": [
+        [
+          "The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.",
+          " The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.",
+          " It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States."
+        ],
+        [
+          "Capitol Punishment: The Hard Truth About Washington Corruption From America's Most Notorious Lobbyist is a non-fiction 300-page memoir by former American lobbyist Jack Abramoff, published by WNDbooks in November 2011.",
+          " The book, described as an \"account of his political triumphs, serial lawbreaking and unethical conduct\" by the \"Washington Post\", details the author's life in Washington as a power broker and lobbyist.",
+          " In its last chapter, titled \"Path to Reform\", Abramoff lists a number of proposals to eliminate bribery of government officials."
+        ],
+        [
+          "Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson."
+        ],
+        [
+          "Captan Jack Wyly, Sr. (December 30, 1917 – July 14, 2006), was a colorful attorney in Lake Providence, Louisiana, who in the 1960s and 1970s was a leader of conservatives within his state's dominant Democratic Party.",
+          " He was known for his 1960s-style suits and hats.",
+          " His massive wealth enabled him to act as a power broker over nearly every aspect of Lake Providence affairs."
+        ],
+        [
+          "Stephen M. \"Steve\" Sweeney (born June 11, 1959) is an American executive, political power broker, and Democratic Party politician who currently serves as the President of the New Jersey Senate.",
+          " He has served in the New Jersey State Senate since 2002, where he represents the 3rd Legislative District.",
+          " On November 23, 2009, Sweeney was selected as Senate President-designate, replacing former Gov. Richard Codey."
+        ],
+        [
+          "A power broker is a person who influences people to vote towards a particular client (i.e. elected official or referendum) in exchange for political and financial benefits.",
+          " Power brokers can also negotiate deals with other power brokers to meet their aims."
+        ],
+        [
+          "Raymond J. \"Ray\" Lesniak (born May 7, 1946) is an American Democratic Party politician, who has been serving in the New Jersey State Senate since 1983, where he represents the 20th Legislative District.",
+          " Before entering New Jersey's upper house, the Senate, Lesniak served in the General Assembly from 1978 to 1983.",
+          " Lesniak is considered a major power broker in the Democratic Party, having served as New Jersey Democratic State Chairman and New Jersey Chair for Clinton/Gore and Gore/Lieberman.",
+          " Lesniak was a candidate for Governor of New Jersey in the 2017 election."
+        ],
+        [
+          "Joachim Kempin (born in 1942) is a German-born businessman and retired Senior Vice President of Microsoft Corporation.",
+          " He ran Microsoft's division selling operating software to PC manufacturers for 15 years.",
+          " He is also the author of \"Resolve and Fortitude: Microsoft's \"Secret Power Broker\" Breaks His Silence\"."
+        ],
+        [
+          "Edward Dean Adams (9 April 1846 – 20 May 1931) was an American businessman, banker, power broker and numismatist.",
+          " He was the president of Niagara Falls Hydraulic Power and Manufacturing Company which built the first hydroelectric power plants in Niagara Falls, Canada.",
+          " The Adams Power Plant Transformer House is named after him.",
+          " He was “conspicuously successful in corporate reorganizations”."
+        ],
+        [
+          "Shaun Going is a Canadian construction engineer who was arrested by Serbia in August 2000 and charged with terrorism.",
+          " An acknowledged power broker with \"enormous influence known to bribe and fraternise with other powerful figures in the region, including the Kosovo Liberation Army, he was quickly defended by Canada who insisted on his innocence."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Power Broker",
+        "Robert Caro"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "Who else did the author of The Power Broker write a biography of?",
+    "gold_answer": "Lyndon B. Johnson",
+    "context": {
+      "title": [
+        "The Power Broker",
+        "Capitol Punishment (book)",
+        "Robert Caro",
+        "Captan Jack Wyly",
+        "Stephen M. Sweeney",
+        "Power broker (politics)",
+        "Raymond Lesniak",
+        "Joachim Kempin",
+        "Edward Dean Adams",
+        "Shaun Going"
+      ],
+      "sentences": [
+        [
+          "The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.",
+          " The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.",
+          " It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States."
+        ],
+        [
+          "Capitol Punishment: The Hard Truth About Washington Corruption From America's Most Notorious Lobbyist is a non-fiction 300-page memoir by former American lobbyist Jack Abramoff, published by WNDbooks in November 2011.",
+          " The book, described as an \"account of his political triumphs, serial lawbreaking and unethical conduct\" by the \"Washington Post\", details the author's life in Washington as a power broker and lobbyist.",
+          " In its last chapter, titled \"Path to Reform\", Abramoff lists a number of proposals to eliminate bribery of government officials."
+        ],
+        [
+          "Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson."
+        ],
+        [
+          "Captan Jack Wyly, Sr. (December 30, 1917 – July 14, 2006), was a colorful attorney in Lake Providence, Louisiana, who in the 1960s and 1970s was a leader of conservatives within his state's dominant Democratic Party.",
+          " He was known for his 1960s-style suits and hats.",
+          " His massive wealth enabled him to act as a power broker over nearly every aspect of Lake Providence affairs."
+        ],
+        [
+          "Stephen M. \"Steve\" Sweeney (born June 11, 1959) is an American executive, political power broker, and Democratic Party politician who currently serves as the President of the New Jersey Senate.",
+          " He has served in the New Jersey State Senate since 2002, where he represents the 3rd Legislative District.",
+          " On November 23, 2009, Sweeney was selected as Senate President-designate, replacing former Gov. Richard Codey."
+        ],
+        [
+          "A power broker is a person who influences people to vote towards a particular client (i.e. elected official or referendum) in exchange for political and financial benefits.",
+          " Power brokers can also negotiate deals with other power brokers to meet their aims."
+        ],
+        [
+          "Raymond J. \"Ray\" Lesniak (born May 7, 1946) is an American Democratic Party politician, who has been serving in the New Jersey State Senate since 1983, where he represents the 20th Legislative District.",
+          " Before entering New Jersey's upper house, the Senate, Lesniak served in the General Assembly from 1978 to 1983.",
+          " Lesniak is considered a major power broker in the Democratic Party, having served as New Jersey Democratic State Chairman and New Jersey Chair for Clinton/Gore and Gore/Lieberman.",
+          " Lesniak was a candidate for Governor of New Jersey in the 2017 election."
+        ],
+        [
+          "Joachim Kempin (born in 1942) is a German-born businessman and retired Senior Vice President of Microsoft Corporation.",
+          " He ran Microsoft's division selling operating software to PC manufacturers for 15 years.",
+          " He is also the author of \"Resolve and Fortitude: Microsoft's \"Secret Power Broker\" Breaks His Silence\"."
+        ],
+        [
+          "Edward Dean Adams (9 April 1846 – 20 May 1931) was an American businessman, banker, power broker and numismatist.",
+          " He was the president of Niagara Falls Hydraulic Power and Manufacturing Company which built the first hydroelectric power plants in Niagara Falls, Canada.",
+          " The Adams Power Plant Transformer House is named after him.",
+          " He was “conspicuously successful in corporate reorganizations”."
+        ],
+        [
+          "Shaun Going is a Canadian construction engineer who was arrested by Serbia in August 2000 and charged with terrorism.",
+          " An acknowledged power broker with \"enormous influence known to bribe and fraternise with other powerful figures in the region, including the Kosovo Liberation Army, he was quickly defended by Canada who insisted on his innocence."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Power Broker",
+        "Robert Caro"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "The Power Broker",
+      "Robert Caro"
+    ],
+    "hop1_query": "Who else did the author of The Power Broker write a biography of?",
+    "hop1_docs": [
+      "The Power Broker | The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.  The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.  It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States.",
+      "List of biographers | Biographers are authors who write an account of another person's life, while autobiographers are authors who write their own biography.",
+      "Get Happy: The Life of Judy Garland | Get Happy: The Life of Judy Garland is a biography of entertainer Judy Garland.  Published in 2000, \"Get Happy\" is author Gerald Clarke's follow-up to his 1988 biography of Truman Capote.  Clarke conducted some 500 interviews, including some with subjects who had not previously spoken about Garland, and also drew upon tape recordings that Garland had made in the 1960s for an autobiography.  He found Garland's unpublished 68-page manuscript in the Random House archives.  Clarke spent ten years on the book, and only made his final decision to write about Garland after reading the extant biographies.  \"I did not want to write a book about her if the definitive book had already been written...So, I sat down and I read the biographies that had already been written and came up with no real impression of Judy...There was a disconnect between the woman who emerged from the pages and the woman I saw in the movies and heard on the records...I knew that \"the\" book had not yet been written.\"",
+      "The Broker | The Broker is a suspense novel written by American author John Grisham and published in the United States on January 11, 2005.  The novel follows the story of Joel Backman, a newly pardoned prisoner who had tried to broker a deal to sell the world's most powerful satellite surveillance system to the highest bidder.",
+      "Power broker (politics) | A power broker is a person who influences people to vote towards a particular client (i.e. elected official or referendum) in exchange for political and financial benefits.  Power brokers can also negotiate deals with other power brokers to meet their aims.",
+      "Janaki Ram | Janaki Ram is an Indian-American author who has written biographies and collections of short stories, as well as a prominent figure in Asian art auctions.  She is a relative of Krishna Menon and Sir C.P. Ramaswami Iyer and a member of the powerful South Indian Vengalil family.  She was a founder and convenor of INTACH previous to her writing career.",
+      "Ann Waldron | Ann Wood Waldron (December 14, 1924 – July 2, 2010) was an American author who initially focused on writing for children and young adults, then turned to biographies of authors from the South, and ultimately shifted in her late seventies to writing murder mysteries set at Princeton University."
+    ],
+    "hop1_titles": [
+      "The Power Broker",
+      "List of biographers",
+      "Get Happy: The Life of Judy Garland",
+      "The Broker",
+      "Power broker (politics)",
+      "Janaki Ram",
+      "Ann Waldron"
+    ],
+    "summary_1": "Passage [1] confirms the bridge entity: \"The Power Broker: Robert Moses and the Fall of New York is ... by Robert Caro\" (author = Robert Caro). Missing fact: which other person(s) Robert Caro has written biographies of. Next-hop retrieval direction: fetch Robert Caro's bibliography or authoritative pages linking Robert Caro to his other biographies (search queries to use as anchors: \"Robert Caro bibliography\", \"Robert Caro biography of\", \"Robert Caro Lyndon B. Johnson\", or \"works by Robert Caro\").",
+    "hop2_query": "Robert Caro biography Lyndon B. Johnson",
+    "hop2_docs": [
+      "Robert Caro | Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson.",
+      "The Years of Lyndon Johnson | The Years of Lyndon Johnson is a biography of Lyndon B. Johnson by the American writer Robert Caro.  Four volumes have been published, running to more than 3,000 pages in total, detailing Johnson's early life, education, and political career.  A fifth volume will deal with the bulk of Johnson's presidency.  The series is published by Alfred A. Knopf.",
+      "Indomitable Will | Indomitable Will: LBJ in the Presidency is a biography of Lyndon Baines Johnson by Mark K. Updegrove, published in 2012.",
+      "Dereliction of Duty (1997 book) | Dereliction of Duty: Lyndon Johnson, Robert McNamara, The Joint Chiefs of Staff, and the Lies that Led to Vietnam is a book written by then Major, currently National Security Advisor Lieutenant General H.R. McMaster, that presents a case indicting former U.S. President Lyndon B. Johnson and his principal civilian and military advisers for losing the Vietnam War.",
+      "The Power Broker | The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.  The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.  It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States.",
+      "Lyndon Baines Johnson Day | Lyndon Baines Johnson Day is a legal state holiday in Texas.  It falls every year on August 27, to mark the birthday of U.S. President Lyndon Baines Johnson.",
+      "Lyndon B. Johnson High School (Johnson City, Texas) | Lyndon B. Johnson High School (Johnson City, Texas)"
+    ],
+    "hop2_titles": [
+      "Robert Caro",
+      "The Years of Lyndon Johnson",
+      "Indomitable Will",
+      "Dereliction of Duty (1997 book)",
+      "The Power Broker",
+      "Lyndon Baines Johnson Day",
+      "Lyndon B. Johnson High School (Johnson City, Texas)"
+    ],
+    "summary_2": "Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.",
+    "answer": "President Lyndon B. Johnson",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Robert Caro"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "The Power Broker"
+    ],
+    "hit_titles_total": [
+      "Robert Caro",
+      "The Power Broker"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

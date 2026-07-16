@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c6d6516dd7f6c5922d6cc2c55ccc04ecc2c6ffaf8e0dc93597cb1b827ca47229",
+  "created_at": "2026-07-15T21:07:10.626733+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which genus of plant had more species identified with it in the past, Carissa or Aruncus?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Which genus of plant had more species identified with it in the past, Carissa or Aruncus?",
+        "summary_1": "Carissa — about 100 species were listed in the past, compared with only 1–4 species for Aruncus.",
+        "summary_2": "Carissa — about 100 species in the past — had more species than Aruncus, which had only 1–4 species.",
+        "current_output": "Carissa"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Carissa",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Carissa — about 100 species were listed in the past, compared with only 1–4 species for Aruncus.",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which genus of plant had more species identified with it in the past, Carissa or Aruncus?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which genus of plant had more species identified with it in the past, Carissa or Aruncus?\",\n  \"summary_1\": \"Carissa — about 100 species were listed in the past, compared with only 1–4 species for Aruncus.\",\n  \"summary_2\": \"Carissa — about 100 species in the past — had more species than Aruncus, which had only 1–4 species.\",\n  \"current_output\": \"Carissa\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Carissa\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Carissa — about 100 species were listed in the past, compared with only 1–4 species for Aruncus.\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the correct response can be expressed as a single short label (e.g., a genus name or one-phrase answer) and the summaries contain supporting sentences or numbers.\",\n    \"preserve_rule\": \"Keep the base behavior: use the provided summaries to determine the minimal final answer and place that minimal answer into the [[ ## answer ## ]] block.\",\n    \"change_rule\": \"If the minimal answer is a single token or very short phrase, enforce returning only that token/phrase as the final answer. Do not append explanatory text, supporting statistics, comparative clauses, or quoted summary sentences to the answer.\",\n    \"drop_or_avoid_rule\": \"Avoid copying multi-word supporting spans, numeric counts, or parenthetical comparisons from summaries into the final answer. Do not add punctuation or clauses beyond the minimal label (no dashes, em-dashes, elaborations, or sentence fragments).\",\n    \"output_contract\": \"Produce exactly the minimal answer string (the short label/genus) and nothing else inside the [[ ## answer ## ]] block. No additional context, evidence, numbers, or commentary may be included.\",\n    \"why_local_transition\": \"This small rule prevents the agent from expanding the concise correct label into a verbose, evidence-laden sentence drawn from the summaries; it preserves the minimal-answer contract while still using summaries to choose the correct label.\"\n  },\n  \"rationale\": \"The shortest coherent edit is to forbid appending supporting text when the answer is a single short label. The base prompt already requires a minimal answer; adding a narrow rule that enforces a single-token/short-phrase output closes the gap that produced the verbose, damaged output. This change preserves use of summaries for answer selection while preventing inclusion of copied supporting spans or numeric comparisons, matching the required final-answer format without introducing new behaviors.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 122,
+    "row_index": 122,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "3aad7981c47622cfb6cb72569225ab144b679a5c22c2b98769cd1e4194150801",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

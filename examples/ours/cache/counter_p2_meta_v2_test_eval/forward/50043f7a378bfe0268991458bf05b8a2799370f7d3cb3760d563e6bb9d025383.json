@@ -1,0 +1,251 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "50043f7a378bfe0268991458bf05b8a2799370f7d3cb3760d563e6bb9d025383",
+  "created_at": "2026-07-15T23:51:57.663427+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "What is the name of the regional transportation authority that includes the station which is proximal to Cira Centre South?",
+    "answer": "Southeastern Pennsylvania Transportation Authority",
+    "context": {
+      "title": [
+        "Tampa Bay Area Regional Transportation Authority",
+        "South Florida Regional Transportation Authority",
+        "Santa Ana Regional Transportation Center",
+        "30th Street Station",
+        "Berks Area Regional Transportation Authority",
+        "Anaheim Regional Transportation Intermodal Center",
+        "Franklin Street station (Pennsylvania)",
+        "William F. Walsh Regional Transportation Center",
+        "Tri-Rail",
+        "Cira Centre South"
+      ],
+      "sentences": [
+        [
+          "The Tampa Bay Area Regional Transportation Authority, or TBARTA, is a regional transportation agency of the U.S. state of Florida which was created on July 1, 2007.",
+          " The purpose of the agency is \"to plan, develop, finance, construct, own, purchase, operate, maintain, relocate, equip, repair, and manage multimodal systems in Citrus, Hernando, Hillsborough, Manatee, Pasco, Pinellas, and Sarasota Counties.\"",
+          " The agency coordinates its efforts with the Florida Department of Transportation to improve transportation in the Tampa Bay Area."
+        ],
+        [
+          "The South Florida Regional Transportation Authority (SFRTA) is a tri-county public transit authority operating out of Pompano Beach, Florida, serving Miami-Dade, Broward and Palm Beach counties.",
+          " The organization was created on July 1, 2003 by the Florida Legislature and enacted by the Florida Department of Transportation.",
+          " Replacing the pre-existing Tri-County Commuter Rail Authority, the goal of incorporation was to expand cooperation between the Tri-Rail commuter rail service and the existing county public transport authorities: Broward County Transit, Miami-Dade Transit, and Palm Tran.",
+          " Tri-Rail is solely operated by SFRTA."
+        ],
+        [
+          "Santa Ana Regional Transportation Center is a passenger rail station and transportation center in Santa Ana, California.",
+          " It is used by Amtrak's \"Pacific Surfliner\" and Metrolink's Orange County Line and Inland Empire-Orange County Line trains.",
+          " It is also a Greyhound station and a hub for the Orange County Transportation Authority bus system as well as a terminal for several Mexican bus tour companies."
+        ],
+        [
+          "The 30th Street Station is the main railroad station in Philadelphia, Pennsylvania, United States and one of the seven stations in Southeastern Pennsylvania Transportation Authority's (SEPTA) Center City fare zone.",
+          " It is also a major stop on Amtrak's (National Railroad Passenger Corporation) Northeast and Keystone Corridors."
+        ],
+        [
+          "Berks Area Regional Transportation Authority (BARTA), previously Berks Area Reading Transportation Authority, is a public transportation system serving the city of Reading and its surrounding area of Berks County, Pennsylvania.",
+          " Dennis D. Louwerse, the long-time executive director/CEO at BARTA, died on Thursday, September 5, 2013 at the age of 68.",
+          " He became the executive director at BARTA in 1983, and he was the executive director for 30 years until his death in 2013.",
+          " David W. Kilmer is currently the executive director at BARTA and Red Rose Transit Authority."
+        ],
+        [
+          "The Anaheim Regional Transportation Intermodal Center (ARTIC) is an intermodal transit center in Anaheim, California, United States.",
+          " It serves as a train station for Amtrak intercity rail and Metrolink commuter rail, as well as a bus station used by the Orange County Transportation Authority (OCTA), Anaheim Resort Transportation (ART), Greyhound, Megabus, and Tres Estrellas de Oro."
+        ],
+        [
+          "Franklin Street station is a bus station and former railroad station in Reading, Pennsylvania.",
+          " It currently serves Berks Area Regional Transportation Authority (BARTA) buses and hosts a transportation museum."
+        ],
+        [
+          "The William F. Walsh Regional Transportation Center is the long-distance ground travel (rail and bus) terminal serving the Syracuse, New York area.",
+          " It is served by Amtrak, Greyhound Lines, Megabus, and Trailways.",
+          " Local and regional bus transportation is provided by the Central New York Regional Transportation Authority (CENTRO).",
+          " Various taxi firms service the Center, as well.",
+          " The Regional Transportation Center is located on the north side of Syracuse, adjacent to the Central New York Regional Market and near Destiny USA."
+        ],
+        [
+          "Tri-Rail (reporting mark TRCX) is a commuter rail line linking Miami, Fort Lauderdale, and West Palm Beach, Florida, United States.",
+          " It is managed by the South Florida Regional Transportation Authority (SFRTA) along CSX Transportation's former Miami Subdivision, the line now wholly owned by the Florida DOT.",
+          " The 70.9 mi system has 18 stations along the Southeast Florida coast, and connects directly to Amtrak at numerous stations, and to Metrorail at the Tri-Rail and Metrorail Transfer Station and at Miami Airport station."
+        ],
+        [
+          "Cira Centre South is a complex of two skyscrapers in the University City district of Philadelphia, Pennsylvania, which is across the Schuylkill River from Center City Philadelphia.",
+          " The location of the buildings is between Walnut Street and Chestnut Street south of 30th Street Station and the Old Post Office Building."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Cira Centre South",
+        "Cira Centre South",
+        "30th Street Station"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question` and `passages`, produce the single field `summary`.\n\nGoal: compress the grounded first-hop evidence into a short intermediate state that makes it easy for the next-hop agent to (a) see what facts are present per candidate/entity, (b) see what is ambiguous or missing, and (c) know 1–4 prioritized next-hop retrieval targets or concise queries. This module does not produce the final answer unless the provided passages already unambiguously contain every fact required to resolve the question's relation for every argument.\n\nProcedure:\n1) Decide whether the question's relation is semantically complete given the supplied passages. Treat the hop as INCOMPLETE if any of the following hold: a) the relation requires combining or comparing facts across pages (e.g., comparing birth dates, publication/founding years, ordinal ranks, confirming a named director among candidates) and the passages do not supply each required fact unambiguously for all relevant arguments; b) any relation argument is ambiguous or has multiple candidate pages or mentions in the passages; c) an expected candidate page or explicit fact for an argument is missing (e.g., only one side of a comparison is present). Do not trigger INCOMPLETE solely from surface tokens (years, digits) — base the decision on whether the relation's arguments are unambiguously resolved.\n\n2) If the hop is COMPLETE (all required facts to resolve the relation for every argument are present unambiguously in the passages): produce a concise derived result in `summary`. This may be a short phrase or sentence that states the necessary fact(s) needed by the pipeline. Keep it minimal and grounded in the passages; you may include a 1–2 token citation (passage title) if helpful.\n\n3) If the hop is INCOMPLETE or AMBIGUOUS: do NOT assert a final answer or perform the final comparison/selection. Instead emit a short structured report in `summary` containing these labeled elements (prefer bullets or a compact paragraph with explicit labels). Keep all text neutral and non-assertive.\n\n  - evidence: For each named candidate/argument mentioned in the question or passages, list the candidate label and the exact passage title(s) that mention it plus a very short quoted snippet or explicit fact token found there (1–12 words). If a candidate named in the question has no grounded mention in any provided passage, explicitly mark it as NOT present under evidence.\n\n  - ambiguities_or_missing: Explicitly name any ambiguities (e.g., multiple candidates for the same name, multiple pages that could be the intended entity) and any missing expected pages or facts.\n\n  - missing_facts_or_bridge / bridge_entity_or_missing_fact: State exactly which fact(s) or disambiguation is needed to complete the relation. Use a slight conditional labeling here:\n      * If the question names an entity that has no grounded mention in the provided passages and the unresolved gap is identity/disambiguation (you cannot map the question token to a single canonical entity needed to ground later facts), label the gap as `bridge_entity_or_missing_fact` and specify that the canonical/biography page for that named entity is required to resolve identity.\n      * Otherwise (the missing premise is a concrete attribute/property such as a date, developer, layout engine, filmography item, opening-order token, etc.), use `missing_facts_or_bridge` and describe the exact attribute(s) required (e.g., \"birth date for Person A\", \"developer of Product X\"). Do not request the canonical biography page by default in this case; prefer an attribute-targeted retrieval first.\n\n  - retrieval_direction: Provide 1–4 prioritized next-hop targets or concise queries to resolve the missing facts/ambiguities. Order targets by priority and keep them short. Apply this retrieval-priority conditional:\n      * If the missing gap is identity/disambiguation (see bridge_entity_or_missing_fact above), put the candidate's canonical/biography page title as retrieval_direction #1 (exact title if known) and include 1–2 biography-style fallback queries (e.g., \"<Name> biography\", \"<Name> official page\") as subsequent targets.\n      * If the missing gap is a specific attribute/property, put 1–2 concise attribute-focused queries first (e.g., \"<Item> developer\", \"<Item> layout engine\", \"<Work B> publication year\"). Include the canonical/biography page as a secondary target only if it might reasonably contain the attribute and identity resolution could still be needed.\n\nFormatting and style constraints (apply to both COMPLETE and INCOMPLETE cases):\n- The output must be a single `summary` field only. Do not emit other fields.\n- In INCOMPLETE reports, use neutral, non-assertive phrasing. Do not produce final comparisons, numeric answers, or definitive selections (e.g., avoid \"X is the oldest\" or \"Answer: 3\").\n- Keep the report compact and actionable (short labeled bullets or one concise paragraph). Avoid long prose.\n- It is allowed and encouraged to quote short factual snippets from passages and cite passage titles to show grounding.\n- Do not defer or mark INCOMPLETE when the passages already unambiguously provide all facts for the relation and its arguments.\n\nProduce the `summary` content that follows these rules.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the single field `query`.\n\nGoal\n- Produce exactly one compact, retrieval-intent query suitable for a second-hop search that will recover the missing bridging evidence needed to answer the question. Do not produce the final answer in `query`.\n\nSemantic decision rule (when to emit a retrieval-intent query)\n- If summary_1 does NOT assert a confirmed linking entity or verified bridging fact needed to answer the question, you MUST emit exactly one compact retrieval-intent query. \"Does not assert a confirmed bridge\" includes short or candidate-only summaries (e.g., a single named entity, a quoted candidate title, or numeric anchors that are not verified) and any case where the visible anchors do not unambiguously identify the needed bridge.\n- Narrowed applicability for birth-date disambiguation: If summary_1 lacks a confirmed bridge AND the question explicitly requires a birth-date comparison (e.g., asks who was born earlier or requests birth years) AND the visible inputs (question or summary_1) show ambiguous name candidates AND a suitable disambiguator token (occupation, band, institution, or a parenthetical label) is present or clearly implied in the visible inputs, then emit one compact query that combines: the ambiguous name anchor, the disambiguator copied verbatim from the visible inputs, and a concise birth-term (\"born\" or \"birth year\"). In all other cases (including birth-name mappings, page-title targets, non-temporal bridges, or when no usable disambiguator is available), do not append birth/date relation words or invent disambiguators; instead prefer the minimal visible-anchor form (page-title, name-pair, or person+institution) appropriate to the missing bridge.\n- If summary_1 already names a confirmed bridge (a clearly identified, verified linking entity or unambiguous metadata that directly connects the question's pieces), you may produce a compact query to fetch supporting evidence, but do NOT produce an answer in the `query` field.\n- If summary_1 explicitly states that the bridge cannot be recovered automatically (extreme ambiguity or user-local context requiring clarification), do NOT force a misleading retrieval query. In that case, set `query` to the single short token BRIDGE_UNRECOVERABLE (all caps, no punctuation) so downstream steps can prompt the user for clarification. Do not invent facts.\n\nQuery construction rules\n- Output exactly one compact line of text as `query`. Keep it short and retrieval-focused (few keywords, no full sentences). Use visible anchors from `question` and `summary_1` and minimal retrieval keywords that express the missing relation (e.g., anchor1 anchor2 which artist recorded both; AlbumTitle album artist genre; 1991–92 NHL season regular season).\n- Do not include the final answer, assertions, or user-facing instructions in the `query` field. Avoid polite phrasing, questions to the user, or explanatory text. Prefer noun phrases and relation keywords.\n- If the conditional birth-date disambiguation rule above applies, build the query by concatenating: the ambiguous person name, the disambiguator token copied verbatim from the visible inputs (occupation, band, institution, parenthetical), and a single concise birth-term (\"born\" or \"birth year\"). Use only the visible disambiguator wording; do not invent or normalize parentheticals.\n- Relation-token selection rule: choose a single concise relation token that matches the question's relation (e.g., \"born\" or \"birth year\" only for temporal birth queries). Do not append relation tokens when the canonical retrieval strategy is to use a page-title, exact name-pair, or person+institution anchor.\n- Do not include the final answer or explanatory text. If your natural impulse would be to write a declarative answer or a clarification sentence in `query`, instead convert that output into a compact retrieval-intent query that targets the missing bridge.\n- Preserve semantic fidelity: base the query only on visible anchors and relations in `question` and `summary_1`. Do not invent hidden identifiers or assume unseen facts.\n\nFormat contract\n- Return exactly one field named `query` whose value is a single short string. If unrecoverable as described above, set `query` to BRIDGE_UNRECOVERABLE.\n\nExamples of disallowed outputs for `query`\n- A declarative answer (e.g., \"The artist was X.\")\n- A user-facing clarification sentence (e.g., \"Do you mean X or Y?\") unless summary_1 explicitly requires clarification — in that case use BRIDGE_UNRECOVERABLE.\n\nBehavioral constraints\n- Do not use surface heuristics (token count, punctuation, or quotation marks) as the trigger; apply the semantic rule above.\n- Emit only one compact retrieval string when the bridge is missing; do not emit multiple queries or long explanations.\n\nInputs available: `question`, `summary_1`. Output required: single field `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`. The `summary` must be a concise, post-retrieval integration of the evidence that preserves the facts needed by the final answer. Follow these rules when composing `summary`:\n\n- Purpose: Integrate the first-hop `context` with the newly retrieved `passages` into a grounded state that retains or resolves the earlier bridge only when the second-hop passages supply relation- or attribute-facts that are necessary to answer or disambiguate the `question` (for example: partnership/membership links, joint-award partners indicated by 'with', or requested biographical qualifiers such as nationality, birthdate, current team/status).\n\n- When to append supporting sentence(s): Append the primary canonical label/token from `context` and at most one short passage-grounded supporting sentence only when a passage contains an explicit, directly stated predicate that links the same entity token from `context` (or a clearly corroborated alias/role/date) to the partner or attribute the question cites. Examples of acceptable explicit predicates include clear statements like 'X with Y', 'X is a member of Y', 'X was born DATE', 'X is a recipient of AWARD', 'X is also called Z', or 'X began tenure in YEAR'. The trigger requires that the passage (a) names the same entity token as in `context` or an alias/role/date that is corroborated by other attributes in `context`, and (b) explicitly asserts the relation or attribute needed by the question. Do not append when the passage only contains the attribute string without an explicit predicate, a nearby mention, an indirect implication, or when the link refers to a different named entity.\n\n- Transitive alias/composition: Do not assert transitive equivalence unless every hop in the chain is explicitly stated as an equivalence in the supplied passages and each hop clearly refers to the same entity. If only a mediated or inferred chain exists (i.e., intermediate links are not explicit equivalences and identity-aligned), suppress the appended support and preserve uncertainty.\n\n- When not to append: Do not append supporting sentences and instead return only the canonical label/token when any of the following apply: the question expects a normalized identifier or single token (examples: binary/multiple-choice label selection between named options, identification-only questions, or explicit token-extraction such as 'middle name'); or the `context` already contains a full, passage-consistent, multi-clause integrated answer. Permit an exception for identification/single-token/binary cases only when the question's semantics truly demand the relation/attribute (for example, determining an era boundary or tenure date) and a passage explicitly provides the necessary predicate linking the context entity to that temporal relation or attribute.\n\n- Identity alignment and verification: Before appending, confirm that the fact in `passages` refers to the same entity referenced in `context` by matching names, corroborating aliases, roles, dates, or other attributes. If identity is ambiguous or unsupported, refrain from appending and preserve uncertainty instead. Avoid naive substring or proximity matches as sufficient evidence.\n\n- Style and content constraints: Keep output concise. If appending, limit `summary` to 1–3 sentences total (the primary concise answer plus at most one short supporting sentence per relevant entity or one joint supporting sentence). Preserve the exact canonical label/token selected from `context`. Use a compact paraphrase grounded in passage language, avoid inventing facts or long verbatim quotations, and avoid misattributing attributes from different entities.\n\n- If there is insufficient information in `context` and `passages` to resolve the needed relation/attribute, summarize the uncertainty succinctly rather than asserting unsupported facts.\n\nProduce only the `summary` field as the integrated output string.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\nWhen multiple co-referent surface strings for the same entity appear in summary_2, you may prefer a shorter canonical label only if that exact shorter string appears verbatim in summary_2 either as an independent label or as an explicit parenthetical alternate, AND emitting that shorter string alone would not drop administrative or category qualifiers, required punctuation/abbreviations, or other disambiguating tokens that the question requires; otherwise emit the minimal multi-token or formatted string exactly as supported by summary_2. Preserve multi-token formatted place names, parenthetical acronyms or alternates when they are present or when the question's intent relies on them.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "b9971a087180",
+    "rerun_from": null,
+    "question": "What is the name of the regional transportation authority that includes the station which is proximal to Cira Centre South?",
+    "gold_answer": "Southeastern Pennsylvania Transportation Authority",
+    "context": {
+      "title": [
+        "Tampa Bay Area Regional Transportation Authority",
+        "South Florida Regional Transportation Authority",
+        "Santa Ana Regional Transportation Center",
+        "30th Street Station",
+        "Berks Area Regional Transportation Authority",
+        "Anaheim Regional Transportation Intermodal Center",
+        "Franklin Street station (Pennsylvania)",
+        "William F. Walsh Regional Transportation Center",
+        "Tri-Rail",
+        "Cira Centre South"
+      ],
+      "sentences": [
+        [
+          "The Tampa Bay Area Regional Transportation Authority, or TBARTA, is a regional transportation agency of the U.S. state of Florida which was created on July 1, 2007.",
+          " The purpose of the agency is \"to plan, develop, finance, construct, own, purchase, operate, maintain, relocate, equip, repair, and manage multimodal systems in Citrus, Hernando, Hillsborough, Manatee, Pasco, Pinellas, and Sarasota Counties.\"",
+          " The agency coordinates its efforts with the Florida Department of Transportation to improve transportation in the Tampa Bay Area."
+        ],
+        [
+          "The South Florida Regional Transportation Authority (SFRTA) is a tri-county public transit authority operating out of Pompano Beach, Florida, serving Miami-Dade, Broward and Palm Beach counties.",
+          " The organization was created on July 1, 2003 by the Florida Legislature and enacted by the Florida Department of Transportation.",
+          " Replacing the pre-existing Tri-County Commuter Rail Authority, the goal of incorporation was to expand cooperation between the Tri-Rail commuter rail service and the existing county public transport authorities: Broward County Transit, Miami-Dade Transit, and Palm Tran.",
+          " Tri-Rail is solely operated by SFRTA."
+        ],
+        [
+          "Santa Ana Regional Transportation Center is a passenger rail station and transportation center in Santa Ana, California.",
+          " It is used by Amtrak's \"Pacific Surfliner\" and Metrolink's Orange County Line and Inland Empire-Orange County Line trains.",
+          " It is also a Greyhound station and a hub for the Orange County Transportation Authority bus system as well as a terminal for several Mexican bus tour companies."
+        ],
+        [
+          "The 30th Street Station is the main railroad station in Philadelphia, Pennsylvania, United States and one of the seven stations in Southeastern Pennsylvania Transportation Authority's (SEPTA) Center City fare zone.",
+          " It is also a major stop on Amtrak's (National Railroad Passenger Corporation) Northeast and Keystone Corridors."
+        ],
+        [
+          "Berks Area Regional Transportation Authority (BARTA), previously Berks Area Reading Transportation Authority, is a public transportation system serving the city of Reading and its surrounding area of Berks County, Pennsylvania.",
+          " Dennis D. Louwerse, the long-time executive director/CEO at BARTA, died on Thursday, September 5, 2013 at the age of 68.",
+          " He became the executive director at BARTA in 1983, and he was the executive director for 30 years until his death in 2013.",
+          " David W. Kilmer is currently the executive director at BARTA and Red Rose Transit Authority."
+        ],
+        [
+          "The Anaheim Regional Transportation Intermodal Center (ARTIC) is an intermodal transit center in Anaheim, California, United States.",
+          " It serves as a train station for Amtrak intercity rail and Metrolink commuter rail, as well as a bus station used by the Orange County Transportation Authority (OCTA), Anaheim Resort Transportation (ART), Greyhound, Megabus, and Tres Estrellas de Oro."
+        ],
+        [
+          "Franklin Street station is a bus station and former railroad station in Reading, Pennsylvania.",
+          " It currently serves Berks Area Regional Transportation Authority (BARTA) buses and hosts a transportation museum."
+        ],
+        [
+          "The William F. Walsh Regional Transportation Center is the long-distance ground travel (rail and bus) terminal serving the Syracuse, New York area.",
+          " It is served by Amtrak, Greyhound Lines, Megabus, and Trailways.",
+          " Local and regional bus transportation is provided by the Central New York Regional Transportation Authority (CENTRO).",
+          " Various taxi firms service the Center, as well.",
+          " The Regional Transportation Center is located on the north side of Syracuse, adjacent to the Central New York Regional Market and near Destiny USA."
+        ],
+        [
+          "Tri-Rail (reporting mark TRCX) is a commuter rail line linking Miami, Fort Lauderdale, and West Palm Beach, Florida, United States.",
+          " It is managed by the South Florida Regional Transportation Authority (SFRTA) along CSX Transportation's former Miami Subdivision, the line now wholly owned by the Florida DOT.",
+          " The 70.9 mi system has 18 stations along the Southeast Florida coast, and connects directly to Amtrak at numerous stations, and to Metrorail at the Tri-Rail and Metrorail Transfer Station and at Miami Airport station."
+        ],
+        [
+          "Cira Centre South is a complex of two skyscrapers in the University City district of Philadelphia, Pennsylvania, which is across the Schuylkill River from Center City Philadelphia.",
+          " The location of the buildings is between Walnut Street and Chestnut Street south of 30th Street Station and the Old Post Office Building."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Cira Centre South",
+        "Cira Centre South",
+        "30th Street Station"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Cira Centre South",
+      "30th Street Station"
+    ],
+    "hop1_query": "What is the name of the regional transportation authority that includes the station which is proximal to Cira Centre South?",
+    "hop1_docs": [
+      "Cira Centre South | Cira Centre South is a complex of two skyscrapers in the University City district of Philadelphia, Pennsylvania, which is across the Schuylkill River from Center City Philadelphia.  The location of the buildings is between Walnut Street and Chestnut Street south of 30th Street Station and the Old Post Office Building.",
+      "Cira Centre | The Cira Centre is a 29-story, 437 ft office high-rise in the University City section of Philadelphia, across the street from Amtrak's 30th Street Station.  Developed by Brandywine Realty Trust and designed by César Pelli, it was built in 2004-05 on a platform over rail tracks.",
+      "Transportation in Boston | The Boston transportation system includes roadway, subway, regional rail, air, and sea options for passenger and freight transit in Boston, Massachusetts.  The Massachusetts Port Authority (Massport) operates the Port of Boston, which includes a container shipping facility in South Boston, and Logan International Airport, in East Boston.  The Massachusetts Bay Transportation Authority (MBTA) operates bus, subway, short distance rail, and water ferry passenger services throughout the city and region.  Amtrak operates passenger rail service to and from major northeastern cities.  A major bus terminal at South Station is served by varied intercity bus companies.  The city is bisected by major highways I-90 and I-93, the intersection of which has undergone a major renovation, nicknamed the Big Dig.",
+      "Canadian Internet Registration Authority | The Canadian Internet Registration Authority (CIRA) (French: Autorité canadienne pour les enregistrements Internet ACEI) is the organization that manages the . CA country code top-level domain, the policies that support Canada’s Internet community and Canada’s involvement in international Internet governance.  CIRA is a member-driven organization.  Membership in CIRA is included in the cost of a . CA domain, and open to anyone who holds a . CA domain.  There are approximately 15,000 CIRA members as of January 2013.",
+      "Metrolinx | Metrolinx is a Crown agency that manages and integrates road and public transport in the Golden Horseshoe region, which includes the cities of Toronto and Hamilton, in the province of Ontario in Canada.  Headquartered in Union Station in Toronto, the organization was created by the Government of Ontario as the \"Greater Toronto Transportation Authority\" on April 24, 2006.  It adopted the public name, Metrolinx, in 2007.",
+      "Transit-proximate development | Transit-proximate development is a term used by some planning officials to describe (potentially dense) development that is physically near a public transport node (e.g. a bus station, train station or metro station).  This type of development includes transit-oriented development, but, according to some planning officials, can also describe development that is not transit-oriented development.  Thus, transit-proximate development can include results where, despite the location of dense development near transit, the development does not take full advantage of -- or fully encourage the use of -- the public transport node.  For example, transit-proximate development could include buildings with extensive parking facilities typical of suburban locations, a lack of \"mixed-use development\" (housing, workplaces and shopping in the same place), or a lack of extensive pedestrian facilities that would make it easier for people to reach the public transport node.",
+      "Glenanda | Glenanda is a suburb of Johannesburg, South Africa.  It is located in Region F.  Glenanda borders the suburbs of Glenvista, Suideroord and Winchester Hills.  Glenanda has its own public library, service station and local shopping centre.  A primary school is established in Glenanda which services the surrounding areas.  Glenanda is in close proximity to The Glen Shopping Centre with an average travelling time of five minutes."
+    ],
+    "hop1_titles": [
+      "Cira Centre South",
+      "Cira Centre",
+      "Transportation in Boston",
+      "Canadian Internet Registration Authority",
+      "Metrolinx",
+      "Transit-proximate development",
+      "Glenanda"
+    ],
+    "summary_1": "- evidence:\n  - Cira Centre South — passage [1]: \"south of 30th Street Station\"\n  - Cira Centre — passage [2]: \"across the street from Amtrak's 30th Street Station\"\n  - Amtrak — passage [2] mentions \"Amtrak's 30th Street Station\"\n  - SEPTA or other regional authority — NOT present in provided passages\n\n- ambiguities_or_missing:\n  - The proximate station is unambiguously 30th Street Station in the passages.\n  - Missing: which regional transportation authority/agency includes or operates 30th Street Station (no passage names SEPTA or a regional operator).\n\n- missing_facts_or_bridge:\n  - missing_facts_or_bridge: \"name of the regional transportation authority/agency that includes or operates 30th Street Station (e.g., SEPTA)\"\n\n- retrieval_direction (priority):\n  1. \"30th Street Station operator\" or \"30th Street Station operator SEPTA\"\n  2. \"30th Street Station (Philadelphia) page\"\n  3. \"SEPTA 30th Street Station\" or \"Southeastern Pennsylvania Transportation Authority 30th Street Station\"",
+    "hop2_query": "30th Street Station operator",
+    "hop2_docs": [
+      "30th Street station (subway) | 30th Street station is an underground SEPTA rapid transit and trolley station in Philadelphia.  It serves the Market–Frankford Line and SEPTA Subway–Surface Trolley Lines.  It is located on Market Street between 30th and 31st Streets in the University City neighborhood near the main 30th Street Station and Drexel University.  The station features four tracks—two outer tracks for the Subway-Surface trolleys, and two inner tracks for the Market-Frankford subway trains.  A free transfer is available between both services via a mezzanine level which provides access to all four tracks.",
+      "30th &amp; Downing station | 30th & Downing station is a RTD light rail station in the Five Points neighborhood of Denver, Colorado, United States.  Operating as part of the D Line, the station was opened on October 8, 1994, and is operated by the Regional Transportation District.  It is the current northern terminus for Five Points trains.  Currently there is only one track on Welton Street for light rail trains, necessitating track sharing for trains in both directions between here and 20th & Welton.  Therefore, only one line serves this station and all stations on the Five Points branch.",
+      "CBS 30th Street Studio | CBS 30th Street Studio, also known as Columbia 30th Street Studio, and nicknamed \"The Church\", was an American recording studio operated by Columbia Records from 1948 to 1981 located at 207 East 30th Street, between Second and Third Avenues in Manhattan, New York City.",
+      "30th Street and Dolores station | 30th Street and Dolores is a station on the San Francisco Municipal Railway light rail network's J Church line.  It is located in the Bernal Heights neighborhood.",
+      "Church and 30th Street station | Church and 30th Street is a station on the San Francisco Municipal Railway light rail network's J Church line in the city of San Francisco, California.  It is located in the Upper Noe Valley neighborhood.  Only inbound trains bound towards Embarcadero are served at this station; however, the outbound Church and Day Street station is 220 feet north of the stop.",
+      "30th Street Station | The 30th Street Station is the main railroad station in Philadelphia, Pennsylvania, United States and one of the seven stations in Southeastern Pennsylvania Transportation Authority's (SEPTA) Center City fare zone.  It is also a major stop on Amtrak's (National Railroad Passenger Corporation) Northeast and Keystone Corridors.",
+      "30th Operations Group | The 30th Operations Group (30 OG) is an operational component of the United States Air Force 30th Space Wing, stationed at Vandenberg Air Force Base, California."
+    ],
+    "hop2_titles": [
+      "30th Street station (subway)",
+      "30th &amp; Downing station",
+      "CBS 30th Street Studio",
+      "30th Street and Dolores station",
+      "Church and 30th Street station",
+      "30th Street Station",
+      "30th Operations Group"
+    ],
+    "summary_2": "30th Street Station — It is one of the seven stations in the Southeastern Pennsylvania Transportation Authority's (SEPTA) Center City fare zone.",
+    "answer": "Southeastern Pennsylvania Transportation Authority (SEPTA)",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "30th Street Station"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Cira Centre South"
+    ],
+    "hit_titles_total": [
+      "30th Street Station",
+      "Cira Centre South"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

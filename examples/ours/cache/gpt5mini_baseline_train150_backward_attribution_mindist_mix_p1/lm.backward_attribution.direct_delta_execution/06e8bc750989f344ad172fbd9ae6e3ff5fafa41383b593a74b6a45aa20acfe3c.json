@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "06e8bc750989f344ad172fbd9ae6e3ff5fafa41383b593a74b6a45aa20acfe3c",
+  "created_at": "2026-07-14T19:01:55.277813+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks who 'originated from', 'born in', 'from', or otherwise names a place (here: 'Oaxaca') AND at least one visible summary explicitly states the subject's birthplace/place-of-origin.",
+            "preserve_rule": "Keep the agent's existing behavior of producing a single minimal answer string in the [[ ## answer ## ]] block derived only from the provided summaries; do not add explanatory sentences or extra fields.",
+            "change_rule": "When the trigger matches, modify the minimal answer by appending a brief place-of-origin tag immediately after the name, using only wording present in the visible summaries (examples of allowed formats: 'Name (born in Oaxaca)' or 'Name, born in Oaxaca'). Do not change the named entity itself or add additional claims.",
+            "drop_or_avoid_rule": "Do not invent or append ethnicities, political labels, dates, or any facts that do not appear in the visible summaries; do not produce full sentences, questions, or commentary; do not copy any text that exists only in hidden/target data.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal answer string (name plus the minimal birthplace tag if triggered), e.g. 'Benito Juárez (born in Oaxaca)'. No other text, punctuation, explanation, or metadata may appear.",
+            "why_local_transition": "This small edit ensures the agent answers origin-focused questions by including an explicit, summary-supported birthplace tag after the name, matching the user's focus on origin while preserving the minimal-answer format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which president was present for the Mexican Civil War who originated from Oaxaca?",
+        "summary_1": "Benito Juárez — born in Oaxaca — was the Mexican president during the Reform War (the 19th-century civil conflict) and the subsequent French Intervention.",
+        "summary_2": "Benito Juárez",
+        "current_output": "Benito Juárez"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks who 'originated from', 'born in', 'from', or otherwise names a place (here: 'Oaxaca') AND at least one visible summary explicitly states the subject's birthplace/place-of-origin.\",\n      \"preserve_rule\": \"Keep the agent's existing behavior of producing a single minimal answer string in the [[ ## answer ## ]] block derived only from the provided summaries; do not add explanatory sentences or extra fields.\",\n      \"change_rule\": \"When the trigger matches, modify the minimal answer by appending a brief place-of-origin tag immediately after the name, using only wording present in the visible summaries (examples of allowed formats: 'Name (born in Oaxaca)' or 'Name, born in Oaxaca'). Do not change the named entity itself or add additional claims.\",\n      \"drop_or_avoid_rule\": \"Do not invent or append ethnicities, political labels, dates, or any facts that do not appear in the visible summaries; do not produce full sentences, questions, or commentary; do not copy any text that exists only in hidden/target data.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string (name plus the minimal birthplace tag if triggered), e.g. 'Benito Juárez (born in Oaxaca)'. No other text, punctuation, explanation, or metadata may appear.\",\n      \"why_local_transition\": \"This small edit ensures the agent answers origin-focused questions by including an explicit, summary-supported birthplace tag after the name, matching the user's focus on origin while preserving the minimal-answer format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which president was present for the Mexican Civil War who originated from Oaxaca?\",\n  \"summary_1\": \"Benito Juárez — born in Oaxaca — was the Mexican president during the Reform War (the 19th-century civil conflict) and the subsequent French Intervention.\",\n  \"summary_2\": \"Benito Juárez\",\n  \"current_output\": \"Benito Juárez\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Benito Juárez (born in Oaxaca)\",\n  \"rationale\": \"Trigger matched: visible summaries state birthplace; appended a brief birthplace tag using wording from the summaries while keeping only the minimal answer string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 132,
+    "row_index": 132,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

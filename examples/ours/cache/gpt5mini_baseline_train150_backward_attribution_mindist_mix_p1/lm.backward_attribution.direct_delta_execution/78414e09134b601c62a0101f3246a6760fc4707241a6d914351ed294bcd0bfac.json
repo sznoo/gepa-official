@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "78414e09134b601c62a0101f3246a6760fc4707241a6d914351ed294bcd0bfac",
+  "created_at": "2026-07-14T19:01:55.780826+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question wording includes 'prequel' (or similar) and summary_1 is a specific book title (non-empty).",
+            "preserve_rule": "Keep producing exactly one compact retrieval query; retain focus on series/order relationships rather than long explanations.",
+            "change_rule": "When triggered, rewrite the query to explicitly ask for the main/parent series that the named prequel belongs to and the series order counting the prequel. Construct the query by naming the prequel from the question and the book title from summary_1 (both are visible inputs) and asking succinctly for the series name and the position/order.",
+            "drop_or_avoid_rule": "Do not include any presumed series name or long quoted passages; avoid yes/no or ambiguous phrasing, and avoid adding unrelated keywords or narrative context.",
+            "output_contract": "Emit one short (roughly <=25 words) retrieval query that mentions the prequel title from the question and the summary_1 title and requests the parent/main series name and the series order (counting the prequel).",
+            "why_local_transition": "Explicitly requesting the parent/main series while naming both the prequel and the known book guides the retriever toward the series page that names the series and lists book order, enabling the second-hop evidence to be found."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+        "summary_1": "Scrivener's Moon",
+        "current_output": {
+          "query": "What is the series order (counting the prequel \"Traction City\") for the Philip Reeve novella/series — is \"Scrivener's Moon\" the third book?"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question wording includes 'prequel' (or similar) and summary_1 is a specific book title (non-empty).\",\n      \"preserve_rule\": \"Keep producing exactly one compact retrieval query; retain focus on series/order relationships rather than long explanations.\",\n      \"change_rule\": \"When triggered, rewrite the query to explicitly ask for the main/parent series that the named prequel belongs to and the series order counting the prequel. Construct the query by naming the prequel from the question and the book title from summary_1 (both are visible inputs) and asking succinctly for the series name and the position/order.\",\n      \"drop_or_avoid_rule\": \"Do not include any presumed series name or long quoted passages; avoid yes/no or ambiguous phrasing, and avoid adding unrelated keywords or narrative context.\",\n      \"output_contract\": \"Emit one short (roughly <=25 words) retrieval query that mentions the prequel title from the question and the summary_1 title and requests the parent/main series name and the series order (counting the prequel).\",\n      \"why_local_transition\": \"Explicitly requesting the parent/main series while naming both the prequel and the known book guides the retriever toward the series page that names the series and lists book order, enabling the second-hop evidence to be found.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n  \"summary_1\": \"Scrivener's Moon\",\n  \"current_output\": {\n    \"query\": \"What is the series order (counting the prequel \\\"Traction City\\\") for the Philip Reeve novella/series — is \\\"Scrivener's Moon\\\" the third book?\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Parent series name and series order (counting the prequel) for 'Traction city' and 'Scrivener's Moon'?\"\n  },\n  \"rationale\": \"Delta triggered by 'prequel' and non-empty summary_1; query names both titles and asks succinctly for the parent series and position per the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 136,
+    "row_index": 136,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

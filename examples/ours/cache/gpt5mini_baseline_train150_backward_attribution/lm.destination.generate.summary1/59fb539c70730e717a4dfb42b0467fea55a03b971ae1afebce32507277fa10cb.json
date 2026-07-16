@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "59fb539c70730e717a4dfb42b0467fea55a03b971ae1afebce32507277fa10cb",
+  "created_at": "2026-07-14T13:42:37.275341+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+      "current_output": "The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.",
+      "upstream_context": {
+        "question": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+        "hop1_query": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+        "hop1_titles": [
+          "1992–93 UMass Minutemen basketball team",
+          "1992 UMass Minutemen football team",
+          "1999–2000 UMass Minutemen basketball team",
+          "2008–09 UMass Minutemen basketball team",
+          "2017–18 UMass Minutemen basketball team",
+          "2009–10 UMass Minutemen basketball team",
+          "1997–98 UMass Minutemen basketball team"
+        ],
+        "hop1_docs": [
+          "1992–93 UMass Minutemen basketball team | The 1992–93 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1992–93 NCAA Division I men's basketball season.  The Minutemen, led by fifth year head coach John Calipari were members of the Atlantic 10 Conference.  They finished the season 24-7, 11-3 in A-10 play to finish in first place.  It also marked the last season home games would be regularly played at Curry Hicks Cage.",
+          "1992 UMass Minutemen football team | The 1992 UMass Minutemen football team represented the University of Massachusetts Amherst in the 1992 NCAA Division I-AA football season as a member of the Yankee Conference.  The team was coached by Mike Hodges and played its home games at Warren McGuirk Alumni Stadium in Hadley, Massachusetts.  The 1992 season was Hodges' first as head coach of the Minutemen.  UMass finished the season with a record of 7–3 overall and 5–3 in conference play.",
+          "1999–2000 UMass Minutemen basketball team | The 1999–00 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1999–00 NCAA Division I men's basketball season.  The Minutemen, led by fourth year head coach Bruiser Flint, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 17-16, 9-7 in A-10 play to finish in third place.",
+          "2008–09 UMass Minutemen basketball team | The 2008–09 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 2008–09 NCAA Division I men's basketball season.  The Minutemen, led by first year head coach Derek Kellogg, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 12-18, 7-9 in A-10 play to finish for tenth place.",
+          "2017–18 UMass Minutemen basketball team | The 2017–18 UMass Minutemen basketball team will represent the University of Massachusetts Amherst during the 2017–18 NCAA Division I men's basketball season.  The Minutemen, will be led by first-year head coach Matt McCall and will play their home games at the William D. Mullins Memorial Center in Amherst, Massachusetts as members of the Atlantic 10 Conference.",
+          "2009–10 UMass Minutemen basketball team | The 2009–10 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 2009–10 NCAA Division I men's basketball season.  The Minutemen were led by second year head coach Derek Kellogg and played their home games at William D. Mullins Memorial Center.  They were members of the Atlantic 10 Conference.  They finished the season 12–20, 5–11 in A-10 play to finish in 11th place.  The Minutemen lost to Richmond in the A-10 Tournament.",
+          "1997–98 UMass Minutemen basketball team | The 1997–98 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1997–98 NCAA Division I men's basketball season.  The Minutemen, led by second year head coach Bruiser Flint, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 21–11, 12–4 in A-10 play to finish in third place."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "1992–93 UMass Minutemen basketball team",
+          "sent_id": 1,
+          "sentence": "The Minutemen, led by fifth year head coach John Calipari were members of the Atlantic 10 Conference."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "John Calipari"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhat is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\n\nCurrent agent output:\n\"The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.\"\n\nActual upstream context:\n{\n  \"question\": \"What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\",\n  \"hop1_query\": \"What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\",\n  \"hop1_titles\": [\n    \"1992–93 UMass Minutemen basketball team\",\n    \"1992 UMass Minutemen football team\",\n    \"1999–2000 UMass Minutemen basketball team\",\n    \"2008–09 UMass Minutemen basketball team\",\n    \"2017–18 UMass Minutemen basketball team\",\n    \"2009–10 UMass Minutemen basketball team\",\n    \"1997–98 UMass Minutemen basketball team\"\n  ],\n  \"hop1_docs\": [\n    \"1992–93 UMass Minutemen basketball team | The 1992–93 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1992–93 NCAA Division I men's basketball season.  The Minutemen, led by fifth year head coach John Calipari were members of the Atlantic 10 Conference.  They finished the season 24-7, 11-3 in A-10 play to finish in first place.  It also marked the last season home games would be regularly played at Curry Hicks Cage.\",\n    \"1992 UMass Minutemen football team | The 1992 UMass Minutemen football team represented the University of Massachusetts Amherst in the 1992 NCAA Division I-AA football season as a member of the Yankee Conference.  The team was coached by Mike Hodges and played its home games at Warren McGuirk Alumni Stadium in Hadley, Massachusetts.  The 1992 season was Hodges' first as head coach of the Minutemen.  UMass finished the season with a record of 7–3 overall and 5–3 in conference play.\",\n    \"1999–2000 UMass Minutemen basketball team | The 1999–00 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1999–00 NCAA Division I men's basketball season.  The Minutemen, led by fourth year head coach Bruiser Flint, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 17-16, 9-7 in A-10 play to finish in third place.\",\n    \"2008–09 UMass Minutemen basketball team | The 2008–09 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 2008–09 NCAA Division I men's basketball season.  The Minutemen, led by first year head coach Derek Kellogg, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 12-18, 7-9 in A-10 play to finish for tenth place.\",\n    \"2017–18 UMass Minutemen basketball team | The 2017–18 UMass Minutemen basketball team will represent the University of Massachusetts Amherst during the 2017–18 NCAA Division I men's basketball season.  The Minutemen, will be led by first-year head coach Matt McCall and will play their home games at the William D. Mullins Memorial Center in Amherst, Massachusetts as members of the Atlantic 10 Conference.\",\n    \"2009–10 UMass Minutemen basketball team | The 2009–10 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 2009–10 NCAA Division I men's basketball season.  The Minutemen were led by second year head coach Derek Kellogg and played their home games at William D. Mullins Memorial Center.  They were members of the Atlantic 10 Conference.  They finished the season 12–20, 5–11 in A-10 play to finish in 11th place.  The Minutemen lost to Richmond in the A-10 Tournament.\",\n    \"1997–98 UMass Minutemen basketball team | The 1997–98 UMass Minutemen basketball team represented the University of Massachusetts Amherst during the 1997–98 NCAA Division I men's basketball season.  The Minutemen, led by second year head coach Bruiser Flint, played their home games at William D. Mullins Memorial Center and are members of the Atlantic 10 Conference.  They finished the season 21–11, 12–4 in A-10 play to finish in third place.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"1992–93 UMass Minutemen basketball team\",\n    \"sent_id\": 1,\n    \"sentence\": \"The Minutemen, led by fifth year head coach John Calipari were members of the Atlantic 10 Conference.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"John Calipari\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary of first-hop evidence: The 1992–93 UMass Minutemen basketball team page states the team was led by fifth-year head coach John Calipari. Bridge entity / missing relation: John Calipari — the missing fact needed is his middle name (the coach's full given name). Retrieval direction for next hop: retrieve the 'John Calipari' biography page (or other authoritative biographical sources) and check the lead/infobox or birth-name/full-name fields for his full name (middle name).\",\n  \"rationale\": \"The only supported first-hop sentence identifies John Calipari as the 1992–93 head coach; to answer the question we must obtain his middle name from his biography (e.g., the 'John Calipari' page).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 120,
+    "row_index": 120
+  }
+}

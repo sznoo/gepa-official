@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "058bfabc693ec71878bb3f64efbe50efe3f3aa90c89df016c3d0dbb1b3d88f38",
+  "created_at": "2026-07-16T04:56:08.181601+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "summary_1": "Passages identify two Doyle Holmes novels: Passage 1 names \"The Sign of the Four\" as \"the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle\" (the passage also shows a parenthetical year next to that title), and Passage 3 names \"The Hound of the Baskervilles\" as \"the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.\" Missing/next-hop: determine which specific \"crime novel\" the question refers to (which title is meant) and then retrieve that novel's publication/writing year (if the intended novel is \"The Sign of the Four,\" confirm the parenthetical year shown in Passage 1 as the publication year).",
+        "current_output": {
+          "query": "The Sign of the Four publication year Sir Arthur Conan Doyle"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "The Sign of the Four publication year Sir Arthur Conan Doyle"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "The Sign of the Four",
+          "Sir Arthur Conan Doyle's Sherlock Holmes",
+          "The Sign of Four (1983 film)",
+          "Arthur Conan Doyle",
+          "The Sign of Four (1932 film)",
+          "Sherlock Holmes (play)",
+          "Adrian Conan Doyle"
+        ],
+        "retrieved_doc_snippets": [
+          "The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle. Doyle wrote four novels and 56 stories starring the fictional detective.",
+          "Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:",
+          "The Sign of Four (1983 film) | The Sign of Four is a 1983 British made-for-television mystery film directed by Desmond Davis and starring Ian Richardson and David Healy. The film is based on Sir Arthur Conan Doyle's novel of the same name, the second novel to feature Sherlock Holmes and Doctor Watson.",
+          "Arthur Conan Doyle | Sir Arthur Ignatius Conan Doyle KStJ, DL (22 May 1859 – 7 July 1930) was a British writer best known for his detective fiction featuring the character Sherlock Holmes. Originally a physician, in 1887 he published \"A Study in Scarlet\", the first of four novels about Holmes and Dr. Watson. In addition, Doyle wrote over fifty short stories featuring the famous detective.",
+          "The Sign of Four (1932 film) | The Sign of Four is a 1932 British crime film directed by Graham Cutts and starring Arthur Wontner, Ian Hunter and Graham Soutten. The film is based on Arthur Conan Doyle's second Sherlock Holmes story \"The Sign of the Four\". The film is also known as The Sign of Four: Sherlock Holmes' Greatest Case.",
+          "Sherlock Holmes (play) | Sherlock Holmes is a four-act play by William Gillette and Sir Arthur Conan Doyle, based on Conan Doyle's character Sherlock Holmes. After three previews it premiered on Broadway November 6, 1899, at the Garrick Theatre in New York City.",
+          "Adrian Conan Doyle | Adrian Malcolm Conan Doyle (19 November 19103 June 1970) was the youngest son of Sir Arthur Conan Doyle and his second wife Jean, Lady Doyle or Lady Conan Doyle. He had two siblings, sister Jean and brother Denis, as well as two half-siblings, sister Mary and brother Kingsley."
+        ],
+        "summary_2": "The novel is The Sign of the Four, and it was written/published in 1890 (Passage 1 shows \"(1890)\" next to the title, supported by the other passages).",
+        "answer": "1890",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Richard Cabell",
+          "The Hound of the Baskervilles"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Richard Cabell Hound of the Baskervilles year Sir Arthur Conan Doyle"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"summary_1\": \"Passages identify two Doyle Holmes novels: Passage 1 names \\\"The Sign of the Four\\\" as \\\"the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle\\\" (the passage also shows a parenthetical year next to that title), and Passage 3 names \\\"The Hound of the Baskervilles\\\" as \\\"the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.\\\" Missing/next-hop: determine which specific \\\"crime novel\\\" the question refers to (which title is meant) and then retrieve that novel's publication/writing year (if the intended novel is \\\"The Sign of the Four,\\\" confirm the parenthetical year shown in Passage 1 as the publication year).\",\n  \"current_output\": {\n    \"query\": \"The Sign of the Four publication year Sir Arthur Conan Doyle\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"The Sign of the Four publication year Sir Arthur Conan Doyle\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"The Sign of the Four\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes\",\n    \"The Sign of Four (1983 film)\",\n    \"Arthur Conan Doyle\",\n    \"The Sign of Four (1932 film)\",\n    \"Sherlock Holmes (play)\",\n    \"Adrian Conan Doyle\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle. Doyle wrote four novels and 56 stories starring the fictional detective.\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:\",\n    \"The Sign of Four (1983 film) | The Sign of Four is a 1983 British made-for-television mystery film directed by Desmond Davis and starring Ian Richardson and David Healy. The film is based on Sir Arthur Conan Doyle's novel of the same name, the second novel to feature Sherlock Holmes and Doctor Watson.\",\n    \"Arthur Conan Doyle | Sir Arthur Ignatius Conan Doyle KStJ, DL (22 May 1859 – 7 July 1930) was a British writer best known for his detective fiction featuring the character Sherlock Holmes. Originally a physician, in 1887 he published \\\"A Study in Scarlet\\\", the first of four novels about Holmes and Dr. Watson. In addition, Doyle wrote over fifty short stories featuring the famous detective.\",\n    \"The Sign of Four (1932 film) | The Sign of Four is a 1932 British crime film directed by Graham Cutts and starring Arthur Wontner, Ian Hunter and Graham Soutten. The film is based on Arthur Conan Doyle's second Sherlock Holmes story \\\"The Sign of the Four\\\". The film is also known as The Sign of Four: Sherlock Holmes' Greatest Case.\",\n    \"Sherlock Holmes (play) | Sherlock Holmes is a four-act play by William Gillette and Sir Arthur Conan Doyle, based on Conan Doyle's character Sherlock Holmes. After three previews it premiered on Broadway November 6, 1899, at the Garrick Theatre in New York City.\",\n    \"Adrian Conan Doyle | Adrian Malcolm Conan Doyle (19 November 19103 June 1970) was the youngest son of Sir Arthur Conan Doyle and his second wife Jean, Lady Doyle or Lady Conan Doyle. He had two siblings, sister Jean and brother Denis, as well as two half-siblings, sister Mary and brother Kingsley.\"\n  ],\n  \"summary_2\": \"The novel is The Sign of the Four, and it was written/published in 1890 (Passage 1 shows \\\"(1890)\\\" next to the title, supported by the other passages).\",\n  \"answer\": \"1890\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Richard Cabell\",\n    \"The Hound of the Baskervilles\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Richard Cabell Hound of the Baskervilles year Sir Arthur Conan Doyle\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 lists two or more candidate novel titles and at least one of those titles is shown with an explicit year (e.g. a parenthetical year) while at least one other title in summary_1 lacks any year marker.\",\n    \"preserve_rule\": \"Keep all base-prompt requirements: emit exactly one compact, keyword-style retrieval query string (single line), anchor the query to visible tokens in summary_1, include the author token 'Sir Arthur Conan Doyle' if it already appears in the visible inputs, and do not add explanatory text or extra fields.\",\n    \"change_rule\": \"When triggered, prefer the candidate title from summary_1 that does NOT already display a year. Construct the query as: <UnyearedTitle> publication year Sir Arthur Conan Doyle (or if the author token is not present in summary_1, use: <UnyearedTitle> publication year). Use only tokens exactly as they appear in summary_1 and keep the query compact (keywords only).\",\n    \"drop_or_avoid_rule\": \"Do not emit a query targeting a title that already includes a parenthetical year in summary_1. Do not introduce any new proper names or anchors that do not appear in the visible inputs. Do not output multiple queries, explanatory text, or attempts to copy the target answer.\",\n    \"output_contract\": \"Return exactly one single-line string in the 'query' field containing the compact keyword-style search; no other fields, punctuation, or commentary.\",\n    \"why_local_transition\": \"Shifts the retrieval focus away from a title already resolved in the visible summary toward the unresolved candidate title, so the downstream retriever can collect the missing publication-year evidence for that other novel.\"\n  },\n  \"rationale\": \"The smallest coherent change is to prefer the novel in summary_1 that lacks an explicit year. This preserves the original single-query, anchor-based behavior while altering only the selection heuristic so the agent requests the missing publication-year evidence for the unresolved title. The rule avoids inventing new anchors and keeps the query compact and grounded in visible tokens, satisfying the prompt constraints.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

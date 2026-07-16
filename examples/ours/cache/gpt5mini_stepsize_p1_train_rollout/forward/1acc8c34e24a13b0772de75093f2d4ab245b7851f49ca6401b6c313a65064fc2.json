@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "1acc8c34e24a13b0772de75093f2d4ab245b7851f49ca6401b6c313a65064fc2",
+  "created_at": "2026-07-16T02:45:36.741931+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?",
+    "answer": "Irish Giant",
+    "context": {
+      "title": [
+        "1884 Cleveland Blues season",
+        "Charles Byrne (giant)",
+        "Patrick Cotter (Irish poet)",
+        "1883 Brooklyn Grays season",
+        "Patrick Cotter O'Brien",
+        "1897 Brooklyn Bridegrooms season",
+        "Patricia O'Brien Cotter",
+        "Patrick Cotter (croquet player)",
+        "The Giant, O'Brien",
+        "1888 Brooklyn Bridegrooms season"
+      ],
+      "sentences": [
+        [
+          "The 1884 Cleveland Blues season was a season in American baseball.",
+          " It involved the Blues finishing the season at 35–72, seventh place in the National League.",
+          " After the season, the team was purchased by Charles Byrne for $10,000 and shut down, many of the players being added to Byrne's Brooklyn Grays team.",
+          ""
+        ],
+        [
+          "Charles Byrne (1761–1783) or \"The Irish Giant\", was a man regarded as a curiosity or freak in London in the 1780s.",
+          " Byrne's exact height is of some conjecture.",
+          " Some accounts refer to him as being 8 ft to 8 ft tall, but skeletal evidence places him at just over 7 ft ."
+        ],
+        [
+          "Patrick Cotter is an Irish poet based in Cork city.",
+          " Born in 1963, he has published several collections of poetry.",
+          " He is currently the Artistic Director of the Munster Literature Centre."
+        ],
+        [
+          "The Brooklyn baseball club was formed in 1883 by real estate magnate and baseball enthusiast Charles Byrne who convinced his brother-in-law Joseph Doyle and casino operator Ferdinand Abell to start the team with him.",
+          " Byrne set up a grandstand on fifth avenue and named it Washington Park in honor of George Washington.",
+          " The team played in the minor Inter-State Association of Professional Baseball Clubs."
+        ],
+        [
+          "Patrick Cotter O'Brien (19 January 1760 – 8 September 1806) was the first of only seventeen people in medical history to stand at a verified height of eight feet (2.44 m) or more.",
+          " O'Brien was born in Kinsale, County Cork, Ireland.",
+          " His real name was Patrick Cotter and he adopted O'Brien as his stage name in the sideshow circus, claiming descent from the legendarily gigantic Brian Boru.",
+          " He was also known as the \"Bristol Giant\" and the \"Irish Giant\".",
+          " Another giant of this period, Charles Byrne, also claimed to be an O'Brien."
+        ],
+        [
+          "The 1897 Brooklyn Bridegrooms finished the season in seventh place under new manager Billy Barnie.",
+          " Also the team's ownership underwent a change as Charles Byrne and Ferdinand Abell buy the shares previously owned by George Chauncey and Charles Ebbets becomes a part owner of the team."
+        ],
+        [
+          "Patricia O'Brien Cotter is a Montana Supreme Court Associate Justice first elected on November 7, 2000, filling the seat of the retired Justice William E. Hunt.",
+          " Originally from South Bend, Indiana, she graduated with honors in 1972 from Western Michigan University with a B.S. in Political Science and History.",
+          " Justice Cotter's law degree is from the Notre Dame Law School in 1977."
+        ],
+        [
+          "Edmond Patrick Charles Cotter (24 September 1904 - 8 March 1996) was a croquet player from Ireland.",
+          " Cotter was one of the most successful croquet players in the 1950s and 1960s winning the President’s Cup six times (1949, 1950, 1952, 1953, 1956 and 1960), the Open Championship three times (1955, 1958 and 1962) and the Men's Championship four times (1952, 1954, 1963 and 1969).",
+          " He also won the Open Doubles Championship on ten occasions (1954, 1955, 1958, 1959, 1961-1965 and 1969) on each occasion being partnered by John Solomon."
+        ],
+        [
+          "The Giant, O'Brien is a novel by Hilary Mantel, published in 1998.",
+          " It is a fictionalized account of Irish giant Charles Byrne (O'Brien) and Scottish surgeon John Hunter."
+        ],
+        [
+          "With the 1888 season, the Brooklyn Grays underwent a name change to the Brooklyn Bridegrooms, a nickname that resulted from several team members getting married around the same time.",
+          " Also, owner Charles Byrne decided to withdraw from managing the team's on field activities and turned the reins over to more experienced baseball manager Bill McGunnigle.",
+          " That, along with the Bridegrooms' purchase of several top players from the defunct New York Metropolitans, led to a dramatic on field improvement as the team finished in second place in the American Association."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Patrick Cotter O'Brien",
+        "Charles Byrne (giant)"
+      ],
+      "sent_id": [
+        3,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?",
+    "gold_answer": "Irish Giant",
+    "context": {
+      "title": [
+        "1884 Cleveland Blues season",
+        "Charles Byrne (giant)",
+        "Patrick Cotter (Irish poet)",
+        "1883 Brooklyn Grays season",
+        "Patrick Cotter O'Brien",
+        "1897 Brooklyn Bridegrooms season",
+        "Patricia O'Brien Cotter",
+        "Patrick Cotter (croquet player)",
+        "The Giant, O'Brien",
+        "1888 Brooklyn Bridegrooms season"
+      ],
+      "sentences": [
+        [
+          "The 1884 Cleveland Blues season was a season in American baseball.",
+          " It involved the Blues finishing the season at 35–72, seventh place in the National League.",
+          " After the season, the team was purchased by Charles Byrne for $10,000 and shut down, many of the players being added to Byrne's Brooklyn Grays team.",
+          ""
+        ],
+        [
+          "Charles Byrne (1761–1783) or \"The Irish Giant\", was a man regarded as a curiosity or freak in London in the 1780s.",
+          " Byrne's exact height is of some conjecture.",
+          " Some accounts refer to him as being 8 ft to 8 ft tall, but skeletal evidence places him at just over 7 ft ."
+        ],
+        [
+          "Patrick Cotter is an Irish poet based in Cork city.",
+          " Born in 1963, he has published several collections of poetry.",
+          " He is currently the Artistic Director of the Munster Literature Centre."
+        ],
+        [
+          "The Brooklyn baseball club was formed in 1883 by real estate magnate and baseball enthusiast Charles Byrne who convinced his brother-in-law Joseph Doyle and casino operator Ferdinand Abell to start the team with him.",
+          " Byrne set up a grandstand on fifth avenue and named it Washington Park in honor of George Washington.",
+          " The team played in the minor Inter-State Association of Professional Baseball Clubs."
+        ],
+        [
+          "Patrick Cotter O'Brien (19 January 1760 – 8 September 1806) was the first of only seventeen people in medical history to stand at a verified height of eight feet (2.44 m) or more.",
+          " O'Brien was born in Kinsale, County Cork, Ireland.",
+          " His real name was Patrick Cotter and he adopted O'Brien as his stage name in the sideshow circus, claiming descent from the legendarily gigantic Brian Boru.",
+          " He was also known as the \"Bristol Giant\" and the \"Irish Giant\".",
+          " Another giant of this period, Charles Byrne, also claimed to be an O'Brien."
+        ],
+        [
+          "The 1897 Brooklyn Bridegrooms finished the season in seventh place under new manager Billy Barnie.",
+          " Also the team's ownership underwent a change as Charles Byrne and Ferdinand Abell buy the shares previously owned by George Chauncey and Charles Ebbets becomes a part owner of the team."
+        ],
+        [
+          "Patricia O'Brien Cotter is a Montana Supreme Court Associate Justice first elected on November 7, 2000, filling the seat of the retired Justice William E. Hunt.",
+          " Originally from South Bend, Indiana, she graduated with honors in 1972 from Western Michigan University with a B.S. in Political Science and History.",
+          " Justice Cotter's law degree is from the Notre Dame Law School in 1977."
+        ],
+        [
+          "Edmond Patrick Charles Cotter (24 September 1904 - 8 March 1996) was a croquet player from Ireland.",
+          " Cotter was one of the most successful croquet players in the 1950s and 1960s winning the President’s Cup six times (1949, 1950, 1952, 1953, 1956 and 1960), the Open Championship three times (1955, 1958 and 1962) and the Men's Championship four times (1952, 1954, 1963 and 1969).",
+          " He also won the Open Doubles Championship on ten occasions (1954, 1955, 1958, 1959, 1961-1965 and 1969) on each occasion being partnered by John Solomon."
+        ],
+        [
+          "The Giant, O'Brien is a novel by Hilary Mantel, published in 1998.",
+          " It is a fictionalized account of Irish giant Charles Byrne (O'Brien) and Scottish surgeon John Hunter."
+        ],
+        [
+          "With the 1888 season, the Brooklyn Grays underwent a name change to the Brooklyn Bridegrooms, a nickname that resulted from several team members getting married around the same time.",
+          " Also, owner Charles Byrne decided to withdraw from managing the team's on field activities and turned the reins over to more experienced baseball manager Bill McGunnigle.",
+          " That, along with the Bridegrooms' purchase of several top players from the defunct New York Metropolitans, led to a dramatic on field improvement as the team finished in second place in the American Association."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Patrick Cotter O'Brien",
+        "Charles Byrne (giant)"
+      ],
+      "sent_id": [
+        3,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Patrick Cotter O'Brien",
+      "Charles Byrne (giant)"
+    ],
+    "hop1_query": "What nickname was shared by Patrick Cotter O'Brien and Charles Byrne?",
+    "hop1_docs": [
+      "Patrick Cotter O'Brien | Patrick Cotter O'Brien (19 January 1760 – 8 September 1806) was the first of only seventeen people in medical history to stand at a verified height of eight feet (2.44 m) or more.  O'Brien was born in Kinsale, County Cork, Ireland.  His real name was Patrick Cotter and he adopted O'Brien as his stage name in the sideshow circus, claiming descent from the legendarily gigantic Brian Boru.  He was also known as the \"Bristol Giant\" and the \"Irish Giant\".  Another giant of this period, Charles Byrne, also claimed to be an O'Brien.",
+      "The Giant, O'Brien | The Giant, O'Brien is a novel by Hilary Mantel, published in 1998.  It is a fictionalized account of Irish giant Charles Byrne (O'Brien) and Scottish surgeon John Hunter.",
+      "Patrick Cotter (croquet player) | Edmond Patrick Charles Cotter (24 September 1904 - 8 March 1996) was a croquet player from Ireland.  Cotter was one of the most successful croquet players in the 1950s and 1960s winning the President’s Cup six times (1949, 1950, 1952, 1953, 1956 and 1960), the Open Championship three times (1955, 1958 and 1962) and the Men's Championship four times (1952, 1954, 1963 and 1969).  He also won the Open Doubles Championship on ten occasions (1954, 1955, 1958, 1959, 1961-1965 and 1969) on each occasion being partnered by John Solomon.",
+      "Patricia O'Brien Cotter | Patricia O'Brien Cotter is a Montana Supreme Court Associate Justice first elected on November 7, 2000, filling the seat of the retired Justice William E. Hunt.  Originally from South Bend, Indiana, she graduated with honors in 1972 from Western Michigan University with a B.S. in Political Science and History.  Justice Cotter's law degree is from the Notre Dame Law School in 1977.",
+      "Patrick Cotter (Irish poet) | Patrick Cotter is an Irish poet based in Cork city.  Born in 1963, he has published several collections of poetry.  He is currently the Artistic Director of the Munster Literature Centre.",
+      "Cubby O'Brien | Carl Patrick O'Brien (born July 14, 1946), better known by the nickname of \"Cubby\", is an American drummer and former child actor, best known as one of the original Mouseketeers on the weekday ABC television program, \"The Mickey Mouse Club\" from 1955–1958.",
+      "John O'Brien (Dublin footballer) | John O'Brien is a senior inter-county Gaelic footballer for Dublin and Round Towers.  He made his debut in the 2008 O'Byrne Cup against Wicklow.  John made his NFL debut for Dublin against Westmeath in the first round.  O'Brien was on Dublin's winning team for the 2008 O'Byrne Cup winning team which defeated Longford in the final."
+    ],
+    "hop1_titles": [
+      "Patrick Cotter O'Brien",
+      "The Giant, O'Brien",
+      "Patrick Cotter (croquet player)",
+      "Patricia O'Brien Cotter",
+      "Patrick Cotter (Irish poet)",
+      "Cubby O'Brien",
+      "John O'Brien (Dublin footballer)"
+    ],
+    "summary_1": "Evidence: passage [1] states Patrick Cotter O'Brien \"was also known as the 'Bristol Giant' and the 'Irish Giant'\"; passage [2] refers to \"Irish giant Charles Byrne (O'Brien)\". Bridge/missing-check: the shared nickname appears to be \"Irish Giant\" — next hop should retrieve an authoritative source confirming Charles Byrne is called the \"Irish Giant\" (and/or that both men are referred to by that nickname).",
+    "hop2_query": "Charles Byrne \"Irish Giant\" nickname biography",
+    "hop2_docs": [
+      "Charles Byrne (giant) | Charles Byrne (1761–1783) or \"The Irish Giant\", was a man regarded as a curiosity or freak in London in the 1780s.  Byrne's exact height is of some conjecture.  Some accounts refer to him as being 8 ft to 8 ft tall, but skeletal evidence places him at just over 7 ft .",
+      "The Giant, O'Brien | The Giant, O'Brien is a novel by Hilary Mantel, published in 1998.  It is a fictionalized account of Irish giant Charles Byrne (O'Brien) and Scottish surgeon John Hunter.",
+      "Patrick Cotter O'Brien | Patrick Cotter O'Brien (19 January 1760 – 8 September 1806) was the first of only seventeen people in medical history to stand at a verified height of eight feet (2.44 m) or more.  O'Brien was born in Kinsale, County Cork, Ireland.  His real name was Patrick Cotter and he adopted O'Brien as his stage name in the sideshow circus, claiming descent from the legendarily gigantic Brian Boru.  He was also known as the \"Bristol Giant\" and the \"Irish Giant\".  Another giant of this period, Charles Byrne, also claimed to be an O'Brien.",
+      "Shane Byrne (rugby union) | James Shane Byrne (born 18 July 1971) is a former Irish rugby union hooker.  He is nicknamed 'Munch' or 'Mullet' (a reference to his hair style).",
+      "Garrett Byrne | Garrett Michael Byrne (1829 – March 3, 1897) was an Irish nationalist and MP in the House of Commons of the United Kingdom of Great Britain and Ireland and as member of the Irish Parliamentary Party represented Co.  Wexford, 1880–83, and West Wicklow, 1885-92.  He was a strong supporter of Charles Stewart Parnell.",
+      "Simon Byrne | Simon Byrne (1806 – 2 June 1833), nicknamed \"The Emerald Gem\", was an Irish bare-knuckle prize fighter.  The heavyweight boxing champion of Ireland, he was drawn to England by the larger sums of prize money on offer and his hopes of becoming the heavyweight champion there as well.  He became one of only six fighters ever to have been involved in fatal fights as both survivor and deceased since records began in 1741.",
+      "O'Byrne (surname) | O'Byrne (Irish: \"Ó Broin\" ) is an Irish surname.  The O'Byrne family were descendants of Bran mac Máelmórda, King of Leinster."
+    ],
+    "hop2_titles": [
+      "Charles Byrne (giant)",
+      "The Giant, O'Brien",
+      "Patrick Cotter O'Brien",
+      "Shane Byrne (rugby union)",
+      "Garrett Byrne",
+      "Simon Byrne",
+      "O'Byrne (surname)"
+    ],
+    "summary_2": "The shared nickname was \"the Irish Giant.\" Both Patrick Cotter O'Brien (passage [3]) and Charles Byrne (passage [1]) are explicitly described by that nickname.",
+    "answer": "\"the Irish Giant.\"",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Charles Byrne (giant)"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Patrick Cotter O'Brien"
+    ],
+    "hit_titles_total": [
+      "Charles Byrne (giant)",
+      "Patrick Cotter O'Brien"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

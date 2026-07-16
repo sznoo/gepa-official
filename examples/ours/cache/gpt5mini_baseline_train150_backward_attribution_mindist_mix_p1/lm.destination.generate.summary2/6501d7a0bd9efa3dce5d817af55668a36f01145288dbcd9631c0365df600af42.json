@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "6501d7a0bd9efa3dce5d817af55668a36f01145288dbcd9631c0365df600af42",
+  "created_at": "2026-07-14T19:01:34.371557+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+      "current_output": "Four.",
+      "upstream_context": {
+        "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+        "summary_1": "Both Juliette and the Licks and Civil Twilight have four male band members.",
+        "hop2_query": "Juliette and the Licks band members site:wikipedia.org\nCivil Twilight band members site:wikipedia.org",
+        "hop2_titles": [
+          "Wikidumper.org",
+          "Wikipediocracy",
+          "The Steph Show",
+          "Robert Jessup",
+          "Juliette and the Licks",
+          "URL redirection",
+          "Zeno.org"
+        ],
+        "hop2_docs": [
+          "Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \"best of the Wikipedia rejects\", articles that are slated for deletion at the site.  WikiDumper was launched on November 4, 2006, and accepts user submissions.  Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources.  The site has been criticized as likely to be less accurate than Wikipedia.",
+          "Wikipediocracy | Wikipediocracy is a website for discussion and criticism of Wikipedia.  Its members have brought information about Wikipedia's controversies to the attention of the media.  The site was founded in March 2012 by users of Wikipedia Review, another site critical of Wikipedia.",
+          "The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#",
+          "Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter.  Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).",
+          "Juliette and the Licks | Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.  Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.  Their popular songs include \"You're Speaking My Language\" and \"Hot Kiss\".  The band broke up in 2009.  In 2015, Lewis announced the band would be reunited on July 23rd for a show in Los Angeles.  The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.  In June of 2016, Juliette Lewis announced a solo tour leaving the future of The Licks undetermined.",
+          "URL redirection | URL redirection, also called URL forwarding, is a World Wide Web technique for making a web page available under more than one URL address.  When a web browser attempts to open a URL that has been redirected, a page with a different URL is opened.  Similarly, domain redirection or domain forwarding is when all pages in a URL domain are redirected to a different domain, as when wikipedia.com and wikipedia.net are automatically redirected to wikipedia.org.  URL redirection is done for various reasons: for URL shortening; to prevent broken links when web pages are moved; to allow multiple domain names belonging to the same owner to refer to a single web site; to guide navigation into and out of a website; for privacy protection; and for hostile purposes such as phishing attacks or malware distribution.",
+          "Zeno.org | Zeno.org (] ) is a digital library with German texts and other content such as pictures, facsimile, etc., which has been started by the Zenodot Verlagsgesellschaft mbH, a German publishing house and sister enterprise of Directmedia Publishing GmbH.  The content is based on the digital libraries from the CDs and DVDs published by Directmedia, The Yorck Projekt and Zenodot.  It uses a stable mirror of the German Wikipedia, purchasable as German language Wikipedia DVD-ROM.  Since its official start in September 2007, it is the largest fulltext online digital library in German language."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 0,
+          "sentence": "Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis."
+        },
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 1,
+          "sentence": "Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis."
+        },
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 5,
+          "sentence": "The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat number of male band members do both Juliette and the Licks and Civil Twilight have?\n\nCurrent agent output:\n\"Four.\"\n\nActual upstream context:\n{\n  \"question\": \"What number of male band members do both Juliette and the Licks and Civil Twilight have?\",\n  \"summary_1\": \"Both Juliette and the Licks and Civil Twilight have four male band members.\",\n  \"hop2_query\": \"Juliette and the Licks band members site:wikipedia.org\\nCivil Twilight band members site:wikipedia.org\",\n  \"hop2_titles\": [\n    \"Wikidumper.org\",\n    \"Wikipediocracy\",\n    \"The Steph Show\",\n    \"Robert Jessup\",\n    \"Juliette and the Licks\",\n    \"URL redirection\",\n    \"Zeno.org\"\n  ],\n  \"hop2_docs\": [\n    \"Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \\\"best of the Wikipedia rejects\\\", articles that are slated for deletion at the site.  WikiDumper was launched on November 4, 2006, and accepts user submissions.  Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources.  The site has been criticized as likely to be less accurate than Wikipedia.\",\n    \"Wikipediocracy | Wikipediocracy is a website for discussion and criticism of Wikipedia.  Its members have brought information about Wikipedia's controversies to the attention of the media.  The site was founded in March 2012 by users of Wikipedia Review, another site critical of Wikipedia.\",\n    \"The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#\",\n    \"Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter.  Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).\",\n    \"Juliette and the Licks | Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.  Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.  Their popular songs include \\\"You're Speaking My Language\\\" and \\\"Hot Kiss\\\".  The band broke up in 2009.  In 2015, Lewis announced the band would be reunited on July 23rd for a show in Los Angeles.  The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.  In June of 2016, Juliette Lewis announced a solo tour leaving the future of The Licks undetermined.\",\n    \"URL redirection | URL redirection, also called URL forwarding, is a World Wide Web technique for making a web page available under more than one URL address.  When a web browser attempts to open a URL that has been redirected, a page with a different URL is opened.  Similarly, domain redirection or domain forwarding is when all pages in a URL domain are redirected to a different domain, as when wikipedia.com and wikipedia.net are automatically redirected to wikipedia.org.  URL redirection is done for various reasons: for URL shortening; to prevent broken links when web pages are moved; to allow multiple domain names belonging to the same owner to refer to a single web site; to guide navigation into and out of a website; for privacy protection; and for hostile purposes such as phishing attacks or malware distribution.\",\n    \"Zeno.org | Zeno.org (] ) is a digital library with German texts and other content such as pictures, facsimile, etc., which has been started by the Zenodot Verlagsgesellschaft mbH, a German publishing house and sister enterprise of Directmedia Publishing GmbH.  The content is based on the digital libraries from the CDs and DVDs published by Directmedia, The Yorck Projekt and Zenodot.  It uses a stable mirror of the German Wikipedia, purchasable as German language Wikipedia DVD-ROM.  Since its official start in September 2007, it is the largest fulltext online digital library in German language.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 0,\n    \"sentence\": \"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.\"\n  },\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 1,\n    \"sentence\": \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\"\n  },\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 5,\n    \"sentence\": \"The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary: The upstream summary_1 states that both Juliette & The Licks and Civil Twilight have four male band members. Second-hop retrieval returned supporting sentences for Juliette & The Licks that confirm the band is led by Juliette Lewis and list four other band members: guitarists Craig Fairbaugh and Emilio Cueto, bassist Jason Womack, and drummer Ed Davis (four instrumental members). No second-hop support for Civil Twilight was returned here, so the claim about Civil Twilight’s membership count currently relies on the summary_1 context.\",\n  \"rationale\": \"I combined the summary_1 claim that both bands have four male members with the retrieved Juliette & The Licks sentences (which identify the band leader and list four other band members by name). Those retrieved sentences substantiate the four-member count for Juliette & The Licks; there were no retrieved sentences for Civil Twilight at this boundary, so that part of the claim is only present via summary_1.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 16,
+    "row_index": 16
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d625da14d39531ae37dadb9b8d2e3556db8084f8a7481a1567546911443af0af",
+  "created_at": "2026-07-14T19:01:55.515297+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When composing the final answer for this question, and any visible input field (question, summary_1, summary_2, or other provided contexts) explicitly names the artist or explicitly names songwriter(s) tied to the debut song in question, apply the rule below.",
+            "preserve_rule": "Preserve the existing final-answer format and interface: produce only the minimal answer string inside the [[ ## answer ## ]] block; do not add explanatory text, extra fields, or change formatting.",
+            "change_rule": "If any visible input explicitly contains one or more songwriter names for the debut song, output exactly those name(s) as the minimal answer string (if multiple names, join them with ' and ' in the order they appear). If visible inputs identify only the artist but do not contain songwriter names, continue to return 'Cannot be determined from the provided information.' Do not attempt to infer songwriter names from absent evidence.",
+            "drop_or_avoid_rule": "Do not invent, infer, or fetch songwriter names not present in the visible inputs. Avoid adding qualifiers, explanations, or any supporting sentences inside the answer block. Do not restate summaries or copy long spans that do not appear in the visible inputs.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the minimal answer string supported by visible inputs: either the explicit songwriter name(s) found in the inputs (joined with ' and ' if multiple) or the exact phrase 'Cannot be determined from the provided information.' Nothing else is allowed in that block.",
+            "why_local_transition": "This change instructs the final agent to surface songwriter names already present in the visible inputs (if any) rather than defaulting to 'Cannot be determined.' It is a minimal behavior tweak that lets the agent return a concrete minimal answer when explicit evidence is present while preserving format and avoiding invention."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who wrote the debut song on the debut album of the artist who also released the album \"I'm Still Here\"?",
+        "summary_1": "Insufficient information in the provided passages to answer. None of the passages link any artist to an album titled \"I'm Still Here,\" so the writer of that artist's debut-song cannot be determined from the given text.",
+        "summary_2": "The provided passages do not state who wrote the debut song on Mindy McCready’s debut album, so the answer cannot be determined from the given information.",
+        "current_output": "Cannot be determined from the provided information."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When composing the final answer for this question, and any visible input field (question, summary_1, summary_2, or other provided contexts) explicitly names the artist or explicitly names songwriter(s) tied to the debut song in question, apply the rule below.\",\n      \"preserve_rule\": \"Preserve the existing final-answer format and interface: produce only the minimal answer string inside the [[ ## answer ## ]] block; do not add explanatory text, extra fields, or change formatting.\",\n      \"change_rule\": \"If any visible input explicitly contains one or more songwriter names for the debut song, output exactly those name(s) as the minimal answer string (if multiple names, join them with ' and ' in the order they appear). If visible inputs identify only the artist but do not contain songwriter names, continue to return 'Cannot be determined from the provided information.' Do not attempt to infer songwriter names from absent evidence.\",\n      \"drop_or_avoid_rule\": \"Do not invent, infer, or fetch songwriter names not present in the visible inputs. Avoid adding qualifiers, explanations, or any supporting sentences inside the answer block. Do not restate summaries or copy long spans that do not appear in the visible inputs.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal answer string supported by visible inputs: either the explicit songwriter name(s) found in the inputs (joined with ' and ' if multiple) or the exact phrase 'Cannot be determined from the provided information.' Nothing else is allowed in that block.\",\n      \"why_local_transition\": \"This change instructs the final agent to surface songwriter names already present in the visible inputs (if any) rather than defaulting to 'Cannot be determined.' It is a minimal behavior tweak that lets the agent return a concrete minimal answer when explicit evidence is present while preserving format and avoiding invention.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who wrote the debut song on the debut album of the artist who also released the album \\\"I'm Still Here\\\"?\",\n  \"summary_1\": \"Insufficient information in the provided passages to answer. None of the passages link any artist to an album titled \\\"I'm Still Here,\\\" so the writer of that artist's debut-song cannot be determined from the given text.\",\n  \"summary_2\": \"The provided passages do not state who wrote the debut song on Mindy McCready’s debut album, so the answer cannot be determined from the given information.\",\n  \"current_output\": \"Cannot be determined from the provided information.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Cannot be determined from the provided information.\",\n  \"rationale\": \"No songwriter names are present in the visible inputs, so the ordered rule requires returning the exact phrase indicating the information cannot be determined.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 143,
+    "row_index": 143,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

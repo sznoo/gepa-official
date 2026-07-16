@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c35d62d7af2348771fda40a4bdd04cb49c92c8b10a83b29a449d3848b23c0576",
+  "created_at": "2026-07-15T22:01:07.757472+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What type of profession does Yang Seung-ho and Tanya Donelly have in common?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What type of profession does Yang Seung-ho and Tanya Donelly have in common?",
+        "summary_1": "Both are singers (Yang Seung-ho — \"idol singer\" [1]; Tanya Donelly — \"singer-songwriter\" [4]).",
+        "summary_2": "Singers",
+        "current_output": "Singers"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Singers",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "singer",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What type of profession does Yang Seung-ho and Tanya Donelly have in common?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What type of profession does Yang Seung-ho and Tanya Donelly have in common?\",\n  \"summary_1\": \"Both are singers (Yang Seung-ho — \\\"idol singer\\\" [1]; Tanya Donelly — \\\"singer-songwriter\\\" [4]).\",\n  \"summary_2\": \"Singers\",\n  \"current_output\": \"Singers\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Singers\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"singer\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 both indicate the same profession/occupation and the current proposed answer is a plural form or uses unnecessary capitalization for that profession label.\",\n    \"preserve_rule\": \"Keep the base rules: use only summary_1 and summary_2 as evidence, treat summary_2 as the later/prioritized summary, produce the single field 'answer' as the minimal final plain-text string with no explanation or surrounding formatting, and follow the binary/non-binary intent rules from the base prompt.\",\n    \"change_rule\": \"When the agreed-upon factual value is a profession or occupational label, output its minimal canonical common-noun form by converting any plural label to its singular form and downcasing the word. Do not add extra words, articles, punctuation, or explanatory text; emit only the normalized profession token/phrase as the 'answer' value.\",\n    \"drop_or_avoid_rule\": \"Avoid emitting pluralized profession labels, initial capitalization of the profession token, explanatory phrases (e.g., 'They are', 'Both are'), quotations, JSON-like wrappers, or any additional context. Do not introduce new evidence or fabricate modifiers; do not repeat summary text beyond the single minimal token/phrase required.\",\n    \"output_contract\": \"Produce exactly one field, answer, whose value is the minimal plain-text string supported by the summaries. For profession labels, that string must be the singular, lowercase common-noun form of the profession (no extra tokens). Follow the base prompt's binary/non-binary rules and emit nothing else.\",\n    \"why_local_transition\": \"The current output is a capitalized plural form; a minimal, local behavior change to singularize and downcase profession labels enforces the base prompt's requirement for the smallest supported answer and consistent formatting without changing evidence usage or other decision logic.\"\n  },\n  \"rationale\": \"The smallest coherent edit needed is a formatting/normalization rule: when summaries agree on a profession, prefer the singular lowercase common-noun form. This preserves all existing evidence-usage rules and the minimal-answer contract, fixes only the plurality/casing mismatch observed in the current output, and avoids broader changes (no new inference, no copying of the target). The delta is constrained to behavior (prompt rule) and does not supply or echo the target label itself.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 35,
+    "row_index": 35,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

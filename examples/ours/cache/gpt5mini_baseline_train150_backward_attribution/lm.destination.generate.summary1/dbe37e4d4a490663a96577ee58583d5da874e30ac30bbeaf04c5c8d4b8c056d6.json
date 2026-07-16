@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "dbe37e4d4a490663a96577ee58583d5da874e30ac30bbeaf04c5c8d4b8c056d6",
+  "created_at": "2026-07-14T13:42:02.775922+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+      "current_output": "1890",
+      "upstream_context": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "hop1_query": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "hop1_titles": [
+          "The Sign of the Four",
+          "Canon of Sherlock Holmes",
+          "The Hound of the Baskervilles (disambiguation)",
+          "Professor Moriarty",
+          "Sir Arthur Conan Doyle's Sherlock Holmes",
+          "The Adventures of Sherlock Holmes (film)",
+          "Sherlock Holmes and the Baskerville Curse"
+        ],
+        "hop1_docs": [
+          "The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.  Doyle wrote four novels and 56 stories starring the fictional detective.",
+          "Canon of Sherlock Holmes | Traditionally, the canon of Sherlock Holmes consists of the 56 short stories and four novels written by Sir Arthur Conan Doyle.  In this context, the term \"canon\" is an attempt to distinguish between Doyle's original works and subsequent works by other authors using the same characters.",
+          "The Hound of the Baskervilles (disambiguation) | The Hound of the Baskervilles is the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.",
+          "Professor Moriarty | Professor James Moriarty is a fictional character and the main antagonist in some of the Sherlock Holmes stories written by Sir Arthur Conan Doyle.  Moriarty is a criminal mastermind whom Holmes describes as the \"Napoleon of crime\".  Doyle lifted the phrase from a Scotland Yard inspector who was referring to Adam Worth, a real-life criminal mastermind and one of the individuals upon whom the character of Moriarty was based.  The character was introduced primarily as a narrative device to enable Doyle to kill Sherlock Holmes, and only featured in two of the Sherlock Holmes stories.  However, in many adaptations, he has been given a greater prominence and treated as Holmes' archenemy.",
+          "Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:",
+          "The Adventures of Sherlock Holmes (film) | The Adventures of Sherlock Holmes (released theatrically as Sherlock Holmes in the United Kingdom) is a 1939 mystery-adventure film released by Twentieth Century Fox.  It is a pastiche featuring the characters of the Sherlock Holmes series of books written by Sir Arthur Conan Doyle.  The film is an adaptation of the 1899 play \"Sherlock Holmes\" by William Gillette, though there is little resemblance in the plots.",
+          "Sherlock Holmes and the Baskerville Curse | Sherlock Holmes and the Baskerville Curse is a 1983 Australian film directed by Eddie Graham.  It is an adaptation of Sir Arthur Conan Doyle's novel \"The Hound of the Baskervilles\", the third of his novels featuring Sherlock Holmes and Dr. John Watson."
+        ]
+      },
+      "visible_gold_support": [],
+      "missing_support_targets": [
+        {
+          "title": "Richard Cabell"
+        },
+        {
+          "title": "The Hound of the Baskervilles"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhat year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\n\nCurrent agent output:\n\"1890\"\n\nActual upstream context:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"hop1_query\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"hop1_titles\": [\n    \"The Sign of the Four\",\n    \"Canon of Sherlock Holmes\",\n    \"The Hound of the Baskervilles (disambiguation)\",\n    \"Professor Moriarty\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes\",\n    \"The Adventures of Sherlock Holmes (film)\",\n    \"Sherlock Holmes and the Baskerville Curse\"\n  ],\n  \"hop1_docs\": [\n    \"The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.  Doyle wrote four novels and 56 stories starring the fictional detective.\",\n    \"Canon of Sherlock Holmes | Traditionally, the canon of Sherlock Holmes consists of the 56 short stories and four novels written by Sir Arthur Conan Doyle.  In this context, the term \\\"canon\\\" is an attempt to distinguish between Doyle's original works and subsequent works by other authors using the same characters.\",\n    \"The Hound of the Baskervilles (disambiguation) | The Hound of the Baskervilles is the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.\",\n    \"Professor Moriarty | Professor James Moriarty is a fictional character and the main antagonist in some of the Sherlock Holmes stories written by Sir Arthur Conan Doyle.  Moriarty is a criminal mastermind whom Holmes describes as the \\\"Napoleon of crime\\\".  Doyle lifted the phrase from a Scotland Yard inspector who was referring to Adam Worth, a real-life criminal mastermind and one of the individuals upon whom the character of Moriarty was based.  The character was introduced primarily as a narrative device to enable Doyle to kill Sherlock Holmes, and only featured in two of the Sherlock Holmes stories.  However, in many adaptations, he has been given a greater prominence and treated as Holmes' archenemy.\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:\",\n    \"The Adventures of Sherlock Holmes (film) | The Adventures of Sherlock Holmes (released theatrically as Sherlock Holmes in the United Kingdom) is a 1939 mystery-adventure film released by Twentieth Century Fox.  It is a pastiche featuring the characters of the Sherlock Holmes series of books written by Sir Arthur Conan Doyle.  The film is an adaptation of the 1899 play \\\"Sherlock Holmes\\\" by William Gillette, though there is little resemblance in the plots.\",\n    \"Sherlock Holmes and the Baskerville Curse | Sherlock Holmes and the Baskerville Curse is a 1983 Australian film directed by Eddie Graham.  It is an adaptation of Sir Arthur Conan Doyle's novel \\\"The Hound of the Baskervilles\\\", the third of his novels featuring Sherlock Holmes and Dr. John Watson.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Richard Cabell\"\n  },\n  {\n    \"title\": \"The Hound of the Baskervilles\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence summary:\\n- The Sign of the Four page text notes: \\\"The Sign of the Four (1890) ... is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.\\\" This provides a publication year (1890) for that novel.\\n- Canon of Sherlock Holmes: Doyle wrote four novels and 56 stories featuring Holmes — confirms there are four canonical Holmes novels to consider.\\n- The Hound of the Baskervilles is identified (via a disambiguation entry) as the third of those four novels, but the full Hound of the Baskervilles article itself was not included in the retrieved docs at this hop.\\nBridge / missing fact for next hop:\\n- Bridge entity: the specific novel title the question intends (e.g., \\\"The Sign of the Four\\\" vs. \\\"The Hound of the Baskervilles\\\").\\n- Missing relation/evidence: authoritative publication year for any candidate novel other than the already-seen Sign of the Four, and confirmation that the question refers to which Holmes novel.\\nCompact retrieval direction for the next agent:\\n- Retrieve the full article pages for: \\\"The Hound of the Baskervilles\\\" (missing) and \\\"The Sign of the Four\\\" (to confirm publication details) to obtain definitive publication years.\\n- If the question is ambiguous, perform a disambiguation lookup (query: \\\"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\\\" or check list of Doyle novels) to determine which novel the question refers to.\\nThis is a summary of first-hop evidence and the precise next retrieval targets; it does not provide a final answer.\",\n  \"rationale\": \"Upstream retrieval returned a page explicitly stating The Sign of the Four (1890) and pages noting there are four Holmes novels and that The Hound of the Baskervilles is the third novel. The Hound of the Baskervilles full article is listed among missing targets, so the next hop should fetch that page (and confirm publication years) or disambiguate which novel the question intends.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 104,
+    "row_index": 104
+  }
+}

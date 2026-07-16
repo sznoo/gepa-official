@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "d8bb1324606291a7ee58f4eb1cccfb830d5e6412b6f7d98c96598581a303e71e",
+  "created_at": "2026-07-14T19:01:54.408616+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when the question names a band (exact phrase present in `question`, e.g. \"Hesitation Wounds\") and the current query mainly repeats `summary_1` (a person) rather than the band name.",
+            "preserve_rule": "Keep producing a single compact retrieval query string. Keep including any candidate person from `summary_1` as an optional supplemental token (it may help disambiguation).",
+            "change_rule": "Force the query to explicitly include the band name from `question` (as an exact phrase) plus a short relation phrase targeting touring with Bruce Springsteen in 2009 (examples of relation phrases: \"toured with Bruce Springsteen 2009\", \"toured with Bruce Springsteen\" + \"2009\"). If `summary_1` is included, make it an optional supplement rather than the sole anchor (e.g., append it after the band+relation). Keep the query concise (prefer <=12 words).",
+            "drop_or_avoid_rule": "Avoid making the person from `summary_1` the only or dominant search term. Do not produce long descriptive sentences, questions, or explanatory text—only the query string. Avoid including unrelated album titles or verbose quotes that dilute the band+touring relation.",
+            "output_contract": "Return exactly one compact query string (no extra text). The string must: (1) contain the band name exactly as it appears in `question`, (2) contain a short touring relation referencing Bruce Springsteen and the year 2009, and (3) may optionally append the `summary_1` person name as supplemental. Example form: \"Hesitation Wounds toured with Bruce Springsteen 2009 [Ed Manion]\" but do not output explanatory text.",
+            "why_local_transition": "The existing query centered on the person (summary_1) and retrieved that person's pages but missed the band's page and the band member who toured in 2009. Anchoring the second-hop query on the band name plus the specific touring relation/year focuses retrieval on the band's page and members who toured with Springsteen in 2009, enabling discovery of the correct supporting entity."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which Hesitation Wounds band member toured with Bruce Springsteen's band in 2009?",
+        "summary_1": "Ed Manion",
+        "current_output": {
+          "query": "\"Hesitation Wounds\" \"Ed Manion\" \"Bruce Springsteen\" 2009 tour"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question names a band (exact phrase present in `question`, e.g. \\\"Hesitation Wounds\\\") and the current query mainly repeats `summary_1` (a person) rather than the band name.\",\n      \"preserve_rule\": \"Keep producing a single compact retrieval query string. Keep including any candidate person from `summary_1` as an optional supplemental token (it may help disambiguation).\",\n      \"change_rule\": \"Force the query to explicitly include the band name from `question` (as an exact phrase) plus a short relation phrase targeting touring with Bruce Springsteen in 2009 (examples of relation phrases: \\\"toured with Bruce Springsteen 2009\\\", \\\"toured with Bruce Springsteen\\\" + \\\"2009\\\"). If `summary_1` is included, make it an optional supplement rather than the sole anchor (e.g., append it after the band+relation). Keep the query concise (prefer <=12 words).\",\n      \"drop_or_avoid_rule\": \"Avoid making the person from `summary_1` the only or dominant search term. Do not produce long descriptive sentences, questions, or explanatory text—only the query string. Avoid including unrelated album titles or verbose quotes that dilute the band+touring relation.\",\n      \"output_contract\": \"Return exactly one compact query string (no extra text). The string must: (1) contain the band name exactly as it appears in `question`, (2) contain a short touring relation referencing Bruce Springsteen and the year 2009, and (3) may optionally append the `summary_1` person name as supplemental. Example form: \\\"Hesitation Wounds toured with Bruce Springsteen 2009 [Ed Manion]\\\" but do not output explanatory text.\",\n      \"why_local_transition\": \"The existing query centered on the person (summary_1) and retrieved that person's pages but missed the band's page and the band member who toured in 2009. Anchoring the second-hop query on the band name plus the specific touring relation/year focuses retrieval on the band's page and members who toured with Springsteen in 2009, enabling discovery of the correct supporting entity.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which Hesitation Wounds band member toured with Bruce Springsteen's band in 2009?\",\n  \"summary_1\": \"Ed Manion\",\n  \"current_output\": {\n    \"query\": \"\\\"Hesitation Wounds\\\" \\\"Ed Manion\\\" \\\"Bruce Springsteen\\\" 2009 tour\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Hesitation Wounds toured with Bruce Springsteen 2009 Ed Manion\"\n  },\n  \"rationale\": \"Applied the delta by keeping the band name exactly, adding the short touring relation with Bruce Springsteen and year 2009, and appending summary_1 (Ed Manion) as an optional supplement.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 110,
+    "row_index": 110,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

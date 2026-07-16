@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "0827bc678f5927eb3b822408aad618fac10c16bc6bf33fc096f7ad7c848dc618",
+  "created_at": "2026-07-14T19:01:54.159147+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks for the publication year of a crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes (question contains both the author name and 'Sherlock Holmes') and a first-hop summary already gives a single year or the current query is anchored to one specific novel title, apply this delta.",
+            "preserve_rule": "Keep producing exactly one compact retrieval query string as the agent's output. Continue to include the author ('Sir Arthur Conan Doyle') and the phrase 'Sherlock Holmes' or 'Sherlock Holmes novels' as core terms, and keep the query focused on publication/years.",
+            "change_rule": "Do not anchor the second-hop query to the first-hop novel title. Instead generate a short disambiguation query that requests publication dates for Sir Arthur Conan Doyle's Sherlock Holmes novels (e.g. search for 'Sherlock Holmes novels publication years Sir Arthur Conan Doyle'). This expands retrieval to other candidate novels and their dates.",
+            "drop_or_avoid_rule": "Avoid reusing the full quoted first-hop query or long spans from retrieved snippets. Do not hardcode any specific novel name unless that name already appears in the visible inputs. Avoid extra explanatory text—produce only the single concise query string.",
+            "output_contract": "Return exactly one short retrieval query (plain text, ≤ ~12–15 tokens) aimed at finding a list of Sir Arthur Conan Doyle's Sherlock Holmes novels and their publication years (must mention 'Sherlock Holmes' and 'Sir Arthur Conan Doyle' and a term like 'publication year(s)' or 'publication dates'). No additional commentary or punctuation beyond what is needed for a compact search query.",
+            "why_local_transition": "The first-hop locked onto one novel/year. This local change broadens the second-hop to retrieve other Holmes novels and their dates so the pipeline can find the correct crime novel and its year without changing the agent's interface or overall behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "summary_1": "1890",
+        "current_output": {
+          "query": "\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks for the publication year of a crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes (question contains both the author name and 'Sherlock Holmes') and a first-hop summary already gives a single year or the current query is anchored to one specific novel title, apply this delta.\",\n      \"preserve_rule\": \"Keep producing exactly one compact retrieval query string as the agent's output. Continue to include the author ('Sir Arthur Conan Doyle') and the phrase 'Sherlock Holmes' or 'Sherlock Holmes novels' as core terms, and keep the query focused on publication/years.\",\n      \"change_rule\": \"Do not anchor the second-hop query to the first-hop novel title. Instead generate a short disambiguation query that requests publication dates for Sir Arthur Conan Doyle's Sherlock Holmes novels (e.g. search for 'Sherlock Holmes novels publication years Sir Arthur Conan Doyle'). This expands retrieval to other candidate novels and their dates.\",\n      \"drop_or_avoid_rule\": \"Avoid reusing the full quoted first-hop query or long spans from retrieved snippets. Do not hardcode any specific novel name unless that name already appears in the visible inputs. Avoid extra explanatory text—produce only the single concise query string.\",\n      \"output_contract\": \"Return exactly one short retrieval query (plain text, ≤ ~12–15 tokens) aimed at finding a list of Sir Arthur Conan Doyle's Sherlock Holmes novels and their publication years (must mention 'Sherlock Holmes' and 'Sir Arthur Conan Doyle' and a term like 'publication year(s)' or 'publication dates'). No additional commentary or punctuation beyond what is needed for a compact search query.\",\n      \"why_local_transition\": \"The first-hop locked onto one novel/year. This local change broadens the second-hop to retrieve other Holmes novels and their dates so the pipeline can find the correct crime novel and its year without changing the agent's interface or overall behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"summary_1\": \"1890\",\n  \"current_output\": {\n    \"query\": \"\\\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Sir Arthur Conan Doyle Sherlock Holmes publication years\"\n  },\n  \"rationale\": \"Delta applied: broadened second-hop to list Sir Arthur Conan Doyle's Sherlock Holmes novels and their publication years, kept required phrases and a single concise query.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

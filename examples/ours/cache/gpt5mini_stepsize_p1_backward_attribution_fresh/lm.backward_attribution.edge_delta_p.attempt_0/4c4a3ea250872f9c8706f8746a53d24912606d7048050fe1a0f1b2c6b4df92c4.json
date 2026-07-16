@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "4c4a3ea250872f9c8706f8746a53d24912606d7048050fe1a0f1b2c6b4df92c4",
+  "created_at": "2026-07-16T04:51:33.812414+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "In what year did the star of \"Flesh and the Devil\" receive an Academy Honorary Award?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "In what year did the star of \"Flesh and the Devil\" receive an Academy Honorary Award?",
+        "summary_1": "Passages define the Academy Honorary Award and give example recipients: e.g., passage 1 says the Honorary Award \"is given annually by the Board of Governors of the Academy of Motion Picture Arts and Sciences\" and that many recipients are \"Classic Hollywood stars, such as Lillian Gish, Barbara Stanwyck, Kirk Douglas, and Lauren Bacall.\" Other passages note individual recipients (e.g., \"he did receive an Academy Honorary Award\" for Sidney Lumet). None of the passages identify who starred in \"Flesh and the Devil\" or connect that film's star to an Honorary Award. Next hop: retrieve the star of \"Flesh and the Devil\" (bridge entity) and then retrieve whether and in what year that person received an Academy Honorary Award — use sources that list the film's cast and the Academy Honorary Award recipients/years.",
+        "current_output": {
+          "query": "Flesh and the Devil star Academy Honorary Award year"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Flesh and the Devil star Academy Honorary Award year"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Academy Honorary Award",
+          "Devil in the Flesh 2",
+          "Devil in the Flesh (1998 film)",
+          "Devil in the Flesh (1947 film)",
+          "Flesh and the Devil",
+          "The World, the Flesh, the Devil",
+          "Robert Honorary Award"
+        ],
+        "retrieved_doc_snippets": [
+          "Academy Honorary Award | The Academy Honorary Award – instituted in 1948 for the 21st Academy Awards (previously called the Special Award, which was first presented in early 1929) – is given annually by the Board of Governors of the Academy of Motion Picture Arts and Sciences (AMPAS) to celebrate motion picture achievements that are not covered by existing Academy Awards, although prior winners of competitive Academy Awards are not excluded from receiving the Honorary Award. Unless otherwise spe ...[truncated]",
+          "Devil in the Flesh 2 | Devil in the Flesh 2 is the 2000 sequel to \"Devil in the Flesh\" which starred Rose McGowan.",
+          "Devil in the Flesh (1998 film) | Devil in the Flesh is a 1998 American thriller film starring Rose McGowan. The film was also released under the title \"Dearly Devoted\". It was co-scripted by Kelly Carlin-McCall but is not based on the twice-filmed Raymond Radiguet novel \"Le Diable au corps\" (\"The Devil in the Flesh\").",
+          "Devil in the Flesh (1947 film) | Devil in the Flesh (French: Le diable au corps ) is a 1947 French movie directed by Claude Autant-Lara starring Micheline Presle and Gérard Philipe. It is based on a novel by Raymond Radiguet.",
+          "Flesh and the Devil | Flesh and the Devil (1926) is a romantic drama silent film released by Metro-Goldwyn-Mayer and stars Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent, directed by Clarence Brown, and based on the novel \"The Undying Past\" by Hermann Sudermann.",
+          "The World, the Flesh, the Devil | The World, the Flesh, the Devil is a 1932 British crime film directed by George A. Cooper and starring Harold Huth, Isla Bevan and Victor Stanley. It was based on a play by Laurence Cowen. A lawyer plans to murder an aristocrat and steal his inheritance.",
+          "Robert Honorary Award | The Robert Honorary Award (Danish: \"Æres-Robert\" , Honorary Robert) has been given since 1986 as one of the Robert Awards (Danish: \"Robert prisen\" ) by the Danish Film Academy. It is the Danish equivalent of the American Academy Honorary Award."
+        ],
+        "summary_2": "Flesh and the Devil (1926) stars Greta Garbo. The provided passages do not say whether or when Garbo received an Academy Honorary Award, so no award year is given here.",
+        "answer": "unknown",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "Flesh and the Devil"
+        ],
+        "missing_titles_after_hop2": [
+          "Greta Garbo"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Greta Garbo Academy Honorary Award year"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"In what year did the star of \\\"Flesh and the Devil\\\" receive an Academy Honorary Award?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"In what year did the star of \\\"Flesh and the Devil\\\" receive an Academy Honorary Award?\",\n  \"summary_1\": \"Passages define the Academy Honorary Award and give example recipients: e.g., passage 1 says the Honorary Award \\\"is given annually by the Board of Governors of the Academy of Motion Picture Arts and Sciences\\\" and that many recipients are \\\"Classic Hollywood stars, such as Lillian Gish, Barbara Stanwyck, Kirk Douglas, and Lauren Bacall.\\\" Other passages note individual recipients (e.g., \\\"he did receive an Academy Honorary Award\\\" for Sidney Lumet). None of the passages identify who starred in \\\"Flesh and the Devil\\\" or connect that film's star to an Honorary Award. Next hop: retrieve the star of \\\"Flesh and the Devil\\\" (bridge entity) and then retrieve whether and in what year that person received an Academy Honorary Award — use sources that list the film's cast and the Academy Honorary Award recipients/years.\",\n  \"current_output\": {\n    \"query\": \"Flesh and the Devil star Academy Honorary Award year\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Flesh and the Devil star Academy Honorary Award year\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Academy Honorary Award\",\n    \"Devil in the Flesh 2\",\n    \"Devil in the Flesh (1998 film)\",\n    \"Devil in the Flesh (1947 film)\",\n    \"Flesh and the Devil\",\n    \"The World, the Flesh, the Devil\",\n    \"Robert Honorary Award\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Academy Honorary Award | The Academy Honorary Award – instituted in 1948 for the 21st Academy Awards (previously called the Special Award, which was first presented in early 1929) – is given annually by the Board of Governors of the Academy of Motion Picture Arts and Sciences (AMPAS) to celebrate motion picture achievements that are not covered by existing Academy Awards, although prior winners of competitive Academy Awards are not excluded from receiving the Honorary Award. Unless otherwise spe ...[truncated]\",\n    \"Devil in the Flesh 2 | Devil in the Flesh 2 is the 2000 sequel to \\\"Devil in the Flesh\\\" which starred Rose McGowan.\",\n    \"Devil in the Flesh (1998 film) | Devil in the Flesh is a 1998 American thriller film starring Rose McGowan. The film was also released under the title \\\"Dearly Devoted\\\". It was co-scripted by Kelly Carlin-McCall but is not based on the twice-filmed Raymond Radiguet novel \\\"Le Diable au corps\\\" (\\\"The Devil in the Flesh\\\").\",\n    \"Devil in the Flesh (1947 film) | Devil in the Flesh (French: Le diable au corps ) is a 1947 French movie directed by Claude Autant-Lara starring Micheline Presle and Gérard Philipe. It is based on a novel by Raymond Radiguet.\",\n    \"Flesh and the Devil | Flesh and the Devil (1926) is a romantic drama silent film released by Metro-Goldwyn-Mayer and stars Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent, directed by Clarence Brown, and based on the novel \\\"The Undying Past\\\" by Hermann Sudermann.\",\n    \"The World, the Flesh, the Devil | The World, the Flesh, the Devil is a 1932 British crime film directed by George A. Cooper and starring Harold Huth, Isla Bevan and Victor Stanley. It was based on a play by Laurence Cowen. A lawyer plans to murder an aristocrat and steal his inheritance.\",\n    \"Robert Honorary Award | The Robert Honorary Award (Danish: \\\"Æres-Robert\\\" , Honorary Robert) has been given since 1986 as one of the Robert Awards (Danish: \\\"Robert prisen\\\" ) by the Danish Film Academy. It is the Danish equivalent of the American Academy Honorary Award.\"\n  ],\n  \"summary_2\": \"Flesh and the Devil (1926) stars Greta Garbo. The provided passages do not say whether or when Garbo received an Academy Honorary Award, so no award year is given here.\",\n  \"answer\": \"unknown\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"Flesh and the Devil\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Greta Garbo\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Greta Garbo Academy Honorary Award year\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the visible summaries (summary_1 or summary_2) name a specific person as the film's star (a bridge entity) while the question asks about that person's award/year, and the current query still uses the film title to look for the award year.\",\n    \"preserve_rule\": \"Keep the single-line, compact, keyword-style query output contract. Continue to anchor the query on visible facts in the summaries and emit exactly one string with no explanatory text or punctuation.\",\n    \"change_rule\": \"When triggered, extract the star's exact name as it appears in the visible summaries and compose the query using that name plus the keywords: Academy Honorary Award year. Format: <StarName> Academy Honorary Award year (use only the name from the summaries followed by these three keywords).\",\n    \"drop_or_avoid_rule\": \"Do not use the film title for this hop if a named star is available; do not add natural-language phrasing, question words, extra tokens, punctuation, or invented names; avoid broad or ambiguous terms (e.g., 'award', 'honorary' variants) beyond the specified keywords.\",\n    \"output_contract\": \"Emit exactly one compact retrieval query string (single line) in the `query` field and nothing else. The string must be the star's name copied from the visible summaries followed by: Academy Honorary Award year.\",\n    \"why_local_transition\": \"This edge shifts retrieval from the film entity to the bridge person entity (the film's star). Targeting the named person directly is the minimal, focused change needed to find whether and when that person received an Academy Honorary Award.\"\n  },\n  \"rationale\": \"The original query used the film title and returned film-level documents but did not recover the missing bridge (the star). The smallest coherent change is to extract the named star from the summaries and query the star plus the award-year keywords. This preserves the single-query contract and keyword-style format, avoids inventing facts, and focuses retrieval on the exact relation needed (person → Academy Honorary Award year) without altering other useful behavior.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 32,
+    "row_index": 32,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

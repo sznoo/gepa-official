@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2e9e9189adfc645a3c6f97fe0649129ea025a5ede758a210b499998ee342e82a",
+  "created_at": "2026-07-14T19:01:53.795885+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question concerns a war and one or both visible summaries mention a 'World War' label (for example, 'World War II').",
+            "preserve_rule": "Keep using only the provided summaries as evidence and preserve the requirement to output a single minimal answer string in the [[ ## answer ## ]] block. Preserve the factual selection (i.e., choose the war indicated by the summaries) and do not add new facts.",
+            "change_rule": "When a summary names a world war using a Roman numeral (e.g., 'World War II'), render that name in the formal, spelled-out style with a leading definite article and a spelled-out ordinal (construct: 'the' + spelled-out ordinal + 'World War'). Use words for ordinals (First, Second, Third, ...) instead of Roman numerals or abbreviations.",
+            "drop_or_avoid_rule": "Avoid using Roman numerals, abbreviations (e.g., 'WWII'), informal variants, or any additional explanatory text. Do not append justification, sources, or extra punctuation—only the formatted war name string.",
+            "output_contract": "Produce only the minimal answer string in the [[ ## answer ## ]] block, using the formal spelled-out, article-prefixed war name as specified above. No other text or formatting is allowed.",
+            "why_local_transition": "This change standardizes the surface form of the war name (style/format) without altering the underlying fact asserted by the summaries, producing the formally phrased name expected by the target while preserving evidence provenance."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which war was being fought when C.S. Lewis wrote the book whose chapter shares a title with the band Wild Sweet Orange's 2008 album?",
+        "summary_1": "World War II.",
+        "summary_2": "World War II.",
+        "current_output": "World War II"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question concerns a war and one or both visible summaries mention a 'World War' label (for example, 'World War II').\",\n      \"preserve_rule\": \"Keep using only the provided summaries as evidence and preserve the requirement to output a single minimal answer string in the [[ ## answer ## ]] block. Preserve the factual selection (i.e., choose the war indicated by the summaries) and do not add new facts.\",\n      \"change_rule\": \"When a summary names a world war using a Roman numeral (e.g., 'World War II'), render that name in the formal, spelled-out style with a leading definite article and a spelled-out ordinal (construct: 'the' + spelled-out ordinal + 'World War'). Use words for ordinals (First, Second, Third, ...) instead of Roman numerals or abbreviations.\",\n      \"drop_or_avoid_rule\": \"Avoid using Roman numerals, abbreviations (e.g., 'WWII'), informal variants, or any additional explanatory text. Do not append justification, sources, or extra punctuation—only the formatted war name string.\",\n      \"output_contract\": \"Produce only the minimal answer string in the [[ ## answer ## ]] block, using the formal spelled-out, article-prefixed war name as specified above. No other text or formatting is allowed.\",\n      \"why_local_transition\": \"This change standardizes the surface form of the war name (style/format) without altering the underlying fact asserted by the summaries, producing the formally phrased name expected by the target while preserving evidence provenance.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which war was being fought when C.S. Lewis wrote the book whose chapter shares a title with the band Wild Sweet Orange's 2008 album?\",\n  \"summary_1\": \"World War II.\",\n  \"summary_2\": \"World War II.\",\n  \"current_output\": \"World War II\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"the Second World War\",\n  \"rationale\": \"Both summaries named 'World War II'; per the ordered rule, I rendered the war name in the spelled-out, article-prefixed form.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 107,
+    "row_index": 107,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

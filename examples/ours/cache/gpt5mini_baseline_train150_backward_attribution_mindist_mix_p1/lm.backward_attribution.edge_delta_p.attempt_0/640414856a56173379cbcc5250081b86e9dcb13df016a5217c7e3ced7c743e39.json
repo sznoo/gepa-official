@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "640414856a56173379cbcc5250081b86e9dcb13df016a5217c7e3ced7c743e39",
+  "created_at": "2026-07-14T19:01:55.702507+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Higher education in Ukraine has a long and rich history, the pioneering research of scholars working in the country’s higher education institutions and academies, such as which Russian scientist, mathematician and engineer, and a founding father of modern aero- and hydrodynamics?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Higher education in Ukraine has a long and rich history, the pioneering research of scholars working in the country’s higher education institutions and academies, such as which Russian scientist, mathematician and engineer, and a founding father of modern aero- and hydrodynamics?",
+        "summary_1": "Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)",
+        "summary_2": "Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)",
+        "current_output": "Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Nikolay Yegorovich Zhukovsky",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Higher education in Ukraine has a long and rich history, the pioneering research of scholars working in the country’s higher education institutions and academies, such as which Russian scientist, mathematician and engineer, and a founding father of modern aero- and hydrodynamics?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Higher education in Ukraine has a long and rich history, the pioneering research of scholars working in the country’s higher education institutions and academies, such as which Russian scientist, mathematician and engineer, and a founding father of modern aero- and hydrodynamics?\",\n  \"summary_1\": \"Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)\",\n  \"summary_2\": \"Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)\",\n  \"current_output\": \"Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nikolay (Nikolai) Yegorovich Zhukovsky (also rendered Mykola Zhukovsky)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Nikolay Yegorovich Zhukovsky\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when any summary contains a personal name with parenthetical text (e.g., parentheses or phrases like '(also rendered ...)').\",\n    \"preserve_rule\": \"Keep the agent's existing contract to emit a single minimal answer string in the [[ ## answer ## ]] block and preserve any name tokens that occur outside parentheses in the visible summaries.\",\n    \"change_rule\": \"Remove all parenthetical text and any 'also rendered' notes attached to names. Construct the answer by concatenating the remaining non-parenthetical name tokens in their original order, separated by single spaces (first name, patronymic/middle name if present, family name). Do not add qualifiers, translations, or explanatory phrases.\",\n    \"drop_or_avoid_rule\": \"Avoid including parenthetical variants, alternate transliterations, 'also rendered' clauses, duplicate name variants, or extra punctuation. Do not introduce new tokens not present outside parentheses in the summaries.\",\n    \"output_contract\": \"Return exactly one minimal answer string in the [[ ## answer ## ]] block. That string must be only the core non-parenthetical name tokens found in the visible summaries, in original order and separated by single spaces, with no additional commentary.\",\n    \"why_local_transition\": \"The current output contains parenthetical alternate renderings. This edit normalizes the name by dropping parentheses and alternates so the final answer is the concise canonical name composed of the visible non-parenthetical tokens.\"\n  },\n  \"rationale\": \"This prompt delta is a minimal, local change: detect parenthetical alternates and strip them, then join the remaining name tokens. It preserves the agent's existing minimal-answer behavior and only changes how name variants are handled, avoiding added commentary or new information. The trigger is narrow (parentheses/also-rendered), so the rule applies only when necessary and does not disrupt other outputs.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 149,
+    "row_index": 149,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

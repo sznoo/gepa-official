@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "bf01de92c18361cad1d37b37f973da42297a8de182458a602346de49ab5c4907",
+  "created_at": "2026-07-14T19:01:53.568409+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 both assert the same occupation (i.e., they contain the same short occupation phrase or equivalent wording).",
+            "preserve_rule": "Keep using the two visible summaries as the only evidence and preserve the base prompt's interface and output contract (produce the field `answer` / the [[ ## answer ## ]] block). Retain any existing behavior that prefers direct extraction from the summaries.",
+            "change_rule": "Replace any full-sentence or explanatory answer with a single canonical occupation token derived from the summaries: extract the occupation word/phrase present in the summaries, normalize it to a single noun in singular form and lowercase, and output only that token as the entire content of the `answer` field / [[ ## answer ## ]] block.",
+            "drop_or_avoid_rule": "Do not output full sentences, explanatory phrases, determiners, qualifiers (e.g., 'they were both', 'both', 'yes —'), punctuation, or additional context. Do not output multiple occupations or additional tokens; do not quote the summaries verbatim beyond extracting and normalizing the occupation token.",
+            "output_contract": "The `answer` (the [[ ## answer ## ]] block) must contain exactly one token: the normalized occupation noun (singular, lowercase), with no surrounding text, punctuation, or explanation.",
+            "why_local_transition": "The current output is a full-sentence response derived from the same summaries; convert it to the required minimal single-token occupation form while still relying only on the visible summaries as evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?",
+        "summary_1": "They were both mathematicians.",
+        "summary_2": "They were both mathematicians.",
+        "current_output": "They were both mathematicians."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 both assert the same occupation (i.e., they contain the same short occupation phrase or equivalent wording).\",\n      \"preserve_rule\": \"Keep using the two visible summaries as the only evidence and preserve the base prompt's interface and output contract (produce the field `answer` / the [[ ## answer ## ]] block). Retain any existing behavior that prefers direct extraction from the summaries.\",\n      \"change_rule\": \"Replace any full-sentence or explanatory answer with a single canonical occupation token derived from the summaries: extract the occupation word/phrase present in the summaries, normalize it to a single noun in singular form and lowercase, and output only that token as the entire content of the `answer` field / [[ ## answer ## ]] block.\",\n      \"drop_or_avoid_rule\": \"Do not output full sentences, explanatory phrases, determiners, qualifiers (e.g., 'they were both', 'both', 'yes —'), punctuation, or additional context. Do not output multiple occupations or additional tokens; do not quote the summaries verbatim beyond extracting and normalizing the occupation token.\",\n      \"output_contract\": \"The `answer` (the [[ ## answer ## ]] block) must contain exactly one token: the normalized occupation noun (singular, lowercase), with no surrounding text, punctuation, or explanation.\",\n      \"why_local_transition\": \"The current output is a full-sentence response derived from the same summaries; convert it to the required minimal single-token occupation form while still relying only on the visible summaries as evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?\",\n  \"summary_1\": \"They were both mathematicians.\",\n  \"summary_2\": \"They were both mathematicians.\",\n  \"current_output\": \"They were both mathematicians.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"mathematician\",\n  \"rationale\": \"Both summaries state they were mathematicians; per the ordered delta, output the singular lowercase occupation token.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 100,
+    "row_index": 100,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

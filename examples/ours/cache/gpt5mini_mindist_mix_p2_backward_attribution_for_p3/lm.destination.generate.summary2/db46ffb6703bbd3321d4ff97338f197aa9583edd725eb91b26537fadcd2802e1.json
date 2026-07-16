@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "db46ffb6703bbd3321d4ff97338f197aa9583edd725eb91b26537fadcd2802e1",
+  "created_at": "2026-07-15T06:18:45.096677+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+      "current_output": "Anthony Toby \"Tony\" Hiller appeared with Rip Taylor, who was known for \"showering himself (and others) with confetti.\"",
+      "upstream_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "summary_1": "Evidence found:\n- Anthony Toby \"Tony\" Hiller — [1]: \"Anthony Toby \"Tony\" Hiller (born 30 July 1927)\"\n- Rip Taylor — [1]: \"Rip Taylor\"\n- Rip Taylor — [2]: \"showering himself (and others) with confetti.\"\n\nAmbiguities:\n- None; \"Rip Taylor\" appears unambiguously in [1] and [2].\n\nBridge / missing fact:\n- No missing facts. Passages show Tony Hiller appeared with Rip Taylor, who \"showered himself (and others) with confetti.\" Final answer: Rip Taylor.\n\nRetrieval direction:\n- Open page \"Rip Taylor | Charles Elmer \"Rip\" Taylor, Jr.\" for full biography.\n- Open page \"Tony Hiller | Anthony Toby \"Tony\" Hiller (born 30 July 1927)\" to verify the appearance list.\n- (Optional) Search query: \"Rip Taylor confetti habit\" for corroborating sources.",
+        "hop2_query": "Rip Taylor confetti",
+        "hop2_titles": [
+          "Rip Taylor",
+          "Confetti Mario Pelino",
+          "Confetti (band)",
+          "Confetti's",
+          "Confetti",
+          "Confetti (Sérgio Mendes album)",
+          "Confetti Cake"
+        ],
+        "hop2_docs": [
+          "Rip Taylor | Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.",
+          "Confetti Mario Pelino | Confetti Mario Pelino is one of the oldest Italian confectioneries founded in 1783 by Bernardino Pelino and located in Sulmona, Abruzzo, the region well-known for the production of confetti candies.  The well-known poet Paul Valéry was also fan of these sweets.",
+          "Confetti (band) | Confetti were a British band during the early 1990s.",
+          "Confetti's | Confetti’s was a Belgian new beat band from the 1980s.  Producers were Serge Ramaekers and Dominique Sas, sometimes credited as The Maxx (not the same as Maxx, a shorter-lived German project from mid-90s).  On stage Confetti’s was fronted by singer Peter Renkens and female dancers Marleen, Tania, Hilde and Daniëlla.",
+          "Confetti | Confetti are small pieces or streamers of paper, mylar, or metallic material which are usually thrown at parades, sporting team winners, and celebrations, especially weddings (and game shows, following the end of a milestone or the occasion of a big win.  The origins are from the Latin \"confectum\", with \"confetti\" the plural of Italian \"confetto\", small sweet.  Modern paper confetti trace back to symbolic rituals of tossing grains and sweets during special occasions, traditional for numerous cultures throughout history as an ancient custom dating back to pagan times, but adapted from sweets and grains to paper through the centuries.",
+          "Confetti (Sérgio Mendes album) | Confetti is an album from 1984 by Sérgio Mendes.",
+          "Confetti Cake | Confetti Cake is a type of cake that has rainbow colored sprinkles baked into the batter.  It is called confetti cake because when baked, the rainbow sprinkles melt into dots of bright color that resembles confetti Typically the batter is either white or yellow to allow for a better visual effect.  The cake generally consists of flour, butter, baking powder, salt, sugar, vegetable oil, eggs, vanilla extract, milk,and rainbow colored sprinkles.  The cake normally has a frosting made of butter, salt,powdered sugar, vanilla extract, and milk.  The cake was created in the United States."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Rip Taylor",
+          "sent_id": 0,
+          "sentence": "Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian."
+        },
+        {
+          "title": "Rip Taylor",
+          "sent_id": 1,
+          "sentence": "He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhich artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?\n\nCurrent agent output:\n\"Anthony Toby \\\"Tony\\\" Hiller appeared with Rip Taylor, who was known for \\\"showering himself (and others) with confetti.\\\"\"\n\nActual upstream context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"summary_1\": \"Evidence found:\\n- Anthony Toby \\\"Tony\\\" Hiller — [1]: \\\"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927)\\\"\\n- Rip Taylor — [1]: \\\"Rip Taylor\\\"\\n- Rip Taylor — [2]: \\\"showering himself (and others) with confetti.\\\"\\n\\nAmbiguities:\\n- None; \\\"Rip Taylor\\\" appears unambiguously in [1] and [2].\\n\\nBridge / missing fact:\\n- No missing facts. Passages show Tony Hiller appeared with Rip Taylor, who \\\"showered himself (and others) with confetti.\\\" Final answer: Rip Taylor.\\n\\nRetrieval direction:\\n- Open page \\\"Rip Taylor | Charles Elmer \\\"Rip\\\" Taylor, Jr.\\\" for full biography.\\n- Open page \\\"Tony Hiller | Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927)\\\" to verify the appearance list.\\n- (Optional) Search query: \\\"Rip Taylor confetti habit\\\" for corroborating sources.\",\n  \"hop2_query\": \"Rip Taylor confetti\",\n  \"hop2_titles\": [\n    \"Rip Taylor\",\n    \"Confetti Mario Pelino\",\n    \"Confetti (band)\",\n    \"Confetti's\",\n    \"Confetti\",\n    \"Confetti (Sérgio Mendes album)\",\n    \"Confetti Cake\"\n  ],\n  \"hop2_docs\": [\n    \"Rip Taylor | Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\",\n    \"Confetti Mario Pelino | Confetti Mario Pelino is one of the oldest Italian confectioneries founded in 1783 by Bernardino Pelino and located in Sulmona, Abruzzo, the region well-known for the production of confetti candies.  The well-known poet Paul Valéry was also fan of these sweets.\",\n    \"Confetti (band) | Confetti were a British band during the early 1990s.\",\n    \"Confetti's | Confetti’s was a Belgian new beat band from the 1980s.  Producers were Serge Ramaekers and Dominique Sas, sometimes credited as The Maxx (not the same as Maxx, a shorter-lived German project from mid-90s).  On stage Confetti’s was fronted by singer Peter Renkens and female dancers Marleen, Tania, Hilde and Daniëlla.\",\n    \"Confetti | Confetti are small pieces or streamers of paper, mylar, or metallic material which are usually thrown at parades, sporting team winners, and celebrations, especially weddings (and game shows, following the end of a milestone or the occasion of a big win.  The origins are from the Latin \\\"confectum\\\", with \\\"confetti\\\" the plural of Italian \\\"confetto\\\", small sweet.  Modern paper confetti trace back to symbolic rituals of tossing grains and sweets during special occasions, traditional for numerous cultures throughout history as an ancient custom dating back to pagan times, but adapted from sweets and grains to paper through the centuries.\",\n    \"Confetti (Sérgio Mendes album) | Confetti is an album from 1984 by Sérgio Mendes.\",\n    \"Confetti Cake | Confetti Cake is a type of cake that has rainbow colored sprinkles baked into the batter.  It is called confetti cake because when baked, the rainbow sprinkles melt into dots of bright color that resembles confetti Typically the batter is either white or yellow to allow for a better visual effect.  The cake generally consists of flour, butter, baking powder, salt, sugar, vegetable oil, eggs, vanilla extract, milk,and rainbow colored sprinkles.  The cake normally has a frosting made of butter, salt,powdered sugar, vanilla extract, and milk.  The cake was created in the United States.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 0,\n    \"sentence\": \"Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.\"\n  },\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 1,\n    \"sentence\": \"He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary:\\n- From summary_1: Anthony Toby \\\"Tony\\\" Hiller appeared with Rip Taylor.\\n- From second-hop (Rip Taylor): Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\\nRetained facts for final answer: (1) Hiller appeared with Rip Taylor; (2) Rip Taylor is documented as habitually showering himself (and others) with confetti.\",\n  \"rationale\": \"Combines the summary_1 statement that Hiller appeared with Rip Taylor with the Rip Taylor page sentences (occupation, flamboyant persona, and confetti habit). These two visible facts together provide the necessary link without adding any unsupported information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 14,
+    "row_index": 14
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "ee257d61838f1352d6814499f7738e817591c1af7310df77893812ce12c14f3d",
+  "created_at": "2026-07-15T06:19:49.406892+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+      "source_summary": "Chelsea Peretti is part of the Brooklyn Nine-Nine supporting cast and is an American comedian and writer.",
+      "target_summary": "The Brooklyn Nine-Nine page lists Chelsea Peretti as part of the ensemble and supporting cast, portraying Regina \"Gina\" Linetti. The Chelsea Peretti page states she is an American comedian, actress, and writer. These two facts link a Brooklyn Nine-Nine supporting cast member to being a comedian and writer.",
+      "candidate_summary": "Chelsea Peretti is listed in the Brooklyn Nine-Nine ensemble and supporting cast as Regina \"Gina\" Linetti. She is an American comedian and writer."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nBrooklyn Nine-Nine had a supporting cast that included which comedian and writer?\n\nSource summary2:\nChelsea Peretti is part of the Brooklyn Nine-Nine supporting cast and is an American comedian and writer.\n\nTarget summary2:\nThe Brooklyn Nine-Nine page lists Chelsea Peretti as part of the ensemble and supporting cast, portraying Regina \"Gina\" Linetti. The Chelsea Peretti page states she is an American comedian, actress, and writer. These two facts link a Brooklyn Nine-Nine supporting cast member to being a comedian and writer.\n\nCandidate summary2:\nChelsea Peretti is listed in the Brooklyn Nine-Nine ensemble and supporting cast as Regina \"Gina\" Linetti. She is an American comedian and writer.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate links Chelsea Peretti to Brooklyn Nine-Nine supporting cast and identifies her as an American comedian and writer (matching the target's key facts). It also adds the role name Regina \\\"Gina\\\" Linetti from the target, so it preserves the source and includes a task-relevant addition.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 5,
+    "row_index": 5,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

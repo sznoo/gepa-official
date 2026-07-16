@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "8a858b7926d1262281d77c163905c8ca57004a9451babff6b0e8dc0494315c86",
+  "created_at": "2026-07-14T13:37:17.088244+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "summary_1": "Rip Taylor",
+        "summary_2": "Rip Taylor",
+        "current_output": "Rip Taylor"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Rip Taylor",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Charles Elmer \"Rip\" Taylor, Jr.",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"summary_1\": \"Rip Taylor\",\n  \"summary_2\": \"Rip Taylor\",\n  \"current_output\": \"Rip Taylor\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Rip Taylor\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Charles Elmer \\\"Rip\\\" Taylor, Jr.\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 are identical (exact string match) and both are short (three words or fewer) or look like a stage/name token (e.g. a two-word stage name such as 'Rip Taylor'), apply this delta.\",\n    \"preserve_rule\": \"Keep the current behavior of selecting an answer directly supported by the provided summaries. Use the identical summary string as the primary evidence source; do not discard or overwrite that string.\",\n    \"change_rule\": \"When the trigger fires, attempt to output a more formal/expanded name only if that exact expanded form already appears verbatim in any visible input field (question, summary_1, or summary_2). If no verbatim expanded form appears, emit the identical summary string unchanged. Do not attempt external lookup or invent fuller forms.\",\n    \"drop_or_avoid_rule\": \"Do not add invented details (middle names, initials, honorifics, suffixes like 'Jr.', or alternative full names) unless those exact tokens appear in the visible inputs. Avoid extra parentheticals, qualifiers, or commentary.\",\n    \"output_contract\": \"Return exactly one minimal answer string that is strictly supported by the visible summaries. Place only that string inside the [[ ## answer ## ]] block; include no other text or explanation.\",\n    \"why_local_transition\": \"This change prevents the agent from inventing or inserting an expanded legal name when only a stage/nickname is present in the summaries while still allowing a fuller form when the fuller form is explicitly provided in the inputs. It is a minimal, local constraint that preserves correct summary-based answers and avoids hallucination.\"\n  },\n  \"rationale\": \"The smallest safe behavioral change is to allow expansion to a formal name only when that expanded form is already present in the visible inputs. That preserves the existing default of using the agreed summary string (so current correct short answers remain unchanged) while preventing unsupported invention of fuller names. This delta is narrowly scoped (it triggers only when both summaries agree and are short) and preserves the agent's original output contract, minimizing risk of introducing hallucinations or extra text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 14,
+    "row_index": 14,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "848ec372ad7a1259f0a6dbe7156a2977fd783105f551e156b2865b38f848226d",
+  "created_at": "2026-07-14T21:24:17.207036+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 62,
+        "stable_id": "62",
+        "question": "Which mountain range, found in eastern North America, was seen as the western frontier prior to about 1800?",
+        "summary_1": "Evidence found:\n- \"Western United States\" — [1] \"Prior to about 1800, the crest of the Appalachian Mountains\"  \n- \"Appalachian Mountains\" — [1] \"the crest of the Appalachian Mountains\"  \n- \"Chuska Mountains\" — [2] \"The Chuska Mountains are an elongate range\"  \n- \"Rocky Mountain elk\" — [3] \"Rocky Mountain elk (\\\"Cervus canadensis nelsoni\\\")\"  \n- \"American Cordillera\" — [4] \"The American Cordillera is a chain of mountain ranges\"  \n- \"Coast Mountains\" — [5] \"The Coast Mountains are a major mountain range\"  \n- \"Rhododendron occidentale\" — [6] \"Rhododendron occidentale, the western azalea\"  \n- \"Arbutus xalapensis\" — [7] \"Arbutus xalapensis, commonly known as the Texas madrone\"\n\nAmbiguities:\n- None — \"Appalachian Mountains\" is stated explicitly in [1] with no conflicting variants in the passages.\n\nBridge / missing fact:\n- None — the passage explicitly states which mountain range was seen as the western frontier prior to about 1800.\n\nRetrieval direction:\n- No further retrieval required. Final answer: Appalachian Mountains.",
+        "hop2_query": "Appalachian Mountains western frontier",
+        "summary_2": "Western United States — the crest of the Appalachian Mountains was seen as the western frontier prior to about 1800.",
+        "answer": "Appalachian Mountains",
+        "gold_support_titles": [
+          "Western United States",
+          "Appalachian Mountains"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 13,
+          "w_stable_id": "13",
+          "agent": "final",
+          "w_question": "Heavyweights and The Santa Clause 2, share which genres?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "unknown",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "comedy-drama",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks for a film-genre label and summary_2 (the primary integrated summary) contains a composite genre phrase that includes a hyphenated core genre token (for example the phrase 'romantic comedy-drama' appearing in the summaries), apply the change below.",
+                "preserve_rule": "Keep the base prompt's evidential rule: use summary_1 and summary_2 as the sole evidence and treat summary_2 as primary. Preserve the requirement to emit exactly one minimal answer string and not to introduce outside facts.",
+                "change_rule": "If the primary summary contains a composite phrase of the form '<modifier> X-Y' (e.g., 'romantic comedy-drama'), extract and use the hyphenated core token 'X-Y' as the concise genre label for the final answer. Emit that single minimal label as the answer field (no extra text). Do not add other genres or explanatory text.",
+                "drop_or_avoid_rule": "Do not output the leading modifier (e.g., 'romantic' or similar adjectives) alone or append additional genres not present in the summaries. Do not attempt to invent or retrieve Heavyweights' genres; if summary_2 contains no concise genre token, fall back to the base rule that yields 'unknown'.",
+                "output_contract": "Produce the single-field answer required by the base prompt: the answer value must be the single minimal string equal to the extracted hyphenated core genre token (the 'X-Y' from the composite phrase) and nothing else.",
+                "why_local_transition": "Resolves the specific ambiguity of phrases like 'romantic comedy-drama' by standardizing to the hyphenated core genre token so the final-answer contract (one minimal string) can be satisfied using only the available summaries."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 1,
+          "w_stable_id": "1",
+          "agent": "final",
+          "w_question": "Where is the official residence of the head of state of Germany?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Bellevue Palace (Schloss Bellevue) in Berlin",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Schloss Bellevue",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "summary_2 contains an entity name with an alternate name in parentheses (e.g. 'Bellevue Palace (Schloss Bellevue)') and the current candidate answer includes extra qualifiers (location phrases like 'in Berlin') or the primary name plus the parenthetical alias.",
+                "preserve_rule": "Keep the base instructions to use only summary_1 and summary_2 as evidence, to produce exactly one minimal string in the `answer` field, and to prefer verbatim text from the summaries when possible.",
+                "change_rule": "If summary_2 (or summary_1 when summary_2 is silent) includes a parenthetical alternate name, set the single `answer` string to the parenthetical content alone (remove the surrounding parentheses). Drop any appended location phrases or the non-parenthetical primary name when the parenthetical alias is present. If no parenthetical alternate is present, make no change.",
+                "drop_or_avoid_rule": "Do not output parentheses, location qualifiers (e.g. 'in Berlin'), or both the primary name and its parenthetical alias together. Avoid adding explanatory words or punctuation; output exactly the parenthetical alias text as a single minimal string.",
+                "output_contract": "Produce precisely one field `answer` whose value is the parenthetical alias text from the summaries (trimmed of parentheses and surrounding punctuation), as a single minimal string and nothing else.",
+                "why_local_transition": "The summaries already contain a concise local/canonical label inside parentheses. Selecting that parenthetical alias yields a shorter, canonical answer that satisfies the base prompt's minimal-string requirement and removes redundant location or wrapper text."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 138,
+          "w_stable_id": "138",
+          "agent": "final",
+          "w_question": "Peston on Sunday is hosted by the reporter who got the scoop on which financial crisis in the late-2000s?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Northern Rock crisis",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Northern Rock",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the base rules would emit a minimal answer string that ends with the generic token \"crisis\" (a form like \"<ProperName> crisis\" appears in the summaries, e.g. \"Northern Rock crisis\").",
+                "preserve_rule": "Keep all existing output rules and the single-field/single-string contract. Continue to prefer summary_2 as primary evidence and preserve all other selection logic unchanged.",
+                "change_rule": "If the selected minimal answer is of the lexical form \"X crisis\" where X is a proper-name token sequence that also appears in the provided summaries, strip the trailing token \"crisis\" and emit only the proper-name token sequence X as the single minimal answer string. Do not add words, punctuation, or explanatory text.",
+                "drop_or_avoid_rule": "Do not strip other meaningful tokens or shorten answers that are not of the exact \"X crisis\" pattern. Do not apply this transformation when the question explicitly asks for the crisis itself by name in a way that requires the word \"crisis\" (for example, if the canonical answer in the summaries is just the word \"crisis\" rather than a named entity).",
+                "output_contract": "After this edit, the agent must still produce exactly one field `answer` whose value is a single minimal string (no surrounding text). If the transform applies, that string will be the proper-name X (e.g., \"Northern Rock\"); otherwise the original base rules determine the string.",
+                "why_local_transition": "This small change canonicalizes answers that are named entities followed by the generic descriptor \"crisis\", producing the concise entity name expected in minimal-answer outputs while leaving all other behavior and evidence weighting unchanged."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 106,
+          "w_stable_id": "106",
+          "agent": "final",
+          "w_question": "The winner of the 1976 United States Senate election in Missouri was what kind of priest?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Episcopal priest",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Episcopal",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question explicitly asks for the kind/type of a priest (phrases like \"what kind of priest\", \"what kind of clergyman\", or similar) AND one of the provided summaries contains a phrase matching the pattern '<denomination> priest' (e.g., 'Episcopal priest').",
+                "preserve_rule": "Keep all existing base-prompt behavior: use only the provided summaries as evidence, prefer summary_2 when resolving ambiguity, and obey the single-minimal-string output requirement of the base prompt.",
+                "change_rule": "Instead of emitting the full noun phrase that includes 'priest' (for example 'Episcopal priest'), extract and emit only the denomination token(s) immediately preceding the word 'priest' (for example 'Episcopal' or 'Roman Catholic'). Remove any preceding verbs or descriptors like 'ordained' when they are not part of the denomination. Trim whitespace and strip surrounding punctuation; emit exactly those token(s) verbatim as they appear in the summaries.",
+                "drop_or_avoid_rule": "Do not include the word 'priest' itself, nor add explanatory words ('ordained', 'clergyman', 'minister', 'the', etc.), additional qualifiers, punctuation, or sentences. Avoid introducing facts not present in the summaries.",
+                "output_contract": "Produce the base-prompt 'answer' field as a single minimal string equal to the extracted denomination token(s), no extra text or punctuation, following the base prompt's formatting rules.",
+                "why_local_transition": "The smallest coherent behavioral change is to strip the occupational noun 'priest' from a denomination phrase so the agent returns the minimal label the question requests (the denomination). This preserves summary-based reasoning and the single-token output contract while correcting the over-specific noun phrase."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 147,
+          "w_stable_id": "147",
+          "agent": "final",
+          "w_question": "What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Tactical Studies Rules, Inc. (TSR)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Tactical Studies Rules",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the chosen concise answer string is a company/developer name that contains a corporate suffix (e.g., \", Inc.\" or \"Inc.\") or contains a parenthetical abbreviation (text enclosed in parentheses), apply this delta.",
+                "preserve_rule": "Keep all existing evidence rules: use summary_2 as primary evidence, prefer verbatim answer strings from the summaries, preserve multi-token labels and the parent/publisher preference when selecting which company name to answer with.",
+                "change_rule": "Normalize the selected company name before emitting it: strip any trailing corporate designator tokens such as \", Inc.\" or standalone \"Inc.\"; remove any parenthetical substring (the parentheses and their contents) and any adjacent extra punctuation or whitespace; then trim whitespace. Emit the resulting core company name as the single minimal answer string.",
+                "drop_or_avoid_rule": "Do not include corporate suffixes (\"Inc.\", \", Inc.\", etc.), parenthetical abbreviations, extra punctuation, explanatory text, or surrounding quotes/brackets in the final answer. Do not introduce facts or names that are not present in the provided summaries.",
+                "output_contract": "Produce exactly one field `answer` whose value is a single minimal string (no extra text, punctuation, or markup). After normalization above, emit that core company name as the sole answer token.",
+                "why_local_transition": "This is a minimal formatting/normalization change: it removes corporate suffixes and parenthetical abbreviations from an otherwise-correct company name so the final output is the concise core name expected by the endpoint rules, while preserving evidence selection and other base behaviors."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Appalachian Mountains",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 62,\n  \"stable_id\": \"62\",\n  \"question\": \"Which mountain range, found in eastern North America, was seen as the western frontier prior to about 1800?\",\n  \"summary_1\": \"Evidence found:\\n- \\\"Western United States\\\" — [1] \\\"Prior to about 1800, the crest of the Appalachian Mountains\\\"  \\n- \\\"Appalachian Mountains\\\" — [1] \\\"the crest of the Appalachian Mountains\\\"  \\n- \\\"Chuska Mountains\\\" — [2] \\\"The Chuska Mountains are an elongate range\\\"  \\n- \\\"Rocky Mountain elk\\\" — [3] \\\"Rocky Mountain elk (\\\\\\\"Cervus canadensis nelsoni\\\\\\\")\\\"  \\n- \\\"American Cordillera\\\" — [4] \\\"The American Cordillera is a chain of mountain ranges\\\"  \\n- \\\"Coast Mountains\\\" — [5] \\\"The Coast Mountains are a major mountain range\\\"  \\n- \\\"Rhododendron occidentale\\\" — [6] \\\"Rhododendron occidentale, the western azalea\\\"  \\n- \\\"Arbutus xalapensis\\\" — [7] \\\"Arbutus xalapensis, commonly known as the Texas madrone\\\"\\n\\nAmbiguities:\\n- None — \\\"Appalachian Mountains\\\" is stated explicitly in [1] with no conflicting variants in the passages.\\n\\nBridge / missing fact:\\n- None — the passage explicitly states which mountain range was seen as the western frontier prior to about 1800.\\n\\nRetrieval direction:\\n- No further retrieval required. Final answer: Appalachian Mountains.\",\n  \"hop2_query\": \"Appalachian Mountains western frontier\",\n  \"summary_2\": \"Western United States — the crest of the Appalachian Mountains was seen as the western frontier prior to about 1800.\",\n  \"answer\": \"Appalachian Mountains\",\n  \"gold_support_titles\": [\n    \"Western United States\",\n    \"Appalachian Mountains\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 13,\n    \"w_stable_id\": \"13\",\n    \"agent\": \"final\",\n    \"w_question\": \"Heavyweights and The Santa Clause 2, share which genres?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"unknown\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"comedy-drama\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks for a film-genre label and summary_2 (the primary integrated summary) contains a composite genre phrase that includes a hyphenated core genre token (for example the phrase 'romantic comedy-drama' appearing in the summaries), apply the change below.\",\n          \"preserve_rule\": \"Keep the base prompt's evidential rule: use summary_1 and summary_2 as the sole evidence and treat summary_2 as primary. Preserve the requirement to emit exactly one minimal answer string and not to introduce outside facts.\",\n          \"change_rule\": \"If the primary summary contains a composite phrase of the form '<modifier> X-Y' (e.g., 'romantic comedy-drama'), extract and use the hyphenated core token 'X-Y' as the concise genre label for the final answer. Emit that single minimal label as the answer field (no extra text). Do not add other genres or explanatory text.\",\n          \"drop_or_avoid_rule\": \"Do not output the leading modifier (e.g., 'romantic' or similar adjectives) alone or append additional genres not present in the summaries. Do not attempt to invent or retrieve Heavyweights' genres; if summary_2 contains no concise genre token, fall back to the base rule that yields 'unknown'.\",\n          \"output_contract\": \"Produce the single-field answer required by the base prompt: the answer value must be the single minimal string equal to the extracted hyphenated core genre token (the 'X-Y' from the composite phrase) and nothing else.\",\n          \"why_local_transition\": \"Resolves the specific ambiguity of phrases like 'romantic comedy-drama' by standardizing to the hyphenated core genre token so the final-answer contract (one minimal string) can be satisfied using only the available summaries.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 1,\n    \"w_stable_id\": \"1\",\n    \"agent\": \"final\",\n    \"w_question\": \"Where is the official residence of the head of state of Germany?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Bellevue Palace (Schloss Bellevue) in Berlin\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Schloss Bellevue\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"summary_2 contains an entity name with an alternate name in parentheses (e.g. 'Bellevue Palace (Schloss Bellevue)') and the current candidate answer includes extra qualifiers (location phrases like 'in Berlin') or the primary name plus the parenthetical alias.\",\n          \"preserve_rule\": \"Keep the base instructions to use only summary_1 and summary_2 as evidence, to produce exactly one minimal string in the `answer` field, and to prefer verbatim text from the summaries when possible.\",\n          \"change_rule\": \"If summary_2 (or summary_1 when summary_2 is silent) includes a parenthetical alternate name, set the single `answer` string to the parenthetical content alone (remove the surrounding parentheses). Drop any appended location phrases or the non-parenthetical primary name when the parenthetical alias is present. If no parenthetical alternate is present, make no change.\",\n          \"drop_or_avoid_rule\": \"Do not output parentheses, location qualifiers (e.g. 'in Berlin'), or both the primary name and its parenthetical alias together. Avoid adding explanatory words or punctuation; output exactly the parenthetical alias text as a single minimal string.\",\n          \"output_contract\": \"Produce precisely one field `answer` whose value is the parenthetical alias text from the summaries (trimmed of parentheses and surrounding punctuation), as a single minimal string and nothing else.\",\n          \"why_local_transition\": \"The summaries already contain a concise local/canonical label inside parentheses. Selecting that parenthetical alias yields a shorter, canonical answer that satisfies the base prompt's minimal-string requirement and removes redundant location or wrapper text.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 138,\n    \"w_stable_id\": \"138\",\n    \"agent\": \"final\",\n    \"w_question\": \"Peston on Sunday is hosted by the reporter who got the scoop on which financial crisis in the late-2000s?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Northern Rock crisis\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Northern Rock\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the base rules would emit a minimal answer string that ends with the generic token \\\"crisis\\\" (a form like \\\"<ProperName> crisis\\\" appears in the summaries, e.g. \\\"Northern Rock crisis\\\").\",\n          \"preserve_rule\": \"Keep all existing output rules and the single-field/single-string contract. Continue to prefer summary_2 as primary evidence and preserve all other selection logic unchanged.\",\n          \"change_rule\": \"If the selected minimal answer is of the lexical form \\\"X crisis\\\" where X is a proper-name token sequence that also appears in the provided summaries, strip the trailing token \\\"crisis\\\" and emit only the proper-name token sequence X as the single minimal answer string. Do not add words, punctuation, or explanatory text.\",\n          \"drop_or_avoid_rule\": \"Do not strip other meaningful tokens or shorten answers that are not of the exact \\\"X crisis\\\" pattern. Do not apply this transformation when the question explicitly asks for the crisis itself by name in a way that requires the word \\\"crisis\\\" (for example, if the canonical answer in the summaries is just the word \\\"crisis\\\" rather than a named entity).\",\n          \"output_contract\": \"After this edit, the agent must still produce exactly one field `answer` whose value is a single minimal string (no surrounding text). If the transform applies, that string will be the proper-name X (e.g., \\\"Northern Rock\\\"); otherwise the original base rules determine the string.\",\n          \"why_local_transition\": \"This small change canonicalizes answers that are named entities followed by the generic descriptor \\\"crisis\\\", producing the concise entity name expected in minimal-answer outputs while leaving all other behavior and evidence weighting unchanged.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 106,\n    \"w_stable_id\": \"106\",\n    \"agent\": \"final\",\n    \"w_question\": \"The winner of the 1976 United States Senate election in Missouri was what kind of priest?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Episcopal priest\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Episcopal\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question explicitly asks for the kind/type of a priest (phrases like \\\"what kind of priest\\\", \\\"what kind of clergyman\\\", or similar) AND one of the provided summaries contains a phrase matching the pattern '<denomination> priest' (e.g., 'Episcopal priest').\",\n          \"preserve_rule\": \"Keep all existing base-prompt behavior: use only the provided summaries as evidence, prefer summary_2 when resolving ambiguity, and obey the single-minimal-string output requirement of the base prompt.\",\n          \"change_rule\": \"Instead of emitting the full noun phrase that includes 'priest' (for example 'Episcopal priest'), extract and emit only the denomination token(s) immediately preceding the word 'priest' (for example 'Episcopal' or 'Roman Catholic'). Remove any preceding verbs or descriptors like 'ordained' when they are not part of the denomination. Trim whitespace and strip surrounding punctuation; emit exactly those token(s) verbatim as they appear in the summaries.\",\n          \"drop_or_avoid_rule\": \"Do not include the word 'priest' itself, nor add explanatory words ('ordained', 'clergyman', 'minister', 'the', etc.), additional qualifiers, punctuation, or sentences. Avoid introducing facts not present in the summaries.\",\n          \"output_contract\": \"Produce the base-prompt 'answer' field as a single minimal string equal to the extracted denomination token(s), no extra text or punctuation, following the base prompt's formatting rules.\",\n          \"why_local_transition\": \"The smallest coherent behavioral change is to strip the occupational noun 'priest' from a denomination phrase so the agent returns the minimal label the question requests (the denomination). This preserves summary-based reasoning and the single-token output contract while correcting the over-specific noun phrase.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 147,\n    \"w_stable_id\": \"147\",\n    \"agent\": \"final\",\n    \"w_question\": \"What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Tactical Studies Rules, Inc. (TSR)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Tactical Studies Rules\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the chosen concise answer string is a company/developer name that contains a corporate suffix (e.g., \\\", Inc.\\\" or \\\"Inc.\\\") or contains a parenthetical abbreviation (text enclosed in parentheses), apply this delta.\",\n          \"preserve_rule\": \"Keep all existing evidence rules: use summary_2 as primary evidence, prefer verbatim answer strings from the summaries, preserve multi-token labels and the parent/publisher preference when selecting which company name to answer with.\",\n          \"change_rule\": \"Normalize the selected company name before emitting it: strip any trailing corporate designator tokens such as \\\", Inc.\\\" or standalone \\\"Inc.\\\"; remove any parenthetical substring (the parentheses and their contents) and any adjacent extra punctuation or whitespace; then trim whitespace. Emit the resulting core company name as the single minimal answer string.\",\n          \"drop_or_avoid_rule\": \"Do not include corporate suffixes (\\\"Inc.\\\", \\\", Inc.\\\", etc.), parenthetical abbreviations, extra punctuation, explanatory text, or surrounding quotes/brackets in the final answer. Do not introduce facts or names that are not present in the provided summaries.\",\n          \"output_contract\": \"Produce exactly one field `answer` whose value is a single minimal string (no extra text, punctuation, or markup). After normalization above, emit that core company name as the sole answer token.\",\n          \"why_local_transition\": \"This is a minimal formatting/normalization change: it removes corporate suffixes and parenthetical abbreviations from an otherwise-correct company name so the final output is the concise core name expected by the endpoint rules, while preserving evidence selection and other base behaviors.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 106,\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"Agent strips the generic geographic type token ('Mountains'), returning the truncated label 'Appalachian'.\",\n  \"expected_damaged_behavior\": \"Final answer outputs 'Appalachian' (or similarly truncated form) instead of 'Appalachian Mountains'.\",\n  \"rationale\": \"W sample 106 implements a minimal, local transform that removes an occupational/generic noun ('priest') to yield a shorter canonical label. The same class of local output-shaping error can plausibly apply to toponyms by dropping the generic type token ('Mountains'), producing an under-specified name that is still a local neighbor of the correct answer. This transports only the failure mode (trimming a trailing generic token) without importing any W-side entities, requires no extra retrieval or answer flip, and matches the target boundary where the agent must emit a single minimal string.\",\n  \"confidence\": 0.78\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 62,
+    "c_stable_id": "62",
+    "candidate_w_sample_indices": [
+      1,
+      13,
+      106,
+      138,
+      147
+    ],
+    "match_fingerprint": "262c92d44c8a35de83b3ab13a8e1642320df8ae5b0f8a89dc1b001fa016a1330"
+  }
+}

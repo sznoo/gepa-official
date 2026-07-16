@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "90cc7cce46d6ca8a3657c108e333f119654f0c7680b76be78b73ab34256bb356",
+  "created_at": "2026-07-16T07:05:44.194213+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Which film director, Frank Tashlin or Craig Serling, was also an animator?",
+    "answer": "Frank Tashlin",
+    "context": {
+      "title": [
+        "The Girl Can't Help It",
+        "Son of Paleface",
+        "Izzy Ellis",
+        "Craig Serling",
+        "Frank Tashlin",
+        "The Fuller Brush Girl",
+        "Susan Slept Here",
+        "The Bear That Wasn't",
+        "The Private Navy of Sgt. O'Farrell",
+        "The Good Humor Man (1950 film)"
+      ],
+      "sentences": [
+        [
+          "The Girl Can't Help It is a 1956 musical comedy starring Jayne Mansfield in the titular role, Tom Ewell, Edmond O'Brien, Henry Jones, and Julie London.",
+          " The picture was produced and directed by Frank Tashlin, with a screenplay adapted by Tashlin and Herbert Baker from an uncredited 1955 novel \"Do Re Mi\" by Garson Kanin.",
+          " The movie was originally intended as a vehicle for the American sex symbol Jayne Mansfield, with a satirical subplot involving teenagers and rock 'n' roll music.",
+          " The unintended result has been called the \"most potent\" celebration of rock music ever captured on film."
+        ],
+        [
+          "Son of Paleface is a 1952 Western comedy film directed by Frank Tashlin and starring Bob Hope, Jane Russell, and Roy Rogers.",
+          " The film is a sequel to \"The Paleface\" (1948).",
+          " Written by Tashlin, Joseph Quillan, and Robert L. Welch, the film is about a man who returns home to claim his father's gold, which is nowhere to be found.",
+          " \"Son of Paleface\" was released in the United States by Paramount Pictures on July 14, 1952."
+        ],
+        [
+          "Isadore Ellis (1910–1994), credited as I. Ellis and known throughout the animation industry as Izzy Ellis, was an American animator best known for working for Warner Bros.",
+          " Cartoons under the Bob Clampett & Frank Tashlin units.",
+          " Ellis had a long career in the animation industry, which started at Ub Iwerks Studio in 1935.",
+          " After three years, Ellis moved to Leon Schlesinger Productions, where he worked under the Clampett B/W unit, under the Ray Katz management.",
+          " Ellis continued to animate in the B/W unit under the supervision of Norman McCabe, and eventually Frank Tashlin.",
+          " Ellis reunited with Clampett after Robert McKimson took over Tashlin's unit.",
+          " However, Ellis relocated to McKimson's unit after Art Davis took over the Clampett unit.",
+          " In 1948, Ellis left to do commercial work."
+        ],
+        [
+          "Craig Serling is an American film director, film producer, screenwriter, and television editor known for multiple Primetime Emmy nominations for 'Outstanding Picture Editing for Non-Fiction Programming' and for his 2006 directorial debut feature film \"Jam\"."
+        ],
+        [
+          "Francis Fredrick von Taschlein (February 19, 1913 – May 5, 1972), better known by his stage name Frank Tashlin, was an American animator, screenwriter, and film director.",
+          " He was also known as Tish Tash and Frank Tash."
+        ],
+        [
+          "The Fuller Brush Girl is a 1950 slapstick comedy starring Lucille Ball and directed by Lloyd Bacon.",
+          " Animator Frank Tashlin wrote the script.",
+          " Ball plays a quirky door-to-door cosmetics saleswoman for the Fuller Brush Company.",
+          " The film also stars Eddie Albert and has an uncredited cameo by Red Skelton (who had starred in the Tashlin-scripted \"The Fuller Brush Man\" two years earlier)."
+        ],
+        [
+          "Susan Slept Here is a 1954 American romantic comedy film starring Dick Powell (in his last film role) and Debbie Reynolds.",
+          " Shot in Technicolor, the film was based on the play of the same name by Steve Fisher and Alex Gottlieb.",
+          " The film's plotline was later used again by director Frank Tashlin for 1962's \"Bachelor Flat\"."
+        ],
+        [
+          "The Bear That Wasn't is a 1946 children's book by film director and \"Looney Tunes\" alumnus Frank Tashlin."
+        ],
+        [
+          "The Private Navy of Sgt. O'Farrell is a 1968 film directed by Frank Tashlin and starring Bob Hope, Phyllis Diller, and Jeffrey Hunter.",
+          " It was the final film for Tashlin, who died in 1972."
+        ],
+        [
+          "The Good Humor Man is a 1950 comedy crime film directed by Lloyd Bacon and written by Frank Tashlin.",
+          " The film revolves around a Good Humor ice cream salesman who becomes involved in a murder.",
+          " The film stars Jack Carson, Lola Albright, Jean Wallace, George Reeves, Peter Miles and Frank Ferguson.",
+          " The film was released on June 1, 1950, by Columbia Pictures."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Frank Tashlin",
+        "Craig Serling"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- If summary_1 already includes explicit profession/role/descriptor tokens for an anchor (for example, 'singer', 'director', 'country music artist'), omit those redundant descriptor tokens and emit a compact anchor-only query consisting of the core visible anchors (names, titles, groups). Retain relation tokens only when the question explicitly requests them or when disambiguation rules demand them. Do not remove descriptors when the question explicitly asks for role/occupation evidence or when a short-title disambiguation rule requires adding an entertainment disambiguator.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity (or otherwise names candidate/bridge entities), treat the context claim as the summary anchor and perform explicit identity-alignment checks before using passage facts. For each entity explicitly named in `context` as a candidate or bridge, do the following: if at least one passage provides an explicit, identity-aligned statement linking that named entity (or a clearly indicated alias) to the asserted relation, append a single brief corroborating sentence that paraphrases that linking fact and references the corroborating passage and also include one short clause for that context-named entity giving the passage-supported relation value (e.g., \"Name: [relation value].\"); if no passage provides the relation value for that context-named entity, append a short clause stating that no relation value is provided in the evidence (e.g., \"Name: no [relation] provided in evidence.\"). Do not create such clauses for entities that are only mentioned in `passages` and are not named in `context`. Do not append corroboration if the `context` already contains the identical corroborating fact verbatim. Keep these additions short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n- Vocal-role single-token normalization (narrow scope): If summary_2 (alone or composed with summary_1 where identity links are explicit) explicitly contains vocal-role evidence — i.e., one or more verbalized vocal-role phrases that clearly denote a singing performer (examples: \"lead singer\", \"lead vocals\", \"vocalist\" as presented in the summaries) — then you may prefer to emit the concise single-token common noun for a person who sings (e.g., \"singer\") only when that single-token common noun itself appears verbatim in the summaries or when the vocal-role phrases in the summaries unambiguously denote the same person-role. If those explicit lexical licenses are not present, retain the literal role phrasing as given in summary_2 and do not normalize modifiers or drop qualifiers.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "ab3db3537ee7",
+    "rerun_from": null,
+    "question": "Which film director, Frank Tashlin or Craig Serling, was also an animator?",
+    "gold_answer": "Frank Tashlin",
+    "context": {
+      "title": [
+        "The Girl Can't Help It",
+        "Son of Paleface",
+        "Izzy Ellis",
+        "Craig Serling",
+        "Frank Tashlin",
+        "The Fuller Brush Girl",
+        "Susan Slept Here",
+        "The Bear That Wasn't",
+        "The Private Navy of Sgt. O'Farrell",
+        "The Good Humor Man (1950 film)"
+      ],
+      "sentences": [
+        [
+          "The Girl Can't Help It is a 1956 musical comedy starring Jayne Mansfield in the titular role, Tom Ewell, Edmond O'Brien, Henry Jones, and Julie London.",
+          " The picture was produced and directed by Frank Tashlin, with a screenplay adapted by Tashlin and Herbert Baker from an uncredited 1955 novel \"Do Re Mi\" by Garson Kanin.",
+          " The movie was originally intended as a vehicle for the American sex symbol Jayne Mansfield, with a satirical subplot involving teenagers and rock 'n' roll music.",
+          " The unintended result has been called the \"most potent\" celebration of rock music ever captured on film."
+        ],
+        [
+          "Son of Paleface is a 1952 Western comedy film directed by Frank Tashlin and starring Bob Hope, Jane Russell, and Roy Rogers.",
+          " The film is a sequel to \"The Paleface\" (1948).",
+          " Written by Tashlin, Joseph Quillan, and Robert L. Welch, the film is about a man who returns home to claim his father's gold, which is nowhere to be found.",
+          " \"Son of Paleface\" was released in the United States by Paramount Pictures on July 14, 1952."
+        ],
+        [
+          "Isadore Ellis (1910–1994), credited as I. Ellis and known throughout the animation industry as Izzy Ellis, was an American animator best known for working for Warner Bros.",
+          " Cartoons under the Bob Clampett & Frank Tashlin units.",
+          " Ellis had a long career in the animation industry, which started at Ub Iwerks Studio in 1935.",
+          " After three years, Ellis moved to Leon Schlesinger Productions, where he worked under the Clampett B/W unit, under the Ray Katz management.",
+          " Ellis continued to animate in the B/W unit under the supervision of Norman McCabe, and eventually Frank Tashlin.",
+          " Ellis reunited with Clampett after Robert McKimson took over Tashlin's unit.",
+          " However, Ellis relocated to McKimson's unit after Art Davis took over the Clampett unit.",
+          " In 1948, Ellis left to do commercial work."
+        ],
+        [
+          "Craig Serling is an American film director, film producer, screenwriter, and television editor known for multiple Primetime Emmy nominations for 'Outstanding Picture Editing for Non-Fiction Programming' and for his 2006 directorial debut feature film \"Jam\"."
+        ],
+        [
+          "Francis Fredrick von Taschlein (February 19, 1913 – May 5, 1972), better known by his stage name Frank Tashlin, was an American animator, screenwriter, and film director.",
+          " He was also known as Tish Tash and Frank Tash."
+        ],
+        [
+          "The Fuller Brush Girl is a 1950 slapstick comedy starring Lucille Ball and directed by Lloyd Bacon.",
+          " Animator Frank Tashlin wrote the script.",
+          " Ball plays a quirky door-to-door cosmetics saleswoman for the Fuller Brush Company.",
+          " The film also stars Eddie Albert and has an uncredited cameo by Red Skelton (who had starred in the Tashlin-scripted \"The Fuller Brush Man\" two years earlier)."
+        ],
+        [
+          "Susan Slept Here is a 1954 American romantic comedy film starring Dick Powell (in his last film role) and Debbie Reynolds.",
+          " Shot in Technicolor, the film was based on the play of the same name by Steve Fisher and Alex Gottlieb.",
+          " The film's plotline was later used again by director Frank Tashlin for 1962's \"Bachelor Flat\"."
+        ],
+        [
+          "The Bear That Wasn't is a 1946 children's book by film director and \"Looney Tunes\" alumnus Frank Tashlin."
+        ],
+        [
+          "The Private Navy of Sgt. O'Farrell is a 1968 film directed by Frank Tashlin and starring Bob Hope, Phyllis Diller, and Jeffrey Hunter.",
+          " It was the final film for Tashlin, who died in 1972."
+        ],
+        [
+          "The Good Humor Man is a 1950 comedy crime film directed by Lloyd Bacon and written by Frank Tashlin.",
+          " The film revolves around a Good Humor ice cream salesman who becomes involved in a murder.",
+          " The film stars Jack Carson, Lola Albright, Jean Wallace, George Reeves, Peter Miles and Frank Ferguson.",
+          " The film was released on June 1, 1950, by Columbia Pictures."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Frank Tashlin",
+        "Craig Serling"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Frank Tashlin",
+      "Craig Serling"
+    ],
+    "hop1_query": "Which film director, Frank Tashlin or Craig Serling, was also an animator?",
+    "hop1_docs": [
+      "Frank Tashlin | Francis Fredrick von Taschlein (February 19, 1913 – May 5, 1972), better known by his stage name Frank Tashlin, was an American animator, screenwriter, and film director.  He was also known as Tish Tash and Frank Tash.",
+      "Craig Serling | Craig Serling is an American film director, film producer, screenwriter, and television editor known for multiple Primetime Emmy nominations for 'Outstanding Picture Editing for Non-Fiction Programming' and for his 2006 directorial debut feature film \"Jam\".",
+      "Izzy Ellis | Isadore Ellis (1910–1994), credited as I. Ellis and known throughout the animation industry as Izzy Ellis, was an American animator best known for working for Warner Bros.  Cartoons under the Bob Clampett & Frank Tashlin units.  Ellis had a long career in the animation industry, which started at Ub Iwerks Studio in 1935.  After three years, Ellis moved to Leon Schlesinger Productions, where he worked under the Clampett B/W unit, under the Ray Katz management.  Ellis continued to animate in the B/W unit under the supervision of Norman McCabe, and eventually Frank Tashlin.  Ellis reunited with Clampett after Robert McKimson took over Tashlin's unit.  However, Ellis relocated to McKimson's unit after Art Davis took over the Clampett unit.  In 1948, Ellis left to do commercial work.",
+      "The Fuller Brush Girl | The Fuller Brush Girl is a 1950 slapstick comedy starring Lucille Ball and directed by Lloyd Bacon.  Animator Frank Tashlin wrote the script.  Ball plays a quirky door-to-door cosmetics saleswoman for the Fuller Brush Company.  The film also stars Eddie Albert and has an uncredited cameo by Red Skelton (who had starred in the Tashlin-scripted \"The Fuller Brush Man\" two years earlier).",
+      "Porky in the North Woods | Porky in the North Woods (released December 19, 1936) is a Warner Brothers Looney Tunes short animated film.  The cartoon was supervised (directed) by Frank Tashlin (credited at \"Frank Tash\"), with animation by Volney White and Norman McCabe.  The musical score is by Carl Stalling.",
+      "Censored (film) | Censored is an animated short, directed by Frank Tashlin and first released in July 1944.  It is part of the Private Snafu series.",
+      "The Bear That Wasn't | The Bear That Wasn't is a 1946 children's book by film director and \"Looney Tunes\" alumnus Frank Tashlin."
+    ],
+    "hop1_titles": [
+      "Frank Tashlin",
+      "Craig Serling",
+      "Izzy Ellis",
+      "The Fuller Brush Girl",
+      "Porky in the North Woods",
+      "Censored (film)",
+      "The Bear That Wasn't"
+    ],
+    "summary_1": "Passage [1] states Frank Tashlin \"was an American animator, screenwriter, and film director.\" Passage [2] describes Craig Serling as \"an American film director, film producer, screenwriter, and television editor\" (no \"animator\" mentioned). Missing/next hop: confirm whether Craig Serling has any animation-related credits or is described elsewhere as an animator (search Craig Serling biography/filmography or IMDb/Wikipedia for \"animator\", \"animation\", or animated credits).",
+    "hop2_query": "Craig Serling animator filmography biography",
+    "hop2_docs": [
+      "Craig Serling | Craig Serling is an American film director, film producer, screenwriter, and television editor known for multiple Primetime Emmy nominations for 'Outstanding Picture Editing for Non-Fiction Programming' and for his 2006 directorial debut feature film \"Jam\".",
+      "Encyclopedia of Domestic Animation | The Encyclopedia of Domestic Animation (Russian: Энциклопедия отечественной мультипликации ; transliterated \"Entsiklopediya otechestvennoy multiplikatsiyi\") is a collection of biographies and filmographies of the masters of Russian and Soviet animation.  It was released at the 12th Open Russian Festival of Animated Film in March 2007, and its general release happened on March 11.  It is the first attempt at recording the complete history of Russian and Soviet animation.",
+      "Geoffrey Serle | Alan Geoffrey Serle (10 March 1922 – 27 April 1998), known as Geoff, was an Australian historian, who is best known for his books on the colony of Victoria; \"The Golden Age\" (1963) and \"The Rush to be Rich\" (1971) and his biographies of John Monash, John Curtin and Robin Boyd.",
+      "Jam (film) | Jam (or Jam: When Lives Collide) is a 2006 drama film directed by Craig E. Serling.  Written by Serling and Nicole Lonner, the film was executive produced by Dianne Burnett for Burnett Entertainment in association with Thanksgiving Films.  As Serling's first feature length project, \"Jam\" is based upon a short film by the same name that Serling shot in 2004.  Starring Elizabeth Bogush, Dan Byrd, Julie Claire, and David DeLuise, \"Jam\" premiered at the Vail Film Festival on April 1, 2006, aired on television on the Starz!  TV channel, and was released on DVD on July 3, 2007, by the Starz!  distribution branch of Anchor Bay Entertainment.",
+      "Dictionary of Australian Biography | The Dictionary of Australian Biography, published in 1949, is a reference work by Percival Serle containing information on notable people associated with Australian history.  With approximately a thousand entries, the book took more than twenty years to complete.  Published by Angus and Robertson, the dictionary was compiled as two volumes, Volume 1: A-K; and Volume 2: L-Z.",
+      "Terry Gilliam filmography | This is a filmography for film director, screenwriter, producer, animator and actor Terry Gilliam.",
+      "Chuck Jones filmography | The following is the filmography of American animator, filmmaker, cartoonist, author, artist, and screenwriter, Chuck Jones."
+    ],
+    "hop2_titles": [
+      "Craig Serling",
+      "Encyclopedia of Domestic Animation",
+      "Geoffrey Serle",
+      "Jam (film)",
+      "Dictionary of Australian Biography",
+      "Terry Gilliam filmography",
+      "Chuck Jones filmography"
+    ],
+    "summary_2": "The context states Frank Tashlin was an American animator, screenwriter, and film director. Passage [1] corroborates Craig Serling's roles as an American film director, producer, screenwriter, and television editor and does not list him as an animator (Craig Serling: no animator provided in evidence); no retrieved passage provides supporting evidence for Frank Tashlin's animator credit.",
+    "answer": "Frank Tashlin",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Craig Serling",
+      "Frank Tashlin"
+    ],
+    "hit_titles_total": [
+      "Craig Serling",
+      "Frank Tashlin"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

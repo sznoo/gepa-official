@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "b85513cccc51ad75e90d428bd46c7ac424d9b55656c28985b3fae1e5b6de8981",
+  "created_at": "2026-07-14T19:01:34.190945+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+        "summary_1": "Chelsea Peretti",
+        "summary_2": "Chelsea Peretti",
+        "current_output": "Chelsea Peretti"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Chelsea Peretti",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Chelsea Vanessa Peretti",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n  \"summary_1\": \"Chelsea Peretti\",\n  \"summary_2\": \"Chelsea Peretti\",\n  \"current_output\": \"Chelsea Peretti\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Chelsea Peretti\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Chelsea Vanessa Peretti\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 are identical and that identical text is a person's name (a first+last name or similar short name),\",\n    \"preserve_rule\": \"Preserve the base behavior: accept only the given fields (question, summary_1, summary_2) and produce a single minimal answer string with no extra commentary or explanation.\",\n    \"change_rule\": \"When the trigger applies, prefer the canonical full name form you internally know for that person (for example, including a known middle name) instead of the shorter form shown in the summaries; if you do not have a canonical fuller form in your internal knowledge, output the name exactly as it appears in the summaries.\",\n    \"drop_or_avoid_rule\": \"Do not add any other unsupported facts, titles, roles, dates, or explanations; do not synthesize or expand beyond a canonical full personal name (and only when you actually know it).\",\n    \"output_contract\": \"Output exactly one minimal name string (no surrounding text), which is either the canonical full name from your internal knowledge (only if the trigger applies) or the name text exactly as provided by the summaries. No extra tokens, punctuation, or explanation.\",\n    \"why_local_transition\": \"This small rule refines name precision when both summaries clearly identify the same person: it upgrades to a canonical full name the agent already knows while preserving the original minimal-answer requirement and avoiding adding unsupported facts.\"\n  },\n  \"rationale\": \"The smallest coherent change to move from the source to the target is to allow the agent to output a canonical fuller version of an identified name when both summaries agree on the identity. That keeps the base prompt interface and minimal-answer contract intact, preserves reliance on the visible summaries (only applying the upgrade when both agree), and avoids inventing unrelated information. This is a narrowly scoped behavioral tweak rather than a change to the output format or to how evidence is used.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 5,
+    "row_index": 5,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

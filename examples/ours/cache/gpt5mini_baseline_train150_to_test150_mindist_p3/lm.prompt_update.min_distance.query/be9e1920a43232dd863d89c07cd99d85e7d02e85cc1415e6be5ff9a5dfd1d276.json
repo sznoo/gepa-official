@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.min_distance.query",
+  "key": "be9e1920a43232dd863d89c07cd99d85e7d02e85cc1415e6be5ff9a5dfd1d276",
+  "created_at": "2026-07-14T17:11:45.541326+00:00",
+  "request": {
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "input_dict": {
+      "agent": "query",
+      "anchor_material": {
+        "sample_index": 50,
+        "row_index": 50,
+        "stable_id": "50",
+        "agent": "query",
+        "question": "United 300 and 300 were both made in what country?",
+        "delta_p_trace": [
+          {
+            "edge_index": 0,
+            "delta_p": {
+              "trigger": "If the question or summary_1 mentions the anchor token United 300 and summary_1 also lists 300 or 300 (film) as a next-hop target",
+              "preserve_rule": "Keep all existing base-prompt constraints: produce exactly one compact one-line retrieval query using only tokens visible in `question` and `summary_1`; do not add explanations, punctuation, or new tokens beyond those visible.",
+              "change_rule": "When triggered, prefer the multi-anchor connector template: emit a single-line query that concatenates the prioritized anchor tokens from summary_1 (place the higher-priority anchor first) and append the single attribute keyword country. Use visible tokens only (e.g. United 300 300 film country).",
+              "drop_or_avoid_rule": "Avoid emitting a single-anchor query (for example 'United 300 country') or adding extra words, punctuation, or explanations; avoid using ambiguous generic queries that omit the explicit anchor tokens.",
+              "output_contract": "Produce exactly one compact retrieval query line (<=12 words) formed only from visible tokens, combining the listed anchors then the attribute keyword country (example format: United 300 300 film country).",
+              "why_local_transition": "This small behavior change forces the agent to request both the specific 'United 300' page and the likely counterpart '300' film page in one concise query, resolving the ambiguity and targeting the production country evidence."
+            }
+          }
+        ]
+      },
+      "candidate_materials": [
+        {
+          "sample_index": 43,
+          "row_index": 43,
+          "stable_id": "43",
+          "agent": "query",
+          "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 names multiple Brian Johnson candidates and also lists Dallas Green (musician) or Dallas Green (disambiguation) as a next-hop target",
+                "preserve_rule": "Keep the original output contract: emit exactly one compact one-line retrieval query string using only tokens from question and summary_1; no explanation, lists, or extra fields.",
+                "change_rule": "When the trigger fires, prefer the connector-style template: emit a compact multi-anchor query that pairs the prioritized Brian Johnson token with the explicit Dallas Green disambiguator token and append the single attribute keyword born. Example form to produce: \"Brian Johnson Dallas Green (musician) born\" (use the visible disambiguator if present).",
+                "drop_or_avoid_rule": "Do not add the full question, interrogative clauses, or extra tokens; do not enumerate candidates or fetch only the disambiguation page; avoid selecting other Brian Johnson variants unless the summary explicitly prioritizes them.",
+                "output_contract": "Output remains exactly one line containing a single query string (compact, ≤ ~12 tokens), preserving visible tokens and the single appended attribute keyword, with no surrounding punctuation or commentary.",
+                "why_local_transition": "Makes the second-hop query explicitly target the missing Dallas Green musician page while linking it to Brian Johnson so retrieval returns both ledes/infobox birth dates needed to compare birth years."
+              }
+            }
+          ]
+        },
+        {
+          "sample_index": 85,
+          "row_index": 85,
+          "stable_id": "85",
+          "agent": "query",
+          "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 includes a comma-separated list of individual member names and the current query is a broad group-level query (for example a query consisting only of the group title plus plural members).",
+                "preserve_rule": "Keep all existing base-p constraints: emit exactly one one-line compact retrieval query, use only tokens visible in question and summary_1, do not add explanation or extra fields, and obey the decision templates and formatting rules.",
+                "change_rule": "Instead of a group-only query, prefer a connector-style member-focused query: pick the first individual member token that appears in summary_1 (the earliest-listed member name) and combine it with the visible group title token plus the short attribute keyword member. Emit a single compact string like '<first-listed-member> Monsta X member' using only visible tokens.",
+                "drop_or_avoid_rule": "Avoid emitting generic group-level queries such as 'Monsta X members' when an explicit individual member token is present in summary_1. Do not append new tokens or explanatory words beyond the allowed short attribute keyword.",
+                "output_contract": "The produced query must be a single one-line string, compact (aim ≤12 words), contain only tokens from the provided inputs, and follow the connector-style template '<member-token> Monsta X member'.",
+                "why_local_transition": "This small change shifts the query from a broad group page to the specific member anchor (the first-listed member token visible in summary_1), increasing the chance of retrieving that member's page while preserving the base prompt's compact retrieval behavior."
+              }
+            }
+          ]
+        },
+        {
+          "sample_index": 125,
+          "row_index": 125,
+          "stable_id": "125",
+          "agent": "query",
+          "question": "Who was the producer of the 1981 American neo-noir political thriller film?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When summary_1 marks a missing film anchor (or ambiguity among films) and the question contains a year token (here '1981').",
+                "preserve_rule": "Preserve the base prompt's requirement to emit exactly one compact one-line retrieval query using only tokens from `question` and `summary_1`, with no explanations, punctuation, or extra fields.",
+                "change_rule": "If triggered, form the query by placing the visible film title anchor first, then the year token from the question, then the single attribute keyword producer. Produce the one-line string: \"<Anchor> <year> producer\" (e.g., \"Blow Out 1981 producer\"). Do not add any other words.",
+                "drop_or_avoid_rule": "Avoid adding interrogative words (who what), personal names, extra disambiguators, punctuation, explanatory clauses, or any tokens not present in the visible inputs; do not convert the query into a full sentence.",
+                "output_contract": "Output exactly one line and one string: the compact query composed as '<Anchor> <year> producer', using only anchor and year tokens visible in the inputs. No surrounding quotes, no additional tokens, and no other output fields.",
+                "why_local_transition": "Appending the visible year token disambiguates the generic title 'Blow Out' and focuses the retrieval on the 1981 film's production credits, reducing irrelevant hits while preserving the original minimal query style."
+              }
+            }
+          ]
+        },
+        {
+          "sample_index": 136,
+          "row_index": 136,
+          "stable_id": "136",
+          "agent": "query",
+          "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When summary_1 mentions the token Traction City together with the canonical series token Mortal Engines Quartet or otherwise flags a prequel/membership ambiguity about Traction City",
+                "preserve_rule": "Keep all base prompt constraints: produce exactly one compact one-line query string in field `query`; use only the provided `question` and `summary_1`; follow the decision templates and strict formatting rules; do not add explanation or extra fields.",
+                "change_rule": "Prefer the connector-style template that pairs the highest-priority candidate token Traction City with the canonical collection token Mortal Engines Quartet. Emit a minimal multi-anchor query that requests membership/relationship evidence by appending a single short attribute keyword (use membership or prequel). Example target form (do not output here): Traction City Mortal Engines Quartet membership",
+                "drop_or_avoid_rule": "Avoid selecting the Fever Crumb Series as the primary anchor when Mortal Engines Quartet is present and the ambiguity concerns Traction City's relation to the larger canonical collection. Do not add punctuation, extra words, full questions, years, or explanatory clauses.",
+                "output_contract": "Return exactly one one-line query string using only visible tokens from question or summary_1. Use connector style: Traction City + Mortal Engines Quartet + one short attribute keyword (membership or prequel). Keep the query compact (≈3 tokens plus attribute) and compliant with original formatting rules.",
+                "why_local_transition": "Shifts the second-hop focus from the intermediate Fever Crumb Series to the canonical Mortal Engines Quartet, directly targeting the missing collection relation needed to resolve whether Traction City counts among the prequels."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "rendered_prompt": "You are selecting the local prompt-feedback update that is semantically closest to a fixed anchor update.\n\nEach material contains feedback for the HotpotQA second-hop query generator.\nCompare the anchor against all candidate materials and select exactly one candidate whose feedback represents the most similar query-generation behavior update.\n\nHere, semantic distance means how differently the retrieval query behavior would need to change:\n- which entity, title, alias, location, class, or task anchors to preserve, add, remove, or disambiguate\n- whether an anchor is grounded in the visible inputs, misleading, or an unsupported hypothesized answer\n- which bridge relation, comparison relation, role, property, or information need to emphasize\n- which evidence family, domain, or answer type the query should target\n- which distractors, wrong senses, prior answers, or noisy entity families to avoid\n- whether the candidate scope should be broadened, narrowed, preserved, or re-centered\n- whether the query should use compact keywords, preserve a comparison, or restate an open information need\n- what retrieval failure the feedback is intended to correct\n\nImportant:\n- Judge the semantic update represented by the feedback itself.\n- Do not judge which update is more correct or likely to improve retrieval.\n- Do not select a candidate merely because it shares entities, topics, question wording, or query tokens with the anchor.\n- Do not select a candidate merely because its feedback is longer or more detailed.\n- Source-style details such as infoboxes, lead sentences, cast sections, tables, or list parsing are secondary unless they change the retrieval target.\n- Broadening from one entity to multiple comparison subjects is different from narrowing a broad query to one missing entity.\n- Removing a misleading visible anchor is different from preventing insertion of an unsupported candidate.\n- Changing from a verbose sentence to compact keywords matters only when it changes the retrieval strategy or target.\n- If a material contains multiple delta_p edges, compare the complete ordered trace and its net retrieval-policy change, not only matching individual edges.\n- Select exactly one candidate. If candidates request materially equivalent updates, choose the one with the smallest sample_index.\n\nReturn JSON only:\n{\n  \"selected_sample_index\": 0,\n  \"shared_update_pattern\": \"short description of the retrieval-policy update shared by the anchor and selected candidate\",\n  \"rationale\": \"short explanation of why this candidate is semantically closest to the anchor\",\n  \"confidence\": 0.0\n}\n\nRequirements:\n- selected_sample_index must exactly match one candidate sample_index.\n- confidence must be between 0.0 and 1.0.\n- Do not return markdown or additional keys.\n\nAgent:\nquery\n\nAnchor feedback material:\n{\n  \"sample_index\": 50,\n  \"row_index\": 50,\n  \"stable_id\": \"50\",\n  \"agent\": \"query\",\n  \"question\": \"United 300 and 300 were both made in what country?\",\n  \"delta_p_trace\": [\n    {\n      \"edge_index\": 0,\n      \"delta_p\": {\n        \"trigger\": \"If the question or summary_1 mentions the anchor token United 300 and summary_1 also lists 300 or 300 (film) as a next-hop target\",\n        \"preserve_rule\": \"Keep all existing base-prompt constraints: produce exactly one compact one-line retrieval query using only tokens visible in `question` and `summary_1`; do not add explanations, punctuation, or new tokens beyond those visible.\",\n        \"change_rule\": \"When triggered, prefer the multi-anchor connector template: emit a single-line query that concatenates the prioritized anchor tokens from summary_1 (place the higher-priority anchor first) and append the single attribute keyword country. Use visible tokens only (e.g. United 300 300 film country).\",\n        \"drop_or_avoid_rule\": \"Avoid emitting a single-anchor query (for example 'United 300 country') or adding extra words, punctuation, or explanations; avoid using ambiguous generic queries that omit the explicit anchor tokens.\",\n        \"output_contract\": \"Produce exactly one compact retrieval query line (<=12 words) formed only from visible tokens, combining the listed anchors then the attribute keyword country (example format: United 300 300 film country).\",\n        \"why_local_transition\": \"This small behavior change forces the agent to request both the specific 'United 300' page and the likely counterpart '300' film page in one concise query, resolving the ambiguity and targeting the production country evidence.\"\n      }\n    }\n  ]\n}\n\nCandidate feedback materials:\n[\n  {\n    \"sample_index\": 43,\n    \"row_index\": 43,\n    \"stable_id\": \"43\",\n    \"agent\": \"query\",\n    \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 names multiple Brian Johnson candidates and also lists Dallas Green (musician) or Dallas Green (disambiguation) as a next-hop target\",\n          \"preserve_rule\": \"Keep the original output contract: emit exactly one compact one-line retrieval query string using only tokens from question and summary_1; no explanation, lists, or extra fields.\",\n          \"change_rule\": \"When the trigger fires, prefer the connector-style template: emit a compact multi-anchor query that pairs the prioritized Brian Johnson token with the explicit Dallas Green disambiguator token and append the single attribute keyword born. Example form to produce: \\\"Brian Johnson Dallas Green (musician) born\\\" (use the visible disambiguator if present).\",\n          \"drop_or_avoid_rule\": \"Do not add the full question, interrogative clauses, or extra tokens; do not enumerate candidates or fetch only the disambiguation page; avoid selecting other Brian Johnson variants unless the summary explicitly prioritizes them.\",\n          \"output_contract\": \"Output remains exactly one line containing a single query string (compact, ≤ ~12 tokens), preserving visible tokens and the single appended attribute keyword, with no surrounding punctuation or commentary.\",\n          \"why_local_transition\": \"Makes the second-hop query explicitly target the missing Dallas Green musician page while linking it to Brian Johnson so retrieval returns both ledes/infobox birth dates needed to compare birth years.\"\n        }\n      }\n    ]\n  },\n  {\n    \"sample_index\": 85,\n    \"row_index\": 85,\n    \"stable_id\": \"85\",\n    \"agent\": \"query\",\n    \"question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 includes a comma-separated list of individual member names and the current query is a broad group-level query (for example a query consisting only of the group title plus plural members).\",\n          \"preserve_rule\": \"Keep all existing base-p constraints: emit exactly one one-line compact retrieval query, use only tokens visible in question and summary_1, do not add explanation or extra fields, and obey the decision templates and formatting rules.\",\n          \"change_rule\": \"Instead of a group-only query, prefer a connector-style member-focused query: pick the first individual member token that appears in summary_1 (the earliest-listed member name) and combine it with the visible group title token plus the short attribute keyword member. Emit a single compact string like '<first-listed-member> Monsta X member' using only visible tokens.\",\n          \"drop_or_avoid_rule\": \"Avoid emitting generic group-level queries such as 'Monsta X members' when an explicit individual member token is present in summary_1. Do not append new tokens or explanatory words beyond the allowed short attribute keyword.\",\n          \"output_contract\": \"The produced query must be a single one-line string, compact (aim ≤12 words), contain only tokens from the provided inputs, and follow the connector-style template '<member-token> Monsta X member'.\",\n          \"why_local_transition\": \"This small change shifts the query from a broad group page to the specific member anchor (the first-listed member token visible in summary_1), increasing the chance of retrieving that member's page while preserving the base prompt's compact retrieval behavior.\"\n        }\n      }\n    ]\n  },\n  {\n    \"sample_index\": 125,\n    \"row_index\": 125,\n    \"stable_id\": \"125\",\n    \"agent\": \"query\",\n    \"question\": \"Who was the producer of the 1981 American neo-noir political thriller film?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When summary_1 marks a missing film anchor (or ambiguity among films) and the question contains a year token (here '1981').\",\n          \"preserve_rule\": \"Preserve the base prompt's requirement to emit exactly one compact one-line retrieval query using only tokens from `question` and `summary_1`, with no explanations, punctuation, or extra fields.\",\n          \"change_rule\": \"If triggered, form the query by placing the visible film title anchor first, then the year token from the question, then the single attribute keyword producer. Produce the one-line string: \\\"<Anchor> <year> producer\\\" (e.g., \\\"Blow Out 1981 producer\\\"). Do not add any other words.\",\n          \"drop_or_avoid_rule\": \"Avoid adding interrogative words (who what), personal names, extra disambiguators, punctuation, explanatory clauses, or any tokens not present in the visible inputs; do not convert the query into a full sentence.\",\n          \"output_contract\": \"Output exactly one line and one string: the compact query composed as '<Anchor> <year> producer', using only anchor and year tokens visible in the inputs. No surrounding quotes, no additional tokens, and no other output fields.\",\n          \"why_local_transition\": \"Appending the visible year token disambiguates the generic title 'Blow Out' and focuses the retrieval on the 1981 film's production credits, reducing irrelevant hits while preserving the original minimal query style.\"\n        }\n      }\n    ]\n  },\n  {\n    \"sample_index\": 136,\n    \"row_index\": 136,\n    \"stable_id\": \"136\",\n    \"agent\": \"query\",\n    \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When summary_1 mentions the token Traction City together with the canonical series token Mortal Engines Quartet or otherwise flags a prequel/membership ambiguity about Traction City\",\n          \"preserve_rule\": \"Keep all base prompt constraints: produce exactly one compact one-line query string in field `query`; use only the provided `question` and `summary_1`; follow the decision templates and strict formatting rules; do not add explanation or extra fields.\",\n          \"change_rule\": \"Prefer the connector-style template that pairs the highest-priority candidate token Traction City with the canonical collection token Mortal Engines Quartet. Emit a minimal multi-anchor query that requests membership/relationship evidence by appending a single short attribute keyword (use membership or prequel). Example target form (do not output here): Traction City Mortal Engines Quartet membership\",\n          \"drop_or_avoid_rule\": \"Avoid selecting the Fever Crumb Series as the primary anchor when Mortal Engines Quartet is present and the ambiguity concerns Traction City's relation to the larger canonical collection. Do not add punctuation, extra words, full questions, years, or explanatory clauses.\",\n          \"output_contract\": \"Return exactly one one-line query string using only visible tokens from question or summary_1. Use connector style: Traction City + Mortal Engines Quartet + one short attribute keyword (membership or prequel). Keep the query compact (≈3 tokens plus attribute) and compliant with original formatting rules.\",\n          \"why_local_transition\": \"Shifts the second-hop focus from the intermediate Fever Crumb Series to the canonical Mortal Engines Quartet, directly targeting the missing collection relation needed to resolve whether Traction City counts among the prequels.\"\n        }\n      }\n    ]\n  }\n]",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_sample_index\": 43,\n  \"shared_update_pattern\": \"Prefer a compact connector-style multi-anchor query that concatenates prioritized visible anchor tokens (using any disambiguators shown) and appends a single short attribute keyword.\",\n  \"rationale\": \"Both the anchor and candidate 43 change the retrieval policy from single-anchor queries to a single-line multi-anchor connector that orders prioritized anchors, preserves only visible tokens (including disambiguators), and appends one attribute token (anchor: country; candidate: born). They share the same compact one-line output contract, avoidance of extra words/punctuation, and the goal of retrieving paired pages for direct attribute comparison.\",\n  \"confidence\": 0.86\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "agent": "query",
+    "anchor_sample_index": 50,
+    "candidate_sample_indices": [
+      43,
+      85,
+      125,
+      136
+    ]
+  }
+}

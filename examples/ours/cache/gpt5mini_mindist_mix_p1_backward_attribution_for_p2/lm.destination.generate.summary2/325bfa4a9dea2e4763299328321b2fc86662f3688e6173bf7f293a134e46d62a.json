@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "325bfa4a9dea2e4763299328321b2fc86662f3688e6173bf7f293a134e46d62a",
+  "created_at": "2026-07-14T21:07:36.135063+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+      "current_output": "Chelsea Peretti is a supporting cast member of Brooklyn Nine-Nine and is an American comedian and writer.",
+      "upstream_context": {
+        "question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+        "summary_1": "Evidence found:\n- Chelsea Peretti — [2] «Chelsea Peretti as Regina \"Gina\" Linetti»; [3] «is an American comedian, actress, and writer.»\n- Ken Marino — [1] «Kenneth Joseph \"Ken\" Marino»; [1] «is an American actor, comedian, director, and screenwriter.»; [1] contains «\"Brooklyn Nine-Nine\"»\n\nAmbiguities:\n- \"comedian and writer\" could refer to Chelsea Peretti (passage [3]) or Ken Marino (passage [1] \"screenwriter\"), and Ken Marino is linked to \"Brooklyn Nine-Nine\" in [1].\n\nBridge / missing fact:\n- No missing bridge: passage [2] lists Chelsea Peretti in the supporting cast and passage [3] states she is a comedian and writer. These two relations are present and resolve the question.\n\nRetrieval direction:\n- Open page \"Chelsea Peretti\"\n- Open page \"Brooklyn Nine-Nine\"\n- (Optional verification) Search query: \"Ken Marino Brooklyn Nine-Nine\"\nFinal conclusion: Chelsea Peretti.",
+        "hop2_query": "Chelsea Peretti Brooklyn Nine-Nine",
+        "hop2_titles": [
+          "Chelsea Peretti",
+          "Brooklyn Nine-Nine",
+          "List of Brooklyn Nine-Nine characters",
+          "Brooklyn Nine-Nine (season 1)",
+          "Brooklyn Nine-Nine (season 3)",
+          "Brooklyn Nine-Nine (season 2)",
+          "Brooklyn Nine-Nine (season 4)"
+        ],
+        "hop2_docs": [
+          "Chelsea Peretti | Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.  She is best known for portraying Gina Linetti on the Fox comedy series \"Brooklyn Nine-Nine\". \" Paste\" ranked her Twitter account #75 on \"The 75 Best Twitter Accounts of 2014\".",
+          "Brooklyn Nine-Nine | Brooklyn Nine-Nine is an American police sitcom that premiered on Fox on September 17, 2013, garnering 6.17 million viewers.  Created by Dan Goor and Michael Schur, the series revolves around Jake Peralta (Andy Samberg), an immature but talented NYPD detective in Brooklyn's 99th Precinct, who comes into immediate conflict with his new commanding officer, the serious and stern Captain Raymond Holt (Andre Braugher).  The ensemble and supporting cast feature Stephanie Beatriz as Rosa Diaz, Terry Crews as Terrence \"Terry\" Jeffords, Melissa Fumero as Amy Santiago, Joe Lo Truglio as Charles Boyle, Chelsea Peretti as Regina \"Gina\" Linetti, Dirk Blocker as Michael Hitchcock and Joel McKinnon Miller as Norman \"Norm\" Scully.",
+          "List of Brooklyn Nine-Nine characters | \"Brooklyn Nine-Nine\" is a sitcom which premiered in September 2013.  The show revolves around the fictional 99th Precinct of the New York Police Department, located in Brooklyn.",
+          "Brooklyn Nine-Nine (season 1) | The first season of the television sitcom \"Brooklyn Nine-Nine\" premiered September 17, 2013 on Fox and concluded March 25, 2014 with 22 episodes.",
+          "Brooklyn Nine-Nine (season 3) | The third season of the television sitcom \"Brooklyn Nine-Nine\" premiered September 27, 2015 on Fox and ended April 19, 2016 with 23 episodes.",
+          "Brooklyn Nine-Nine (season 2) | The second season of the television sitcom \"Brooklyn Nine-Nine\" premiered September 28, 2014 on Fox and ended May 17, 2015 with 23 episodes.",
+          "Brooklyn Nine-Nine (season 4) | The fourth season of the television sitcom \"Brooklyn Nine-Nine\" premiered September 20, 2016 on Fox and ended May 23, 2017 with 22 episodes."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Brooklyn Nine-Nine",
+          "sent_id": 2,
+          "sentence": "The ensemble and supporting cast feature Stephanie Beatriz as Rosa Diaz, Terry Crews as Terrence \"Terry\" Jeffords, Melissa Fumero as Amy Santiago, Joe Lo Truglio as Charles Boyle, Chelsea Peretti as Regina \"Gina\" Linetti, Dirk Blocker as Michael Hitchcock and Joel McKinnon Miller as Norman \"Norm\" Scully."
+        },
+        {
+          "title": "Chelsea Peretti",
+          "sent_id": 0,
+          "sentence": "Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nBrooklyn Nine-Nine had a supporting cast that included which comedian and writer?\n\nCurrent agent output:\n\"Chelsea Peretti is a supporting cast member of Brooklyn Nine-Nine and is an American comedian and writer.\"\n\nActual upstream context:\n{\n  \"question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n  \"summary_1\": \"Evidence found:\\n- Chelsea Peretti — [2] «Chelsea Peretti as Regina \\\"Gina\\\" Linetti»; [3] «is an American comedian, actress, and writer.»\\n- Ken Marino — [1] «Kenneth Joseph \\\"Ken\\\" Marino»; [1] «is an American actor, comedian, director, and screenwriter.»; [1] contains «\\\"Brooklyn Nine-Nine\\\"»\\n\\nAmbiguities:\\n- \\\"comedian and writer\\\" could refer to Chelsea Peretti (passage [3]) or Ken Marino (passage [1] \\\"screenwriter\\\"), and Ken Marino is linked to \\\"Brooklyn Nine-Nine\\\" in [1].\\n\\nBridge / missing fact:\\n- No missing bridge: passage [2] lists Chelsea Peretti in the supporting cast and passage [3] states she is a comedian and writer. These two relations are present and resolve the question.\\n\\nRetrieval direction:\\n- Open page \\\"Chelsea Peretti\\\"\\n- Open page \\\"Brooklyn Nine-Nine\\\"\\n- (Optional verification) Search query: \\\"Ken Marino Brooklyn Nine-Nine\\\"\\nFinal conclusion: Chelsea Peretti.\",\n  \"hop2_query\": \"Chelsea Peretti Brooklyn Nine-Nine\",\n  \"hop2_titles\": [\n    \"Chelsea Peretti\",\n    \"Brooklyn Nine-Nine\",\n    \"List of Brooklyn Nine-Nine characters\",\n    \"Brooklyn Nine-Nine (season 1)\",\n    \"Brooklyn Nine-Nine (season 3)\",\n    \"Brooklyn Nine-Nine (season 2)\",\n    \"Brooklyn Nine-Nine (season 4)\"\n  ],\n  \"hop2_docs\": [\n    \"Chelsea Peretti | Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.  She is best known for portraying Gina Linetti on the Fox comedy series \\\"Brooklyn Nine-Nine\\\". \\\" Paste\\\" ranked her Twitter account #75 on \\\"The 75 Best Twitter Accounts of 2014\\\".\",\n    \"Brooklyn Nine-Nine | Brooklyn Nine-Nine is an American police sitcom that premiered on Fox on September 17, 2013, garnering 6.17 million viewers.  Created by Dan Goor and Michael Schur, the series revolves around Jake Peralta (Andy Samberg), an immature but talented NYPD detective in Brooklyn's 99th Precinct, who comes into immediate conflict with his new commanding officer, the serious and stern Captain Raymond Holt (Andre Braugher).  The ensemble and supporting cast feature Stephanie Beatriz as Rosa Diaz, Terry Crews as Terrence \\\"Terry\\\" Jeffords, Melissa Fumero as Amy Santiago, Joe Lo Truglio as Charles Boyle, Chelsea Peretti as Regina \\\"Gina\\\" Linetti, Dirk Blocker as Michael Hitchcock and Joel McKinnon Miller as Norman \\\"Norm\\\" Scully.\",\n    \"List of Brooklyn Nine-Nine characters | \\\"Brooklyn Nine-Nine\\\" is a sitcom which premiered in September 2013.  The show revolves around the fictional 99th Precinct of the New York Police Department, located in Brooklyn.\",\n    \"Brooklyn Nine-Nine (season 1) | The first season of the television sitcom \\\"Brooklyn Nine-Nine\\\" premiered September 17, 2013 on Fox and concluded March 25, 2014 with 22 episodes.\",\n    \"Brooklyn Nine-Nine (season 3) | The third season of the television sitcom \\\"Brooklyn Nine-Nine\\\" premiered September 27, 2015 on Fox and ended April 19, 2016 with 23 episodes.\",\n    \"Brooklyn Nine-Nine (season 2) | The second season of the television sitcom \\\"Brooklyn Nine-Nine\\\" premiered September 28, 2014 on Fox and ended May 17, 2015 with 23 episodes.\",\n    \"Brooklyn Nine-Nine (season 4) | The fourth season of the television sitcom \\\"Brooklyn Nine-Nine\\\" premiered September 20, 2016 on Fox and ended May 23, 2017 with 22 episodes.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Brooklyn Nine-Nine\",\n    \"sent_id\": 2,\n    \"sentence\": \"The ensemble and supporting cast feature Stephanie Beatriz as Rosa Diaz, Terry Crews as Terrence \\\"Terry\\\" Jeffords, Melissa Fumero as Amy Santiago, Joe Lo Truglio as Charles Boyle, Chelsea Peretti as Regina \\\"Gina\\\" Linetti, Dirk Blocker as Michael Hitchcock and Joel McKinnon Miller as Norman \\\"Norm\\\" Scully.\"\n  },\n  {\n    \"title\": \"Chelsea Peretti\",\n    \"sent_id\": 0,\n    \"sentence\": \"Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary: The Brooklyn Nine-Nine page lists Chelsea Peretti as part of the ensemble and supporting cast, portraying Regina \\\"Gina\\\" Linetti. The Chelsea Peretti page describes her as an American comedian, actress, and writer. These two facts together show that a supporting cast member of Brooklyn Nine-Nine (Chelsea Peretti) is described as a comedian and writer.\",\n  \"rationale\": \"Visible supporting evidence includes: (1) Brooklyn Nine-Nine: the ensemble and supporting cast list Chelsea Peretti as Regina \\\"Gina\\\" Linetti; (2) Chelsea Peretti: she is described as an American comedian, actress, and writer. Combining these two explicit sentences provides the necessary link between a listed supporting cast member and the occupations \\\"comedian\\\" and \\\"writer.\\\"\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 5,
+    "row_index": 5
+  }
+}

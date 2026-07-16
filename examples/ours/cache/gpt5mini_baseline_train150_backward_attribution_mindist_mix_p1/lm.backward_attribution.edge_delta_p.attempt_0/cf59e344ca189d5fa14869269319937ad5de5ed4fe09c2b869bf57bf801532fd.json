@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "cf59e344ca189d5fa14869269319937ad5de5ed4fe09c2b869bf57bf801532fd",
+  "created_at": "2026-07-14T19:01:52.571293+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "summary_1": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "current_output": {
+          "query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer)."
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer)."
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Dallas Green (baseball)",
+          "J. Green",
+          "Dallas Green Monarchs",
+          "Lil Johnson (blues singer)",
+          "Brian Johnson (disambiguation)",
+          "Coley Jones",
+          "Angela Greene"
+        ],
+        "retrieved_doc_snippets": [
+          "Dallas Green (baseball) | George Dallas Green (August 4, 1934 – March 22, 2017) was an American pitcher, manager and executive in Major League Baseball. After playing for the Philadelphia Phillies, Washington Senators, and New York Mets from 1960 through 1967, he went on to manage the Phillies, New York Yankees, and Mets. Green managed the Phillies when they won their first World Series title in 1980 over the Kansas City Royals, and as general manager of the Chicago Cubs from 1981 to 1987 he bui ...[truncated]",
+          "J. Green | J. Green (full name and dates of birth and death unknown) was an English cricketer. Green's batting style is unknown.",
+          "Dallas Green Monarchs | The Dallas Green Monarchs were a semipro baseball team in the Negro Leagues from 1940-1947 and again in 1953. The team was ostensibly the successor of the Dallas Black Giants which had disbanded after the 1938 season. The 1940s team played the majority of their games at Rebel Field while the 1953 team played at Burnett Field. From 1940-1942, their intracity \"rival\" was the Dallas Wonders who they played for the city tournament in 1940. The Green Monarchs won the Dixie Neg ...[truncated]",
+          "Lil Johnson (blues singer) | Lil Johnson (fl. 1920s-1930s, dates and places of birth and death unknown) was an African-American singer who recorded dirty blues and hokum songs in the 1920s and 1930s.",
+          "Brian Johnson (disambiguation) | Brian Johnson (born 1947) is British lead singer of Australian hard rock band AC/DC.",
+          "Coley Jones | Coley Jones (circa 1880s – 1930s) was an American country blues mandolin player popular in Dallas, Texas in the 1920s. Much of Jones's background, such as residency, date of birth and death, are obscured, but he is best remembered for leading and recording with The Dallas String Band, with their most known song being the traditional Irish folk tune, \"Drunkard's Special\".",
+          "Angela Greene | Angela Katherine Greene (Dublin, 24 February 1921 – Los Angeles, 9 February 1978) was an Irish actress. (The reference \"Celebrities in Los Angeles Cemeteries: A Directory\" gives 4 February 1921 as her date of birth.)"
+        ],
+        "summary_2": "Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)",
+        "answer": "Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Brian Johnson",
+          "Dallas Green (musician)"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Dallas Green (musician) birth date Brian Johnson (AC/DC) birth date"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"summary_1\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"current_output\": {\n    \"query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Dallas Green (baseball)\",\n    \"J. Green\",\n    \"Dallas Green Monarchs\",\n    \"Lil Johnson (blues singer)\",\n    \"Brian Johnson (disambiguation)\",\n    \"Coley Jones\",\n    \"Angela Greene\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Dallas Green (baseball) | George Dallas Green (August 4, 1934 – March 22, 2017) was an American pitcher, manager and executive in Major League Baseball. After playing for the Philadelphia Phillies, Washington Senators, and New York Mets from 1960 through 1967, he went on to manage the Phillies, New York Yankees, and Mets. Green managed the Phillies when they won their first World Series title in 1980 over the Kansas City Royals, and as general manager of the Chicago Cubs from 1981 to 1987 he bui ...[truncated]\",\n    \"J. Green | J. Green (full name and dates of birth and death unknown) was an English cricketer. Green's batting style is unknown.\",\n    \"Dallas Green Monarchs | The Dallas Green Monarchs were a semipro baseball team in the Negro Leagues from 1940-1947 and again in 1953. The team was ostensibly the successor of the Dallas Black Giants which had disbanded after the 1938 season. The 1940s team played the majority of their games at Rebel Field while the 1953 team played at Burnett Field. From 1940-1942, their intracity \\\"rival\\\" was the Dallas Wonders who they played for the city tournament in 1940. The Green Monarchs won the Dixie Neg ...[truncated]\",\n    \"Lil Johnson (blues singer) | Lil Johnson (fl. 1920s-1930s, dates and places of birth and death unknown) was an African-American singer who recorded dirty blues and hokum songs in the 1920s and 1930s.\",\n    \"Brian Johnson (disambiguation) | Brian Johnson (born 1947) is British lead singer of Australian hard rock band AC/DC.\",\n    \"Coley Jones | Coley Jones (circa 1880s – 1930s) was an American country blues mandolin player popular in Dallas, Texas in the 1920s. Much of Jones's background, such as residency, date of birth and death, are obscured, but he is best remembered for leading and recording with The Dallas String Band, with their most known song being the traditional Irish folk tune, \\\"Drunkard's Special\\\".\",\n    \"Angela Greene | Angela Katherine Greene (Dublin, 24 February 1921 – Los Angeles, 9 February 1978) was an Irish actress. (The reference \\\"Celebrities in Los Angeles Cemeteries: A Directory\\\" gives 4 February 1921 as her date of birth.)\"\n  ],\n  \"summary_2\": \"Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)\",\n  \"answer\": \"Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Brian Johnson\",\n    \"Dallas Green (musician)\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Dallas Green (musician) birth date Brian Johnson (AC/DC) birth date\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the current `query` is framed as a verification step (contains words like \\\"Verify\\\", \\\"verify\\\", or contains candidate years or parenthetical explanatory notes).\",\n    \"preserve_rule\": \"Keep the agent's role: produce one compact second-hop retrieval query using the given `question` and `summary_1`. Preserve use of available disambiguating context (occupations, bands) that already appears in the visible inputs.\",\n    \"change_rule\": \"Instead of a verification-style sentence or including candidate birth years, emit a single short retrieval query that names each person and attaches a concise disambiguator (occupation, band, or the already-seen parenthetical identity) plus the phrase 'birth date' or 'date of birth'. Form: '<Person A> <disambiguator> birth date; <Person B> <disambiguator> birth date' or a compact variant combining both with minimal punctuation.\",\n    \"drop_or_avoid_rule\": \"Do not include candidate years, answer guesses, long explanatory parentheses, or instructions like 'Verify'/'check'. Avoid extra clauses, commentary, or multi-sentence queries—produce only the concise search query string.\",\n    \"output_contract\": \"Return one single-line retrieval query string (no full-sentence explanation) that mentions both people with short disambiguators present in the visible inputs and the term 'birth date' or 'date of birth'. Do not output any candidate dates or summary statements.\",\n    \"why_local_transition\": \"The current query is verbose and includes candidate dates and parenthetical notes, which can distract retrieval. A minimal edit to produce a compact, disambiguation-focused query will better target the correct pages for each person while preserving the agent's original interface and use of available context.\"\n  },\n  \"rationale\": \"The source query used verification language and inserted candidate birth years and explanatory parentheses. That risks retrieving the already-seen ambiguous pages or propagating the agent's guess as search terms. This local prompt delta narrowly changes only how the query is composed: keep using the question and summary, retain any disambiguating tokens already visible (e.g., occupations or band names), but force a concise, neutral retrieval query that omits answers. This small behavioral tweak preserves useful context while increasing the chance of fetching the correct second-hop pages.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

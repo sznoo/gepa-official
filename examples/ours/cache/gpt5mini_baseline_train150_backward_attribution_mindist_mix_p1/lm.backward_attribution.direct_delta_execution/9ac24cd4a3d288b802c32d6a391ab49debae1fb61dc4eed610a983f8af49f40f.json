@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "9ac24cd4a3d288b802c32d6a391ab49debae1fb61dc4eed610a983f8af49f40f",
+  "created_at": "2026-07-14T19:01:53.963269+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the provided summaries clearly indicate which person was born earlier (i.e., they agree on the comparison) and the current final-answer string is a shortened form of that person's name (missing commonly used name components such as a widely known middle name or other canonical components).",
+            "preserve_rule": "Continue to base the choice of which person was born first solely on the provided summaries. Preserve the requirement that the final answer be the minimal single-string response supported by the summaries.",
+            "change_rule": "If the chosen person is a well-known public figure and there exists an unambiguous, commonly used fuller/canonical form of that person's name (for example commonly-cited middle names or full legal/stage names), replace the shorter name in the final answer with that fuller canonical name. Only perform this expansion when the fuller form is clearly the standard/common usage and unambiguous; otherwise leave the name exactly as it appears in the summaries.",
+            "drop_or_avoid_rule": "Do not add dates, explanations, supporting facts, or extra punctuation. Do not invent or guess obscure name components; if the fuller form is uncertain or ambiguous, avoid expanding. Do not copy or recreate long spans of text from any hidden target state.",
+            "output_contract": "Produce exactly one minimal answer string inside the [[ ## answer ## ]] block: the person who was born earlier, expressed using the most complete commonly used name when that expansion is unambiguous, otherwise using the name as given in the summaries. No extra words or punctuation.",
+            "why_local_transition": "This is a small, targeted stylistic adjustment to prefer a fuller canonical name for the chosen person when that fuller form is the standard, fixing only the name-form used in the final single-string answer while leaving evidence use and minimal-answer constraints unchanged."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who was born first Aretha Franklin or Andy Yorke?",
+        "summary_1": "Aretha Franklin (born 1942) was born before Andy Yorke (born 1972).",
+        "summary_2": "Aretha Franklin was born first — 1942 versus Andy Yorke's 1972 (about 30 years earlier).",
+        "current_output": "Aretha Franklin."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the provided summaries clearly indicate which person was born earlier (i.e., they agree on the comparison) and the current final-answer string is a shortened form of that person's name (missing commonly used name components such as a widely known middle name or other canonical components).\",\n      \"preserve_rule\": \"Continue to base the choice of which person was born first solely on the provided summaries. Preserve the requirement that the final answer be the minimal single-string response supported by the summaries.\",\n      \"change_rule\": \"If the chosen person is a well-known public figure and there exists an unambiguous, commonly used fuller/canonical form of that person's name (for example commonly-cited middle names or full legal/stage names), replace the shorter name in the final answer with that fuller canonical name. Only perform this expansion when the fuller form is clearly the standard/common usage and unambiguous; otherwise leave the name exactly as it appears in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not add dates, explanations, supporting facts, or extra punctuation. Do not invent or guess obscure name components; if the fuller form is uncertain or ambiguous, avoid expanding. Do not copy or recreate long spans of text from any hidden target state.\",\n      \"output_contract\": \"Produce exactly one minimal answer string inside the [[ ## answer ## ]] block: the person who was born earlier, expressed using the most complete commonly used name when that expansion is unambiguous, otherwise using the name as given in the summaries. No extra words or punctuation.\",\n      \"why_local_transition\": \"This is a small, targeted stylistic adjustment to prefer a fuller canonical name for the chosen person when that fuller form is the standard, fixing only the name-form used in the final single-string answer while leaving evidence use and minimal-answer constraints unchanged.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born first Aretha Franklin or Andy Yorke?\",\n  \"summary_1\": \"Aretha Franklin (born 1942) was born before Andy Yorke (born 1972).\",\n  \"summary_2\": \"Aretha Franklin was born first — 1942 versus Andy Yorke's 1972 (about 30 years earlier).\",\n  \"current_output\": \"Aretha Franklin.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nAretha Franklin\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Summaries clearly indicate Aretha Franklin was born earlier; the name was kept as given in the summaries (terminal punctuation removed) per the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 111,
+    "row_index": 111,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "f6c77a827543e7892819bbde9e581a289ad9ac471f1d54242f865de4f5b3b459",
+  "created_at": "2026-07-16T06:01:23.474759+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+      "source_summary": "Tony Hiller (The Hiller Brothers) appeared with Rip Taylor, who was known for showering himself (and others) with confetti. This is corroborated by Tony Hiller's page listing Rip Taylor among artists they appeared with (passage [1]).",
+      "target_summary": "Tony Hiller (of The Hiller Brothers) is documented as having appeared with many artists of the time, including Rip Taylor (Tony Hiller page lists Rip Taylor among artists they appeared with). Independent material notes that Rip Taylor was known for his exuberance, including his habit of showering himself (and others) with confetti. These two facts together link Tony Hiller's performances to an artist (Rip Taylor) who had the confetti habit.",
+      "candidate_summary": "Tony Hiller (of The Hiller Brothers) is documented as having appeared with many artists of the time, including Rip Taylor (Tony Hiller page lists Rip Taylor among artists they appeared with). Independent material notes that Rip Taylor was known for his exuberance, including his habit of showering himself (and others) with confetti. These two facts together link Tony Hiller's performances to an artist (Rip Taylor) who had the confetti habit."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhich artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?\n\nSource summary2:\nTony Hiller (The Hiller Brothers) appeared with Rip Taylor, who was known for showering himself (and others) with confetti. This is corroborated by Tony Hiller's page listing Rip Taylor among artists they appeared with (passage [1]).\n\nTarget summary2:\nTony Hiller (of The Hiller Brothers) is documented as having appeared with many artists of the time, including Rip Taylor (Tony Hiller page lists Rip Taylor among artists they appeared with). Independent material notes that Rip Taylor was known for his exuberance, including his habit of showering himself (and others) with confetti. These two facts together link Tony Hiller's performances to an artist (Rip Taylor) who had the confetti habit.\n\nCandidate summary2:\nTony Hiller (of The Hiller Brothers) is documented as having appeared with many artists of the time, including Rip Taylor (Tony Hiller page lists Rip Taylor among artists they appeared with). Independent material notes that Rip Taylor was known for his exuberance, including his habit of showering himself (and others) with confetti. These two facts together link Tony Hiller's performances to an artist (Rip Taylor) who had the confetti habit.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target exactly, preserving the task-relevant facts: Hiller appeared with Rip Taylor and Rip Taylor was known for showering others with confetti. It does not contradict the source. Relative to the source, the candidate/target explicitly separates the two evidentiary strands (Hiller's page vs independent notes about Taylor) and states the explicit linkage that Hiller's performances are connected to an artist with the confetti habit, which is an added, relevant clarification.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 14,
+    "row_index": 14,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

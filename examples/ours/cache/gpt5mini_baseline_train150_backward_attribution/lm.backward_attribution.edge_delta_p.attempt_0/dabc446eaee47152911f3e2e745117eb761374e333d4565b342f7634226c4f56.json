@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "dabc446eaee47152911f3e2e745117eb761374e333d4565b342f7634226c4f56",
+  "created_at": "2026-07-14T13:37:18.951091+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?",
+        "summary_1": "Waimānalo, Hawaii",
+        "summary_2": "Waimānalo, Hawaii",
+        "current_output": "Waimānalo, Hawaii"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Waimānalo, Hawaii",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Waimānalo",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?\",\n  \"summary_1\": \"Waimānalo, Hawaii\",\n  \"summary_2\": \"Waimānalo, Hawaii\",\n  \"current_output\": \"Waimānalo, Hawaii\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Waimānalo, Hawaii\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Waimānalo\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If both visible summaries contain the same comma-separated place string (pattern: \\\"Place, Region\\\") and the current tentative answer includes that same comma-separated string (or any answer containing a comma-separated place),\",\n    \"preserve_rule\": \"Keep all existing behavior that derives the answer from the visible summaries and do not change how the agent determines which place is supported. Preserve use of the summaries as the sole evidence source.\",\n    \"change_rule\": \"When triggered, remove the trailing \\\", Region\\\" portion from the place string before emitting the final answer. Concretely: map any answer of the form \\\"X, Y\\\" to just \\\"X\\\" (trim whitespace). Apply only when the shorter form X still appears as a substring in the provided summaries.\",\n    \"drop_or_avoid_rule\": \"Do not add extra context, qualifiers, punctuation, or explanatory text to the answer. Avoid expanding the place with additional geographic labels (state, country, county) or parenthetical notes. Do not change other parts of the base prompt or how evidence is used.\",\n    \"output_contract\": \"Ensure the [[ ## answer ## ]] block contains only the minimal place-name string (no comma or trailing region/state) that is directly supported by the visible summaries.\",\n    \"why_local_transition\": \"The only needed correction is to normalize a comma-separated place to its minimal place-name form (removing the trailing region) so the final answer matches the expected minimal-string format while still being directly supported by the provided summaries.\"\n  },\n  \"rationale\": \"This is a very small, local behavioral edit: when the agent would output a place including an attached region/state (e.g., \\\"Place, Region\\\") and the summaries support the place name itself, instruct the agent to emit the shorter place name only. The rule preserves the agent's evidence-based decision process and only alters formatting/verbosity of the final answer. It avoids inserting new information and only removes redundant regional qualifiers already present in the output, satisfying the requirement to make the minimal coherent change for this transition.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 25,
+    "row_index": 25,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

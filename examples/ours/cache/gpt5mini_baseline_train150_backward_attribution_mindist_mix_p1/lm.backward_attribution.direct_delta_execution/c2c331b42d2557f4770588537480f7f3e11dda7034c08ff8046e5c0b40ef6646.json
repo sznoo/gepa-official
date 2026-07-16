@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c2c331b42d2557f4770588537480f7f3e11dda7034c08ff8046e5c0b40ef6646",
+  "created_at": "2026-07-14T19:01:55.295144+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks which of two films was made first (e.g., begins with phrasing like \"Which film was made first\" or compares two film titles) AND both summary_1 and summary_2 assert the same ordering (both contain phrases like \"was made before\" referring to the same film),",
+            "preserve_rule": "Keep using the provided question and the two summaries as your evidence sources; preserve any correct inference already present in the agent output and retain the convention of returning a single `answer` field.",
+            "change_rule": "Instead of a full sentence, respond with exactly the single film title that the summaries indicate was made first. Use the film title exactly as it appears in the summaries (matching words and capitalization), but omit any parenthetical dates, explanatory phrases, or extra punctuation.",
+            "drop_or_avoid_rule": "Do not include dates, years, comparative clauses, additional explanation, or any extra punctuation outside the title. Avoid restating the question or the summaries; avoid producing a sentence or justification — only the minimal title string.",
+            "output_contract": "Place only the minimal answer string (the film title identified as made first) as the content of the `answer` field and inside the [[ ## answer ## ]] block. Nothing else may appear in that block — no dates, no parentheses, no commentary, no punctuation beyond what is part of the title itself.",
+            "why_local_transition": "The current output is a full sentence with dates and explanation. For the final-answer role we need a minimal title-only response; this minimal-format rule makes the smallest change required to meet the agent's final-answer contract while preserving the prior correct determination."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which film was made first King of the Grizzlies or Waking Sleeping Beauty?",
+        "summary_1": "King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009).",
+        "summary_2": "King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009).",
+        "current_output": "King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks which of two films was made first (e.g., begins with phrasing like \\\"Which film was made first\\\" or compares two film titles) AND both summary_1 and summary_2 assert the same ordering (both contain phrases like \\\"was made before\\\" referring to the same film),\",\n      \"preserve_rule\": \"Keep using the provided question and the two summaries as your evidence sources; preserve any correct inference already present in the agent output and retain the convention of returning a single `answer` field.\",\n      \"change_rule\": \"Instead of a full sentence, respond with exactly the single film title that the summaries indicate was made first. Use the film title exactly as it appears in the summaries (matching words and capitalization), but omit any parenthetical dates, explanatory phrases, or extra punctuation.\",\n      \"drop_or_avoid_rule\": \"Do not include dates, years, comparative clauses, additional explanation, or any extra punctuation outside the title. Avoid restating the question or the summaries; avoid producing a sentence or justification — only the minimal title string.\",\n      \"output_contract\": \"Place only the minimal answer string (the film title identified as made first) as the content of the `answer` field and inside the [[ ## answer ## ]] block. Nothing else may appear in that block — no dates, no parentheses, no commentary, no punctuation beyond what is part of the title itself.\",\n      \"why_local_transition\": \"The current output is a full sentence with dates and explanation. For the final-answer role we need a minimal title-only response; this minimal-format rule makes the smallest change required to meet the agent's final-answer contract while preserving the prior correct determination.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which film was made first King of the Grizzlies or Waking Sleeping Beauty?\",\n  \"summary_1\": \"King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009).\",\n  \"summary_2\": \"King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009).\",\n  \"current_output\": \"King of the Grizzlies (1970) was made before Waking Sleeping Beauty (2009).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]King of the Grizzlies[[ ## answer ## ]]\",\n  \"rationale\": \"Both summaries state King of the Grizzlies was made before Waking Sleeping Beauty, so I followed the delta to return only that film title inside the required answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 135,
+    "row_index": 135,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

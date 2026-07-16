@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "de0b9a5e51b20a4b02a923b194333bc24687d0ba2727784f96edfc6c4bd93b3c",
+  "created_at": "2026-07-14T13:40:51.185629+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "passages": [
+          "Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.",
+          "Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL).  He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.",
+          "Brian Johnson (footballer, born 1955) | Brian Johnson (born 21 October 1955) is an English retired footballer who played as a winger.  He made 197 appearances in the Football League for Plymouth Argyle, scoring 40 goals, and a further seven while on loan at Torquay United.",
+          "Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.",
+          "Brian Johnson (fullback) | Brian \"Horse\" Johnson (born April 6, 1979) is a former American football fullback who played five seasons with the San Jose SaberCats of the Arena Football League (AFL).  He played college football at the University of New Mexico.",
+          "Brian Rogers (baseball) | Brian Alan Rogers (born July 17, 1982 in Dallas, Texas) is a former relief pitcher in Major League Baseball who played for the Pittsburgh Pirates in 2006 and 2007.",
+          "Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper."
+        ],
+        "current_output": "Dallas Green was born earlier (1934) than Brian Johnson (1948)."
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "score": 0.0,
+        "generated_query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).",
+        "retrieved_titles": [
+          "Dallas Green (baseball)",
+          "J. Green",
+          "Dallas Green Monarchs",
+          "Lil Johnson (blues singer)",
+          "Brian Johnson (disambiguation)",
+          "Coley Jones",
+          "Angela Greene"
+        ],
+        "summary_2": "Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)",
+        "answer": "Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Brian Johnson",
+          "Dallas Green (musician)"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop findings: a Dallas Green page was found (George Dallas Green, baseball manager, born August 4, 1934) but the hop did not return a Dallas Green (musician/City and Colour) page that the question likely intends. The hop returned multiple Brian Johnson pages including Brian Johnson (AC/DC) (born 5 Oct 1947) and Brian Johnson (footballer, born 29 Oct 1948), plus others. Bridge / missing fact needed: the birth date of Dallas Green the musician (if that is the intended Dallas Green) and a clear disambiguation of which Brian Johnson the question refers to. Retrieval direction for next hop: fetch Dallas Green (musician) (City and Colour) to get his birth date, and fetch the Brian Johnson disambiguation page or the specific Brian Johnson page (e.g., the AC/DC singer) to confirm which Brian Johnson is meant and obtain that birth date; then compare the two dates. No final comparison concluded here.",
+        "score": null,
+        "generated_query": null,
+        "retrieved_titles": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"passages\": [\n    \"Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.\",\n    \"Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL).  He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.\",\n    \"Brian Johnson (footballer, born 1955) | Brian Johnson (born 21 October 1955) is an English retired footballer who played as a winger.  He made 197 appearances in the Football League for Plymouth Argyle, scoring 40 goals, and a further seven while on loan at Torquay United.\",\n    \"Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.\",\n    \"Brian Johnson (fullback) | Brian \\\"Horse\\\" Johnson (born April 6, 1979) is a former American football fullback who played five seasons with the San Jose SaberCats of the Arena Football League (AFL).  He played college football at the University of New Mexico.\",\n    \"Brian Rogers (baseball) | Brian Alan Rogers (born July 17, 1982 in Dallas, Texas) is a former relief pitcher in Major League Baseball who played for the Pittsburgh Pirates in 2006 and 2007.\",\n    \"Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper.\"\n  ],\n  \"current_output\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"score\": 0.0,\n  \"generated_query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\",\n  \"retrieved_titles\": [\n    \"Dallas Green (baseball)\",\n    \"J. Green\",\n    \"Dallas Green Monarchs\",\n    \"Lil Johnson (blues singer)\",\n    \"Brian Johnson (disambiguation)\",\n    \"Coley Jones\",\n    \"Angela Greene\"\n  ],\n  \"summary_2\": \"Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)\",\n  \"answer\": \"Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Brian Johnson\",\n    \"Dallas Green (musician)\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop findings: a Dallas Green page was found (George Dallas Green, baseball manager, born August 4, 1934) but the hop did not return a Dallas Green (musician/City and Colour) page that the question likely intends. The hop returned multiple Brian Johnson pages including Brian Johnson (AC/DC) (born 5 Oct 1947) and Brian Johnson (footballer, born 29 Oct 1948), plus others. Bridge / missing fact needed: the birth date of Dallas Green the musician (if that is the intended Dallas Green) and a clear disambiguation of which Brian Johnson the question refers to. Retrieval direction for next hop: fetch Dallas Green (musician) (City and Colour) to get his birth date, and fetch the Brian Johnson disambiguation page or the specific Brian Johnson page (e.g., the AC/DC singer) to confirm which Brian Johnson is meant and obtain that birth date; then compare the two dates. No final comparison concluded here.\",\n  \"score\": null,\n  \"generated_query\": null,\n  \"retrieved_titles\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks to compare two people by birth date and the available passages do not unambiguously provide both individuals' birth dates or when the passages show multiple candidate pages for one of the names.\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of extracting and stating concrete facts verbatim from the given passages (names, dates, page labels, and any explicit birth dates). Preserve concise factual phrasing and citation of which passage contains each fact.\",\n    \"change_rule\": \"Instead of producing a final comparison/answer, produce a concise \\\"first-hop findings\\\" summary that: (1) lists which passages mention candidates for each person named in the question and any birth dates found there; (2) explicitly notes any ambiguity (multiple candidate pages for a name) and which candidate variants were observed; (3) identifies the missing fact(s) (e.g., a birth date) or disambiguation needed to answer the question; (4) gives a concrete retrieval direction for the next hop (which pages or disambiguation pages to fetch next, or which specific candidate pages already seen should be checked). Do not draw the final born-earlier conclusion or pick between ambiguous candidates.\",\n    \"drop_or_avoid_rule\": \"Do not present a final answer or compare birth dates unless both target persons' birth dates are present and unambiguous in the provided passages. Do not assume which named individual is intended when multiple candidates exist. Do not introduce outside knowledge or new facts not present in the visible passages.\",\n    \"output_contract\": \"The summary field must begin with a short header like 'First-hop findings:' and include these labeled parts: (a) Evidence found: list each question name and the passages that mention matching candidates plus any birth dates quoted from those passages; (b) Ambiguities: note names that have multiple candidate pages observed and enumerate those candidates (using only titles/labels present in the passages); (c) Missing facts / bridge: state which specific birth date(s) or disambiguation must be retrieved to resolve the question; (d) Retrieval direction: name the next retrieval targets (e.g., retrieve pages for <person name> to disambiguate, fetch the <Name> disambiguation page or the specific candidate pages already listed). The summary must not include a final comparison or answer.\",\n    \"why_local_transition\": \"The current behavior prematurely concludes a birth-date comparison even though the provided passages lack an unambiguous pair of birth dates and show several candidate persons. This local edit prevents a wrong final answer and instead forces the agent to expose which exact page(s) or birth-date facts are missing so the pipeline can fetch them in the next hop.\"\n  },\n  \"rationale\": \"The pipeline's next agent expects a clear signal of what was found and what is missing after the first hop. The minimal prompt change redirects the agent from producing a final answer to producing a structured first-hop report: keep factual extraction, add explicit ambiguity detection, and prescribe exact retrieval targets. This is a small, local behavioral change that preserves existing useful behavior while avoiding premature conclusions and guiding the next retrieval.\" \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 1,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

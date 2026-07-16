@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "515425d7e4a2a03fdbb437e8a9ae1b55a829964a4746739ab688ec5ae0e8b2e3",
+  "created_at": "2026-07-14T21:11:00.970304+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+      "source_summary": "Monsta X includes the member Jooheon.",
+      "target_summary": "Monsta X is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)",
+      "candidate_summary": "Monsta X is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)"
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\n Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\n\nSource summary2:\nMonsta X includes the member Jooheon.\n\nTarget summary2:\nMonsta X is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)\n\nCandidate summary2:\nMonsta X is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target exactly, including formation details (Starship Entertainment, No.Mercy, 2015), the full seven-member list (Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, I.M.), and the parenthetical on Jooheon. It also retains the source fact that Monsta X includes Jooheon and adds the additional target facts.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 85,
+    "row_index": 85,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

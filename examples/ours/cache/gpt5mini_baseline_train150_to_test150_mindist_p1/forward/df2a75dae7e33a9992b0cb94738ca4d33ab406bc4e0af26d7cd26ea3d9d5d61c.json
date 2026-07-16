@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "df2a75dae7e33a9992b0cb94738ca4d33ab406bc4e0af26d7cd26ea3d9d5d61c",
+  "created_at": "2026-07-14T15:00:06.561514+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Which was founded earlier, The Week or New Scientist?",
+    "answer": "New Scientist",
+    "context": {
+      "title": [
+        "Massachusetts Audubon Society",
+        "Pirate Party (Italy)",
+        "Jordan River Foundation",
+        "Champ de Mars Racecourse",
+        "Canons Regular of the Holy Sepulchre",
+        "The Week",
+        "Nominative determinism",
+        "Gloucester Old Bank",
+        "New Scientist",
+        "1883 Philadelphia Quakers season"
+      ],
+      "sentences": [
+        [
+          "The Massachusetts Audubon Society, founded in 1896 by Harriet Hemenway and headquartered in Lincoln, Massachusetts, is a nonprofit organization dedicated to \"protecting the nature of Massachusetts.\"",
+          " Mass Audubon is independent of the National Audubon Society, and in fact was founded earlier.",
+          " Mass Audubon protects 36,500 acres of land throughout Massachusetts, saving birds and other wildlife, and making nature accessible to all with its wildlife sanctuaries and 20 nature centers."
+        ],
+        [
+          "The Italian Pirate Party (Italian: \"Partito Pirata Italiano\" ) is a political party in Italy, founded on 16 September 2006, modelled on the Pirate Party of Sweden, founded earlier that year.",
+          " It supports reform of copyright and patent law, privacy and freedom of expression."
+        ],
+        [
+          "The \"Jordan River Foundation\" was founded earlier by Queen Nour Al Hussein, the wife of the late king of Jordan Hussein bin Talal, after the death of king Hussein, queen Nour left her position as the Chair person of \"Jordan River Foundation\" and the new queen Rania took over the position."
+        ],
+        [
+          "The Champ de Mars Racecourse is a thoroughbred horse race track in Port Louis, Mauritius.",
+          " The Racecourse was inaugurated on 25 June 1812, by The Mauritius Turf Club (MTC) which was founded earlier in the same year by Sir Robert Townsend Farquhar, who was the first British Governor of Mauritius.",
+          " The Mauritius Turf Club is the oldest horse-racing club in the Southern Hemisphere and the second oldest in the world.",
+          " The race track follows a very selective right hand oval path and is relatively small in size, with a circumference of 1,298 meters (4,258.5 ft) and width between 12 and 14 meters (39 and 46 feet).",
+          " The home-straight extends uphill and is 225 meters (738 ft) long."
+        ],
+        [
+          "The Canons Regular of the Holy Sepulchre were a Catholic religious order of canons regular of the Rule of Saint Augustine said to have been founded in the Church of the Holy Sepulchre in Jerusalem, then the capital of the Kingdom of Jerusalem, recognised in 1113 by Papal bull of Pope Paschal II.",
+          " Other accounts has it that they were founded earlier, during the rule of Godfrey of Bouillon (1099–1100)."
+        ],
+        [
+          "The Week is a weekly British news magazine founded in 1995 which has also published a US edition since 2001 and a children's edition in the UK since 2015.",
+          " Between 2008 and 2012 it also published an Australian edition."
+        ],
+        [
+          "Nominative determinism is the hypothesis that people tend to gravitate towards areas of work that fit their names.",
+          " The term was first used in the magazine \"New Scientist\" in 1994, after the magazine's humorous Feedback column noted several studies carried out by researchers with remarkably fitting surnames.",
+          " These included a book on polar explorations by Daniel Snowman and an article on urology by researchers named Splatt and Weedon.",
+          " These and other examples led to light-hearted speculation that some sort of psychological effect was at work.",
+          " Since the term appeared, nominative determinism has been an irregularly recurring topic in \"New Scientist\", as readers continue to submit examples.",
+          " Nominative determinism differs from the related concept aptronym, and its synonyms aptonym, namephreak, and Perfect Fit Last Name, in that it focusses on causality.",
+          " \"Aptronym\" merely means the name is fitting, without saying anything about why it has come to fit."
+        ],
+        [
+          "The Gloucester Old Bank was a British bank that operated between 1716 and 1838.",
+          " It was founded in 1716 by James Wood.",
+          " The bank was said to have been the oldest private bank in Britain, having survived the financial consequences of the Napoleonic Wars when many other banks went out of business.",
+          " The claim was wrong as both C. Hoare & Co and Child & Co. were founded earlier, it was, however, one of the oldest banks in Britain in the nineteenth century."
+        ],
+        [
+          "New Scientist is a weekly English-language international science magazine, founded in 1956.",
+          " Since 1996 it has also run a website."
+        ],
+        [
+          "The 1883 Philadelphia Quakers season was the first in the franchise's existence.",
+          " The team was founded earlier in the year as a replacement for the Worcester franchise.",
+          " It was the first year Philadelphia was represented in the National League since the original Athletics were disbanded in 1876.",
+          " The American Association's Philadelphia Athletics had been founded a year earlier."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Week",
+        "New Scientist"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nProduce a single, concise, structured first-hop evidence report as the `summary`. The summary must do all of the following and only include content that helps determine what to fetch next:\n\n- Enumerate concrete facts found in the provided passages. For each fact include the passage source label and either a very short quoted fragment (up to about 15 words) when a decisive short fact appears or a brief paraphrase otherwise. Keep each fact to one short line.\n\n- Explicitly identify the bridge entity(ies) and any missing or ambiguous fact(s) that prevent answering the question from the given passages. If a name or identifier in the question corresponds to multiple candidate pages present in `passages`, list every candidate variant and mark the name as ambiguous; do not choose between them.\n\n- Prescribe concrete, prioritized next-hop retrieval targets to resolve each missing or ambiguous element. For each target, specify which page(s) or disambiguation page to fetch and what exact section, keyword, or datum to extract (for example: specific field such as birth year, office held, list membership, dates, or the section heading to check). Prioritize targets (1, 2, 3...) when helpful.\n\n- Only produce a final answer in `summary` if every required fact for every entity is present and unambiguous in the supplied passages; otherwise do not produce a final answer and focus on retrieval guidance.\n\nFormatting and content constraints:\n- Keep the summary concise (a short paragraph or a few short bullet-like lines).\n- Produce only the single output field `summary` and nothing else.\n- Preserve source-linked evidence; do not assert facts without a passage label.\n- Do not invent facts or assume which ambiguous candidate is intended.\n- Avoid copying long verbatim spans; use short quoted fragments when decisive and paraphrase otherwise.\n- When an expected authoritative page is missing from `passages`, note that absence and include that page title as a next-hop retrieval target.\n\nInput: fields `question` and `passages`. Output: one field `summary` meeting the requirements above.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nYou are to produce exactly one compact second-hop retrieval query that targets the missing bridge or supporting evidence referenced by summary_1. Follow these operational rules when constructing the single `query` string:\n\n- Use visible anchor tokens from `question` or `summary_1` (named works, titles, artist names, years or other identifiers only if present) and append a short retrieval cue naming the bridge sought (e.g., artist, album, recording, genre, season count, passage, supporting quote).\n- Emit one concise line (one string assigned to `query`), roughly ≤ 10–12 words, formatted either as a short interrogative that names the anchors or as a compact keyword string (anchors + bridge keywords).\n- If summary_1 explicitly requests a missing attribute or passage, emit the focused retrieval query rather than asking for clarification.\n- Do not include answers, conclusions, enumerations, provenance notes, speculative language, or user-facing explanations; do not invent entities or add tokens that are not present in the inputs.\n- Include year or other identifier tokens only if they appear in the provided inputs and help disambiguate.\n- Keep wording retrieval-oriented and terse. Preserve the fallback that if retrieval using this query later fails, downstream steps may request clarification.\n\nOutput contract: produce exactly one field `query` whose value is the single compact retrieval query line described above.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nInstructions for producing `summary` (single field only):\n1. Merge the first-hop `context` and the second-hop `passages` into one compact integrated `summary` that preserves the primary answer name(s) and only includes passage-supported facts needed to justify or disambiguate that answer.\n2. If `context` already contains a concise answer (a short sentence or a name), keep that content as the first sentence of `summary` when it is consistent with facts in `passages`. If `context` lacks a concise answer, create a concise first sentence that names the primary answer(s), using the canonical labels from `context` when available and otherwise from `passages`.\n3. Expand the summary only when `passages` provide explicit, matching second-hop evidence about one or more named entities referenced in `context`. When expansion is appropriate, append at most one short supporting sentence per named entity. Each supporting sentence must begin with the entity's full name as shown in the inputs and paraphrase up to a few core attributes that are directly present in the `passages` (examples: nationality, a notable award/status, a current affiliation/team, a birth date, membership/partnership relation, or an explicit founding/formation fact).\n4. Keep `summary` concise: typically 1–2 sentences for a single entity; allow up to 3 sentences only when multiple distinct named entities each require one supporting sentence. Prioritize the facts most directly necessary to answer the `question`.\n5. Only assert facts that are directly supported by the provided `passages` or `context`. Do not introduce new entities, dates, awards, affiliations, roles, or causal claims that are not present in the inputs.\n6. Prefer paraphrase over long verbatim copying. Use short quoted phrases only when the exact short phrase (roughly ≤10 words) appears in the `passages` and quoting preserves clarity.\n7. If `context` and `passages` conflict, prefer facts that are explicitly present in the `passages`: update the concise answer to match passage-supported content rather than preserving a contradicted `context`.\n8. If the retrieved `passages` do not supply explicit supporting evidence for named entities in `context`, keep the `summary` concise and do not expand or speculate.\n9. Output exactly one field named `summary` whose value is the integrated post-retrieval summary text. Do not output additional fields, metadata, or commentary.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nFollow these operational rules when producing `answer`:\n- Use only the content of `question`, `summary_1`, and `summary_2` as your evidential basis. Do not introduce new facts or external information.\n- If both `summary_1` and `summary_2` clearly and unambiguously support the same binary (yes/no) conclusion to the question, set `answer` to exactly one lowercase token: yes or no. The `answer` field must contain nothing else (no punctuation, capitalization, quotes, explanation, or additional text).\n- Decide which token to emit by aggregating the visible summaries only. Treat `summary_2` as the later integrated evidence; do not let unresolved language in `summary_1` alone prevent emitting the single-token result if both summaries now unambiguously agree.\n- If the summaries conflict, are ambiguous, incomplete, hedged such that the relation is unresolved, or if the question is non-binary, do not apply the single-token rule; instead follow the agent's existing final-answer fallback behavior for unresolved or non-binary cases (which may produce a fuller response or an uncertainty signal).\n\nProduce only the `answer` field as specified."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "822bbea7ca75",
+    "rerun_from": null,
+    "question": "Which was founded earlier, The Week or New Scientist?",
+    "gold_answer": "New Scientist",
+    "context": {
+      "title": [
+        "Massachusetts Audubon Society",
+        "Pirate Party (Italy)",
+        "Jordan River Foundation",
+        "Champ de Mars Racecourse",
+        "Canons Regular of the Holy Sepulchre",
+        "The Week",
+        "Nominative determinism",
+        "Gloucester Old Bank",
+        "New Scientist",
+        "1883 Philadelphia Quakers season"
+      ],
+      "sentences": [
+        [
+          "The Massachusetts Audubon Society, founded in 1896 by Harriet Hemenway and headquartered in Lincoln, Massachusetts, is a nonprofit organization dedicated to \"protecting the nature of Massachusetts.\"",
+          " Mass Audubon is independent of the National Audubon Society, and in fact was founded earlier.",
+          " Mass Audubon protects 36,500 acres of land throughout Massachusetts, saving birds and other wildlife, and making nature accessible to all with its wildlife sanctuaries and 20 nature centers."
+        ],
+        [
+          "The Italian Pirate Party (Italian: \"Partito Pirata Italiano\" ) is a political party in Italy, founded on 16 September 2006, modelled on the Pirate Party of Sweden, founded earlier that year.",
+          " It supports reform of copyright and patent law, privacy and freedom of expression."
+        ],
+        [
+          "The \"Jordan River Foundation\" was founded earlier by Queen Nour Al Hussein, the wife of the late king of Jordan Hussein bin Talal, after the death of king Hussein, queen Nour left her position as the Chair person of \"Jordan River Foundation\" and the new queen Rania took over the position."
+        ],
+        [
+          "The Champ de Mars Racecourse is a thoroughbred horse race track in Port Louis, Mauritius.",
+          " The Racecourse was inaugurated on 25 June 1812, by The Mauritius Turf Club (MTC) which was founded earlier in the same year by Sir Robert Townsend Farquhar, who was the first British Governor of Mauritius.",
+          " The Mauritius Turf Club is the oldest horse-racing club in the Southern Hemisphere and the second oldest in the world.",
+          " The race track follows a very selective right hand oval path and is relatively small in size, with a circumference of 1,298 meters (4,258.5 ft) and width between 12 and 14 meters (39 and 46 feet).",
+          " The home-straight extends uphill and is 225 meters (738 ft) long."
+        ],
+        [
+          "The Canons Regular of the Holy Sepulchre were a Catholic religious order of canons regular of the Rule of Saint Augustine said to have been founded in the Church of the Holy Sepulchre in Jerusalem, then the capital of the Kingdom of Jerusalem, recognised in 1113 by Papal bull of Pope Paschal II.",
+          " Other accounts has it that they were founded earlier, during the rule of Godfrey of Bouillon (1099–1100)."
+        ],
+        [
+          "The Week is a weekly British news magazine founded in 1995 which has also published a US edition since 2001 and a children's edition in the UK since 2015.",
+          " Between 2008 and 2012 it also published an Australian edition."
+        ],
+        [
+          "Nominative determinism is the hypothesis that people tend to gravitate towards areas of work that fit their names.",
+          " The term was first used in the magazine \"New Scientist\" in 1994, after the magazine's humorous Feedback column noted several studies carried out by researchers with remarkably fitting surnames.",
+          " These included a book on polar explorations by Daniel Snowman and an article on urology by researchers named Splatt and Weedon.",
+          " These and other examples led to light-hearted speculation that some sort of psychological effect was at work.",
+          " Since the term appeared, nominative determinism has been an irregularly recurring topic in \"New Scientist\", as readers continue to submit examples.",
+          " Nominative determinism differs from the related concept aptronym, and its synonyms aptonym, namephreak, and Perfect Fit Last Name, in that it focusses on causality.",
+          " \"Aptronym\" merely means the name is fitting, without saying anything about why it has come to fit."
+        ],
+        [
+          "The Gloucester Old Bank was a British bank that operated between 1716 and 1838.",
+          " It was founded in 1716 by James Wood.",
+          " The bank was said to have been the oldest private bank in Britain, having survived the financial consequences of the Napoleonic Wars when many other banks went out of business.",
+          " The claim was wrong as both C. Hoare & Co and Child & Co. were founded earlier, it was, however, one of the oldest banks in Britain in the nineteenth century."
+        ],
+        [
+          "New Scientist is a weekly English-language international science magazine, founded in 1956.",
+          " Since 1996 it has also run a website."
+        ],
+        [
+          "The 1883 Philadelphia Quakers season was the first in the franchise's existence.",
+          " The team was founded earlier in the year as a replacement for the Worcester franchise.",
+          " It was the first year Philadelphia was represented in the National League since the original Athletics were disbanded in 1876.",
+          " The American Association's Philadelphia Athletics had been founded a year earlier."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "The Week",
+        "New Scientist"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "The Week",
+      "New Scientist"
+    ],
+    "hop1_query": "Which was founded earlier, The Week or New Scientist?",
+    "hop1_docs": [
+      "New Scientist | New Scientist is a weekly English-language international science magazine, founded in 1956.  Since 1996 it has also run a website.",
+      "The New Times (magazine) | The New Times (Russian: Но́вые Времена́ ) is a Russian language magazine in Russia.  The magazine was founded in 1943.  The current version, established in 1988, , is a liberal, independent Russian weekly news magazine, publishing for Russia and Armenia.  (During the Soviet times it was a multi-language political magazine which followed the official party line.)  Its chief editor is Russian investigative journalist, political scientist, writer and radio host Yevgenia Albats.",
+      "Bat Boy (character) | Bat Boy is a creature who made several appearances in the American supermarket tabloid \"Weekly World News\".  \"The Weekly World News\" published patently fabricated stories which were purported to be factual.  Within the pages of the paper, Bat Boy is described as a creature who is 'half human and half bat'.  His pursuers, according to \"Weekly World News\", are scientists and United States government officials; he is frequently captured, then later makes a daring escape.  The original scientist who found him was named Dr. Ron Dillon.  Matthew Daemon, S.O.S. (Seeker of Obscure Supernaturals) crossed paths with him on several occasions.",
+      "Vinod Agarwal | Dr. Vinod K. Agarwal is an Indian-American businessman and scientist.  He was a professor at McGill University in Montreal, Canada from 1978 to 1992.  He then founded LogicVision, which he took public in October, 2001, as the first technology IPO following the terrorist attacks earlier that year.  Agarwal left LogicVision in 2005 to start SemIndia, a semiconductor company based in India.",
+      "Odisha Sampark Kranti Express | Odisha Sampark Kranti Express is a bi-weekly train which runs between Bhubaneswar,Capital of Odisha and Anand Vihar Terminal.  This train was introduced as part of the Sampark Kranti trains that were announced by the then railway minister Nitish Kumar in 2005.  It was and still is a bi-weekly train.  Now there is a requirement of attaching AC First class berths to this train.  Earlier the train used to terminate at New Delhi railway station (NDLS) but now terminates at Anand Vihar Terminus (ANVT) of New Delhi.  Its rakes are maintained by East Coast Railway (ECoR).",
+      "The Aquarian Weekly | The Aquarian Weekly is a regional alternative weekly newspaper based in New Jersey.  Founded in 1969, its focus is rock music and related events in the New Jersey/New York City/Eastern Pennsylvania region.  From 1986 to 1992, it was called East Coast Rocker.  After returning to its original title, the newspaper began including a pull-out section that retained the \"East Coast Rocker\" name, and which is now freely distributed throughout the region.",
+      "New Adventures | New Adventures is a British dance company, specialising in contemporary dance.  Founded by the choreographer Matthew Bourne in 2002, the company developed from an earlier company Adventures in Motion Pictures, which was later dissolved."
+    ],
+    "hop1_titles": [
+      "New Scientist",
+      "The New Times (magazine)",
+      "Bat Boy (character)",
+      "Vinod Agarwal",
+      "Odisha Sampark Kranti Express",
+      "The Aquarian Weekly",
+      "New Adventures"
+    ],
+    "summary_1": "- Fact: [1] New Scientist — \"founded in 1956.\" (passage [1], opening line: \"New Scientist ... founded in 1956.\")\n- Missing: No passage in the set mentions \"The Week\" (the target magazine is absent).\n- Bridge entity / ambiguity: \"The Week\" (magazine) is the required entity; its page is not present here and may have multiple national editions (UK/US/India). Treat \"The Week\" as missing and potentially ambiguous.\n- Next-hop retrieval (prioritized):\n  1) Fetch page \"The Week (magazine)\" (or the exact \"The Week\" main article). Extract infobox fields \"Founded\"/\"First issue\" or the article opening line stating founding year and country/edition.\n  2) If that page is a disambiguation or multiple-edition situation, fetch the disambiguation page \"The Week (disambiguation)\" and then fetch each relevant edition page (e.g., \"The Week (UK)\", \"The Week (U.S.)\", \"The Week (India)\"). From each, extract \"Founded\"/\"First published\" year and country/launch date.\n  3) Confirm New Scientist's founding year by fetching \"New Scientist\" article infobox or opening sentence (already present as passage [1]) if needed for final comparison.\n\nNo final answer is given here because The Week's founding year is not present in the supplied passages.",
+    "hop2_query": "The Week (magazine) founding year",
+    "hop2_docs": [
+      "Princeton Alumni Weekly | The Princeton Alumni Weekly (PAW) is a magazine published for the alumni of Princeton University.  It was founded in 1900 and, until 1977, it was the only weekly college alumni magazine in the United States.  Upon changing to biweekly publication in 1977, the number of issues per year decreased from twenty-eight to twenty-one, and then later decreased to seventeen.  It still remains the most frequently published alumni magazine in the world, currently publishing 14 times per year.",
+      "Village (magazine) | Village is a left-wing Irish current affairs and cultural magazine.  It was launched in October 2004 and was originally published weekly.  It was founded, and edited for a number of years by Vincent Browne.",
+      "Jet (magazine) | Jet is a digital magazine.  As an American weekly marketed toward African-American readers, it was founded in 1951 by John H. Johnson of the Johnson Publishing Company in Chicago, Illinois.  Initially billed as \"The Weekly Negro News Magazine\", \"Jet\" is notable for its role in chronicling the Civil Rights Movement from its earliest years, including coverage of the Emmett Till murder, the Montgomery bus boycott, and Martin Luther King Jr.",
+      "Shanibarer Chithi | Shanibarer Chithi (meaning \"the Saturday Letter\" in English) was a monthly Bengal literary magazine published by Shaniranjan Press in Kolkata.  It was founded in 1929 by Ashok Chattopadhyay as the conservative response to the progressive literary magazine \"Kallol\" which was founded a year ago.  It started as a weekly.  Later it became a monthly.  The magazine was one of the major satirical publications in the country.  Sajanikanta Das joined the magazine from eleventh issue as the editor.",
+      "Året Runt | Året Runt (meaning \"All Year Around\" in English) is a weekly women's and family magazine published in Malmö, Sweden.  Founded in 1946 it is one of the longest-running magazines in the country.",
+      "Robert Gottliebsen | Robert Gottliebsen is a columnist for Business Spectator and an economics writer at The Australian.  He was the original Australian Financial Review columnist \"Chanticleer\" and founder of Business Review Weekly Magazine, heading the magazine for the next 19 years.  He also co-founded the investor advice newsletter and website Eureka Report in 2005, and writes a weekly column for it.",
+      "Voice of The Hawkeyes | Voice of The Hawkeyes is an American sports-oriented magazine.  It is owned and operated by Landmark Media Enterprises, and is affiliated with the 247Sports. com network.  It covers University of Iowa athletics and was founded in 1987.  It is issued 25 times per year.  During the football season (September-December), the magazine is issued weekly; it is issued bi-weekly during the winter months, and monthly from April through August."
+    ],
+    "hop2_titles": [
+      "Princeton Alumni Weekly",
+      "Village (magazine)",
+      "Jet (magazine)",
+      "Shanibarer Chithi",
+      "Året Runt",
+      "Robert Gottliebsen",
+      "Voice of The Hawkeyes"
+    ],
+    "summary_2": "New Scientist was founded in 1956. The retrieved passages do not include any information about The Week (magazine) or its founding year, so a comparison of which was founded earlier cannot be determined from the provided material.",
+    "answer": "Insufficient information to determine which was founded earlier from the provided summaries.",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "The Week"
+    ],
+    "hit_titles_hop1": [
+      "New Scientist"
+    ],
+    "hit_titles_total": [
+      "New Scientist"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

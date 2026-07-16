@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "d205950f9bd9a0657664424b97c4cf6e6a91de7bbe0cc4de36c69f58ef34107d",
+  "created_at": "2026-07-14T16:15:43.708643+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "summary_1": "Tony Hiller collaborations; confetti-throwing performer\n\n- Tony Hiller: \"Anthony Toby 'Tony' Hiller (born 30 July 1927)\" (passage [1]).\n- The Hiller Brothers \"appeared with many artists of the time including\" — includes the entity \"Rip Taylor\" (passage [1]).\n- Rip Taylor: \"Charles Elmer 'Rip' Taylor, Jr. (born January 13, 1935)\" and \"known for ... his habit of 'showering himself (and others) with confetti.'\" (passage [2]).\n- Ambiguity/missing facts: none — the passages explicitly link Tony Hiller's appearances to Rip Taylor and state Rip Taylor's confetti habit.\n- Prioritized next-hop retrieval directive:\n  1. No additional retrieval needed — passages provide the necessary linkage and descriptive fact.",
+        "summary_2": "Tony Hiller appeared with Rip Taylor. Rip Taylor is an American actor and comedian noted for his exuberant, flamboyant persona and his habit of showering himself (and others) with confetti.",
+        "current_output": "Rip Taylor"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nInstructions:\n- Use only `summary_1` and `summary_2` as the evidential basis for the final decision; do not add new facts or external information.\n- First determine whether the question is a binary (yes/no) proposition and whether both `summary_1` and `summary_2` clearly and unambiguously support the same binary outcome.\n- If BOTH summaries unambiguously assert the same binary conclusion, emit exactly one lowercase token as the entire content of `answer`: use \"yes\" for an affirmative conclusion and \"no\" for a negative conclusion. The `answer` field must contain that single token and nothing else (no punctuation, no extra whitespace, no explanation).\n- Prefer `summary_2` as the decisive statement when it clarifies or restates `summary_1`, but still require that both summaries support the same binary judgment before emitting the single-token `answer`.\n- If the summaries conflict, if either summary hedges, is ambiguous, silent about the binary relation, or otherwise fails to clearly agree, do NOT apply the single-token rule; instead produce the module's normal fallback/unresolved output for `answer`.\n- Always remain truthful to the visible summaries and do not alter their factual conclusions.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Rip Taylor",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Charles Elmer \"Rip\" Taylor, Jr.",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"summary_1\": \"Tony Hiller collaborations; confetti-throwing performer\\n\\n- Tony Hiller: \\\"Anthony Toby 'Tony' Hiller (born 30 July 1927)\\\" (passage [1]).\\n- The Hiller Brothers \\\"appeared with many artists of the time including\\\" — includes the entity \\\"Rip Taylor\\\" (passage [1]).\\n- Rip Taylor: \\\"Charles Elmer 'Rip' Taylor, Jr. (born January 13, 1935)\\\" and \\\"known for ... his habit of 'showering himself (and others) with confetti.'\\\" (passage [2]).\\n- Ambiguity/missing facts: none — the passages explicitly link Tony Hiller's appearances to Rip Taylor and state Rip Taylor's confetti habit.\\n- Prioritized next-hop retrieval directive:\\n  1. No additional retrieval needed — passages provide the necessary linkage and descriptive fact.\",\n  \"summary_2\": \"Tony Hiller appeared with Rip Taylor. Rip Taylor is an American actor and comedian noted for his exuberant, flamboyant persona and his habit of showering himself (and others) with confetti.\",\n  \"current_output\": \"Rip Taylor\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nInstructions:\n- Use only `summary_1` and `summary_2` as the evidential basis for the final decision; do not add new facts or external information.\n- First determine whether the question is a binary (yes/no) proposition and whether both `summary_1` and `summary_2` clearly and unambiguously support the same binary outcome.\n- If BOTH summaries unambiguously assert the same binary conclusion, emit exactly one lowercase token as the entire content of `answer`: use \"yes\" for an affirmative conclusion and \"no\" for a negative conclusion. The `answer` field must contain that single token and nothing else (no punctuation, no extra whitespace, no explanation).\n- Prefer `summary_2` as the decisive statement when it clarifies or restates `summary_1`, but still require that both summaries support the same binary judgment before emitting the single-token `answer`.\n- If the summaries conflict, if either summary hedges, is ambiguous, silent about the binary relation, or otherwise fails to clearly agree, do NOT apply the single-token rule; instead produce the module's normal fallback/unresolved output for `answer`.\n- Always remain truthful to the visible summaries and do not alter their factual conclusions.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Rip Taylor\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Charles Elmer \\\"Rip\\\" Taylor, Jr.\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When summary_1 and summary_2 refer to the same person using more than one name variant (for example, a short/stage name and a fuller or legal name) and the module would otherwise emit the shorter variant.\",\n    \"preserve_rule\": \"Keep the base prompt's input/output interface and restrictions: use only summary_1 and summary_2 as evidence; obey the existing binary single-token rule when it applies; emit only the required `answer` field with no extra commentary.\",\n    \"change_rule\": \"Prefer the most complete canonical name string that is present in the visible summaries. Concretely: if either summary supplies a fuller/legal/name-variant for the same entity (longer form, inclusion of middle name/initials, suffixes like Jr., or quoted full stage name) then output that fuller variant exactly as given in the summaries. If summaries only contain a single short/stage name variant, output that short variant.\",\n    \"drop_or_avoid_rule\": \"Do not add any facts, dates, descriptors, explanatory text, or external disambiguation. Do not append punctuation or surrounding text beyond what appears in the chosen name string in the summaries. Do not override the base prompt's binary-answer single-token rule when it applies.\",\n    \"output_contract\": \"The `answer` must be exactly the single minimal name string chosen from the summaries' most complete variant (verbatim as it appears there), with no extra whitespace, punctuation, or explanation.\",\n    \"why_local_transition\": \"The current behavior emits a shorter/stage name variant; this rule nudges the module to select the fuller canonical name when that fuller form is present in the provided summaries, improving specificity while preserving the module's minimal-output contract.\"\n  },\n  \"rationale\": \"This is a minimal, local behavioral change: it does not alter what evidence is allowed or the output interface, only the selection preference among name variants already present in the summaries. It avoids introducing external facts or extra text and preserves the existing binary-answer logic. The change resolves cases where summaries include both a short and a fuller name for the same entity by consistently choosing the fuller form when available, which matches the intended increase in specificity without violating the prompt-edit constraints.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 14,
+    "row_index": 14,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

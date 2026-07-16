@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "49ed7c3b5f8f96b87f14cd4162409aa874364f9b314abafa2af67161015b214a",
+  "created_at": "2026-07-14T13:38:42.922091+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the provided summaries conflict about a person's age (one summary explicitly states an age while another says the passages do not state the age) for the same named person (e.g., 'Edwin Mortimer Hopkins'), apply the following small policy change.",
+            "preserve_rule": "Keep the existing behavior of producing a single minimal answer string in [[ ## answer ## ]] and continue to rely only on the visible summaries and question. Preserve any computed ages that are explicitly justified in the summaries.",
+            "change_rule": "When a numeric age is asserted by a summary but another summary indicates the age is not stated, do not accept the asserted age uncritically. First, look for any birth year or birth date mentioned in any visible summary or the question. If a birth year or date is available, compute the person's age for the season year (1891) by subtracting the birth year from 1891 and adjusting only when a birth month/day in relation to the season date is explicitly provided. If this computed integer age differs from an asserted age that lacks supporting arithmetic or a birth year, prefer the computed age (because it is derived from explicit data) and use that as the answer. If no birth year/date is available in any visible input and the asserted age has no supporting calculation, treat the age as unsupported and indicate that the age cannot be determined from the provided summaries (following the base prompt's minimal-answer output contract).",
+            "drop_or_avoid_rule": "Do not accept a claimed numeric age that has no supporting birth-year/date or explicit arithmetic in the visible summaries. Do not invent or fetch external facts beyond the visible summaries and question. Do not change the final-answer formatting contract.",
+            "output_contract": "Produce the single minimal answer string in the [[ ## answer ## ]] block (no extra explanation). The answer should be the integer age supported by either: (a) an explicit arithmetic derivation from a birth year/date present in the visible summaries, or (b) an asserted age that itself contains an explicit supporting calculation. If neither exists, produce the minimal 'cannot be determined' response consistent with the base prompt.",
+            "why_local_transition": "This small rule resolves conflicts where a numeric age is asserted without supporting birth-date evidence by requiring explicit arithmetic from any available birth year/date. That makes the decision rule stricter and avoids accepting unexplained numeric claims, while preserving existing output format and any legitimately justified ages."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "summary_1": "The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.",
+        "summary_2": "He was 29 years old during the 1891 season.",
+        "current_output": "29"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the provided summaries conflict about a person's age (one summary explicitly states an age while another says the passages do not state the age) for the same named person (e.g., 'Edwin Mortimer Hopkins'), apply the following small policy change.\",\n      \"preserve_rule\": \"Keep the existing behavior of producing a single minimal answer string in [[ ## answer ## ]] and continue to rely only on the visible summaries and question. Preserve any computed ages that are explicitly justified in the summaries.\",\n      \"change_rule\": \"When a numeric age is asserted by a summary but another summary indicates the age is not stated, do not accept the asserted age uncritically. First, look for any birth year or birth date mentioned in any visible summary or the question. If a birth year or date is available, compute the person's age for the season year (1891) by subtracting the birth year from 1891 and adjusting only when a birth month/day in relation to the season date is explicitly provided. If this computed integer age differs from an asserted age that lacks supporting arithmetic or a birth year, prefer the computed age (because it is derived from explicit data) and use that as the answer. If no birth year/date is available in any visible input and the asserted age has no supporting calculation, treat the age as unsupported and indicate that the age cannot be determined from the provided summaries (following the base prompt's minimal-answer output contract).\",\n      \"drop_or_avoid_rule\": \"Do not accept a claimed numeric age that has no supporting birth-year/date or explicit arithmetic in the visible summaries. Do not invent or fetch external facts beyond the visible summaries and question. Do not change the final-answer formatting contract.\",\n      \"output_contract\": \"Produce the single minimal answer string in the [[ ## answer ## ]] block (no extra explanation). The answer should be the integer age supported by either: (a) an explicit arithmetic derivation from a birth year/date present in the visible summaries, or (b) an asserted age that itself contains an explicit supporting calculation. If neither exists, produce the minimal 'cannot be determined' response consistent with the base prompt.\",\n      \"why_local_transition\": \"This small rule resolves conflicts where a numeric age is asserted without supporting birth-date evidence by requiring explicit arithmetic from any available birth year/date. That makes the decision rule stricter and avoids accepting unexplained numeric claims, while preserving existing output format and any legitimately justified ages.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"summary_1\": \"The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.\",\n  \"summary_2\": \"He was 29 years old during the 1891 season.\",\n  \"current_output\": \"29\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"cannot be determined\",\n  \"rationale\": \"Applied the ordered delta: summaries conflict and no birth year/date or supporting calculation is present, so the age cannot be determined from the provided summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 99,
+    "row_index": 99,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

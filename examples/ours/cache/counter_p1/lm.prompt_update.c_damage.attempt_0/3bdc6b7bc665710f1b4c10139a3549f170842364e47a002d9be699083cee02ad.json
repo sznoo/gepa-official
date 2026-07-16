@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_0",
+  "key": "3bdc6b7bc665710f1b4c10139a3549f170842364e47a002d9be699083cee02ad",
+  "created_at": "2026-07-15T21:09:22.842993+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "visible_c_inputs": {
+        "question": "Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?",
+        "summary_1": "Washington, D.C.",
+        "summary_2": "Washington, D.C.",
+        "current_output": "Washington, D.C."
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Washington, D.C.",
+        "score": 1.0
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).",
+        "score": 0.0
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).",
+            "preserve_rule": "Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.",
+            "change_rule": "Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.",
+            "drop_or_avoid_rule": "Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.",
+            "output_contract": "Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.",
+            "why_local_transition": "The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 141,
+        "c_stable_id": "141",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 28,
+        "selected_w_stable_id": "28",
+        "agent": "final",
+        "dominant_gap_type": "output_selection",
+        "transported_damage_hypothesis": "The final agent enforces a minimal single-token answer when both summaries agree, truncating or compressing the canonical place name to one token (e.g., outputting 'Washington' instead of the full 'Washington, D.C.').",
+        "expected_damaged_behavior": "At the final agent boundary, the model returns a single-token, shortened form of the city name rather than the full, properly formatted place name.",
+        "rationale": "The W-side failure consistently tightens final-output format to a single-token minimal answer whenever the provided summaries agree. That failure pattern (an output-shape/selection constraint) plausibly transfers to this C case because both summaries agree on the same place; forcing a single-token form would not require inventing new facts or flipping the answer, only altering output shape (truncation/normalization). This preserves the evidence usage and keeps the damaged output as a local neighbor of the correct answer (a shortened or minimally formatted place name) while demonstrating the same narrow, format-driven failure.",
+        "confidence": 0.78
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nVisible C inputs:\n{\n  \"question\": \"Which important city is home to both the George Washington University Hospital and the Sibley Memorial Hospital?\",\n  \"summary_1\": \"Washington, D.C.\",\n  \"summary_2\": \"Washington, D.C.\",\n  \"current_output\": \"Washington, D.C.\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Washington, D.C.\",\n  \"score\": 1.0\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\",\n  \"score\": 0.0\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).\",\n      \"preserve_rule\": \"Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.\",\n      \"change_rule\": \"Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.\",\n      \"drop_or_avoid_rule\": \"Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.\",\n      \"output_contract\": \"Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.\",\n      \"why_local_transition\": \"The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 141,\n  \"c_stable_id\": \"141\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 28,\n  \"selected_w_stable_id\": \"28\",\n  \"agent\": \"final\",\n  \"dominant_gap_type\": \"output_selection\",\n  \"transported_damage_hypothesis\": \"The final agent enforces a minimal single-token answer when both summaries agree, truncating or compressing the canonical place name to one token (e.g., outputting 'Washington' instead of the full 'Washington, D.C.').\",\n  \"expected_damaged_behavior\": \"At the final agent boundary, the model returns a single-token, shortened form of the city name rather than the full, properly formatted place name.\",\n  \"rationale\": \"The W-side failure consistently tightens final-output format to a single-token minimal answer whenever the provided summaries agree. That failure pattern (an output-shape/selection constraint) plausibly transfers to this C case because both summaries agree on the same place; forcing a single-token form would not require inventing new facts or flipping the answer, only altering output shape (truncation/normalization). This preserves the evidence usage and keeps the damaged output as a local neighbor of the correct answer (a shortened or minimally formatted place name) while demonstrating the same narrow, format-driven failure.\",\n  \"confidence\": 0.78\n}\n\nRepair feedback from a rejected attempt:\n{}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": {\"query\": \"Washington\"},\n  \"transported_failure_pattern\": \"force single-token truncation of multi-token place names\",\n  \"expected_damage\": \"The final answer is shortened to the single token 'Washington' instead of the full 'Washington, D.C.'\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"Washington, D.C.\"],\n    \"why_not_unrelated\": \"Only the output format is compressed to a shorter, single-token form while the original city identity supported by the summaries is retained.\"\n  },\n  \"confidence\": 0.78,\n  \"rationale\": \"Both summaries agree on the same city; the transported failure truncates the multi-token place name to a single-token minimal answer without changing the underlying conclusion.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 141,
+    "c_stable_id": "141",
+    "w_sample_index": 28,
+    "w_stable_id": "28",
+    "agent": "final",
+    "damage_attempt": 0,
+    "match_fingerprint": "db59d51c115509d5aabbdec1490f39ec538423df7cd22c0dc97195f313a25074"
+  }
+}

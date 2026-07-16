@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_1",
+  "key": "ce53d7dca734eeb39b686beaf1008dd54374a6904d2af3c2f26809ab45cbb8ec",
+  "created_at": "2026-07-15T21:15:54.956540+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_1",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "base_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "visible_c_inputs": {
+        "question": "What MTV television drama starred an actor who had once boxed with a boxer born in Belarus?",
+        "context": "Skins",
+        "passages": [
+          "James Newman (actor) | James Milo Newman (born Jared Matthew James Newman; January 22, 1992) is an American actor.  He played Tony Schneider on the MTV television teen drama \"Skins\".  Newman's first acting experience was auditioning for \"Skins\".  He had previously planned to fight in the Golden Gloves boxing tournament (he had once boxed with Yuri Foreman).",
+          "Aliaksandr Liakhovich | Aliaksandr Piatrovich Liakhovich (Belarusian: Аляксандр Пятровіч Ляховіч ; born 4 July 1989) is a male Belarusian racewalker.  He competed in the 20 kilometres walk event at the 2015 World Championships in Athletics in Beijing, China, but was disqualified.",
+          "Siarhei Liakhovich | Siarhéi Petróvich Liakhóvich (Russian: Серге́й Петро́вич Ляхо́вич , Belarusian: Сяргей Пятровіч Ляховіч ; also Siarhiej Piatrovič Liachovič or Lyakhóvich; born 29 May 1976) is a Belarusian former professional boxer who competed from 1998 to 2014, and held the WBO heavyweight title in 2006.  As an amateur he won a bronze medal in the super-heavyweight division at the 1997 World Championships.",
+          "Andrei Arlovski | Andrei Valeryevich Arlovski (Belarusian: Андрэй Валер'евіч Арлоўскі , ] , born February 4, 1979), nicknamed The Pit Bull, is a Belarusian mixed martial artist, actor and former UFC Heavyweight Champion.  He has also competed for Strikeforce, WSOF, Affliction, EliteXC, ONE FC and M-1 Challenge.  As of July, 2017, Arlovski is #13 in the official UFC heavyweight rankings.",
+          "Sergey Khomitsky | Sergey Khomitsky (Belarusian: Siarhei Khamitski ; born 13 September 1974) is a Belarusian professional boxer who has challenged once for the WBA interim middleweight title in 2015.",
+          "Siarhei Mikhalok | Siarhei Mikhalok (born January 19, 1972 in Belarusian: Сяргей Міхалок , Russian: Серге́й Михалок , Sergey Mikhalok) is a Belarusian rock musician and actor.  He was the frontman of the ska punk band Lyapis Trubetskoy that he dissolved on 1 September 2014.  He is the frontman of the band Brutto now.",
+          "Siarhei Charnou | Siarhei Charnou (Belarusian: Сяргей Чарноў ; born 5 February 1979, in Minsk) is a Belarusian race walker.  His name is also spelled as Sergey Chernov."
+        ],
+        "current_output": "Skins"
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Skins",
+        "score": 1.0,
+        "answer": "Skins"
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nico Hülkenberg",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),",
+            "preserve_rule": "Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.",
+            "change_rule": "When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.",
+            "drop_or_avoid_rule": "Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.",
+            "output_contract": "Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.",
+            "why_local_transition": "This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 52,
+        "c_stable_id": "52",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 48,
+        "selected_w_stable_id": "48",
+        "agent": "summary2",
+        "dominant_gap_type": "bridge_relation",
+        "transported_damage_hypothesis": "The summary agent will fail to integrate the first-hop (MTV show → actor) and second-hop (actor bio → boxed/sparred with a Belarus-born boxer) evidence: either omitting the actor-boxing link from the summary or collapsing supporting facts into a terse name-only output.",
+        "expected_damaged_behavior": "At the summary2 boundary, the agent returns only the show title or a short answer without the second-hop supporting sentence linking an actor from the show to having once boxed with a Belarus-born boxer (i.e., the bridging relation is missing or under-specified).",
+        "rationale": "W sample 48's repair explicitly targets the same kind of cross-hop integration needed here: merging a primary-page listing (car→drivers / show→actor) with a separate biographical passage (driver bio / actor bio) to establish an inter-entity relation. That bridge-relation failure (not connecting the show to the actor's boxing-with-Belarus-born-boxer fact) is directly transferable as a local summary2 boundary error without importing any W-side entities. Other candidates focus on per-person supporting sentences or membership facts, but 48's pattern—expanding a bare name into a concise integrated two-sentence summary combining both hops—maps most closely to the required show→actor→boxer bridge and therefore supplies a plausible, local failure mode when reversed.",
+        "confidence": 0.78
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "ValueError",
+        "message": "damaged_output is identical to C_plus output.",
+        "instruction": "Return strict JSON, preserve the native output contract, produce a non-identical local neighbor, and avoid W-side literals."
+      }
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nBase prompt:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nVisible C inputs:\n{\n  \"question\": \"What MTV television drama starred an actor who had once boxed with a boxer born in Belarus?\",\n  \"context\": \"Skins\",\n  \"passages\": [\n    \"James Newman (actor) | James Milo Newman (born Jared Matthew James Newman; January 22, 1992) is an American actor.  He played Tony Schneider on the MTV television teen drama \\\"Skins\\\".  Newman's first acting experience was auditioning for \\\"Skins\\\".  He had previously planned to fight in the Golden Gloves boxing tournament (he had once boxed with Yuri Foreman).\",\n    \"Aliaksandr Liakhovich | Aliaksandr Piatrovich Liakhovich (Belarusian: Аляксандр Пятровіч Ляховіч ; born 4 July 1989) is a male Belarusian racewalker.  He competed in the 20 kilometres walk event at the 2015 World Championships in Athletics in Beijing, China, but was disqualified.\",\n    \"Siarhei Liakhovich | Siarhéi Petróvich Liakhóvich (Russian: Серге́й Петро́вич Ляхо́вич , Belarusian: Сяргей Пятровіч Ляховіч ; also Siarhiej Piatrovič Liachovič or Lyakhóvich; born 29 May 1976) is a Belarusian former professional boxer who competed from 1998 to 2014, and held the WBO heavyweight title in 2006.  As an amateur he won a bronze medal in the super-heavyweight division at the 1997 World Championships.\",\n    \"Andrei Arlovski | Andrei Valeryevich Arlovski (Belarusian: Андрэй Валер'евіч Арлоўскі , ] , born February 4, 1979), nicknamed The Pit Bull, is a Belarusian mixed martial artist, actor and former UFC Heavyweight Champion.  He has also competed for Strikeforce, WSOF, Affliction, EliteXC, ONE FC and M-1 Challenge.  As of July, 2017, Arlovski is #13 in the official UFC heavyweight rankings.\",\n    \"Sergey Khomitsky | Sergey Khomitsky (Belarusian: Siarhei Khamitski ; born 13 September 1974) is a Belarusian professional boxer who has challenged once for the WBA interim middleweight title in 2015.\",\n    \"Siarhei Mikhalok | Siarhei Mikhalok (born January 19, 1972 in Belarusian: Сяргей Міхалок , Russian: Серге́й Михалок , Sergey Mikhalok) is a Belarusian rock musician and actor.  He was the frontman of the ska punk band Lyapis Trubetskoy that he dissolved on 1 September 2014.  He is the frontman of the band Brutto now.\",\n    \"Siarhei Charnou | Siarhei Charnou (Belarusian: Сяргей Чарноў ; born 5 February 1979, in Minsk) is a Belarusian race walker.  His name is also spelled as Sergey Chernov.\"\n  ],\n  \"current_output\": \"Skins\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Skins\",\n  \"score\": 1.0,\n  \"answer\": \"Skins\"\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nico Hülkenberg\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),\",\n      \"preserve_rule\": \"Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.\",\n      \"change_rule\": \"When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.\",\n      \"drop_or_avoid_rule\": \"Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.\",\n      \"output_contract\": \"Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.\",\n      \"why_local_transition\": \"This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 52,\n  \"c_stable_id\": \"52\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 48,\n  \"selected_w_stable_id\": \"48\",\n  \"agent\": \"summary2\",\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"The summary agent will fail to integrate the first-hop (MTV show → actor) and second-hop (actor bio → boxed/sparred with a Belarus-born boxer) evidence: either omitting the actor-boxing link from the summary or collapsing supporting facts into a terse name-only output.\",\n  \"expected_damaged_behavior\": \"At the summary2 boundary, the agent returns only the show title or a short answer without the second-hop supporting sentence linking an actor from the show to having once boxed with a Belarus-born boxer (i.e., the bridging relation is missing or under-specified).\",\n  \"rationale\": \"W sample 48's repair explicitly targets the same kind of cross-hop integration needed here: merging a primary-page listing (car→drivers / show→actor) with a separate biographical passage (driver bio / actor bio) to establish an inter-entity relation. That bridge-relation failure (not connecting the show to the actor's boxing-with-Belarus-born-boxer fact) is directly transferable as a local summary2 boundary error without importing any W-side entities. Other candidates focus on per-person supporting sentences or membership facts, but 48's pattern—expanding a bare name into a concise integrated two-sentence summary combining both hops—maps most closely to the required show→actor→boxer bridge and therefore supplies a plausible, local failure mode when reversed.\",\n  \"confidence\": 0.78\n}\n\nRepair feedback from a rejected attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"ValueError\",\n  \"message\": \"damaged_output is identical to C_plus output.\",\n  \"instruction\": \"Return strict JSON, preserve the native output contract, produce a non-identical local neighbor, and avoid W-side literals.\"\n}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": \"Skins — features actor James Newman.\",\n  \"transported_failure_pattern\": \"omit second-hop integration: return only show and actor name, dropping the cross-hop relation to the Belarus-born boxer\",\n  \"expected_damage\": \"The summary no longer includes the supporting sentence linking the named actor to having once boxed with a Belarus-born boxer; it only states the show and actor.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\n      \"Skins\",\n      \"James Newman\"\n    ],\n    \"why_not_unrelated\": \"Keeps the original show and actor cues from the passages but removes the bridging evidence sentence, so the change is a focused loss of cross-hop integration rather than unrelated corruption.\"\n  },\n  \"confidence\": 0.78,\n  \"rationale\": \"Removed the second-hop supporting clause that would connect the actor to the boxing-with-Belarus-born-boxer fact while preserving the primary show and actor mentions from the visible passages.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_1",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 52,
+    "c_stable_id": "52",
+    "w_sample_index": 48,
+    "w_stable_id": "48",
+    "agent": "summary2",
+    "damage_attempt": 1,
+    "match_fingerprint": "048d01057c244398b5f165c7ca27982633f02ef5c62a4ec702eb539e9f87ed7d"
+  }
+}

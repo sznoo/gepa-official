@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "0c9fa56ea77b34d8f764dac49aaef612f1bf9b28cd09705a63a06bd4b425956f",
+  "created_at": "2026-07-14T21:10:50.015076+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+      "source_summary": "Carlo Emilio Gadda is credited as the author of Italian novels (e.g., That Awful Mess on Via Merulana) and Katharine Kerr is an American science fiction and fantasy novelist; both were novelists.",
+      "target_summary": "First-hop evidence noted that Carlo Emilio Gadda authored an Italian novel. Second-hop (gold) evidence identifies Carlo Emilio Gadda (1893–1973) as an Italian writer and poet who \"belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.\" Second-hop (gold) evidence identifies Katharine Kerr (born 1944) as an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry.",
+      "candidate_summary": "Carlo Emilio Gadda was an Italian writer and poet who authored Italian novels, and Katharine Kerr is an American science fiction and fantasy novelist; both were novelists."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nCarlo Emilio Gadda and Katharine Kerr both were considered what?\n\nSource summary2:\nCarlo Emilio Gadda is credited as the author of Italian novels (e.g., That Awful Mess on Via Merulana) and Katharine Kerr is an American science fiction and fantasy novelist; both were novelists.\n\nTarget summary2:\nFirst-hop evidence noted that Carlo Emilio Gadda authored an Italian novel. Second-hop (gold) evidence identifies Carlo Emilio Gadda (1893–1973) as an Italian writer and poet who \"belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.\" Second-hop (gold) evidence identifies Katharine Kerr (born 1944) as an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry.\n\nCandidate summary2:\nCarlo Emilio Gadda was an Italian writer and poet who authored Italian novels, and Katharine Kerr is an American science fiction and fantasy novelist; both were novelists.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate retains the source claim that both are novelists and reproduces the target's identification of Gadda as an Italian writer and poet and Kerr as an American science fiction/fantasy novelist. It adds the poet attribution (present in the target) without contradicting the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 68,
+    "row_index": 68,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

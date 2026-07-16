@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ba41042d5025489063980c5018c947553f7a7895c6c82b4ec82c279b328f420b",
+  "created_at": "2026-07-14T19:01:55.663232+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "current_output": {
+          "query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Mammoth Creek",
+          "Trout Creek, Utah",
+          "U.S. Special Delivery (postal service)",
+          "Golden trout",
+          "Hybrid mail",
+          "Sheepheaven Creek redband trout",
+          "Trout Creek, Montana"
+        ],
+        "retrieved_doc_snippets": [
+          "Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah). The creek contains wild brown trout and hatchery rainbow trout.",
+          "Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States. It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao. It is named after the creek that flows from the west off of the Deep Creek Mountains. It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .",
+          "U.S. Special Delivery (postal service) | U.S. Special Delivery was a postal service paid for with additional postage for urgent letters and postal packets which are delivered in less time than by standard or first class mail service. Its meaning is different and separate from express mail delivery service. Essentially it meant that a postal packet was delivered from a post office to the addressee immediately once it arrived at the post office responsible for delivering it, rather than waiting fo ...[truncated]",
+          "Golden trout | The California golden trout, or simply the golden trout (\"Oncorhynchus mykiss aguabonita\"), is a subspecies of the rainbow trout native to California. The golden trout is native to Golden Trout Creek (tributary to the Kern River), Volcano Creek (tributary to Golden Trout Creek), and the South Fork Kern River. It is the state fish of California.",
+          "Hybrid mail | Hybrid mail is mail that is delivered using a combination of electronic and physical delivery. Usually, it involves digital data being transformed into physical letter items at distributed print centres located as close as possible to the final delivery addresses. An e-mail letter (also L-mail and letter mail) is a letter which sent as an email using a computer then printed out and delivered as a traditional (physical) letter. It is a communication means between the virtual cyber-  ...[truncated]",
+          "Sheepheaven Creek redband trout | The Sheepheaven Creek redband trout is a local Californian variety of the rainbow trout (\"Oncorhynchus mykiss\"), a freshwater fish in the Salmonidae family. It is considered either a distinct western form of the McCloud River redband trout (subspecies \"Oncorhynchus mykiss stonei\"), or a subspecies of its own, which has not been scientifically named and described yet. It is native to Sheepheaven Creek, Siskiyou County, California, United States. It has been trans ...[truncated]",
+          "Trout Creek, Montana | Trout Creek is a census-designated place (CDP) in Sanders County, Montana, United States. The population was 261 at the 2000 census. Trout Creek was proclaimed \"Huckleberry Capital of Montana\" by the state's legislature in 1981."
+        ],
+        "summary_2": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "answer": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Pony Express"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Pony Express Trout Creek Utah delivered items"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"current_output\": {\n    \"query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Mammoth Creek\",\n    \"Trout Creek, Utah\",\n    \"U.S. Special Delivery (postal service)\",\n    \"Golden trout\",\n    \"Hybrid mail\",\n    \"Sheepheaven Creek redband trout\",\n    \"Trout Creek, Montana\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah). The creek contains wild brown trout and hatchery rainbow trout.\",\n    \"Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States. It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao. It is named after the creek that flows from the west off of the Deep Creek Mountains. It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .\",\n    \"U.S. Special Delivery (postal service) | U.S. Special Delivery was a postal service paid for with additional postage for urgent letters and postal packets which are delivered in less time than by standard or first class mail service. Its meaning is different and separate from express mail delivery service. Essentially it meant that a postal packet was delivered from a post office to the addressee immediately once it arrived at the post office responsible for delivering it, rather than waiting fo ...[truncated]\",\n    \"Golden trout | The California golden trout, or simply the golden trout (\\\"Oncorhynchus mykiss aguabonita\\\"), is a subspecies of the rainbow trout native to California. The golden trout is native to Golden Trout Creek (tributary to the Kern River), Volcano Creek (tributary to Golden Trout Creek), and the South Fork Kern River. It is the state fish of California.\",\n    \"Hybrid mail | Hybrid mail is mail that is delivered using a combination of electronic and physical delivery. Usually, it involves digital data being transformed into physical letter items at distributed print centres located as close as possible to the final delivery addresses. An e-mail letter (also L-mail and letter mail) is a letter which sent as an email using a computer then printed out and delivered as a traditional (physical) letter. It is a communication means between the virtual cyber-  ...[truncated]\",\n    \"Sheepheaven Creek redband trout | The Sheepheaven Creek redband trout is a local Californian variety of the rainbow trout (\\\"Oncorhynchus mykiss\\\"), a freshwater fish in the Salmonidae family. It is considered either a distinct western form of the McCloud River redband trout (subspecies \\\"Oncorhynchus mykiss stonei\\\"), or a subspecies of its own, which has not been scientifically named and described yet. It is native to Sheepheaven Creek, Siskiyou County, California, United States. It has been trans ...[truncated]\",\n    \"Trout Creek, Montana | Trout Creek is a census-designated place (CDP) in Sanders County, Montana, United States. The population was 261 at the 2000 census. Trout Creek was proclaimed \\\"Huckleberry Capital of Montana\\\" by the state's legislature in 1981.\"\n  ],\n  \"summary_2\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"answer\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Pony Express\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Pony Express Trout Creek Utah delivered items\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When `question` asks what items can be delivered to a specific place and `summary_1` indicates 'mail' or 'letters'.\",\n    \"preserve_rule\": \"Keep the place name (exact town and state) and the delivery concept (e.g., 'delivered items' / 'mail' / 'delivery') in the query.\",\n    \"change_rule\": \"Instead of enumerating many mail‑type synonyms, produce a single compact 3–6 word query that contains: (1) the place name, (2) a short delivery keyword ('delivered items' or 'mail' or 'delivery'), and (3) a concise historical/mail‑route or route keyword if such a route is mentioned in available place descriptions (e.g. include a named route or the word 'Express'/'Overland'). Put the most distinctive route/name term next to the place name (e.g. '<Place> <route-term> <delivered items>').\",\n    \"drop_or_avoid_rule\": \"Avoid long lists of mail variants, repeated place forms, excessive Boolean operators, and long quoted fragments. Do not produce multi‑sentence queries or retrieval instructions—emit one short query string.\",\n    \"output_contract\": \"Return a single short string for `query` (3–6 words) that follows the change_rule: contains the place, a delivery keyword, and—if present in place descriptions—a concise route/name keyword.\",\n    \"why_local_transition\": \"The previous query over‑emphasized generic mail synonyms and omitted a concise historical/route keyword that would bridge the place page to pages describing historic mail routes; adding that single route/name token plus a focused delivery term increases chance of retrieving the missing route page while preserving the original delivery focus.\"\n  },\n  \"rationale\": \"The baseline query listed many mail synonyms and general delivery tokens, which dilutes signals needed to find a connecting page about historic mail routes. This minimal prompt edit preserves the useful elements (place + delivery) but forces a compact query format and instructs inclusion of a single route/name token when place descriptions mention one. That small behavioral change keeps other retrieval behavior intact while targeting the bridge needed for the second hop.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

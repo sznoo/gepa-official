@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.min_distance.query",
+  "key": "d117bb346f4e4834bb7717fa3bd202a342e5c3cb4bfe327dc36a861326c2b227",
+  "created_at": "2026-07-14T16:32:05.468485+00:00",
+  "request": {
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "input_dict": {
+      "agent": "query",
+      "anchor_material": {
+        "sample_index": 50,
+        "row_index": 50,
+        "stable_id": "50",
+        "agent": "query",
+        "question": "United 300 and 300 were both made in what country?",
+        "delta_p_trace": [
+          {
+            "edge_index": 0,
+            "delta_p": {
+              "trigger": "Apply when summary_1 explicitly lists fetching the pages titled \"United 300\" and also lists or recommends fetching \"300 (film)\" or \"300 (disambiguation)\" as next hop targets.",
+              "preserve_rule": "Maintain the base requirement: emit exactly one compact, retrieval-focused one-line query string as the `query` output; do not add explanation, answers, lists, or extra fields; preserve visible tokens from `question` and `summary_1` as anchors.",
+              "change_rule": "Instead of a single-anchor query, compose one compact multi-anchor query that includes both named anchors plus an attribute keyword for country. Example token pattern to emit: United 300 300 film country (all on one line, space separated). Use the exact visible anchor tokens when present but avoid extra words.",
+              "drop_or_avoid_rule": "Avoid single ambiguous anchors like \"United 300 country\" or generic terms that match many \"United\" results. Do not use punctuation or explanatory clauses (no parentheses, commas, or question phrasing). Avoid introducing tokens not present in the provided inputs except short attribute keywords such as country or film.",
+              "output_contract": "The agent must return exactly one line containing only the compact query string (e.g., United 300 300 film country). Keep it concise (aim ≤ 10–12 tokens), retrieval focused, and compliant with the original formatting rules.",
+              "why_local_transition": "The source produced a single ambiguous anchor query that returned noisy 'United' results. When the summary explicitly directs fetching both 'United 300' and the film '300', the smallest coherent change is to emit a single query that targets both anchors plus the attribute 'country' so retrieval can recover both pages needed for the question."
+            }
+          }
+        ]
+      },
+      "candidate_materials": [
+        {
+          "sample_index": 47,
+          "row_index": 47,
+          "stable_id": "47",
+          "agent": "query",
+          "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 explicitly flags a single anchor title as missing key info (contains the token of a missing person such as \"Charles Giblyn\" and words like \"missing\" or \"missing occupations\").",
+                "preserve_rule": "Keep all original hard constraints: produce exactly one compact one-line query string using only the provided `question` and `summary_1`; obey the Decision templates and Strict formatting rules (≤ ~12 tokens, no punctuation, one line, no explanations).",
+                "change_rule": "When triggered, prefer the Metadata for a single anchor title template instead of the two-entity connector: emit a short keyword-style query that begins with the missing anchor token and a concise attribute keyword such as occupations or occupation (for example, form like \"Charles Giblyn occupations\"). Keep the query minimal, retrieval-focused, and not assertive.",
+                "drop_or_avoid_rule": "Avoid constructing a connector-style query that names both Bertrand Tavernier and the missing anchor; avoid adding question phrasing, punctuation, extra tokens, or any phrasing that attempts to answer or summarize. Do not introduce tokens that do not already appear in `question` or `summary_1`.",
+                "output_contract": "Produce one single-line retrieval query string that uses visible tokens and targets the missing anchor (e.g., \"Charles Giblyn occupations\"). The query must be compact, one line, no punctuation, and use only inputs allowed by the base prompt.",
+                "why_local_transition": "The missing evidence is specifically Charles Giblyn's occupations. Switching to a single-anchor metadata query is the smallest focused change to retrieve that page reliably so downstream steps can identify shared occupations."
+              }
+            }
+          ]
+        },
+        {
+          "sample_index": 85,
+          "row_index": 85,
+          "stable_id": "85",
+          "agent": "query",
+          "question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+          "delta_p_trace": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_1 contains a list of individual member names and the current query is a generic group-level query (e.g., \"Monsta X members\"), apply this edit.",
+                "preserve_rule": "Keep producing exactly one compact one-line retrieval query using only the provided question and summary_1; preserve the decision-template and strict formatting constraints (single line, no punctuation, anchor tokens from inputs).",
+                "change_rule": "Replace a generic group query with a metadata-style query that targets the individual member token present in summary_1 plus the visible group title. Construct the query as: \"<member-token> Monsta X member\" (use the exact member token from summary_1, e.g., \"Jooheon Monsta X member\"). Keep it compact and one line.",
+                "drop_or_avoid_rule": "Avoid broad group-level queries like \"Monsta X members\" and multi-name connector queries. Do not introduce full names or tokens that do not already appear in the provided inputs, and do not add explanatory clauses or punctuation.",
+                "output_contract": "Produce exactly one one-line query string containing the chosen member token from summary_1 and the group anchor 'Monsta X', no punctuation, no additional fields or commentary (example output: \"Jooheon Monsta X member\").",
+                "why_local_transition": "Focusing the query on the specific member token visible in summary_1 directs retrieval to that member's dedicated page or lede, recovering the canonical name/title evidence while keeping the original compact retrieval style."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "rendered_prompt": "You are selecting the local prompt-feedback update that is semantically closest to a fixed anchor update.\n\nEach material contains feedback for the HotpotQA second-hop query generator.\nCompare the anchor against all candidate materials and select exactly one candidate whose feedback represents the most similar query-generation behavior update.\n\nHere, semantic distance means how differently the retrieval query behavior would need to change:\n- which entity, title, alias, location, class, or task anchors to preserve, add, remove, or disambiguate\n- whether an anchor is grounded in the visible inputs, misleading, or an unsupported hypothesized answer\n- which bridge relation, comparison relation, role, property, or information need to emphasize\n- which evidence family, domain, or answer type the query should target\n- which distractors, wrong senses, prior answers, or noisy entity families to avoid\n- whether the candidate scope should be broadened, narrowed, preserved, or re-centered\n- whether the query should use compact keywords, preserve a comparison, or restate an open information need\n- what retrieval failure the feedback is intended to correct\n\nImportant:\n- Judge the semantic update represented by the feedback itself.\n- Do not judge which update is more correct or likely to improve retrieval.\n- Do not select a candidate merely because it shares entities, topics, question wording, or query tokens with the anchor.\n- Do not select a candidate merely because its feedback is longer or more detailed.\n- Source-style details such as infoboxes, lead sentences, cast sections, tables, or list parsing are secondary unless they change the retrieval target.\n- Broadening from one entity to multiple comparison subjects is different from narrowing a broad query to one missing entity.\n- Removing a misleading visible anchor is different from preventing insertion of an unsupported candidate.\n- Changing from a verbose sentence to compact keywords matters only when it changes the retrieval strategy or target.\n- If a material contains multiple delta_p edges, compare the complete ordered trace and its net retrieval-policy change, not only matching individual edges.\n- Select exactly one candidate. If candidates request materially equivalent updates, choose the one with the smallest sample_index.\n\nReturn JSON only:\n{\n  \"selected_sample_index\": 0,\n  \"shared_update_pattern\": \"short description of the retrieval-policy update shared by the anchor and selected candidate\",\n  \"rationale\": \"short explanation of why this candidate is semantically closest to the anchor\",\n  \"confidence\": 0.0\n}\n\nRequirements:\n- selected_sample_index must exactly match one candidate sample_index.\n- confidence must be between 0.0 and 1.0.\n- Do not return markdown or additional keys.\n\nAgent:\nquery\n\nAnchor feedback material:\n{\n  \"sample_index\": 50,\n  \"row_index\": 50,\n  \"stable_id\": \"50\",\n  \"agent\": \"query\",\n  \"question\": \"United 300 and 300 were both made in what country?\",\n  \"delta_p_trace\": [\n    {\n      \"edge_index\": 0,\n      \"delta_p\": {\n        \"trigger\": \"Apply when summary_1 explicitly lists fetching the pages titled \\\"United 300\\\" and also lists or recommends fetching \\\"300 (film)\\\" or \\\"300 (disambiguation)\\\" as next hop targets.\",\n        \"preserve_rule\": \"Maintain the base requirement: emit exactly one compact, retrieval-focused one-line query string as the `query` output; do not add explanation, answers, lists, or extra fields; preserve visible tokens from `question` and `summary_1` as anchors.\",\n        \"change_rule\": \"Instead of a single-anchor query, compose one compact multi-anchor query that includes both named anchors plus an attribute keyword for country. Example token pattern to emit: United 300 300 film country (all on one line, space separated). Use the exact visible anchor tokens when present but avoid extra words.\",\n        \"drop_or_avoid_rule\": \"Avoid single ambiguous anchors like \\\"United 300 country\\\" or generic terms that match many \\\"United\\\" results. Do not use punctuation or explanatory clauses (no parentheses, commas, or question phrasing). Avoid introducing tokens not present in the provided inputs except short attribute keywords such as country or film.\",\n        \"output_contract\": \"The agent must return exactly one line containing only the compact query string (e.g., United 300 300 film country). Keep it concise (aim ≤ 10–12 tokens), retrieval focused, and compliant with the original formatting rules.\",\n        \"why_local_transition\": \"The source produced a single ambiguous anchor query that returned noisy 'United' results. When the summary explicitly directs fetching both 'United 300' and the film '300', the smallest coherent change is to emit a single query that targets both anchors plus the attribute 'country' so retrieval can recover both pages needed for the question.\"\n      }\n    }\n  ]\n}\n\nCandidate feedback materials:\n[\n  {\n    \"sample_index\": 47,\n    \"row_index\": 47,\n    \"stable_id\": \"47\",\n    \"agent\": \"query\",\n    \"question\": \"Bertrand Tavernier and Charles Giblyn, have which mutual occupations?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 explicitly flags a single anchor title as missing key info (contains the token of a missing person such as \\\"Charles Giblyn\\\" and words like \\\"missing\\\" or \\\"missing occupations\\\").\",\n          \"preserve_rule\": \"Keep all original hard constraints: produce exactly one compact one-line query string using only the provided `question` and `summary_1`; obey the Decision templates and Strict formatting rules (≤ ~12 tokens, no punctuation, one line, no explanations).\",\n          \"change_rule\": \"When triggered, prefer the Metadata for a single anchor title template instead of the two-entity connector: emit a short keyword-style query that begins with the missing anchor token and a concise attribute keyword such as occupations or occupation (for example, form like \\\"Charles Giblyn occupations\\\"). Keep the query minimal, retrieval-focused, and not assertive.\",\n          \"drop_or_avoid_rule\": \"Avoid constructing a connector-style query that names both Bertrand Tavernier and the missing anchor; avoid adding question phrasing, punctuation, extra tokens, or any phrasing that attempts to answer or summarize. Do not introduce tokens that do not already appear in `question` or `summary_1`.\",\n          \"output_contract\": \"Produce one single-line retrieval query string that uses visible tokens and targets the missing anchor (e.g., \\\"Charles Giblyn occupations\\\"). The query must be compact, one line, no punctuation, and use only inputs allowed by the base prompt.\",\n          \"why_local_transition\": \"The missing evidence is specifically Charles Giblyn's occupations. Switching to a single-anchor metadata query is the smallest focused change to retrieve that page reliably so downstream steps can identify shared occupations.\"\n        }\n      }\n    ]\n  },\n  {\n    \"sample_index\": 85,\n    \"row_index\": 85,\n    \"stable_id\": \"85\",\n    \"agent\": \"query\",\n    \"question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n    \"delta_p_trace\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_1 contains a list of individual member names and the current query is a generic group-level query (e.g., \\\"Monsta X members\\\"), apply this edit.\",\n          \"preserve_rule\": \"Keep producing exactly one compact one-line retrieval query using only the provided question and summary_1; preserve the decision-template and strict formatting constraints (single line, no punctuation, anchor tokens from inputs).\",\n          \"change_rule\": \"Replace a generic group query with a metadata-style query that targets the individual member token present in summary_1 plus the visible group title. Construct the query as: \\\"<member-token> Monsta X member\\\" (use the exact member token from summary_1, e.g., \\\"Jooheon Monsta X member\\\"). Keep it compact and one line.\",\n          \"drop_or_avoid_rule\": \"Avoid broad group-level queries like \\\"Monsta X members\\\" and multi-name connector queries. Do not introduce full names or tokens that do not already appear in the provided inputs, and do not add explanatory clauses or punctuation.\",\n          \"output_contract\": \"Produce exactly one one-line query string containing the chosen member token from summary_1 and the group anchor 'Monsta X', no punctuation, no additional fields or commentary (example output: \\\"Jooheon Monsta X member\\\").\",\n          \"why_local_transition\": \"Focusing the query on the specific member token visible in summary_1 directs retrieval to that member's dedicated page or lede, recovering the canonical name/title evidence while keeping the original compact retrieval style.\"\n        }\n      }\n    ]\n  }\n]",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_sample_index\": 85,\n  \"shared_update_pattern\": \"Turn a broad or ambiguous retrieval query into a single compact multi-anchor query that includes the visible specific anchors plus a short attribute keyword (e.g., include both entity tokens and 'country'/'member') to target the exact pages.\",\n  \"rationale\": \"Both the anchor and candidate 85 change the query from a noisy/generic form to a concise one-line query that preserves visible tokens and combines two anchors with an attribute keyword to focus retrieval on the needed pages (anchor: 'United 300' + '300 film' + 'country'; candidate: member token + 'Monsta X' + 'member'). This is a multi-anchor+attribute shift rather than narrowing to a single missing anchor, so 85 is the closest match.\",\n  \"confidence\": 0.84\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.min_distance.query",
+    "signature": "__main__.SelectNearestDeltaPTraceSignature",
+    "agent": "query",
+    "anchor_sample_index": 50,
+    "candidate_sample_indices": [
+      47,
+      85
+    ]
+  }
+}

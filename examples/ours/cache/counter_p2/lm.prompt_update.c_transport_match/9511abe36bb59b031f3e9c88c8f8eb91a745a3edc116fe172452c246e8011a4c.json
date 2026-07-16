@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "9511abe36bb59b031f3e9c88c8f8eb91a745a3edc116fe172452c246e8011a4c",
+  "created_at": "2026-07-15T22:42:35.734085+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 94,
+        "stable_id": "94",
+        "question": "The mayor whose tenure marked the end of the 1900-1942 era in the history of Albany, New York was what political party?",
+        "summary_1": "Democrat — Erastus Corning 2nd (passage 5).",
+        "hop2_query": "Erastus Corning 2nd mayor Albany party",
+        "summary_2": "Democrat",
+        "answer": "Democrat",
+        "gold_support_titles": [
+          "History of Albany, New York (1900–42)",
+          "Erastus Corning 2nd"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 119,
+          "w_stable_id": "119",
+          "agent": "summary2",
+          "w_question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nikita Katsalapov",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the current `summary` selection is already a named answer from `context` but the `question` mentions a specific attribute of the partner (e.g., a birthdate) that appears in the retrieved `passages` for that partner, and the `passages` also explicitly assert the partnership (e.g., 'with <partner>' or equivalent).",
+                "preserve_rule": "Keep the canonical label/token chosen by the existing answer-selection logic as the first-and-primary output (do not change which name/token is returned). Preserve concise style and the 1–3 sentence limit in the base prompt.",
+                "change_rule": "In this trigger case, append a single short, joint supporting sentence after the primary label that (a) is directly grounded in the supplied `passages`, (b) confirms the partnership relation between the answer and the named partner, and (c) confirms the partner's requested attribute only if that attribute appears in the `passages`. The appended sentence must be compact, identity-aligned, and avoid extra biography or unrelated facts.",
+                "drop_or_avoid_rule": "Do not add additional supporting sentences beyond the single joint sentence; do not restate the full biographical lines or long quoted spans; do not change the chosen label; do not invent or infer attributes that are not present in `passages`; avoid repeating facts already fully present in `context` unless needed for identity alignment.",
+                "output_contract": "Produce the original concise primary label/token exactly as selected, optionally followed by one short joint supporting sentence (no more than one sentence) that verifies the partnership and the partner's attribute when both are explicitly supported by `passages`. Total output must remain 1–3 sentences and be directly grounded in the visible `passages`.",
+                "why_local_transition": "The source output returns only the canonical name but the question requires confirming a partner attribute (birthdate) that the second-hop passages provide; adding a single grounded supporting sentence enables the downstream agent to rely on verified partner identity/attribute without changing the chosen answer or adding extraneous details."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Democrat",
+            "score": 1.0,
+            "answer": "Democrat"
+          }
+        },
+        {
+          "w_sample_index": 14,
+          "w_stable_id": "14",
+          "agent": "summary2",
+          "w_question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Rip Taylor. Rip Taylor is an American actor/comedian known for his exuberant, flamboyant personality and his habit of showering himself (and others) with confetti.",
+            "score": 0.0,
+            "answer": "Rip Taylor"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberant, flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.",
+            "score": 0.0,
+            "answer": "Rip Taylor"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the provided `context` already selects a canonical named answer (an entity label) and the `passages` include one or more passages that identity-align to that same entity and explicitly state the relation or attribute invoked by the question (for example, an 'appeared with' relation and a biographical trait like 'showering himself (and others) with confetti'), activate this rule.",
+                "preserve_rule": "Keep the base prompt's constraints: emit a concise `summary` that preserves the canonical label chosen from `context`; perform an identity-alignment check before appending; limit output to the primary label plus at most one short supporting sentence per relevant entity (total 1–3 sentences); do not invent facts or change which label is selected.",
+                "change_rule": "If triggered, append exactly one short supporting sentence that (a) states the relevant partnership/relation between the entity named in `context` and the question's subject (e.g., 'appeared with X') and (b) states the specific attribute from the passages that the question references (e.g., the confetti habit). Ensure the appended sentence is directly grounded in the supplied `passages`, uses matching names/aliases for identity alignment, and is phrased compactly (one clause per fact). Do not expand into additional biography or unrelated facts.",
+                "drop_or_avoid_rule": "Do not append when the passages fail to unambiguously identity-align to the `context` entity. Avoid multiple supporting sentences, long verbatim quotations, extra biographical detail beyond the relation+attribute needed to answer, or changing the selected label. Do not introduce new entities or assert unsupported attributes.",
+                "output_contract": "Produce the `summary` string only. If the rule triggers, output the canonical label followed by a single short supporting sentence that (a) confirms the 'appeared with' relation between the question subject and the named artist and (b) confirms the artist's confetti habit (or the specific attribute cited by the question), all grounded in the given `passages`. Otherwise, fall back to the base behavior (canonical label only or concise uncertainty). Total length: 1–3 sentences.",
+                "why_local_transition": "The agent previously returned only the canonical label and a short descriptor; this local edit ensures the summary also appends the minimal, passage-grounded confirmation of both the appearance relation and the distinctive attribute invoked by the question, improving evidence integration without broadening behavior."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Democrat",
+            "score": 1.0,
+            "answer": "Democrat"
+          }
+        },
+        {
+          "w_sample_index": 9,
+          "w_stable_id": "9",
+          "agent": "summary2",
+          "w_question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Punk bands.",
+            "score": 0.0,
+            "answer": "Punk bands."
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Integrated evidence summary: Mindless Self Indulgence (MSI) is described as an American electropunk band formed in New York City in 1997. Tappi Tíkarrass is described as an Icelandic punk band which added elements of funk, rock and jazz to their music. The cited passages identify the two groups by those punk-related genres (MSI as an American electropunk band; Tappi Tíkarrass as an Icelandic punk band).",
+            "score": 0.0,
+            "answer": "punk bands"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the existing `context` already supplies a concise canonical label/token for the answer (for example a short label like 'Punk bands.') AND one or more of the retrieved `passages` contains identity-aligned attribute facts (genre modifiers, nationality, formation facts, membership links, or other brief relation/attribute statements) about an entity named in `context`.",
+                "preserve_rule": "Keep the original behavior of returning the single concise primary label/token as the summary when no passage-grounded attributes are necessary to support or disambiguate the answer. Do not change the selected canonical label or which entity token is returned as the primary answer.",
+                "change_rule": "When the trigger condition is met, append one short supporting sentence per relevant entity (or one joint supporting sentence for an explicit partnership) after the primary label. Each supporting sentence must: (a) be directly grounded to the supplied `passages`, (b) be identity-verified against the `context` (confirm names/aliases match), (c) paraphrase the attribute (no long verbatim quotations), (d) be concise (one sentence each), and (e) avoid introducing any facts that are not present in the provided `passages` and `context`.",
+                "drop_or_avoid_rule": "Do not append supporting sentences if identity alignment between `context` and `passages` is ambiguous or unsupported; do not append when the question expects a normalized single-token answer or when `context` already contains a full passage-consistent integrated answer. Avoid long verbatim quotes, extra background details, multiple supporting sentences per entity, or adding unrelated attributes not present in the inputs.",
+                "output_contract": "The final `summary` must be either (A) the single canonical label/token alone, or (B) the canonical label followed by 1–2 short, passage-grounded supporting sentences (one per relevant entity or one joint sentence). Total output must remain concise (1–3 sentences), preserve the chosen label, and only include attributes that can be directly verified in the provided `passages`.",
+                "why_local_transition": "This small behavioral addition ensures that when the second-hop passages supply verifying/disambiguating attributes about entities already named in `context`, the agent will append tightly focused supporting sentences so the integrated summary preserves the facts needed by downstream answer-generation, without changing cases where no extra support is required."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Democrat",
+            "score": 1.0,
+            "answer": "Democrat"
+          }
+        },
+        {
+          "w_sample_index": 5,
+          "w_stable_id": "5",
+          "agent": "summary2",
+          "w_question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Chelsea Peretti",
+            "score": 0.0,
+            "answer": "Chelsea Peretti"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Chelsea Peretti — Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer. She is listed in the Brooklyn Nine-Nine ensemble and supporting cast as Regina \"Gina\" Linetti.",
+            "score": 0.0,
+            "answer": "Chelsea Peretti"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question requests an entity by role or attribute (e.g. \"which comedian and writer\") and the `context` names a single canonical entity with those role-terms, AND at least one `passage` corroborates that same named entity and explicitly links them to Brooklyn Nine-Nine (for example via the show's cast list or the entity's page),",
+                "preserve_rule": "Do not change which canonical label/token is selected as the primary `summary`. Preserve the agent's existing brief answer-selection behavior and do not replace or re-rank the chosen label.",
+                "change_rule": "When the trigger conditions hold, append exactly one short supporting sentence after the canonical label. The sentence must (a) confirm the entity's role/attributes referenced in the question (e.g. 'comedian and writer') and (b) state that the passages list or describe them as part of Brooklyn Nine-Nine's ensemble/supporting cast (optionally naming the character) — but only if the passage text directly supports each clause. Ensure identity alignment (match name/alias/role) before appending. Keep the appended sentence to one compact clause (no more than ~20 words).",
+                "drop_or_avoid_rule": "Do not append additional biographical details (birthdates, awards, extra roles) unless the question explicitly requires them and the passages directly support them. Avoid long verbatim quotations, multi-sentence biographies, or inventing links not present in the supplied passages. Do not alter the selected canonical label or include alternative candidates.",
+                "output_contract": "The `summary` must be either (A) the single canonical label/token already chosen, or (B) that same canonical label followed by one short supporting sentence that is directly grounded in the provided `passages` and confirms both the requested attribute(s) and the entity's inclusion in Brooklyn Nine-Nine's cast. Total output must remain concise (1–2 short sentences).",
+                "why_local_transition": "The current output is only the canonical label; for questions that ask for an entity by role/attribute, the base prompt allows appending a short passage-grounded supporting sentence when passages corroborate the relation. This edit adds the minimal behavior to append a single corroborating sentence (identity-checked and concise) so the summary supplies the attribute-and-cast link needed by the question without changing answer selection."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Democrat",
+            "score": 1.0,
+            "answer": "Democrat"
+          }
+        },
+        {
+          "w_sample_index": 85,
+          "w_stable_id": "85",
+          "agent": "summary2",
+          "w_question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Jooheon",
+            "score": 0.0,
+            "answer": "Jooheon"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary1 identified Jooheon among the names. Lee Joo-heon (Jooheon) is a South Korean rapper and songwriter and is a member of Monsta X. Monsta X was formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015 and the group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.",
+            "score": 1.0,
+            "answer": "Lee Joo-heon"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the current `summary` output is a single canonical label/token drawn from `context` (e.g. 'Jooheon') AND the supplied `passages` contain an explicit group-membership or formation fact (phrases like 'formed', 'formed in <year>', or an explicit member list that includes that label), activate this delta.",
+                "preserve_rule": "Keep the existing primary label/token exactly as selected by the agent's answer-selection logic; do not change which name/token is chosen or its spelling/presentation.",
+                "change_rule": "If triggered, append exactly one short, passage-grounded supporting sentence to the primary token. That sentence must (a) confirm the entity's identity/role as stated in the passages (e.g., member/role), and (b) state the group's formation attribute that is relevant to the question (for example formation year or formation method) and, if directly helpful, a brief mention of the group's membership composition. Keep this appended sentence to one concise sentence (no lists, no extra clauses beyond the necessary relation/attribute facts). Verify identity alignment before appending.",
+                "drop_or_avoid_rule": "Do not append if the passages do not explicitly support the exact identity/role or formation fact for the label, or if identity is ambiguous. Do not append multiple supporting sentences, long quotations, or extra unrelated facts. Do not alter the primary label/token or attempt to replace it with alternatives.",
+                "output_contract": "Final `summary` must remain concise (1–2 sentences): the original canonical label/token unchanged as the first sentence (or sole token), plus at most one short supporting sentence that is strictly grounded in the supplied `passages` and identity-aligned to the `context` entity. No invented facts, no extended member lists beyond what is necessary to support the answer.",
+                "why_local_transition": "The change nudges the agent to add a single, grounded supporting sentence when the second-hop passages supply membership/formation facts needed by the question. This preserves the original short-label behavior while ensuring the small, targeted evidence integration required to answer the query about group formation/membership."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Democrat",
+            "score": 1.0,
+            "answer": "Democrat"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 94,\n  \"stable_id\": \"94\",\n  \"question\": \"The mayor whose tenure marked the end of the 1900-1942 era in the history of Albany, New York was what political party?\",\n  \"summary_1\": \"Democrat — Erastus Corning 2nd (passage 5).\",\n  \"hop2_query\": \"Erastus Corning 2nd mayor Albany party\",\n  \"summary_2\": \"Democrat\",\n  \"answer\": \"Democrat\",\n  \"gold_support_titles\": [\n    \"History of Albany, New York (1900–42)\",\n    \"Erastus Corning 2nd\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 119,\n    \"w_stable_id\": \"119\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nikita Katsalapov\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the current `summary` selection is already a named answer from `context` but the `question` mentions a specific attribute of the partner (e.g., a birthdate) that appears in the retrieved `passages` for that partner, and the `passages` also explicitly assert the partnership (e.g., 'with <partner>' or equivalent).\",\n          \"preserve_rule\": \"Keep the canonical label/token chosen by the existing answer-selection logic as the first-and-primary output (do not change which name/token is returned). Preserve concise style and the 1–3 sentence limit in the base prompt.\",\n          \"change_rule\": \"In this trigger case, append a single short, joint supporting sentence after the primary label that (a) is directly grounded in the supplied `passages`, (b) confirms the partnership relation between the answer and the named partner, and (c) confirms the partner's requested attribute only if that attribute appears in the `passages`. The appended sentence must be compact, identity-aligned, and avoid extra biography or unrelated facts.\",\n          \"drop_or_avoid_rule\": \"Do not add additional supporting sentences beyond the single joint sentence; do not restate the full biographical lines or long quoted spans; do not change the chosen label; do not invent or infer attributes that are not present in `passages`; avoid repeating facts already fully present in `context` unless needed for identity alignment.\",\n          \"output_contract\": \"Produce the original concise primary label/token exactly as selected, optionally followed by one short joint supporting sentence (no more than one sentence) that verifies the partnership and the partner's attribute when both are explicitly supported by `passages`. Total output must remain 1–3 sentences and be directly grounded in the visible `passages`.\",\n          \"why_local_transition\": \"The source output returns only the canonical name but the question requires confirming a partner attribute (birthdate) that the second-hop passages provide; adding a single grounded supporting sentence enables the downstream agent to rely on verified partner identity/attribute without changing the chosen answer or adding extraneous details.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Democrat\",\n      \"score\": 1.0,\n      \"answer\": \"Democrat\"\n    }\n  },\n  {\n    \"w_sample_index\": 14,\n    \"w_stable_id\": \"14\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Rip Taylor. Rip Taylor is an American actor/comedian known for his exuberant, flamboyant personality and his habit of showering himself (and others) with confetti.\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberant, flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the provided `context` already selects a canonical named answer (an entity label) and the `passages` include one or more passages that identity-align to that same entity and explicitly state the relation or attribute invoked by the question (for example, an 'appeared with' relation and a biographical trait like 'showering himself (and others) with confetti'), activate this rule.\",\n          \"preserve_rule\": \"Keep the base prompt's constraints: emit a concise `summary` that preserves the canonical label chosen from `context`; perform an identity-alignment check before appending; limit output to the primary label plus at most one short supporting sentence per relevant entity (total 1–3 sentences); do not invent facts or change which label is selected.\",\n          \"change_rule\": \"If triggered, append exactly one short supporting sentence that (a) states the relevant partnership/relation between the entity named in `context` and the question's subject (e.g., 'appeared with X') and (b) states the specific attribute from the passages that the question references (e.g., the confetti habit). Ensure the appended sentence is directly grounded in the supplied `passages`, uses matching names/aliases for identity alignment, and is phrased compactly (one clause per fact). Do not expand into additional biography or unrelated facts.\",\n          \"drop_or_avoid_rule\": \"Do not append when the passages fail to unambiguously identity-align to the `context` entity. Avoid multiple supporting sentences, long verbatim quotations, extra biographical detail beyond the relation+attribute needed to answer, or changing the selected label. Do not introduce new entities or assert unsupported attributes.\",\n          \"output_contract\": \"Produce the `summary` string only. If the rule triggers, output the canonical label followed by a single short supporting sentence that (a) confirms the 'appeared with' relation between the question subject and the named artist and (b) confirms the artist's confetti habit (or the specific attribute cited by the question), all grounded in the given `passages`. Otherwise, fall back to the base behavior (canonical label only or concise uncertainty). Total length: 1–3 sentences.\",\n          \"why_local_transition\": \"The agent previously returned only the canonical label and a short descriptor; this local edit ensures the summary also appends the minimal, passage-grounded confirmation of both the appearance relation and the distinctive attribute invoked by the question, improving evidence integration without broadening behavior.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Democrat\",\n      \"score\": 1.0,\n      \"answer\": \"Democrat\"\n    }\n  },\n  {\n    \"w_sample_index\": 9,\n    \"w_stable_id\": \"9\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Mindless Self Indulgence and Tappi Tíkarrass are both what?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Punk bands.\",\n      \"score\": 0.0,\n      \"answer\": \"Punk bands.\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Integrated evidence summary: Mindless Self Indulgence (MSI) is described as an American electropunk band formed in New York City in 1997. Tappi Tíkarrass is described as an Icelandic punk band which added elements of funk, rock and jazz to their music. The cited passages identify the two groups by those punk-related genres (MSI as an American electropunk band; Tappi Tíkarrass as an Icelandic punk band).\",\n      \"score\": 0.0,\n      \"answer\": \"punk bands\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the existing `context` already supplies a concise canonical label/token for the answer (for example a short label like 'Punk bands.') AND one or more of the retrieved `passages` contains identity-aligned attribute facts (genre modifiers, nationality, formation facts, membership links, or other brief relation/attribute statements) about an entity named in `context`.\",\n          \"preserve_rule\": \"Keep the original behavior of returning the single concise primary label/token as the summary when no passage-grounded attributes are necessary to support or disambiguate the answer. Do not change the selected canonical label or which entity token is returned as the primary answer.\",\n          \"change_rule\": \"When the trigger condition is met, append one short supporting sentence per relevant entity (or one joint supporting sentence for an explicit partnership) after the primary label. Each supporting sentence must: (a) be directly grounded to the supplied `passages`, (b) be identity-verified against the `context` (confirm names/aliases match), (c) paraphrase the attribute (no long verbatim quotations), (d) be concise (one sentence each), and (e) avoid introducing any facts that are not present in the provided `passages` and `context`.\",\n          \"drop_or_avoid_rule\": \"Do not append supporting sentences if identity alignment between `context` and `passages` is ambiguous or unsupported; do not append when the question expects a normalized single-token answer or when `context` already contains a full passage-consistent integrated answer. Avoid long verbatim quotes, extra background details, multiple supporting sentences per entity, or adding unrelated attributes not present in the inputs.\",\n          \"output_contract\": \"The final `summary` must be either (A) the single canonical label/token alone, or (B) the canonical label followed by 1–2 short, passage-grounded supporting sentences (one per relevant entity or one joint sentence). Total output must remain concise (1–3 sentences), preserve the chosen label, and only include attributes that can be directly verified in the provided `passages`.\",\n          \"why_local_transition\": \"This small behavioral addition ensures that when the second-hop passages supply verifying/disambiguating attributes about entities already named in `context`, the agent will append tightly focused supporting sentences so the integrated summary preserves the facts needed by downstream answer-generation, without changing cases where no extra support is required.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Democrat\",\n      \"score\": 1.0,\n      \"answer\": \"Democrat\"\n    }\n  },\n  {\n    \"w_sample_index\": 5,\n    \"w_stable_id\": \"5\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Chelsea Peretti\",\n      \"score\": 0.0,\n      \"answer\": \"Chelsea Peretti\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Chelsea Peretti — Chelsea Vanessa Peretti (born February 20, 1978) is an American comedian, actress, and writer. She is listed in the Brooklyn Nine-Nine ensemble and supporting cast as Regina \\\"Gina\\\" Linetti.\",\n      \"score\": 0.0,\n      \"answer\": \"Chelsea Peretti\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question requests an entity by role or attribute (e.g. \\\"which comedian and writer\\\") and the `context` names a single canonical entity with those role-terms, AND at least one `passage` corroborates that same named entity and explicitly links them to Brooklyn Nine-Nine (for example via the show's cast list or the entity's page),\",\n          \"preserve_rule\": \"Do not change which canonical label/token is selected as the primary `summary`. Preserve the agent's existing brief answer-selection behavior and do not replace or re-rank the chosen label.\",\n          \"change_rule\": \"When the trigger conditions hold, append exactly one short supporting sentence after the canonical label. The sentence must (a) confirm the entity's role/attributes referenced in the question (e.g. 'comedian and writer') and (b) state that the passages list or describe them as part of Brooklyn Nine-Nine's ensemble/supporting cast (optionally naming the character) — but only if the passage text directly supports each clause. Ensure identity alignment (match name/alias/role) before appending. Keep the appended sentence to one compact clause (no more than ~20 words).\",\n          \"drop_or_avoid_rule\": \"Do not append additional biographical details (birthdates, awards, extra roles) unless the question explicitly requires them and the passages directly support them. Avoid long verbatim quotations, multi-sentence biographies, or inventing links not present in the supplied passages. Do not alter the selected canonical label or include alternative candidates.\",\n          \"output_contract\": \"The `summary` must be either (A) the single canonical label/token already chosen, or (B) that same canonical label followed by one short supporting sentence that is directly grounded in the provided `passages` and confirms both the requested attribute(s) and the entity's inclusion in Brooklyn Nine-Nine's cast. Total output must remain concise (1–2 short sentences).\",\n          \"why_local_transition\": \"The current output is only the canonical label; for questions that ask for an entity by role/attribute, the base prompt allows appending a short passage-grounded supporting sentence when passages corroborate the relation. This edit adds the minimal behavior to append a single corroborating sentence (identity-checked and concise) so the summary supplies the attribute-and-cast link needed by the question without changing answer selection.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Democrat\",\n      \"score\": 1.0,\n      \"answer\": \"Democrat\"\n    }\n  },\n  {\n    \"w_sample_index\": 85,\n    \"w_stable_id\": \"85\",\n    \"agent\": \"summary2\",\n    \"w_question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Jooheon\",\n      \"score\": 0.0,\n      \"answer\": \"Jooheon\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary1 identified Jooheon among the names. Lee Joo-heon (Jooheon) is a South Korean rapper and songwriter and is a member of Monsta X. Monsta X was formed by Starship Entertainment through the survival show \\\"No.Mercy\\\" on Mnet in 2015 and the group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M.\",\n      \"score\": 1.0,\n      \"answer\": \"Lee Joo-heon\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the current `summary` output is a single canonical label/token drawn from `context` (e.g. 'Jooheon') AND the supplied `passages` contain an explicit group-membership or formation fact (phrases like 'formed', 'formed in <year>', or an explicit member list that includes that label), activate this delta.\",\n          \"preserve_rule\": \"Keep the existing primary label/token exactly as selected by the agent's answer-selection logic; do not change which name/token is chosen or its spelling/presentation.\",\n          \"change_rule\": \"If triggered, append exactly one short, passage-grounded supporting sentence to the primary token. That sentence must (a) confirm the entity's identity/role as stated in the passages (e.g., member/role), and (b) state the group's formation attribute that is relevant to the question (for example formation year or formation method) and, if directly helpful, a brief mention of the group's membership composition. Keep this appended sentence to one concise sentence (no lists, no extra clauses beyond the necessary relation/attribute facts). Verify identity alignment before appending.\",\n          \"drop_or_avoid_rule\": \"Do not append if the passages do not explicitly support the exact identity/role or formation fact for the label, or if identity is ambiguous. Do not append multiple supporting sentences, long quotations, or extra unrelated facts. Do not alter the primary label/token or attempt to replace it with alternatives.\",\n          \"output_contract\": \"Final `summary` must remain concise (1–2 sentences): the original canonical label/token unchanged as the first sentence (or sole token), plus at most one short supporting sentence that is strictly grounded in the supplied `passages` and identity-aligned to the `context` entity. No invented facts, no extended member lists beyond what is necessary to support the answer.\",\n          \"why_local_transition\": \"The change nudges the agent to add a single, grounded supporting sentence when the second-hop passages supply membership/formation facts needed by the question. This preserves the original short-label behavior while ensuring the small, targeted evidence integration required to answer the query about group formation/membership.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Democrat\",\n      \"score\": 1.0,\n      \"answer\": \"Democrat\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 5,\n  \"dominant_gap_type\": \"missing_qualifier\",\n  \"transported_damage_hypothesis\": \"The agent normally appends a single short, passage‑grounded sentence that confirms the requested attribute (here: the mayor's party and/or that his tenure marked the end of the 1900–1942 era) when the passages explicitly support it. Transport the failure that removes that appended supporting sentence so the summary emits only the canonical token without the corroborating qualifier.\",\n  \"expected_damaged_behavior\": \"At the summary2 boundary the agent will still emit the primary label/token (leaving the answer token unchanged) but will omit the one short supporting sentence that ties the mayor to the era/party, leaving the answer uncorroborated by local evidence.\",\n  \"rationale\": \"Sample 5 exactly captures the pattern needed for this target: the question requests an entity by attribute (\\\"what political party?\\\"), and the W repair appends one concise, passage‑grounded sentence confirming the attribute and role only when passages support it. That same minimal supporting‑sentence behavior is directly applicable to the Albany mayor/party case (append a single sentence confirming party/tenure link). Removing that small appended qualifier is a local, transportable failure that doesn't require inventing entities or flipping the answer token, and it keeps the damaged state a local neighbor of the correct C_plus output.\",\n  \"confidence\": 0.83\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 94,
+    "c_stable_id": "94",
+    "candidate_w_sample_indices": [
+      5,
+      9,
+      14,
+      85,
+      119
+    ],
+    "match_fingerprint": "8457fef554475a6f1faf88e4726e3b3931db4ec5896efa2e98359b113b06f317"
+  }
+}

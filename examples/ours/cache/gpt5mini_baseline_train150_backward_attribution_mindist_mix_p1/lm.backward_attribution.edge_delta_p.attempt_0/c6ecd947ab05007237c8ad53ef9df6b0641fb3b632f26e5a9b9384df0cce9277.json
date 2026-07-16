@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c6ecd947ab05007237c8ad53ef9df6b0641fb3b632f26e5a9b9384df0cce9277",
+  "created_at": "2026-07-14T19:01:54.599866+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?",
+        "summary_1": "The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.",
+        "summary_2": "Cannot determine — the supplied passages do not provide John Calipari's middle name (the coach in 1992–93), so it is not available from these sources.",
+        "current_output": "Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Vincent",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What is the middle name of the coach of UMass Minutemen basketball team in the 1992-93 season ?\",\n  \"summary_1\": \"The coach was John Calipari; his middle name is not provided in the supplied passages, so it cannot be determined from these sources.\",\n  \"summary_2\": \"Cannot determine — the supplied passages do not provide John Calipari's middle name (the coach in 1992–93), so it is not available from these sources.\",\n  \"current_output\": \"Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Cannot be determined from the supplied passages — the coach (John Calipari) has no middle name listed in the provided sources.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Vincent\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If summary_1 and summary_2 both name the same individual with the exact same full-name string as the coach referenced in the question, and neither summary supplies that individual's middle name, and the question asks specifically for that individual's middle name.\",\n    \"preserve_rule\": \"Continue to treat the provided summaries as the primary evidence source. If the summaries disagree about the coach's identity, omit an asserted middle name and return the canonical 'cannot be determined' response.\",\n    \"change_rule\": \"When the trigger condition holds, permit the model to use its internal, widely known general-knowledge memory to supply the person's commonly documented middle name — but only if the model is confident this is a well-documented public fact. If supplying a name, put only the single middle-name token as the answer. If not confident, revert to the preserved behavior (reporting that it cannot be determined from the supplied passages).\",\n    \"drop_or_avoid_rule\": \"Do not invent or guess a middle name when confidence is low. Do not use partial or fuzzy name matches as the trigger; require exact same full-name string in both summaries. Do not instruct or perform external searches. Do not add explanatory text or extra tokens outside the mandated minimal answer.\",\n    \"output_contract\": \"Return exactly one minimal answer string inside the final-answer output block: either the single middle-name token (if produced under the trigger and confidence rule) or the short canonical phrase 'Cannot be determined from the supplied passages.' No additional words, sentences, or justification may be added.\",\n    \"why_local_transition\": \"The summaries consistently identify the same coach but lack the middle name. This small rule lets the agent responsibly fill a factual gap using confident internal knowledge when the identity is unambiguous, producing a concise answer instead of a default 'cannot determine' only when justified.\"\n  },\n  \"rationale\": \"This is a minimal, targeted edit: it does not change the agent's interface or the primary reliance on supplied summaries, and it only relaxes the refusal to answer in a narrowly scoped case (both summaries name the same person exactly). It preserves the original behavior when summaries disagree or confidence is low, adds strict safeguards against hallucination, and keeps the final-output contract (single minimal answer token) intact.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 120,
+    "row_index": 120,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

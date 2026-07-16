@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_0",
+  "key": "5c0af548bf4b707ebd0d00d56199bd52bafa1db602b654c0ab2bfcc810b220a8",
+  "created_at": "2026-07-16T01:03:02.735288+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "visible_c_inputs": {
+        "question": "Both Should Have Known Better and Carrie & Lowell have which instrumentalist playing on them?",
+        "summary_1": "Sufjan Stevens",
+        "summary_2": "Sufjan Stevens (the singer-songwriter and multi-instrumentalist).",
+        "current_output": "Sufjan Stevens"
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Sufjan Stevens",
+        "score": 1.0
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).",
+        "score": 0.0
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).",
+            "preserve_rule": "Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.",
+            "change_rule": "Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.",
+            "drop_or_avoid_rule": "Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.",
+            "output_contract": "Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.",
+            "why_local_transition": "The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 60,
+        "c_stable_id": "60",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 28,
+        "selected_w_stable_id": "28",
+        "agent": "final",
+        "dominant_gap_type": "output_shape",
+        "transported_damage_hypothesis": "A final-agent formatting rule that collapses the final answer to a single-token minimal response (originally intended for yes/no consensus) will be applied to this question, causing the full named-entity answer to be reduced to one token.",
+        "expected_damaged_behavior": "The final answer field will contain only a single token (e.g., a truncated name or a lone token) instead of the full 'Sufjan Stevens' entity string.",
+        "rationale": "All candidate W transitions describe the same narrow failure: enforcing a one-token final-answer contract when the summaries already agree. That failure is about output shape/formatting rather than content and therefore transports directly: the target C also has two summaries that jointly support the same named-entity answer, so a misapplied minimal-answer rule could locally turn the correct full-entity output into a single-token output (truncation or an inappropriate minimal token). This preserves locality (only final-output formatting changes), doesn't require inventing W-side entities, and plausibly yields a nearby incorrect C_- by stripping or collapsing the correct entity into one token.",
+        "confidence": 0.78
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nVisible C inputs:\n{\n  \"question\": \"Both Should Have Known Better and Carrie & Lowell have which instrumentalist playing on them?\",\n  \"summary_1\": \"Sufjan Stevens\",\n  \"summary_2\": \"Sufjan Stevens (the singer-songwriter and multi-instrumentalist).\",\n  \"current_output\": \"Sufjan Stevens\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Sufjan Stevens\",\n  \"score\": 1.0\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes — both Libocedrus and Helianthus are genera of plants (Libocedrus = coniferous trees; Helianthus = sunflowers).\",\n  \"score\": 0.0\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 and summary_2 clearly agree on the same binary conclusion about the question (both assert the same affirmative or the same negative answer).\",\n      \"preserve_rule\": \"Keep the agent's use of summary_1 and summary_2 as the evidential basis and preserve the conclusion they jointly support. Do not add new claims or external evidence, and retain any determination already made from the summaries.\",\n      \"change_rule\": \"Instead of a sentence or explanation, emit exactly one token that expresses the binary conclusion indicated by the summaries (a single-word affirmative or single-word negative). Do not add surrounding commentary, explanatory phrases, or examples; output only that one token as the answer.\",\n      \"drop_or_avoid_rule\": \"Avoid any elaboration, parenthetical notes, genus names, descriptions, punctuation beyond the single token, or framing text (no 'Yes —', 'Yes.', 'Both are ...', etc.). Do not rephrase the conclusion into a longer sentence or include supporting detail.\",\n      \"output_contract\": \"Produce the field `answer` whose content is exactly one token (one word) conveying the binary conclusion that is directly supported by the visible summaries. Nothing else should appear in the answer field.\",\n      \"why_local_transition\": \"The summaries already agree on the binary fact; this edit only tightens the final-output format to the minimal single-token answer required by the final-agent contract while keeping the original conclusion and evidence unchanged.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 60,\n  \"c_stable_id\": \"60\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 28,\n  \"selected_w_stable_id\": \"28\",\n  \"agent\": \"final\",\n  \"dominant_gap_type\": \"output_shape\",\n  \"transported_damage_hypothesis\": \"A final-agent formatting rule that collapses the final answer to a single-token minimal response (originally intended for yes/no consensus) will be applied to this question, causing the full named-entity answer to be reduced to one token.\",\n  \"expected_damaged_behavior\": \"The final answer field will contain only a single token (e.g., a truncated name or a lone token) instead of the full 'Sufjan Stevens' entity string.\",\n  \"rationale\": \"All candidate W transitions describe the same narrow failure: enforcing a one-token final-answer contract when the summaries already agree. That failure is about output shape/formatting rather than content and therefore transports directly: the target C also has two summaries that jointly support the same named-entity answer, so a misapplied minimal-answer rule could locally turn the correct full-entity output into a single-token output (truncation or an inappropriate minimal token). This preserves locality (only final-output formatting changes), doesn't require inventing W-side entities, and plausibly yields a nearby incorrect C_- by stripping or collapsing the correct entity into one token.\",\n  \"confidence\": 0.78\n}\n\nRepair feedback from a rejected attempt:\n{}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": {\n    \"answer\": \"Sufjan\"\n  },\n  \"transported_failure_pattern\": \"collapse multi-token entity to a single-token answer (one-word output-format enforcement)\",\n  \"expected_damage\": \"The agent's full named-entity answer is truncated to a single token ('Sufjan') instead of the full 'Sufjan Stevens'.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\n      \"summary_1 and summary_2 agreement\",\n      \"Sufjan Stevens\"\n    ],\n    \"why_not_unrelated\": \"Only the final output's tokenization/formatting was altered; the summaries and their agreement remain intact.\"\n  },\n  \"confidence\": 0.78,\n  \"rationale\": \"The summaries clearly support the same named-entity answer; a formatting failure that enforces a single-token response plausibly yields the truncated token while preserving evidence and overall answer intent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 60,
+    "c_stable_id": "60",
+    "w_sample_index": 28,
+    "w_stable_id": "28",
+    "agent": "final",
+    "damage_attempt": 0,
+    "match_fingerprint": "83d54950ef4970e9b2d14f37bc5f372dd4fbcc6c856c14d9d209e5837244ee8c"
+  }
+}

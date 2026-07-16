@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "23bee97b117f4f27d1027e91952e781bcbbab6893ba5c627dbe5b0233d057173",
+  "created_at": "2026-07-14T19:01:50.355777+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks which of two named people 'was a Greek film director' (or otherwise asks to choose who held that role) and one or both summaries explicitly state that a specific person is a Greek film director, apply this delta.",
+            "preserve_rule": "Continue to base the decision only on the provided summary_1 and summary_2 texts; preserve the current behavior of selecting the person directly supported by those summaries.",
+            "change_rule": "Instead of outputting only a bare name token, format the answer as a single, concise declarative sentence that states the person and the role using the name exactly as it appears in the summaries (no alternative spellings or added parenthetical material). Structure: '<PersonName> is a Greek film director.' Do not add extra facts, transliterations, native-script text, dates, or biographical detail not present in the summaries.",
+            "drop_or_avoid_rule": "Do not append citations, explanations, justifications, or any sentences beyond the one minimal declarative sentence. Do not introduce wording or long spans that appear only in any hidden/target state (for example, do not insert parenthetical native-script or extended descriptors).",
+            "output_contract": "Return the field 'answer' containing only a single concise declarative sentence naming who was the Greek film director, based solely on the summaries (e.g., '<PersonName> is a Greek film director.'). No additional text, lists, or commentary.",
+            "why_local_transition": "This edge refines formatting and explicitness: the agent should move from a bare name token to a minimal declarative sentence that asserts the role supported by the visible summaries, while still avoiding any unsupported detail. It is a small, local change that preserves evidence use and the minimal-answer constraint."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who was a Greek film director Andrew Lau or Yannis Smaragdis? ",
+        "summary_1": "Yannis Smaragdis is the Greek film director. Andrew Lau is a Hong Kong film director.",
+        "summary_2": "Yannis Smaragdis is the Greek film director. Andrew Lau is a Hong Kong film director (see passages [1] and [5]).",
+        "current_output": "Yannis Smaragdis."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks which of two named people 'was a Greek film director' (or otherwise asks to choose who held that role) and one or both summaries explicitly state that a specific person is a Greek film director, apply this delta.\",\n      \"preserve_rule\": \"Continue to base the decision only on the provided summary_1 and summary_2 texts; preserve the current behavior of selecting the person directly supported by those summaries.\",\n      \"change_rule\": \"Instead of outputting only a bare name token, format the answer as a single, concise declarative sentence that states the person and the role using the name exactly as it appears in the summaries (no alternative spellings or added parenthetical material). Structure: '<PersonName> is a Greek film director.' Do not add extra facts, transliterations, native-script text, dates, or biographical detail not present in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not append citations, explanations, justifications, or any sentences beyond the one minimal declarative sentence. Do not introduce wording or long spans that appear only in any hidden/target state (for example, do not insert parenthetical native-script or extended descriptors).\",\n      \"output_contract\": \"Return the field 'answer' containing only a single concise declarative sentence naming who was the Greek film director, based solely on the summaries (e.g., '<PersonName> is a Greek film director.'). No additional text, lists, or commentary.\",\n      \"why_local_transition\": \"This edge refines formatting and explicitness: the agent should move from a bare name token to a minimal declarative sentence that asserts the role supported by the visible summaries, while still avoiding any unsupported detail. It is a small, local change that preserves evidence use and the minimal-answer constraint.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who was a Greek film director Andrew Lau or Yannis Smaragdis? \",\n  \"summary_1\": \"Yannis Smaragdis is the Greek film director. Andrew Lau is a Hong Kong film director.\",\n  \"summary_2\": \"Yannis Smaragdis is the Greek film director. Andrew Lau is a Hong Kong film director (see passages [1] and [5]).\",\n  \"current_output\": \"Yannis Smaragdis.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Yannis Smaragdis is a Greek film director.\",\n  \"rationale\": \"Applied the ordered delta to produce a single concise declarative sentence using the name exactly as given in the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 66,
+    "row_index": 66,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

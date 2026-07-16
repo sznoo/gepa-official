@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "bae4ea4c6dd4f09091c794d72818e4603b06e26b05e2b1faf616c63f8099d5d7",
+  "created_at": "2026-07-14T19:01:55.419855+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which plant grows further North, Zamia or Vallea?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which plant grows further North, Zamia or Vallea?",
+        "summary_1": "I can't determine which grows further north based only on the provided passages. The passages show Zamia occurs as far north as Mexico, but no information about Vallea's range is given. Provide Vallea range information (or allow me to look it up) and I can answer the question.",
+        "summary_2": "Zamia grows further north than Vallea. If you want exact northernmost localities for each genus, I can look them up.",
+        "current_output": "Zamia grows further north than Vallea."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Zamia grows further north than Vallea.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Zamia",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which plant grows further North, Zamia or Vallea?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which plant grows further North, Zamia or Vallea?\",\n  \"summary_1\": \"I can't determine which grows further north based only on the provided passages. The passages show Zamia occurs as far north as Mexico, but no information about Vallea's range is given. Provide Vallea range information (or allow me to look it up) and I can answer the question.\",\n  \"summary_2\": \"Zamia grows further north than Vallea. If you want exact northernmost localities for each genus, I can look them up.\",\n  \"current_output\": \"Zamia grows further north than Vallea.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Zamia grows further north than Vallea.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Zamia\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks to choose which of two named taxa grows further north (e.g. formulation 'Which ... X or Y?') AND at least one provided summary contains a clear comparative conclusion of the form 'A grows further north than B' (a direct statement preferring one of the two), AND no summary contains a direct, explicit contradiction of that conclusion.\",\n    \"preserve_rule\": \"Keep using the visible summaries as the sole evidence source. If summaries conflict or neither supplies a direct comparative conclusion, retain existing behavior (do not apply this delta) and fall back to requesting or consulting additional information.\",\n    \"change_rule\": \"If the trigger conditions are met, extract the single plant name that the authoritative summary explicitly prefers (the entity asserted to grow further north) and place only that single token as the answer. Do not add any explanatory text, reasoning, punctuation, or qualifiers in the answer slot; do not introduce new facts beyond what the summaries provide.\",\n    \"drop_or_avoid_rule\": \"Avoid producing a full-sentence answer, any justification, hedging, or additional context in the final answer block. Avoid inventing supporting facts or citing unseen sources. Do not apply this compression when summaries contradict each other or lack a direct comparative statement.\",\n    \"output_contract\": \"Produce the minimal answer string supported by the visible summaries: exactly one plant name token only inside the [[ ## answer ## ]] block and nothing else.\",\n    \"why_local_transition\": \"The current output is a full-sentence restatement of a supported conclusion. The smallest coherent change is to enforce the final-answer format requirement (a single minimal answer token) whenever the summaries already provide a clear comparative conclusion, preserving existing evidence usage while tightening output form.\"\n  },\n  \"rationale\": \"This edit is the minimal behavioral change needed to satisfy the final-answer contract: when the summaries already contain an unambiguous comparative claim, compress the agent's output to the single named winner. It preserves the agent's reliance on visible summaries, includes a safeguard against applying the rule when summaries conflict or lack the comparison, and avoids introducing new facts or explanations. The delta is a prompt-level instruction (a behavior rule), not an answer or summary, and it leaves unchanged behaviors for cases without a clear comparative statement.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 140,
+    "row_index": 140,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

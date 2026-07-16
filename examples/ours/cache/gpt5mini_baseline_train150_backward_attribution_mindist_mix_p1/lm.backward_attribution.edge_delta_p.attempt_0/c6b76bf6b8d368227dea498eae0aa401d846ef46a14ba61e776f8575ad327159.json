@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "c6b76bf6b8d368227dea498eae0aa401d846ef46a14ba61e776f8575ad327159",
+  "created_at": "2026-07-14T19:01:52.628861+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?",
+        "summary_1": "He was 23 years old.",
+        "summary_2": "23 years old.",
+        "current_output": "He was 23 years old."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "He was 23 years old.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "23",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?\",\n  \"summary_1\": \"He was 23 years old.\",\n  \"summary_2\": \"23 years old.\",\n  \"current_output\": \"He was 23 years old.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"He was 23 years old.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"23\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question text contains the phrase 'how old' (case-insensitive) AND at least one of the provided summaries contains a numeric age token (a contiguous sequence of digits, optionally followed by words like 'year', 'years', or 'years old').\",\n    \"preserve_rule\": \"Continue using the existing summaries as the evidence source. If both summaries contain the same numeric token, treat that token as the agreed value. If summaries contain different numeric tokens, prefer the majority numeric value; if there is a tie, prefer the numeric token that appears first in summary_1 then summary_2. Do not invent or infer any new numeric value beyond what the summaries provide.\",\n    \"change_rule\": \"Replace verbose-age wording with a minimal digits-only answer: extract the agreed numeric token from the selected summary and set the answer field to that digits-only string (strip any surrounding words, units, punctuation, and explanatory text). If multiple digits appear in the selected summary, choose the token that appears in a phrase indicating age (e.g., adjacent to 'year', 'years', or 'old'); if none is clearly indicated, choose the first digit-token. If no numeric token is found, do not apply this change and fall back to the base prompt behavior.\",\n    \"drop_or_avoid_rule\": \"Do not include units ('years', 'old', etc.), explanatory words, punctuation, or a full-sentence answer. Do not add any extra context, qualifiers, or new information. Do not output the summaries themselves or repeat long spans from them—only the chosen digits. Do not request clarification when a numeric token is present.\",\n    \"output_contract\": \"Produce the answer field as a single, minimal digits-only string (e.g., only characters 0-9), placed per the base prompt's final-answer interface. The [[ ## answer ## ]] block must contain exactly that digits-only string and nothing else. If the trigger conditions are not met, preserve the base prompt's original output rules.\",\n    \"why_local_transition\": \"This change only normalizes format: it converts an already-supported age value present in the summaries from a verbose sentence into the minimal numeric string required by the final-answer contract. It preserves the factual content and evidence selection logic while enforcing the required minimal output formatting.\"\n  },\n  \"rationale\": \"The source output contains the correct age information but in a verbose sentence form. The smallest coherent and safe edit is a deterministic formatting rule that extracts the numeric age token already present in the summaries and emits only the digits. This preserves the agent's evidence reliance, avoids adding or inventing information, handles disagreements deterministically (majority then earliest), and falls back to base behavior if no numeric evidence exists. The rule is local (format-only), minimizes risk, and enforces the agent's required minimal-answer output contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 74,
+    "row_index": 74,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

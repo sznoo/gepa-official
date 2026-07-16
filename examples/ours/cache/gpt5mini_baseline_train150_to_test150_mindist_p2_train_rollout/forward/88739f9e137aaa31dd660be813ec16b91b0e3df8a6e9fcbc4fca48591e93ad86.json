@@ -1,0 +1,236 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "88739f9e137aaa31dd660be813ec16b91b0e3df8a6e9fcbc4fca48591e93ad86",
+  "created_at": "2026-07-14T16:52:07.590921+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+    "answer": "writers",
+    "context": {
+      "title": [
+        "Deverry Cycle",
+        "Carlo Emilio Bonferroni",
+        "That Awful Mess on Via Merulana",
+        "Katharine Kerr",
+        "Emilio Ghione",
+        "Characters in the Deverry cycle",
+        "Daggerspell",
+        "Un maledetto imbroglio",
+        "Eros e Priapo",
+        "Carlo Emilio Gadda"
+      ],
+      "sentences": [
+        [
+          "The Deverry Cycle is a series of Celtic fantasy novels by Katharine Kerr set in the fictional land of Deverry.",
+          " As of November 2009, fifteen books have been published in the series."
+        ],
+        [
+          "Carlo Emilio Bonferroni (28 January 1892 – 18 August 1960) was an Italian mathematician who worked on probability theory.",
+          " Carlo Emilio Bonferroni was born in Bergamo on 28 January 1892 and died on 18 August 1960 in Florence.",
+          " He studied in Turin, held a post as assistant professor at the Turin Polytechnic, and in 1923 took up the chair of financial mathematics at the Economics Institute in Bari.",
+          " In 1933 he transferred to Florence where he held his chair until his death."
+        ],
+        [
+          "That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda, first published in Italy by Garzanti Editore s.p.a. in 1957.",
+          " An English translation by William Weaver was published in 1965."
+        ],
+        [
+          "Katharine Kerr (born 1944) is an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry."
+        ],
+        [
+          "Emilio Luigi Carlo Giuseppe Maria Ghione (July 30, 1879 – January 7, 1930), known as Emilio Ghione, was an Italian silent film actor, director and screenwriter.",
+          " Ghione was best known for writing, directing and starring in the Za La Mort series of adventure films, in which Ghione played a likeable French Apache and 'honest outlaw.'",
+          " Ghione directed, wrote and acted in every genre of film, and directed some of the most famous stars of the time, including Francesca Bertini, Lina Cavalieri, Alberto Collo and Hesperia.",
+          " After his final film role in 1926, Ghione briefly performed on a theatrical tour of Italy.",
+          " Ghione wrote three novels based around his Za La Mort character, an autobiography, and an essay on Italian Silent Cinema, before his death from tuberculosis in 1930."
+        ],
+        [
+          "This article lists some of the major characters in the Deverry Cycle by Katharine Kerr."
+        ],
+        [
+          "Daggerspell (1986) is a fantasy novel by American writer Katharine Kerr.",
+          " Her first novel, it is also the first book in the Celtic themed, multi-reincarnational \"Deverry cycle\"."
+        ],
+        [
+          "Un maledetto imbroglio also known as \"The Facts of Murder\" is a 1959 Italian crime film mystery directed by and starring Pietro Germi with Claudia Cardinale.",
+          " The film is based on the novel by Carlo Emilio Gadda \"Quer pasticciaccio brutto de via Merulana\".",
+          " The film was restored and re-released in 1999 both in Italy and the USA."
+        ],
+        [
+          "Eros e Priapo: da furore a cenere is a 1945 satiric pamphlet by Italian author Carlo Emilio Gadda."
+        ],
+        [
+          "Carlo Emilio Gadda (] ; November 14, 1893 – May 21, 1973) was an Italian writer and poet.",
+          " He belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Carlo Emilio Gadda",
+        "Carlo Emilio Gadda",
+        "Katharine Kerr"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nTask: Compress the grounded first-hop evidence into a single concise, retrieval-oriented intermediate state to guide the next-hop retrieval. Do not produce the final answer or perform any new retrieval here.\n\nRequired content of `summary` (single field):\n- A short header identifying the primary topic(s) found in the passages (1 line).\n- A concise enumeration of the concrete facts supported verbatim by the provided passages: list entity mentions and directly supported factual spans (dates, years, titles, roles). Use very short quoted fragments (<= ~15 words) only when those words appear verbatim in the passages. Keep to facts present in the passages; do not add or infer new facts.\n- Explicitly expose any ambiguity or missing information that blocks answering: if multiple candidate entities or page variants appear, enumerate those candidates and label the name as ambiguous; if a required target fact is missing or ambiguous, label it as the missing fact and identify the bridge entity that connects this hop to the next.\n- Prioritized next-hop retrieval directives (1–4 items): concrete page titles or disambiguation pages to fetch, explicit article sections to inspect (e.g., lede/infobox, \"Career\", \"Publication\", \"History\"), or tight search keywords. Order them by priority and be specific (include possible disambiguation terms or section names).\n\nFormatting and style constraints:\n- Keep the entire `summary` concise: a short header plus 1–4 brief sentences or 2–6 short bullet lines in total.\n- Preserve the habit of extracting and citing concrete facts verbatim from the passages (names, dates, passage labels).\n- Do not output a final answer, comparison, or any numeric fact that purports to resolve the question here. Even if the passages fully and unambiguously contain all required facts, present that evidence and explicitly state \"no additional retrieval needed,\" but defer producing any final answer to a downstream component.\n- If a name or term has multiple distinct variants in the passages, do not pick one without disambiguating evidence; enumerate candidates instead.\n- Do not invent or add facts not present in the supplied passages. Avoid long verbatim quotations; prefer short extracts (<= ~15 words) or paraphrase.\n\nOutput expectations: produce exactly one field `summary` containing the concise, retrieval-oriented summary that meets the above requirements.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact, retrieval-focused second-hop query in the field `query`. Use only the provided `question` and `summary_1` as inputs. Do not include any explanation, answer, fallback text, lists, or additional fields — the output must be a single one-line query string.\n\nWhen composing the query, select the minimal anchor token(s) visible in `question` and/or `summary_1` that point to the missing page or fact. You may append a single short attribute keyword (for example country member occupations record season) only when that keyword is needed to disambiguate the evidence type. Do not introduce any other new tokens.\n\nDecision templates (choose the single template that matches the missing evidence implied by summary_1):\n- Connector between two named items: emit a short interrogative naming both items and requesting the linking evidence (e.g., artist album recording) in one line. Retain the visible item tokens from the inputs.\n- Metadata for a single anchor title: emit a compact keyword-style query consisting of the anchor plus brief attribute keywords (for example: artist genre).\n- Temporal or aggregate fact: include the year or season token plus the entity type and a short cue such as season count.\n\nUse these operational rules when choosing a template:\n- If summary_1 explicitly lists two or more distinct page anchors as next-hop targets, combine those visible anchor tokens into one compact multi-anchor query and append a short attribute keyword naming the evidence type (for example country member occupations record).\n- If summary_1 flags a single missing anchor or a missing_titles list is present, emit a single-anchor metadata-style query that places the missing anchor token first and appends a concise attribute keyword naming the desired fact.\n- When summary_1 names multiple candidate entities and the missing fact concerns one candidate’s membership, order, or relation to a canonical collection, prefer a connector-style query that pairs the highest-priority candidate token (first or prioritized in summary_1) with the canonical collection token plus a short attribute keyword requesting membership or order.\n- When individual member tokens are present but the needed retrieval is about that individual, prefer member-token + group-anchor + member (or equivalent short attribute) to target the individual’s page rather than issuing a broad group-level query.\n\nStrict formatting rules:\n- Emit exactly one line and exactly one string in `query` containing only the query text.\n- Keep the query compact (aim for ≤ 10–12 words/tokens) and free of punctuation or explanatory clauses.\n- Preserve visible tokens from `question` and `summary_1` (title words, years, or entity names) to anchor retrieval.\n- Do not answer, conclude, enumerate candidates, assert hidden facts, or include user-facing instructions.\n\nProduce the `query` field now.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nInstructions (must follow exactly):\n- Emit a single field named `summary` containing only 1–3 concise sentences that integrate the first-hop `context` and the second-hop `passages` into a grounded post-retrieval state.\n- If the `context` already contains a concise answer sentence, keep that sentence as the first sentence of `summary` unless the `passages` clearly contradict it; append supporting sentence(s) after it rather than replacing it.\n- Preserve the primary answer name(s) exactly as they appear in the inputs (context or passages) unless those names clearly conflict with stronger passage content.\n- When one or more `passages` supply short biographical, membership, partnership, or corroborating facts about a named entity from the `context`, append at most one brief supporting sentence per relevant named person. Each such supporting sentence should:\n  - begin with the entity's canonical name as shown in the passages (if available),\n  - paraphrase up to one or two key attributes present in the passages (examples: nationality, award/winner status, current affiliation/team, partner identity, founding/formation fact, birth date), and\n  - avoid long verbatim copying (prefer paraphrase; use short quotes only when a brief exact phrase from a passage is necessary for clarity).\n- If the question requires naming both members of a partnership or collaborator pair, name both people in the summary and, if passages provide partner-specific attributes, include one brief attribute for each as separate short clauses or sentences if needed.\n- Do not invent facts not present in the provided passages. If passages conflict on a specific attribute, do not synthesize a new reconciled fact; instead prefer the passage that most directly addresses the question or omit the disputed attribute (or state necessary ambiguity only when needed to avoid a false claim).\n- Keep the `summary` compact and focused: avoid extraneous biography, discography/chart data, or unrelated commentary. When `context` is absent or is not a concise answer, produce a 1–2 sentence integrated summary naming the relevant entity(ies) and including at most one brief paraphrased attribute drawn from the passages.\n\nAdditional constraints (must follow):\n- The first sentence must be an answer-first concise identification (a direct answer or concise identification). If the `context` already contains such a sentence, preserve it exactly unless a passage explicitly and directly contradicts it; otherwise derive that first sentence from the clearest passage.\n- After the first sentence, append at most one short supporting sentence for each additional relevant named entity only when the passages supply corroborating attributes. Each supporting sentence must begin with the entity's canonical name as shown in the inputs (context or passages) and paraphrase no more than one or two simple attributes.\n- When a queried binary/status attribute for an entity is not stated in the provided passages, indicate that absence concisely within that entity's supporting sentence (for example, with a short parenthetical or clause saying the status is not given in the provided evidence).\n- If the passages explicitly assert a relationship between two or more entities that is directly relevant to the question, include one short relationship sentence after the per-entity supporting sentence(s) describing that relationship; do not embed the same relationship claim redundantly in multiple sentences.\n- If relevant entities exceed the available supporting-sentence budget under the 1–3 sentence limit, prioritize entities in this order: entities explicitly named in the question, entities named in the preserved first sentence, then other context entities. Do not exceed the 1–3 sentence cap.\n\nOutput requirement: exactly one JSON field `summary` whose value is the integrated 1–3 sentence summary.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nInstructions:\n- Use only `summary_1` and `summary_2` as the evidential basis for the final decision; do not add new facts or external information.\n- First determine whether the question is a binary (yes/no) proposition and whether both `summary_1` and `summary_2` clearly and unambiguously support the same binary outcome.\n- If BOTH summaries unambiguously assert the same binary conclusion, emit exactly one lowercase token as the entire content of `answer`: use \"yes\" for an affirmative conclusion and \"no\" for a negative conclusion. The `answer` field must contain that single token and nothing else (no punctuation, no extra whitespace, no explanation).\n- Prefer `summary_2` as the decisive statement when it clarifies or restates `summary_1`, but still require that both summaries support the same binary judgment before emitting the single-token `answer`.\n- If the summaries conflict, if either summary hedges, is ambiguous, silent about the binary relation, or otherwise fails to clearly agree, do NOT apply the single-token rule; instead produce the module's normal fallback/unresolved output for `answer`.\n- Do not infer that the final state is unresolved merely because `summary_1` uses earlier unresolved or bridge language; prefer `summary_2` when it clarifies `summary_1`.\n- Always remain truthful to the visible summaries and do not alter their factual conclusions.\n\nBinary detection is mandatory and must run first. Only if the question is not a binary yes/no or the binary detector does not apply, proceed to the extractive rules below. Use the extractor that matches the question intent and only apply an extractor when the summaries present the required adjacent or verbatim phrasing.\n\nExtraction and formatting rules (apply only when binary detection does not produce a single-token answer):\n- Person-name selection: if a longer verbatim personal-name string appears in either summary and contains a shorter candidate as a substring, emit the longest verbatim name exactly as it appears in the summaries. Prefer wording from `summary_2` when both summaries provide the same evidence but differ in form.\n- Denomination/type extraction: for questions asking a \"kind\", \"type\", or \"denomination\" of a role, extract and emit exactly the minimal token or short phrase that appears immediately adjacent to the role word in the summaries (the word/phrase answering \"what kind\").\n- Event-name extraction: when summaries show a contiguous proper-name followed by a generic event-type noun, emit only the contiguous proper-name core. Strip any leading articles and remove the trailing generic event-type noun; emit only the proper-name portion exactly as given in the summaries.\n- Nationality handling: if both summaries unambiguously state the same nationality phrase and at least one summary places the literal single word \"citizen\" immediately after that nationality phrase, append exactly one space and the single word \"citizen\" to the nationality phrase. Otherwise emit the nationality phrase exactly as given in the summaries.\n\nGeneral formatting constraints for all outputs:\n- Always emit the minimal answer string supported by the visible summaries and do not add explanation, context, punctuation, or extra words.\n- Do not introduce external facts, additional descriptors, dates, roles, or explanatory text not present in the summaries.\n- Do not normalize or invent name variants that are not verbatim in the summaries.\n- If the summaries conflict, lack the required adjacent phrasing, or do not present a clear verbatim form for the requested attribute, do not guess—use the module's normal unresolved output.\n\nOutput contract:\n- Produce a single field `answer` whose contents follow the rules above. The `answer` field must contain only the minimal string supported by `summary_1` and `summary_2` and no additional tokens, punctuation, or explanation."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "b1029cbfb061",
+    "rerun_from": null,
+    "question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+    "gold_answer": "writers",
+    "context": {
+      "title": [
+        "Deverry Cycle",
+        "Carlo Emilio Bonferroni",
+        "That Awful Mess on Via Merulana",
+        "Katharine Kerr",
+        "Emilio Ghione",
+        "Characters in the Deverry cycle",
+        "Daggerspell",
+        "Un maledetto imbroglio",
+        "Eros e Priapo",
+        "Carlo Emilio Gadda"
+      ],
+      "sentences": [
+        [
+          "The Deverry Cycle is a series of Celtic fantasy novels by Katharine Kerr set in the fictional land of Deverry.",
+          " As of November 2009, fifteen books have been published in the series."
+        ],
+        [
+          "Carlo Emilio Bonferroni (28 January 1892 – 18 August 1960) was an Italian mathematician who worked on probability theory.",
+          " Carlo Emilio Bonferroni was born in Bergamo on 28 January 1892 and died on 18 August 1960 in Florence.",
+          " He studied in Turin, held a post as assistant professor at the Turin Polytechnic, and in 1923 took up the chair of financial mathematics at the Economics Institute in Bari.",
+          " In 1933 he transferred to Florence where he held his chair until his death."
+        ],
+        [
+          "That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda, first published in Italy by Garzanti Editore s.p.a. in 1957.",
+          " An English translation by William Weaver was published in 1965."
+        ],
+        [
+          "Katharine Kerr (born 1944) is an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry."
+        ],
+        [
+          "Emilio Luigi Carlo Giuseppe Maria Ghione (July 30, 1879 – January 7, 1930), known as Emilio Ghione, was an Italian silent film actor, director and screenwriter.",
+          " Ghione was best known for writing, directing and starring in the Za La Mort series of adventure films, in which Ghione played a likeable French Apache and 'honest outlaw.'",
+          " Ghione directed, wrote and acted in every genre of film, and directed some of the most famous stars of the time, including Francesca Bertini, Lina Cavalieri, Alberto Collo and Hesperia.",
+          " After his final film role in 1926, Ghione briefly performed on a theatrical tour of Italy.",
+          " Ghione wrote three novels based around his Za La Mort character, an autobiography, and an essay on Italian Silent Cinema, before his death from tuberculosis in 1930."
+        ],
+        [
+          "This article lists some of the major characters in the Deverry Cycle by Katharine Kerr."
+        ],
+        [
+          "Daggerspell (1986) is a fantasy novel by American writer Katharine Kerr.",
+          " Her first novel, it is also the first book in the Celtic themed, multi-reincarnational \"Deverry cycle\"."
+        ],
+        [
+          "Un maledetto imbroglio also known as \"The Facts of Murder\" is a 1959 Italian crime film mystery directed by and starring Pietro Germi with Claudia Cardinale.",
+          " The film is based on the novel by Carlo Emilio Gadda \"Quer pasticciaccio brutto de via Merulana\".",
+          " The film was restored and re-released in 1999 both in Italy and the USA."
+        ],
+        [
+          "Eros e Priapo: da furore a cenere is a 1945 satiric pamphlet by Italian author Carlo Emilio Gadda."
+        ],
+        [
+          "Carlo Emilio Gadda (] ; November 14, 1893 – May 21, 1973) was an Italian writer and poet.",
+          " He belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Carlo Emilio Gadda",
+        "Carlo Emilio Gadda",
+        "Katharine Kerr"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Carlo Emilio Gadda",
+      "Katharine Kerr"
+    ],
+    "hop1_query": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+    "hop1_docs": [
+      "Carlo Emilio Gadda | Carlo Emilio Gadda (] ; November 14, 1893 – May 21, 1973) was an Italian writer and poet.  He belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.",
+      "Eros e Priapo | Eros e Priapo: da furore a cenere is a 1945 satiric pamphlet by Italian author Carlo Emilio Gadda.",
+      "Un maledetto imbroglio | Un maledetto imbroglio also known as \"The Facts of Murder\" is a 1959 Italian crime film mystery directed by and starring Pietro Germi with Claudia Cardinale.  The film is based on the novel by Carlo Emilio Gadda \"Quer pasticciaccio brutto de via Merulana\".  The film was restored and re-released in 1999 both in Italy and the USA.",
+      "That Awful Mess on Via Merulana | That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda, first published in Italy by Garzanti Editore s.p.a. in 1957.  An English translation by William Weaver was published in 1965.",
+      "Katharine Kerr | Katharine Kerr (born 1944) is an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry.",
+      "Carlos Emilio Morales | Carlos Emilio Morales (November 6, 1939 – November 12, 2014) was a Cuban jazz guitarist.",
+      "Carlos Carmona | Carlos Emilio Carmona Tello (born February 21, 1987) is a Chilean professional footballer who plays for Atlanta United as a midfielder in the Major League Soccer (MLS) men's professional soccer league, sanctioned by U.S. Soccer, that represents the sport's highest level in both the United States and Canada."
+    ],
+    "hop1_titles": [
+      "Carlo Emilio Gadda",
+      "Eros e Priapo",
+      "Un maledetto imbroglio",
+      "That Awful Mess on Via Merulana",
+      "Katharine Kerr",
+      "Carlos Emilio Morales",
+      "Carlos Carmona"
+    ],
+    "summary_1": "Primary topics: Carlo Emilio Gadda; Katharine Kerr\n\n- Carlo Emilio Gadda — \"Carlo Emilio Gadda (...) was an Italian writer and poet.\" (dates: \"November 14, 1893 – May 21, 1973\"). Passages also call works \"an Italian novel by Carlo Emilio Gadda\" and reference his novel \"Quer pasticciaccio brutto de via Merulana.\"\n- Katharine Kerr — \"Katharine Kerr (born 1944) is an American science fiction and fantasy novelist.\"\n- Ambiguity/missing fact: Gadda's lede uses \"writer and poet\" rather than the single label \"novelist\"; however passages explicitly attribute novels to him (\"an Italian novel by Carlo Emilio Gadda\"), so the label \"novelist\" is supported but the lede wording differs. Bridge entity: Carlo Emilio Gadda (author of named novels).\n- Next-hop retrieval directives (priority):\n  1. Fetch page \"Carlo Emilio Gadda\" — inspect lede/infobox and \"Works\"/\"Bibliography\"/\"Career\" sections to confirm occupation labels (novelist/writer/poet) and notable novels.\n  2. Fetch page \"That Awful Mess on Via Merulana\" (or \"Quer pasticciaccio brutto de via Merulana\") — inspect article lede to confirm authorship attribution.\n  3. Fetch page \"Katharine Kerr\" — inspect lede/infobox and \"Career\"/\"Works\" to confirm occupation as novelist.\n  4. Search term: \"Carlo Emilio Gadda novelist\" if additional corroboration needed.\n\nNo additional retrieval needed to see that both are described in the passages as authors of novels, but fetch the above pages/sections to confirm exact occupation labels for final phrasing.",
+    "hop2_query": "Carlo Emilio Gadda Katharine Kerr novelist",
+    "hop2_docs": [
+      "Carlo Emilio Gadda | Carlo Emilio Gadda (] ; November 14, 1893 – May 21, 1973) was an Italian writer and poet.  He belongs to the tradition of the language innovators, writers that played with the somewhat stiff standard pre-war Italian language, and added elements of dialects, technical jargon and wordplay.",
+      "Katharine Kerr | Katharine Kerr (born 1944) is an American science fiction and fantasy novelist, best known for her series of Celtic-influenced high fantasy novels set in the fictional land of Deverry.",
+      "Eros e Priapo | Eros e Priapo: da furore a cenere is a 1945 satiric pamphlet by Italian author Carlo Emilio Gadda.",
+      "That Awful Mess on Via Merulana | That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda, first published in Italy by Garzanti Editore s.p.a. in 1957.  An English translation by William Weaver was published in 1965.",
+      "Un maledetto imbroglio | Un maledetto imbroglio also known as \"The Facts of Murder\" is a 1959 Italian crime film mystery directed by and starring Pietro Germi with Claudia Cardinale.  The film is based on the novel by Carlo Emilio Gadda \"Quer pasticciaccio brutto de via Merulana\".  The film was restored and re-released in 1999 both in Italy and the USA.",
+      "Piero Gadda Conti | Piero Gadda Conti (13 February 1902 – 22 January 1999) was an Italian novelist and film critic.",
+      "Carlos Emilio Morales | Carlos Emilio Morales (November 6, 1939 – November 12, 2014) was a Cuban jazz guitarist."
+    ],
+    "hop2_titles": [
+      "Carlo Emilio Gadda",
+      "Katharine Kerr",
+      "Eros e Priapo",
+      "That Awful Mess on Via Merulana",
+      "Un maledetto imbroglio",
+      "Piero Gadda Conti",
+      "Carlos Emilio Morales"
+    ],
+    "summary_2": "{\"summary\":\"Carlo Emilio Gadda and Katharine Kerr were both novelists. Carlo Emilio Gadda was an Italian writer and poet credited as the author of the novel That Awful Mess on Via Merulana. Katharine Kerr is an American science fiction and fantasy novelist.\"}",
+    "answer": "novelists",
+    "score": 0.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Carlo Emilio Gadda",
+      "Katharine Kerr"
+    ],
+    "hit_titles_total": [
+      "Carlo Emilio Gadda",
+      "Katharine Kerr"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

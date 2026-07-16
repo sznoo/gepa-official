@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "ea8852d48238474a7f32a69df7b54c221b5976de2e382a3d5bf0686d6d352100",
+  "created_at": "2026-07-14T21:10:09.636656+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+      "source_summary": "Bertrand Tavernier and Charles Giblyn were both directors and actors.",
+      "target_summary": "Evidence summary:\n\n- Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.\n\n- Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era; he directed 96 films between 1912 and 1927 and appeared in 23 films between 1914 and 1934.\n\nThese retained occupation facts for each person allow the final-answer agent to determine their overlapping occupations.",
+      "candidate_summary": "Bertrand Tavernier is a French director, screenwriter, actor and producer. Charles Giblyn is an American film director and actor."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nBertrand Tavernier and Charles Giblyn, have which mutual occupations?\n\nSource summary2:\nBertrand Tavernier and Charles Giblyn were both directors and actors.\n\nTarget summary2:\nEvidence summary:\n\n- Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.\n\n- Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era; he directed 96 films between 1912 and 1927 and appeared in 23 films between 1914 and 1934.\n\nThese retained occupation facts for each person allow the final-answer agent to determine their overlapping occupations.\n\nCandidate summary2:\nBertrand Tavernier is a French director, screenwriter, actor and producer. Charles Giblyn is an American film director and actor.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate lists the same overlapping occupations (director, actor) needed to answer the question and reproduces the target's additional occupations for Tavernier (screenwriter, producer) and Giblyn (film director/actor, American), so it preserves the source claim and adds target-consistent details.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 47,
+    "row_index": 47,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

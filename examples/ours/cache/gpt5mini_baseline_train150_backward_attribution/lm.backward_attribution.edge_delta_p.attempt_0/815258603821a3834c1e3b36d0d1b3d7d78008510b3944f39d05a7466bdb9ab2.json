@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "815258603821a3834c1e3b36d0d1b3d7d78008510b3944f39d05a7466bdb9ab2",
+  "created_at": "2026-07-14T13:37:18.993430+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are both Warren County Canal and Dismal Swamp Canal located in the same state?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are both Warren County Canal and Dismal Swamp Canal located in the same state?",
+        "summary_1": "No — Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.",
+        "summary_2": "No. Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.",
+        "current_output": "No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "no",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are both Warren County Canal and Dismal Swamp Canal located in the same state?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are both Warren County Canal and Dismal Swamp Canal located in the same state?\",\n  \"summary_1\": \"No — Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.\",\n  \"summary_2\": \"No. Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.\",\n  \"current_output\": \"No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"no\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question is a yes/no (binary) question and both summary_1 and summary_2 present the same clear conclusion that the two items are not in the same state (both summaries express a negative conclusion or state different locations).\",\n    \"preserve_rule\": \"Continue to read and use summary_1 and summary_2 as the evidence source and preserve the base prompt's final-answer interface (the single 'answer' field). Do not discard or alter the summaries themselves.\",\n    \"change_rule\": \"Replace any longer explanatory final sentence with a single-word, lowercase, minimal answer that directly matches the consensus of the summaries. Emit only that one word in the answer field; do not add explanation, supporting facts, or surrounding text.\",\n    \"drop_or_avoid_rule\": \"Do not include any additional sentences, punctuation, capitalization, qualifiers, or justification in the answer field. Avoid copying multi-clause sentences from the summaries as the final answer. Do not attempt to restate supporting details; avoid producing a full sentence or paragraph as the final output.\",\n    \"output_contract\": \"Produce the field 'answer' whose value is exactly one lowercase word (an affirmative or negative response) that matches the conclusion supported by summary_1 and summary_2. The 'answer' value must contain no extra characters, punctuation, or explanatory text.\",\n    \"why_local_transition\": \"The only needed change is formatting the agreed-upon conclusion into the minimal final-answer form. This is a narrow behavior shift — keep evidence use but shorten the final output to the required one-word answer when both summaries agree.\"\n  },\n  \"rationale\": \"The source output gives a full explanatory sentence while the final-answer contract requires a minimal single-word response. This delta is a small, targeted instruction: when both summaries concur on the negative conclusion, collapse the explanatory sentence into a single lowercase one-word answer. It preserves use of the summaries as evidence and only alters the final formatting/verbosity to meet the agent's output contract without introducing new reasoning or copying target text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 30,
+    "row_index": 30,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

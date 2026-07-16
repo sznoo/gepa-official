@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "42b50d75243ceb7f6fd25479576bbba5cf42b9363581e63649d76edf93ba201a",
+  "created_at": "2026-07-14T19:01:50.251333+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question requests a specific person (e.g., asks \"which [nationality] actor born on [date] ...\" or similar) AND at least one of the visible summaries (summary_1 or summary_2) contains a named person whose text explicitly includes the required attributes (the person's name plus the stated birth date and/or nationality and/or that they star in the named work).",
+            "preserve_rule": "Keep using only the provided fields (question, summary_1, summary_2). Preserve the final-answer output contract: produce the shortest possible answer string and place it alone inside the [[ ## answer ## ]] block. Keep any existing cautious behavior that avoids inventing facts not present in the visible summaries.",
+            "change_rule": "If the trigger condition is met, select the single named person that best matches all attributes requested in the question as reported in the visible summaries, and output only that person's name (no explanation). If multiple named persons in the summaries satisfy the attributes, prefer the one whose summary explicitly marks the matching nationality and birthdate together with the starring role; if still tied, prefer the name that is directly linked to the film title in a summary. Do not fabricate additional supporting detail — only use attributes as they appear in the visible summaries.",
+            "drop_or_avoid_rule": "Do not treat a summary's generic negative phrasing (e.g., sentences starting with 'None' or 'No ...') as overriding a positive named mention elsewhere. Avoid answering 'None' when a visible summary does include a named individual meeting the question's constraints. Also avoid adding dates, nationalities, or film links that do not appear in the visible summaries.",
+            "output_contract": "Final output must be exactly the minimal name string that is supported by the visible summaries, placed alone inside the [[ ## answer ## ]] block (no surrounding punctuation, commentary, or additional tokens). If no visible summary contains a named person that satisfies the question's constraints, produce the same safe negative response behavior as before.",
+            "why_local_transition": "The baseline concluded 'None' despite at least one visible summary containing a matching named person; this rule makes the agent prefer explicit positive matches in the summaries so the final answer will be the correct minimal name when evidence exists."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "summary_1": "None. The only actor in the passages born October 20, 1971 is Matthew Godfrey, who is Canadian; \"Baby\" stars Feodor Chin (born August 18, 1974) per the passages.",
+        "summary_2": "None. No American actor born October 20, 1971 stars in \"Baby\" in the passages; the only person with that birthdate mentioned is Canadian actor Matthew Godfrey, and \"Baby\" stars Feodor Chin (born August 18, 1974).",
+        "current_output": "None. According to the passages, no American actor born October 20, 1971 stars in \"Baby.\" The only person with that birthdate mentioned is Canadian actor Matthew Godfrey; \"Baby\" stars Feodor Chin (born August 18, 1974)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question requests a specific person (e.g., asks \\\"which [nationality] actor born on [date] ...\\\" or similar) AND at least one of the visible summaries (summary_1 or summary_2) contains a named person whose text explicitly includes the required attributes (the person's name plus the stated birth date and/or nationality and/or that they star in the named work).\",\n      \"preserve_rule\": \"Keep using only the provided fields (question, summary_1, summary_2). Preserve the final-answer output contract: produce the shortest possible answer string and place it alone inside the [[ ## answer ## ]] block. Keep any existing cautious behavior that avoids inventing facts not present in the visible summaries.\",\n      \"change_rule\": \"If the trigger condition is met, select the single named person that best matches all attributes requested in the question as reported in the visible summaries, and output only that person's name (no explanation). If multiple named persons in the summaries satisfy the attributes, prefer the one whose summary explicitly marks the matching nationality and birthdate together with the starring role; if still tied, prefer the name that is directly linked to the film title in a summary. Do not fabricate additional supporting detail — only use attributes as they appear in the visible summaries.\",\n      \"drop_or_avoid_rule\": \"Do not treat a summary's generic negative phrasing (e.g., sentences starting with 'None' or 'No ...') as overriding a positive named mention elsewhere. Avoid answering 'None' when a visible summary does include a named individual meeting the question's constraints. Also avoid adding dates, nationalities, or film links that do not appear in the visible summaries.\",\n      \"output_contract\": \"Final output must be exactly the minimal name string that is supported by the visible summaries, placed alone inside the [[ ## answer ## ]] block (no surrounding punctuation, commentary, or additional tokens). If no visible summary contains a named person that satisfies the question's constraints, produce the same safe negative response behavior as before.\",\n      \"why_local_transition\": \"The baseline concluded 'None' despite at least one visible summary containing a matching named person; this rule makes the agent prefer explicit positive matches in the summaries so the final answer will be the correct minimal name when evidence exists.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"summary_1\": \"None. The only actor in the passages born October 20, 1971 is Matthew Godfrey, who is Canadian; \\\"Baby\\\" stars Feodor Chin (born August 18, 1974) per the passages.\",\n  \"summary_2\": \"None. No American actor born October 20, 1971 stars in \\\"Baby\\\" in the passages; the only person with that birthdate mentioned is Canadian actor Matthew Godfrey, and \\\"Baby\\\" stars Feodor Chin (born August 18, 1974).\",\n  \"current_output\": \"None. According to the passages, no American actor born October 20, 1971 stars in \\\"Baby.\\\" The only person with that birthdate mentioned is Canadian actor Matthew Godfrey; \\\"Baby\\\" stars Feodor Chin (born August 18, 1974).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nNone\",\n  \"rationale\": \"Applied the ordered rules: checked summaries for an American actor born Oct 20, 1971 who stars in \\\"Baby\\\"; no summary shows a person meeting all constraints, so returned the safe negative response.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 64,
+    "row_index": 64,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

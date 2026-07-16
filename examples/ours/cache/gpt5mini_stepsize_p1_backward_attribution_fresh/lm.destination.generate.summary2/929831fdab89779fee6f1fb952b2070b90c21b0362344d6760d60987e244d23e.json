@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "929831fdab89779fee6f1fb952b2070b90c21b0362344d6760d60987e244d23e",
+  "created_at": "2026-07-16T04:52:21.291632+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Who else did the author of The Power Broker write a biography of?",
+      "current_output": "Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.",
+      "upstream_context": {
+        "question": "Who else did the author of The Power Broker write a biography of?",
+        "summary_1": "Passage [1] confirms the bridge entity: \"The Power Broker: Robert Moses and the Fall of New York is ... by Robert Caro\" (author = Robert Caro). Missing fact: which other person(s) Robert Caro has written biographies of. Next-hop retrieval direction: fetch Robert Caro's bibliography or authoritative pages linking Robert Caro to his other biographies (search queries to use as anchors: \"Robert Caro bibliography\", \"Robert Caro biography of\", \"Robert Caro Lyndon B. Johnson\", or \"works by Robert Caro\").",
+        "hop2_query": "Robert Caro biography Lyndon B. Johnson",
+        "hop2_titles": [
+          "Robert Caro",
+          "The Years of Lyndon Johnson",
+          "Indomitable Will",
+          "Dereliction of Duty (1997 book)",
+          "The Power Broker",
+          "Lyndon Baines Johnson Day",
+          "Lyndon B. Johnson High School (Johnson City, Texas)"
+        ],
+        "hop2_docs": [
+          "Robert Caro | Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson.",
+          "The Years of Lyndon Johnson | The Years of Lyndon Johnson is a biography of Lyndon B. Johnson by the American writer Robert Caro.  Four volumes have been published, running to more than 3,000 pages in total, detailing Johnson's early life, education, and political career.  A fifth volume will deal with the bulk of Johnson's presidency.  The series is published by Alfred A. Knopf.",
+          "Indomitable Will | Indomitable Will: LBJ in the Presidency is a biography of Lyndon Baines Johnson by Mark K. Updegrove, published in 2012.",
+          "Dereliction of Duty (1997 book) | Dereliction of Duty: Lyndon Johnson, Robert McNamara, The Joint Chiefs of Staff, and the Lies that Led to Vietnam is a book written by then Major, currently National Security Advisor Lieutenant General H.R. McMaster, that presents a case indicting former U.S. President Lyndon B. Johnson and his principal civilian and military advisers for losing the Vietnam War.",
+          "The Power Broker | The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.  The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.  It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States.",
+          "Lyndon Baines Johnson Day | Lyndon Baines Johnson Day is a legal state holiday in Texas.  It falls every year on August 27, to mark the birthday of U.S. President Lyndon Baines Johnson.",
+          "Lyndon B. Johnson High School (Johnson City, Texas) | Lyndon B. Johnson High School (Johnson City, Texas)"
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "The Power Broker",
+          "sent_id": 0,
+          "sentence": "The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro."
+        },
+        {
+          "title": "Robert Caro",
+          "sent_id": 0,
+          "sentence": "Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWho else did the author of The Power Broker write a biography of?\n\nCurrent agent output:\n\"Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.\"\n\nActual upstream context:\n{\n  \"question\": \"Who else did the author of The Power Broker write a biography of?\",\n  \"summary_1\": \"Passage [1] confirms the bridge entity: \\\"The Power Broker: Robert Moses and the Fall of New York is ... by Robert Caro\\\" (author = Robert Caro). Missing fact: which other person(s) Robert Caro has written biographies of. Next-hop retrieval direction: fetch Robert Caro's bibliography or authoritative pages linking Robert Caro to his other biographies (search queries to use as anchors: \\\"Robert Caro bibliography\\\", \\\"Robert Caro biography of\\\", \\\"Robert Caro Lyndon B. Johnson\\\", or \\\"works by Robert Caro\\\").\",\n  \"hop2_query\": \"Robert Caro biography Lyndon B. Johnson\",\n  \"hop2_titles\": [\n    \"Robert Caro\",\n    \"The Years of Lyndon Johnson\",\n    \"Indomitable Will\",\n    \"Dereliction of Duty (1997 book)\",\n    \"The Power Broker\",\n    \"Lyndon Baines Johnson Day\",\n    \"Lyndon B. Johnson High School (Johnson City, Texas)\"\n  ],\n  \"hop2_docs\": [\n    \"Robert Caro | Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson.\",\n    \"The Years of Lyndon Johnson | The Years of Lyndon Johnson is a biography of Lyndon B. Johnson by the American writer Robert Caro.  Four volumes have been published, running to more than 3,000 pages in total, detailing Johnson's early life, education, and political career.  A fifth volume will deal with the bulk of Johnson's presidency.  The series is published by Alfred A. Knopf.\",\n    \"Indomitable Will | Indomitable Will: LBJ in the Presidency is a biography of Lyndon Baines Johnson by Mark K. Updegrove, published in 2012.\",\n    \"Dereliction of Duty (1997 book) | Dereliction of Duty: Lyndon Johnson, Robert McNamara, The Joint Chiefs of Staff, and the Lies that Led to Vietnam is a book written by then Major, currently National Security Advisor Lieutenant General H.R. McMaster, that presents a case indicting former U.S. President Lyndon B. Johnson and his principal civilian and military advisers for losing the Vietnam War.\",\n    \"The Power Broker | The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.  The book focuses on the creation and use of power in local and state politics, as witnessed through Moses' use of unelected positions to design and implement dozens of highways and bridges, sometimes at great cost to the communities he nominally served.  It has been repeatedly named one of the best biographies of the 20th century, and has been highly influential on city planners and politicians throughout the United States.\",\n    \"Lyndon Baines Johnson Day | Lyndon Baines Johnson Day is a legal state holiday in Texas.  It falls every year on August 27, to mark the birthday of U.S. President Lyndon Baines Johnson.\",\n    \"Lyndon B. Johnson High School (Johnson City, Texas) | Lyndon B. Johnson High School (Johnson City, Texas)\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"The Power Broker\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Power Broker: Robert Moses and the Fall of New York is a Pulitzer Prize-winning biography of Robert Moses by Robert Caro.\"\n  },\n  {\n    \"title\": \"Robert Caro\",\n    \"sent_id\": 0,\n    \"sentence\": \"Robert Allan Caro (born October 30, 1935) is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary integrating first- and second-hop evidence: Passage [The Power Broker] identifies The Power Broker as a Pulitzer Prize-winning biography of Robert Moses by Robert Caro. The Robert Caro passage states that Robert Allan Caro is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson. These combined facts establish that the author of The Power Broker, Robert Caro, is also known for a biography of Lyndon B. Johnson.\",\n  \"rationale\": \"Summary1 established the bridge entity (The Power Broker author = Robert Caro). The visible second-hop support (Robert Caro sentence) explicitly states Caro is known for biographies of Robert Moses and Lyndon B. Johnson, which together with The Power Broker sentence provides the evidence needed to identify another person Caro has written a biography of.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 76,
+    "row_index": 76
+  }
+}

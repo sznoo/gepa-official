@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c3c60f7d122762cd899cb4cc69c5f9196462e248f4aefd3bff9bec949a5ca2b8",
+  "created_at": "2026-07-14T13:40:50.168734+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 names an artist and the question contains wording about depression (e.g., 'depress', 'depressive', 'reflects on'), and the current query is narrowly artist-specific.",
+            "preserve_rule": "Keep producing one compact second-hop retrieval query. Retain inclusion of the artist from summary_1 as an explicit candidate when present.",
+            "change_rule": "When triggered, produce a single compact query that tries the artist AND a generic fallback in one expression. Format: \"<artist_from_summary_1> OR (album reflect* depress* \"Billboard Hot 100\" 1976 (song OR single))\". Replace <artist_from_summary_1> with the exact artist string from summary_1. Keep the whole output a single query string (no explanations).",
+            "drop_or_avoid_rule": "Do not inject names, album titles, or long quoted spans that do not already appear in the visible inputs. Avoid multi-sentence outputs, multiple separate queries, or verbose instructions. Do not copy any hidden/gold labels or target-only spans.",
+            "output_contract": "Return exactly one compact query string suitable for the retriever. It must either include the artist from summary_1 OR the generic fallback clause and must contain keywords: album, reflect*/reflects, depress*/depressive, \"Billboard Hot 100\", 1976, and (song OR single). No extra text.",
+            "why_local_transition": "Current retrieval concentrated on the named artist; the question may instead refer to an album characterized by depressive themes that produced a 1976 Hot 100 song. This small change broadens the search to catch such alternative album/artist matches while still preferring the candidate already in summary_1."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "If the question ties an album to an artist's depressive state and either `summary_1` or the current output names an artist or an album title, activate this rule to produce a second-hop query.",
+            "preserve_rule": "Keep any artist name or album title tokens already present in the inputs, and keep the chart-year tokens from the question (e.g., 'Billboard Hot 100' and '1976'). Preserve the requirement that the output must be a single compact retrieval query string.",
+            "change_rule": "Augment the compact query by adding concise bridging terms that target collaborators/bands and charting singles. Prefer combinations such as: <artist_or_album> session musicians band single \"Billboard Hot 100\" 1976 OR <artist_or_album> 'session musicians' 'single' 'Billboard Hot 100'. Keep the whole query short and focused (no full-sentence restatements).",
+            "drop_or_avoid_rule": "Do not introduce unrelated artist names, long quoted passages, or full answer candidates. Avoid restating the full question; avoid adding long spans that appear only in hidden/supporting documents.",
+            "output_contract": "Produce a single, compact search query string that (a) includes the artist name or album title taken from inputs, (b) includes at least one bridging term from {session musicians, band, single}, and (c) includes 'Billboard Hot 100' and the year '1976' (or equivalent). The query should be short and focused, suitable for a second-hop retrieval.",
+            "why_local_transition": "Adding explicit bridging terms (session musicians / band / single) steers retrieval toward collaborators or groups connected to the album who might have released a charting single in 1976 — the missing bridge needed to connect the album's depressive-theme mention to a Billboard Hot 100 result."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? ",
+        "summary_1": "Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \"Show Me the Way\") had a song that reached the Billboard Hot 100.",
+        "current_output": {
+          "query": "Peter Frampton \"Frampton Comes Alive!\" \"Show Me the Way\" Billboard Hot 100 1976 \"depress\" \"depressive\" \"reflects on his depressive state\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 names an artist and the question contains wording about depression (e.g., 'depress', 'depressive', 'reflects on'), and the current query is narrowly artist-specific.\",\n      \"preserve_rule\": \"Keep producing one compact second-hop retrieval query. Retain inclusion of the artist from summary_1 as an explicit candidate when present.\",\n      \"change_rule\": \"When triggered, produce a single compact query that tries the artist AND a generic fallback in one expression. Format: \\\"<artist_from_summary_1> OR (album reflect* depress* \\\"Billboard Hot 100\\\" 1976 (song OR single))\\\". Replace <artist_from_summary_1> with the exact artist string from summary_1. Keep the whole output a single query string (no explanations).\",\n      \"drop_or_avoid_rule\": \"Do not inject names, album titles, or long quoted spans that do not already appear in the visible inputs. Avoid multi-sentence outputs, multiple separate queries, or verbose instructions. Do not copy any hidden/gold labels or target-only spans.\",\n      \"output_contract\": \"Return exactly one compact query string suitable for the retriever. It must either include the artist from summary_1 OR the generic fallback clause and must contain keywords: album, reflect*/reflects, depress*/depressive, \\\"Billboard Hot 100\\\", 1976, and (song OR single). No extra text.\",\n      \"why_local_transition\": \"Current retrieval concentrated on the named artist; the question may instead refer to an album characterized by depressive themes that produced a 1976 Hot 100 song. This small change broadens the search to catch such alternative album/artist matches while still preferring the candidate already in summary_1.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"If the question ties an album to an artist's depressive state and either `summary_1` or the current output names an artist or an album title, activate this rule to produce a second-hop query.\",\n      \"preserve_rule\": \"Keep any artist name or album title tokens already present in the inputs, and keep the chart-year tokens from the question (e.g., 'Billboard Hot 100' and '1976'). Preserve the requirement that the output must be a single compact retrieval query string.\",\n      \"change_rule\": \"Augment the compact query by adding concise bridging terms that target collaborators/bands and charting singles. Prefer combinations such as: <artist_or_album> session musicians band single \\\"Billboard Hot 100\\\" 1976 OR <artist_or_album> 'session musicians' 'single' 'Billboard Hot 100'. Keep the whole query short and focused (no full-sentence restatements).\",\n      \"drop_or_avoid_rule\": \"Do not introduce unrelated artist names, long quoted passages, or full answer candidates. Avoid restating the full question; avoid adding long spans that appear only in hidden/supporting documents.\",\n      \"output_contract\": \"Produce a single, compact search query string that (a) includes the artist name or album title taken from inputs, (b) includes at least one bridging term from {session musicians, band, single}, and (c) includes 'Billboard Hot 100' and the year '1976' (or equivalent). The query should be short and focused, suitable for a second-hop retrieval.\",\n      \"why_local_transition\": \"Adding explicit bridging terms (session musicians / band / single) steers retrieval toward collaborators or groups connected to the album who might have released a charting single in 1976 — the missing bridge needed to connect the album's depressive-theme mention to a Billboard Hot 100 result.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? \",\n  \"summary_1\": \"Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \\\"Show Me the Way\\\") had a song that reached the Billboard Hot 100.\",\n  \"current_output\": {\n    \"query\": \"Peter Frampton \\\"Frampton Comes Alive!\\\" \\\"Show Me the Way\\\" Billboard Hot 100 1976 \\\"depress\\\" \\\"depressive\\\" \\\"reflects on his depressive state\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Peter Frampton band OR (album reflect* depress* \\\"Billboard Hot 100\\\" 1976 (song OR single))\"\n  },\n  \"rationale\": \"Delta 0 triggered and produced the artist OR fallback pattern with reflect*/depress* and chart terms; Delta 1 then augmented the artist side with the bridging term 'band' while preserving required keywords.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 96,
+    "row_index": 96,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

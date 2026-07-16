@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "1bd42f80fe03f370a45bb0cbd7f20cec33dbf56f3e9f501d66874da8011baccc",
+  "created_at": "2026-07-14T19:01:55.028091+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "task_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "agent": "summary2",
+        "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question."
+      },
+      "visible_agent_inputs": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "context": "Nikita Katsalapov",
+        "passages": [
+          "Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.",
+          "Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.",
+          "Nikita Morgachyov | Nikita Andreyevich Morgachyov (Russian: Никита Андреевич Моргачёв , born 3 May 1981) is a Russian rower.  Competing in the quadruple sculls he won the 2007 European title and placed seventh-eighth at the 2008 and 2012 Olympics.  He was disqualified from the 2016 Games after his teammate Sergey Fedorovtsev failed a drug test in 2016.  Morgachyov won two more medals at the 2014–2015 European championships in the eighth.",
+          "Nikita Lobintsev | Nikita Konstantinovich Lobintsev (Russian: Никита Константинович Лобинцев ; born 21 November 1988) is a Russian freestyle swimmer, who won the silver medal in the 4 × 200 m freestyle relay at the 2008 Summer Olympics.",
+          "Nikita Nagornyy | Nikita Vladimirovich Nagornyy (Russian: Никита Владимирович Нагорный , born 12 February 1997 in Rostov-on-Don, Rostov Oblast, Russia) is a Russian artistic gymnast.  He is the 2016 Olympics Team silver medalist, the 2016 European Champion on floor, 2015 European Champion on vault, the 2014 Youth Olympic All-around silver medalist and pommel horse, rings and parallel bars Champion, and the 2014 European Junior vault champion.",
+          "Nikita Kryukov | Nikita Valeryevich Kriukov (Russian: Никита Валерьевич Крюков ; born 30 May 1985) is a Russian cross country skier who has competed since 2005.  He is a sprint specialist who has won an Olympic Gold and Olympic silver, three World Championship gold medals, six World cup gold medals (three stage races, three individual World Cups), all in the sprint events.  He is arguably the fastest skier ever when it comes to double-poling on the flat in sprints.  He generally favors classic skiing and classic sprints over freestyle, but as he showed in winning the team sprint in the 2013 World Championship, in Val di Fiemme, he is also very strong in the freestyle sprint.",
+          "Roman Anoshkin | Roman Sergeyevich Anoshkin (Russian: Роман Сергеевич Аношкин ; born 31 August 1987) is a Russian sprint canoeist.  He won individual bronze medals at the 2015 World Championships and 2016 Rio Olympics.  He also won a silver medal in the four-man K-4 1000 m event at the 2016 European Championships and placed ninth at the 2016 Olympics."
+        ],
+        "current_output": "Nikita Katsalapov"
+      },
+      "current_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nikita Katsalapov",
+        "score": 0.0,
+        "answer": "Nikita Katsalapov"
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.",
+        "score": 0.0,
+        "answer": "Nikita Katsalapov"
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nTask context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"agent\": \"summary2\",\n  \"agent_role\": \"Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"context\": \"Nikita Katsalapov\",\n  \"passages\": [\n    \"Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\",\n    \"Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\",\n    \"Nikita Morgachyov | Nikita Andreyevich Morgachyov (Russian: Никита Андреевич Моргачёв , born 3 May 1981) is a Russian rower.  Competing in the quadruple sculls he won the 2007 European title and placed seventh-eighth at the 2008 and 2012 Olympics.  He was disqualified from the 2016 Games after his teammate Sergey Fedorovtsev failed a drug test in 2016.  Morgachyov won two more medals at the 2014–2015 European championships in the eighth.\",\n    \"Nikita Lobintsev | Nikita Konstantinovich Lobintsev (Russian: Никита Константинович Лобинцев ; born 21 November 1988) is a Russian freestyle swimmer, who won the silver medal in the 4 × 200 m freestyle relay at the 2008 Summer Olympics.\",\n    \"Nikita Nagornyy | Nikita Vladimirovich Nagornyy (Russian: Никита Владимирович Нагорный , born 12 February 1997 in Rostov-on-Don, Rostov Oblast, Russia) is a Russian artistic gymnast.  He is the 2016 Olympics Team silver medalist, the 2016 European Champion on floor, 2015 European Champion on vault, the 2014 Youth Olympic All-around silver medalist and pommel horse, rings and parallel bars Champion, and the 2014 European Junior vault champion.\",\n    \"Nikita Kryukov | Nikita Valeryevich Kriukov (Russian: Никита Валерьевич Крюков ; born 30 May 1985) is a Russian cross country skier who has competed since 2005.  He is a sprint specialist who has won an Olympic Gold and Olympic silver, three World Championship gold medals, six World cup gold medals (three stage races, three individual World Cups), all in the sprint events.  He is arguably the fastest skier ever when it comes to double-poling on the flat in sprints.  He generally favors classic skiing and classic sprints over freestyle, but as he showed in winning the team sprint in the 2013 World Championship, in Val di Fiemme, he is also very strong in the freestyle sprint.\",\n    \"Roman Anoshkin | Roman Sergeyevich Anoshkin (Russian: Роман Сергеевич Аношкин ; born 31 August 1987) is a Russian sprint canoeist.  He won individual bronze medals at the 2015 World Championships and 2016 Rio Olympics.  He also won a silver medal in the four-man K-4 1000 m event at the 2016 European Championships and placed ninth at the 2016 Olympics.\"\n  ],\n  \"current_output\": \"Nikita Katsalapov\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nikita Katsalapov\",\n  \"score\": 0.0,\n  \"answer\": \"Nikita Katsalapov\"\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.\",\n  \"score\": 0.0,\n  \"answer\": \"Nikita Katsalapov\"\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks who won the 2016 Russian national silver medal 'with' another person and the passages include the context person plus a different passage that contains the partner's name and the birth date '29 April 1995'.\",\n    \"preserve_rule\": \"Keep the agent's existing concise-answer behavior and retain any facts already used from `context` and `passages` (e.g., the context person's identity). Continue to produce the `summary` field as the output.\",\n    \"change_rule\": \"Also integrate the second-hop passage that names the partner: produce a short 1–2 sentence summary that (a) names both people (use the full names as given in the passages), (b) includes birth dates when they appear in the passages, and (c) explicitly states that the two skaters were the 2016 Russian national silver medalists together. Stay concise and factual; do not add new facts beyond the passages.\",\n    \"drop_or_avoid_rule\": \"Do not output only a single name (avoid the current one-word output). Do not invent or infer facts not present in the provided passages. Avoid long verbatim quotations of passage text and avoid unrelated passage content.\",\n    \"output_contract\": \"Return the field `summary` as a short (1–2 sentence) integrated statement that mentions both partners' full names, includes birth dates if present in the passages, and states they jointly won the 2016 Russian national silver medal. Keep the language factual and minimal.\",\n    \"why_local_transition\": \"The current output only repeats the context person. This minimal change forces the agent to incorporate the partner information (including the 29 April 1995 birth date when present) from the passages so the summary directly links both skaters and the 2016 silver-medal partnership required to answer the question.\"\n  },\n  \"rationale\": \"This delta is a small, targeted prompt edit that preserves the agent's existing concise summary behavior while adding the single responsibility of integrating second-hop evidence (the partner and birth date) when the question asks about a partnership. It avoids hallucination and long-copying by restricting content to names, birth dates present in passages, and the partnership/medal fact, which are necessary to satisfy the question without changing the interface or producing an answer directly in the prompt.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 119,
+    "row_index": 119,
+    "bisection_round": 0,
+    "agent": "summary2",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "35fd0a2722d58b0a05735b7a97a95585bc70a966c9443e3baf3ca581f7d20601",
+  "created_at": "2026-07-16T04:54:15.348248+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "summary_1": "- Feodor Chin is described as \"an American actor\" who \"starred as the antagonist 'Benny' in Juwan Chung's 'Baby'\" and is given as born \"August 18, 1974.\" \n- Matthew Godfrey is listed as \"born October 20, 1971\" (October 20, 1971) but is identified as a Canadian actor; he is not shown as part of Baby in these passages.\n- Missing link: none of the passages identify an American actor born October 20, 1971 who starred in Baby. Next hop: retrieve the full cast/credits for Juwan Chung's film \"Baby\" (or search cast lists for any film titled \"Baby\") and check each cast member's birthdates to find any American actor born October 20, 1971.",
+        "current_output": {
+          "query": "Baby Juwan Chung cast \"born October 20, 1971\""
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 1,
+      "source_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Kenneth Choi born October 20 1971 Baby cast"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": {
+          "query": "Kenneth Choi Baby stars which American actor born on October 20, 1971?"
+        },
+        "score": 1.0,
+        "retrieved_titles": [
+          "Kenneth Choi",
+          "Baby (2007 film)",
+          "Kenneth Brown (playwright)",
+          "Eric Scott (actor)",
+          "Ken Choi (singer)",
+          "Choi Kwon-soo",
+          "Choi Woong"
+        ],
+        "retrieved_doc_snippets": [
+          "Kenneth Choi | Kenneth Choi (born October 20, 1971) is an American actor. He is best known for playing the character Henry Lin on the television series \"Sons of Anarchy\" (2008–2014). He is also known for his roles as Jim Morita in the film \"\" (2011), Chester Ming in Martin Scorsese's \"The Wolf of Wall Street\" (2013), Judge Lance Ito in \"\" (2016). and Lewis on the FOX comedy series \"The Last Man on Earth\".",
+          "Baby (2007 film) | Baby is a 2007 independent film, considered part of the hood film genre. The film tells the story of an Asian-American youth's gang life in East Los Angeles, set during the mid '80s to the early '90s. Directed by Juwan Chung and starring David Huynh, Tzi Ma, Feodor Chin, Ron Yuan and Kenneth Choi. It has been called \"the Asian American Boyz n the Hood\" by the San Francisco Chronicle. The film won Best Narrative Feature at the 2007 Los Angeles Asian Pacific Film Festival and a  ...[truncated]",
+          "Kenneth Brown (playwright) | Kenneth Brown is a playwright, actor, director and producer (born 20 January 1954) who has been active in theatre since 1971. He is an author or co-author of the following plays:",
+          "Eric Scott (actor) | Eric Scott (born Eric Scott Magat; October 20, 1958, in Los Angeles, California) is an American actor whose most noted role is as Ben Walton, which he first played in the movie \"\" in 1971, and subsequently in the series \"The Waltons\".",
+          "Ken Choi (singer) | Kenneth \"Ken\" Choi Fung-Wah (; born 28 November 1960) is a singer and actor from Hong Kong. Before his music career, he worked at a summer job for approximately . He enrolled in a radio singing contest and won . He composed the music for the 1981 song, \"Beautiful Silhouette\" (倩影 , \"Sin Ying\"), which won an award at the 1981 RTHK Top 10 Gold Songs Awards. Caron ( ) wrote the lyrics of the song.",
+          "Choi Kwon-soo | Choi Kwon-Soo (born October 5, 2004) is a South Korean actor. He began his career as a child actor.",
+          "Choi Woong | Choi Woong (born Choi Sun-woong; December 28, 1986) is a South Korean actor. He starred in television series such as \"Secret Love\" (2013), and \"Descendants of the Sun\" (2016)."
+        ],
+        "summary_2": "Kenneth Choi — an American actor born October 20, 1971 — starred in Juwan Chung's film Baby (2007).",
+        "answer": "Kenneth Choi",
+        "missing_recovery_rate": 1.0,
+        "recovered_missing_titles": [
+          "Baby (2007 film)",
+          "Kenneth Choi"
+        ],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Kenneth Choi"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"summary_1\": \"- Feodor Chin is described as \\\"an American actor\\\" who \\\"starred as the antagonist 'Benny' in Juwan Chung's 'Baby'\\\" and is given as born \\\"August 18, 1974.\\\" \\n- Matthew Godfrey is listed as \\\"born October 20, 1971\\\" (October 20, 1971) but is identified as a Canadian actor; he is not shown as part of Baby in these passages.\\n- Missing link: none of the passages identify an American actor born October 20, 1971 who starred in Baby. Next hop: retrieve the full cast/credits for Juwan Chung's film \\\"Baby\\\" (or search cast lists for any film titled \\\"Baby\\\") and check each cast member's birthdates to find any American actor born October 20, 1971.\",\n  \"current_output\": {\n    \"query\": \"Baby Juwan Chung cast \\\"born October 20, 1971\\\"\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n1\n\nSource state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Kenneth Choi born October 20 1971 Baby cast\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": {\n    \"query\": \"Kenneth Choi Baby stars which American actor born on October 20, 1971?\"\n  },\n  \"score\": 1.0,\n  \"retrieved_titles\": [\n    \"Kenneth Choi\",\n    \"Baby (2007 film)\",\n    \"Kenneth Brown (playwright)\",\n    \"Eric Scott (actor)\",\n    \"Ken Choi (singer)\",\n    \"Choi Kwon-soo\",\n    \"Choi Woong\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Kenneth Choi | Kenneth Choi (born October 20, 1971) is an American actor. He is best known for playing the character Henry Lin on the television series \\\"Sons of Anarchy\\\" (2008–2014). He is also known for his roles as Jim Morita in the film \\\"\\\" (2011), Chester Ming in Martin Scorsese's \\\"The Wolf of Wall Street\\\" (2013), Judge Lance Ito in \\\"\\\" (2016). and Lewis on the FOX comedy series \\\"The Last Man on Earth\\\".\",\n    \"Baby (2007 film) | Baby is a 2007 independent film, considered part of the hood film genre. The film tells the story of an Asian-American youth's gang life in East Los Angeles, set during the mid '80s to the early '90s. Directed by Juwan Chung and starring David Huynh, Tzi Ma, Feodor Chin, Ron Yuan and Kenneth Choi. It has been called \\\"the Asian American Boyz n the Hood\\\" by the San Francisco Chronicle. The film won Best Narrative Feature at the 2007 Los Angeles Asian Pacific Film Festival and a  ...[truncated]\",\n    \"Kenneth Brown (playwright) | Kenneth Brown is a playwright, actor, director and producer (born 20 January 1954) who has been active in theatre since 1971. He is an author or co-author of the following plays:\",\n    \"Eric Scott (actor) | Eric Scott (born Eric Scott Magat; October 20, 1958, in Los Angeles, California) is an American actor whose most noted role is as Ben Walton, which he first played in the movie \\\"\\\" in 1971, and subsequently in the series \\\"The Waltons\\\".\",\n    \"Ken Choi (singer) | Kenneth \\\"Ken\\\" Choi Fung-Wah (; born 28 November 1960) is a singer and actor from Hong Kong. Before his music career, he worked at a summer job for approximately . He enrolled in a radio singing contest and won . He composed the music for the 1981 song, \\\"Beautiful Silhouette\\\" (倩影 , \\\"Sin Ying\\\"), which won an award at the 1981 RTHK Top 10 Gold Songs Awards. Caron ( ) wrote the lyrics of the song.\",\n    \"Choi Kwon-soo | Choi Kwon-Soo (born October 5, 2004) is a South Korean actor. He began his career as a child actor.\",\n    \"Choi Woong | Choi Woong (born Choi Sun-woong; December 28, 1986) is a South Korean actor. He starred in television series such as \\\"Secret Love\\\" (2013), and \\\"Descendants of the Sun\\\" (2016).\"\n  ],\n  \"summary_2\": \"Kenneth Choi — an American actor born October 20, 1971 — starred in Juwan Chung's film Baby (2007).\",\n  \"answer\": \"Kenneth Choi\",\n  \"missing_recovery_rate\": 1.0,\n  \"recovered_missing_titles\": [\n    \"Baby (2007 film)\",\n    \"Kenneth Choi\"\n  ],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Kenneth Choi\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When composing the second-hop retrieval query for a film-related missing-support hop and either (a) summary_1 contains a film title and a birthdate anchor but no confirmed American actor, or (b) the draft query would insert a personal name not present in summary_1.\",\n    \"preserve_rule\": \"Keep the existing single-string, single-line output contract. Continue to use visible facts from summary_1 as anchors and to produce a concise keyword-style search; do not add explanatory text, questions, or extra fields.\",\n    \"change_rule\": \"Do not inject any person-name literal that is not already present in the visible inputs. Instead, form a compact query that pairs the film anchor (the film title as shown in summary_1) with the birthdate anchor and relation keywords such as \\\"American actor\\\" plus a cast-retrieval token like \\\"cast\\\" or \\\"stars\\\". Use the date token exactly as it appears in summary_1 (or a simple numeric variant). Keep the query terse and focused (keywords only).\",\n    \"drop_or_avoid_rule\": \"Avoid including any personal names, long quoted spans, or target-only literals that do not appear in the visible inputs. Avoid full-sentence phrasing, explanatory clauses, and unnecessary punctuation. Specifically do not emit actor names not present in summary_1.\",\n    \"output_contract\": \"Emit exactly one compact retrieval query string (single line). The query should be a concise keyword search intended to retrieve cast or biographical pages linking the named film to an American actor born on the given date. Produce no other text or fields.\",\n    \"why_local_transition\": \"This minimal behavior edit prevents leakage of unseen actor names while increasing retrieval precision: combining the film title + birthdate + 'American actor' + 'cast' guides downstream retrieval to the actor biography or cast list that supplies the missing bridge.\"\n  },\n  \"rationale\": \"The rejected attempt leaked an actor name that did not appear in the visible inputs. The smallest coherent fix is a prompt-level constraint: ban injecting person-name literals not present in summary_1 and prefer queries that combine the existing anchors (film title and birthdate) with relation keywords ('American actor' and 'cast'/'stars'). This preserves the original single-query interface and anchoring behavior while preventing literal leakage and improving the likelihood of retrieving the correct supporting passages. The delta is an instruction-only edit (not a candidate answer) and follows the anti-cheating rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 64,
+    "row_index": 64,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 1,
+    "delta_attempt": 1
+  }
+}

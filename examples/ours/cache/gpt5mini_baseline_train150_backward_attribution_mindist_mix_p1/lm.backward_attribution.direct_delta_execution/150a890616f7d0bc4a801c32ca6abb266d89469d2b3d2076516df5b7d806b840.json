@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "150a890616f7d0bc4a801c32ca6abb266d89469d2b3d2076516df5b7d806b840",
+  "created_at": "2026-07-14T19:01:55.744674+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When `question` asks what items can be delivered to a specific place and `summary_1` indicates 'mail' or 'letters'.",
+            "preserve_rule": "Keep the place name (exact town and state) and the delivery concept (e.g., 'delivered items' / 'mail' / 'delivery') in the query.",
+            "change_rule": "Instead of enumerating many mail‑type synonyms, produce a single compact 3–6 word query that contains: (1) the place name, (2) a short delivery keyword ('delivered items' or 'mail' or 'delivery'), and (3) a concise historical/mail‑route or route keyword if such a route is mentioned in available place descriptions (e.g. include a named route or the word 'Express'/'Overland'). Put the most distinctive route/name term next to the place name (e.g. '<Place> <route-term> <delivered items>').",
+            "drop_or_avoid_rule": "Avoid long lists of mail variants, repeated place forms, excessive Boolean operators, and long quoted fragments. Do not produce multi‑sentence queries or retrieval instructions—emit one short query string.",
+            "output_contract": "Return a single short string for `query` (3–6 words) that follows the change_rule: contains the place, a delivery keyword, and—if present in place descriptions—a concise route/name keyword.",
+            "why_local_transition": "The previous query over‑emphasized generic mail synonyms and omitted a concise historical/route keyword that would bridge the place page to pages describing historic mail routes; adding that single route/name token plus a focused delivery term increases chance of retrieving the missing route page while preserving the original delivery focus."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When summary_1 indicates mail/letters and the agent is expected to produce a second-hop retrieval query (the `query` field) for that question.",
+            "preserve_rule": "Keep the agent's current concise, single-query output style and retain use of place-name and mail-related tokens already present in the visible inputs.",
+            "change_rule": "Add a focused instruction: produce one compact retrieval query string that (1) explicitly includes the place name from the question (e.g. 'Trout Creek' or 'Trout Creek, UT'), (2) targets historical/mail-route phrasing (for example, terms such as 'historic mail service', 'mail route', or 'delivery history'), and (3) includes wording that seeks the kinds or 'items' delivered (for example, 'items delivered' or 'types of items delivered'). Output a short search-query phrase rather than a full sentence or an answer.",
+            "drop_or_avoid_rule": "Do not include specific carrier or service brand names or other named entities that are not present in the visible inputs. Avoid outputting final answers, copying long verbatim spans from hidden documents, or reproducing any leaked literal tokens referenced in prior feedback.",
+            "output_contract": "Produce exactly one compact retrieval query string in the `query` field. The query must contain the place name, at least one mail-related phrase, and a phrase indicating 'items' or 'types of items' delivered. The query must be concise and suitable for retrieval, must not include disallowed carrier/service names or final answers, and must not reproduce long hidden-document spans.",
+            "why_local_transition": "This minimal prompt edit redirects the agent from relying on a specific named carrier to issuing a targeted historical-mail/delivery query for Trout Creek that will surface supporting pages about what was delivered there. It preserves the mail-focused, concise behavior while removing the temptation to emit forbidden named literals."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "current_output": {
+          "query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When `question` asks what items can be delivered to a specific place and `summary_1` indicates 'mail' or 'letters'.\",\n      \"preserve_rule\": \"Keep the place name (exact town and state) and the delivery concept (e.g., 'delivered items' / 'mail' / 'delivery') in the query.\",\n      \"change_rule\": \"Instead of enumerating many mail‑type synonyms, produce a single compact 3–6 word query that contains: (1) the place name, (2) a short delivery keyword ('delivered items' or 'mail' or 'delivery'), and (3) a concise historical/mail‑route or route keyword if such a route is mentioned in available place descriptions (e.g. include a named route or the word 'Express'/'Overland'). Put the most distinctive route/name term next to the place name (e.g. '<Place> <route-term> <delivered items>').\",\n      \"drop_or_avoid_rule\": \"Avoid long lists of mail variants, repeated place forms, excessive Boolean operators, and long quoted fragments. Do not produce multi‑sentence queries or retrieval instructions—emit one short query string.\",\n      \"output_contract\": \"Return a single short string for `query` (3–6 words) that follows the change_rule: contains the place, a delivery keyword, and—if present in place descriptions—a concise route/name keyword.\",\n      \"why_local_transition\": \"The previous query over‑emphasized generic mail synonyms and omitted a concise historical/route keyword that would bridge the place page to pages describing historic mail routes; adding that single route/name token plus a focused delivery term increases chance of retrieving the missing route page while preserving the original delivery focus.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 indicates mail/letters and the agent is expected to produce a second-hop retrieval query (the `query` field) for that question.\",\n      \"preserve_rule\": \"Keep the agent's current concise, single-query output style and retain use of place-name and mail-related tokens already present in the visible inputs.\",\n      \"change_rule\": \"Add a focused instruction: produce one compact retrieval query string that (1) explicitly includes the place name from the question (e.g. 'Trout Creek' or 'Trout Creek, UT'), (2) targets historical/mail-route phrasing (for example, terms such as 'historic mail service', 'mail route', or 'delivery history'), and (3) includes wording that seeks the kinds or 'items' delivered (for example, 'items delivered' or 'types of items delivered'). Output a short search-query phrase rather than a full sentence or an answer.\",\n      \"drop_or_avoid_rule\": \"Do not include specific carrier or service brand names or other named entities that are not present in the visible inputs. Avoid outputting final answers, copying long verbatim spans from hidden documents, or reproducing any leaked literal tokens referenced in prior feedback.\",\n      \"output_contract\": \"Produce exactly one compact retrieval query string in the `query` field. The query must contain the place name, at least one mail-related phrase, and a phrase indicating 'items' or 'types of items' delivered. The query must be concise and suitable for retrieval, must not include disallowed carrier/service names or final answers, and must not reproduce long hidden-document spans.\",\n      \"why_local_transition\": \"This minimal prompt edit redirects the agent from relying on a specific named carrier to issuing a targeted historical-mail/delivery query for Trout Creek that will surface supporting pages about what was delivered there. It preserves the mail-focused, concise behavior while removing the temptation to emit forbidden named literals.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"current_output\": {\n    \"query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Trout Creek Utah mail items delivered\"\n  },\n  \"rationale\": \"Kept the exact place name, used a mail-related term plus 'items delivered' to target delivery history, and produced one compact 3–6 word query per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

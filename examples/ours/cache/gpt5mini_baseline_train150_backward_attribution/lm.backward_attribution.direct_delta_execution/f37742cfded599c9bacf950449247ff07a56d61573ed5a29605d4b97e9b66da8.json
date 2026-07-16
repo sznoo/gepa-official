@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "f37742cfded599c9bacf950449247ff07a56d61573ed5a29605d4b97e9b66da8",
+  "created_at": "2026-07-14T13:43:32.840482+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks to choose which of two named taxa grows further north (e.g. formulation 'Which ... X or Y?') AND at least one provided summary contains a clear comparative conclusion of the form 'A grows further north than B' (a direct statement preferring one of the two), AND no summary contains a direct, explicit contradiction of that conclusion.",
+            "preserve_rule": "Keep using the visible summaries as the sole evidence source. If summaries conflict or neither supplies a direct comparative conclusion, retain existing behavior (do not apply this delta) and fall back to requesting or consulting additional information.",
+            "change_rule": "If the trigger conditions are met, extract the single plant name that the authoritative summary explicitly prefers (the entity asserted to grow further north) and place only that single token as the answer. Do not add any explanatory text, reasoning, punctuation, or qualifiers in the answer slot; do not introduce new facts beyond what the summaries provide.",
+            "drop_or_avoid_rule": "Avoid producing a full-sentence answer, any justification, hedging, or additional context in the final answer block. Avoid inventing supporting facts or citing unseen sources. Do not apply this compression when summaries contradict each other or lack a direct comparative statement.",
+            "output_contract": "Produce the minimal answer string supported by the visible summaries: exactly one plant name token only inside the [[ ## answer ## ]] block and nothing else.",
+            "why_local_transition": "The current output is a full-sentence restatement of a supported conclusion. The smallest coherent change is to enforce the final-answer format requirement (a single minimal answer token) whenever the summaries already provide a clear comparative conclusion, preserving existing evidence usage while tightening output form."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which plant grows further North, Zamia or Vallea?",
+        "summary_1": "I can't determine which grows further north based only on the provided passages. The passages show Zamia occurs as far north as Mexico, but no information about Vallea's range is given. Provide Vallea range information (or allow me to look it up) and I can answer the question.",
+        "summary_2": "Zamia grows further north than Vallea. If you want exact northernmost localities for each genus, I can look them up.",
+        "current_output": "Zamia grows further north than Vallea."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks to choose which of two named taxa grows further north (e.g. formulation 'Which ... X or Y?') AND at least one provided summary contains a clear comparative conclusion of the form 'A grows further north than B' (a direct statement preferring one of the two), AND no summary contains a direct, explicit contradiction of that conclusion.\",\n      \"preserve_rule\": \"Keep using the visible summaries as the sole evidence source. If summaries conflict or neither supplies a direct comparative conclusion, retain existing behavior (do not apply this delta) and fall back to requesting or consulting additional information.\",\n      \"change_rule\": \"If the trigger conditions are met, extract the single plant name that the authoritative summary explicitly prefers (the entity asserted to grow further north) and place only that single token as the answer. Do not add any explanatory text, reasoning, punctuation, or qualifiers in the answer slot; do not introduce new facts beyond what the summaries provide.\",\n      \"drop_or_avoid_rule\": \"Avoid producing a full-sentence answer, any justification, hedging, or additional context in the final answer block. Avoid inventing supporting facts or citing unseen sources. Do not apply this compression when summaries contradict each other or lack a direct comparative statement.\",\n      \"output_contract\": \"Produce the minimal answer string supported by the visible summaries: exactly one plant name token only inside the [[ ## answer ## ]] block and nothing else.\",\n      \"why_local_transition\": \"The current output is a full-sentence restatement of a supported conclusion. The smallest coherent change is to enforce the final-answer format requirement (a single minimal answer token) whenever the summaries already provide a clear comparative conclusion, preserving existing evidence usage while tightening output form.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which plant grows further North, Zamia or Vallea?\",\n  \"summary_1\": \"I can't determine which grows further north based only on the provided passages. The passages show Zamia occurs as far north as Mexico, but no information about Vallea's range is given. Provide Vallea range information (or allow me to look it up) and I can answer the question.\",\n  \"summary_2\": \"Zamia grows further north than Vallea. If you want exact northernmost localities for each genus, I can look them up.\",\n  \"current_output\": \"Zamia grows further north than Vallea.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nZamia\",\n  \"rationale\": \"summary_2 explicitly states Zamia grows further north than Vallea and summary_1 does not contradict; per the ordered delta produce the single-token answer 'Zamia' in the answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 140,
+    "row_index": 140,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

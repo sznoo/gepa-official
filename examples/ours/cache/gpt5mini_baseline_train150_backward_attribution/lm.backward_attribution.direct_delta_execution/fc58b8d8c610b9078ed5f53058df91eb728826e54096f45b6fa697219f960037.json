@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "fc58b8d8c610b9078ed5f53058df91eb728826e54096f45b6fa697219f960037",
+  "created_at": "2026-07-14T13:37:18.885952+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When any visible summary or the agent's current_output contains parenthetical aliases, 'formerly', or slash-separated alternate names (e.g., text with '(' or 'formerly' or '/').",
+            "preserve_rule": "Keep using the provided summaries as the evidence source and preserve the agent's existing final-answer format and minimal-answer intent. Do not add new facts or external information.",
+            "change_rule": "If triggered, produce the canonical name by removing parenthetical phrases and obvious alternate-name fragments: take the substring of the cited phrase up to (but not including) the first parenthesis '(', the first ' / ' slash separator, or an explicit 'formerly' marker; also remove trailing periods and redundant whitespace. Emit only that cleaned core name as the answer.",
+            "drop_or_avoid_rule": "Do not include former names, parenthetical qualifiers, slash-separated aliases, explanatory clauses, or trailing punctuation in the final answer. Avoid adding context, qualifiers, or any text not present in the minimal cleaned core name extracted from the visible summaries.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only the single minimal canonical name string (the cleaned core name as produced by change_rule). No parentheses, no aliases, no trailing period, and no extra commentary or labels.",
+            "why_local_transition": "This edge narrows formatting from a verbose string (which included parenthetical former names) to the concise canonical building name required by the endpoint, without changing evidence or adding facts."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which building near Convention Center station used to be the home of the St. Louis Rams?",
+        "summary_1": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome) was the home of the St. Louis Rams.",
+        "summary_2": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).",
+        "current_output": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When any visible summary or the agent's current_output contains parenthetical aliases, 'formerly', or slash-separated alternate names (e.g., text with '(' or 'formerly' or '/').\",\n      \"preserve_rule\": \"Keep using the provided summaries as the evidence source and preserve the agent's existing final-answer format and minimal-answer intent. Do not add new facts or external information.\",\n      \"change_rule\": \"If triggered, produce the canonical name by removing parenthetical phrases and obvious alternate-name fragments: take the substring of the cited phrase up to (but not including) the first parenthesis '(', the first ' / ' slash separator, or an explicit 'formerly' marker; also remove trailing periods and redundant whitespace. Emit only that cleaned core name as the answer.\",\n      \"drop_or_avoid_rule\": \"Do not include former names, parenthetical qualifiers, slash-separated aliases, explanatory clauses, or trailing punctuation in the final answer. Avoid adding context, qualifiers, or any text not present in the minimal cleaned core name extracted from the visible summaries.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal canonical name string (the cleaned core name as produced by change_rule). No parentheses, no aliases, no trailing period, and no extra commentary or labels.\",\n      \"why_local_transition\": \"This edge narrows formatting from a verbose string (which included parenthetical former names) to the concise canonical building name required by the endpoint, without changing evidence or adding facts.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which building near Convention Center station used to be the home of the St. Louis Rams?\",\n  \"summary_1\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome) was the home of the St. Louis Rams.\",\n  \"summary_2\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).\",\n  \"current_output\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"The Dome at America's Center\",\n  \"rationale\": \"Truncated the summary at the first parenthesis to remove the parenthetical former names and aliases, yielding the canonical building name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 18,
+    "row_index": 18,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

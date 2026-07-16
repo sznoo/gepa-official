@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "9a9b1f46b2fa58110ecc908ce724a1f3c0441b84bfb175a168b56ddb9af19c0c",
+  "created_at": "2026-07-16T04:46:08.928263+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Between LaIsha and Glamour, which was founded first?",
+    "answer": "Glamour",
+    "context": {
+      "title": [
+        "Penco",
+        "First Descents",
+        "Andrew Bryan (Baptist)",
+        "LaIsha",
+        "Krefeld Pinguine",
+        "Glamour (magazine)",
+        "Michelle Sun",
+        "Tanta University",
+        "Syracuse Triad",
+        "Stewart Spiers"
+      ],
+      "sentences": [
+        [
+          "Penco (Mapudungun: \"Peumo water\") is a Chilean city and commune in Concepción Province, Bío Bío Region on the Bay of Concepción.",
+          " Founded as the city of Concepción del Nuevo Extremo ('beginning of the new extreme') on February 12, 1550 by Pedro de Valdivia, it is the third oldest city in Chili, after capital Santiago founded first in 1541 and La Serena second in 1544."
+        ],
+        [
+          "First Descents is a charitable non-profit organization that gives a free outdoor adventure experience trip to young adults who are fighting cancer.",
+          " Brad Ludden, a professional kayaker, founded First Descents in 2001 at age 20."
+        ],
+        [
+          "Andrew Bryan (1737–1812) founded First Bryan Baptist Church, affectionately called the Mother Church of Black Baptists, and First African Baptist Church of Savannah in Savannah, Georgia, the first black Baptist churches to be established in America.",
+          " Bryan was the former slave of Jonathan Bryan."
+        ],
+        [
+          "La'Isha (Hebrew: לאשה‎ ‎ , \"For the Woman\") is an Israeli magazine for girls and boys.",
+          " It has been published on weekly basis since 1947, and is owned by Yedioth Ahronoth media group."
+        ],
+        [
+          "The Krefeld Pinguine (Krefeld Penguins) are an ice hockey team in the Deutsche Eishockey Liga.",
+          " Their home ice is in Krefeld, North Rhine-Westphalia, Germany at the König Palast.",
+          " Founded first in 1936 by Willi Münstermann, the pro team became a limited liability company in 1994 and joined the top tier Deutsche Eishockey Liga.",
+          " In their history they have won the German championship in 1952 and 2003."
+        ],
+        [
+          "Glamour is a women's magazine published by Condé Nast Publications.",
+          " Founded in 1939 and first published in April 1939 in the United States, it was originally called \"Glamour of Hollywood\"."
+        ],
+        [
+          "Michelle Sun (born late 1980s) is a Hong Kong engineer, entrepreneur and teacher.",
+          " In 2013, she founded First Code Academy which teaches Hong Kong children from the age of six how to code and create mobile applications.",
+          " Teaching is given either in their school classrooms or in the firm's own offices."
+        ],
+        [
+          "It was founded first in 1962 as a branch from the University of Alexandria with the faculty of Medicine only and then it became an independent university named University of the Middle Delta in 1972.",
+          " It had at that time Medicine, Science, Agriculture and Education faculties.",
+          " Then, its name was changed into Tanta University in 1973."
+        ],
+        [
+          "The Syracuse Triad is the name given to the three women's sororities founded at Syracuse University.",
+          " Alpha Phi was founded first in 1872 by 10 of the original 20 women admitted into Syracuse University.",
+          " Gamma Phi Beta came along two years later in 1874 and with it came the term \"sorority,\" which was coined at the time of its founding.",
+          " (Prior to that, women's Greek-letter organizations used the term \"women's fraternity,\" since no more appropriate term existed.)",
+          " Alpha Gamma Delta completed the triad in 1904."
+        ],
+        [
+          "Stewart Spiers was a small but innovative firm of plane-makers in Scotland, founded first of all in Ayr in Ayrshire and continuing under the registered name of Stewart Speirs Ltd [\"sic\"] in Paisley, Renfrewshire, from c. 1933 until its demise in the mid to late 1930s.",
+          " Like the Glasgow firm of Alexander Mathieson & Sons, Spiers benefited hugely from the thriving industries on the Firth of Clyde in the latter half of the nineteenth century."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "LaIsha",
+        "LaIsha",
+        "Glamour (magazine)",
+        "Glamour (magazine)"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "Between LaIsha and Glamour, which was founded first?",
+    "gold_answer": "Glamour",
+    "context": {
+      "title": [
+        "Penco",
+        "First Descents",
+        "Andrew Bryan (Baptist)",
+        "LaIsha",
+        "Krefeld Pinguine",
+        "Glamour (magazine)",
+        "Michelle Sun",
+        "Tanta University",
+        "Syracuse Triad",
+        "Stewart Spiers"
+      ],
+      "sentences": [
+        [
+          "Penco (Mapudungun: \"Peumo water\") is a Chilean city and commune in Concepción Province, Bío Bío Region on the Bay of Concepción.",
+          " Founded as the city of Concepción del Nuevo Extremo ('beginning of the new extreme') on February 12, 1550 by Pedro de Valdivia, it is the third oldest city in Chili, after capital Santiago founded first in 1541 and La Serena second in 1544."
+        ],
+        [
+          "First Descents is a charitable non-profit organization that gives a free outdoor adventure experience trip to young adults who are fighting cancer.",
+          " Brad Ludden, a professional kayaker, founded First Descents in 2001 at age 20."
+        ],
+        [
+          "Andrew Bryan (1737–1812) founded First Bryan Baptist Church, affectionately called the Mother Church of Black Baptists, and First African Baptist Church of Savannah in Savannah, Georgia, the first black Baptist churches to be established in America.",
+          " Bryan was the former slave of Jonathan Bryan."
+        ],
+        [
+          "La'Isha (Hebrew: לאשה‎ ‎ , \"For the Woman\") is an Israeli magazine for girls and boys.",
+          " It has been published on weekly basis since 1947, and is owned by Yedioth Ahronoth media group."
+        ],
+        [
+          "The Krefeld Pinguine (Krefeld Penguins) are an ice hockey team in the Deutsche Eishockey Liga.",
+          " Their home ice is in Krefeld, North Rhine-Westphalia, Germany at the König Palast.",
+          " Founded first in 1936 by Willi Münstermann, the pro team became a limited liability company in 1994 and joined the top tier Deutsche Eishockey Liga.",
+          " In their history they have won the German championship in 1952 and 2003."
+        ],
+        [
+          "Glamour is a women's magazine published by Condé Nast Publications.",
+          " Founded in 1939 and first published in April 1939 in the United States, it was originally called \"Glamour of Hollywood\"."
+        ],
+        [
+          "Michelle Sun (born late 1980s) is a Hong Kong engineer, entrepreneur and teacher.",
+          " In 2013, she founded First Code Academy which teaches Hong Kong children from the age of six how to code and create mobile applications.",
+          " Teaching is given either in their school classrooms or in the firm's own offices."
+        ],
+        [
+          "It was founded first in 1962 as a branch from the University of Alexandria with the faculty of Medicine only and then it became an independent university named University of the Middle Delta in 1972.",
+          " It had at that time Medicine, Science, Agriculture and Education faculties.",
+          " Then, its name was changed into Tanta University in 1973."
+        ],
+        [
+          "The Syracuse Triad is the name given to the three women's sororities founded at Syracuse University.",
+          " Alpha Phi was founded first in 1872 by 10 of the original 20 women admitted into Syracuse University.",
+          " Gamma Phi Beta came along two years later in 1874 and with it came the term \"sorority,\" which was coined at the time of its founding.",
+          " (Prior to that, women's Greek-letter organizations used the term \"women's fraternity,\" since no more appropriate term existed.)",
+          " Alpha Gamma Delta completed the triad in 1904."
+        ],
+        [
+          "Stewart Spiers was a small but innovative firm of plane-makers in Scotland, founded first of all in Ayr in Ayrshire and continuing under the registered name of Stewart Speirs Ltd [\"sic\"] in Paisley, Renfrewshire, from c. 1933 until its demise in the mid to late 1930s.",
+          " Like the Glasgow firm of Alexander Mathieson & Sons, Spiers benefited hugely from the thriving industries on the Firth of Clyde in the latter half of the nineteenth century."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "LaIsha",
+        "LaIsha",
+        "Glamour (magazine)",
+        "Glamour (magazine)"
+      ],
+      "sent_id": [
+        0,
+        1,
+        0,
+        1
+      ]
+    },
+    "gold_support_titles": [
+      "LaIsha",
+      "Glamour (magazine)"
+    ],
+    "hop1_query": "Between LaIsha and Glamour, which was founded first?",
+    "hop1_docs": [
+      "Laisha Wilkins | Laisha Wilkins (born Laisha Wilkins Pérez on May 18 1976 in Mexico City, Mexico) is a Mexican actress, talk show hostess and producer.",
+      "Glamour (magazine) | Glamour is a women's magazine published by Condé Nast Publications.  Founded in 1939 and first published in April 1939 in the United States, it was originally called \"Glamour of Hollywood\".",
+      "Laisha Rosnau | Laisha Rosnau (born 1972) is a Canadian novelist and poet.",
+      "Laisha Junaid | Laisha Junaid is the winner of \"Maldivian Idol\" Season1 opposing against the other two finalists, Shalabee Ibrahim (First Runner-up) and Mohamed Ishan (Second Runner-up).  She has released her first song Hoadheytho Manzileh _Official Music Video on 26th january 2017.  and currently working on several video projects for an album.  She was most known as a very clever and well mannered girl whos dream was to become a doctor.  She has also got a scholarship for it on the finale night from PSM",
+      "Hell City Glamours | Hell City Glamours were a hard rock band from Sydney, Australia.  They supported the likes of Paul Stanley, New York Dolls, Sebastian Bach, Alice Cooper, Shihad, and Airbourne.  They released three EP's, a split 7\" single with the Devilrock Four and were responsible for a resurgence in hard rock/rock n roll in Sydney in the early 2000s.  In late 2008 Hell City Glamours supported The Angels on their Night Attack tour which included four special shows with Rose Tattoo and released their debut album in Europe on Classic Rock Magazine's \"Powerage\" label.  In March, 2009 Hell City Glamours completed their first tour of the United States in which they played at Aussie BBQ and SXSW.  In April 2014 they announced the release of their second and final self-titled album along with dates for their farewell tour.  Whilst never receiving any support from radio, the Hell City Glamours were an incredibly popular live draw, known for their often sold-out, raucous live shows.",
+      "Prix République du Glamour | Founded in 2008, the prix République du Glamour (in English, the Republic of Glamour prize) annually rewards the best French lesbian novels.  The novel is chosen each year by the editor of the eponymous magazine.",
+      "Glamour (presentation) | Glamour is the impression of attraction or fascination that a particularly luxurious or elegant appearance creates, an impression which is better than the reality.  Typically, a person, event, location, technology, or product such as a piece of clothing can be glamorous or add glamour.  \"Glamour\" originally referred to a magic spell, an illusion said to be cast by witches."
+    ],
+    "hop1_titles": [
+      "Laisha Wilkins",
+      "Glamour (magazine)",
+      "Laisha Rosnau",
+      "Laisha Junaid",
+      "Hell City Glamours",
+      "Prix République du Glamour",
+      "Glamour (presentation)"
+    ],
+    "summary_1": "Passage 2 states Glamour was \"Founded in 1939\" and \"first published in April 1939\" (Glamour (magazine)). The passages contain no information about a magazine named \"LaIsha\" (they include similarly spelled personal names such as \"Laisha Wilkins\"), so the missing fact is LaIsha's founding date/year (and confirmation that the target \"LaIsha\" is the magazine). Next retrieval should target \"LaIsha (magazine) founding date\" or \"LaIsha magazine founded\" (verify spelling/case to disambiguate from personal names).",
+    "hop2_query": "LaIsha magazine founded",
+    "hop2_docs": [
+      "Laisha Wilkins | Laisha Wilkins (born Laisha Wilkins Pérez on May 18 1976 in Mexico City, Mexico) is a Mexican actress, talk show hostess and producer.",
+      "LaIsha | La'Isha (Hebrew: לאשה‎ ‎ , \"For the Woman\") is an Israeli magazine for girls and boys.  It has been published on weekly basis since 1947, and is owned by Yedioth Ahronoth media group.",
+      "Laisha Rosnau | Laisha Rosnau (born 1972) is a Canadian novelist and poet.",
+      "Laisha Junaid | Laisha Junaid is the winner of \"Maldivian Idol\" Season1 opposing against the other two finalists, Shalabee Ibrahim (First Runner-up) and Mohamed Ishan (Second Runner-up).  She has released her first song Hoadheytho Manzileh _Official Music Video on 26th january 2017.  and currently working on several video projects for an album.  She was most known as a very clever and well mannered girl whos dream was to become a doctor.  She has also got a scholarship for it on the finale night from PSM",
+      "Dilema veche | Dilema veche (English: \"Old Dilemma\") is a Romanian weekly magazine that covers culture, social topics, and politics.  It was founded in 2004 as the successor to the magazine \"Dilema\", which was founded in 1993.  Both magazines were founded by Andrei Pleșu.  The magazine is currently part of Adevărul Holding, and is a member of the Eurozine network.  It has a circulation of 31,000.",
+      "Latino Perspectives Magazine | Latino Perspectives Magazine was a monthly magazine publication based in Phoenix, Arizona and founded in September 2004.  The magazine's core focus and audience was English-speaking Hispanic Americans, mainly in the Southwestern United States.  The publication was founded by Ricardo Torres.",
+      "Maldivian Idol | Maldivian Idol is a Dhivehi television show based on the popular British show \"Pop Idol\" created by Simon Fuller's 19 Entertainment and developed by Fremantle Media.  The first season premiered on 22 January 2016.  On 2 May, 18-year-old Laisha Junaid from Male' was announced winner, with close contenders Shalabee Ibrahim and Mohamed Ishan coming second and third respectively.  The winner was awarded a cash prize of MVR 250,000 (USD 16,213) from the organizer PSM, among a host of other prizes."
+    ],
+    "hop2_titles": [
+      "Laisha Wilkins",
+      "LaIsha",
+      "Laisha Rosnau",
+      "Laisha Junaid",
+      "Dilema veche",
+      "Latino Perspectives Magazine",
+      "Maldivian Idol"
+    ],
+    "summary_2": "Glamour was founded in 1939, while La'Isha (La'Isha) has been published since 1947; therefore Glamour was founded first.",
+    "answer": "glamour",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "LaIsha"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Glamour (magazine)"
+    ],
+    "hit_titles_total": [
+      "Glamour (magazine)",
+      "LaIsha"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

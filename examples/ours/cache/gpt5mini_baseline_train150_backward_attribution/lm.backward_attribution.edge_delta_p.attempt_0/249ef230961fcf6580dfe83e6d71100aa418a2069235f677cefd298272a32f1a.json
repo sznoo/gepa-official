@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "249ef230961fcf6580dfe83e6d71100aa418a2069235f677cefd298272a32f1a",
+  "created_at": "2026-07-14T13:37:20.629466+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "When was the American politician which  Catherine E. Pugh lost primaries to born ",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "When was the American politician which  Catherine E. Pugh lost primaries to born ",
+        "summary_1": "The passages show Pugh lost the primary to Stephanie Rawlings-Blake, but none of the provided passages give that politician's birth date, so the birthdate cannot be determined from the given information.",
+        "summary_2": "She was born March 17, 1970.",
+        "current_output": "Stephanie Rawlings-Blake was born on March 17, 1970."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Stephanie Rawlings-Blake was born on March 17, 1970.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "March 17, 1970",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"When was the American politician which  Catherine E. Pugh lost primaries to born \",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"When was the American politician which  Catherine E. Pugh lost primaries to born \",\n  \"summary_1\": \"The passages show Pugh lost the primary to Stephanie Rawlings-Blake, but none of the provided passages give that politician's birth date, so the birthdate cannot be determined from the given information.\",\n  \"summary_2\": \"She was born March 17, 1970.\",\n  \"current_output\": \"Stephanie Rawlings-Blake was born on March 17, 1970.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Stephanie Rawlings-Blake was born on March 17, 1970.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"March 17, 1970\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If one of the visible summaries (summary_1, summary_2, etc.) contains an explicit birthdate phrase matching a Month Day, Year pattern (e.g., 'born <Month> <Day>, <Year>'), and another summary either lacks the date or states it cannot be determined,\",\n    \"preserve_rule\": \"Keep all existing behavior: use the provided summaries as evidence, do not invent facts, and follow the base prompt's interface for producing the `answer` field.\",\n    \"change_rule\": \"Prefer the explicit birthdate assertion from the summary that contains the Month Day, Year phrase. Produce the birthdate itself as the answer, formatted exactly as the date appears in that summary (Month Day, Year), but do not wrap it in a sentence or add commentary.\",\n    \"drop_or_avoid_rule\": \"Do not repeat uncertainty from other summaries that say the date cannot be determined when at least one summary provides an explicit date. Avoid producing a full-sentence answer, explanations, or additional tokens beyond the minimal date string.\",\n    \"output_contract\": \"Write only the minimal answer string (the birthdate in Month Day, Year format) into the [[ ## answer ## ]] block and nothing else. Preserve punctuation and capitalization exactly as it appears in the chosen summary's date string, but no surrounding text.\",\n    \"why_local_transition\": \"The summaries disagree: one contains an explicit birthdate while another reports the date is not available. This change locally biases the agent to accept and output the explicit date evidence already present in the inputs and to adhere to the required minimal-answer format.\"\n  },\n  \"rationale\": \"The current output was a full sentence rather than the minimal answer string required by the final-answer contract, and summary_1 claimed the date was unavailable while summary_2 contained an explicit date. The smallest coherent prompt change is to instruct the agent to prefer an explicit Month Day, Year phrase when present and to emit only that date string. This preserves evidence use, avoids hallucination, and enforces the minimal formatting required for the final answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 54,
+    "row_index": 54,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

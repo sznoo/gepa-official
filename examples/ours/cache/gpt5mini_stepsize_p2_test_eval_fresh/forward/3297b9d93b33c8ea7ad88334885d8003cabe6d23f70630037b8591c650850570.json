@@ -1,0 +1,238 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "3297b9d93b33c8ea7ad88334885d8003cabe6d23f70630037b8591c650850570",
+  "created_at": "2026-07-16T05:43:02.585731+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "answer": "yes",
+    "context": {
+      "title": [
+        "Ivan Perestiani",
+        "Nostalgia for the Light",
+        "The Compass Rose (film)",
+        "Salvador Allende (film)",
+        "The Suram Fortress (film)",
+        "Patricio Guzmán",
+        "Pato Guzman",
+        "The Battle of Chile",
+        "The Pearl Button",
+        "Three Lives (film)"
+      ],
+      "sentences": [
+        [
+          "Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).",
+          " He was of Kefalonian Greek descent."
+        ],
+        [
+          "Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.",
+          " Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.",
+          " Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists."
+        ],
+        [
+          "The Compass Rose (Spanish: \"La rosa de los vientos\" ) is a 1983 Spanish drama film directed by Patricio Guzmán.",
+          " It was entered into the 13th Moscow International Film Festival."
+        ],
+        [
+          "Salvador Allende is a 2004 documentary film about Chilean president Salvador Allende, from his election campaign to the \"coup d'état\" which ended his life.",
+          " It was directed by Patricio Guzmán and screened out of competition at the 2004 Cannes Film Festival."
+        ],
+        [
+          "The Suram Fortress (Georgian: სურამის ციხე , Russian: Сурамская крепость ) is a 1922 Soviet Georgian adventure film directed by Ivan Perestiani, based on Daniel Chonkadze's novel with the same title."
+        ],
+        [
+          "Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.",
+          " He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\"."
+        ],
+        [
+          "Patricio \"Pato\" Guzmán (1933–1991), a native of Chile, worked in the United States as an art director, production designer, and producer of television and film.",
+          " He worked on such notable shows as \"The Jack Benny Program\", \"I Love Lucy\", \"The Lucy Show\", \"That Girl\".",
+          " He also served as a production designer for the \"\" pilot \"\" (uncredited) and in that capacity worked directly with art director Matt Jeffries and creator-producer Gene Roddenberry on the design of the original USS Enterprise NCC-1701 exterior and bridge.",
+          " In the 1980s, Guzman worked with director Paul Mazursky on the films \"Tempest\", \"Moscow on the Hudson\", \"Down and Out in Beverly Hills\", and \"\"."
+        ],
+        [
+          "The Battle of Chile is a documentary film directed by the Chilean Patricio Guzman, in three parts: \"The Insurrection of the Bourgeoisie\" (1975), \"The Coup d'état\" (1976), \"Popular Power\" (1979).",
+          " It is a chronicle of the political tension in Chile in 1973 and of the violent counter revolution against the democratically elected government of Salvador Allende.",
+          " It won the Grand Prix in 1975 and 1976 at the Grenoble International Film Festival.",
+          " In 1996, \"Chile, Obstinate Memory\" was released and followed Guzmán back to Chile as he screened the 3-part documentary to Chileans who had never seen it before."
+        ],
+        [
+          "The Pearl Button (Spanish: El botón de nácar ) is a 2015 Chilean documentary film directed by Patricio Guzmán.",
+          " It was screened in the main competition section of the 65th Berlin International Film Festival where it won the Silver Bear for Best Script.",
+          " It won the Lumières Award for Best Documentary at the 21st Lumières Awards.",
+          " The filmmaker has described the work as part of a triptych with \"Nostalgia for the Light\" and potentially a third film focusing on the Andes."
+        ],
+        [
+          "Three Lives (Georgian: სამი სიცოცხლე , Russian: Три жизни , sometimes \"Who is to Blame?\")",
+          " is a 1924 Georgian silent film directed by Ivan Perestiani."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ivan Perestiani",
+        "Patricio Guzmán"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity and at least one passage provides an explicit, identity-aligned statement linking that same named entity (or a clearly indicated alias) to the asserted relation, append exactly one brief corroborating sentence that paraphrases that passage's linking fact and references the corroborating passage. Perform an explicit identity-alignment check (alias or explicit linking); do not treat mere name co-occurrence or a passage that merely mentions the name as sufficient. Do not append this corroboration if the `context` already contains the identical corroborating fact verbatim. Keep this addition short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "fc7f6a240c2e",
+    "rerun_from": null,
+    "question": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "gold_answer": "yes",
+    "context": {
+      "title": [
+        "Ivan Perestiani",
+        "Nostalgia for the Light",
+        "The Compass Rose (film)",
+        "Salvador Allende (film)",
+        "The Suram Fortress (film)",
+        "Patricio Guzmán",
+        "Pato Guzman",
+        "The Battle of Chile",
+        "The Pearl Button",
+        "Three Lives (film)"
+      ],
+      "sentences": [
+        [
+          "Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).",
+          " He was of Kefalonian Greek descent."
+        ],
+        [
+          "Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.",
+          " Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.",
+          " Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists."
+        ],
+        [
+          "The Compass Rose (Spanish: \"La rosa de los vientos\" ) is a 1983 Spanish drama film directed by Patricio Guzmán.",
+          " It was entered into the 13th Moscow International Film Festival."
+        ],
+        [
+          "Salvador Allende is a 2004 documentary film about Chilean president Salvador Allende, from his election campaign to the \"coup d'état\" which ended his life.",
+          " It was directed by Patricio Guzmán and screened out of competition at the 2004 Cannes Film Festival."
+        ],
+        [
+          "The Suram Fortress (Georgian: სურამის ციხე , Russian: Сурамская крепость ) is a 1922 Soviet Georgian adventure film directed by Ivan Perestiani, based on Daniel Chonkadze's novel with the same title."
+        ],
+        [
+          "Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.",
+          " He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\"."
+        ],
+        [
+          "Patricio \"Pato\" Guzmán (1933–1991), a native of Chile, worked in the United States as an art director, production designer, and producer of television and film.",
+          " He worked on such notable shows as \"The Jack Benny Program\", \"I Love Lucy\", \"The Lucy Show\", \"That Girl\".",
+          " He also served as a production designer for the \"\" pilot \"\" (uncredited) and in that capacity worked directly with art director Matt Jeffries and creator-producer Gene Roddenberry on the design of the original USS Enterprise NCC-1701 exterior and bridge.",
+          " In the 1980s, Guzman worked with director Paul Mazursky on the films \"Tempest\", \"Moscow on the Hudson\", \"Down and Out in Beverly Hills\", and \"\"."
+        ],
+        [
+          "The Battle of Chile is a documentary film directed by the Chilean Patricio Guzman, in three parts: \"The Insurrection of the Bourgeoisie\" (1975), \"The Coup d'état\" (1976), \"Popular Power\" (1979).",
+          " It is a chronicle of the political tension in Chile in 1973 and of the violent counter revolution against the democratically elected government of Salvador Allende.",
+          " It won the Grand Prix in 1975 and 1976 at the Grenoble International Film Festival.",
+          " In 1996, \"Chile, Obstinate Memory\" was released and followed Guzmán back to Chile as he screened the 3-part documentary to Chileans who had never seen it before."
+        ],
+        [
+          "The Pearl Button (Spanish: El botón de nácar ) is a 2015 Chilean documentary film directed by Patricio Guzmán.",
+          " It was screened in the main competition section of the 65th Berlin International Film Festival where it won the Silver Bear for Best Script.",
+          " It won the Lumières Award for Best Documentary at the 21st Lumières Awards.",
+          " The filmmaker has described the work as part of a triptych with \"Nostalgia for the Light\" and potentially a third film focusing on the Andes."
+        ],
+        [
+          "Three Lives (Georgian: სამი სიცოცხლე , Russian: Три жизни , sometimes \"Who is to Blame?\")",
+          " is a 1924 Georgian silent film directed by Ivan Perestiani."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Ivan Perestiani",
+        "Patricio Guzmán"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ],
+    "hop1_query": "Were Ivan Perestiani and Patricio Guzmán both directors?",
+    "hop1_docs": [
+      "Ivan Perestiani | Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).  He was of Kefalonian Greek descent.",
+      "Patricio Guzmán | Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.  He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\".",
+      "Nostalgia for the Light | Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.  Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.  Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists.",
+      "In the Quagmire | In the Quagmire (Georgian: Gaplangva) is a 1927 Soviet silent film directed by Ivane Perestiani.",
+      "Nest of Wasps | Nest of Wasps (Georgian:Krazanas bude) is a 1927 Soviet silent film directed by Ivane Perestiani.",
+      "Ilan-dili | Ilan-dili is a 1926 Soviet silent adventure film directed by Ivane Perestiani.  It is the sequel to the film \"The Savur Grave\".",
+      "The Punishment of Shirvanskaya | The Punishment of Shirvanskaya (Georgian:Sasdjeli) is a 1926 Soviet silent adventure film directed by Ivane Perestiani.  It is a sequel to \"The Crime of Shirvanskaya\"."
+    ],
+    "hop1_titles": [
+      "Ivan Perestiani",
+      "Patricio Guzmán",
+      "Nostalgia for the Light",
+      "In the Quagmire",
+      "Nest of Wasps",
+      "Ilan-dili",
+      "The Punishment of Shirvanskaya"
+    ],
+    "summary_1": "Passage 1: Ivan Perestiani is described as \"was a Russian/Soviet film director, script-writer and actor\" (explicitly labels him a film director). Passage 2: Patricio Guzmán is described as \"is a Chilean documentary film director\" (explicitly labels him a director). No additional retrieval is needed—both passages explicitly identify each person as a director.",
+    "hop2_query": "Ivan Perestiani director Patricio Guzmán director",
+    "hop2_docs": [
+      "Ivan Perestiani | Ivan Nikolaevich Perestiani (also Ivane, Georgian: ივანე პერესტიანი ; Russian: Иван Николаевич Перестиани ; 13 April [O.S. 1 April] 1870 — 14 May 1959) was a Russian/Soviet film director, script-writer and actor, and People's Artist of the Georgian SSR (1949).  He was of Kefalonian Greek descent.",
+      "Patricio Guzmán | Patricio Guzmán Lozanes (born August 11, 1941) is a Chilean documentary film director.  He is internationally renowned for films such as \"The Battle of Chile\" and \"Salvador Allende\".",
+      "Pato Guzman | Patricio \"Pato\" Guzmán (1933–1991), a native of Chile, worked in the United States as an art director, production designer, and producer of television and film.  He worked on such notable shows as \"The Jack Benny Program\", \"I Love Lucy\", \"The Lucy Show\", \"That Girl\".  He also served as a production designer for the \"\" pilot \"\" (uncredited) and in that capacity worked directly with art director Matt Jeffries and creator-producer Gene Roddenberry on the design of the original USS Enterprise NCC-1701 exterior and bridge.  In the 1980s, Guzman worked with director Paul Mazursky on the films \"Tempest\", \"Moscow on the Hudson\", \"Down and Out in Beverly Hills\", and \"\".",
+      "Patricio Buenrostro Gilhuys | Patricio Buenrostro Gilhuys (born in Mexico City) is a Mexican artist.  He has worked as a film director, music video director, and visual artist.  He currently defines himself as a \"creative futurist\".",
+      "Claudio Guzmán | Claudio Guzmán (August 2, 1927 in Chillán, Chile – July 12, 2008 in Los Angeles, California) was a Chilean-American television director, producer, art director, and production designer.  He is perhaps best known for his work as director and producer of the television series \"I Dream of Jeannie\".",
+      "Nostalgia for the Light | Nostalgia for the Light (Spanish: \"Nostalgia de la Luz\" ) is a documentary released in 2010 by Patricio Guzmán to address the lasting impacts of Augusto Pinochet’s dictatorship.  Guzmán focuses on the similarities between astronomers researching humanity’s past, in an astronomical sense, and the struggle of many Chilean women who still search, after decades, for the remnants of their relatives executed during the dictatorship.  Patricio Guzmán narrates the documentary himself and the documentary includes interviews and commentary from those affected and from astronomers and archeologists.",
+      "Patricio Miguel Finnen | Patricio Miguel Finnen (Alias: Patricio Fonseca) was an Argentine intelligence operative - a SIDE agent and intelligence director who became publicly known because of the AMIA bombing investigation."
+    ],
+    "hop2_titles": [
+      "Ivan Perestiani",
+      "Patricio Guzmán",
+      "Pato Guzman",
+      "Patricio Buenrostro Gilhuys",
+      "Claudio Guzmán",
+      "Nostalgia for the Light",
+      "Patricio Miguel Finnen"
+    ],
+    "summary_2": "Yes — both were directors. Passage 1 names Ivan Perestiani as a Russian/Soviet film director, and Passage 2 identifies Patricio Guzmán as a Chilean documentary film director.",
+    "answer": "yes",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ],
+    "hit_titles_total": [
+      "Ivan Perestiani",
+      "Patricio Guzmán"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

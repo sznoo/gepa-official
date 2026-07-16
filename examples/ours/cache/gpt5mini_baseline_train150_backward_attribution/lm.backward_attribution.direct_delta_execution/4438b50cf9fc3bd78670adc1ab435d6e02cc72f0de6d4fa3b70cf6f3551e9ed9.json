@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "4438b50cf9fc3bd78670adc1ab435d6e02cc72f0de6d4fa3b70cf6f3551e9ed9",
+  "created_at": "2026-07-14T13:37:19.056684+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question is a yes/no (binary) question and both summary_1 and summary_2 present the same clear conclusion that the two items are not in the same state (both summaries express a negative conclusion or state different locations).",
+            "preserve_rule": "Continue to read and use summary_1 and summary_2 as the evidence source and preserve the base prompt's final-answer interface (the single 'answer' field). Do not discard or alter the summaries themselves.",
+            "change_rule": "Replace any longer explanatory final sentence with a single-word, lowercase, minimal answer that directly matches the consensus of the summaries. Emit only that one word in the answer field; do not add explanation, supporting facts, or surrounding text.",
+            "drop_or_avoid_rule": "Do not include any additional sentences, punctuation, capitalization, qualifiers, or justification in the answer field. Avoid copying multi-clause sentences from the summaries as the final answer. Do not attempt to restate supporting details; avoid producing a full sentence or paragraph as the final output.",
+            "output_contract": "Produce the field 'answer' whose value is exactly one lowercase word (an affirmative or negative response) that matches the conclusion supported by summary_1 and summary_2. The 'answer' value must contain no extra characters, punctuation, or explanatory text.",
+            "why_local_transition": "The only needed change is formatting the agreed-upon conclusion into the minimal final-answer form. This is a narrow behavior shift — keep evidence use but shorten the final output to the required one-word answer when both summaries agree."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are both Warren County Canal and Dismal Swamp Canal located in the same state?",
+        "summary_1": "No — Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.",
+        "summary_2": "No. Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.",
+        "current_output": "No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question is a yes/no (binary) question and both summary_1 and summary_2 present the same clear conclusion that the two items are not in the same state (both summaries express a negative conclusion or state different locations).\",\n      \"preserve_rule\": \"Continue to read and use summary_1 and summary_2 as the evidence source and preserve the base prompt's final-answer interface (the single 'answer' field). Do not discard or alter the summaries themselves.\",\n      \"change_rule\": \"Replace any longer explanatory final sentence with a single-word, lowercase, minimal answer that directly matches the consensus of the summaries. Emit only that one word in the answer field; do not add explanation, supporting facts, or surrounding text.\",\n      \"drop_or_avoid_rule\": \"Do not include any additional sentences, punctuation, capitalization, qualifiers, or justification in the answer field. Avoid copying multi-clause sentences from the summaries as the final answer. Do not attempt to restate supporting details; avoid producing a full sentence or paragraph as the final output.\",\n      \"output_contract\": \"Produce the field 'answer' whose value is exactly one lowercase word (an affirmative or negative response) that matches the conclusion supported by summary_1 and summary_2. The 'answer' value must contain no extra characters, punctuation, or explanatory text.\",\n      \"why_local_transition\": \"The only needed change is formatting the agreed-upon conclusion into the minimal final-answer form. This is a narrow behavior shift — keep evidence use but shorten the final output to the required one-word answer when both summaries agree.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are both Warren County Canal and Dismal Swamp Canal located in the same state?\",\n  \"summary_1\": \"No — Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.\",\n  \"summary_2\": \"No. Warren County Canal is in Ohio, while Dismal Swamp Canal runs in Virginia and North Carolina.\",\n  \"current_output\": \"No. Warren County Canal is in Ohio, while the Dismal Swamp Canal runs in Virginia and North Carolina.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"no\",\n  \"rationale\": \"Both summaries state the canals are in different states; applied the delta to return the one-word consensus.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 30,
+    "row_index": 30,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

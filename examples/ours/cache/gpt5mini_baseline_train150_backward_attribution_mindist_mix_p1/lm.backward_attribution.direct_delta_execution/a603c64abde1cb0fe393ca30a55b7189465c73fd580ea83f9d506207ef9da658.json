@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a603c64abde1cb0fe393ca30a55b7189465c73fd580ea83f9d506207ef9da658",
+  "created_at": "2026-07-14T19:01:52.800459+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks 'Who...' (or otherwise requests an identity) and the provided summaries contain two name variants where one summary shows a longer/full personal name (for example, includes a middle name) while another shows a shorter form of the same name.",
+            "preserve_rule": "Keep the existing behavior of returning a single minimal answer string and restricting content to information present in the visible summaries.",
+            "change_rule": "If any summary provides a longer/full form of the person's name, prefer and output that full form exactly as written in the summaries (spelling and token order), instead of a shorter variant shown elsewhere.",
+            "drop_or_avoid_rule": "Do not invent, append, or prepend tokens not present in the summaries (no extra titles, dates, or explanations). Do not choose a shorter nickname or truncated form when a full name is present in the visible summaries.",
+            "output_contract": "Place only the minimal answer string (the full name as it appears in the summaries) inside the [[ ## answer ## ]] block, matching spelling and order from the summaries and nothing else.",
+            "why_local_transition": "The source output used a shorter name variant; the available summaries include a more complete/full name. This small rule steers the final agent to prefer the fuller name already present in the inputs, producing a more complete identity while preserving the minimal-answer format."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who is a retired American track and field athlete, who mostly competed in the shot put who returned four years later to the most populous metropolitan area in the world ?",
+        "summary_1": "Dallas Long",
+        "summary_2": "Dallas Crutcher Long — a retired American shot putter who returned to Tokyo for the 1964 Olympics.",
+        "current_output": "Dallas Long"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks 'Who...' (or otherwise requests an identity) and the provided summaries contain two name variants where one summary shows a longer/full personal name (for example, includes a middle name) while another shows a shorter form of the same name.\",\n      \"preserve_rule\": \"Keep the existing behavior of returning a single minimal answer string and restricting content to information present in the visible summaries.\",\n      \"change_rule\": \"If any summary provides a longer/full form of the person's name, prefer and output that full form exactly as written in the summaries (spelling and token order), instead of a shorter variant shown elsewhere.\",\n      \"drop_or_avoid_rule\": \"Do not invent, append, or prepend tokens not present in the summaries (no extra titles, dates, or explanations). Do not choose a shorter nickname or truncated form when a full name is present in the visible summaries.\",\n      \"output_contract\": \"Place only the minimal answer string (the full name as it appears in the summaries) inside the [[ ## answer ## ]] block, matching spelling and order from the summaries and nothing else.\",\n      \"why_local_transition\": \"The source output used a shorter name variant; the available summaries include a more complete/full name. This small rule steers the final agent to prefer the fuller name already present in the inputs, producing a more complete identity while preserving the minimal-answer format.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who is a retired American track and field athlete, who mostly competed in the shot put who returned four years later to the most populous metropolitan area in the world ?\",\n  \"summary_1\": \"Dallas Long\",\n  \"summary_2\": \"Dallas Crutcher Long — a retired American shot putter who returned to Tokyo for the 1964 Olympics.\",\n  \"current_output\": \"Dallas Long\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nDallas Crutcher Long\\n[[ ## answer ## ]]\",\n  \"rationale\": \"The question asks 'Who...'; summary_2 provides the longer full name, so I output that exact full name from the summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 78,
+    "row_index": 78,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

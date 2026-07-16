@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "e0a968db4d6f1b26aca1f2e94c5ce187a6070a90977ad8c646d430b3967028ff",
+  "created_at": "2026-07-16T05:59:19.430757+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Kalyan is known as what in West Asia?",
+    "answer": "Emaan",
+    "context": {
+      "title": [
+        "2011 AFC Champions League group stage",
+        "Kalyani (raga)",
+        "Haplogroup I (mtDNA)",
+        "Talmiz Ahmad",
+        "2011 AFC Cup group stage",
+        "Yaman (raga)",
+        "Ethnic groups in West Asia",
+        "List of Ultras of West Asia",
+        "West Asian Tennis Federation",
+        "West Asia Basketball Association"
+      ],
+      "sentences": [
+        [
+          "A total of 32 teams, 16 from West Asia and 16 from East Asia, competed in the 2011 AFC Champions League group stage.",
+          " They included 30 direct entries and 2 winners of the qualifying play-off (one from West Asia and one from East Asia)."
+        ],
+        [
+          "Kalyani or Kalyan, alternatively called Yaman in Hindustani Music, is a melakarta raga (parent musical scale) in the Carnatic music.",
+          " Its Western equivalent is the Lydian mode."
+        ],
+        [
+          "Haplogroup I is a human mitochondrial DNA (mtDNA) haplogroup.",
+          " It is largely distributed in Europe and West Asia, and is also found among some Afroasiatic-speaking populations in Africa.",
+          " The clade is believed to have evolved in West Asia (see Origin and Distribution), i.e. the Near East during the LGM period ."
+        ],
+        [
+          "He has published two books: Reform in the Arab World: External Influences and Regional Debates (2005) and Children of Abraham at War: the Clash of Messianic Militarisms (2010).",
+          " His new book, \"The Islamist Challenge in West Asia: Doctrinal and Political Competitions\" after the Arab Spring, published in August 2013.",
+          "He writes and lectures frequently on the politics of West Asia, Political Islam and energy security issues.",
+          " Presently he is a Visiting Distinguished Fellow at ORF."
+        ],
+        [
+          "A total of 32 teams, 20 from West Asia and 12 from East Asia, competed in the 2011 AFC Cup group stage.",
+          " They included 28 direct entries and 4 losers of the 2011 AFC Champions League qualifying play-off (two from West Asia and two from East Asia)."
+        ],
+        [
+          "Yaman (also known as Emaan in West Asia and 'Kalyani' in Carnatic classical music) is a heptatonic (Sampurna) Hindustani Classical raga of Kalyan Thaat."
+        ],
+        [
+          "The ethnic groups in West Asia refers to the various peoples that reside in West Asia.",
+          " The region has historically been a crossroad of different cultures.",
+          " Since the 1960s, the changes in political and economic factors (especially the enormous oil wealth in the region and conflicts) have significantly altered the ethnic composition of groups in the region.",
+          " While some ethnic groups have been present in the region for millennia, others have arrived fairly recently through immigration.",
+          " The five largest ethnic groups in the region are Arabs, Azerbaijanis, Kurds, Persians, and Turks but there are dozens of other ethnic groups which have hundreds of thousands, if not millions, of members."
+        ],
+        [
+          "This is a list of all 90 of the ultra-prominent peaks (with topographic prominence greater than 1,500 metres) in West Asia.",
+          " It includes peaks on the islands of Cyprus and Socotra.",
+          " It does not include the 10 ultras of the Caucasus which are listed under Europe although they are geographically more connected to the mountains of West Asia."
+        ],
+        [
+          "The West Asian Tennis Federation (WATF) also known as ITF West Asia (International Tennis Federation West Asia) is a subzone of the ATF consisting of countries from West Asia."
+        ],
+        [
+          "The West Asia Basketball Association (WABA) is a subzone of FIBA Asia, consisting of countries from West Asia.",
+          " The WABA Champions Cup, a professional men's tournament, is a top level club competition run by the WABA."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Kalyani (raga)",
+        "Yaman (raga)"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nDisambiguation for short/ambiguous title tokens:\n- If an anchor in summary_1 is a short or potentially ambiguous title token, do not automatically append an entertainment-domain keyword. Only append a plain entertainment disambiguator keyword (for example: film movie album song novel author director) when the original question itself contains explicit entertainment-role words (e.g., film, movie, album, song, directed, author, novella) or when the question explicitly lists multiple title-like tokens. In those cases, include the visible anchor(s) from summary_1 plus the appropriate entertainment keyword to bias retrieval. If the question lacks entertainment cues and does not list multiple titles, do not guess or add an entertainment disambiguator—keep the query anchored to the visible tokens only.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- When the context contains a concise bridge claim about a named entity and at least one passage provides an explicit, identity-aligned statement linking that same named entity (or a clearly indicated alias) to the asserted relation, append exactly one brief corroborating sentence that paraphrases that passage's linking fact and references the corroborating passage. Perform an explicit identity-alignment check (alias or explicit linking); do not treat mere name co-occurrence or a passage that merely mentions the name as sufficient. Do not append this corroboration if the `context` already contains the identical corroborating fact verbatim. Keep this addition short and keep the overall summary compact.\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n- When the summaries contain both a short single-token alias and, in the later integrated summary (summary_2), a contiguous multi-token full-name literal that explicitly identifies or is explicitly linked to the same person (for example via an identity link or biographical framing in summary_2), prefer and emit that multi-token full-name literal exactly as it appears in summary_2. Do not prefer the longer form unless summary_2 provides an explicit identity link tying the alias to the full-name literal; if no such explicit link is present, follow the base identity-link rules and do not force selection of the longer form.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "fc7f6a240c2e",
+    "rerun_from": null,
+    "question": "Kalyan is known as what in West Asia?",
+    "gold_answer": "Emaan",
+    "context": {
+      "title": [
+        "2011 AFC Champions League group stage",
+        "Kalyani (raga)",
+        "Haplogroup I (mtDNA)",
+        "Talmiz Ahmad",
+        "2011 AFC Cup group stage",
+        "Yaman (raga)",
+        "Ethnic groups in West Asia",
+        "List of Ultras of West Asia",
+        "West Asian Tennis Federation",
+        "West Asia Basketball Association"
+      ],
+      "sentences": [
+        [
+          "A total of 32 teams, 16 from West Asia and 16 from East Asia, competed in the 2011 AFC Champions League group stage.",
+          " They included 30 direct entries and 2 winners of the qualifying play-off (one from West Asia and one from East Asia)."
+        ],
+        [
+          "Kalyani or Kalyan, alternatively called Yaman in Hindustani Music, is a melakarta raga (parent musical scale) in the Carnatic music.",
+          " Its Western equivalent is the Lydian mode."
+        ],
+        [
+          "Haplogroup I is a human mitochondrial DNA (mtDNA) haplogroup.",
+          " It is largely distributed in Europe and West Asia, and is also found among some Afroasiatic-speaking populations in Africa.",
+          " The clade is believed to have evolved in West Asia (see Origin and Distribution), i.e. the Near East during the LGM period ."
+        ],
+        [
+          "He has published two books: Reform in the Arab World: External Influences and Regional Debates (2005) and Children of Abraham at War: the Clash of Messianic Militarisms (2010).",
+          " His new book, \"The Islamist Challenge in West Asia: Doctrinal and Political Competitions\" after the Arab Spring, published in August 2013.",
+          "He writes and lectures frequently on the politics of West Asia, Political Islam and energy security issues.",
+          " Presently he is a Visiting Distinguished Fellow at ORF."
+        ],
+        [
+          "A total of 32 teams, 20 from West Asia and 12 from East Asia, competed in the 2011 AFC Cup group stage.",
+          " They included 28 direct entries and 4 losers of the 2011 AFC Champions League qualifying play-off (two from West Asia and two from East Asia)."
+        ],
+        [
+          "Yaman (also known as Emaan in West Asia and 'Kalyani' in Carnatic classical music) is a heptatonic (Sampurna) Hindustani Classical raga of Kalyan Thaat."
+        ],
+        [
+          "The ethnic groups in West Asia refers to the various peoples that reside in West Asia.",
+          " The region has historically been a crossroad of different cultures.",
+          " Since the 1960s, the changes in political and economic factors (especially the enormous oil wealth in the region and conflicts) have significantly altered the ethnic composition of groups in the region.",
+          " While some ethnic groups have been present in the region for millennia, others have arrived fairly recently through immigration.",
+          " The five largest ethnic groups in the region are Arabs, Azerbaijanis, Kurds, Persians, and Turks but there are dozens of other ethnic groups which have hundreds of thousands, if not millions, of members."
+        ],
+        [
+          "This is a list of all 90 of the ultra-prominent peaks (with topographic prominence greater than 1,500 metres) in West Asia.",
+          " It includes peaks on the islands of Cyprus and Socotra.",
+          " It does not include the 10 ultras of the Caucasus which are listed under Europe although they are geographically more connected to the mountains of West Asia."
+        ],
+        [
+          "The West Asian Tennis Federation (WATF) also known as ITF West Asia (International Tennis Federation West Asia) is a subzone of the ATF consisting of countries from West Asia."
+        ],
+        [
+          "The West Asia Basketball Association (WABA) is a subzone of FIBA Asia, consisting of countries from West Asia.",
+          " The WABA Champions Cup, a professional men's tournament, is a top level club competition run by the WABA."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Kalyani (raga)",
+        "Yaman (raga)"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Kalyani (raga)",
+      "Yaman (raga)"
+    ],
+    "hop1_query": "Kalyan is known as what in West Asia?",
+    "hop1_docs": [
+      "Yaman (raga) | Yaman (also known as Emaan in West Asia and 'Kalyani' in Carnatic classical music) is a heptatonic (Sampurna) Hindustani Classical raga of Kalyan Thaat.",
+      "T. S. Kalyanaraman | T. S. Kalyanaraman (born 1951) is an Indian businessman best known as the chairman and managing director of Kalyan Jewellers and Kalyan Developers.  Kalyan Group is the holding company of Kalyan Jewellers.",
+      "Kalyan Chaubey | Kalyan Chaubey (born 16 December 1976) or Kalyan Chaubey is an Indian footballer of Kolkata,West Bengal Kanaujia Aryan Brahmin descent who plays as a goalkeeper.  Twice Indian Goalkeeper of the year in 1997-98 and 2001-02.  Kalyan Chaubey has an younger sister named Bulbuli Panja.  Bulibuli is a professional television actor for Bengali TV Serials and a Football Anchor.  Kalyan Chaubey is married in 2004 and blessed with a daughter.",
+      "Kalyan Silks | Kalyan Silks was founded in Thrissur in 1909 as a store specializing in silk.  Today, it has 21 showrooms in India and the UAE, making it India’s largest silk saree showroom network.  Mr. T. S. Pattabhiraman is the Chairman and Managing Director of the group.  Under his leadership Kalyan Silks has been able to add at least one new showroom to their network every year.  He is also credited for redefining silk trade through innovative concepts that include introducing India’s first branded bridal silk saree, “Saugandhika” and being the first textile retailer to create in-house brands.  These innovations coupled with inventive retail practices is what has shaped Kalyan Silks’ success.  With a turnover of 1100 crores, 1000 weaving centers, 300 design centers, 100 production units and 4000 employees, the Kalyan Silks is a formidable force in textile retail.  Malayalam superstar Prithviraj Sukumaran has been the brand’s ambassador since 2011.",
+      "Kalyan West (Vidhan Sabha constituency) | Kalyan West Vidhan Sabha constituency (Marathi: कल्याण पश्चिम विधानसभा मतदारसंघ ) is one of the 288 Vidhan Sabha (legislative assembly) constituencies of Maharashtra state, western India.  This constituency is located in Thane district.",
+      "Kole-Kalyan railway station | Kole-Kalyan was a former station on the Salsette-Trombay Railway serving the East Indian village of Kole-Kalyan, now known as Kalina.  It was dismantled after the rail line closed down in 1934.",
+      "Nepali Kalyan High School | Nepali Kalyan High School is a co-educational school Siliguri, West Bengal, India.  It was founded in 1983 and is managed by the Department of Higher Education."
+    ],
+    "hop1_titles": [
+      "Yaman (raga)",
+      "T. S. Kalyanaraman",
+      "Kalyan Chaubey",
+      "Kalyan Silks",
+      "Kalyan West (Vidhan Sabha constituency)",
+      "Kole-Kalyan railway station",
+      "Nepali Kalyan High School"
+    ],
+    "summary_1": "Evidence: \"Yaman (also known as Emaan in West Asia and 'Kalyani' in Carnatic classical music) is ... of Kalyan Thaat.\" Bridge/missing fact: need an explicit source that states which \"Kalyan\" form (the Kalyan Thaat, the raga Kalyan/Kalyani) corresponds to the West Asian name \"Emaan\" — i.e., confirm \"Kalyan/Kalyani = Yaman (Emaan) in West Asia.\" Retrieval direction: look up Yaman/Kalyan/Kalyani raga pages or authoritative music sources to find a direct statement like \"Kalyan (or Kalyani) is known as Emaan in West Asia\" (use the quoted phrase above as anchor).",
+    "hop2_query": "Yaman Emaan Kalyan Kalyani West Asia raga \"also known as\"",
+    "hop2_docs": [
+      "Yaman (raga) | Yaman (also known as Emaan in West Asia and 'Kalyani' in Carnatic classical music) is a heptatonic (Sampurna) Hindustani Classical raga of Kalyan Thaat.",
+      "Kalyani (raga) | Kalyani or Kalyan, alternatively called Yaman in Hindustani Music, is a melakarta raga (parent musical scale) in the Carnatic music.  Its Western equivalent is the Lydian mode.",
+      "Yaman Kalyan | Yaman Kalyan is a Hindustani classical raga, related to Yaman.",
+      "Krishna Ni Begane Baaro | Krishna Nee Begane Baro is a famous classical song in Kannada language.  It is composed in Raga Yaman Kalyani by Vyasatirtha.  The Tala is \"Misra chapu\" (also usually referred as \"chapu\").",
+      "Sur Yaman kalyan | Sur Yaman Kalyan or Kalian (Sindhi: سريمن ڪلياڻ‎ ) is the second of 30 Surs (Chapters) from Shah Jo Risalo that treat of different tenets of the philosophy of Sufis.  The contents of this Sur, section by section, are described below:",
+      "Kalyan Koduri | Kalyan Koduri a.k.a. Kalyani Malik is an Indian film music director and playback singer in Telugu cinema.",
+      "Kalyani Mahavidyalaya | Kalyani Mahavidyalaya, (\"Bengali\": কল্যাণী মহাবিদ্যালয়) popularly known as Kalyani College established in 1999, is a general degree college in Kalyani, in Nadia district, West Bengal, India.  It offers undergraduate courses in arts, commerce and sciences.  It is affiliated to the University of Kalyani."
+    ],
+    "hop2_titles": [
+      "Yaman (raga)",
+      "Kalyani (raga)",
+      "Yaman Kalyan",
+      "Krishna Ni Begane Baaro",
+      "Sur Yaman kalyan",
+      "Kalyan Koduri",
+      "Kalyani Mahavidyalaya"
+    ],
+    "summary_2": "Kalyan (the Kalyan/Kalyani raga of the Kalyan Thaat) is known as \"Emaan\" in West Asia. This is corroborated by sources stating that Yaman — the raga of Kalyan Thaat and equivalent to Kalyani — is \"also known as Emaan in West Asia\" (see passage [1]).",
+    "answer": "emaan",
+    "score": 1.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 1.0,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Kalyani (raga)"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Yaman (raga)"
+    ],
+    "hit_titles_total": [
+      "Kalyani (raga)",
+      "Yaman (raga)"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

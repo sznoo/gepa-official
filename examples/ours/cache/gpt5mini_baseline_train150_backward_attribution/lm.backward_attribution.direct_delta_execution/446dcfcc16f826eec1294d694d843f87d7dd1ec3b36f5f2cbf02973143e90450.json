@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "446dcfcc16f826eec1294d694d843f87d7dd1ec3b36f5f2cbf02973143e90450",
+  "created_at": "2026-07-14T13:39:37.408426+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks which of two films was made first and BOTH summary_1 and summary_2 agree on the ordering (they both state the same film was made before the other).",
+            "preserve_rule": "Continue to rely on summary_1 and summary_2 as the evidence sources and preserve the agent's current behavior of resolving the pairwise ordering by checking agreement between the summaries.",
+            "change_rule": "When the trigger applies, do not produce a full-sentence answer. Instead extract the single film title that both summaries indicate was made first, using the title text as it appears in the summaries but omitting parenthetical years or extra qualifiers. Place only that title string into the output block; do not add explanation, dates, or other commentary.",
+            "drop_or_avoid_rule": "Avoid outputting full sentences, explanatory phrases, parenthetical years, comparisons (e.g., 'was made before'), extra punctuation, or multiple titles. Do not invent or add facts beyond the summaries. Do not restate the question or include provenance.",
+            "output_contract": "Populate the [[ ## answer ## ]] field with only the minimal answer string: exactly one film title (taken from the summaries, without parenthetical years or surrounding punctuation). Nothing else may appear in the [[ ## answer ## ]] block.",
+            "why_local_transition": "The agent previously produced a full-sentence assertion. The final role requires a single minimal answer string; this edit makes the smallest focused change to switch from a verbose sentence to the required minimal title output when both summaries agree."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Which film was made first The Three Caballeros or The Castaway Cowboy?",
+        "summary_1": "The Three Caballeros (1944) was made before The Castaway Cowboy (1974).",
+        "summary_2": "The Three Caballeros (1944) was made before The Castaway Cowboy (1974).",
+        "current_output": "The Three Caballeros (1944) was made before The Castaway Cowboy (1974)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks which of two films was made first and BOTH summary_1 and summary_2 agree on the ordering (they both state the same film was made before the other).\",\n      \"preserve_rule\": \"Continue to rely on summary_1 and summary_2 as the evidence sources and preserve the agent's current behavior of resolving the pairwise ordering by checking agreement between the summaries.\",\n      \"change_rule\": \"When the trigger applies, do not produce a full-sentence answer. Instead extract the single film title that both summaries indicate was made first, using the title text as it appears in the summaries but omitting parenthetical years or extra qualifiers. Place only that title string into the output block; do not add explanation, dates, or other commentary.\",\n      \"drop_or_avoid_rule\": \"Avoid outputting full sentences, explanatory phrases, parenthetical years, comparisons (e.g., 'was made before'), extra punctuation, or multiple titles. Do not invent or add facts beyond the summaries. Do not restate the question or include provenance.\",\n      \"output_contract\": \"Populate the [[ ## answer ## ]] field with only the minimal answer string: exactly one film title (taken from the summaries, without parenthetical years or surrounding punctuation). Nothing else may appear in the [[ ## answer ## ]] block.\",\n      \"why_local_transition\": \"The agent previously produced a full-sentence assertion. The final role requires a single minimal answer string; this edit makes the smallest focused change to switch from a verbose sentence to the required minimal title output when both summaries agree.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Which film was made first The Three Caballeros or The Castaway Cowboy?\",\n  \"summary_1\": \"The Three Caballeros (1944) was made before The Castaway Cowboy (1974).\",\n  \"summary_2\": \"The Three Caballeros (1944) was made before The Castaway Cowboy (1974).\",\n  \"current_output\": \"The Three Caballeros (1944) was made before The Castaway Cowboy (1974).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"The Three Caballeros\",\n  \"rationale\": \"Both summaries agree that The Three Caballeros was made first; per the ordered rule, the single film title is returned without the year.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 109,
+    "row_index": 109,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "53d77733cdcc7195275f1a88af4e07f43e5a235cef5740e29d0ecba825970426",
+  "created_at": "2026-07-15T22:02:55.378221+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What do the Lost McLeod Mine and the Colomac Mine have in common?",
+      "current_output": "Both are mines located in the Northwest Territories of Canada.",
+      "upstream_context": {
+        "question": "What do the Lost McLeod Mine and the Colomac Mine have in common?",
+        "summary_1": "Both are mines located in the Northwest Territories of Canada. (Lost McLeod Mine; Colomac Mine)",
+        "hop2_query": "Lost McLeod Mine Colomac Mine Northwest Territories Canada",
+        "hop2_titles": [
+          "Lost McLeod Mine",
+          "Colomac Mine",
+          "Colomac Airport",
+          "Tundra Mine/Salamita Mine Aerodrome",
+          "Courageous Lake mine",
+          "Quartz Mountain mine",
+          "List of mines in Nunavut"
+        ],
+        "hop2_docs": [
+          "Lost McLeod Mine | Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.  The story has been featured in many books and magazines.  The events in the legend have led to geographic locations in the Northwest Territories being named Headless Valley and Headless Creek located in Nahanni National Park Reserve.  A creek called Sheep Creek was renamed McCleod Creek in honour of the Mcleod Brothers.  20 people have lost their lives searching for The Lost McLeod Mine.",
+          "Colomac Mine | The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .  The Colomac mine operated between 1990–1992, and 1994–1997.  It was operated by Neptune Resources Limited that had little success in making a profit during its operation.  In 1994, the mine had reopened under Royal Oak Mines Inc.  Both Neptune Resources and Royal Oak Mines where both owned and operated by Peggy Witte.  Due to low gold prices and high cost of mining, Royal Oak Mines was forced into bankruptcy.  The Federal Government of Canada became owners of the mine, along with the related environmental issues.  A major cleanup effort is under way to prevent the mine from polluting the environment, but this might be too late at this stage.  This mine is now owned and controlled by the Indigenous and Northern Affairs department of the Federal government, while Public Works and Government services is the current contracting authority.",
+          "Colomac Airport | Colomac Airport (TC LID: CFY8) , was located near Colomac Mine in the Northwest Territories, Canada where caribou may be found on the runway.  Prior permission was required to land except in the case of an emergency.",
+          "Tundra Mine/Salamita Mine Aerodrome | Tundra Mine/Salamita Mine Aerodrome (TC LID: CTM7) is a registered aerodrome that served the Tundra and Salamita Mines in the Northwest Territories, Canada.",
+          "Courageous Lake mine | The Courageous Lake mine is one of the largest gold mines in Canada and in the world.  The mine is located in the north of the country in Northwest Territories.  The mine has estimated reserves of 11.4 million oz of gold.",
+          "Quartz Mountain mine | The Quartz Mountain mine is one of the largest gold mines in Canada and in the world.  The mine is located in the north of the country in Northwest Territories.  The mine has estimated reserves of 2.74 million oz of gold.",
+          "List of mines in Nunavut | This is a list of mines in Nunavut, Canada.  It includes mines that were operating prior to 1999 in what was then Northwest Territories."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Lost McLeod Mine",
+          "sent_id": 0,
+          "sentence": "Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada."
+        },
+        {
+          "title": "Colomac Mine",
+          "sent_id": 0,
+          "sentence": "The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada ."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat do the Lost McLeod Mine and the Colomac Mine have in common?\n\nCurrent agent output:\n\"Both are mines located in the Northwest Territories of Canada.\"\n\nActual upstream context:\n{\n  \"question\": \"What do the Lost McLeod Mine and the Colomac Mine have in common?\",\n  \"summary_1\": \"Both are mines located in the Northwest Territories of Canada. (Lost McLeod Mine; Colomac Mine)\",\n  \"hop2_query\": \"Lost McLeod Mine Colomac Mine Northwest Territories Canada\",\n  \"hop2_titles\": [\n    \"Lost McLeod Mine\",\n    \"Colomac Mine\",\n    \"Colomac Airport\",\n    \"Tundra Mine/Salamita Mine Aerodrome\",\n    \"Courageous Lake mine\",\n    \"Quartz Mountain mine\",\n    \"List of mines in Nunavut\"\n  ],\n  \"hop2_docs\": [\n    \"Lost McLeod Mine | Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.  The story has been featured in many books and magazines.  The events in the legend have led to geographic locations in the Northwest Territories being named Headless Valley and Headless Creek located in Nahanni National Park Reserve.  A creek called Sheep Creek was renamed McCleod Creek in honour of the Mcleod Brothers.  20 people have lost their lives searching for The Lost McLeod Mine.\",\n    \"Colomac Mine | The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .  The Colomac mine operated between 1990–1992, and 1994–1997.  It was operated by Neptune Resources Limited that had little success in making a profit during its operation.  In 1994, the mine had reopened under Royal Oak Mines Inc.  Both Neptune Resources and Royal Oak Mines where both owned and operated by Peggy Witte.  Due to low gold prices and high cost of mining, Royal Oak Mines was forced into bankruptcy.  The Federal Government of Canada became owners of the mine, along with the related environmental issues.  A major cleanup effort is under way to prevent the mine from polluting the environment, but this might be too late at this stage.  This mine is now owned and controlled by the Indigenous and Northern Affairs department of the Federal government, while Public Works and Government services is the current contracting authority.\",\n    \"Colomac Airport | Colomac Airport (TC LID: CFY8) , was located near Colomac Mine in the Northwest Territories, Canada where caribou may be found on the runway.  Prior permission was required to land except in the case of an emergency.\",\n    \"Tundra Mine/Salamita Mine Aerodrome | Tundra Mine/Salamita Mine Aerodrome (TC LID: CTM7) is a registered aerodrome that served the Tundra and Salamita Mines in the Northwest Territories, Canada.\",\n    \"Courageous Lake mine | The Courageous Lake mine is one of the largest gold mines in Canada and in the world.  The mine is located in the north of the country in Northwest Territories.  The mine has estimated reserves of 11.4 million oz of gold.\",\n    \"Quartz Mountain mine | The Quartz Mountain mine is one of the largest gold mines in Canada and in the world.  The mine is located in the north of the country in Northwest Territories.  The mine has estimated reserves of 2.74 million oz of gold.\",\n    \"List of mines in Nunavut | This is a list of mines in Nunavut, Canada.  It includes mines that were operating prior to 1999 in what was then Northwest Territories.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Lost McLeod Mine\",\n    \"sent_id\": 0,\n    \"sentence\": \"Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.\"\n  },\n  {\n    \"title\": \"Colomac Mine\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Relevant evidence integrated from second-hop retrieval:\\n- Lost McLeod Mine: “Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.”\\n- Colomac Mine: “The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada.”\\nBoth sources place the respective mines in the Northwest Territories of Canada.\",\n  \"rationale\": \"The output only uses the two visible supporting sentences: the Lost McLeod Mine sentence stating it is a legend of a lost mine in the Northwest Territories, and the Colomac Mine sentence stating it is an open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories. These facts support the shared location without adding any other information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 56,
+    "row_index": 56
+  }
+}

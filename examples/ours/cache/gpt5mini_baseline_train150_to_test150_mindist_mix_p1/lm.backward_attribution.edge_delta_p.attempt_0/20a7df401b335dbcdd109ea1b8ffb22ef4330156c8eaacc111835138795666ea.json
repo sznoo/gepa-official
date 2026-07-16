@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "20a7df401b335dbcdd109ea1b8ffb22ef4330156c8eaacc111835138795666ea",
+  "created_at": "2026-07-14T19:29:14.958394+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Noam Jenkins had a role in the 2014 video game developed by which company?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "Noam Jenkins had a role in the 2014 video game developed by which company?",
+        "summary_1": "Ubisoft Montreal (Ubisoft)",
+        "summary_2": "Ubisoft Montreal (published by Ubisoft).",
+        "current_output": "Ubisoft Montreal"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Ubisoft Montreal",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "Ubisoft",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Noam Jenkins had a role in the 2014 video game developed by which company?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Noam Jenkins had a role in the 2014 video game developed by which company?\",\n  \"summary_1\": \"Ubisoft Montreal (Ubisoft)\",\n  \"summary_2\": \"Ubisoft Montreal (published by Ubisoft).\",\n  \"current_output\": \"Ubisoft Montreal\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Ubisoft Montreal\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"Ubisoft\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"The question asks which company developed the game (e.g., 'developed by which company') and at least one visible summary contains a studio name accompanied by a parenthetical or explicit publisher/company label (patterns like 'StudioName (ParentCompany)' or the phrase 'published by ParentCompany').\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the evidence sources. Keep producing a single minimal answer string inside the [[ ## answer ## ]] block and retain all other existing final-answer formatting and brevity requirements.\",\n    \"change_rule\": \"When the trigger condition is met, prefer the parent/publisher company name indicated in the summaries (the text shown in parentheses or after 'published by') instead of the subordinate studio name. Output only that parent company name as the minimal answer string.\",\n    \"drop_or_avoid_rule\": \"Avoid returning the subsidiary studio name (or adding studio qualifiers like city or 'studio') when a parent/publisher company is explicitly indicated in the visible summaries. Do not list both names, extra descriptors, or explanatory text.\",\n    \"output_contract\": \"Produce exactly one minimal company name string (no extra words or punctuation) inside the [[ ## answer ## ]] block, supported by the visible summaries. If a parent/publisher company is explicitly present in the summaries, use that; otherwise use the best-supported developer name.\",\n    \"why_local_transition\": \"The question requests the company that developed the game, while the summaries show a studio plus an explicit parent/publisher label (studio shown with a parenthetical or 'published by' company). This delta nudges the agent to return the parent/publisher company as the concise company answer rather than the more specific studio name.\"\n  },\n  \"rationale\": \"This is a minimal, focused behavioral edit: it does not change the agent's evidence sources, answer format, or general behavior—only the specificity preference when summaries explicitly identify a parent/publisher. That preserves correct behavior in other cases while preventing returning a subordinate studio name when the visible summaries already indicate the parent company as the company-level answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 26,
+    "row_index": 26,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "1401fe2ac35ae5c5a9f2cf8f9428abb2498e4cdda949d8820127866af63e0dcd",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

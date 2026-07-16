@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "9b3c393c8343d3e4565e6c656010a10419ec90e4d61da8a805214761e1a1a64e",
+  "created_at": "2026-07-16T05:19:38.357667+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 144,
+        "stable_id": "144",
+        "question": "Among film directors, who was more well-known for horror films, Eric Red or Howard Hughes?",
+        "summary_1": "Evidence about Eric Red: passage [1] states Eric Red \"is an American screenwriter and director, best known for writing the horror films 'The Hitcher' and 'Near Dark', as well as writing and directing 'Cohen and Tate'.\" \n\nPassages do not contain \"Howard Hughes\"; they contain Howard Deutch instead — passage [3] says Howard Deutch \"is perhaps best known for his collaboration with filmmaker John Hughes, having directed ... 'Pretty in Pink' and 'Some Kind of Wonderful'\" (no mention of horror).\n\nMissing / next-hop direction: confirm the identity \"Howard Hughes\" (the provided passages lack any Howard Hughes entry) — retrieve the page(s) for \"Howard Hughes (film director)\" or the relevant Howard Hughes biography/filmography to find explicit genre associations or titles (look for phrases like \"known for horror,\" \"horror films,\" or horror film titles). If the question intended Howard Deutch, retrieve his filmography/genre associations to verify whether he is known for horror.",
+        "hop2_query": "Howard Hughes film director horror",
+        "summary_2": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+        "answer": "Eric Red",
+        "gold_support_titles": [
+          "Howard Hughes",
+          "Eric Red"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 68,
+          "w_stable_id": "68",
+          "agent": "summary2",
+          "w_question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Both Carlo Emilio Gadda and Katharine Kerr were novelists. The passages corroborate that Gadda was an Italian writer and author of novels (see passages 1 and 3), while the context identifies Kerr as an American science fiction and fantasy novelist.",
+            "score": 0.0,
+            "answer": "novelists"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step.",
+            "score": 0.0,
+            "answer": "novelist"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks for a shared occupation/role and the `context` already proposes a concise bridge claim (e.g., both are 'novelist'/'writer') and the retrieved `passages` contain an explicit, identity-aligned mention that attributes a work to one of the named entities (for example, a passage stating That Awful Mess on Via Merulana is by Carlo Emilio Gadda).",
+                "preserve_rule": "Keep the base-prompt behavior: treat the concise context claim as the primary assertion unless passages provide an explicit, identity-aligned contradiction; confirm identity alignment before attributing passage facts; keep the summary compact (1–3 sentences); and preserve any corroboration already present in the agent's current output.",
+                "change_rule": "If the trigger conditions hold, append a single brief corroborating clause or short sentence that ties the retrieved passage fact to the context claim—e.g., paraphrase that the passage attributes That Awful Mess on Via Merulana to Carlo Emilio Gadda (thus corroborating his authorship/novelist status) while retaining the context's description of Katharine Kerr as an American science fiction and fantasy novelist. Merge this into a 1–2 sentence integrated summary that preserves the facts needed for the final-answer step.",
+                "drop_or_avoid_rule": "Do not invent or assert any facts not present in `context` or `passages`; avoid long verbatim quotations; do not add unnecessary hedging when the evidence is identity-aligned; do not repeat the same claim redundantly; and do not attempt to produce the final-step label beyond what the context+passages already license.",
+                "output_contract": "Produce a single `summary` string of 1–3 sentences that (a) preserves the context's concise bridge claim as primary unless contradicted, (b) retains the specific facts needed for the final agent to infer the shared occupation (for Gadda: his writer/poet identity and the passage attributing That Awful Mess on Via Merulana to him; for Kerr: the context's description of her as an American science fiction and fantasy novelist), and (c) includes at most one brief paraphrased supporting sentence referencing the corroborating passage. Keep the wording compact and limited to what the supplied inputs support.",
+                "why_local_transition": "The current summary asserts the shared label but does not explicitly tie the retrieved passage that names a Gadda novel to the context's bridge; adding a concise, identity-aligned corroboration (naming the cited work present in the passages) minimally strengthens the summary's evidential grounding for the final-answer agent without changing other base behaviors."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+            "score": 1.0,
+            "answer": "Eric Red"
+          }
+        },
+        {
+          "w_sample_index": 76,
+          "w_stable_id": "76",
+          "agent": "summary2",
+          "w_question": "Who else did the author of The Power Broker write a biography of?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.",
+            "score": 0.0,
+            "answer": "President Lyndon B. Johnson"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary integrating first- and second-hop evidence: Passage [The Power Broker] identifies The Power Broker as a Pulitzer Prize-winning biography of Robert Moses by Robert Caro. The Robert Caro passage states that Robert Allan Caro is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson. These combined facts establish that the author of The Power Broker, Robert Caro, is also known for a biography of Lyndon B. Johnson.",
+            "score": 1.0,
+            "answer": "Lyndon B. Johnson"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the `context` names an author of The Power Broker (e.g., \"Robert Caro\") and the retrieved `passages` contain an identity-aligned passage about that same person that lists other biographies they wrote.",
+                "preserve_rule": "Keep all existing habits from the base prompt: treat the concise claim in `context` as primary, do not replace it unless passages provide an explicit, identity-aligned contradiction, stay compact (1–3 sentences), and only express uncertainty when genuinely required.",
+                "change_rule": "Before finalizing the summary, perform one explicit identity-check step: verify that the author named in `context` (the The Power Broker author) is the same person named in the passages (match on the same name/alias). If the match succeeds, append one brief paraphrased supporting sentence that cites the corroboration from the passages (mentioning the passage identity or short paraphrase), e.g. a single short sentence that ties 'The Power Broker' authorship to the biographical subjects the Robert Caro passage lists. Keep this supporting sentence concise and factual; do not add new facts beyond what the passages state.",
+                "drop_or_avoid_rule": "Do not invent additional biography subjects, do not introduce new uncertainty if the identity is clearly aligned, avoid long verbatim quotations (no >10-word quotes), and do not restate the full context claim as a quote. Do not output the final answer as part of the prompt edit or instruct the agent to copy the target endpoint text.",
+                "output_contract": "The `summary` must remain 1–3 sentences. It should (1) assert the resolved bridge only when identity alignment is confirmed, and (2) include at most one extra short sentence paraphrasing supporting evidence from the retrieved passages (naming the passage or paraphrasing its claim). Use no long quotes, no invented facts, and keep wording minimal.",
+                "why_local_transition": "This edge adds a single explicit identity-alignment and corroboration step so the agent reliably integrates the second-hop passage about Robert Caro with the first-hop claim that he authored The Power Broker, producing a concise, evidence-backed summary for downstream answering."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+            "score": 1.0,
+            "answer": "Eric Red"
+          }
+        },
+        {
+          "w_sample_index": 119,
+          "w_stable_id": "119",
+          "agent": "summary2",
+          "w_question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nikita Katsalapov — he and Victoria Sinitsina (born 29 April 1995) were the 2016 Russian national silver medalists.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. The retrieved Nikita Katsalapov page identifies Nikita Gennadyevich Katsalapov (born 10 July 1991) as a Russian ice dancer and states that, with Victoria Sinitsina, he is the 2016 Russian national silver medalist.",
+            "score": 1.0,
+            "answer": "Nikita Gennadyevich Katsalapov"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the `context` names a bridge entity (here, Victoria Sinitsina) and the retrieved `passages` contain at least one passage that explicitly links that bridge to a retrieved entity (e.g., a passage that states the retrieved Nikita Katsalapov is partnered with Victoria Sinitsina or repeats the same medal claim).",
+                "preserve_rule": "Keep the concise context claim as the primary first sentence (do not replace or remove the context's asserted answer unless the passages provide an explicit, identity-aligned contradiction).",
+                "change_rule": "If a passage explicitly corroborates the context and provides an identity link, append one short supporting sentence (no more than one sentence) that names the corroborating retrieved page and summarizes its confirmation. The appended sentence should: (a) state that the retrieved page identifies the retrieved entity and links them with the context entity for the 2016 Russian national silver medal, and (b) may include any full name or birthdate only if those are present in the supplied passages. Keep wording neutral and compact.",
+                "drop_or_avoid_rule": "Do not invent or assert any facts not present in `context`+`passages`. Do not remove the original context claim. Avoid long verbatim quotes (>10 words), avoid hedging when the passages clearly corroborate, and avoid adding extra biographical details unless they appear in the provided passages.",
+                "output_contract": "Produce a 1–3 sentence `summary` that: (1) preserves the context claim as the main statement; (2) if corroborated by the passages, includes a single brief supporting sentence that cites the corroborating retrieved passage and confirms the identity link; (3) uses uncertainty language only if the passages fail to provide an explicit identity alignment or conflict.",
+                "why_local_transition": "Adds a minimal, targeted instruction to append a brief, identity-aligned corroboration from the retrieved Nikita Katsalapov passage so the summary both preserves the original context claim and records direct supporting evidence needed by downstream answer selection."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+            "score": 1.0,
+            "answer": "Eric Red"
+          }
+        },
+        {
+          "w_sample_index": 39,
+          "w_stable_id": "39",
+          "agent": "summary2",
+          "w_question": "What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "George Adamski was Polish-American (a Polish American citizen), as corroborated by passage [1].",
+            "score": 0.0,
+            "answer": "Polish-American"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Bridge entity: George Adamski. Summary_1 reports that Adamski is credited with being among the first to claim contact with Nordic aliens in the mid-1950s. The retrieved George Adamski page (hop2) explicitly states: \"George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen\" and also says he \"...met with friendly Nordic alien Space Brothers...\", thereby providing the supporting evidence for his nationality (Polish American) alongside the contact claim.",
+            "score": 1.0,
+            "answer": "Polish American citizen"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the input `context` includes a 'Bridge entity: <NAME>' line and the retrieved `passages` contain an identity-aligned passage that states the bridge entity's nationality or repeats the contact claim.",
+                "preserve_rule": "Keep the concise claim from `context` as the primary assertion in `summary`. Do not replace that claim unless the `passages` contain an explicit, identity-aligned contradiction.",
+                "change_rule": "If a corroborating passage is present, append exactly one brief supporting sentence that (a) names the bridge entity to confirm identity alignment, (b) paraphrases the passage's support for the nationality and its relevance to the contact claim, and (c) cites the passage id (e.g., 'passage [1]'). Keep the appended sentence short (one clause, overall summary 1–3 sentences).",
+                "drop_or_avoid_rule": "Do not introduce new facts, long verbatim quotes, extra uncertainty when evidence is consistent, or multiple redundant citations. Do not replace the context claim without an explicit contradiction. Avoid citing passages that are not identity-aligned.",
+                "output_contract": "Produce a single `summary` string of 1–3 sentences. If corroborated: first sentence asserts the context claim (unchanged), second sentence is a single brief paraphrase citing the corroborating passage id and naming the bridge entity. If not corroborated or ambiguous, preserve the context claim and add a concise uncertainty marker per existing guidelines.",
+                "why_local_transition": "Makes the minimal behavioral change needed so that when a second-hop passage directly supports the bridge assertion, the agent explicitly names the bridge entity and cites the corroborating passage in a short supporting sentence, improving traceability for downstream answering steps."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+            "score": 1.0,
+            "answer": "Eric Red"
+          }
+        },
+        {
+          "w_sample_index": 84,
+          "w_stable_id": "84",
+          "agent": "summary2",
+          "w_question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Israel Kamakawiwoʻole (\"Braddah Iz\") was a member and founding member of the Hawaiian group The Mākaha Sons of Niʻihau (later known simply as The Makaha Sons).",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Niʻihau"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Israel Kaʻanoʻi Kamakawiwoʻole (May 20, 1959 – June 26, 1997), also called \"Braddah Iz\", was a Native Hawaiian musician. The second-hop document 'Mākaha Sons' states: \"The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\" Integrating these sources: the evidence shows Israel Kamakawiwoʻole (aka Braddah Iz) was among the founding members of The Mākaha Sons of Ni'ihau (the Hawaiian musical group referenced).",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Ni'ihau"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If any passage contains an explicit, identity-aligned statement linking the entity named in `context` (or an alias shown there) to a musical group (for example, a passage that lists the person among a group's members or founders).",
+                "preserve_rule": "Keep the `context`'s concise claim as the primary assertion in `summary` unless a passage explicitly contradicts it. Preserve any facts already asserted in the current summary that are supported by passages.",
+                "change_rule": "When the trigger applies, append exactly one short supporting sentence that explicitly cites the corroborating passage (by its title or index) and paraphrases the linking fact in one clause or sentence (template: \"Passage [i] names <entity> among the members/founders of <group>\"). Do not add extra facts beyond that corroboration.",
+                "drop_or_avoid_rule": "Do not invent additional details, do not replace the context claim unless an explicit contradiction exists, do not include long verbatim quotes (>10 words) from passages, and avoid introducing new uncertainty language when the passages provide an identity-aligned corroboration.",
+                "output_contract": "Produce a single `summary` string of 1–3 sentences. Sentence 1: state or preserve the context's concise claim. If the trigger applies, Sentence 2: the single brief paraphrased citation of the corroborating passage (as specified). No other sentences or extraneous details.",
+                "why_local_transition": "The source summary asserted the group membership but did not explicitly record which retrieved passage provides the identity link. This minimal change forces a one-sentence, passage-citing corroboration so the summary records the retrieval evidence without adding new facts."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.",
+            "score": 1.0,
+            "answer": "Eric Red"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 144,\n  \"stable_id\": \"144\",\n  \"question\": \"Among film directors, who was more well-known for horror films, Eric Red or Howard Hughes?\",\n  \"summary_1\": \"Evidence about Eric Red: passage [1] states Eric Red \\\"is an American screenwriter and director, best known for writing the horror films 'The Hitcher' and 'Near Dark', as well as writing and directing 'Cohen and Tate'.\\\" \\n\\nPassages do not contain \\\"Howard Hughes\\\"; they contain Howard Deutch instead — passage [3] says Howard Deutch \\\"is perhaps best known for his collaboration with filmmaker John Hughes, having directed ... 'Pretty in Pink' and 'Some Kind of Wonderful'\\\" (no mention of horror).\\n\\nMissing / next-hop direction: confirm the identity \\\"Howard Hughes\\\" (the provided passages lack any Howard Hughes entry) — retrieve the page(s) for \\\"Howard Hughes (film director)\\\" or the relevant Howard Hughes biography/filmography to find explicit genre associations or titles (look for phrases like \\\"known for horror,\\\" \\\"horror films,\\\" or horror film titles). If the question intended Howard Deutch, retrieve his filmography/genre associations to verify whether he is known for horror.\",\n  \"hop2_query\": \"Howard Hughes film director horror\",\n  \"summary_2\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n  \"answer\": \"Eric Red\",\n  \"gold_support_titles\": [\n    \"Howard Hughes\",\n    \"Eric Red\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 68,\n    \"w_stable_id\": \"68\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Carlo Emilio Gadda and Katharine Kerr both were considered what?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Both Carlo Emilio Gadda and Katharine Kerr were novelists. The passages corroborate that Gadda was an Italian writer and author of novels (see passages 1 and 3), while the context identifies Kerr as an American science fiction and fantasy novelist.\",\n      \"score\": 0.0,\n      \"answer\": \"novelists\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step.\",\n      \"score\": 0.0,\n      \"answer\": \"novelist\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks for a shared occupation/role and the `context` already proposes a concise bridge claim (e.g., both are 'novelist'/'writer') and the retrieved `passages` contain an explicit, identity-aligned mention that attributes a work to one of the named entities (for example, a passage stating That Awful Mess on Via Merulana is by Carlo Emilio Gadda).\",\n          \"preserve_rule\": \"Keep the base-prompt behavior: treat the concise context claim as the primary assertion unless passages provide an explicit, identity-aligned contradiction; confirm identity alignment before attributing passage facts; keep the summary compact (1–3 sentences); and preserve any corroboration already present in the agent's current output.\",\n          \"change_rule\": \"If the trigger conditions hold, append a single brief corroborating clause or short sentence that ties the retrieved passage fact to the context claim—e.g., paraphrase that the passage attributes That Awful Mess on Via Merulana to Carlo Emilio Gadda (thus corroborating his authorship/novelist status) while retaining the context's description of Katharine Kerr as an American science fiction and fantasy novelist. Merge this into a 1–2 sentence integrated summary that preserves the facts needed for the final-answer step.\",\n          \"drop_or_avoid_rule\": \"Do not invent or assert any facts not present in `context` or `passages`; avoid long verbatim quotations; do not add unnecessary hedging when the evidence is identity-aligned; do not repeat the same claim redundantly; and do not attempt to produce the final-step label beyond what the context+passages already license.\",\n          \"output_contract\": \"Produce a single `summary` string of 1–3 sentences that (a) preserves the context's concise bridge claim as primary unless contradicted, (b) retains the specific facts needed for the final agent to infer the shared occupation (for Gadda: his writer/poet identity and the passage attributing That Awful Mess on Via Merulana to him; for Kerr: the context's description of her as an American science fiction and fantasy novelist), and (c) includes at most one brief paraphrased supporting sentence referencing the corroborating passage. Keep the wording compact and limited to what the supplied inputs support.\",\n          \"why_local_transition\": \"The current summary asserts the shared label but does not explicitly tie the retrieved passage that names a Gadda novel to the context's bridge; adding a concise, identity-aligned corroboration (naming the cited work present in the passages) minimally strengthens the summary's evidential grounding for the final-answer agent without changing other base behaviors.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n      \"score\": 1.0,\n      \"answer\": \"Eric Red\"\n    }\n  },\n  {\n    \"w_sample_index\": 76,\n    \"w_stable_id\": \"76\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who else did the author of The Power Broker write a biography of?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Robert Caro also wrote a multi-volume biography of President Lyndon B. Johnson, published as The Years of Lyndon Johnson.\",\n      \"score\": 0.0,\n      \"answer\": \"President Lyndon B. Johnson\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary integrating first- and second-hop evidence: Passage [The Power Broker] identifies The Power Broker as a Pulitzer Prize-winning biography of Robert Moses by Robert Caro. The Robert Caro passage states that Robert Allan Caro is an American journalist and author known for his biographies of United States political figures Robert Moses and Lyndon B. Johnson. These combined facts establish that the author of The Power Broker, Robert Caro, is also known for a biography of Lyndon B. Johnson.\",\n      \"score\": 1.0,\n      \"answer\": \"Lyndon B. Johnson\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the `context` names an author of The Power Broker (e.g., \\\"Robert Caro\\\") and the retrieved `passages` contain an identity-aligned passage about that same person that lists other biographies they wrote.\",\n          \"preserve_rule\": \"Keep all existing habits from the base prompt: treat the concise claim in `context` as primary, do not replace it unless passages provide an explicit, identity-aligned contradiction, stay compact (1–3 sentences), and only express uncertainty when genuinely required.\",\n          \"change_rule\": \"Before finalizing the summary, perform one explicit identity-check step: verify that the author named in `context` (the The Power Broker author) is the same person named in the passages (match on the same name/alias). If the match succeeds, append one brief paraphrased supporting sentence that cites the corroboration from the passages (mentioning the passage identity or short paraphrase), e.g. a single short sentence that ties 'The Power Broker' authorship to the biographical subjects the Robert Caro passage lists. Keep this supporting sentence concise and factual; do not add new facts beyond what the passages state.\",\n          \"drop_or_avoid_rule\": \"Do not invent additional biography subjects, do not introduce new uncertainty if the identity is clearly aligned, avoid long verbatim quotations (no >10-word quotes), and do not restate the full context claim as a quote. Do not output the final answer as part of the prompt edit or instruct the agent to copy the target endpoint text.\",\n          \"output_contract\": \"The `summary` must remain 1–3 sentences. It should (1) assert the resolved bridge only when identity alignment is confirmed, and (2) include at most one extra short sentence paraphrasing supporting evidence from the retrieved passages (naming the passage or paraphrasing its claim). Use no long quotes, no invented facts, and keep wording minimal.\",\n          \"why_local_transition\": \"This edge adds a single explicit identity-alignment and corroboration step so the agent reliably integrates the second-hop passage about Robert Caro with the first-hop claim that he authored The Power Broker, producing a concise, evidence-backed summary for downstream answering.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n      \"score\": 1.0,\n      \"answer\": \"Eric Red\"\n    }\n  },\n  {\n    \"w_sample_index\": 119,\n    \"w_stable_id\": \"119\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nikita Katsalapov — he and Victoria Sinitsina (born 29 April 1995) were the 2016 Russian national silver medalists.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. The retrieved Nikita Katsalapov page identifies Nikita Gennadyevich Katsalapov (born 10 July 1991) as a Russian ice dancer and states that, with Victoria Sinitsina, he is the 2016 Russian national silver medalist.\",\n      \"score\": 1.0,\n      \"answer\": \"Nikita Gennadyevich Katsalapov\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the `context` names a bridge entity (here, Victoria Sinitsina) and the retrieved `passages` contain at least one passage that explicitly links that bridge to a retrieved entity (e.g., a passage that states the retrieved Nikita Katsalapov is partnered with Victoria Sinitsina or repeats the same medal claim).\",\n          \"preserve_rule\": \"Keep the concise context claim as the primary first sentence (do not replace or remove the context's asserted answer unless the passages provide an explicit, identity-aligned contradiction).\",\n          \"change_rule\": \"If a passage explicitly corroborates the context and provides an identity link, append one short supporting sentence (no more than one sentence) that names the corroborating retrieved page and summarizes its confirmation. The appended sentence should: (a) state that the retrieved page identifies the retrieved entity and links them with the context entity for the 2016 Russian national silver medal, and (b) may include any full name or birthdate only if those are present in the supplied passages. Keep wording neutral and compact.\",\n          \"drop_or_avoid_rule\": \"Do not invent or assert any facts not present in `context`+`passages`. Do not remove the original context claim. Avoid long verbatim quotes (>10 words), avoid hedging when the passages clearly corroborate, and avoid adding extra biographical details unless they appear in the provided passages.\",\n          \"output_contract\": \"Produce a 1–3 sentence `summary` that: (1) preserves the context claim as the main statement; (2) if corroborated by the passages, includes a single brief supporting sentence that cites the corroborating retrieved passage and confirms the identity link; (3) uses uncertainty language only if the passages fail to provide an explicit identity alignment or conflict.\",\n          \"why_local_transition\": \"Adds a minimal, targeted instruction to append a brief, identity-aligned corroboration from the retrieved Nikita Katsalapov passage so the summary both preserves the original context claim and records direct supporting evidence needed by downstream answer selection.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n      \"score\": 1.0,\n      \"answer\": \"Eric Red\"\n    }\n  },\n  {\n    \"w_sample_index\": 39,\n    \"w_stable_id\": \"39\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"What is the nationality of UFOlogist who is credited with being among the first to claim contact with Nordic aliens in the mid 1950s?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"George Adamski was Polish-American (a Polish American citizen), as corroborated by passage [1].\",\n      \"score\": 0.0,\n      \"answer\": \"Polish-American\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Bridge entity: George Adamski. Summary_1 reports that Adamski is credited with being among the first to claim contact with Nordic aliens in the mid-1950s. The retrieved George Adamski page (hop2) explicitly states: \\\"George Adamski (17 April 1891 – 23 April 1965) was a Polish American citizen\\\" and also says he \\\"...met with friendly Nordic alien Space Brothers...\\\", thereby providing the supporting evidence for his nationality (Polish American) alongside the contact claim.\",\n      \"score\": 1.0,\n      \"answer\": \"Polish American citizen\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the input `context` includes a 'Bridge entity: <NAME>' line and the retrieved `passages` contain an identity-aligned passage that states the bridge entity's nationality or repeats the contact claim.\",\n          \"preserve_rule\": \"Keep the concise claim from `context` as the primary assertion in `summary`. Do not replace that claim unless the `passages` contain an explicit, identity-aligned contradiction.\",\n          \"change_rule\": \"If a corroborating passage is present, append exactly one brief supporting sentence that (a) names the bridge entity to confirm identity alignment, (b) paraphrases the passage's support for the nationality and its relevance to the contact claim, and (c) cites the passage id (e.g., 'passage [1]'). Keep the appended sentence short (one clause, overall summary 1–3 sentences).\",\n          \"drop_or_avoid_rule\": \"Do not introduce new facts, long verbatim quotes, extra uncertainty when evidence is consistent, or multiple redundant citations. Do not replace the context claim without an explicit contradiction. Avoid citing passages that are not identity-aligned.\",\n          \"output_contract\": \"Produce a single `summary` string of 1–3 sentences. If corroborated: first sentence asserts the context claim (unchanged), second sentence is a single brief paraphrase citing the corroborating passage id and naming the bridge entity. If not corroborated or ambiguous, preserve the context claim and add a concise uncertainty marker per existing guidelines.\",\n          \"why_local_transition\": \"Makes the minimal behavioral change needed so that when a second-hop passage directly supports the bridge assertion, the agent explicitly names the bridge entity and cites the corroborating passage in a short supporting sentence, improving traceability for downstream answering steps.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n      \"score\": 1.0,\n      \"answer\": \"Eric Red\"\n    }\n  },\n  {\n    \"w_sample_index\": 84,\n    \"w_stable_id\": \"84\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Israel Kamakawiwoʻole (\\\"Braddah Iz\\\") was a member and founding member of the Hawaiian group The Mākaha Sons of Niʻihau (later known simply as The Makaha Sons).\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Niʻihau\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Israel Kaʻanoʻi Kamakawiwoʻole (May 20, 1959 – June 26, 1997), also called \\\"Braddah Iz\\\", was a Native Hawaiian musician. The second-hop document 'Mākaha Sons' states: \\\"The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\\\\\"Moon\\\\\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\\\" Integrating these sources: the evidence shows Israel Kamakawiwoʻole (aka Braddah Iz) was among the founding members of The Mākaha Sons of Ni'ihau (the Hawaiian musical group referenced).\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Ni'ihau\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If any passage contains an explicit, identity-aligned statement linking the entity named in `context` (or an alias shown there) to a musical group (for example, a passage that lists the person among a group's members or founders).\",\n          \"preserve_rule\": \"Keep the `context`'s concise claim as the primary assertion in `summary` unless a passage explicitly contradicts it. Preserve any facts already asserted in the current summary that are supported by passages.\",\n          \"change_rule\": \"When the trigger applies, append exactly one short supporting sentence that explicitly cites the corroborating passage (by its title or index) and paraphrases the linking fact in one clause or sentence (template: \\\"Passage [i] names <entity> among the members/founders of <group>\\\"). Do not add extra facts beyond that corroboration.\",\n          \"drop_or_avoid_rule\": \"Do not invent additional details, do not replace the context claim unless an explicit contradiction exists, do not include long verbatim quotes (>10 words) from passages, and avoid introducing new uncertainty language when the passages provide an identity-aligned corroboration.\",\n          \"output_contract\": \"Produce a single `summary` string of 1–3 sentences. Sentence 1: state or preserve the context's concise claim. If the trigger applies, Sentence 2: the single brief paraphrased citation of the corroborating passage (as specified). No other sentences or extraneous details.\",\n          \"why_local_transition\": \"The source summary asserted the group membership but did not explicitly record which retrieved passage provides the identity link. This minimal change forces a one-sentence, passage-citing corroboration so the summary records the retrieval evidence without adding new facts.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Eric Red is more well-known for horror films — he wrote/directed horror titles like The Hitcher and Near Dark — while Howard Hughes (who directed The Outlaw, a Western, and was primarily a producer/businessman) has no passages linking him to horror.\",\n      \"score\": 1.0,\n      \"answer\": \"Eric Red\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 76,\n  \"dominant_gap_type\": \"entity_disambiguation\",\n  \"transported_damage_hypothesis\": \"The summary agent will skip the explicit identity-check step and fail to verify that the 'Howard Hughes' named in the question is actually present in the retrieved passages (which contain Howard Deutch). As a result it will treat the available passages as if they addressed the queried Howard and will not request or integrate the correct Howard Hughes page.\",\n  \"expected_damaged_behavior\": \"The agent's summary will preserve the Eric Red evidence but will not flag or correct the mismatch between 'Howard Hughes' (question) and 'Howard Deutch' (passages); it will therefore fail to call for the missing Howard Hughes page or disambiguate the Howard identity, leaving the summary under-supported on the Howard side.\",\n  \"rationale\": \"W-sample 76 introduces an explicit identity-alignment step (verify the named author in context matches the retrieved page) to avoid misattributing evidence. The target C has the same structural problem: the passages contain a different Howard (Howard Deutch) than the question's Howard (Howard Hughes). The W failure pattern (omitting the identity check) maps directly to this entity-disambiguation gap and would locally degrade the summary agent in the same way—failing to detect and correct a wrong/missing entity—without requiring any answer flip.\",\n  \"confidence\": 0.83\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 144,
+    "c_stable_id": "144",
+    "candidate_w_sample_indices": [
+      39,
+      68,
+      76,
+      84,
+      119
+    ],
+    "match_fingerprint": "a2d81fc6aab9ca0ffa84688d2f3d84654106fd25ed5bd56fc9ab6f200ee804f0"
+  }
+}

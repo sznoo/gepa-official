@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "fd6d8aa4326549780dc918aa94927bb7f9ed9f64c69be295af87c1f26cc613ed",
+  "created_at": "2026-07-14T13:40:42.872271+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when summary_1 looks like a 4-digit year (regex: ^\\d{4}$) and the current query is a broad quoted phrase that also includes that year (i.e., it mixes a generic descriptor + year).",
+            "preserve_rule": "Keep the agent's behavior of producing one short, retrieval-style query (no answer text, no extra explanation) and retain any year token from summary_1 when it is likely relevant.",
+            "change_rule": "Instead of forming a broad quoted-phrase + year query, produce a concise query that targets an entity or concrete source likely to hold the founding/establishment date. Use this priority: (1) if a specific organization or proper noun appears in prior retrieval results or snippets, make the query \"<ENTITY> established\" or \"<ENTITY> founding year\"; (2) otherwise, form a focused query asking for the founding year of the most specific noun phrase from the question (template: \"<specific noun phrase> established year\" or \"when was <specific noun phrase> established\"). Keep queries short (one short phrase or question).",
+            "drop_or_avoid_rule": "Avoid queries that only quote the generic descriptor plus the year (e.g., '\"pioneers of managed care\" \"1947\"') or other broad formulations that do not target a named entity or explicit founding-year phrasing.",
+            "output_contract": "Produce exactly one compact retrieval query (several words, no sentence-level explanation). The query must either name a specific entity (if available from prior snippets) with an establishment/founding-year phrasing, or otherwise use the most specific noun phrase from the question with an explicit 'established' / 'founding year' formulation. Do not output answers, summaries, or extra instructions.",
+            "why_local_transition": "This change nudges the agent away from overly general year+descriptor searches toward queries that directly retrieve an organization's founding date or a concrete source that states the establishment year, which is the missing bridge needed for a second-hop retrieval."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When the question requests a year (e.g., begins with or implies \"In what year\") and the current query does not clearly target an entity's founding/establishment (i.e., lacks an explicit combination of an entity name and the tokens 'established' or 'founded').",
+            "preserve_rule": "Keep any entity names and the phrase indicating the 'pioneer(s) of managed care' concept that already appear in the inputs (do not drop the observed entity/phrase). Also preserve the intent to find a year (the 'year' / establishment objective).",
+            "change_rule": "Rewrite the query into a concise, entity-focused search string that pairs the observed entity name (if present) or the phrase 'pioneers of managed care' with a founding keyword. Concretely: form a short query by concatenating the entity or concept + one of {'established','founded'} and optionally the token 'year' (and only include 'pioneer(s) of managed care' if it already appears in inputs). Do not add extra context words; keep the query compact and focused on retrieving an entity page or a reliable source mentioning the founding year.",
+            "drop_or_avoid_rule": "Do not include any numeric year hypothesis or candidate answer in the query. Avoid long full-sentence question phrasing, extra geographic qualifiers unless they already appear in inputs, and unrelated keywords that reduce precision.",
+            "output_contract": "Produce a single compact query string (the `query` field) that pairs the available entity or the phrase 'pioneers of managed care' with an establishment/founding keyword (as described). The output must be concise, omit numeric years, and be optimized to retrieve the entity page or a reliable source indicating the founding year.",
+            "why_local_transition": "The previous query was a loose keyword jumble; to recover the missing supporting document (an entity page that lists founding/establishment year) the agent should pivot to a tightly focused entity+established/founded query so search will surface the organization's page or authoritative summaries that include the year."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "In what year were the pioneers of managed care in the United States established?",
+        "summary_1": "1947",
+        "current_output": {
+          "query": "\"pioneers of managed care\" \"established 1947\" United States"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when summary_1 looks like a 4-digit year (regex: ^\\\\d{4}$) and the current query is a broad quoted phrase that also includes that year (i.e., it mixes a generic descriptor + year).\",\n      \"preserve_rule\": \"Keep the agent's behavior of producing one short, retrieval-style query (no answer text, no extra explanation) and retain any year token from summary_1 when it is likely relevant.\",\n      \"change_rule\": \"Instead of forming a broad quoted-phrase + year query, produce a concise query that targets an entity or concrete source likely to hold the founding/establishment date. Use this priority: (1) if a specific organization or proper noun appears in prior retrieval results or snippets, make the query \\\"<ENTITY> established\\\" or \\\"<ENTITY> founding year\\\"; (2) otherwise, form a focused query asking for the founding year of the most specific noun phrase from the question (template: \\\"<specific noun phrase> established year\\\" or \\\"when was <specific noun phrase> established\\\"). Keep queries short (one short phrase or question).\",\n      \"drop_or_avoid_rule\": \"Avoid queries that only quote the generic descriptor plus the year (e.g., '\\\"pioneers of managed care\\\" \\\"1947\\\"') or other broad formulations that do not target a named entity or explicit founding-year phrasing.\",\n      \"output_contract\": \"Produce exactly one compact retrieval query (several words, no sentence-level explanation). The query must either name a specific entity (if available from prior snippets) with an establishment/founding-year phrasing, or otherwise use the most specific noun phrase from the question with an explicit 'established' / 'founding year' formulation. Do not output answers, summaries, or extra instructions.\",\n      \"why_local_transition\": \"This change nudges the agent away from overly general year+descriptor searches toward queries that directly retrieve an organization's founding date or a concrete source that states the establishment year, which is the missing bridge needed for a second-hop retrieval.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When the question requests a year (e.g., begins with or implies \\\"In what year\\\") and the current query does not clearly target an entity's founding/establishment (i.e., lacks an explicit combination of an entity name and the tokens 'established' or 'founded').\",\n      \"preserve_rule\": \"Keep any entity names and the phrase indicating the 'pioneer(s) of managed care' concept that already appear in the inputs (do not drop the observed entity/phrase). Also preserve the intent to find a year (the 'year' / establishment objective).\",\n      \"change_rule\": \"Rewrite the query into a concise, entity-focused search string that pairs the observed entity name (if present) or the phrase 'pioneers of managed care' with a founding keyword. Concretely: form a short query by concatenating the entity or concept + one of {'established','founded'} and optionally the token 'year' (and only include 'pioneer(s) of managed care' if it already appears in inputs). Do not add extra context words; keep the query compact and focused on retrieving an entity page or a reliable source mentioning the founding year.\",\n      \"drop_or_avoid_rule\": \"Do not include any numeric year hypothesis or candidate answer in the query. Avoid long full-sentence question phrasing, extra geographic qualifiers unless they already appear in inputs, and unrelated keywords that reduce precision.\",\n      \"output_contract\": \"Produce a single compact query string (the `query` field) that pairs the available entity or the phrase 'pioneers of managed care' with an establishment/founding keyword (as described). The output must be concise, omit numeric years, and be optimized to retrieve the entity page or a reliable source indicating the founding year.\",\n      \"why_local_transition\": \"The previous query was a loose keyword jumble; to recover the missing supporting document (an entity page that lists founding/establishment year) the agent should pivot to a tightly focused entity+established/founded query so search will surface the organization's page or authoritative summaries that include the year.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"In what year were the pioneers of managed care in the United States established?\",\n  \"summary_1\": \"1947\",\n  \"current_output\": {\n    \"query\": \"\\\"pioneers of managed care\\\" \\\"established 1947\\\" United States\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\":{\"query\":\"pioneers of managed care established year\"},\"rationale\":\"Delta 0: replaced the quoted phrase+year with a focused entity/noun-phrase query; Delta 1: paired the observed phrase with an establishment keyword and omitted numeric years.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 97,
+    "row_index": 97,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

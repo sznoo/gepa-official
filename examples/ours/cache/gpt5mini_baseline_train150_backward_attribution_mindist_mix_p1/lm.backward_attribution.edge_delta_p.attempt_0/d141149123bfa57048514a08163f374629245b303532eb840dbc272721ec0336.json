@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "d141149123bfa57048514a08163f374629245b303532eb840dbc272721ec0336",
+  "created_at": "2026-07-14T19:01:34.227728+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What artist created a traditional folk song among prisoners in the American South as well as Maybellene?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What artist created a traditional folk song among prisoners in the American South as well as Maybellene?",
+        "summary_1": "No single artist created both. \"Midnight Special\" is a traditional folk song of unknown single author; \"Maybellene\" was created by Chuck Berry.",
+        "summary_2": "No single artist did. \"Midnight Special\" is a traditional folk song of unknown author; \"Maybellene\" was written and recorded by Chuck Berry.",
+        "current_output": "No single artist. \"Midnight Special\" is a traditional/anonymous folk song; \"Maybellene\" was written and recorded by Chuck Berry."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "No single artist. \"Midnight Special\" is a traditional/anonymous folk song; \"Maybellene\" was written and recorded by Chuck Berry.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Johnny Rivers",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What artist created a traditional folk song among prisoners in the American South as well as Maybellene?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What artist created a traditional folk song among prisoners in the American South as well as Maybellene?\",\n  \"summary_1\": \"No single artist created both. \\\"Midnight Special\\\" is a traditional folk song of unknown single author; \\\"Maybellene\\\" was created by Chuck Berry.\",\n  \"summary_2\": \"No single artist did. \\\"Midnight Special\\\" is a traditional folk song of unknown author; \\\"Maybellene\\\" was written and recorded by Chuck Berry.\",\n  \"current_output\": \"No single artist. \\\"Midnight Special\\\" is a traditional/anonymous folk song; \\\"Maybellene\\\" was written and recorded by Chuck Berry.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"No single artist. \\\"Midnight Special\\\" is a traditional/anonymous folk song; \\\"Maybellene\\\" was written and recorded by Chuck Berry.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Johnny Rivers\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the visible summaries concur that one song is a traditional/anonymous piece (e.g. “Midnight Special”) and the other is credited to a named artist (e.g. “Maybellene”), and the current output is a negative statement that 'No single artist' created both.\",\n    \"preserve_rule\": \"Keep using only the provided summaries as explicit evidence in reasoning and preserve the final-answer output contract (the [[ ## answer ## ]] block must contain only the minimal answer string). Do not discard the fact that one song is labeled traditional/anonymous in the summaries.\",\n    \"change_rule\": \"Re-interpret the question's verb 'created' to allow identification of an artist who is associated with (i.e. recorded or popularly performed) both songs, not only the original songwriter. If, from reliable knowledge, you can name an artist who is notably known to have recorded/performed both titles, output that single artist name as the concise answer. If no such performer is known from the summaries or from reliable knowledge, output the concise negative answer 'No single artist.' Do not invent new supporting quotations or long spans; only emit the single minimal answer string.\",\n    \"drop_or_avoid_rule\": \"Avoid adding explanatory text, citations, or summary repetitions inside the final answer block. Do not present multiple candidate names or justification; do not fabricate evidence or claim authorship unsupported by your reliable knowledge. Do not instruct to copy or reproduce any target/hidden labels.\",\n    \"output_contract\": \"Produce exactly one minimal answer string inside the [[ ## answer ## ]] block: either a single artist name (if you reliably know of a performer who recorded/performed both songs) or the phrase 'No single artist.' No other text, punctuation, or explanation should appear in that block.\",\n    \"why_local_transition\": \"The smallest useful behavioral change is to treat 'created' as potentially meaning 'performed/recorded' for the purpose of naming an artist. That permits selecting a single performer associated with both songs (when such a performer is reliably known) instead of always returning a negative 'No single artist,' while preserving summary evidence and the minimal-answer format.\"\n  },\n  \"rationale\": \"This delta is a minimal, local prompt edit: it narrows the interpretation of 'created' to include performers and specifies a decision rule for when to return a single artist name vs. the negative answer. It preserves use of the provided summaries, keeps the required minimal-answer output format, and forbids inventing supporting evidence. It does not contain the target answer, does not instruct copying the target state, and only changes the smallest piece of behavior needed to allow returning a performer name when justified by the agent's reliable knowledge.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 10,
+    "row_index": 10,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

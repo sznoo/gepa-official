@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "e7e6ad6720712e1ae564f3cb9a60b47ffcdadab9e013ee708996185ab39c4446",
+  "created_at": "2026-07-14T13:37:17.030402+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+        "summary_1": "Both are punk bands.",
+        "summary_2": "Both are punk bands.",
+        "current_output": "They are punk bands."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are punk bands.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "band",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Mindless Self Indulgence and Tappi Tíkarrass are both what?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Mindless Self Indulgence and Tappi Tíkarrass are both what?\",\n  \"summary_1\": \"Both are punk bands.\",\n  \"summary_2\": \"Both are punk bands.\",\n  \"current_output\": \"They are punk bands.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are punk bands.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"band\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When the question asks for a category (e.g., 'are both what?') and summary_1 and summary_2 assert the same noun phrase (they both state the same category, for example both say 'punk bands'), and the current output is a full sentence or contains extra words beyond that category.\",\n    \"preserve_rule\": \"Keep using the two summaries as the evidence source. Preserve recognition that both summaries assert the same category phrase (for example, 'punk bands') and preserve any correct content already identified by the agent.\",\n    \"change_rule\": \"Instead of producing a full-sentence response, output only the minimal common category noun supported by both summaries. Extract the shared noun phrase, take its head noun, convert it to singular form if plural, and emit that head noun only (lowercased, no articles, no adjectives or modifiers unless those modifiers are necessary to identify the category and are present in both summaries).\",\n    \"drop_or_avoid_rule\": \"Do not produce a sentence, explanation, clarification, or extra tokens. Avoid articles ('a', 'the'), punctuation, surrounding commentary, and plural inflection. Avoid including modifiers unless they are required by both summaries to identify the category.\",\n    \"output_contract\": \"Populate the answer so that the [[ ## answer ## ]] block contains exactly one minimal label token: the singular head noun (lowercase) that both summaries support, with no additional text or punctuation.\",\n    \"why_local_transition\": \"The source already identifies the correct category but expresses it as a full, plural sentence. This edit only changes formatting and granularity (to a single minimal noun token) while reusing the same evidence from the summaries, so it is a minimal local behavioral change.\"\n  },\n  \"rationale\": \"The visible summaries already agree on the category; the agent's current output is correct in content but not in form. The smallest coherent edit is a prompt rule that instructs the agent to compress the agreed category into a single, singular noun token and to suppress any extra wording. This preserves existing evidence use and avoids changing reasoning or data selection, satisfying the final-answer contract requiring a minimal answer string.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 9,
+    "row_index": 9,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

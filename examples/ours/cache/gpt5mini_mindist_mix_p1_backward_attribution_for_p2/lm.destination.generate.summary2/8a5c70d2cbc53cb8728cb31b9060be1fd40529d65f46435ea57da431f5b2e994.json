@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "8a5c70d2cbc53cb8728cb31b9060be1fd40529d65f46435ea57da431f5b2e994",
+  "created_at": "2026-07-14T21:12:57.974149+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+      "current_output": "Victoria Sinitsina won the 2016 Russian national silver medal with Nikita Katsalapov.",
+      "upstream_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "summary_1": "Evidence found:\n- Victoria Sinitsina — [1] \"born 29 April 1995\"\n- Victoria Sinitsina / partner — [1] \"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\"\n\nAmbiguities:\n- None identified; Victoria Sinitsina is uniquely the 29 April 1995-born dancer in the passages, and only Nikita Katsalapov is named as her 2016 partner.\n\nBridge / missing fact:\n- None; the passages explicitly link the 29 April 1995-born dancer to her 2016 Russian national silver-medal partner.\n\nRetrieval direction:\n- Page title: \"Nikita Katsalapov\"\n- Page title: \"Victoria Sinitsina\"\n- Quoted query: \"Nikita Katsalapov 2016 Russian national silver\"\nFinal answer: Nikita Katsalapov.",
+        "hop2_query": "Nikita Katsalapov Victoria Sinitsina biography",
+        "hop2_titles": [
+          "Nikita Katsalapov",
+          "Victoria Sinitsina",
+          "Katsalapov",
+          "William Taubman",
+          "Aleksandr Katsalapov",
+          "Khrushchev: The Man and His Era",
+          "Victoria Schofield"
+        ],
+        "hop2_docs": [
+          "Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.",
+          "Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.",
+          "Katsalapov | Katsalapov (Russian: Кацалапов ) is a Russian masculine surname, its feminine counterpart is Katsalapova.  It may refer to",
+          "William Taubman | William Chase Taubman (born November 13, 1941 in New York City) is an American political scientist.  His biography of Nikita Khrushchev won the Pulitzer Prize for biography in 2004 and the National Book Critics Circle Award for Biography in 2003.",
+          "Aleksandr Katsalapov | Aleksandr Anatolyevich Katsalapov (Russian: Александр Анатольевич Кацалапов ; born 5 April 1986) is a Russian footballer.  He plays for FC Ararat Moscow.",
+          "Khrushchev: The Man and His Era | Khrushchev: The Man and His Era is a 2003 biography of Soviet leader Nikita Khrushchev.  Written by William Taubman, the book is the first in-depth and comprehensive American biography of Khrushchev.  Taubman was the recipient of the 2004 Pulitzer Prize for Biography or Autobiography, as well as the 2004 National Book Critics Circle Award.  The author spent almost 20 years researching the life of Khrushchev in preparation to write the book.  Extensive research was made possible through access to archives in Russia and the Ukraine, which were opened to the public following the collapse of the Soviet Union.  In addition to printed materials and documentation, he spent time engaging Khrushchev's children and extended relatives, resulting in over 70 personal interviews.  Taubman presents a historical narrative and study of the life of Nikita Khrushchev, the Soviet leader who succeeded Joseph Stalin.  The book concludes with Khrushchev's death on September 11, 1971.",
+          "Victoria Schofield | Rosemary Victoria Schofield is a British author, biographer, and military historian.  Her most recent books are a two volume history of the Black Watch and a biography of John Wheeler-Bennett.  She also authored the first full-length biography of Field Marshal Archibald Wavell.  She regularly contributes to British national and specialist media."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Victoria Sinitsina",
+          "sent_id": 0,
+          "sentence": "Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 0,
+          "sentence": "Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 1,
+          "sentence": "With Victoria Sinitsina, he is the 2016 Russian national silver medalist."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWho won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\n\nCurrent agent output:\n\"Victoria Sinitsina won the 2016 Russian national silver medal with Nikita Katsalapov.\"\n\nActual upstream context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"summary_1\": \"Evidence found:\\n- Victoria Sinitsina — [1] \\\"born 29 April 1995\\\"\\n- Victoria Sinitsina / partner — [1] \\\"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\\\"\\n\\nAmbiguities:\\n- None identified; Victoria Sinitsina is uniquely the 29 April 1995-born dancer in the passages, and only Nikita Katsalapov is named as her 2016 partner.\\n\\nBridge / missing fact:\\n- None; the passages explicitly link the 29 April 1995-born dancer to her 2016 Russian national silver-medal partner.\\n\\nRetrieval direction:\\n- Page title: \\\"Nikita Katsalapov\\\"\\n- Page title: \\\"Victoria Sinitsina\\\"\\n- Quoted query: \\\"Nikita Katsalapov 2016 Russian national silver\\\"\\nFinal answer: Nikita Katsalapov.\",\n  \"hop2_query\": \"Nikita Katsalapov Victoria Sinitsina biography\",\n  \"hop2_titles\": [\n    \"Nikita Katsalapov\",\n    \"Victoria Sinitsina\",\n    \"Katsalapov\",\n    \"William Taubman\",\n    \"Aleksandr Katsalapov\",\n    \"Khrushchev: The Man and His Era\",\n    \"Victoria Schofield\"\n  ],\n  \"hop2_docs\": [\n    \"Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\",\n    \"Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\",\n    \"Katsalapov | Katsalapov (Russian: Кацалапов ) is a Russian masculine surname, its feminine counterpart is Katsalapova.  It may refer to\",\n    \"William Taubman | William Chase Taubman (born November 13, 1941 in New York City) is an American political scientist.  His biography of Nikita Khrushchev won the Pulitzer Prize for biography in 2004 and the National Book Critics Circle Award for Biography in 2003.\",\n    \"Aleksandr Katsalapov | Aleksandr Anatolyevich Katsalapov (Russian: Александр Анатольевич Кацалапов ; born 5 April 1986) is a Russian footballer.  He plays for FC Ararat Moscow.\",\n    \"Khrushchev: The Man and His Era | Khrushchev: The Man and His Era is a 2003 biography of Soviet leader Nikita Khrushchev.  Written by William Taubman, the book is the first in-depth and comprehensive American biography of Khrushchev.  Taubman was the recipient of the 2004 Pulitzer Prize for Biography or Autobiography, as well as the 2004 National Book Critics Circle Award.  The author spent almost 20 years researching the life of Khrushchev in preparation to write the book.  Extensive research was made possible through access to archives in Russia and the Ukraine, which were opened to the public following the collapse of the Soviet Union.  In addition to printed materials and documentation, he spent time engaging Khrushchev's children and extended relatives, resulting in over 70 personal interviews.  Taubman presents a historical narrative and study of the life of Nikita Khrushchev, the Soviet leader who succeeded Joseph Stalin.  The book concludes with Khrushchev's death on September 11, 1971.\",\n    \"Victoria Schofield | Rosemary Victoria Schofield is a British author, biographer, and military historian.  Her most recent books are a two volume history of the Black Watch and a biography of John Wheeler-Bennett.  She also authored the first full-length biography of Field Marshal Archibald Wavell.  She regularly contributes to British national and specialist media.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Victoria Sinitsina\",\n    \"sent_id\": 0,\n    \"sentence\": \"Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 0,\n    \"sentence\": \"Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 1,\n    \"sentence\": \"With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Evidence summary:\\n- Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer.\\n- Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer.\\n- With Victoria Sinitsina, Nikita Katsalapov is the 2016 Russian national silver medalist.\\n\\nThese facts link the 29 April 1995–born ice dancer (Victoria Sinitsina) to the 2016 Russian national silver-medal result with partner Nikita Katsalapov.\",\n  \"rationale\": \"All statements are supported by the provided second-hop sentences: Sinitsina's birth date and status as a Russian ice dancer; Katsalapov's birth date and status; and the sentence stating that with Victoria Sinitsina he is the 2016 Russian national silver medalist.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 119,
+    "row_index": 119
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "35525abaeab08448d4d8149d604a685f4959608d2d32a0caf4a3c9fbb097373b",
+  "created_at": "2026-07-14T14:06:31.219193+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "California Suite is a 1976 play by an american playwright born in what year?",
+    "answer": "1927",
+    "context": {
+      "title": [
+        "Anthony Clarvoe",
+        "Edward Locke",
+        "London Suite (play)",
+        "Jen Silverman",
+        "Vinegar Tom",
+        "California Suite",
+        "The Vietnamization of New Jersey",
+        "Eden (Steve Carter play)",
+        "California Suite (film)",
+        "Neil Simon"
+      ],
+      "sentences": [
+        [
+          "Anthony Clarvoe is an American playwright born in 1958."
+        ],
+        [
+          "Edward Locke (1869–1945) was an American playwright born in England."
+        ],
+        [
+          "London Suite is a play by Neil Simon, consisting of four one-act plays.",
+          " \"London Suite\" also was a 1996 television movie.",
+          " It is in a similar style to Simon's earlier works \"Plaza Suite\" and \"California Suite\"."
+        ],
+        [
+          "Jen Silverman is an American playwright born in the United States.",
+          " She grew up living and traveling in Scandinavia, Asia, and Europe as well as the United States.",
+          " She completed a BA in comparative literature at Brown University, a MFA in playwriting at the University of Iowa, and also studied at Juilliard."
+        ],
+        [
+          "Vinegar Tom is the title of a 1976 play by the British playwright Caryl Churchill.",
+          " The play examines gender and power relationships through the lens of 17th century witchcraft trials in England.",
+          " The script employs features of the epic theater associated with German playwright Bertolt Brecht, particularly the realistic use of songs.",
+          " The play's title comes from the name of one character's pet cat, supposed to be her familiar spirit, likely inspired by the supposed imp of one Elizabeth Clarke, a woman tried and executed for witchcraft in Essex in 1645.",
+          " The play was inspired by the Women's Rights Act in 1970 and explored the thought that women were treated unequally to men in England, both at the time in which the play takes place, and the time in which the play was written."
+        ],
+        [
+          "California Suite is a 1976 play by Neil Simon.",
+          " Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel."
+        ],
+        [
+          "The Vietnamization of New Jersey (subtitled \"A American Tragedy\" [\"sic\"] ) is a 1976 play written by American playwright Christopher Durang."
+        ],
+        [
+          "Eden is a 1976 play by American playwright Steve Carter.",
+          " Set in the 1920s, it is the first of Carter's Caribbean trilogy.",
+          " \"Eden\" explores intra-racial conflicts between recent immigrants from the Caribbean and the African-American population.",
+          " The West Coast premiere of this critically acclaimed play received five Los Angeles Drama Critics Circle Awards."
+        ],
+        [
+          "California Suite is a 1978 American comedy film directed by Herbert Ross.",
+          " The screenplay by Neil Simon is based on his play of the same name.",
+          " Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.",
+          " Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film."
+        ],
+        [
+          "Marvin Neil Simon (born July 4, 1927) is an American playwright, screenwriter and author.",
+          " He has written more than thirty plays and nearly the same number of movie screenplays, mostly adaptations of his plays.",
+          " He has received more combined Oscar and Tony nominations than any other writer."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "California Suite",
+        "Neil Simon"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the field `summary`.\n\nRole: This agent summarizes first-hop evidence and exposes the bridge entity, any missing fact(s), ambiguity, and concrete next-hop retrieval directions. Do not attempt to produce the final answer—the summary should tell the next agent exactly what to fetch to finish the multi-hop chain.\n\nOutput requirements (single `summary` value only):\n- Start the summary with the header: First-hop findings:\n- Include these labeled parts (use a short bullet list or 2–4 concise sentences; keep overall output brief):\n  1) Evidence found: For each person/entity named in the question, list which passage(s) mention matching candidate pages/titles and quote any explicit fact tokens found there (names, birth years, publication years, short parenthetical notes). Keep quoted fragments <=15 words and cite the passage title/label for each fact.\n  2) Ambiguities: If a name yields multiple candidate pages or variants in the passages, explicitly enumerate those candidate titles/labels as they appear; if an expected page/variant is missing, note that too.\n  3) Bridge entity / Missing fact: Explicitly name the bridge entity exactly as it appears in the passages (the person, work, or organization that links to the next hop) and state the precise missing fact needed to answer the question (e.g., a birth date, founding year, canonical series ordering).\n  4) Retrieval direction: Provide 2–4 concrete, prioritized next-hop targets (specific page titles or disambiguation pages to fetch, and/or exact sections to check such as lede/infobox/Career/History). Include short example search keywords or one-line instructions (e.g., \"open '<Name>' page and check lede/infobox and 'Career' section for 'Italian champion' year\").\n- End with a brief explicit note that the final answer is deferred until those pages are retrieved.\n\nHard constraints (do not violate):\n- Do not provide a final comparison or answer here. Do not guess or invent facts not present in the provided passages or introduce outside knowledge.\n- Do not assume which candidate is intended when multiple candidates exist.\n- Avoid long verbatim copying of passages (>15 words).\n- Preserve concise factual phrasing and verbatim tokens that appear in the passages (names, dates, page titles) when reporting evidence.\n\nKeep the summary concise and focused—just the first-hop findings needed to guide the next retrieval hop.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nOutput contract:\n- Produce exactly one field named `query` whose value is a single short retrieval query string (one line, no surrounding explanation or extra fields).\n- Do not answer, summarize, or explain anything in `query`. Do not include fallback instructions or user-facing requests for more info in this field.\n\nConstruction rules (apply the most specific rule that fits the inputs):\n1) Linking two named works: If `question` or `summary_1` names two or more specific works (songs, tracks, titles) and the missing evidence is the bridge between them, emit a concise interrogative that names both works and requests the linking evidence (artist / album / recording). Keep it short (about ≤ 12 words). Example form: \"Which artist or album recorded both 'Work A' and 'Work B'?\"\n2) Missing album artist/genre: If `summary_1` indicates the album title is present but the artist or genre is unknown, emit a compact search string of the form: <AlbumTitle> album artist genre\n   - No punctuation, no question phrasing, no extra words. Example: \"Levitate album artist genre\"\n3) Sports season-year lookups: If the `question` contains a specific season-year token and the missing bridge is a league-season page, emit a short query that includes the year token, a league identifier (e.g., \"NHL\" or \"National Hockey League\"), and a cue such as \"regular season\" or \"season count\". Keep it concise (≤ ~10 tokens).\n4) Default: Otherwise, produce one concise search-style query (≤ ~12 words) that uses visible tokens from `question` and `summary_1` targeted at retrieving the missing supporting evidence (artist, album, recording, genre, season page, etc.).\n\nGeneral guidance:\n- Keep queries compact; avoid lists, long page titles, or copying large spans from hidden targets.\n- Do not invent facts or candidate answers; use only visible tokens or neutral retrieval cues.\n- Prefer a short search string; use an interrogative only for the two-works linking case in rule 1.\n- The goal is to maximize recovery of the missing bridge evidence for the downstream retriever.\n\nReturn only the single `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nPrimary function: integrate the newly retrieved `passages` (second-hop evidence) with the provided `context` (first-hop) so the output is a grounded post-retrieval state that preserves the facts the final-answer generator needs. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when evidence is insufficient.\n\nBehavior rules (minimal, general):\n1) Preserve concise-answer behavior. If `context` already contains a concise direct answer (a short sentence or phrase), keep that text exactly as the first sentence of `summary`, unless it contradicts the `passages`.\n2) When `passages` supply additional, directly supported facts about entities named in the `question` or `context`, append up to one brief supporting sentence per distinct named entity (keep total `summary` to 1–3 sentences, preferably 1–2). Each supporting sentence should: start with the entity's full name as shown in the passages, include a short paraphrased attribution drawn only from the passages (no more than ~10–12 words) such as nationality, a notable achievement, a birth date, or a current affiliation, and avoid inventing or inferring facts not present in the inputs.\n3) When an object/entity page (for example, a car page, group page, or similar) lists associated people and a separate passage provides a biography for one of those listed people, produce a 1–2 sentence integrated summary: (a) first sentence: name the people as listed on the object page (e.g., \"driven by X and Y\" or \"member of Group Z\"); (b) optional second short clause/sentence: paraphrase key biographical facts from the person's passage (only facts present there — e.g., nationality, notable wins/awards, birth date, current team/affiliation). Keep wording compact and factual.\n4) Ground everything in the provided `passages` and `context`. Do not add new claims, dates, roles, or affiliations not explicitly supported. Avoid long verbatim quotations from the passages; you may paraphrase short phrases (≤10 words) only if they appear in the sources, and you may copy short strings such as names or dates exactly as shown.\n5) If the passages do not provide enough evidence to resolve the bridge, state that the passages do not specify the requested fact while still listing any supported names or facts. Do not guess or fabricate missing information.\n6) Output contract: return only the field `summary` containing 1–3 concise sentences (preferably 1–2) that integrate the first-hop `context` and second-hop `passages` according to the rules above. Do not add commentary, answer-labels, or extraneous text.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, and `summary_2`, produce the field `answer`.\n\nInstructions:\n- Use only the visible summaries (summary_1 and summary_2) together with the question as your evidence. Do not introduce external facts, sources, or claims not present in those summaries.\n- Treat summary_2 (the later, integrated post-retrieval state) as primary evidence while still considering summary_1. Do not assume the final state is unresolved simply because summary_1 describes an earlier unresolved bridge; rely on the combined visible summaries to reach a conclusion.\n- If summary_1 and summary_2 both clearly and unambiguously support the same binary (yes/no) conclusion to the question, then the value of the `answer` field must be exactly one lowercase token: either \"yes\" (if both summaries affirm the fact) or \"no\" (if both summaries deny the fact). The `answer` field must contain only that single token and nothing else (no punctuation, no capitalization, no explanation, no additional words).\n- If the summaries conflict, are ambiguous, or do not together provide a clear binary yes/no verdict, produce a concise answer string in the `answer` field that best reflects what the summaries support. This concise answer may be a short phrase or sentence, but must still be supported solely by the summaries and must avoid adding new facts.\n- Always minimize verbosity: prefer the single-token binary response when the summaries unambiguously agree; otherwise keep the answer brief and directly tied to the visible summaries.\n\nProduce only the `answer` field as output."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "7935745c042b",
+    "rerun_from": null,
+    "question": "California Suite is a 1976 play by an american playwright born in what year?",
+    "gold_answer": "1927",
+    "context": {
+      "title": [
+        "Anthony Clarvoe",
+        "Edward Locke",
+        "London Suite (play)",
+        "Jen Silverman",
+        "Vinegar Tom",
+        "California Suite",
+        "The Vietnamization of New Jersey",
+        "Eden (Steve Carter play)",
+        "California Suite (film)",
+        "Neil Simon"
+      ],
+      "sentences": [
+        [
+          "Anthony Clarvoe is an American playwright born in 1958."
+        ],
+        [
+          "Edward Locke (1869–1945) was an American playwright born in England."
+        ],
+        [
+          "London Suite is a play by Neil Simon, consisting of four one-act plays.",
+          " \"London Suite\" also was a 1996 television movie.",
+          " It is in a similar style to Simon's earlier works \"Plaza Suite\" and \"California Suite\"."
+        ],
+        [
+          "Jen Silverman is an American playwright born in the United States.",
+          " She grew up living and traveling in Scandinavia, Asia, and Europe as well as the United States.",
+          " She completed a BA in comparative literature at Brown University, a MFA in playwriting at the University of Iowa, and also studied at Juilliard."
+        ],
+        [
+          "Vinegar Tom is the title of a 1976 play by the British playwright Caryl Churchill.",
+          " The play examines gender and power relationships through the lens of 17th century witchcraft trials in England.",
+          " The script employs features of the epic theater associated with German playwright Bertolt Brecht, particularly the realistic use of songs.",
+          " The play's title comes from the name of one character's pet cat, supposed to be her familiar spirit, likely inspired by the supposed imp of one Elizabeth Clarke, a woman tried and executed for witchcraft in Essex in 1645.",
+          " The play was inspired by the Women's Rights Act in 1970 and explored the thought that women were treated unequally to men in England, both at the time in which the play takes place, and the time in which the play was written."
+        ],
+        [
+          "California Suite is a 1976 play by Neil Simon.",
+          " Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel."
+        ],
+        [
+          "The Vietnamization of New Jersey (subtitled \"A American Tragedy\" [\"sic\"] ) is a 1976 play written by American playwright Christopher Durang."
+        ],
+        [
+          "Eden is a 1976 play by American playwright Steve Carter.",
+          " Set in the 1920s, it is the first of Carter's Caribbean trilogy.",
+          " \"Eden\" explores intra-racial conflicts between recent immigrants from the Caribbean and the African-American population.",
+          " The West Coast premiere of this critically acclaimed play received five Los Angeles Drama Critics Circle Awards."
+        ],
+        [
+          "California Suite is a 1978 American comedy film directed by Herbert Ross.",
+          " The screenplay by Neil Simon is based on his play of the same name.",
+          " Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.",
+          " Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film."
+        ],
+        [
+          "Marvin Neil Simon (born July 4, 1927) is an American playwright, screenwriter and author.",
+          " He has written more than thirty plays and nearly the same number of movie screenplays, mostly adaptations of his plays.",
+          " He has received more combined Oscar and Tony nominations than any other writer."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "California Suite",
+        "Neil Simon"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "California Suite",
+      "Neil Simon"
+    ],
+    "hop1_query": "California Suite is a 1976 play by an american playwright born in what year?",
+    "hop1_docs": [
+      "California Suite | California Suite is a 1976 play by Neil Simon.  Similar in structure to his earlier \"Plaza Suite\", the comedy is composed of four playlets set in Suite 203-04, which consists of a living room and an adjoining bedroom with an ensuite bath, in The Beverly Hills Hotel.",
+      "J. California Cooper | Joan Cooper (November 10, 1931, Berkeley, California – September 20, 2014, Seattle, Washington), known by her pen name, J. California Cooper, was an American playwright and author.  She wrote 17 plays and was named Black Playwright of the Year in 1978 for her play \"Strangers\".",
+      "California Suite (film) | California Suite is a 1978 American comedy film directed by Herbert Ross.  The screenplay by Neil Simon is based on his play of the same name.  Similar to his earlier \"Plaza Suite\", the film focuses on the dilemmas of guests staying in a suite in a luxury hotel.  Maggie Smith won the Academy Award for Best Supporting Actress for her performance in the film.",
+      "What I Did Last Summer | What I Did Last Summer is a play by the American playwright A.R. Gurney.",
+      "Donkeys' Years | Donkeys' Years is a play by English playwright Michael Frayn that premiered at the Globe Theatre, London, in 1976.",
+      "Frederick J. Jackson | Frederick J. Jackson (September 21, 1886 – May 22, 1953) was an American author, playwright and screenwriter.  He wrote for over 50 films between 1912 and 1946.  Over a forty-year span, a dozen of his plays were produced on Broadway.  Several of his plays were turned into films, including \"The Bishop Misbehaves\".  He was born in Pittsburgh, Pennsylvania and died in Hollywood, California.",
+      "David Mamet | David Alan Mamet ( ; born November 30, 1947) is an American playwright, essayist, screenwriter, and film director.  As a playwright, Mamet has won a Pulitzer Prize and received Tony nominations for \"Glengarry Glen Ross\" (1984) and \"Speed-the-Plow\" (1988).  Mamet first gained acclaim for a trio of off-Broadway plays in 1976, \"The Duck Variations,\" \"Sexual Perversity in Chicago,\" and \"American Buffalo.\"  His play \"Race\" opened on Broadway on December 6, 2009, and his play \"The Penitent\" previewed off-Broadway on February 8, 2017."
+    ],
+    "hop1_titles": [
+      "California Suite",
+      "J. California Cooper",
+      "California Suite (film)",
+      "What I Did Last Summer",
+      "Donkeys' Years",
+      "Frederick J. Jackson",
+      "David Mamet"
+    ],
+    "summary_1": "First-hop findings:\n1) Evidence found:\n- \"California Suite is a 1976 play by Neil Simon.\" (passage [1]) — quoted fragment: \"1976 play by Neil Simon.\"  \n- \"the screenplay by Neil Simon is based on his play\" (passage [3]) — quoted fragment: \"screenplay by Neil Simon\".  \n- A different American playwright appears in the passages: \"J. California Cooper ... born November 10, 1931\" (passage [2]) — quoted fragment: \"born November 10, 1931\".\n\n2) Ambiguities:\n- The passages identify Neil Simon as the playwright, but no passage contains a Neil Simon page with a birth year.  \n- A separate playwright, \"J. California Cooper\" (passage [2]), is present and has a birth year listed; ensure this is not confused with the California Suite playwright. No alternative \"Neil Simon\" variants or multiple candidate Neil Simon pages appear in the provided passages.\n\n3) Bridge entity / Missing fact:\n- Bridge entity (as in the passages): \"Neil Simon\".  \n- Missing fact needed: Neil Simon's birth year (the precise year of birth).\n\n4) Retrieval direction (prioritized):\n1. Open the \"Neil Simon\" page (Wikipedia or equivalent) — check the lede/infobox and the opening biography for \"born\" / birth year. Example search: \"Neil Simon born\" or \"Neil Simon birth year\".  \n2. If needed, open \"Neil Simon (disambiguation)\" to confirm the playwright's correct page and then check lede/infobox and \"Early life\" or \"Biography\" sections.  \n3. If the above is unavailable, consult an authoritative biography page (e.g., Britannica entry \"Neil Simon\") or library authority record for the birth date/year.\n\nDo not answer the birth year yet — final answer deferred until those pages are retrieved.",
+    "hop2_query": "Neil Simon birth year",
+    "hop2_docs": [
+      "Mel Tolkin | Mel Tolkin, né Shmuel Tolchinsky(August 3, 1913 – November 26, 2007), was a television comedy writer best known as head writer of the seminal live TV sketch comedy series \"Your Show of Shows\" (NBC, 1950–1954) during the Golden Age of Television.  There he presided over a storied staff that at times included Mel Brooks, Neil Simon, Danny Simon, and Larry Gelbart.  The writers' room inspired the film \"My Favorite Year\" (1982), produced by Brooks, and the Broadway play \"Laughter on the 23rd Floor\" (1993), written by Neil Simon.",
+      "Simon Neil | Simon Alexander Neil (born 31 August 1979) is a Scottish vocalist, guitarist, and songwriter.",
+      "Neil Simon's I Ought to Be in Pictures | Neil Simon's I Ought to Be in Pictures (also known simply as I Ought to Be in Pictures) is a 1982 American comedy-drama film directed by Herbert Ross and based on Neil Simon's play of the same name.  The film stars Walter Matthau, Ann-Margret, and Dinah Manoff (the only cast member to reprise her Broadway role in the film).  Other actors who have supporting roles are Lance Guest, Eugene Butler, David Faustino, Martin Ferrero and Michael Dudikoff.",
+      "Neil Simon Theatre | The Neil Simon Theatre, formerly the Alvin Theatre, is a Broadway venue built in 1927 and located at 250 West 52nd Street in the Theater District of Midtown Manhattan, New York City.",
+      "Last of the Red Hot Lovers (film) | Neil Simon's Last of the Red Hot Lovers is a 1972 comedy film based on Neil Simon's play of the same name.  Alan Arkin, Sally Kellerman, Paula Prentiss and Renée Taylor star in it.",
+      "Simon of Tournai | Simon of Tournai (c. 1130–1201) was a professor at the University of Paris in the late twelfth century.  His date of birth is uncertain, but he was teaching before 1184, as he signed a document at the same time as Gerard de Pucelle, the Bishop of Coventry, who died that year.",
+      "Emanuel Azenberg | Emanuel \"Manny\" Azenberg (born January 22, 1934) is an American theatre producer and general manager whose professional relationship with playwright Neil Simon spans thirty-three years."
+    ],
+    "hop2_titles": [
+      "Mel Tolkin",
+      "Simon Neil",
+      "Neil Simon's I Ought to Be in Pictures",
+      "Neil Simon Theatre",
+      "Last of the Red Hot Lovers (film)",
+      "Simon of Tournai",
+      "Emanuel Azenberg"
+    ],
+    "summary_2": "California Suite is a 1976 play by Neil Simon. Neil Simon has a Broadway theatre named for him and multiple plays adapted into films, but the provided passages do not specify his birth year.",
+    "answer": "Not specified in the provided summaries.",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Neil Simon"
+    ],
+    "hit_titles_hop1": [
+      "California Suite"
+    ],
+    "hit_titles_total": [
+      "California Suite"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

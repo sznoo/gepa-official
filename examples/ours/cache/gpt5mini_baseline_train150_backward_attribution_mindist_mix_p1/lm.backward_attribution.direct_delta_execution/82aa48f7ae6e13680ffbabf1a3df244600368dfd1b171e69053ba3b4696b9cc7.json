@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "82aa48f7ae6e13680ffbabf1a3df244600368dfd1b171e69053ba3b4696b9cc7",
+  "created_at": "2026-07-14T19:01:36.217478+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If any visible summary (or the current_output) contains the word 'bestseller' or the phrase 'bestseller list' (case-insensitive),",
+            "preserve_rule": "Keep the agent's existing behavior of selecting the named entity or phrase from the provided summaries that names the publication or list; continue to prefer the concise named phrase already present in the summaries.",
+            "change_rule": "When triggered, strip descriptive suffixes that are not part of the publication's name (for example: 'Bestseller list', 'bestsellers', 'bestseller', 'list', or similar trailing descriptors). Return only the core publication name — the minimal proper-name phrase that appears immediately before such a descriptor in the summary.",
+            "drop_or_avoid_rule": "Avoid returning descriptive words like 'Bestseller', 'bestseller list', 'list', or explanatory commentary in the final answer. Do not add extra explanations, qualifiers, or sentences. Preserve articles and capitalization only if they are part of the publication's proper name.",
+            "output_contract": "Produce the 'answer' field as a single minimal publication-name string (no surrounding commentary). Ensure the final output block contains only that string, with no extra punctuation or words other than those that are part of the publication's official name.",
+            "why_local_transition": "The current output includes a descriptive suffix ('bestseller list') that makes the answer verbose. Stripping such suffixes yields the minimal publication name required by the final-answer contract while preserving the original extraction behavior."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Whose bestseller list did the author of Empress Bianca have a biography on in 1992?",
+        "summary_1": "A. W. Tozer",
+        "summary_2": "The New York Times Bestseller list.",
+        "current_output": "The New York Times Bestseller list."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If any visible summary (or the current_output) contains the word 'bestseller' or the phrase 'bestseller list' (case-insensitive),\",\n      \"preserve_rule\": \"Keep the agent's existing behavior of selecting the named entity or phrase from the provided summaries that names the publication or list; continue to prefer the concise named phrase already present in the summaries.\",\n      \"change_rule\": \"When triggered, strip descriptive suffixes that are not part of the publication's name (for example: 'Bestseller list', 'bestsellers', 'bestseller', 'list', or similar trailing descriptors). Return only the core publication name — the minimal proper-name phrase that appears immediately before such a descriptor in the summary.\",\n      \"drop_or_avoid_rule\": \"Avoid returning descriptive words like 'Bestseller', 'bestseller list', 'list', or explanatory commentary in the final answer. Do not add extra explanations, qualifiers, or sentences. Preserve articles and capitalization only if they are part of the publication's proper name.\",\n      \"output_contract\": \"Produce the 'answer' field as a single minimal publication-name string (no surrounding commentary). Ensure the final output block contains only that string, with no extra punctuation or words other than those that are part of the publication's official name.\",\n      \"why_local_transition\": \"The current output includes a descriptive suffix ('bestseller list') that makes the answer verbose. Stripping such suffixes yields the minimal publication name required by the final-answer contract while preserving the original extraction behavior.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\",\n  \"summary_1\": \"A. W. Tozer\",\n  \"summary_2\": \"The New York Times Bestseller list.\",\n  \"current_output\": \"The New York Times Bestseller list.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"The New York Times\",\n  \"rationale\": \"Delta triggered by the phrase 'Bestseller list' in summary_2; removed the descriptive suffix to return the core publication name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

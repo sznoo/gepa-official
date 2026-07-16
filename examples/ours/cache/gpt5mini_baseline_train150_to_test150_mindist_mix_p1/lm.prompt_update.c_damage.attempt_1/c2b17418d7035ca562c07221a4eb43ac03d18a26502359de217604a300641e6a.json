@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_1",
+  "key": "c2b17418d7035ca562c07221a4eb43ac03d18a26502359de217604a300641e6a",
+  "created_at": "2026-07-14T19:32:39.900126+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_1",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "base_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "visible_c_inputs": {
+        "question": "Which cartridge did John Browning design that has a rim that is the same in diameter as the .50 GI?",
+        "context": ".45 ACP",
+        "passages": [
+          ".50 GI | The .50 GI (12.7×23mmRB) pistol cartridge was developed by Vic Tibbets and Alex Zimmermann of Guncrafter Industries.  The .50 GI was introduced at the 2004 SHOT Show alongside the Guncrafter Industries Model No. 1, a variation of the M1911.  The round has a rebated rim that is the same diameter as that of the .45 ACP.",
+          "Guncrafter Industries Model No. 1 | The Guncrafter Industries Model No. 1 (Or M1) is a variant of the widely popular M1911 handgun, modified for the .50 GI cartridge.  John Browning's 1911 .45 ACP has been used for many cartridges over the past century.  In every instance the cartridge used a bullet with a diameter that was the same or smaller than the original .451\".  Both the Desert Eagle and the LAR Grizzly have been offered in cartridges of .50 caliber.  Both are large cartridges requiring a large, heavy pistol.",
+          "Automatic Colt Pistol | Automatic Colt Pistol (ACP) denotes various John Browning cartridge designs primarily used in Colt and Fabrique Nationale de Herstal semi-automatic pistols.  All of these cartridges are straight-sided and appear similar.  The .25 ACP, .32 ACP, and .38 ACP are semi-rimmed and headspace on the rim, while the rimless .380 ACP and .45 ACP headspace on the mouth of the case.",
+          ".45 Auto Rim | The .45 Auto Rim, \"a.k.a. 11.5x23R\" is a rimmed cartridge specifically designed to be fired in revolvers originally chambered for the .45 ACP cartridge.",
+          ".25 ACP | The .25 ACP (Automatic Colt Pistol) (6.35×16mmSR) is a semi-rimmed, straight-walled centerfire pistol cartridge introduced by John Browning in 1905 alongside the Fabrique Nationale M1905 pistol.",
+          ".32 ACP | .32 ACP (Automatic Colt Pistol), also known as the .32 Automatic is a centerfire pistol cartridge.  It is a semi-rimmed, straight-walled cartridge developed by firearms designer John Browning, initially for use in the FN M1900 semi-automatic pistol.  It was introduced in 1899 by Fabrique Nationale, and is also known as the 7.65×17mmSR Browning or 7.65 mm Browning Short.",
+          "Phillips (Martian crater) | Phillips Crater is a crater in the Mare Australe quadrangle of Mars, located at 66.7° south latitude and 45.1° west longitude.  It is 190.2 km in diameter and was named after John Phillips, a British geologist (1800–1874), and Theodore E. Philips, a British astronomer (1868–1942).  The northernmost rim is in the Argyre quadrangle."
+        ],
+        "current_output": ".45 ACP"
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": ".45 ACP",
+        "score": 1.0,
+        "answer": ".45 ACP"
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nico Hülkenberg",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),",
+            "preserve_rule": "Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.",
+            "change_rule": "When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.",
+            "drop_or_avoid_rule": "Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.",
+            "output_contract": "Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.",
+            "why_local_transition": "This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 21,
+        "c_stable_id": "21",
+        "selected_candidate_position": 1,
+        "selected_w_sample_index": 48,
+        "selected_w_stable_id": "48",
+        "agent": "summary2",
+        "dominant_gap_type": "bridge_relation",
+        "transported_damage_hypothesis": "The agent will fail to integrate the .50 GI page (which states a rim-diameter fact) with a John Browning cartridge page; instead it will return only a terse label or a single-passage fact without an explicit 1–2 sentence bridge saying which Browning-designed cartridge shares that rim diameter.",
+        "expected_damaged_behavior": "At the summary2 boundary, produce only a bare cartridge name or an isolated rim-diameter statement drawn from one passage (e.g., '.45 ACP' or 'same rim diameter as .50 GI') without an integrated sentence linking that cartridge to John Browning and the rim-diameter equivalence.",
+        "rationale": "Sample 48's repair teaches the agent to integrate a 'car page' (first-hop) with a 'driver bio' (second-hop) into a compact 1–2 sentence summary while preserving concise answer selection. The cartridge question requires the same kind of local bridge: combining the .50 GI page (rim spec) with a John Browning cartridge page to state that a Browning design shares that rim diameter. Transporting the failure pattern (omitting the bridging integration) is therefore highly plausible: the agent would still select the correct cartridge label from passages but fail to produce the connecting explanatory sentence that ties the rim-diameter fact to a Browning-designed cartridge. This matches the same anchor→second-hop integration gap in sample 48 and respects the constraints (no entity/text copying, local neighbor, no answer flip).",
+        "confidence": 0.87
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "ValueError",
+        "message": "damaged_output is identical to C_plus output.",
+        "instruction": "Return strict JSON, preserve the native output contract, produce a non-identical local neighbor, and avoid W-side literals."
+      }
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nBase prompt:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nVisible C inputs:\n{\n  \"question\": \"Which cartridge did John Browning design that has a rim that is the same in diameter as the .50 GI?\",\n  \"context\": \".45 ACP\",\n  \"passages\": [\n    \".50 GI | The .50 GI (12.7×23mmRB) pistol cartridge was developed by Vic Tibbets and Alex Zimmermann of Guncrafter Industries.  The .50 GI was introduced at the 2004 SHOT Show alongside the Guncrafter Industries Model No. 1, a variation of the M1911.  The round has a rebated rim that is the same diameter as that of the .45 ACP.\",\n    \"Guncrafter Industries Model No. 1 | The Guncrafter Industries Model No. 1 (Or M1) is a variant of the widely popular M1911 handgun, modified for the .50 GI cartridge.  John Browning's 1911 .45 ACP has been used for many cartridges over the past century.  In every instance the cartridge used a bullet with a diameter that was the same or smaller than the original .451\\\".  Both the Desert Eagle and the LAR Grizzly have been offered in cartridges of .50 caliber.  Both are large cartridges requiring a large, heavy pistol.\",\n    \"Automatic Colt Pistol | Automatic Colt Pistol (ACP) denotes various John Browning cartridge designs primarily used in Colt and Fabrique Nationale de Herstal semi-automatic pistols.  All of these cartridges are straight-sided and appear similar.  The .25 ACP, .32 ACP, and .38 ACP are semi-rimmed and headspace on the rim, while the rimless .380 ACP and .45 ACP headspace on the mouth of the case.\",\n    \".45 Auto Rim | The .45 Auto Rim, \\\"a.k.a. 11.5x23R\\\" is a rimmed cartridge specifically designed to be fired in revolvers originally chambered for the .45 ACP cartridge.\",\n    \".25 ACP | The .25 ACP (Automatic Colt Pistol) (6.35×16mmSR) is a semi-rimmed, straight-walled centerfire pistol cartridge introduced by John Browning in 1905 alongside the Fabrique Nationale M1905 pistol.\",\n    \".32 ACP | .32 ACP (Automatic Colt Pistol), also known as the .32 Automatic is a centerfire pistol cartridge.  It is a semi-rimmed, straight-walled cartridge developed by firearms designer John Browning, initially for use in the FN M1900 semi-automatic pistol.  It was introduced in 1899 by Fabrique Nationale, and is also known as the 7.65×17mmSR Browning or 7.65 mm Browning Short.\",\n    \"Phillips (Martian crater) | Phillips Crater is a crater in the Mare Australe quadrangle of Mars, located at 66.7° south latitude and 45.1° west longitude.  It is 190.2 km in diameter and was named after John Phillips, a British geologist (1800–1874), and Theodore E. Philips, a British astronomer (1868–1942).  The northernmost rim is in the Argyre quadrangle.\"\n  ],\n  \"current_output\": \".45 ACP\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \".45 ACP\",\n  \"score\": 1.0,\n  \"answer\": \".45 ACP\"\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nico Hülkenberg\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),\",\n      \"preserve_rule\": \"Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.\",\n      \"change_rule\": \"When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.\",\n      \"drop_or_avoid_rule\": \"Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.\",\n      \"output_contract\": \"Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.\",\n      \"why_local_transition\": \"This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 21,\n  \"c_stable_id\": \"21\",\n  \"selected_candidate_position\": 1,\n  \"selected_w_sample_index\": 48,\n  \"selected_w_stable_id\": \"48\",\n  \"agent\": \"summary2\",\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"The agent will fail to integrate the .50 GI page (which states a rim-diameter fact) with a John Browning cartridge page; instead it will return only a terse label or a single-passage fact without an explicit 1–2 sentence bridge saying which Browning-designed cartridge shares that rim diameter.\",\n  \"expected_damaged_behavior\": \"At the summary2 boundary, produce only a bare cartridge name or an isolated rim-diameter statement drawn from one passage (e.g., '.45 ACP' or 'same rim diameter as .50 GI') without an integrated sentence linking that cartridge to John Browning and the rim-diameter equivalence.\",\n  \"rationale\": \"Sample 48's repair teaches the agent to integrate a 'car page' (first-hop) with a 'driver bio' (second-hop) into a compact 1–2 sentence summary while preserving concise answer selection. The cartridge question requires the same kind of local bridge: combining the .50 GI page (rim spec) with a John Browning cartridge page to state that a Browning design shares that rim diameter. Transporting the failure pattern (omitting the bridging integration) is therefore highly plausible: the agent would still select the correct cartridge label from passages but fail to produce the connecting explanatory sentence that ties the rim-diameter fact to a Browning-designed cartridge. This matches the same anchor→second-hop integration gap in sample 48 and respects the constraints (no entity/text copying, local neighbor, no answer flip).\",\n  \"confidence\": 0.87\n}\n\nRepair feedback from a rejected attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"ValueError\",\n  \"message\": \"damaged_output is identical to C_plus output.\",\n  \"instruction\": \"Return strict JSON, preserve the native output contract, produce a non-identical local neighbor, and avoid W-side literals.\"\n}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": \"Same rebated rim diameter as the .50 GI.\",\n  \"transported_failure_pattern\": \"omit second-hop integration: return an isolated fact or terse label without producing a 1–2 sentence bridge linking the Browning-designed cartridge to the rim-diameter evidence\",\n  \"expected_damage\": \"The agent will output a short rim-diameter statement or bare cartridge label rather than an integrated 1–2 sentence summary that names the Browning cartridge and ties it to the .50 GI rim equivalence.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\".45 ACP\", \"rim diameter\"],\n    \"why_not_unrelated\": \"The damaged output keeps the cartridge-focused rim-diameter cue drawn from the passages but removes the bridging sentence that would connect the Browning-designed cartridge to that fact.\"\n  },\n  \"confidence\": 0.87,\n  \"rationale\": \"Applied the reverse W failure by removing the expected integrated summary and producing an isolated rim-diameter statement using only facts present in the visible passages; this weakens the agent's bridge behavior while keeping relevant cues.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_1",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 21,
+    "c_stable_id": "21",
+    "w_sample_index": 48,
+    "w_stable_id": "48",
+    "agent": "summary2",
+    "damage_attempt": 1,
+    "match_fingerprint": "772c16db45fcf338141b0a4dc2e0049786a511ad57bef3e1180f1c514dec45b8"
+  }
+}

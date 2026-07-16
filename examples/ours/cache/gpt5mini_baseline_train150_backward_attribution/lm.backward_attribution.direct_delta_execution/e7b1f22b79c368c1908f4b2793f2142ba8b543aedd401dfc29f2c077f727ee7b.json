@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "e7b1f22b79c368c1908f4b2793f2142ba8b543aedd401dfc29f2c077f727ee7b",
+  "created_at": "2026-07-14T13:39:20.487472+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks 'what kind of <noun>...' (or uses the phrase 'what kind of') and the provided summaries contain a phrase of the form '<descriptor> <noun>' (for example, 'Episcopal priest').",
+            "preserve_rule": "Keep using summary_1 and summary_2 as the authoritative sources and preserve the existing behavior of returning a short answer string derived from those summaries.",
+            "change_rule": "When the trigger applies, extract and return only the descriptor (the word or short phrase immediately preceding the asked-about noun) instead of repeating the full '<descriptor> <noun>' phrase. If the descriptor is multi-word (e.g., 'Roman Catholic'), include the full descriptor. If summaries disagree, prefer the descriptor that appears in both summaries or else the one in summary_1.",
+            "drop_or_avoid_rule": "Do not include the noun itself (e.g., 'priest'), articles, auxiliary words, or punctuation. Avoid added explanation or phrasing such as 'He was' or 'a'. Produce only the bare descriptor token(s) with no trailing punctuation or extra words.",
+            "output_contract": "Set the answer field to the minimal descriptor string (no punctuation, no extra words) and ensure the [[ ## answer ## ]] block contains exactly that string supported by the visible summaries.",
+            "why_local_transition": "The current output repeats the full phrase ('Episcopal priest.'), but for questions phrased 'what kind of ...' the concise expected answer is just the descriptor ('Episcopal'). This rule makes the smallest change needed to remove the redundant noun and produce the minimal descriptor answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The winner of the 1976 United States Senate election in Missouri was what kind of priest?",
+        "summary_1": "He was an Episcopal priest.",
+        "summary_2": "He was an Episcopal priest.",
+        "current_output": "Episcopal priest."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks 'what kind of <noun>...' (or uses the phrase 'what kind of') and the provided summaries contain a phrase of the form '<descriptor> <noun>' (for example, 'Episcopal priest').\",\n      \"preserve_rule\": \"Keep using summary_1 and summary_2 as the authoritative sources and preserve the existing behavior of returning a short answer string derived from those summaries.\",\n      \"change_rule\": \"When the trigger applies, extract and return only the descriptor (the word or short phrase immediately preceding the asked-about noun) instead of repeating the full '<descriptor> <noun>' phrase. If the descriptor is multi-word (e.g., 'Roman Catholic'), include the full descriptor. If summaries disagree, prefer the descriptor that appears in both summaries or else the one in summary_1.\",\n      \"drop_or_avoid_rule\": \"Do not include the noun itself (e.g., 'priest'), articles, auxiliary words, or punctuation. Avoid added explanation or phrasing such as 'He was' or 'a'. Produce only the bare descriptor token(s) with no trailing punctuation or extra words.\",\n      \"output_contract\": \"Set the answer field to the minimal descriptor string (no punctuation, no extra words) and ensure the [[ ## answer ## ]] block contains exactly that string supported by the visible summaries.\",\n      \"why_local_transition\": \"The current output repeats the full phrase ('Episcopal priest.'), but for questions phrased 'what kind of ...' the concise expected answer is just the descriptor ('Episcopal'). This rule makes the smallest change needed to remove the redundant noun and produce the minimal descriptor answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The winner of the 1976 United States Senate election in Missouri was what kind of priest?\",\n  \"summary_1\": \"He was an Episcopal priest.\",\n  \"summary_2\": \"He was an Episcopal priest.\",\n  \"current_output\": \"Episcopal priest.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nEpiscopal\\n[[ ## /answer ## ]]\",\n  \"rationale\": \"The question asks 'what kind of priest' and both summaries state 'Episcopal priest', so per the delta I returned only the descriptor 'Episcopal' inside the answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 106,
+    "row_index": 106,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

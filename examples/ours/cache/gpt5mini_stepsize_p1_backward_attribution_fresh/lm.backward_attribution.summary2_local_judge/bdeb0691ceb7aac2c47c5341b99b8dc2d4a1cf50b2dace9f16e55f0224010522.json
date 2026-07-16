@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "bdeb0691ceb7aac2c47c5341b99b8dc2d4a1cf50b2dace9f16e55f0224010522",
+  "created_at": "2026-07-16T04:55:23.884456+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "What was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?",
+      "source_summary": "The college is Kansas Wesleyan University. Passages list several Kansas Wesleyan head-football-coach records (Coach Miller 0–1 in 1906; W. F. Ragle 5–4 in 1915; C. L. Williams 9–5 in 1908–1909; Ron Dupree 11–18 for his Kansas Wesleyan tenure), and note Matt Drinkall was hired in 2014 but give no win–loss record for him, so it’s unclear which single \"head coach\" record the question intends.",
+      "target_summary": "The institution is Kansas Wesleyan University. Available coach records from the provided inputs: Coach Miller — served one season (1906), compiling a record of 0–1; W. F. Ragle — served one season (1915), compiling a record of 5–4; C. L. Williams — served two seasons (1908–1909), compiling a record of 9–5. The inputs also state Matt Drinkall was hired as Kansas Wesleyan head coach in January 2014, but no win–loss record for him is provided.",
+      "candidate_summary": "The institution is Kansas Wesleyan University. Available coach records from the provided inputs: Coach Miller — served one season (1906), compiling a record of 0–1; W. F. Ragle — served one season (1915), compiling a record of 5–4; C. L. Williams — served two seasons (1908–1909), compiling a record of 9–5. The inputs also state Matt Drinkall was hired as Kansas Wesleyan head coach in January 2014, but no win–loss record for him is provided."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhat was the record for the head football coach of this private four-year Christian-based college founded in Salina, Kansas, United States?\n\nSource summary2:\nThe college is Kansas Wesleyan University. Passages list several Kansas Wesleyan head-football-coach records (Coach Miller 0–1 in 1906; W. F. Ragle 5–4 in 1915; C. L. Williams 9–5 in 1908–1909; Ron Dupree 11–18 for his Kansas Wesleyan tenure), and note Matt Drinkall was hired in 2014 but give no win–loss record for him, so it’s unclear which single \"head coach\" record the question intends.\n\nTarget summary2:\nThe institution is Kansas Wesleyan University. Available coach records from the provided inputs: Coach Miller — served one season (1906), compiling a record of 0–1; W. F. Ragle — served one season (1915), compiling a record of 5–4; C. L. Williams — served two seasons (1908–1909), compiling a record of 9–5. The inputs also state Matt Drinkall was hired as Kansas Wesleyan head coach in January 2014, but no win–loss record for him is provided.\n\nCandidate summary2:\nThe institution is Kansas Wesleyan University. Available coach records from the provided inputs: Coach Miller — served one season (1906), compiling a record of 0–1; W. F. Ragle — served one season (1915), compiling a record of 5–4; C. L. Williams — served two seasons (1908–1909), compiling a record of 9–5. The inputs also state Matt Drinkall was hired as Kansas Wesleyan head coach in January 2014, but no win–loss record for him is provided.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": false,\n  \"rationale\": \"The candidate matches the target exactly (so it reconstructs the target). However, it omits information present in the source (the Ron Dupree 11–18 record and the source's note about ambiguity), so it does not preserve the source. It also introduces no new task-relevant facts beyond the target.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 116,
+    "row_index": 116,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

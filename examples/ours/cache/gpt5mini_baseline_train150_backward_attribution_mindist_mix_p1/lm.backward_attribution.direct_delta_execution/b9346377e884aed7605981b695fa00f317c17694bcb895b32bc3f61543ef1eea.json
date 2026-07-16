@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "b9346377e884aed7605981b695fa00f317c17694bcb895b32bc3f61543ef1eea",
+  "created_at": "2026-07-14T19:01:53.720505+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the current `query` contains the phrase \"Italian champion\" or is a long conjunction of quoted phrases tied to the full question (e.g., multiple quoted clauses), and the retrieval so far has not produced a clear named person bridging the event.",
+            "preserve_rule": "Keep using the given `question` and `summary_1` as inputs and continue to produce a single compact `query` string as the agent's output. Preserve the aim of a focused second-hop retrieval (one short query).",
+            "change_rule": "Reframe the query to target the PERSON who was associated with the 1950 Indianapolis 500 entry that \"did not arrive\" (i.e., focus the query on finding the driver's name). Prefer short, name-seeking queries that combine the event and a phrase like \"car never arrived\" or \"car failed to arrive\" with a term such as \"driver\" or \"who\". Examples of acceptable formats (use similarly compact wording):\n- 1950 Indianapolis 500 car never arrived driver\n- 1950 Indianapolis 500 \"car failed to arrive\" who",
+            "drop_or_avoid_rule": "Avoid adding the subject's later attributes (for example, 'Italian champion') or embedding the full natural-language question into the query. Avoid overly long quoted conjunctions of unrelated phrases; they reduce recall for pages naming the person.",
+            "output_contract": "Return exactly one compact retrieval query string that emphasizes identifying the person whose car failed to arrive at the 1950 Indianapolis 500 (short, name-seeking, event + failure phrase + driver/who). Do not include answer tokens or full sentences; keep it concise.",
+            "why_local_transition": "The previous query mixes the event and a later attribute ('Italian champion'), which narrows results away from pages naming the person whose car never arrived. A small behavioral change to produce a short, person-focused query increases the chance of retrieving the bridge (the driver's page) needed for the next hop."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?",
+        "summary_1": "1950",
+        "current_output": {
+          "query": "\"1950 Indianapolis 500\" \"car failed to arrive\" \"Italian champion\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the current `query` contains the phrase \\\"Italian champion\\\" or is a long conjunction of quoted phrases tied to the full question (e.g., multiple quoted clauses), and the retrieval so far has not produced a clear named person bridging the event.\",\n      \"preserve_rule\": \"Keep using the given `question` and `summary_1` as inputs and continue to produce a single compact `query` string as the agent's output. Preserve the aim of a focused second-hop retrieval (one short query).\",\n      \"change_rule\": \"Reframe the query to target the PERSON who was associated with the 1950 Indianapolis 500 entry that \\\"did not arrive\\\" (i.e., focus the query on finding the driver's name). Prefer short, name-seeking queries that combine the event and a phrase like \\\"car never arrived\\\" or \\\"car failed to arrive\\\" with a term such as \\\"driver\\\" or \\\"who\\\". Examples of acceptable formats (use similarly compact wording):\\n- 1950 Indianapolis 500 car never arrived driver\\n- 1950 Indianapolis 500 \\\"car failed to arrive\\\" who\",\n      \"drop_or_avoid_rule\": \"Avoid adding the subject's later attributes (for example, 'Italian champion') or embedding the full natural-language question into the query. Avoid overly long quoted conjunctions of unrelated phrases; they reduce recall for pages naming the person.\",\n      \"output_contract\": \"Return exactly one compact retrieval query string that emphasizes identifying the person whose car failed to arrive at the 1950 Indianapolis 500 (short, name-seeking, event + failure phrase + driver/who). Do not include answer tokens or full sentences; keep it concise.\",\n      \"why_local_transition\": \"The previous query mixes the event and a later attribute ('Italian champion'), which narrows results away from pages naming the person whose car never arrived. A small behavioral change to produce a short, person-focused query increases the chance of retrieving the bridge (the driver's page) needed for the next hop.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\",\n  \"summary_1\": \"1950\",\n  \"current_output\": {\n    \"query\": \"\\\"1950 Indianapolis 500\\\" \\\"car failed to arrive\\\" \\\"Italian champion\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"1950 Indianapolis 500 car failed to arrive driver\"\n  },\n  \"rationale\": \"Delta triggered by presence of 'Italian champion'; removed that attribute and produced a short, name-seeking query focusing on the driver whose car failed to arrive at the 1950 Indianapolis 500.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 93,
+    "row_index": 93,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

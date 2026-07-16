@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "cb32b41801ad80199ec4960c660f0a8d9431cc2fcbf4dee880ef8cea3e3a1d98",
+  "created_at": "2026-07-14T19:01:53.086042+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+      "source_summary": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+      "target_summary": "Israel Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.",
+      "candidate_summary": "Israel Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nThe musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?\n\nSource summary2:\nHe was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\n\nTarget summary2:\nIsrael Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\n\nCandidate summary2:\nIsrael Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate exactly matches the target: it identifies Israel Kamakawiwoʻole as a founding member of The Mākaha Sons of Niʻihau and includes formation details (1976, Oahu) and the list of founding members. This preserves the source's claim that he was a member and adds the target's additional facts, without contradiction.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 84,
+    "row_index": 84,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

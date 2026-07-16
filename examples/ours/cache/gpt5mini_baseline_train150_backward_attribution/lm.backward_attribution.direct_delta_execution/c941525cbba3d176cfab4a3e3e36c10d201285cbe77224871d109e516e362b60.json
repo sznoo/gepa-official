@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "c941525cbba3d176cfab4a3e3e36c10d201285cbe77224871d109e516e362b60",
+  "created_at": "2026-07-14T13:37:35.352809+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question contains a specific geographic constraint (distance/direction from Congleton, e.g. \"4 mi southwest of Congleton\") but the agent's current query is centered on the building named in summary_1 (Marton) rather than searching by that geographic clue.",
+            "preserve_rule": "Keep the existing compact single-query output format and continue to prefer 'listed' / 'National Heritage List for England' phrasing from the base behavior; retain using summary_1 only as contextual input (do not drop it automatically).",
+            "change_rule": "Replace or augment the current focus with a single compact location-driven query that combines the question's geographic phrase with listing-language. Construct exactly one short query string that includes the location phrase from the question (e.g. \"4 miles southwest of Congleton\" or \"4 mi southwest of Congleton\") plus at least one of: \"listed building\" or \"National Heritage List for England\" and optionally a phrase like \"most important\" or \"listed buildings\" to surface parish/list pages. Keep the query concise (one line) and avoid adding extra explanation.",
+            "drop_or_avoid_rule": "Do not center the query solely on the summary_1 building name (e.g. Marton) or other specific building names present in summary_1; avoid long conjunctions of many named buildings or quoting target-only place/entity names that do not appear in the visible inputs.",
+            "output_contract": "Produce exactly one compact query string (single-line) that contains the question's geographic phrase (e.g. '4 miles southwest of Congleton' or '4 mi southwest of Congleton') and at least one of the terms 'listed building' or 'National Heritage List for England'. No extra commentary, no answers, and no additional lines.",
+            "why_local_transition": "Redirects the second-hop from the wrongly focused summary_1 building to the geographic constraint in the question so retrieval will surface parish-level 'listed buildings' pages (which list the most important building for that location) instead of returning results about Marton."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the most important building in the National Heritage for England located 4 mi southwest of Congleton in Cheshire?",
+        "summary_1": "St James' and St Paul's Church, Marton",
+        "current_output": {
+          "query": "Marton Cheshire \"listed buildings\" \"St James and St Paul's Church\" \"National Heritage List for England\" \"most important building\" 4 miles southwest of Congleton"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question contains a specific geographic constraint (distance/direction from Congleton, e.g. \\\"4 mi southwest of Congleton\\\") but the agent's current query is centered on the building named in summary_1 (Marton) rather than searching by that geographic clue.\",\n      \"preserve_rule\": \"Keep the existing compact single-query output format and continue to prefer 'listed' / 'National Heritage List for England' phrasing from the base behavior; retain using summary_1 only as contextual input (do not drop it automatically).\",\n      \"change_rule\": \"Replace or augment the current focus with a single compact location-driven query that combines the question's geographic phrase with listing-language. Construct exactly one short query string that includes the location phrase from the question (e.g. \\\"4 miles southwest of Congleton\\\" or \\\"4 mi southwest of Congleton\\\") plus at least one of: \\\"listed building\\\" or \\\"National Heritage List for England\\\" and optionally a phrase like \\\"most important\\\" or \\\"listed buildings\\\" to surface parish/list pages. Keep the query concise (one line) and avoid adding extra explanation.\",\n      \"drop_or_avoid_rule\": \"Do not center the query solely on the summary_1 building name (e.g. Marton) or other specific building names present in summary_1; avoid long conjunctions of many named buildings or quoting target-only place/entity names that do not appear in the visible inputs.\",\n      \"output_contract\": \"Produce exactly one compact query string (single-line) that contains the question's geographic phrase (e.g. '4 miles southwest of Congleton' or '4 mi southwest of Congleton') and at least one of the terms 'listed building' or 'National Heritage List for England'. No extra commentary, no answers, and no additional lines.\",\n      \"why_local_transition\": \"Redirects the second-hop from the wrongly focused summary_1 building to the geographic constraint in the question so retrieval will surface parish-level 'listed buildings' pages (which list the most important building for that location) instead of returning results about Marton.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the most important building in the National Heritage for England located 4 mi southwest of Congleton in Cheshire?\",\n  \"summary_1\": \"St James' and St Paul's Church, Marton\",\n  \"current_output\": {\n    \"query\": \"Marton Cheshire \\\"listed buildings\\\" \\\"St James and St Paul's Church\\\" \\\"National Heritage List for England\\\" \\\"most important building\\\" 4 miles southwest of Congleton\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"4 mi southwest of Congleton listed building \\\"National Heritage List for England\\\"\"\n  },\n  \"rationale\": \"Used the question's geographic phrase and included required listing-language, replacing the Marton-focused query with a single concise location-driven query per the deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 31,
+    "row_index": 31,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

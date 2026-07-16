@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "0fa2915bf4c036ee3925ad5539b4a7787b87e15a45af66b4f077e25f40fe7890",
+  "created_at": "2026-07-14T18:02:00.025056+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+      "source_summary": "Nikita Katsalapov won the 2016 Russian national silver medal with Victoria Sinitsina. Victoria Sinitsina (born 29 April 1995) is a Russian ice dancer.",
+      "target_summary": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer. With Victoria Sinitsina, he is the 2016 Russian national silver medalist. (Also attested in reverse: with Nikita Katsalapov, Sinitsina is the 2016 Russian national silver medalist.)",
+      "candidate_summary": "Victoria Sinitsina (ice dancer) — 2016 Russian national silver\nNikita Katsalapov is a Russian ice dancer born 10 July 1991. They won the 2016 Russian national silver together."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWho won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\n\nSource summary2:\nNikita Katsalapov won the 2016 Russian national silver medal with Victoria Sinitsina. Victoria Sinitsina (born 29 April 1995) is a Russian ice dancer.\n\nTarget summary2:\nVictoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer. With Victoria Sinitsina, he is the 2016 Russian national silver medalist. (Also attested in reverse: with Nikita Katsalapov, Sinitsina is the 2016 Russian national silver medalist.)\n\nCandidate summary2:\nVictoria Sinitsina (ice dancer) — 2016 Russian national silver\nNikita Katsalapov is a Russian ice dancer born 10 July 1991. They won the 2016 Russian national silver together.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate correctly preserves the key entities and relation from the target: that Nikita Katsalapov and Victoria Sinitsina won the 2016 Russian national silver together (answering the question). It also adds Katsalapov's birthdate from the target (meaningful gain). However it omits Sinitsina's birthdate present in the source, thus removing a useful source detail.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 119,
+    "row_index": 119,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

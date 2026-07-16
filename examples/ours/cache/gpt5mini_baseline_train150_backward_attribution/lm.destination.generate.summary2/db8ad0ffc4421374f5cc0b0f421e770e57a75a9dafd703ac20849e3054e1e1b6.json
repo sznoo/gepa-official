@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "db8ad0ffc4421374f5cc0b0f421e770e57a75a9dafd703ac20849e3054e1e1b6",
+  "created_at": "2026-07-14T13:38:08.145345+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+      "current_output": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+      "upstream_context": {
+        "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+        "summary_1": "Makaha Sons of Niʻihau",
+        "hop2_query": "Israel \"Braddah Iz\" Kamakawiwoʻole member of which Hawaiian musical group? (Makaha Sons of Niʻihau)",
+        "hop2_titles": [
+          "Israel Kamakawiwoʻole",
+          "Mākaha Sons",
+          "Jon de Mello",
+          "N Dis Life",
+          "Facing Future",
+          "Alone in IZ World",
+          "Halulu Lake"
+        ],
+        "hop2_docs": [
+          "Israel Kamakawiwoʻole | Israel Kaʻanoʻi Kamakawiwoʻole (] , translation: \"The Fearless Eyed\"; May 20, 1959 – June 26, 1997), also called \"Braddah Iz\" (Brother Iz), was a Native Hawaiian musician, entertainer and Hawaiian sovereignty activist.",
+          "Mākaha Sons | The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.  The band started its career as an opening act at a small nightclub called Uptown Yokos.  The group has reorganized several times, with some members seeking other professional careers.  After the deaths of the Kamakawiwoʻole brothers Skippy and Israel, the remaining members dropped the \"of Niihau\" and became The Makaha Sons.",
+          "Jon de Mello | Jon de Mello born in Honolulu and raised in Waikiki is an American record producer, manager, composer, artist, very famous for producing Israel \"IZ\" Kamakawiwoʻole.",
+          "N Dis Life | In Dis Life is the final album of original music by Native Hawaiian singer Israel \"Iz\" Kamakawiwo'ole before his death, released in 1996.  It reached #3 at Top World Music Albums.",
+          "Facing Future | Facing Future is an album by Hawaiian singer Israel Kamakawiwoʻole, released in 1993.  The best-selling album of all time by a Hawaiian artist, \"Facing Future\" combines traditional Hawaiian-language songs, hapa haole songs with traditional instrumentation and two Jawaiian (Island reggae) tracks.  The album's sales have been driven not only by its popularity with Hawaiian audiences but by its popularity in the mainland United States and around the world, particularly the track \"Somewhere Over the Rainbow/What a Wonderful World,\" which has been licensed for use in movies (\"Finding Forrester\", \"Meet Joe Black\", \"50 First Dates\", \"Fred Claus\", \"Hubble\", \"Son of the Mask\") television shows (\"ER\", \"Cold Case\", \"Jon & Kate Plus 8\", \"Life On Mars\", \"Glee\") and commercials (eToys).  \"Facing Future\" reached platinum status in 2005.",
+          "Alone in IZ World | Alone in IZ World is an album by the Hawaiian musician Israel Kamakawiwo'ole released in 2001, 4 years after his death in 1997.  The album has charted on several of Billboard’s album charts.  These are:",
+          "Halulu Lake | Halulu Lake is a lake in the south central region of the island of Niʻihau (the smallest inhabited island in the chain).  It is the largest (non-intermittent) natural lake in the Hawaiian Islands and ranks third in size after Hālaliʻi Lake (also on Niʻihau) and Keālia Pond (on Maui) which are intermittent bodies of water."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Mākaha Sons",
+          "sent_id": 0,
+          "sentence": "The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray."
+        },
+        {
+          "title": "Israel Kamakawiwoʻole",
+          "sent_id": 0,
+          "sentence": "Israel Kaʻanoʻi Kamakawiwoʻole (] , translation: \"The Fearless Eyed\"; May 20, 1959 – June 26, 1997), also called \"Braddah Iz\" (Brother Iz), was a Native Hawaiian musician, entertainer and Hawaiian sovereignty activist."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nThe musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?\n\nCurrent agent output:\n\"He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\"\n\nActual upstream context:\n{\n  \"question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n  \"summary_1\": \"Makaha Sons of Niʻihau\",\n  \"hop2_query\": \"Israel \\\"Braddah Iz\\\" Kamakawiwoʻole member of which Hawaiian musical group? (Makaha Sons of Niʻihau)\",\n  \"hop2_titles\": [\n    \"Israel Kamakawiwoʻole\",\n    \"Mākaha Sons\",\n    \"Jon de Mello\",\n    \"N Dis Life\",\n    \"Facing Future\",\n    \"Alone in IZ World\",\n    \"Halulu Lake\"\n  ],\n  \"hop2_docs\": [\n    \"Israel Kamakawiwoʻole | Israel Kaʻanoʻi Kamakawiwoʻole (] , translation: \\\"The Fearless Eyed\\\"; May 20, 1959 – June 26, 1997), also called \\\"Braddah Iz\\\" (Brother Iz), was a Native Hawaiian musician, entertainer and Hawaiian sovereignty activist.\",\n    \"Mākaha Sons | The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.  The band started its career as an opening act at a small nightclub called Uptown Yokos.  The group has reorganized several times, with some members seeking other professional careers.  After the deaths of the Kamakawiwoʻole brothers Skippy and Israel, the remaining members dropped the \\\"of Niihau\\\" and became The Makaha Sons.\",\n    \"Jon de Mello | Jon de Mello born in Honolulu and raised in Waikiki is an American record producer, manager, composer, artist, very famous for producing Israel \\\"IZ\\\" Kamakawiwoʻole.\",\n    \"N Dis Life | In Dis Life is the final album of original music by Native Hawaiian singer Israel \\\"Iz\\\" Kamakawiwo'ole before his death, released in 1996.  It reached #3 at Top World Music Albums.\",\n    \"Facing Future | Facing Future is an album by Hawaiian singer Israel Kamakawiwoʻole, released in 1993.  The best-selling album of all time by a Hawaiian artist, \\\"Facing Future\\\" combines traditional Hawaiian-language songs, hapa haole songs with traditional instrumentation and two Jawaiian (Island reggae) tracks.  The album's sales have been driven not only by its popularity with Hawaiian audiences but by its popularity in the mainland United States and around the world, particularly the track \\\"Somewhere Over the Rainbow/What a Wonderful World,\\\" which has been licensed for use in movies (\\\"Finding Forrester\\\", \\\"Meet Joe Black\\\", \\\"50 First Dates\\\", \\\"Fred Claus\\\", \\\"Hubble\\\", \\\"Son of the Mask\\\") television shows (\\\"ER\\\", \\\"Cold Case\\\", \\\"Jon & Kate Plus 8\\\", \\\"Life On Mars\\\", \\\"Glee\\\") and commercials (eToys).  \\\"Facing Future\\\" reached platinum status in 2005.\",\n    \"Alone in IZ World | Alone in IZ World is an album by the Hawaiian musician Israel Kamakawiwo'ole released in 2001, 4 years after his death in 1997.  The album has charted on several of Billboard’s album charts.  These are:\",\n    \"Halulu Lake | Halulu Lake is a lake in the south central region of the island of Niʻihau (the smallest inhabited island in the chain).  It is the largest (non-intermittent) natural lake in the Hawaiian Islands and ranks third in size after Hālaliʻi Lake (also on Niʻihau) and Keālia Pond (on Maui) which are intermittent bodies of water.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Mākaha Sons\",\n    \"sent_id\": 0,\n    \"sentence\": \"The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\"\n  },\n  {\n    \"title\": \"Israel Kamakawiwoʻole\",\n    \"sent_id\": 0,\n    \"sentence\": \"Israel Kaʻanoʻi Kamakawiwoʻole (] , translation: \\\"The Fearless Eyed\\\"; May 20, 1959 – June 26, 1997), also called \\\"Braddah Iz\\\" (Brother Iz), was a Native Hawaiian musician, entertainer and Hawaiian sovereignty activist.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Israel Kaʻanoʻi Kamakawiwoʻole, also called \\\"Braddah Iz\\\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\",\n  \"rationale\": \"Visible supporting sentences explicitly state (1) Israel Kaʻanoʻi Kamakawiwoʻole is also called \\\"Braddah Iz\\\" and (2) The Mākaha Sons of Ni'ihau are a Hawaiian musical group formed in 1976 on Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray. Integrating these preserves the facts needed for the final answer without adding unsupported information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 84,
+    "row_index": 84
+  }
+}

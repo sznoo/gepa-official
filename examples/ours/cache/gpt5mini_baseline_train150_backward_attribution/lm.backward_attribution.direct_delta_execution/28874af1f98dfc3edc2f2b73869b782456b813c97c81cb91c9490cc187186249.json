@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "28874af1f98dfc3edc2f2b73869b782456b813c97c81cb91c9490cc187186249",
+  "created_at": "2026-07-14T13:37:58.006956+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If either summary_1 or summary_2 contains multiple verbal forms of the same group name (for example a long form and a shorter alias, or the long form plus a parenthetical alias), or if the current output contains a parenthetical alias or a leading article like \"The\".",
+            "preserve_rule": "Keep using only information present in summary_1 and summary_2 as evidence. Preserve the base prompt's requirement to produce the `answer` field and to place the final minimal answer string in the [[ ## answer ## ]] block. Preserve any correct extraction of the group's name from the summaries.",
+            "change_rule": "When multiple name variants appear in the visible summaries, select the shortest verbatim group-name string that appears in either summary (after removing any leading article 'The'). Produce exactly that short name string as the answer. Strip parenthetical aliases, explanatory parentheses, and trailing descriptive clauses; do not add clarifying words or punctuation.",
+            "drop_or_avoid_rule": "Avoid including leading articles (e.g., 'The'), parenthetical aliases or explanations, extra punctuation, and descriptive phrases beyond the core group name. Do not invent abbreviations or reorder words not present verbatim in the summaries.",
+            "output_contract": "Return only the minimal canonical group name string (the shortest verbatim form present in the summaries, with any leading 'The' removed) as the `answer`. Place that single string inside the [[ ## answer ## ]] block and nothing else.",
+            "why_local_transition": "The current output includes a parenthetical alias and a leading article, making the answer longer than necessary. This rule nudges the agent to prefer the concise alias already present in the summaries so the final answer is the minimal, well-supported group name."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+        "summary_1": "Makaha Sons of Niʻihau",
+        "summary_2": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+        "current_output": "The Mākaha Sons of Niʻihau (also known as The Makaha Sons)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If either summary_1 or summary_2 contains multiple verbal forms of the same group name (for example a long form and a shorter alias, or the long form plus a parenthetical alias), or if the current output contains a parenthetical alias or a leading article like \\\"The\\\".\",\n      \"preserve_rule\": \"Keep using only information present in summary_1 and summary_2 as evidence. Preserve the base prompt's requirement to produce the `answer` field and to place the final minimal answer string in the [[ ## answer ## ]] block. Preserve any correct extraction of the group's name from the summaries.\",\n      \"change_rule\": \"When multiple name variants appear in the visible summaries, select the shortest verbatim group-name string that appears in either summary (after removing any leading article 'The'). Produce exactly that short name string as the answer. Strip parenthetical aliases, explanatory parentheses, and trailing descriptive clauses; do not add clarifying words or punctuation.\",\n      \"drop_or_avoid_rule\": \"Avoid including leading articles (e.g., 'The'), parenthetical aliases or explanations, extra punctuation, and descriptive phrases beyond the core group name. Do not invent abbreviations or reorder words not present verbatim in the summaries.\",\n      \"output_contract\": \"Return only the minimal canonical group name string (the shortest verbatim form present in the summaries, with any leading 'The' removed) as the `answer`. Place that single string inside the [[ ## answer ## ]] block and nothing else.\",\n      \"why_local_transition\": \"The current output includes a parenthetical alias and a leading article, making the answer longer than necessary. This rule nudges the agent to prefer the concise alias already present in the summaries so the final answer is the minimal, well-supported group name.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n  \"summary_1\": \"Makaha Sons of Niʻihau\",\n  \"summary_2\": \"He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\",\n  \"current_output\": \"The Mākaha Sons of Niʻihau (also known as The Makaha Sons).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nMakaha Sons\",\n  \"rationale\": \"Selected the shortest group name present in the summaries, removed the leading 'The' and dropped the parenthetical alias, yielding 'Makaha Sons'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 84,
+    "row_index": 84,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

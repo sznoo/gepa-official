@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2c0cdf6b277057fbf17fed9ad73e2795252cdc9a9d5950a1f74e145b79a46951",
+  "created_at": "2026-07-14T19:01:53.989065+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question string contains the phrase \"second season\" together with a specific year (a four-digit number, e.g. \"1891\") and the current query is only trying to find a coach's birth date, apply this update.",
+            "preserve_rule": "Keep producing one compact retrieval query as the agent's single output field. Preserve use of any named coach that already appears in the visible inputs when the summary explicitly requests a birth-date lookup.",
+            "change_rule": "Instead of only querying for the named coach's birth date, produce a single short search query that targets which Kansas Jayhawks team had its second season in the given year and names the head coach. Construct the query from the question's year and the phrase \"Kansas Jayhawks\" plus terms such as \"second season\" and \"coach\" (for example: a concise query combining those tokens).",
+            "drop_or_avoid_rule": "Do not limit the search solely to the coach's birth-date phrases (e.g. \"date of birth\", \"born\") when the question is framed around an event year and a team's \"second season\"; avoid overly narrow biographical queries in that case.",
+            "output_contract": "Return exactly the field `query` whose value is one compact search string that uses the question's year and the terms 'Kansas Jayhawks', 'second season' and 'coach' (concise, intended to retrieve the team/season page that lists the head coach).",
+            "why_local_transition": "The pipeline needs the team/season page that states who coached the Jayhawks in their second season for that year; switching from a pure birthdate lookup to an event/season lookup increases the chance of retrieving the missing team/coach page that bridges to the coach's biographical info."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "summary_1": "The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.",
+        "current_output": {
+          "query": "\"Edwin Mortimer Hopkins date of birth\" OR \"Edwin M. Hopkins born\" OR \"Edwin Mortimer Hopkins biography birth date\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question string contains the phrase \\\"second season\\\" together with a specific year (a four-digit number, e.g. \\\"1891\\\") and the current query is only trying to find a coach's birth date, apply this update.\",\n      \"preserve_rule\": \"Keep producing one compact retrieval query as the agent's single output field. Preserve use of any named coach that already appears in the visible inputs when the summary explicitly requests a birth-date lookup.\",\n      \"change_rule\": \"Instead of only querying for the named coach's birth date, produce a single short search query that targets which Kansas Jayhawks team had its second season in the given year and names the head coach. Construct the query from the question's year and the phrase \\\"Kansas Jayhawks\\\" plus terms such as \\\"second season\\\" and \\\"coach\\\" (for example: a concise query combining those tokens).\",\n      \"drop_or_avoid_rule\": \"Do not limit the search solely to the coach's birth-date phrases (e.g. \\\"date of birth\\\", \\\"born\\\") when the question is framed around an event year and a team's \\\"second season\\\"; avoid overly narrow biographical queries in that case.\",\n      \"output_contract\": \"Return exactly the field `query` whose value is one compact search string that uses the question's year and the terms 'Kansas Jayhawks', 'second season' and 'coach' (concise, intended to retrieve the team/season page that lists the head coach).\",\n      \"why_local_transition\": \"The pipeline needs the team/season page that states who coached the Jayhawks in their second season for that year; switching from a pure birthdate lookup to an event/season lookup increases the chance of retrieving the missing team/coach page that bridges to the coach's biographical info.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"summary_1\": \"The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.\",\n  \"current_output\": {\n    \"query\": \"\\\"Edwin Mortimer Hopkins date of birth\\\" OR \\\"Edwin M. Hopkins born\\\" OR \\\"Edwin Mortimer Hopkins biography birth date\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"1891 Kansas Jayhawks second season coach Edwin Mortimer Hopkins\"\n  },\n  \"rationale\": \"Delta triggered by 'second season' and 1891; replaced a birthdate-only query with a concise season/coach query using the year plus 'Kansas Jayhawks', 'second season', and 'coach', while preserving the named coach.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 99,
+    "row_index": 99,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

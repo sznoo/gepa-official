@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "dd5ebe7f94b39200ee1c73f14e7584146d5b8f9f212f3003c8868d561504ab1c",
+  "created_at": "2026-07-14T16:22:16.275880+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+      "current_output": "Victoria Sinitsina (born 29 April 1995) is the 2016 Russian national silver medalist in ice dancing with Nikita Katsalapov. Nikita Katsalapov is a Russian ice dancer born 10 July 1991.",
+      "upstream_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "summary_1": "Primary topic: Victoria Sinitsina — 2016 Russian national silver (ice dancing)\n\n- Victoria Alexandrovna Sinitsina — \"born 29 April 1995\" (passage [1]).\n- Passage [1] states: \"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\" — partner entity: Nikita Katsalapov.\n- Ambiguity/missing facts: none in the passages — only Victoria Sinitsina matches the 29 April 1995 birthdate; no alternate candidates.\n- Next-hop retrieval priority: No additional retrieval needed (passages unambiguously link the 29 Apr 1995 ice dancer to the 2016 silver and to Nikita Katsalapov).",
+        "hop2_query": "Victoria Sinitsina Nikita Katsalapov 2016 Russian nationals silver partnership",
+        "hop2_titles": [
+          "Nikita Katsalapov",
+          "Victoria Sinitsina",
+          "Nikita Nagornyy",
+          "Katsalapov",
+          "Aleksandr Katsalapov",
+          "Nikita Lobintsev",
+          "Nikita Volodin"
+        ],
+        "hop2_docs": [
+          "Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.",
+          "Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.",
+          "Nikita Nagornyy | Nikita Vladimirovich Nagornyy (Russian: Никита Владимирович Нагорный , born 12 February 1997 in Rostov-on-Don, Rostov Oblast, Russia) is a Russian artistic gymnast.  He is the 2016 Olympics Team silver medalist, the 2016 European Champion on floor, 2015 European Champion on vault, the 2014 Youth Olympic All-around silver medalist and pommel horse, rings and parallel bars Champion, and the 2014 European Junior vault champion.",
+          "Katsalapov | Katsalapov (Russian: Кацалапов ) is a Russian masculine surname, its feminine counterpart is Katsalapova.  It may refer to",
+          "Aleksandr Katsalapov | Aleksandr Anatolyevich Katsalapov (Russian: Александр Анатольевич Кацалапов ; born 5 April 1986) is a Russian footballer.  He plays for FC Ararat Moscow.",
+          "Nikita Lobintsev | Nikita Konstantinovich Lobintsev (Russian: Никита Константинович Лобинцев ; born 21 November 1988) is a Russian freestyle swimmer, who won the silver medal in the 4 × 200 m freestyle relay at the 2008 Summer Olympics.",
+          "Nikita Volodin | Nikita Andreyevich Volodin (Russian: Никита Андреевич Володин , born 29 June 1999) is a Russian pair skater.  With partner Alina Ustimkina, he is the 2016 CS Tallinn Trophy champion and 2016 Youth Olympic bronze medalist."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Victoria Sinitsina",
+          "sent_id": 0,
+          "sentence": "Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 0,
+          "sentence": "Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 1,
+          "sentence": "With Victoria Sinitsina, he is the 2016 Russian national silver medalist."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWho won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\n\nCurrent agent output:\n\"Victoria Sinitsina (born 29 April 1995) is the 2016 Russian national silver medalist in ice dancing with Nikita Katsalapov. Nikita Katsalapov is a Russian ice dancer born 10 July 1991.\"\n\nActual upstream context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"summary_1\": \"Primary topic: Victoria Sinitsina — 2016 Russian national silver (ice dancing)\\n\\n- Victoria Alexandrovna Sinitsina — \\\"born 29 April 1995\\\" (passage [1]).\\n- Passage [1] states: \\\"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\\\" — partner entity: Nikita Katsalapov.\\n- Ambiguity/missing facts: none in the passages — only Victoria Sinitsina matches the 29 April 1995 birthdate; no alternate candidates.\\n- Next-hop retrieval priority: No additional retrieval needed (passages unambiguously link the 29 Apr 1995 ice dancer to the 2016 silver and to Nikita Katsalapov).\",\n  \"hop2_query\": \"Victoria Sinitsina Nikita Katsalapov 2016 Russian nationals silver partnership\",\n  \"hop2_titles\": [\n    \"Nikita Katsalapov\",\n    \"Victoria Sinitsina\",\n    \"Nikita Nagornyy\",\n    \"Katsalapov\",\n    \"Aleksandr Katsalapov\",\n    \"Nikita Lobintsev\",\n    \"Nikita Volodin\"\n  ],\n  \"hop2_docs\": [\n    \"Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\",\n    \"Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\",\n    \"Nikita Nagornyy | Nikita Vladimirovich Nagornyy (Russian: Никита Владимирович Нагорный , born 12 February 1997 in Rostov-on-Don, Rostov Oblast, Russia) is a Russian artistic gymnast.  He is the 2016 Olympics Team silver medalist, the 2016 European Champion on floor, 2015 European Champion on vault, the 2014 Youth Olympic All-around silver medalist and pommel horse, rings and parallel bars Champion, and the 2014 European Junior vault champion.\",\n    \"Katsalapov | Katsalapov (Russian: Кацалапов ) is a Russian masculine surname, its feminine counterpart is Katsalapova.  It may refer to\",\n    \"Aleksandr Katsalapov | Aleksandr Anatolyevich Katsalapov (Russian: Александр Анатольевич Кацалапов ; born 5 April 1986) is a Russian footballer.  He plays for FC Ararat Moscow.\",\n    \"Nikita Lobintsev | Nikita Konstantinovich Lobintsev (Russian: Никита Константинович Лобинцев ; born 21 November 1988) is a Russian freestyle swimmer, who won the silver medal in the 4 × 200 m freestyle relay at the 2008 Summer Olympics.\",\n    \"Nikita Volodin | Nikita Andreyevich Volodin (Russian: Никита Андреевич Володин , born 29 June 1999) is a Russian pair skater.  With partner Alina Ustimkina, he is the 2016 CS Tallinn Trophy champion and 2016 Youth Olympic bronze medalist.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Victoria Sinitsina\",\n    \"sent_id\": 0,\n    \"sentence\": \"Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 0,\n    \"sentence\": \"Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 1,\n    \"sentence\": \"With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer. With Victoria Sinitsina, Katsalapov is the 2016 Russian national silver medalist.\",\n  \"rationale\": \"summary_1 established that Victoria Sinitsina was born 29 April 1995 and is linked to the 2016 Russian national silver in ice dancing. The hop2 supporting sentences from the Nikita Katsalapov page identify him (born 10 July 1991) and state, “With Victoria Sinitsina, he is the 2016 Russian national silver medalist.” Combining these provides the necessary facts for the final answer without adding any unsupported information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 119,
+    "row_index": 119
+  }
+}

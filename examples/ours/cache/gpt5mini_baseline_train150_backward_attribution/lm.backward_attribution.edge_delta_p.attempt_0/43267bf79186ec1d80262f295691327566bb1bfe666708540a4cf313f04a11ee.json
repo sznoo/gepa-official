@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "43267bf79186ec1d80262f295691327566bb1bfe666708540a4cf313f04a11ee",
+  "created_at": "2026-07-14T13:42:53.586144+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+        "passages": [
+          "The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.  Doyle wrote four novels and 56 stories starring the fictional detective.",
+          "Canon of Sherlock Holmes | Traditionally, the canon of Sherlock Holmes consists of the 56 short stories and four novels written by Sir Arthur Conan Doyle.  In this context, the term \"canon\" is an attempt to distinguish between Doyle's original works and subsequent works by other authors using the same characters.",
+          "The Hound of the Baskervilles (disambiguation) | The Hound of the Baskervilles is the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.",
+          "Professor Moriarty | Professor James Moriarty is a fictional character and the main antagonist in some of the Sherlock Holmes stories written by Sir Arthur Conan Doyle.  Moriarty is a criminal mastermind whom Holmes describes as the \"Napoleon of crime\".  Doyle lifted the phrase from a Scotland Yard inspector who was referring to Adam Worth, a real-life criminal mastermind and one of the individuals upon whom the character of Moriarty was based.  The character was introduced primarily as a narrative device to enable Doyle to kill Sherlock Holmes, and only featured in two of the Sherlock Holmes stories.  However, in many adaptations, he has been given a greater prominence and treated as Holmes' archenemy.",
+          "Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:",
+          "The Adventures of Sherlock Holmes (film) | The Adventures of Sherlock Holmes (released theatrically as Sherlock Holmes in the United Kingdom) is a 1939 mystery-adventure film released by Twentieth Century Fox.  It is a pastiche featuring the characters of the Sherlock Holmes series of books written by Sir Arthur Conan Doyle.  The film is an adaptation of the 1899 play \"Sherlock Holmes\" by William Gillette, though there is little resemblance in the plots.",
+          "Sherlock Holmes and the Baskerville Curse | Sherlock Holmes and the Baskerville Curse is a 1983 Australian film directed by Eddie Graham.  It is an adaptation of Sir Arthur Conan Doyle's novel \"The Hound of the Baskervilles\", the third of his novels featuring Sherlock Holmes and Dr. John Watson."
+        ],
+        "current_output": "1890"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "1890",
+        "score": 0.0,
+        "generated_query": "\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\"",
+        "retrieved_titles": [
+          "The Sign of the Four",
+          "Sir Arthur Conan Doyle's Sherlock Holmes",
+          "Sherlock Holmes (play)",
+          "The Sign of Four (1932 film)",
+          "Sherlock Holmes (Stoll film series)",
+          "Sherlock Holmes (2010 film)",
+          "Canon of Sherlock Holmes"
+        ],
+        "summary_2": "1890",
+        "answer": "1890",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Richard Cabell",
+          "The Hound of the Baskervilles"
+        ]
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "First-hop evidence summary:\n- The Sign of the Four page text notes: \"The Sign of the Four (1890) ... is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.\" This provides a publication year (1890) for that novel.\n- Canon of Sherlock Holmes: Doyle wrote four novels and 56 stories featuring Holmes — confirms there are four canonical Holmes novels to consider.\n- The Hound of the Baskervilles is identified (via a disambiguation entry) as the third of those four novels, but the full Hound of the Baskervilles article itself was not included in the retrieved docs at this hop.\nBridge / missing fact for next hop:\n- Bridge entity: the specific novel title the question intends (e.g., \"The Sign of the Four\" vs. \"The Hound of the Baskervilles\").\n- Missing relation/evidence: authoritative publication year for any candidate novel other than the already-seen Sign of the Four, and confirmation that the question refers to which Holmes novel.\nCompact retrieval direction for the next agent:\n- Retrieve the full article pages for: \"The Hound of the Baskervilles\" (missing) and \"The Sign of the Four\" (to confirm publication details) to obtain definitive publication years.\n- If the question is ambiguous, perform a disambiguation lookup (query: \"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\" or check list of Doyle novels) to determine which novel the question refers to.\nThis is a summary of first-hop evidence and the precise next retrieval targets; it does not provide a final answer.",
+        "score": 0.0,
+        "generated_query": "crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\nA Study in Scarlet publication year\nThe Sign of the Four publication year\nThe Hound of the Baskervilles publication year\nThe Valley of Fear publication year\nlist of Sherlock Holmes novels publication years",
+        "retrieved_titles": [
+          "Sherlock Holmes and the Baskerville Curse",
+          "The Hound of the Baskervilles (disambiguation)",
+          "The New Annotated Sherlock Holmes",
+          "The Hound of the Baskervilles",
+          "The Hound of the Baskervilles (1972 film)",
+          "The Hounds of Baskerville",
+          "The Hound of the Baskervilles (TV serial)"
+        ],
+        "summary_2": "1902 (The Hound of the Baskervilles was serialised Aug 1901–Apr 1902 and published in book form in 1902.)",
+        "answer": "If you mean The Hound of the Baskervilles, it was published in book form in 1902 (serialized 1901–1902).  \nIf you meant The Sign of the Four, it was published in 1890.  \n(Other Holmes novels: A Study in Scarlet — 1887; The Valley of Fear — 1915.)",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "The Hound of the Baskervilles"
+        ],
+        "missing_titles_after_hop2": [
+          "Richard Cabell"
+        ]
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n  \"passages\": [\n    \"The Sign of the Four | The Sign of the Four (1890), also called The Sign of Four, is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.  Doyle wrote four novels and 56 stories starring the fictional detective.\",\n    \"Canon of Sherlock Holmes | Traditionally, the canon of Sherlock Holmes consists of the 56 short stories and four novels written by Sir Arthur Conan Doyle.  In this context, the term \\\"canon\\\" is an attempt to distinguish between Doyle's original works and subsequent works by other authors using the same characters.\",\n    \"The Hound of the Baskervilles (disambiguation) | The Hound of the Baskervilles is the third of four Sherlock Holmes novels written by Sir Arthur Conan Doyle.\",\n    \"Professor Moriarty | Professor James Moriarty is a fictional character and the main antagonist in some of the Sherlock Holmes stories written by Sir Arthur Conan Doyle.  Moriarty is a criminal mastermind whom Holmes describes as the \\\"Napoleon of crime\\\".  Doyle lifted the phrase from a Scotland Yard inspector who was referring to Adam Worth, a real-life criminal mastermind and one of the individuals upon whom the character of Moriarty was based.  The character was introduced primarily as a narrative device to enable Doyle to kill Sherlock Holmes, and only featured in two of the Sherlock Holmes stories.  However, in many adaptations, he has been given a greater prominence and treated as Holmes' archenemy.\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes | Sir Arthur Conan Doyle's Sherlock Holmes may refer to:\",\n    \"The Adventures of Sherlock Holmes (film) | The Adventures of Sherlock Holmes (released theatrically as Sherlock Holmes in the United Kingdom) is a 1939 mystery-adventure film released by Twentieth Century Fox.  It is a pastiche featuring the characters of the Sherlock Holmes series of books written by Sir Arthur Conan Doyle.  The film is an adaptation of the 1899 play \\\"Sherlock Holmes\\\" by William Gillette, though there is little resemblance in the plots.\",\n    \"Sherlock Holmes and the Baskerville Curse | Sherlock Holmes and the Baskerville Curse is a 1983 Australian film directed by Eddie Graham.  It is an adaptation of Sir Arthur Conan Doyle's novel \\\"The Hound of the Baskervilles\\\", the third of his novels featuring Sherlock Holmes and Dr. John Watson.\"\n  ],\n  \"current_output\": \"1890\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"1890\",\n  \"score\": 0.0,\n  \"generated_query\": \"\\\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\\\"\",\n  \"retrieved_titles\": [\n    \"The Sign of the Four\",\n    \"Sir Arthur Conan Doyle's Sherlock Holmes\",\n    \"Sherlock Holmes (play)\",\n    \"The Sign of Four (1932 film)\",\n    \"Sherlock Holmes (Stoll film series)\",\n    \"Sherlock Holmes (2010 film)\",\n    \"Canon of Sherlock Holmes\"\n  ],\n  \"summary_2\": \"1890\",\n  \"answer\": \"1890\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Richard Cabell\",\n    \"The Hound of the Baskervilles\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"First-hop evidence summary:\\n- The Sign of the Four page text notes: \\\"The Sign of the Four (1890) ... is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.\\\" This provides a publication year (1890) for that novel.\\n- Canon of Sherlock Holmes: Doyle wrote four novels and 56 stories featuring Holmes — confirms there are four canonical Holmes novels to consider.\\n- The Hound of the Baskervilles is identified (via a disambiguation entry) as the third of those four novels, but the full Hound of the Baskervilles article itself was not included in the retrieved docs at this hop.\\nBridge / missing fact for next hop:\\n- Bridge entity: the specific novel title the question intends (e.g., \\\"The Sign of the Four\\\" vs. \\\"The Hound of the Baskervilles\\\").\\n- Missing relation/evidence: authoritative publication year for any candidate novel other than the already-seen Sign of the Four, and confirmation that the question refers to which Holmes novel.\\nCompact retrieval direction for the next agent:\\n- Retrieve the full article pages for: \\\"The Hound of the Baskervilles\\\" (missing) and \\\"The Sign of the Four\\\" (to confirm publication details) to obtain definitive publication years.\\n- If the question is ambiguous, perform a disambiguation lookup (query: \\\"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\\\" or check list of Doyle novels) to determine which novel the question refers to.\\nThis is a summary of first-hop evidence and the precise next retrieval targets; it does not provide a final answer.\",\n  \"score\": 0.0,\n  \"generated_query\": \"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\\nA Study in Scarlet publication year\\nThe Sign of the Four publication year\\nThe Hound of the Baskervilles publication year\\nThe Valley of Fear publication year\\nlist of Sherlock Holmes novels publication years\",\n  \"retrieved_titles\": [\n    \"Sherlock Holmes and the Baskerville Curse\",\n    \"The Hound of the Baskervilles (disambiguation)\",\n    \"The New Annotated Sherlock Holmes\",\n    \"The Hound of the Baskervilles\",\n    \"The Hound of the Baskervilles (1972 film)\",\n    \"The Hounds of Baskerville\",\n    \"The Hound of the Baskervilles (TV serial)\"\n  ],\n  \"summary_2\": \"1902 (The Hound of the Baskervilles was serialised Aug 1901–Apr 1902 and published in book form in 1902.)\",\n  \"answer\": \"If you mean The Hound of the Baskervilles, it was published in book form in 1902 (serialized 1901–1902).  \\nIf you meant The Sign of the Four, it was published in 1890.  \\n(Other Holmes novels: A Study in Scarlet — 1887; The Valley of Fear — 1915.)\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"The Hound of the Baskervilles\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Richard Cabell\"\n  ]\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when agent_role == 'summary1' and the current model output is a terse direct answer (e.g., a single year token like \\\"1890\\\" or a very short numeric string) while the provided `passages` contain at least one explicit publication-year or similarly decisive fact (a short parenthetical year or date string, e.g. \\\"The Sign of the Four (1890)\\\").\",\n    \"preserve_rule\": \"Keep the agent's existing habit of extracting and quoting short, relevant factual snippets from passages and producing concise text. Continue to prefer brief, source-linked evidence excerpts (single-line bullets) and to propose concrete retrieval queries when appropriate.\",\n    \"change_rule\": \"Instead of returning a single-year or direct answer, produce a short structured summary that: (1) lists first-hop evidence bullets: for each decisive passage, give the passage title, a very short quoted fragment (<=15 words) that shows the fact (e.g., \\\"The Sign of the Four (1890)\\\"), and state in one phrase what that fragment supports (e.g., 'provides a publication year for that novel'); (2) explicitly expose the bridge entity or ambiguity needed for the next hop (name candidate novel titles mentioned in the passages and indicate which novel the question might intend); (3) list missing facts/pages needed next (explicit titles still required) and give compact retrieval directions (specific page titles to fetch and one-line example queries). End with an explicit constraint: do not provide a final answer here. Keep the summary concise (3–6 short bullets/lines).\",\n    \"drop_or_avoid_rule\": \"Do not output a final numeric year or select a definitive answer at this step. Avoid long verbatim spans from documents (>15 words) and avoid copying full target summaries. Do not assume the question's intended novel without flagging ambiguity and stating which additional pages are needed to confirm.\",\n    \"output_contract\": \"The `summary` field must be a concise (3–6 short lines) structured note containing: (a) 1–3 first-hop evidence bullets with source title + short quoted fragment (<=15 words) + one-line interpretation of what that evidence supports; (b) a one-line 'bridge / missing fact' identification naming candidate novel title(s) that link this hop to the next; (c) a one-line compact retrieval direction listing explicit page titles to fetch next (and one example query). The summary must not include a final answer to the original question.\",\n    \"why_local_transition\": \"The agent currently emits a terse direct answer (a year) rather than the required first-hop evidence summary and next-hop retrieval guidance. This minimal prompt edit redirects the agent from answering to (1) documenting which passage provided the year, (2) exposing which novel/title is the bridge or ambiguous, and (3) specifying exact next-page retrieval targets so the next agent can complete the multi-hop chain.\"\n  },\n  \"rationale\": \"This delta is the smallest coherent behavior change that converts an answer-producing summary1 into a proper first-hop evidence summary: it preserves the agent's evidence-extraction behavior but adds a strict structure requiring explicit bridge/missing-fact identification and concrete next-hop retrieval instructions. The trigger restricts edits to cases where the model currently outputs a terse answer while decisive evidence already exists in the visible passages (so the change is targeted). The rules forbid returning a final answer or long verbatim spans, complying with the anti-cheating constraints and preserving the agent's original I/O. The guidance uses only short quoted fragments that already appear in the visible inputs (e.g., the parenthetical year in the Sign of the Four passage) as allowed sample-specific anchors, and avoids copying any gold target wording.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 104,
+    "row_index": 104,
+    "bisection_round": 0,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

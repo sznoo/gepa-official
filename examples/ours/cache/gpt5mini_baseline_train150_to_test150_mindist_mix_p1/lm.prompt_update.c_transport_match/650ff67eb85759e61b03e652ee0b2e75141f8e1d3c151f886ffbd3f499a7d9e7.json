@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "650ff67eb85759e61b03e652ee0b2e75141f8e1d3c151f886ffbd3f499a7d9e7",
+  "created_at": "2026-07-14T19:42:28.587471+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 105,
+        "stable_id": "105",
+        "question": "What reporter hosted both Animal Planet Report and was a host on ESPN as well as a sports reporter?",
+        "summary_1": "Michelle Beadle",
+        "hop2_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+        "summary_2": "Michelle Beadle",
+        "answer": "Michelle Beadle",
+        "gold_support_titles": [
+          "Animal Planet Report",
+          "Michelle Beadle"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 43,
+          "w_stable_id": "43",
+          "agent": "summary1",
+          "w_question": "Who was born earlier, Dallas Green or Brian Johnson?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+            "score": 0.0,
+            "generated_query": "Verify birth dates: \"Dallas Green birth date 1934\" and \"Brian Johnson birth date 1948\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).",
+            "retrieved_titles": [
+              "Dallas Green (baseball)",
+              "J. Green",
+              "Dallas Green Monarchs",
+              "Lil Johnson (blues singer)",
+              "Brian Johnson (disambiguation)",
+              "Coley Jones",
+              "Angela Greene"
+            ],
+            "summary_2": "Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)",
+            "answer": "Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Brian Johnson",
+              "Dallas Green (musician)"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop retrieval returned multiple Brian Johnson pages but no Dallas Green page. Useful evidence found: the top hit is \"Brian Johnson (footballer, born 1948)\" which explicitly lists a birth date (29 October 1948). Other Brian Johnson results in the hop include entries with birth years 1955, 1960, 1979, and 1980 (different people). Missing / next-hop targets: \"Dallas Green (musician)\" and the general \"Brian Johnson\" (disambiguation or the specific Brian Johnson intended by the question). Bridge/missing fact needed: the birth date of Dallas Green and a clear disambiguation of which Brian Johnson the question refers to (i.e., the birth date of that specific Brian Johnson). Retrieval direction for the next agent: fetch the Dallas Green (musician) page to get his birth date, and fetch the primary/ambiguous Brian Johnson page(s) (or the disambiguation page) to identify which Brian Johnson is meant and obtain that person’s birth date; then compare the two dates to determine who was born earlier. This output does not conclude which individual was born earlier — it only summarizes first-hop evidence and specifies the next retrievals required.",
+            "score": 0.0,
+            "generated_query": "1) Dallas Green (musician) birth date / Dallas Green City and Colour born\n2) Brian Johnson disambiguation page\n3) Brian Johnson (singer, AC/DC) birth date / Brian Johnson born\n4) Brian Johnson (footballer, born 1948) birth date",
+            "retrieved_titles": [
+              "Brian Johnson (disambiguation)",
+              "Brian Johnson",
+              "Brian Johnson (footballer, born 1948)",
+              "Brian Johnson (Bethel Music singer)",
+              "Brian Johnson (athlete)",
+              "Brian Johnson (footballer, born 1955)",
+              "Brian Johnson (offensive lineman)"
+            ],
+            "summary_2": "What we have:\n- Multiple Brian Johnsons found with birth years: 1947 (AC/DC singer), 29 Oct 1948 (footballer), 1955, 1978, 1980, 1984.\n- No Dallas Green (musician) page found in the first hop.\n\nWhat’s needed next:\n1) Retrieve Dallas Green (musician) page to get his birth date.\n2) Retrieve the intended Brian Johnson page(s) — at minimum the AC/DC singer (born 5 Oct 1947) or the Brian Johnson disambiguation — to confirm which Brian Johnson is meant and obtain that person’s birth date.\n3) Compare Dallas Green’s birth date with the confirmed Brian Johnson’s birth date to determine who was born earlier.\n\nNo final answer yet — awaiting the two pages above.",
+            "answer": "Brian Johnson was born earlier — Brian Johnson: 5 October 1947; Dallas Green: 29 September 1980.",
+            "missing_recovery_rate": 0.5,
+            "recovered_missing_titles": [
+              "Brian Johnson"
+            ],
+            "missing_titles_after_hop2": [
+              "Dallas Green (musician)"
+            ]
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks to compare two people by birth date and the available passages do not unambiguously provide both individuals' birth dates or when the passages show multiple candidate pages for one of the names.",
+                "preserve_rule": "Keep the agent's existing behavior of extracting and stating concrete facts verbatim from the given passages (names, dates, page labels, and any explicit birth dates). Preserve concise factual phrasing and citation of which passage contains each fact.",
+                "change_rule": "Instead of producing a final comparison/answer, produce a concise \"first-hop findings\" summary that: (1) lists which passages mention candidates for each person named in the question and any birth dates found there; (2) explicitly notes any ambiguity (multiple candidate pages for a name) and which candidate variants were observed; (3) identifies the missing fact(s) (e.g., a birth date) or disambiguation needed to answer the question; (4) gives a concrete retrieval direction for the next hop (which pages or disambiguation pages to fetch next, or which specific candidate pages already seen should be checked). Do not draw the final born-earlier conclusion or pick between ambiguous candidates.",
+                "drop_or_avoid_rule": "Do not present a final answer or compare birth dates unless both target persons' birth dates are present and unambiguous in the provided passages. Do not assume which named individual is intended when multiple candidates exist. Do not introduce outside knowledge or new facts not present in the visible passages.",
+                "output_contract": "The summary field must begin with a short header like 'First-hop findings:' and include these labeled parts: (a) Evidence found: list each question name and the passages that mention matching candidates plus any birth dates quoted from those passages; (b) Ambiguities: note names that have multiple candidate pages observed and enumerate those candidates (using only titles/labels present in the passages); (c) Missing facts / bridge: state which specific birth date(s) or disambiguation must be retrieved to resolve the question; (d) Retrieval direction: name the next retrieval targets (e.g., retrieve pages for <person name> to disambiguate, fetch the <Name> disambiguation page or the specific candidate pages already listed). The summary must not include a final comparison or answer.",
+                "why_local_transition": "The current behavior prematurely concludes a birth-date comparison even though the provided passages lack an unambiguous pair of birth dates and show several candidate persons. This local edit prevents a wrong final answer and instead forces the agent to expose which exact page(s) or birth-date facts are missing so the pipeline can fetch them in the next hop."
+              }
+            },
+            {
+              "edge_index": 1,
+              "delta_p": {
+                "trigger": "When the question asks which of two people was born earlier AND the current passages either (a) contain multiple distinct pages for one of the names (e.g., several 'Brian Johnson' entries) or (b) lack an obvious page for the likely intended variant of the other name (e.g., no 'Dallas Green (musician)' page), or when the current summary asserts a final comparison/answer.",
+                "preserve_rule": "Keep any factual first-hop evidence already extracted from the provided passages (named persons, passage titles, and any birth years explicitly present) and keep listing of candidate pages found (for example the multiple Brian Johnson entries and any Dallas Green page that appeared).",
+                "change_rule": "Do not produce or assert a final comparison/answer. Instead, modify the summary behavior to: (1) explicitly enumerate the concrete evidence found from the passages (title + birth year when present); (2) explicitly mark ambiguous names and any missing expected pages (e.g., note that 'Dallas Green (musician)' was not returned); (3) emit a short, prioritized set of next-hop retrieval targets/queries (page titles or disambiguation pages to fetch, e.g., 'Dallas Green (musician)', 'Brian Johnson (disambiguation)', and any specific candidate Brian Johnson pages that appeared); (4) state that the final birth-date comparison is deferred until those next-hop pages are retrieved.",
+                "drop_or_avoid_rule": "Avoid: (a) asserting who was born earlier or producing a final answer; (b) assuming which individual a shared name refers to; (c) adding facts not present in the given passages; (d) copying long literal spans that only appear in later/target sources. Do not change the output field names or format.",
+                "output_contract": "The produced `summary` must (in one paragraph or a short bullet list) 1) list the specific first-hop evidence found (titles and any birth years present), 2) identify ambiguous/missing entities that block answering (naming which page is missing or which names have multiple candidates), 3) provide 2–4 concrete next-hop retrieval queries/pages to fetch, and 4) explicitly defer the final comparison/answer until those retrievals. The agent must not output a final answer in this summary.",
+                "why_local_transition": "The smallest necessary correction is to stop allowing premature conclusions when names are ambiguous or when an expected page is missing. This rule forces the summarizer to surface the ambiguity and to give explicit next-hop retrieval directions rather than producing an incorrect final comparison."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Michelle Beadle",
+            "score": 1.0,
+            "generated_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+            "retrieved_titles": [
+              "Michelle Beadle",
+              "Animal Planet Report",
+              "Max Kellerman",
+              "Michelle Beisner",
+              "The B.S. Report",
+              "The Sports Reporters",
+              "List of BS Report episodes"
+            ],
+            "summary_2": "Michelle Beadle",
+            "answer": "Michelle Beadle",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Michelle Beadle"
+            ],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 104,
+          "w_stable_id": "104",
+          "agent": "summary1",
+          "w_question": "What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "1890",
+            "score": 0.0,
+            "generated_query": "\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\"",
+            "retrieved_titles": [
+              "The Sign of the Four",
+              "Sir Arthur Conan Doyle's Sherlock Holmes",
+              "Sherlock Holmes (play)",
+              "The Sign of Four (1932 film)",
+              "Sherlock Holmes (Stoll film series)",
+              "Sherlock Holmes (2010 film)",
+              "Canon of Sherlock Holmes"
+            ],
+            "summary_2": "1890",
+            "answer": "1890",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Richard Cabell",
+              "The Hound of the Baskervilles"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence summary:\n- The Sign of the Four page text notes: \"The Sign of the Four (1890) ... is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.\" This provides a publication year (1890) for that novel.\n- Canon of Sherlock Holmes: Doyle wrote four novels and 56 stories featuring Holmes — confirms there are four canonical Holmes novels to consider.\n- The Hound of the Baskervilles is identified (via a disambiguation entry) as the third of those four novels, but the full Hound of the Baskervilles article itself was not included in the retrieved docs at this hop.\nBridge / missing fact for next hop:\n- Bridge entity: the specific novel title the question intends (e.g., \"The Sign of the Four\" vs. \"The Hound of the Baskervilles\").\n- Missing relation/evidence: authoritative publication year for any candidate novel other than the already-seen Sign of the Four, and confirmation that the question refers to which Holmes novel.\nCompact retrieval direction for the next agent:\n- Retrieve the full article pages for: \"The Hound of the Baskervilles\" (missing) and \"The Sign of the Four\" (to confirm publication details) to obtain definitive publication years.\n- If the question is ambiguous, perform a disambiguation lookup (query: \"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\" or check list of Doyle novels) to determine which novel the question refers to.\nThis is a summary of first-hop evidence and the precise next retrieval targets; it does not provide a final answer.",
+            "score": 0.0,
+            "generated_query": "crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\nA Study in Scarlet publication year\nThe Sign of the Four publication year\nThe Hound of the Baskervilles publication year\nThe Valley of Fear publication year\nlist of Sherlock Holmes novels publication years",
+            "retrieved_titles": [
+              "Sherlock Holmes and the Baskerville Curse",
+              "The Hound of the Baskervilles (disambiguation)",
+              "The New Annotated Sherlock Holmes",
+              "The Hound of the Baskervilles",
+              "The Hound of the Baskervilles (1972 film)",
+              "The Hounds of Baskerville",
+              "The Hound of the Baskervilles (TV serial)"
+            ],
+            "summary_2": "1902 (The Hound of the Baskervilles was serialised Aug 1901–Apr 1902 and published in book form in 1902.)",
+            "answer": "If you mean The Hound of the Baskervilles, it was published in book form in 1902 (serialized 1901–1902).  \nIf you meant The Sign of the Four, it was published in 1890.  \n(Other Holmes novels: A Study in Scarlet — 1887; The Valley of Fear — 1915.)",
+            "missing_recovery_rate": 0.5,
+            "recovered_missing_titles": [
+              "The Hound of the Baskervilles"
+            ],
+            "missing_titles_after_hop2": [
+              "Richard Cabell"
+            ]
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when agent_role == 'summary1' and the current model output is a terse direct answer (e.g., a single year token like \"1890\" or a very short numeric string) while the provided `passages` contain at least one explicit publication-year or similarly decisive fact (a short parenthetical year or date string, e.g. \"The Sign of the Four (1890)\").",
+                "preserve_rule": "Keep the agent's existing habit of extracting and quoting short, relevant factual snippets from passages and producing concise text. Continue to prefer brief, source-linked evidence excerpts (single-line bullets) and to propose concrete retrieval queries when appropriate.",
+                "change_rule": "Instead of returning a single-year or direct answer, produce a short structured summary that: (1) lists first-hop evidence bullets: for each decisive passage, give the passage title, a very short quoted fragment (<=15 words) that shows the fact (e.g., \"The Sign of the Four (1890)\"), and state in one phrase what that fragment supports (e.g., 'provides a publication year for that novel'); (2) explicitly expose the bridge entity or ambiguity needed for the next hop (name candidate novel titles mentioned in the passages and indicate which novel the question might intend); (3) list missing facts/pages needed next (explicit titles still required) and give compact retrieval directions (specific page titles to fetch and one-line example queries). End with an explicit constraint: do not provide a final answer here. Keep the summary concise (3–6 short bullets/lines).",
+                "drop_or_avoid_rule": "Do not output a final numeric year or select a definitive answer at this step. Avoid long verbatim spans from documents (>15 words) and avoid copying full target summaries. Do not assume the question's intended novel without flagging ambiguity and stating which additional pages are needed to confirm.",
+                "output_contract": "The `summary` field must be a concise (3–6 short lines) structured note containing: (a) 1–3 first-hop evidence bullets with source title + short quoted fragment (<=15 words) + one-line interpretation of what that evidence supports; (b) a one-line 'bridge / missing fact' identification naming candidate novel title(s) that link this hop to the next; (c) a one-line compact retrieval direction listing explicit page titles to fetch next (and one example query). The summary must not include a final answer to the original question.",
+                "why_local_transition": "The agent currently emits a terse direct answer (a year) rather than the required first-hop evidence summary and next-hop retrieval guidance. This minimal prompt edit redirects the agent from answering to (1) documenting which passage provided the year, (2) exposing which novel/title is the bridge or ambiguous, and (3) specifying exact next-page retrieval targets so the next agent can complete the multi-hop chain."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Michelle Beadle",
+            "score": 1.0,
+            "generated_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+            "retrieved_titles": [
+              "Michelle Beadle",
+              "Animal Planet Report",
+              "Max Kellerman",
+              "Michelle Beisner",
+              "The B.S. Report",
+              "The Sports Reporters",
+              "List of BS Report episodes"
+            ],
+            "summary_2": "Michelle Beadle",
+            "answer": "Michelle Beadle",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Michelle Beadle"
+            ],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 93,
+          "w_stable_id": "93",
+          "agent": "summary1",
+          "w_question": "What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "1950",
+            "score": 0.0,
+            "generated_query": "\"1950 Indianapolis 500\" \"car failed to arrive\" \"Italian champion\"",
+            "retrieved_titles": [
+              "1950 Indianapolis 500",
+              "Mike Salay",
+              "1950 AAA Championship Car season",
+              "Rich Vogler",
+              "1995 Indianapolis 500",
+              "George Fonder",
+              "Charles Van Acker"
+            ],
+            "summary_2": "1950",
+            "answer": "1950",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Giuseppe Farina"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Summary of first-hop evidence: The 1950 Indianapolis 500 article states that Giuseppe Farina originally planned to enter the race but his car never arrived. Bridge entity / missing relation for next hop: Giuseppe Farina — we need the year he was first the Italian champion. Retrieval direction for the next agent: open the 'Giuseppe Farina' biography (or reliable profiles of Giuseppe Farina) and locate his championship history/early career sections; search within that page for phrases like 'Italian champion', 'Italian Championship', 'national title', or 'first became champion' to extract the year he first won the Italian championship. This is a summary1 output (not a final answer).",
+            "score": 1.0,
+            "generated_query": "Open the Giuseppe Farina biography (Wikipedia or authoritative motorsport profiles) and find when he first became the Italian champion. Search the page for \"Italian champion\", \"Italian Championship\", \"Italian title\", or \"first became champion\" and extract the year and citation.",
+            "retrieved_titles": [
+              "Giuseppe Farina",
+              "1950 Italian Grand Prix",
+              "List of Italian football champions",
+              "Flavia Pennetta",
+              "Enrico Fabris",
+              "Formula One drivers from Italy",
+              "David Solari (cyclist)"
+            ],
+            "summary_2": "1937",
+            "answer": "1937",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Giuseppe Farina"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When any passage states that a named person \"planned to enter\" or that their \"car never arrived\" (e.g., the passage mentioning Giuseppe Farina).",
+                "preserve_rule": "Keep the existing instruction to produce the single field `summary` from the given `question` and `passages`, and retain the concise summarization style already used by the agent.",
+                "change_rule": "Require the `summary` to (a) include one concise sentence that summarizes the first-hop evidence and explicitly names the person mentioned in the passage as the relevant actor (for example, name the person whose car failed to arrive), (b) explicitly label that named person as the bridge entity and state the specific missing fact needed for the next hop (the year they were first the Italian champion), and (c) provide concrete retrieval directions for the next agent: instruct to open the named person's biography or authoritative motorsport profiles and search the 'Career'/'Early career' sections and for keywords/phrases such as \"Italian champion\", \"Italian Championship\", \"Italian title\", or \"first became champion\" to extract the year. Do not attempt to provide the year or any final answer in the summary.",
+                "drop_or_avoid_rule": "Do not output a candidate answer or a bare year (avoid outputs like a single number). Do not speculate or assert the missing year; do not copy long target-only spans or any hidden/gold label. Avoid producing only a terse numeric summary that lacks the bridge entity and next-hop instructions.",
+                "output_contract": "The `summary` must be a short paragraph containing: (1) a one-sentence first-hop evidence summary that names the person mentioned in the passages and the fact that their car failed to arrive; (2) an explicit 'Bridge entity / missing fact' line naming that person and specifying that the missing fact is the year they first became Italian champion; (3) a 'Retrieval direction' line giving exact next steps and search keywords/sections to consult (biography page, 'Career'/'Early career', keywords like 'Italian champion'/'Italian Championship'). The summary must not include the answer year or any unsupported claims.",
+                "why_local_transition": "The current output is just a year and omits the required bridge entity and retrieval guidance. This targeted prompt edit forces the agent to expose the bridge entity (the named person whose car didn't arrive) and explicit next-hop search instructions while preserving the original summarization behavior and avoiding premature answering."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Michelle Beadle",
+            "score": 1.0,
+            "generated_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+            "retrieved_titles": [
+              "Michelle Beadle",
+              "Animal Planet Report",
+              "Max Kellerman",
+              "Michelle Beisner",
+              "The B.S. Report",
+              "The Sports Reporters",
+              "List of BS Report episodes"
+            ],
+            "summary_2": "Michelle Beadle",
+            "answer": "Michelle Beadle",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Michelle Beadle"
+            ],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 97,
+          "w_stable_id": "97",
+          "agent": "summary1",
+          "w_question": "In what year were the pioneers of managed care in the United States established?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "1947",
+            "score": 0.0,
+            "generated_query": "\"pioneers of managed care\" \"established 1947\" United States",
+            "retrieved_titles": [
+              "Medical facilities of Seattle",
+              "Enhanced Primary Care Case Management Program",
+              "Medicaid managed care",
+              "Diversified Pharmaceutical Services",
+              "Managed care",
+              "Case management (US health system)",
+              "Vermont health care reform"
+            ],
+            "summary_2": "1947",
+            "answer": "1947",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Group Health Cooperative"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "The first-hop evidence (Medical facilities of Seattle) identifies Group Health Cooperative as “one of the pioneers of managed care in the United States.” Bridge entity: Group Health Cooperative. Missing fact needed for the final answer: the year Group Health Cooperative was established/founded. Retrieval direction for the next hop: retrieve the “Group Health Cooperative” page (look in the article lede, infobox, or history/organization sections for founding/establishment/incorporation year; also check reliable sources cited there).",
+            "score": 1.0,
+            "generated_query": "Group Health Cooperative founded year site:wikipedia.org OR \"Group Health Cooperative history\" site:grouphealth.org OR \"Group Health Cooperative founded\"",
+            "retrieved_titles": [
+              "Group Health Cooperative",
+              "Cooper Drum Company",
+              "National Association for Public Health Policy",
+              "Michael Shadid",
+              "Health insurance cooperative",
+              "International Cooperative Biodiversity Groups",
+              "Desjardins Financial Security"
+            ],
+            "summary_2": "1945",
+            "answer": "1945",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Group Health Cooperative"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If any input passage contains the substring \"pioneer\" or \"pioneers\" (case-insensitive) AND the question requests a year/founding/establishment, apply this delta.",
+                "preserve_rule": "Keep extracting and citing the supporting passage/title and preserve the exact entity token(s) as they appear in the passages (e.g., 'Group Health Cooperative'). Keep concise, factual language summarizing what the first-hop passage states.",
+                "change_rule": "Do not attempt to produce a final numeric answer. Instead, produce a concise first-hop summary that: (1) names the supporting passage/title or quotes the short phrase from it (use at most a short quoted phrase already present in the passages, e.g. \"one of the pioneers of managed care\"); (2) explicitly identifies the bridge entity exactly as it appears in the passages; (3) states the single missing fact needed for the next hop (the founding/establishment year); and (4) gives a clear next-hop retrieval direction: retrieve the bridge entity's page and check the lede/infobox or history/organization sections for the founding/establishment year. Do not include the founding year or other facts not present in the given passages.",
+                "drop_or_avoid_rule": "Avoid outputting any numeric year, any invented facts, long verbatim spans that are not already visible in the passages, or step-by-step query strings. Avoid turning the summary into a final answer; avoid adding unrelated retrieval suggestions.",
+                "output_contract": "Produce only the 'summary' text. The summary must be 1–3 short sentences (or a 2–4 line bullet-style list) containing: supporting source/title or a short quote present in the passages, the bridge entity name verbatim, the missing fact needed (phrased as 'founding/establishment year'), and the precise next-hop direction (retrieve the bridge entity page; check lede/infobox/history). Do not include a numeric year or extra speculative details.",
+                "why_local_transition": "The agent currently outputs a final numeric year instead of exposing the bridge entity and the missing fact/direction needed for the next hop. This delta enforces the agent role (summarize first-hop evidence and expose the bridge/missing fact) so the pipeline proceeds to the correct retrieval."
+              }
+            },
+            {
+              "edge_index": 1,
+              "delta_p": {
+                "trigger": "If any passage mentions 'Group Health Cooperative' or contains wording like 'pioneers of managed care'.",
+                "preserve_rule": "Keep the agent's existing behavior of extracting and concisely summarizing the first-hop evidence from the provided passages (cite the passage title or fragment that supports the claim).",
+                "change_rule": "Also explicitly (a) name the bridge entity found in the first-hop evidence (e.g., 'Group Health Cooperative'), (b) state the specific missing fact needed for the next hop in descriptive terms (the founding/establishment/incorporation year), and (c) give a precise next-hop retrieval direction: retrieve the 'Group Health Cooperative' article/page and check the article lede, infobox, and history/organization sections (and the reliable sources cited there) for the founding/establishment year. Do not attempt to supply the year here.",
+                "drop_or_avoid_rule": "Do not state or guess the founding year, do not provide a final answer to the question, and do not output external search queries or fetch results yourself. Avoid adding unrelated background or long extraneous details—only include what is needed to enable the next hop.",
+                "output_contract": "Produce the field `summary` that (1) cites the passage evidence that identifies Group Health Cooperative as a pioneer of managed care, (2) explicitly names 'Group Health Cooperative' as the bridge entity, (3) identifies the missing fact as the organization's founding/establishment year (worded, not a numeric year), and (4) gives the clear next-hop retrieval direction described above. Keep the summary concise and do not include the founding year or any final answer.",
+                "why_local_transition": "The current summary must be augmented to expose the bridge entity and to give a concrete retrieval direction for finding the establishment year. This small, local edit prevents premature answering and ensures the next agent knows exactly where to look for the missing founding/establishment date."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Michelle Beadle",
+            "score": 1.0,
+            "generated_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+            "retrieved_titles": [
+              "Michelle Beadle",
+              "Animal Planet Report",
+              "Max Kellerman",
+              "Michelle Beisner",
+              "The B.S. Report",
+              "The Sports Reporters",
+              "List of BS Report episodes"
+            ],
+            "summary_2": "Michelle Beadle",
+            "answer": "Michelle Beadle",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Michelle Beadle"
+            ],
+            "missing_titles_after_hop2": []
+          }
+        },
+        {
+          "w_sample_index": 136,
+          "w_stable_id": "136",
+          "agent": "summary1",
+          "w_question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Scrivener's Moon",
+            "score": 0.0,
+            "generated_query": "What is the series order (counting the prequel \"Traction City\") for the Philip Reeve novella/series — is \"Scrivener's Moon\" the third book?",
+            "retrieved_titles": [
+              "Fever Crumb Series",
+              "Traction City (novella)",
+              "Fever Crumb",
+              "Scrivener's Moon",
+              "A Web of Air",
+              "Infernal Devices (Philip Reeve novel)",
+              "Alice series"
+            ],
+            "summary_2": "Scrivener's Moon",
+            "answer": "Scrivener's Moon",
+            "missing_recovery_rate": 0.0,
+            "recovered_missing_titles": [],
+            "missing_titles_after_hop2": [
+              "Mortal Engines Quartet"
+            ]
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "First-hop evidence: 'Traction City' is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet. Bridge entity / missing fact: the Mortal Engines Quartet — specifically the canonical ordered list of books in that series and whether the prequel 'Traction City' is to be counted when numbering (i.e., what is meant by “including the prequel”). Retrieval direction for next hop: retrieve the 'Mortal Engines Quartet' (series) page or an authoritative bibliography to obtain the series' titles in order and any notes on associated prequel novellas; from that ordered list determine which title is the third when the prequel is included.",
+            "score": 1.0,
+            "generated_query": "Provide the canonical ordered list of works in Philip Reeve's Mortal Engines series (the Mortal Engines Quartet) and any associated prequel novellas (notably \"Traction City\"). List the works in sequence (including \"Traction City\" as the first entry) and state which title is the third when the prequel is included. Include publication years and sources if available.",
+            "retrieved_titles": [
+              "Traction City (novella)",
+              "Fever Crumb Series",
+              "List of Mortal Engines Quartet characters",
+              "A Web of Air",
+              "Mortal Engines Quartet",
+              "Fever Crumb",
+              "List of traction engine manufacturers"
+            ],
+            "summary_2": "Predator's Gold.",
+            "answer": "Predator's Gold",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Mortal Engines Quartet"
+            ],
+            "missing_titles_after_hop2": []
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks for an ordinal position “including the prequel” (or otherwise depends on counting a prequel), and the provided passages identify a work as a prequel (e.g., mention of 'Traction City' as a prequel to the Mortal Engines series).",
+                "preserve_rule": "Keep the agent's existing behavior of producing a concise first-hop summary: extract and paraphrase the key evidence from the given passages that bears on the question, and expose the bridge entity or missing fact needed for the next retrieval hop.",
+                "change_rule": "Additionally require the summary to explicitly (a) name the series or major entity that must be consulted next (e.g., 'Mortal Engines Quartet'), (b) state the specific missing fact needed to answer the question (the canonical ordered list of works and whether the prequel should be counted when numbering), and (c) give a precise retrieval direction for the next agent (request the series/bibliography page or an authoritative list of the series' works and any associated prequel novellas; instruct to return the ordered list including publication years and then identify which title is third if the prequel is counted first). Phrase this as a short instruction to the next hop rather than as an answer.",
+                "drop_or_avoid_rule": "Do not assert or guess the final numbered answer in this summary; do not return a single-book answer as the summary output. Avoid copying long literal spans found only in target-state examples. Do not instruct the agent to perform the next-hop retrieval itself here; only specify what should be retrieved and why.",
+                "output_contract": "The produced `summary` must include three concise elements: (1) First-hop evidence (1–2 short sentences quoting/paraphrasing the passage that labels 'Traction City' as a prequel), (2) Bridge entity / missing fact (explicitly name the series to consult, e.g., 'Mortal Engines Quartet', and state the exact missing fact: the canonical ordered list of works and whether the prequel counts toward numbering), and (3) Retrieval direction for next hop (one short sentence instructing the next agent which page(s) to fetch and what to extract: the series' ordered titles, publication years, and then determine which title is third when counting the prequel as the first). Keep overall summary concise (about 2–4 sentences total).",
+                "why_local_transition": "The current behavior outputs a candidate title directly instead of exposing the underlying missing series ordering that the next hop must recover. This minimal prompt change forces the agent to surface the bridge entity (the Mortal Engines series) and give an explicit next-hop retrieval directive so the pipeline can correctly determine ordinal numbering including the prequel."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Michelle Beadle",
+            "score": 1.0,
+            "generated_query": "Michelle Beadle \"Animal Planet Report\" host ESPN sports reporter biography",
+            "retrieved_titles": [
+              "Michelle Beadle",
+              "Animal Planet Report",
+              "Max Kellerman",
+              "Michelle Beisner",
+              "The B.S. Report",
+              "The Sports Reporters",
+              "List of BS Report episodes"
+            ],
+            "summary_2": "Michelle Beadle",
+            "answer": "Michelle Beadle",
+            "missing_recovery_rate": 1.0,
+            "recovered_missing_titles": [
+              "Michelle Beadle"
+            ],
+            "missing_titles_after_hop2": []
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 105,\n  \"stable_id\": \"105\",\n  \"question\": \"What reporter hosted both Animal Planet Report and was a host on ESPN as well as a sports reporter?\",\n  \"summary_1\": \"Michelle Beadle\",\n  \"hop2_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n  \"summary_2\": \"Michelle Beadle\",\n  \"answer\": \"Michelle Beadle\",\n  \"gold_support_titles\": [\n    \"Animal Planet Report\",\n    \"Michelle Beadle\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 43,\n    \"w_stable_id\": \"43\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n      \"score\": 0.0,\n      \"generated_query\": \"Verify birth dates: \\\"Dallas Green birth date 1934\\\" and \\\"Brian Johnson birth date 1948\\\" (Dallas Green — which Dallas Green: baseball manager born 1934; Brian Johnson — AC/DC singer).\",\n      \"retrieved_titles\": [\n        \"Dallas Green (baseball)\",\n        \"J. Green\",\n        \"Dallas Green Monarchs\",\n        \"Lil Johnson (blues singer)\",\n        \"Brian Johnson (disambiguation)\",\n        \"Coley Jones\",\n        \"Angela Greene\"\n      ],\n      \"summary_2\": \"Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)\",\n      \"answer\": \"Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Brian Johnson\",\n        \"Dallas Green (musician)\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop retrieval returned multiple Brian Johnson pages but no Dallas Green page. Useful evidence found: the top hit is \\\"Brian Johnson (footballer, born 1948)\\\" which explicitly lists a birth date (29 October 1948). Other Brian Johnson results in the hop include entries with birth years 1955, 1960, 1979, and 1980 (different people). Missing / next-hop targets: \\\"Dallas Green (musician)\\\" and the general \\\"Brian Johnson\\\" (disambiguation or the specific Brian Johnson intended by the question). Bridge/missing fact needed: the birth date of Dallas Green and a clear disambiguation of which Brian Johnson the question refers to (i.e., the birth date of that specific Brian Johnson). Retrieval direction for the next agent: fetch the Dallas Green (musician) page to get his birth date, and fetch the primary/ambiguous Brian Johnson page(s) (or the disambiguation page) to identify which Brian Johnson is meant and obtain that person’s birth date; then compare the two dates to determine who was born earlier. This output does not conclude which individual was born earlier — it only summarizes first-hop evidence and specifies the next retrievals required.\",\n      \"score\": 0.0,\n      \"generated_query\": \"1) Dallas Green (musician) birth date / Dallas Green City and Colour born\\n2) Brian Johnson disambiguation page\\n3) Brian Johnson (singer, AC/DC) birth date / Brian Johnson born\\n4) Brian Johnson (footballer, born 1948) birth date\",\n      \"retrieved_titles\": [\n        \"Brian Johnson (disambiguation)\",\n        \"Brian Johnson\",\n        \"Brian Johnson (footballer, born 1948)\",\n        \"Brian Johnson (Bethel Music singer)\",\n        \"Brian Johnson (athlete)\",\n        \"Brian Johnson (footballer, born 1955)\",\n        \"Brian Johnson (offensive lineman)\"\n      ],\n      \"summary_2\": \"What we have:\\n- Multiple Brian Johnsons found with birth years: 1947 (AC/DC singer), 29 Oct 1948 (footballer), 1955, 1978, 1980, 1984.\\n- No Dallas Green (musician) page found in the first hop.\\n\\nWhat’s needed next:\\n1) Retrieve Dallas Green (musician) page to get his birth date.\\n2) Retrieve the intended Brian Johnson page(s) — at minimum the AC/DC singer (born 5 Oct 1947) or the Brian Johnson disambiguation — to confirm which Brian Johnson is meant and obtain that person’s birth date.\\n3) Compare Dallas Green’s birth date with the confirmed Brian Johnson’s birth date to determine who was born earlier.\\n\\nNo final answer yet — awaiting the two pages above.\",\n      \"answer\": \"Brian Johnson was born earlier — Brian Johnson: 5 October 1947; Dallas Green: 29 September 1980.\",\n      \"missing_recovery_rate\": 0.5,\n      \"recovered_missing_titles\": [\n        \"Brian Johnson\"\n      ],\n      \"missing_titles_after_hop2\": [\n        \"Dallas Green (musician)\"\n      ]\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks to compare two people by birth date and the available passages do not unambiguously provide both individuals' birth dates or when the passages show multiple candidate pages for one of the names.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of extracting and stating concrete facts verbatim from the given passages (names, dates, page labels, and any explicit birth dates). Preserve concise factual phrasing and citation of which passage contains each fact.\",\n          \"change_rule\": \"Instead of producing a final comparison/answer, produce a concise \\\"first-hop findings\\\" summary that: (1) lists which passages mention candidates for each person named in the question and any birth dates found there; (2) explicitly notes any ambiguity (multiple candidate pages for a name) and which candidate variants were observed; (3) identifies the missing fact(s) (e.g., a birth date) or disambiguation needed to answer the question; (4) gives a concrete retrieval direction for the next hop (which pages or disambiguation pages to fetch next, or which specific candidate pages already seen should be checked). Do not draw the final born-earlier conclusion or pick between ambiguous candidates.\",\n          \"drop_or_avoid_rule\": \"Do not present a final answer or compare birth dates unless both target persons' birth dates are present and unambiguous in the provided passages. Do not assume which named individual is intended when multiple candidates exist. Do not introduce outside knowledge or new facts not present in the visible passages.\",\n          \"output_contract\": \"The summary field must begin with a short header like 'First-hop findings:' and include these labeled parts: (a) Evidence found: list each question name and the passages that mention matching candidates plus any birth dates quoted from those passages; (b) Ambiguities: note names that have multiple candidate pages observed and enumerate those candidates (using only titles/labels present in the passages); (c) Missing facts / bridge: state which specific birth date(s) or disambiguation must be retrieved to resolve the question; (d) Retrieval direction: name the next retrieval targets (e.g., retrieve pages for <person name> to disambiguate, fetch the <Name> disambiguation page or the specific candidate pages already listed). The summary must not include a final comparison or answer.\",\n          \"why_local_transition\": \"The current behavior prematurely concludes a birth-date comparison even though the provided passages lack an unambiguous pair of birth dates and show several candidate persons. This local edit prevents a wrong final answer and instead forces the agent to expose which exact page(s) or birth-date facts are missing so the pipeline can fetch them in the next hop.\"\n        }\n      },\n      {\n        \"edge_index\": 1,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks which of two people was born earlier AND the current passages either (a) contain multiple distinct pages for one of the names (e.g., several 'Brian Johnson' entries) or (b) lack an obvious page for the likely intended variant of the other name (e.g., no 'Dallas Green (musician)' page), or when the current summary asserts a final comparison/answer.\",\n          \"preserve_rule\": \"Keep any factual first-hop evidence already extracted from the provided passages (named persons, passage titles, and any birth years explicitly present) and keep listing of candidate pages found (for example the multiple Brian Johnson entries and any Dallas Green page that appeared).\",\n          \"change_rule\": \"Do not produce or assert a final comparison/answer. Instead, modify the summary behavior to: (1) explicitly enumerate the concrete evidence found from the passages (title + birth year when present); (2) explicitly mark ambiguous names and any missing expected pages (e.g., note that 'Dallas Green (musician)' was not returned); (3) emit a short, prioritized set of next-hop retrieval targets/queries (page titles or disambiguation pages to fetch, e.g., 'Dallas Green (musician)', 'Brian Johnson (disambiguation)', and any specific candidate Brian Johnson pages that appeared); (4) state that the final birth-date comparison is deferred until those next-hop pages are retrieved.\",\n          \"drop_or_avoid_rule\": \"Avoid: (a) asserting who was born earlier or producing a final answer; (b) assuming which individual a shared name refers to; (c) adding facts not present in the given passages; (d) copying long literal spans that only appear in later/target sources. Do not change the output field names or format.\",\n          \"output_contract\": \"The produced `summary` must (in one paragraph or a short bullet list) 1) list the specific first-hop evidence found (titles and any birth years present), 2) identify ambiguous/missing entities that block answering (naming which page is missing or which names have multiple candidates), 3) provide 2–4 concrete next-hop retrieval queries/pages to fetch, and 4) explicitly defer the final comparison/answer until those retrievals. The agent must not output a final answer in this summary.\",\n          \"why_local_transition\": \"The smallest necessary correction is to stop allowing premature conclusions when names are ambiguous or when an expected page is missing. This rule forces the summarizer to surface the ambiguity and to give explicit next-hop retrieval directions rather than producing an incorrect final comparison.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Michelle Beadle\",\n      \"score\": 1.0,\n      \"generated_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n      \"retrieved_titles\": [\n        \"Michelle Beadle\",\n        \"Animal Planet Report\",\n        \"Max Kellerman\",\n        \"Michelle Beisner\",\n        \"The B.S. Report\",\n        \"The Sports Reporters\",\n        \"List of BS Report episodes\"\n      ],\n      \"summary_2\": \"Michelle Beadle\",\n      \"answer\": \"Michelle Beadle\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Michelle Beadle\"\n      ],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 104,\n    \"w_stable_id\": \"104\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"What year was the crime novel written by Sir Arthur Conan Doyle written, featuring Sherlock Holmes?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"1890\",\n      \"score\": 0.0,\n      \"generated_query\": \"\\\"The Sign of the Four publication year 1890 Sir Arthur Conan Doyle Sherlock Holmes\\\"\",\n      \"retrieved_titles\": [\n        \"The Sign of the Four\",\n        \"Sir Arthur Conan Doyle's Sherlock Holmes\",\n        \"Sherlock Holmes (play)\",\n        \"The Sign of Four (1932 film)\",\n        \"Sherlock Holmes (Stoll film series)\",\n        \"Sherlock Holmes (2010 film)\",\n        \"Canon of Sherlock Holmes\"\n      ],\n      \"summary_2\": \"1890\",\n      \"answer\": \"1890\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Richard Cabell\",\n        \"The Hound of the Baskervilles\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence summary:\\n- The Sign of the Four page text notes: \\\"The Sign of the Four (1890) ... is the second novel featuring Sherlock Holmes written by Sir Arthur Conan Doyle.\\\" This provides a publication year (1890) for that novel.\\n- Canon of Sherlock Holmes: Doyle wrote four novels and 56 stories featuring Holmes — confirms there are four canonical Holmes novels to consider.\\n- The Hound of the Baskervilles is identified (via a disambiguation entry) as the third of those four novels, but the full Hound of the Baskervilles article itself was not included in the retrieved docs at this hop.\\nBridge / missing fact for next hop:\\n- Bridge entity: the specific novel title the question intends (e.g., \\\"The Sign of the Four\\\" vs. \\\"The Hound of the Baskervilles\\\").\\n- Missing relation/evidence: authoritative publication year for any candidate novel other than the already-seen Sign of the Four, and confirmation that the question refers to which Holmes novel.\\nCompact retrieval direction for the next agent:\\n- Retrieve the full article pages for: \\\"The Hound of the Baskervilles\\\" (missing) and \\\"The Sign of the Four\\\" (to confirm publication details) to obtain definitive publication years.\\n- If the question is ambiguous, perform a disambiguation lookup (query: \\\"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\\\" or check list of Doyle novels) to determine which novel the question refers to.\\nThis is a summary of first-hop evidence and the precise next retrieval targets; it does not provide a final answer.\",\n      \"score\": 0.0,\n      \"generated_query\": \"crime novel by Sir Arthur Conan Doyle featuring Sherlock Holmes publication year\\nA Study in Scarlet publication year\\nThe Sign of the Four publication year\\nThe Hound of the Baskervilles publication year\\nThe Valley of Fear publication year\\nlist of Sherlock Holmes novels publication years\",\n      \"retrieved_titles\": [\n        \"Sherlock Holmes and the Baskerville Curse\",\n        \"The Hound of the Baskervilles (disambiguation)\",\n        \"The New Annotated Sherlock Holmes\",\n        \"The Hound of the Baskervilles\",\n        \"The Hound of the Baskervilles (1972 film)\",\n        \"The Hounds of Baskerville\",\n        \"The Hound of the Baskervilles (TV serial)\"\n      ],\n      \"summary_2\": \"1902 (The Hound of the Baskervilles was serialised Aug 1901–Apr 1902 and published in book form in 1902.)\",\n      \"answer\": \"If you mean The Hound of the Baskervilles, it was published in book form in 1902 (serialized 1901–1902).  \\nIf you meant The Sign of the Four, it was published in 1890.  \\n(Other Holmes novels: A Study in Scarlet — 1887; The Valley of Fear — 1915.)\",\n      \"missing_recovery_rate\": 0.5,\n      \"recovered_missing_titles\": [\n        \"The Hound of the Baskervilles\"\n      ],\n      \"missing_titles_after_hop2\": [\n        \"Richard Cabell\"\n      ]\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when agent_role == 'summary1' and the current model output is a terse direct answer (e.g., a single year token like \\\"1890\\\" or a very short numeric string) while the provided `passages` contain at least one explicit publication-year or similarly decisive fact (a short parenthetical year or date string, e.g. \\\"The Sign of the Four (1890)\\\").\",\n          \"preserve_rule\": \"Keep the agent's existing habit of extracting and quoting short, relevant factual snippets from passages and producing concise text. Continue to prefer brief, source-linked evidence excerpts (single-line bullets) and to propose concrete retrieval queries when appropriate.\",\n          \"change_rule\": \"Instead of returning a single-year or direct answer, produce a short structured summary that: (1) lists first-hop evidence bullets: for each decisive passage, give the passage title, a very short quoted fragment (<=15 words) that shows the fact (e.g., \\\"The Sign of the Four (1890)\\\"), and state in one phrase what that fragment supports (e.g., 'provides a publication year for that novel'); (2) explicitly expose the bridge entity or ambiguity needed for the next hop (name candidate novel titles mentioned in the passages and indicate which novel the question might intend); (3) list missing facts/pages needed next (explicit titles still required) and give compact retrieval directions (specific page titles to fetch and one-line example queries). End with an explicit constraint: do not provide a final answer here. Keep the summary concise (3–6 short bullets/lines).\",\n          \"drop_or_avoid_rule\": \"Do not output a final numeric year or select a definitive answer at this step. Avoid long verbatim spans from documents (>15 words) and avoid copying full target summaries. Do not assume the question's intended novel without flagging ambiguity and stating which additional pages are needed to confirm.\",\n          \"output_contract\": \"The `summary` field must be a concise (3–6 short lines) structured note containing: (a) 1–3 first-hop evidence bullets with source title + short quoted fragment (<=15 words) + one-line interpretation of what that evidence supports; (b) a one-line 'bridge / missing fact' identification naming candidate novel title(s) that link this hop to the next; (c) a one-line compact retrieval direction listing explicit page titles to fetch next (and one example query). The summary must not include a final answer to the original question.\",\n          \"why_local_transition\": \"The agent currently emits a terse direct answer (a year) rather than the required first-hop evidence summary and next-hop retrieval guidance. This minimal prompt edit redirects the agent from answering to (1) documenting which passage provided the year, (2) exposing which novel/title is the bridge or ambiguous, and (3) specifying exact next-page retrieval targets so the next agent can complete the multi-hop chain.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Michelle Beadle\",\n      \"score\": 1.0,\n      \"generated_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n      \"retrieved_titles\": [\n        \"Michelle Beadle\",\n        \"Animal Planet Report\",\n        \"Max Kellerman\",\n        \"Michelle Beisner\",\n        \"The B.S. Report\",\n        \"The Sports Reporters\",\n        \"List of BS Report episodes\"\n      ],\n      \"summary_2\": \"Michelle Beadle\",\n      \"answer\": \"Michelle Beadle\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Michelle Beadle\"\n      ],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 93,\n    \"w_stable_id\": \"93\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"What year was the man whose car failed to arrive to the 1950 Indianapolis 500 first the Italian champion?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"1950\",\n      \"score\": 0.0,\n      \"generated_query\": \"\\\"1950 Indianapolis 500\\\" \\\"car failed to arrive\\\" \\\"Italian champion\\\"\",\n      \"retrieved_titles\": [\n        \"1950 Indianapolis 500\",\n        \"Mike Salay\",\n        \"1950 AAA Championship Car season\",\n        \"Rich Vogler\",\n        \"1995 Indianapolis 500\",\n        \"George Fonder\",\n        \"Charles Van Acker\"\n      ],\n      \"summary_2\": \"1950\",\n      \"answer\": \"1950\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Giuseppe Farina\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Summary of first-hop evidence: The 1950 Indianapolis 500 article states that Giuseppe Farina originally planned to enter the race but his car never arrived. Bridge entity / missing relation for next hop: Giuseppe Farina — we need the year he was first the Italian champion. Retrieval direction for the next agent: open the 'Giuseppe Farina' biography (or reliable profiles of Giuseppe Farina) and locate his championship history/early career sections; search within that page for phrases like 'Italian champion', 'Italian Championship', 'national title', or 'first became champion' to extract the year he first won the Italian championship. This is a summary1 output (not a final answer).\",\n      \"score\": 1.0,\n      \"generated_query\": \"Open the Giuseppe Farina biography (Wikipedia or authoritative motorsport profiles) and find when he first became the Italian champion. Search the page for \\\"Italian champion\\\", \\\"Italian Championship\\\", \\\"Italian title\\\", or \\\"first became champion\\\" and extract the year and citation.\",\n      \"retrieved_titles\": [\n        \"Giuseppe Farina\",\n        \"1950 Italian Grand Prix\",\n        \"List of Italian football champions\",\n        \"Flavia Pennetta\",\n        \"Enrico Fabris\",\n        \"Formula One drivers from Italy\",\n        \"David Solari (cyclist)\"\n      ],\n      \"summary_2\": \"1937\",\n      \"answer\": \"1937\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Giuseppe Farina\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When any passage states that a named person \\\"planned to enter\\\" or that their \\\"car never arrived\\\" (e.g., the passage mentioning Giuseppe Farina).\",\n          \"preserve_rule\": \"Keep the existing instruction to produce the single field `summary` from the given `question` and `passages`, and retain the concise summarization style already used by the agent.\",\n          \"change_rule\": \"Require the `summary` to (a) include one concise sentence that summarizes the first-hop evidence and explicitly names the person mentioned in the passage as the relevant actor (for example, name the person whose car failed to arrive), (b) explicitly label that named person as the bridge entity and state the specific missing fact needed for the next hop (the year they were first the Italian champion), and (c) provide concrete retrieval directions for the next agent: instruct to open the named person's biography or authoritative motorsport profiles and search the 'Career'/'Early career' sections and for keywords/phrases such as \\\"Italian champion\\\", \\\"Italian Championship\\\", \\\"Italian title\\\", or \\\"first became champion\\\" to extract the year. Do not attempt to provide the year or any final answer in the summary.\",\n          \"drop_or_avoid_rule\": \"Do not output a candidate answer or a bare year (avoid outputs like a single number). Do not speculate or assert the missing year; do not copy long target-only spans or any hidden/gold label. Avoid producing only a terse numeric summary that lacks the bridge entity and next-hop instructions.\",\n          \"output_contract\": \"The `summary` must be a short paragraph containing: (1) a one-sentence first-hop evidence summary that names the person mentioned in the passages and the fact that their car failed to arrive; (2) an explicit 'Bridge entity / missing fact' line naming that person and specifying that the missing fact is the year they first became Italian champion; (3) a 'Retrieval direction' line giving exact next steps and search keywords/sections to consult (biography page, 'Career'/'Early career', keywords like 'Italian champion'/'Italian Championship'). The summary must not include the answer year or any unsupported claims.\",\n          \"why_local_transition\": \"The current output is just a year and omits the required bridge entity and retrieval guidance. This targeted prompt edit forces the agent to expose the bridge entity (the named person whose car didn't arrive) and explicit next-hop search instructions while preserving the original summarization behavior and avoiding premature answering.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Michelle Beadle\",\n      \"score\": 1.0,\n      \"generated_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n      \"retrieved_titles\": [\n        \"Michelle Beadle\",\n        \"Animal Planet Report\",\n        \"Max Kellerman\",\n        \"Michelle Beisner\",\n        \"The B.S. Report\",\n        \"The Sports Reporters\",\n        \"List of BS Report episodes\"\n      ],\n      \"summary_2\": \"Michelle Beadle\",\n      \"answer\": \"Michelle Beadle\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Michelle Beadle\"\n      ],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 97,\n    \"w_stable_id\": \"97\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"In what year were the pioneers of managed care in the United States established?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"1947\",\n      \"score\": 0.0,\n      \"generated_query\": \"\\\"pioneers of managed care\\\" \\\"established 1947\\\" United States\",\n      \"retrieved_titles\": [\n        \"Medical facilities of Seattle\",\n        \"Enhanced Primary Care Case Management Program\",\n        \"Medicaid managed care\",\n        \"Diversified Pharmaceutical Services\",\n        \"Managed care\",\n        \"Case management (US health system)\",\n        \"Vermont health care reform\"\n      ],\n      \"summary_2\": \"1947\",\n      \"answer\": \"1947\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Group Health Cooperative\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"The first-hop evidence (Medical facilities of Seattle) identifies Group Health Cooperative as “one of the pioneers of managed care in the United States.” Bridge entity: Group Health Cooperative. Missing fact needed for the final answer: the year Group Health Cooperative was established/founded. Retrieval direction for the next hop: retrieve the “Group Health Cooperative” page (look in the article lede, infobox, or history/organization sections for founding/establishment/incorporation year; also check reliable sources cited there).\",\n      \"score\": 1.0,\n      \"generated_query\": \"Group Health Cooperative founded year site:wikipedia.org OR \\\"Group Health Cooperative history\\\" site:grouphealth.org OR \\\"Group Health Cooperative founded\\\"\",\n      \"retrieved_titles\": [\n        \"Group Health Cooperative\",\n        \"Cooper Drum Company\",\n        \"National Association for Public Health Policy\",\n        \"Michael Shadid\",\n        \"Health insurance cooperative\",\n        \"International Cooperative Biodiversity Groups\",\n        \"Desjardins Financial Security\"\n      ],\n      \"summary_2\": \"1945\",\n      \"answer\": \"1945\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Group Health Cooperative\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If any input passage contains the substring \\\"pioneer\\\" or \\\"pioneers\\\" (case-insensitive) AND the question requests a year/founding/establishment, apply this delta.\",\n          \"preserve_rule\": \"Keep extracting and citing the supporting passage/title and preserve the exact entity token(s) as they appear in the passages (e.g., 'Group Health Cooperative'). Keep concise, factual language summarizing what the first-hop passage states.\",\n          \"change_rule\": \"Do not attempt to produce a final numeric answer. Instead, produce a concise first-hop summary that: (1) names the supporting passage/title or quotes the short phrase from it (use at most a short quoted phrase already present in the passages, e.g. \\\"one of the pioneers of managed care\\\"); (2) explicitly identifies the bridge entity exactly as it appears in the passages; (3) states the single missing fact needed for the next hop (the founding/establishment year); and (4) gives a clear next-hop retrieval direction: retrieve the bridge entity's page and check the lede/infobox or history/organization sections for the founding/establishment year. Do not include the founding year or other facts not present in the given passages.\",\n          \"drop_or_avoid_rule\": \"Avoid outputting any numeric year, any invented facts, long verbatim spans that are not already visible in the passages, or step-by-step query strings. Avoid turning the summary into a final answer; avoid adding unrelated retrieval suggestions.\",\n          \"output_contract\": \"Produce only the 'summary' text. The summary must be 1–3 short sentences (or a 2–4 line bullet-style list) containing: supporting source/title or a short quote present in the passages, the bridge entity name verbatim, the missing fact needed (phrased as 'founding/establishment year'), and the precise next-hop direction (retrieve the bridge entity page; check lede/infobox/history). Do not include a numeric year or extra speculative details.\",\n          \"why_local_transition\": \"The agent currently outputs a final numeric year instead of exposing the bridge entity and the missing fact/direction needed for the next hop. This delta enforces the agent role (summarize first-hop evidence and expose the bridge/missing fact) so the pipeline proceeds to the correct retrieval.\"\n        }\n      },\n      {\n        \"edge_index\": 1,\n        \"delta_p\": {\n          \"trigger\": \"If any passage mentions 'Group Health Cooperative' or contains wording like 'pioneers of managed care'.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of extracting and concisely summarizing the first-hop evidence from the provided passages (cite the passage title or fragment that supports the claim).\",\n          \"change_rule\": \"Also explicitly (a) name the bridge entity found in the first-hop evidence (e.g., 'Group Health Cooperative'), (b) state the specific missing fact needed for the next hop in descriptive terms (the founding/establishment/incorporation year), and (c) give a precise next-hop retrieval direction: retrieve the 'Group Health Cooperative' article/page and check the article lede, infobox, and history/organization sections (and the reliable sources cited there) for the founding/establishment year. Do not attempt to supply the year here.\",\n          \"drop_or_avoid_rule\": \"Do not state or guess the founding year, do not provide a final answer to the question, and do not output external search queries or fetch results yourself. Avoid adding unrelated background or long extraneous details—only include what is needed to enable the next hop.\",\n          \"output_contract\": \"Produce the field `summary` that (1) cites the passage evidence that identifies Group Health Cooperative as a pioneer of managed care, (2) explicitly names 'Group Health Cooperative' as the bridge entity, (3) identifies the missing fact as the organization's founding/establishment year (worded, not a numeric year), and (4) gives the clear next-hop retrieval direction described above. Keep the summary concise and do not include the founding year or any final answer.\",\n          \"why_local_transition\": \"The current summary must be augmented to expose the bridge entity and to give a concrete retrieval direction for finding the establishment year. This small, local edit prevents premature answering and ensures the next agent knows exactly where to look for the missing founding/establishment date.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Michelle Beadle\",\n      \"score\": 1.0,\n      \"generated_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n      \"retrieved_titles\": [\n        \"Michelle Beadle\",\n        \"Animal Planet Report\",\n        \"Max Kellerman\",\n        \"Michelle Beisner\",\n        \"The B.S. Report\",\n        \"The Sports Reporters\",\n        \"List of BS Report episodes\"\n      ],\n      \"summary_2\": \"Michelle Beadle\",\n      \"answer\": \"Michelle Beadle\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Michelle Beadle\"\n      ],\n      \"missing_titles_after_hop2\": []\n    }\n  },\n  {\n    \"w_sample_index\": 136,\n    \"w_stable_id\": \"136\",\n    \"agent\": \"summary1\",\n    \"w_question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Scrivener's Moon\",\n      \"score\": 0.0,\n      \"generated_query\": \"What is the series order (counting the prequel \\\"Traction City\\\") for the Philip Reeve novella/series — is \\\"Scrivener's Moon\\\" the third book?\",\n      \"retrieved_titles\": [\n        \"Fever Crumb Series\",\n        \"Traction City (novella)\",\n        \"Fever Crumb\",\n        \"Scrivener's Moon\",\n        \"A Web of Air\",\n        \"Infernal Devices (Philip Reeve novel)\",\n        \"Alice series\"\n      ],\n      \"summary_2\": \"Scrivener's Moon\",\n      \"answer\": \"Scrivener's Moon\",\n      \"missing_recovery_rate\": 0.0,\n      \"recovered_missing_titles\": [],\n      \"missing_titles_after_hop2\": [\n        \"Mortal Engines Quartet\"\n      ]\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"First-hop evidence: 'Traction City' is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet. Bridge entity / missing fact: the Mortal Engines Quartet — specifically the canonical ordered list of books in that series and whether the prequel 'Traction City' is to be counted when numbering (i.e., what is meant by “including the prequel”). Retrieval direction for next hop: retrieve the 'Mortal Engines Quartet' (series) page or an authoritative bibliography to obtain the series' titles in order and any notes on associated prequel novellas; from that ordered list determine which title is the third when the prequel is included.\",\n      \"score\": 1.0,\n      \"generated_query\": \"Provide the canonical ordered list of works in Philip Reeve's Mortal Engines series (the Mortal Engines Quartet) and any associated prequel novellas (notably \\\"Traction City\\\"). List the works in sequence (including \\\"Traction City\\\" as the first entry) and state which title is the third when the prequel is included. Include publication years and sources if available.\",\n      \"retrieved_titles\": [\n        \"Traction City (novella)\",\n        \"Fever Crumb Series\",\n        \"List of Mortal Engines Quartet characters\",\n        \"A Web of Air\",\n        \"Mortal Engines Quartet\",\n        \"Fever Crumb\",\n        \"List of traction engine manufacturers\"\n      ],\n      \"summary_2\": \"Predator's Gold.\",\n      \"answer\": \"Predator's Gold\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Mortal Engines Quartet\"\n      ],\n      \"missing_titles_after_hop2\": []\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks for an ordinal position “including the prequel” (or otherwise depends on counting a prequel), and the provided passages identify a work as a prequel (e.g., mention of 'Traction City' as a prequel to the Mortal Engines series).\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of producing a concise first-hop summary: extract and paraphrase the key evidence from the given passages that bears on the question, and expose the bridge entity or missing fact needed for the next retrieval hop.\",\n          \"change_rule\": \"Additionally require the summary to explicitly (a) name the series or major entity that must be consulted next (e.g., 'Mortal Engines Quartet'), (b) state the specific missing fact needed to answer the question (the canonical ordered list of works and whether the prequel should be counted when numbering), and (c) give a precise retrieval direction for the next agent (request the series/bibliography page or an authoritative list of the series' works and any associated prequel novellas; instruct to return the ordered list including publication years and then identify which title is third if the prequel is counted first). Phrase this as a short instruction to the next hop rather than as an answer.\",\n          \"drop_or_avoid_rule\": \"Do not assert or guess the final numbered answer in this summary; do not return a single-book answer as the summary output. Avoid copying long literal spans found only in target-state examples. Do not instruct the agent to perform the next-hop retrieval itself here; only specify what should be retrieved and why.\",\n          \"output_contract\": \"The produced `summary` must include three concise elements: (1) First-hop evidence (1–2 short sentences quoting/paraphrasing the passage that labels 'Traction City' as a prequel), (2) Bridge entity / missing fact (explicitly name the series to consult, e.g., 'Mortal Engines Quartet', and state the exact missing fact: the canonical ordered list of works and whether the prequel counts toward numbering), and (3) Retrieval direction for next hop (one short sentence instructing the next agent which page(s) to fetch and what to extract: the series' ordered titles, publication years, and then determine which title is third when counting the prequel as the first). Keep overall summary concise (about 2–4 sentences total).\",\n          \"why_local_transition\": \"The current behavior outputs a candidate title directly instead of exposing the underlying missing series ordering that the next hop must recover. This minimal prompt change forces the agent to surface the bridge entity (the Mortal Engines series) and give an explicit next-hop retrieval directive so the pipeline can correctly determine ordinal numbering including the prequel.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Michelle Beadle\",\n      \"score\": 1.0,\n      \"generated_query\": \"Michelle Beadle \\\"Animal Planet Report\\\" host ESPN sports reporter biography\",\n      \"retrieved_titles\": [\n        \"Michelle Beadle\",\n        \"Animal Planet Report\",\n        \"Max Kellerman\",\n        \"Michelle Beisner\",\n        \"The B.S. Report\",\n        \"The Sports Reporters\",\n        \"List of BS Report episodes\"\n      ],\n      \"summary_2\": \"Michelle Beadle\",\n      \"answer\": \"Michelle Beadle\",\n      \"missing_recovery_rate\": 1.0,\n      \"recovered_missing_titles\": [\n        \"Michelle Beadle\"\n      ],\n      \"missing_titles_after_hop2\": []\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 43,\n  \"dominant_gap_type\": \"entity_disambiguation\",\n  \"transported_damage_hypothesis\": \"If first‑hop retrieval returns multiple similarly named host pages (or omits the canonical host page) the agent will mirror W43's failure and produce a definitive final answer instead of surfacing the ambiguity and requesting the missing page.\",\n  \"expected_damaged_behavior\": \"At the summary1 boundary the agent will assert a concrete reporter as the answer (a final 'Michelle ...' label) despite ambiguous/missing candidate pages, omitting a 'first‑hop findings' summary and any next‑hop retrieval directions to disambiguate.\",\n  \"rationale\": \"W43's repair corrects a premature final answer that arose from ambiguous personal-name candidates (many 'Brian Johnson' variants) and a missing target page by forcing a first‑hop findings summary and explicit next‑hop retrieval targets. The same failure mode maps directly to the Michelle/Animal Planet question: first‑hop results can include multiple Michelle variants (or miss the canonical 'Michelle Beadle' page), producing the same candidate‑set / disambiguation gap. Transporting W43's failure pattern (premature finalization vs. deferring to disambiguation) is local to the summary1 agent role, transfers the entity‑disambiguation structure (not any specific entities), keeps the damaged output a neighbor of the correct C_plus behavior, and does not require flipping the true answer—only changing whether the agent exposes ambiguity and requests the missing page.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 105,
+    "c_stable_id": "105",
+    "candidate_w_sample_indices": [
+      43,
+      93,
+      97,
+      104,
+      136
+    ],
+    "match_fingerprint": "e8ed725f4ba761bdfce746672ed85edb06610a372f82e3fe9f3488cd52670355"
+  }
+}

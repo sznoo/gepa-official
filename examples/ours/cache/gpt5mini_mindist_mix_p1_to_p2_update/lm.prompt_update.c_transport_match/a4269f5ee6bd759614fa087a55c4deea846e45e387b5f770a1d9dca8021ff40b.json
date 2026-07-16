@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "a4269f5ee6bd759614fa087a55c4deea846e45e387b5f770a1d9dca8021ff40b",
+  "created_at": "2026-07-14T21:29:02.802438+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 98,
+        "stable_id": "98",
+        "question": "With the Patriots, D. J. Foster won an American football game that was played on Sunday, February 5, 2017, in what stadium?",
+        "summary_1": "Evidence found:\n- \"D. J. Foster\" — [6]: \"With the Patriots, he won Super Bowl LI against the Atlanta Falcons.\"\n- \"Super Bowl LI\" — [1]: \"played at NRG Stadium in Houston, Texas, on Sunday, February 5, 2017\"\n- \"NRG Stadium\" — [1]: \"NRG Stadium\"\n- \"Sunday, February 5, 2017\" — [1]: \"Sunday, February 5, 2017\"\n- \"New England Patriots\" — [1]: \"New England Patriots\"\n- \"Atlanta Falcons\" — [1]: \"Atlanta Falcons\"\n\nAmbiguities:\n- None identified; \"Super Bowl LI\", date, and \"NRG Stadium\" are consistently stated.\n\nBridge / missing fact:\n- All required facts present and unambiguous: stadium for the game D. J. Foster won (Super Bowl LI) is \"NRG Stadium\".\n- Final conclusion: NRG Stadium.\n\nRetrieval direction:\n- \"Super Bowl LI\" (page) — verify stadium and game details.\n- \"D. J. Foster\" (page) — verify participation/winning credit.\n- \"NRG Stadium\" (page) — venue details.\n- \"New England Patriots\" (Super Bowl LI roster/participation) — if roster confirmation is needed.",
+        "hop2_query": "Super Bowl LI stadium",
+        "summary_2": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+        "answer": "NRG Stadium",
+        "gold_support_titles": [
+          "D. J. Foster",
+          "Super Bowl LI"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 85,
+          "w_stable_id": "85",
+          "agent": "summary2",
+          "w_question": " Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Monsta X includes the member Jooheon.",
+            "score": 0.0,
+            "answer": "Jooheon"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Monsta X is a South Korean boy group formed by Starship Entertainment through the survival show \"No.Mercy\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)",
+            "score": 0.0,
+            "answer": "Jooheon"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the passages contain an explicit group description that names the group's type, formation year, and a definitive member list, and the `context` entity appears among those members.",
+                "preserve_rule": "Keep the existing behavior of naming the `context` entity using the exact form from `context`, integrate that identity with supporting facts from `passages`, and produce a concise 1–2 sentence summary suitable for downstream answer generation.",
+                "change_rule": "Also include the group's type and formation year (using the phrasing present in the passages) and, when a definitive member list is given in the passages, mention the canonical member names exactly as they appear there (comma-separated) to state the membership relation. Fit this into one concise sentence if possible, or two short sentences only if needed.",
+                "drop_or_avoid_rule": "Do not add biographical details, unrelated facts, or speculative information; do not expand into long quotations or multi-paragraph descriptions. Avoid mentioning alternative/ambiguous persons not listed in the cited group passage (e.g., similarly named but separate individuals) and avoid introducing new names that are not present in the provided inputs.",
+                "output_contract": "Return exactly one 1–2 sentence summary string that (1) names the context entity using the form from `context`, (2) names the group/type and formation year as stated in `passages`, and (3) states the membership relation by listing the canonical member names from the passages. Use only terms and facts present in `context` and `passages`.",
+                "why_local_transition": "The source summary merely asserts one member; adding the group's type, formation year, and the canonical member list is a small, focused augmentation that preserves the original integration behavior while supplying the explicit linkage and supporting facts the final answer agent needs."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+            "score": 1.0,
+            "answer": "NRG Stadium"
+          }
+        },
+        {
+          "w_sample_index": 5,
+          "w_stable_id": "5",
+          "agent": "summary2",
+          "w_question": "Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Chelsea Peretti is a supporting cast member of Brooklyn Nine-Nine and is an American comedian and writer.",
+            "score": 0.0,
+            "answer": "Chelsea Peretti"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Integrated evidence summary: The Brooklyn Nine-Nine page lists Chelsea Peretti as part of the ensemble and supporting cast, portraying Regina \"Gina\" Linetti. The Chelsea Peretti page describes her as an American comedian, actress, and writer. These two facts together show that a supporting cast member of Brooklyn Nine-Nine (Chelsea Peretti) is described as a comedian and writer.",
+            "score": 0.0,
+            "answer": "Chelsea Peretti"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the context names a person (first-hop entity) and the passages include both: (a) a show/ensemble page that lists that person as part of the ensemble/supporting cast, and (b) a person page that describes that same person with the occupations asked about (e.g., 'comedian' and 'writer').",
+                "preserve_rule": "Keep the existing summary style (1–2 short sentences), use the exact person form as it appears in the input `context`, and do not invent facts beyond the provided `passages` and `context`.",
+                "change_rule": "Add one explicit bridging sentence that ties the two facts together: state that the show page lists the person as part of the ensemble/supporting cast and that the person page describes them as a comedian and writer, then assert (succinctly) that these two facts show a supporting cast member is a comedian and writer. Use only wording supported by the inputs and avoid extra biographical detail.",
+                "drop_or_avoid_rule": "Do not introduce other cast members or comparisons, do not add unsupported details or speculation, avoid long verbatim quotations from passages, and do not output only the final answer token (unless the question strictly requires single-token identification per the base instructions).",
+                "output_contract": "Produce exactly one concise summary (1–2 short sentences). The summary must (1) name the context entity using the form from `context`, (2) mention the supporting/show membership as given in the show passage, (3) mention the occupation(s) as given in the person passage (e.g., 'comedian' and 'writer'), and (4) explicitly link these facts so a downstream answerer can see that a supporting cast member is described as a comedian and writer.",
+                "why_local_transition": "This edge requires the agent to explicitly state the bridging facts (show membership + occupations) in a single integrated summary so later agents can rely on both relations. The prompt change adds a focused instruction to produce that explicit linkage while preserving the original concise summary format."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+            "score": 1.0,
+            "answer": "NRG Stadium"
+          }
+        },
+        {
+          "w_sample_index": 16,
+          "w_stable_id": "16",
+          "agent": "summary2",
+          "w_question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Unclear from the provided passages: Civil Twilight is a four-piece rock band (Andrew McKeller, Steven McKeller, Richard Wouters, Kevin Dailey), while Juliette and the Licks lists four other members (Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis) but the passages do not explicitly confirm their genders or that this is the full/current male membership.",
+            "score": 0.0,
+            "answer": "unknown"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Evidence summary (not a final answer):\n\n- Civil Twilight: Upstream evidence describes Civil Twilight as \"a four-piece rock band\" and names the members as the brothers Andrew and Steven McKeller, Richard Wouters, and Kevin Dailey.\n\n- Juliette & The Licks: Visible retrieved evidence states \"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis\" and that \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\" \n\n- Ambiguity noted for comparison: The Juliette & The Licks phrasing \"Other band members have included\" indicates variable/partial membership and does not explicitly assert that those four named musicians constitute the complete/current band lineup, nor does it state their genders. This leaves open whether the four named members are the definitive count to compare against Civil Twilight's four-piece lineup.",
+            "score": 0.0,
+            "answer": "unknown"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question asks for a numeric comparison of band membership and the provided passages show an explicit lineup size phrase for one band (e.g. \"a four-piece rock band\") while the other band's passages only list some members under wording like \"Other band members have included\" (member names but no explicit lineup size),",
+                "preserve_rule": "Keep the existing requirement to output exactly one concise summary string (1–2 sentences). Preserve any verified facts already present in the passages (e.g., Civil Twilight's description and the named Juliette & The Licks members). Use the band names/forms exactly as they appear in the inputs.",
+                "change_rule": "Modify the summary behavior so it explicitly integrates both bands: (1) name 'Civil Twilight' and state the explicit fact present in the passages (use the phrase 'a four-piece rock band' and optionally the listed member names); (2) name 'Juliette and the Licks' (or 'Juliette & The Licks' as in the inputs) and state that the passages list specific members using the phrase 'Other band members have included' followed by the named musicians, but do not assert that those names constitute a complete/current lineup; (3) if the passages lack an explicit numeric or gender confirmation for Juliette and the Licks, the summary must explicitly mark that the membership count or genders are unclear. Keep this integrated statement to one or two short sentences.",
+                "drop_or_avoid_rule": "Do not assert the Juliette & The Licks member list is complete or infer genders; do not produce a final comparative answer or compute equality/number unless directly supported by the passages; avoid adding extra explanatory metadata or more than 1–2 sentences; avoid copying long verbatim spans except short quoted phrases already present in the inputs (e.g., \"a four-piece rock band\" or \"Other band members have included\").",
+                "output_contract": "Return exactly one concise summary string (1–2 sentences) that: names both bands using the forms in the inputs, states the explicit supporting fact for Civil Twilight, states the listed members for Juliette & The Licks using the phrasing from the passages, and explicitly notes any lack of explicit completeness/gender support for Juliette & The Licks. Use only facts present in the provided context and passages.",
+                "why_local_transition": "The agent currently reports 'unclear' without a structured integration. This targeted edit directs the agent to produce a compact evidence summary that names each band, cites what is explicitly supported for each, and flags the exact ambiguity downstream answerers need to resolve (whether the Juliette member list is complete or gender-identified)."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+            "score": 1.0,
+            "answer": "NRG Stadium"
+          }
+        },
+        {
+          "w_sample_index": 119,
+          "w_stable_id": "119",
+          "agent": "summary2",
+          "w_question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Victoria Sinitsina won the 2016 Russian national silver medal with Nikita Katsalapov.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Evidence summary:\n- Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer.\n- Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer.\n- With Victoria Sinitsina, Nikita Katsalapov is the 2016 Russian national silver medalist.\n\nThese facts link the 29 April 1995–born ice dancer (Victoria Sinitsina) to the 2016 Russian national silver-medal result with partner Nikita Katsalapov.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the context and passages together (a) mention the same two individuals by their full names, (b) supply birthdates for one or both individuals, and (c) explicitly state the linking fact asked about (e.g., a partnership and a medal), apply this prompt edit.",
+                "preserve_rule": "Keep the existing requirement to produce exactly one concise summary (1–2 short sentences) that names the context entity using the form in `context`, names the supporting entity using the form in `passages`, and states only facts present in the provided inputs.",
+                "change_rule": "Also append any birthdate that appears in the provided inputs in parentheses immediately after the corresponding full canonical name in the summary. When the passages explicitly link the two named people to the asked event (partnership/award), state that linking relation in the same 1–2 sentence summary using the full names (with parenthetical birthdates if present).",
+                "drop_or_avoid_rule": "Do not introduce additional biographical details, avoid multi-bullet evidence lists, do not assert facts not present in `context` or `passages`, and do not truncate to a surname when a full canonical name is available in the inputs.",
+                "output_contract": "Return a single 1–2 sentence summary string that (1) uses the context entity name as given in `context`, (2) names the supporting entity as given in `passages`, (3) appends any supplied birthdates in parentheses immediately after each corresponding name, and (4) states the explicit relation (e.g., partnership and medal) exactly as supported by the inputs. No other facts or commentary may be added.",
+                "why_local_transition": "This small change makes identity evidence explicit (by including birthdates present in the inputs) and preserves the concise linking summary format so downstream agents can unambiguously match the 29 April 1995–born dancer to the partner and the 2016 silver-medal result."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+            "score": 1.0,
+            "answer": "NRG Stadium"
+          }
+        },
+        {
+          "w_sample_index": 48,
+          "w_stable_id": "48",
+          "agent": "summary2",
+          "w_question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "The Force India VJM09 was driven by Le Mans winner Nico Hülkenberg, a German professional racing driver currently racing for the Renault Sport F1 Team.",
+            "score": 0.0,
+            "answer": "Nico Hülkenberg"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Evidence summary: The Force India VJM09 is a Formula One racing car. The provided first-hop context states the car was driven by Sergio Pérez and Le Mans winner Nico Hülkenberg. The Nico Hülkenberg page confirms that Nicolas Hülkenberg is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+            "score": 1.0,
+            "answer": "Nicolas Hülkenberg"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the context names an entity from the first hop (e.g., a driver linked to the car) and the passages include a page for that same person that gives a canonical full name (given + family name) and an explicit current-team affiliation.",
+                "preserve_rule": "Keep the existing requirement to output exactly one concise summary string of 1–2 short sentences that integrates the first-hop identity from `context` with facts from `passages`. Continue to treat the `context` entity as the primary first-hop identity to be linked.",
+                "change_rule": "When the trigger applies, produce a two-sentence integrated summary (still a single string). Sentence 1: state the first-hop linkage using the form of the entity as presented in `context` (mention the car and who it was driven by, including any co-drivers present in `context`). Sentence 2: state the canonical full name and the explicit team affiliation exactly as given in `passages` (use the full multi-token name from the passages if present). Prepend the whole summary with the label 'Evidence summary: ' to make the two-part integration explicit.",
+                "drop_or_avoid_rule": "Do not add any additional biographical details, dates, or unsupported affiliations not present in `context` or `passages`. Do not expand beyond 1–2 short sentences or change the single-string output interface. Do not invent or infer team membership if the passages do not explicitly state it.",
+                "output_contract": "Return exactly one string, 1–2 short sentences, beginning with 'Evidence summary: '. Sentence 1 must integrate the first-hop identity from `context` (car -> driver(s)). Sentence 2 must, if present in `passages`, state the canonical full name and the explicit current team affiliation verbatim as shown in the passages. If the passages do not supply the team-affiliation fact, fall back to the original single-sentence concise integration without asserting a team.",
+                "why_local_transition": "Passages include a person page that provides the canonical multi-token name and an explicit current-team statement not present in the first-hop context; the summary should therefore (minimally) add a confirmation sentence using the canonical name and team so downstream agents have the supported bridging fact."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.",
+            "score": 1.0,
+            "answer": "NRG Stadium"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 98,\n  \"stable_id\": \"98\",\n  \"question\": \"With the Patriots, D. J. Foster won an American football game that was played on Sunday, February 5, 2017, in what stadium?\",\n  \"summary_1\": \"Evidence found:\\n- \\\"D. J. Foster\\\" — [6]: \\\"With the Patriots, he won Super Bowl LI against the Atlanta Falcons.\\\"\\n- \\\"Super Bowl LI\\\" — [1]: \\\"played at NRG Stadium in Houston, Texas, on Sunday, February 5, 2017\\\"\\n- \\\"NRG Stadium\\\" — [1]: \\\"NRG Stadium\\\"\\n- \\\"Sunday, February 5, 2017\\\" — [1]: \\\"Sunday, February 5, 2017\\\"\\n- \\\"New England Patriots\\\" — [1]: \\\"New England Patriots\\\"\\n- \\\"Atlanta Falcons\\\" — [1]: \\\"Atlanta Falcons\\\"\\n\\nAmbiguities:\\n- None identified; \\\"Super Bowl LI\\\", date, and \\\"NRG Stadium\\\" are consistently stated.\\n\\nBridge / missing fact:\\n- All required facts present and unambiguous: stadium for the game D. J. Foster won (Super Bowl LI) is \\\"NRG Stadium\\\".\\n- Final conclusion: NRG Stadium.\\n\\nRetrieval direction:\\n- \\\"Super Bowl LI\\\" (page) — verify stadium and game details.\\n- \\\"D. J. Foster\\\" (page) — verify participation/winning credit.\\n- \\\"NRG Stadium\\\" (page) — venue details.\\n- \\\"New England Patriots\\\" (Super Bowl LI roster/participation) — if roster confirmation is needed.\",\n  \"hop2_query\": \"Super Bowl LI stadium\",\n  \"summary_2\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n  \"answer\": \"NRG Stadium\",\n  \"gold_support_titles\": [\n    \"D. J. Foster\",\n    \"Super Bowl LI\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 85,\n    \"w_stable_id\": \"85\",\n    \"agent\": \"summary2\",\n    \"w_question\": \" Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. and what other South Korean comprise a group created in 2015?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Monsta X includes the member Jooheon.\",\n      \"score\": 0.0,\n      \"answer\": \"Jooheon\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Monsta X is a South Korean boy group formed by Starship Entertainment through the survival show \\\"No.Mercy\\\" on Mnet in 2015. The group is composed of seven members: Jooheon, Shownu, Kihyun, Hyungwon, Wonho, Minhyuk, and I.M. (Lee Joo-heon, known by the mononym Jooheon, is a South Korean rapper and songwriter and is listed as a member of Monsta X.)\",\n      \"score\": 0.0,\n      \"answer\": \"Jooheon\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the passages contain an explicit group description that names the group's type, formation year, and a definitive member list, and the `context` entity appears among those members.\",\n          \"preserve_rule\": \"Keep the existing behavior of naming the `context` entity using the exact form from `context`, integrate that identity with supporting facts from `passages`, and produce a concise 1–2 sentence summary suitable for downstream answer generation.\",\n          \"change_rule\": \"Also include the group's type and formation year (using the phrasing present in the passages) and, when a definitive member list is given in the passages, mention the canonical member names exactly as they appear there (comma-separated) to state the membership relation. Fit this into one concise sentence if possible, or two short sentences only if needed.\",\n          \"drop_or_avoid_rule\": \"Do not add biographical details, unrelated facts, or speculative information; do not expand into long quotations or multi-paragraph descriptions. Avoid mentioning alternative/ambiguous persons not listed in the cited group passage (e.g., similarly named but separate individuals) and avoid introducing new names that are not present in the provided inputs.\",\n          \"output_contract\": \"Return exactly one 1–2 sentence summary string that (1) names the context entity using the form from `context`, (2) names the group/type and formation year as stated in `passages`, and (3) states the membership relation by listing the canonical member names from the passages. Use only terms and facts present in `context` and `passages`.\",\n          \"why_local_transition\": \"The source summary merely asserts one member; adding the group's type, formation year, and the canonical member list is a small, focused augmentation that preserves the original integration behavior while supplying the explicit linkage and supporting facts the final answer agent needs.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n      \"score\": 1.0,\n      \"answer\": \"NRG Stadium\"\n    }\n  },\n  {\n    \"w_sample_index\": 5,\n    \"w_stable_id\": \"5\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Brooklyn Nine-Nine had a supporting cast that included which comedian and writer?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Chelsea Peretti is a supporting cast member of Brooklyn Nine-Nine and is an American comedian and writer.\",\n      \"score\": 0.0,\n      \"answer\": \"Chelsea Peretti\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Integrated evidence summary: The Brooklyn Nine-Nine page lists Chelsea Peretti as part of the ensemble and supporting cast, portraying Regina \\\"Gina\\\" Linetti. The Chelsea Peretti page describes her as an American comedian, actress, and writer. These two facts together show that a supporting cast member of Brooklyn Nine-Nine (Chelsea Peretti) is described as a comedian and writer.\",\n      \"score\": 0.0,\n      \"answer\": \"Chelsea Peretti\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the context names a person (first-hop entity) and the passages include both: (a) a show/ensemble page that lists that person as part of the ensemble/supporting cast, and (b) a person page that describes that same person with the occupations asked about (e.g., 'comedian' and 'writer').\",\n          \"preserve_rule\": \"Keep the existing summary style (1–2 short sentences), use the exact person form as it appears in the input `context`, and do not invent facts beyond the provided `passages` and `context`.\",\n          \"change_rule\": \"Add one explicit bridging sentence that ties the two facts together: state that the show page lists the person as part of the ensemble/supporting cast and that the person page describes them as a comedian and writer, then assert (succinctly) that these two facts show a supporting cast member is a comedian and writer. Use only wording supported by the inputs and avoid extra biographical detail.\",\n          \"drop_or_avoid_rule\": \"Do not introduce other cast members or comparisons, do not add unsupported details or speculation, avoid long verbatim quotations from passages, and do not output only the final answer token (unless the question strictly requires single-token identification per the base instructions).\",\n          \"output_contract\": \"Produce exactly one concise summary (1–2 short sentences). The summary must (1) name the context entity using the form from `context`, (2) mention the supporting/show membership as given in the show passage, (3) mention the occupation(s) as given in the person passage (e.g., 'comedian' and 'writer'), and (4) explicitly link these facts so a downstream answerer can see that a supporting cast member is described as a comedian and writer.\",\n          \"why_local_transition\": \"This edge requires the agent to explicitly state the bridging facts (show membership + occupations) in a single integrated summary so later agents can rely on both relations. The prompt change adds a focused instruction to produce that explicit linkage while preserving the original concise summary format.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n      \"score\": 1.0,\n      \"answer\": \"NRG Stadium\"\n    }\n  },\n  {\n    \"w_sample_index\": 16,\n    \"w_stable_id\": \"16\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"What number of male band members do both Juliette and the Licks and Civil Twilight have?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Unclear from the provided passages: Civil Twilight is a four-piece rock band (Andrew McKeller, Steven McKeller, Richard Wouters, Kevin Dailey), while Juliette and the Licks lists four other members (Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis) but the passages do not explicitly confirm their genders or that this is the full/current male membership.\",\n      \"score\": 0.0,\n      \"answer\": \"unknown\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Evidence summary (not a final answer):\\n\\n- Civil Twilight: Upstream evidence describes Civil Twilight as \\\"a four-piece rock band\\\" and names the members as the brothers Andrew and Steven McKeller, Richard Wouters, and Kevin Dailey.\\n\\n- Juliette & The Licks: Visible retrieved evidence states \\\"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis\\\" and that \\\"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\\\" \\n\\n- Ambiguity noted for comparison: The Juliette & The Licks phrasing \\\"Other band members have included\\\" indicates variable/partial membership and does not explicitly assert that those four named musicians constitute the complete/current band lineup, nor does it state their genders. This leaves open whether the four named members are the definitive count to compare against Civil Twilight's four-piece lineup.\",\n      \"score\": 0.0,\n      \"answer\": \"unknown\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question asks for a numeric comparison of band membership and the provided passages show an explicit lineup size phrase for one band (e.g. \\\"a four-piece rock band\\\") while the other band's passages only list some members under wording like \\\"Other band members have included\\\" (member names but no explicit lineup size),\",\n          \"preserve_rule\": \"Keep the existing requirement to output exactly one concise summary string (1–2 sentences). Preserve any verified facts already present in the passages (e.g., Civil Twilight's description and the named Juliette & The Licks members). Use the band names/forms exactly as they appear in the inputs.\",\n          \"change_rule\": \"Modify the summary behavior so it explicitly integrates both bands: (1) name 'Civil Twilight' and state the explicit fact present in the passages (use the phrase 'a four-piece rock band' and optionally the listed member names); (2) name 'Juliette and the Licks' (or 'Juliette & The Licks' as in the inputs) and state that the passages list specific members using the phrase 'Other band members have included' followed by the named musicians, but do not assert that those names constitute a complete/current lineup; (3) if the passages lack an explicit numeric or gender confirmation for Juliette and the Licks, the summary must explicitly mark that the membership count or genders are unclear. Keep this integrated statement to one or two short sentences.\",\n          \"drop_or_avoid_rule\": \"Do not assert the Juliette & The Licks member list is complete or infer genders; do not produce a final comparative answer or compute equality/number unless directly supported by the passages; avoid adding extra explanatory metadata or more than 1–2 sentences; avoid copying long verbatim spans except short quoted phrases already present in the inputs (e.g., \\\"a four-piece rock band\\\" or \\\"Other band members have included\\\").\",\n          \"output_contract\": \"Return exactly one concise summary string (1–2 sentences) that: names both bands using the forms in the inputs, states the explicit supporting fact for Civil Twilight, states the listed members for Juliette & The Licks using the phrasing from the passages, and explicitly notes any lack of explicit completeness/gender support for Juliette & The Licks. Use only facts present in the provided context and passages.\",\n          \"why_local_transition\": \"The agent currently reports 'unclear' without a structured integration. This targeted edit directs the agent to produce a compact evidence summary that names each band, cites what is explicitly supported for each, and flags the exact ambiguity downstream answerers need to resolve (whether the Juliette member list is complete or gender-identified).\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n      \"score\": 1.0,\n      \"answer\": \"NRG Stadium\"\n    }\n  },\n  {\n    \"w_sample_index\": 119,\n    \"w_stable_id\": \"119\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Victoria Sinitsina won the 2016 Russian national silver medal with Nikita Katsalapov.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Evidence summary:\\n- Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer.\\n- Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer.\\n- With Victoria Sinitsina, Nikita Katsalapov is the 2016 Russian national silver medalist.\\n\\nThese facts link the 29 April 1995–born ice dancer (Victoria Sinitsina) to the 2016 Russian national silver-medal result with partner Nikita Katsalapov.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the context and passages together (a) mention the same two individuals by their full names, (b) supply birthdates for one or both individuals, and (c) explicitly state the linking fact asked about (e.g., a partnership and a medal), apply this prompt edit.\",\n          \"preserve_rule\": \"Keep the existing requirement to produce exactly one concise summary (1–2 short sentences) that names the context entity using the form in `context`, names the supporting entity using the form in `passages`, and states only facts present in the provided inputs.\",\n          \"change_rule\": \"Also append any birthdate that appears in the provided inputs in parentheses immediately after the corresponding full canonical name in the summary. When the passages explicitly link the two named people to the asked event (partnership/award), state that linking relation in the same 1–2 sentence summary using the full names (with parenthetical birthdates if present).\",\n          \"drop_or_avoid_rule\": \"Do not introduce additional biographical details, avoid multi-bullet evidence lists, do not assert facts not present in `context` or `passages`, and do not truncate to a surname when a full canonical name is available in the inputs.\",\n          \"output_contract\": \"Return a single 1–2 sentence summary string that (1) uses the context entity name as given in `context`, (2) names the supporting entity as given in `passages`, (3) appends any supplied birthdates in parentheses immediately after each corresponding name, and (4) states the explicit relation (e.g., partnership and medal) exactly as supported by the inputs. No other facts or commentary may be added.\",\n          \"why_local_transition\": \"This small change makes identity evidence explicit (by including birthdates present in the inputs) and preserves the concise linking summary format so downstream agents can unambiguously match the 29 April 1995–born dancer to the partner and the 2016 silver-medal result.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n      \"score\": 1.0,\n      \"answer\": \"NRG Stadium\"\n    }\n  },\n  {\n    \"w_sample_index\": 48,\n    \"w_stable_id\": \"48\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"The Force India VJM09 was driven by Le Mans winner Nico Hülkenberg, a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n      \"score\": 0.0,\n      \"answer\": \"Nico Hülkenberg\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Evidence summary: The Force India VJM09 is a Formula One racing car. The provided first-hop context states the car was driven by Sergio Pérez and Le Mans winner Nico Hülkenberg. The Nico Hülkenberg page confirms that Nicolas Hülkenberg is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n      \"score\": 1.0,\n      \"answer\": \"Nicolas Hülkenberg\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the context names an entity from the first hop (e.g., a driver linked to the car) and the passages include a page for that same person that gives a canonical full name (given + family name) and an explicit current-team affiliation.\",\n          \"preserve_rule\": \"Keep the existing requirement to output exactly one concise summary string of 1–2 short sentences that integrates the first-hop identity from `context` with facts from `passages`. Continue to treat the `context` entity as the primary first-hop identity to be linked.\",\n          \"change_rule\": \"When the trigger applies, produce a two-sentence integrated summary (still a single string). Sentence 1: state the first-hop linkage using the form of the entity as presented in `context` (mention the car and who it was driven by, including any co-drivers present in `context`). Sentence 2: state the canonical full name and the explicit team affiliation exactly as given in `passages` (use the full multi-token name from the passages if present). Prepend the whole summary with the label 'Evidence summary: ' to make the two-part integration explicit.\",\n          \"drop_or_avoid_rule\": \"Do not add any additional biographical details, dates, or unsupported affiliations not present in `context` or `passages`. Do not expand beyond 1–2 short sentences or change the single-string output interface. Do not invent or infer team membership if the passages do not explicitly state it.\",\n          \"output_contract\": \"Return exactly one string, 1–2 short sentences, beginning with 'Evidence summary: '. Sentence 1 must integrate the first-hop identity from `context` (car -> driver(s)). Sentence 2 must, if present in `passages`, state the canonical full name and the explicit current team affiliation verbatim as shown in the passages. If the passages do not supply the team-affiliation fact, fall back to the original single-sentence concise integration without asserting a team.\",\n          \"why_local_transition\": \"Passages include a person page that provides the canonical multi-token name and an explicit current-team statement not present in the first-hop context; the summary should therefore (minimally) add a confirmation sentence using the canonical name and team so downstream agents have the supported bridging fact.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"D. J. Foster won Super Bowl LI, which was played at NRG Stadium in Houston, Texas.\",\n      \"score\": 1.0,\n      \"answer\": \"NRG Stadium\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 5,\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"Remove the explicit bridging sentence that links the Super Bowl LI page (venue) to the D. J. Foster mention, so the summary asserts the Super Bowl win but omits the stadium.\",\n  \"expected_damaged_behavior\": \"summary2 will output a concise statement like 'D. J. Foster won Super Bowl LI.' or otherwise fail to state that the game was played at NRG Stadium, leaving the stadium unspecified at this agent boundary.\",\n  \"rationale\": \"W sample 5's repair adds a short explicit bridging sentence tying two passages (a show/ensemble page + a person page) so a downstream answerer can infer the answer. That is the same structural need in the target: linking the D. J. Foster mention to the Super Bowl LI page that contains the stadium. The failure pattern (omitting the bridging sentence) would locally remove the evidence-family relation required to assert the venue, without introducing new entities or flipping the answer. This is a local, semantically parallel edit (person→event link) so the reverse (damage) is plausibly transportable to C_plus -> C_minus while keeping the result a local neighbor of the original summary.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 98,
+    "c_stable_id": "98",
+    "candidate_w_sample_indices": [
+      5,
+      16,
+      48,
+      85,
+      119
+    ],
+    "match_fingerprint": "9e985559be0fcabede26028ca586ee4f754981c608aafa39587e9aa91901aab2"
+  }
+}

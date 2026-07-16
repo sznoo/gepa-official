@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a548fdece9283894ec04f3e7305829364ce81a5721c40e3d3e0d0b8681632519",
+  "created_at": "2026-07-14T13:37:19.959172+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When summary_1 and summary_2 both present the same short noun-label for the work (e.g., both say \"symphonic suite\"), apply this delta.",
+            "preserve_rule": "Keep and rely only on the factual phrase already present in the visible summaries as the source of truth. Preserve the core noun-label wording those summaries use (do not invent new descriptors).",
+            "change_rule": "Replace any verbose, parenthetical, or sentence-like output with the concise consensus noun-label taken from the summaries. Normalize that label to a single, lowercased phrase with no surrounding parentheses, articles, or extra explanatory clauses.",
+            "drop_or_avoid_rule": "Do not include parenthetical clarifications, added adjectives, explanatory fragments, leading articles, or extra punctuation. Avoid title-style capitalization and avoid expanding the label into a sentence.",
+            "output_contract": "Produce the field `answer` whose [[ ## answer ## ]] block contains exactly one minimal, lowercased label string (the consensus noun-label present in the summaries) and nothing else.",
+            "why_local_transition": "The current output includes explanatory parenthetical text and title-style capitalization. The summaries agree on a short label; the agent should emit that concise, normalized label only so the final-answer block contains the minimal supported answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "\"Scheherazade\", composed by Nikolai Rimsky-Korasakov is known as this type of music?",
+        "summary_1": "\"Scheherazade\" is a symphonic suite — an orchestral work in the classical music repertoire.",
+        "summary_2": "\"Scheherazade\" is a symphonic suite — an orchestral (classical) work.",
+        "current_output": "Symphonic suite (an orchestral classical work)"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 and summary_2 both present the same short noun-label for the work (e.g., both say \\\"symphonic suite\\\"), apply this delta.\",\n      \"preserve_rule\": \"Keep and rely only on the factual phrase already present in the visible summaries as the source of truth. Preserve the core noun-label wording those summaries use (do not invent new descriptors).\",\n      \"change_rule\": \"Replace any verbose, parenthetical, or sentence-like output with the concise consensus noun-label taken from the summaries. Normalize that label to a single, lowercased phrase with no surrounding parentheses, articles, or extra explanatory clauses.\",\n      \"drop_or_avoid_rule\": \"Do not include parenthetical clarifications, added adjectives, explanatory fragments, leading articles, or extra punctuation. Avoid title-style capitalization and avoid expanding the label into a sentence.\",\n      \"output_contract\": \"Produce the field `answer` whose [[ ## answer ## ]] block contains exactly one minimal, lowercased label string (the consensus noun-label present in the summaries) and nothing else.\",\n      \"why_local_transition\": \"The current output includes explanatory parenthetical text and title-style capitalization. The summaries agree on a short label; the agent should emit that concise, normalized label only so the final-answer block contains the minimal supported answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"\\\"Scheherazade\\\", composed by Nikolai Rimsky-Korasakov is known as this type of music?\",\n  \"summary_1\": \"\\\"Scheherazade\\\" is a symphonic suite — an orchestral work in the classical music repertoire.\",\n  \"summary_2\": \"\\\"Scheherazade\\\" is a symphonic suite — an orchestral (classical) work.\",\n  \"current_output\": \"Symphonic suite (an orchestral classical work)\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nsymphonic suite\",\n  \"rationale\": \"Both summaries label the work as 'symphonic suite'; I preserved that exact noun-label and normalized it to a single lowercase phrase with no parentheses or extra text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 45,
+    "row_index": 45,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

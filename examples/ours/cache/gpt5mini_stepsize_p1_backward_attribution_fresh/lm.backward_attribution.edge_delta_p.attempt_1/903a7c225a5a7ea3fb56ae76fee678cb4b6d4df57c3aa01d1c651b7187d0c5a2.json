@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "903a7c225a5a7ea3fb56ae76fee678cb4b6d4df57c3aa01d1c651b7187d0c5a2",
+  "created_at": "2026-07-16T04:51:55.834258+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "Whose bestseller list did the author of Empress Bianca have a biography on in 1992?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "Whose bestseller list did the author of Empress Bianca have a biography on in 1992?",
+        "summary_1": "None of the passages mention \"Empress Bianca\" or its author. Passages that do appear: passage [4] says James L. Snyder wrote a biography of A.W. Tozer titled \"In Pursuit of God: The Life of A. W. Tozer\" that \"won the Reader’s Choice Award\" from Christianity Today (paraphrase of passage [4]); passages [1], [2], and [7] note other authors with New York Times bestsellers. Missing/next-hop: retrieve the author of Empress Bianca, then search that author's biography + 1992 to locate which person's/bestseller list (e.g., \"New York Times bestseller list\" or another list) featured their biography in 1992. Use query anchors: \"Empress Bianca author\", \"Empress Bianca biography 1992\", and the phrase \"biography ... 1992 bestseller list\" to find the required link.",
+        "current_output": {
+          "query": "Empress Bianca author biography 1992 bestseller list"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Empress Bianca author biography 1992 bestseller list"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Bianca Bosker",
+          "Gabriel Sherman",
+          "Empress Bianca",
+          "Margaret George",
+          "Joe Hyams",
+          "Luiz Cesar Pimentel",
+          "Bill Dedman"
+        ],
+        "retrieved_doc_snippets": [
+          "Bianca Bosker | Bianca Bosker is an American journalist and author whose \"New York Times\" bestselling book \"Cork Dork\" has been reviewed by \"The New York Times\" and \"Publishers Weekly\".",
+          "Gabriel Sherman | Gabriel Sherman is an American author. In 2014, he wrote a biography about Fox News Channel president Roger Ailes called \"The Loudest Voice in the Room: How the Brilliant, Bombastic Roger Ailes Built Fox News – and Divided a Country\", which debuted at #9 on The New York Times Bestseller list.",
+          "Empress Bianca | Empress Bianca, the first novel by Lady Colin Campbell, was initially published in June 2005. One month later, Arcadia Books, the British publisher, withdrew the book and pulped all unsold copies in reaction to a legal threat initiated on behalf of Lily Safra under her interpretation that the book was a defamatory roman à clef. After some changes the book was republished in the United States in 2008 by Dynasty Press.",
+          "Margaret George | Margaret George is an American historical novelist specializing in epic fictional biographies. She is known for her meticulous research and the large scale of her books. She is the author of the bestselling novels \"The Autobiography of Henry VIII\" (1986), \"Mary Queen of Scotland and the Isles\" (1992), \"The Memoirs of Cleopatra\" (1997), \"Mary Called Magdalene\" (2002), \"Helen of Troy\" (2006), and \"Elizabeth I\" (2011.) She is currently at work on a novel about the Emperor Nero.",
+          "Joe Hyams | Joe Hyams (June 6, 1923 – November 8, 2008) was an American Hollywood columnist and author of bestselling biographies of Hollywood stars.",
+          "Luiz Cesar Pimentel | Luiz Cesar Pimentel (São Paulo, January 22, 1971) is a Brazilian journalist, writer and currently Director of Content of the Web Portal R7, of Record TV. He is the author of five books, biographies, that have entered the list of the 20 bestsellers in Brazil by \"Veja\" Magazine. He is also a collaborator of some of the main vehicles, newspapers and magazines, in his country such as \"Rolling Stone\", \"Elle\" and \"Playboy\".",
+          "Bill Dedman | Bill Dedman (born 1960) is a Pulitzer Prize-winning American journalist, an investigative reporter for \"Newsday\", and co-author of the No. 1 bestselling biography of reclusive heiress Huguette Clark, \"\"."
+        ],
+        "summary_2": "Empress Bianca was written by Lady Colin Campbell (passage [3]); the supplied passages contain no evidence that a biography by or about her appeared on any 1992 bestseller list, so the question cannot be answered from these sources.",
+        "answer": "Cannot be answered from the provided summaries.",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "Empress Bianca"
+        ],
+        "missing_titles_after_hop2": [
+          "Lady Colin Campbell"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Lady Colin Campbell Diana Princess of Wales 1992 New York Times bestseller"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Lady Colin Campbell"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Whose bestseller list did the author of Empress Bianca have a biography on in 1992?\",\n  \"summary_1\": \"None of the passages mention \\\"Empress Bianca\\\" or its author. Passages that do appear: passage [4] says James L. Snyder wrote a biography of A.W. Tozer titled \\\"In Pursuit of God: The Life of A. W. Tozer\\\" that \\\"won the Reader’s Choice Award\\\" from Christianity Today (paraphrase of passage [4]); passages [1], [2], and [7] note other authors with New York Times bestsellers. Missing/next-hop: retrieve the author of Empress Bianca, then search that author's biography + 1992 to locate which person's/bestseller list (e.g., \\\"New York Times bestseller list\\\" or another list) featured their biography in 1992. Use query anchors: \\\"Empress Bianca author\\\", \\\"Empress Bianca biography 1992\\\", and the phrase \\\"biography ... 1992 bestseller list\\\" to find the required link.\",\n  \"current_output\": {\n    \"query\": \"Empress Bianca author biography 1992 bestseller list\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Empress Bianca author biography 1992 bestseller list\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Bianca Bosker\",\n    \"Gabriel Sherman\",\n    \"Empress Bianca\",\n    \"Margaret George\",\n    \"Joe Hyams\",\n    \"Luiz Cesar Pimentel\",\n    \"Bill Dedman\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Bianca Bosker | Bianca Bosker is an American journalist and author whose \\\"New York Times\\\" bestselling book \\\"Cork Dork\\\" has been reviewed by \\\"The New York Times\\\" and \\\"Publishers Weekly\\\".\",\n    \"Gabriel Sherman | Gabriel Sherman is an American author. In 2014, he wrote a biography about Fox News Channel president Roger Ailes called \\\"The Loudest Voice in the Room: How the Brilliant, Bombastic Roger Ailes Built Fox News – and Divided a Country\\\", which debuted at #9 on The New York Times Bestseller list.\",\n    \"Empress Bianca | Empress Bianca, the first novel by Lady Colin Campbell, was initially published in June 2005. One month later, Arcadia Books, the British publisher, withdrew the book and pulped all unsold copies in reaction to a legal threat initiated on behalf of Lily Safra under her interpretation that the book was a defamatory roman à clef. After some changes the book was republished in the United States in 2008 by Dynasty Press.\",\n    \"Margaret George | Margaret George is an American historical novelist specializing in epic fictional biographies. She is known for her meticulous research and the large scale of her books. She is the author of the bestselling novels \\\"The Autobiography of Henry VIII\\\" (1986), \\\"Mary Queen of Scotland and the Isles\\\" (1992), \\\"The Memoirs of Cleopatra\\\" (1997), \\\"Mary Called Magdalene\\\" (2002), \\\"Helen of Troy\\\" (2006), and \\\"Elizabeth I\\\" (2011.) She is currently at work on a novel about the Emperor Nero.\",\n    \"Joe Hyams | Joe Hyams (June 6, 1923 – November 8, 2008) was an American Hollywood columnist and author of bestselling biographies of Hollywood stars.\",\n    \"Luiz Cesar Pimentel | Luiz Cesar Pimentel (São Paulo, January 22, 1971) is a Brazilian journalist, writer and currently Director of Content of the Web Portal R7, of Record TV. He is the author of five books, biographies, that have entered the list of the 20 bestsellers in Brazil by \\\"Veja\\\" Magazine. He is also a collaborator of some of the main vehicles, newspapers and magazines, in his country such as \\\"Rolling Stone\\\", \\\"Elle\\\" and \\\"Playboy\\\".\",\n    \"Bill Dedman | Bill Dedman (born 1960) is a Pulitzer Prize-winning American journalist, an investigative reporter for \\\"Newsday\\\", and co-author of the No. 1 bestselling biography of reclusive heiress Huguette Clark, \\\"\\\".\"\n  ],\n  \"summary_2\": \"Empress Bianca was written by Lady Colin Campbell (passage [3]); the supplied passages contain no evidence that a biography by or about her appeared on any 1992 bestseller list, so the question cannot be answered from these sources.\",\n  \"answer\": \"Cannot be answered from the provided summaries.\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"Empress Bianca\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Lady Colin Campbell\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Lady Colin Campbell Diana Princess of Wales 1992 New York Times bestseller\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Lady Colin Campbell\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 (or the visible inputs) indicates the work's author or a biography is missing and the next hop is to find that author/biography (phrases like \\\"Empress Bianca author\\\", \\\"biography 1992\\\", or explicit 'retrieve the author' guidance).\",\n    \"preserve_rule\": \"Keep the original contract: emit exactly one compact, single-line retrieval query and nothing else; continue to use visible anchors from summary_1 and avoid explanatory text.\",\n    \"change_rule\": \"When the missing bridge is the author/biography, build the single query by concatenating the visible work anchor (e.g., the string that names the work plus the token 'author' if present) with focused relation keywords: include 'biography', the year '1992', and a major bestseller-list keyword present in the visible inputs such as 'New York Times bestseller'. Form the query as a short keyword phrase (no full sentences, no punctuation beyond spaces).\",\n    \"drop_or_avoid_rule\": \"Do not insert the actual author name or any other hidden/target-only literal; avoid long quoted spans, multi-query outputs, explanatory phrases, or added punctuation. Do not add facts not present in visible inputs.\",\n    \"output_contract\": \"Return exactly one compact, whitespace-separated query string (single line) that combines the visible work anchor and the keywords: biography 1992 New York Times bestseller. No other fields or commentary.\",\n    \"why_local_transition\": \"This minimal edit steers the existing single-query behavior toward recovering a 1992 biography-on-bestseller-list fact by adding precise relation keywords (biography, 1992, a named bestseller list) while preserving the original anchor from summary_1 and not exposing any target-only literals.\"\n  },\n  \"rationale\": \"The prior query was generic and omitted an explicit bestseller-list keyword, making it less likely to retrieve the needed evidence. Adding concise relation keywords ('biography', '1992', 'New York Times bestseller') to the visible work-author anchor focuses the search on the exact fact to recover without introducing or leaking target-only names. This is a small, local prompt change that preserves the original single-query output contract and avoids forbidden literal leakage.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 37,
+    "row_index": 37,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 1
+  }
+}

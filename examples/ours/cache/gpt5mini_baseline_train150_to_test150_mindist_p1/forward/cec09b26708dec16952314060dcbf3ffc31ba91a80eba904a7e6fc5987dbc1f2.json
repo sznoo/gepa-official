@@ -1,0 +1,246 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "cec09b26708dec16952314060dcbf3ffc31ba91a80eba904a7e6fc5987dbc1f2",
+  "created_at": "2026-07-14T15:07:46.168535+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "A Wish Way is a device that appears in a book illustrated by who?",
+    "answer": "John R. Neill",
+    "context": {
+      "title": [
+        "The Fool of the World and the Flying Ship (book)",
+        "Wish Way",
+        "Tiger Tale",
+        "The Princess and the Pony",
+        "The Book of Genesis (comics)",
+        "The Lost King of Oz",
+        "Mother Goose in Prose",
+        "The Magic Finger",
+        "The Pocket Book of Boners",
+        "The Pencil of Nature"
+      ],
+      "sentences": [
+        [
+          "The Fool of the World and the Flying Ship is a book illustrated by Uri Shulevitz that retells a Russian fairy tale of the same name.",
+          " The text is taken from Arthur Ransome's version of the story in the 1916 book \"Old Peter's Russian Tales\"; Ransome had collected the folktale when he was a journalist in Russia.",
+          " The book was released in 1968 by Farrar, Straus and Giroux and won a Caldecott Medal for illustration in 1969."
+        ],
+        [
+          "A Wish Way is a device that appears in three of the Oz books of Ruth Plumly Thompson, \"The Royal Book of Oz\", \"The Hungry Tiger of Oz\", and \"The Lost King of Oz\".",
+          " Two Wish Ways are found in distinctly different locations, both in the Winkie Country."
+        ],
+        [
+          "Tiger Tale is a children's picture book illustrated by Marion Isham and written by Steve Isham.",
+          " First published in 2002, the book retells the Aboriginal story of how the Tasmanian tiger got its stripes.",
+          " \"Tiger Tale\" is illustrated using torn paper collage that gives the book a folkloric style."
+        ],
+        [
+          "The Princess and the Pony is a 2015 children's picture book illustrated by Kate Beaton.",
+          " She won the Children's Book Award in 2016 for the \"Princess and the Pony\".",
+          " She said that the book was inspired by her nephew.",
+          " It is her first book written for children."
+        ],
+        [
+          "The Book of Genesis (2009) is a comic book illustrated by American cartoonist and comic book artist Robert Crumb that purports to be a faithful, literal illustration of the Book of Genesis.",
+          " It reached #1 the New York Times graphic novel bestseller list and on the Christian books list at Amazon.com."
+        ],
+        [
+          "The Lost King of Oz (1925) is the nineteenth in the series of Oz books created by L. Frank Baum and his successors, and the fifth written by Ruth Plumly Thompson.",
+          " It was Illustrated by John R. Neill."
+        ],
+        [
+          "Mother Goose in Prose is a collection of twenty-two children's stories based on Mother Goose nursery rhymes.",
+          " It was the first children's book written by L. Frank Baum, and the first book illustrated by Maxfield Parrish.",
+          " It was originally published in 1897 by Way and Williams of Chicago, and re-released by the George M. Hill Company in 1901."
+        ],
+        [
+          "The Magic Finger is a fantasy story written by Roald Dahl in 1962.",
+          " It was first published in the United States, by Harper & Row in 1966, as a picture book illustrated by William Pène du Bois.",
+          " Allen & Unwin published a Pène du Bois edition in the U.K. in 1968.",
+          " Later editions have been illustrated by Pat Marriott, Tony Ross, and Quentin Blake."
+        ],
+        [
+          "The Pocket Book of Boners is a book illustrated by Theodor Seuss Geisel (Dr. Seuss), originally published as four separate books in 1931–32 by The Viking Press.",
+          " In 1941, Readers' League of America compiled these four books and published the \"Pocket Book of Boners\".",
+          " It was one of the bestselling paperback books of World War II, with 1.34 million copies in print by 1945."
+        ],
+        [
+          "The Pencil of Nature, published in six installments between 1844 and 1846, was the \"first photographically illustrated book to be commercially published\" or \"the first commercially published book illustrated with photographs\".",
+          " It was wholly executed by the new art of Photogenic Drawing, without any aid whatever from the"
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Wish Way",
+        "The Lost King of Oz",
+        "The Lost King of Oz"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nProduce a single, concise, structured first-hop evidence report as the `summary`. The summary must do all of the following and only include content that helps determine what to fetch next:\n\n- Enumerate concrete facts found in the provided passages. For each fact include the passage source label and either a very short quoted fragment (up to about 15 words) when a decisive short fact appears or a brief paraphrase otherwise. Keep each fact to one short line.\n\n- Explicitly identify the bridge entity(ies) and any missing or ambiguous fact(s) that prevent answering the question from the given passages. If a name or identifier in the question corresponds to multiple candidate pages present in `passages`, list every candidate variant and mark the name as ambiguous; do not choose between them.\n\n- Prescribe concrete, prioritized next-hop retrieval targets to resolve each missing or ambiguous element. For each target, specify which page(s) or disambiguation page to fetch and what exact section, keyword, or datum to extract (for example: specific field such as birth year, office held, list membership, dates, or the section heading to check). Prioritize targets (1, 2, 3...) when helpful.\n\n- Only produce a final answer in `summary` if every required fact for every entity is present and unambiguous in the supplied passages; otherwise do not produce a final answer and focus on retrieval guidance.\n\nFormatting and content constraints:\n- Keep the summary concise (a short paragraph or a few short bullet-like lines).\n- Produce only the single output field `summary` and nothing else.\n- Preserve source-linked evidence; do not assert facts without a passage label.\n- Do not invent facts or assume which ambiguous candidate is intended.\n- Avoid copying long verbatim spans; use short quoted fragments when decisive and paraphrase otherwise.\n- When an expected authoritative page is missing from `passages`, note that absence and include that page title as a next-hop retrieval target.\n\nInput: fields `question` and `passages`. Output: one field `summary` meeting the requirements above.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nYou are to produce exactly one compact second-hop retrieval query that targets the missing bridge or supporting evidence referenced by summary_1. Follow these operational rules when constructing the single `query` string:\n\n- Use visible anchor tokens from `question` or `summary_1` (named works, titles, artist names, years or other identifiers only if present) and append a short retrieval cue naming the bridge sought (e.g., artist, album, recording, genre, season count, passage, supporting quote).\n- Emit one concise line (one string assigned to `query`), roughly ≤ 10–12 words, formatted either as a short interrogative that names the anchors or as a compact keyword string (anchors + bridge keywords).\n- If summary_1 explicitly requests a missing attribute or passage, emit the focused retrieval query rather than asking for clarification.\n- Do not include answers, conclusions, enumerations, provenance notes, speculative language, or user-facing explanations; do not invent entities or add tokens that are not present in the inputs.\n- Include year or other identifier tokens only if they appear in the provided inputs and help disambiguate.\n- Keep wording retrieval-oriented and terse. Preserve the fallback that if retrieval using this query later fails, downstream steps may request clarification.\n\nOutput contract: produce exactly one field `query` whose value is the single compact retrieval query line described above.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nInstructions for producing `summary` (single field only):\n1. Merge the first-hop `context` and the second-hop `passages` into one compact integrated `summary` that preserves the primary answer name(s) and only includes passage-supported facts needed to justify or disambiguate that answer.\n2. If `context` already contains a concise answer (a short sentence or a name), keep that content as the first sentence of `summary` when it is consistent with facts in `passages`. If `context` lacks a concise answer, create a concise first sentence that names the primary answer(s), using the canonical labels from `context` when available and otherwise from `passages`.\n3. Expand the summary only when `passages` provide explicit, matching second-hop evidence about one or more named entities referenced in `context`. When expansion is appropriate, append at most one short supporting sentence per named entity. Each supporting sentence must begin with the entity's full name as shown in the inputs and paraphrase up to a few core attributes that are directly present in the `passages` (examples: nationality, a notable award/status, a current affiliation/team, a birth date, membership/partnership relation, or an explicit founding/formation fact).\n4. Keep `summary` concise: typically 1–2 sentences for a single entity; allow up to 3 sentences only when multiple distinct named entities each require one supporting sentence. Prioritize the facts most directly necessary to answer the `question`.\n5. Only assert facts that are directly supported by the provided `passages` or `context`. Do not introduce new entities, dates, awards, affiliations, roles, or causal claims that are not present in the inputs.\n6. Prefer paraphrase over long verbatim copying. Use short quoted phrases only when the exact short phrase (roughly ≤10 words) appears in the `passages` and quoting preserves clarity.\n7. If `context` and `passages` conflict, prefer facts that are explicitly present in the `passages`: update the concise answer to match passage-supported content rather than preserving a contradicted `context`.\n8. If the retrieved `passages` do not supply explicit supporting evidence for named entities in `context`, keep the `summary` concise and do not expand or speculate.\n9. Output exactly one field named `summary` whose value is the integrated post-retrieval summary text. Do not output additional fields, metadata, or commentary.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nFollow these operational rules when producing `answer`:\n- Use only the content of `question`, `summary_1`, and `summary_2` as your evidential basis. Do not introduce new facts or external information.\n- If both `summary_1` and `summary_2` clearly and unambiguously support the same binary (yes/no) conclusion to the question, set `answer` to exactly one lowercase token: yes or no. The `answer` field must contain nothing else (no punctuation, capitalization, quotes, explanation, or additional text).\n- Decide which token to emit by aggregating the visible summaries only. Treat `summary_2` as the later integrated evidence; do not let unresolved language in `summary_1` alone prevent emitting the single-token result if both summaries now unambiguously agree.\n- If the summaries conflict, are ambiguous, incomplete, hedged such that the relation is unresolved, or if the question is non-binary, do not apply the single-token rule; instead follow the agent's existing final-answer fallback behavior for unresolved or non-binary cases (which may produce a fuller response or an uncertainty signal).\n\nProduce only the `answer` field as specified."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "822bbea7ca75",
+    "rerun_from": null,
+    "question": "A Wish Way is a device that appears in a book illustrated by who?",
+    "gold_answer": "John R. Neill",
+    "context": {
+      "title": [
+        "The Fool of the World and the Flying Ship (book)",
+        "Wish Way",
+        "Tiger Tale",
+        "The Princess and the Pony",
+        "The Book of Genesis (comics)",
+        "The Lost King of Oz",
+        "Mother Goose in Prose",
+        "The Magic Finger",
+        "The Pocket Book of Boners",
+        "The Pencil of Nature"
+      ],
+      "sentences": [
+        [
+          "The Fool of the World and the Flying Ship is a book illustrated by Uri Shulevitz that retells a Russian fairy tale of the same name.",
+          " The text is taken from Arthur Ransome's version of the story in the 1916 book \"Old Peter's Russian Tales\"; Ransome had collected the folktale when he was a journalist in Russia.",
+          " The book was released in 1968 by Farrar, Straus and Giroux and won a Caldecott Medal for illustration in 1969."
+        ],
+        [
+          "A Wish Way is a device that appears in three of the Oz books of Ruth Plumly Thompson, \"The Royal Book of Oz\", \"The Hungry Tiger of Oz\", and \"The Lost King of Oz\".",
+          " Two Wish Ways are found in distinctly different locations, both in the Winkie Country."
+        ],
+        [
+          "Tiger Tale is a children's picture book illustrated by Marion Isham and written by Steve Isham.",
+          " First published in 2002, the book retells the Aboriginal story of how the Tasmanian tiger got its stripes.",
+          " \"Tiger Tale\" is illustrated using torn paper collage that gives the book a folkloric style."
+        ],
+        [
+          "The Princess and the Pony is a 2015 children's picture book illustrated by Kate Beaton.",
+          " She won the Children's Book Award in 2016 for the \"Princess and the Pony\".",
+          " She said that the book was inspired by her nephew.",
+          " It is her first book written for children."
+        ],
+        [
+          "The Book of Genesis (2009) is a comic book illustrated by American cartoonist and comic book artist Robert Crumb that purports to be a faithful, literal illustration of the Book of Genesis.",
+          " It reached #1 the New York Times graphic novel bestseller list and on the Christian books list at Amazon.com."
+        ],
+        [
+          "The Lost King of Oz (1925) is the nineteenth in the series of Oz books created by L. Frank Baum and his successors, and the fifth written by Ruth Plumly Thompson.",
+          " It was Illustrated by John R. Neill."
+        ],
+        [
+          "Mother Goose in Prose is a collection of twenty-two children's stories based on Mother Goose nursery rhymes.",
+          " It was the first children's book written by L. Frank Baum, and the first book illustrated by Maxfield Parrish.",
+          " It was originally published in 1897 by Way and Williams of Chicago, and re-released by the George M. Hill Company in 1901."
+        ],
+        [
+          "The Magic Finger is a fantasy story written by Roald Dahl in 1962.",
+          " It was first published in the United States, by Harper & Row in 1966, as a picture book illustrated by William Pène du Bois.",
+          " Allen & Unwin published a Pène du Bois edition in the U.K. in 1968.",
+          " Later editions have been illustrated by Pat Marriott, Tony Ross, and Quentin Blake."
+        ],
+        [
+          "The Pocket Book of Boners is a book illustrated by Theodor Seuss Geisel (Dr. Seuss), originally published as four separate books in 1931–32 by The Viking Press.",
+          " In 1941, Readers' League of America compiled these four books and published the \"Pocket Book of Boners\".",
+          " It was one of the bestselling paperback books of World War II, with 1.34 million copies in print by 1945."
+        ],
+        [
+          "The Pencil of Nature, published in six installments between 1844 and 1846, was the \"first photographically illustrated book to be commercially published\" or \"the first commercially published book illustrated with photographs\".",
+          " It was wholly executed by the new art of Photogenic Drawing, without any aid whatever from the"
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Wish Way",
+        "The Lost King of Oz",
+        "The Lost King of Oz"
+      ],
+      "sent_id": [
+        0,
+        0,
+        1
+      ]
+    },
+    "gold_support_titles": [
+      "Wish Way",
+      "The Lost King of Oz"
+    ],
+    "hop1_query": "A Wish Way is a device that appears in a book illustrated by who?",
+    "hop1_docs": [
+      "Wish Way | A Wish Way is a device that appears in three of the Oz books of Ruth Plumly Thompson, \"The Royal Book of Oz\", \"The Hungry Tiger of Oz\", and \"The Lost King of Oz\".  Two Wish Ways are found in distinctly different locations, both in the Winkie Country.",
+      "Felicity Wishes | Felicity Wishes is a British children's book series created, written, illustrated and privately owned by the Character Brand Creator Emma Thomson (not to be confused with the British actress of a similar name) .  Books include over 140 story books, activity books, picture books and annuals.  The popularity of the books led to the launch of a \"Felicity Wishes\" magazine and hundreds of other products.",
+      "I Wish That I Had Duck Feet | I Wish That I Had Duck Feet is a children's book written by Dr. Seuss, illustrated by B. Tobey, and first published in 1965.  \"Theo.  LeSieg\" was a pen name of Theodor Geisel, who is more commonly known as Dr. Seuss.  The story concerns a boy who wishes that he could have many different animal and mechanical body parts, explaining the pros and cons of the body part.  At the end, he decides that he is happiest being himself.",
+      "The Wishing Horse of Oz | The Wishing Horse of Oz (1935) is the twenty-ninth in the series of Oz books created by L. Frank Baum and his successors, and the fifteenth written by Ruth Plumly Thompson.  It was Illustrated by John R. Neill.  This book marked the point at which Thompson had written more Oz books than Baum himself.",
+      "Keeping the Night Watch | Keeping the Night Watch is a children's poetry book written by Hope Anita Smith and illustrated by E. B. Lewis.  Published by Square Fish Books as the sequel to Smith's \"The Way a Door Closes\", it was a Coretta Scott King Author Honor Book and appeared on several best children's book lists in 2009.",
+      "Jinnicky the Red Jinn | The Red Jinn, later known as Jinnicky, is one of Ruth Plumly Thompson's most frequently occurring characters in her Oz books.  He was first introduced in \"Jack Pumpkinhead of Oz\" as a mysterious figure who educates Jack Pumpkinhead on the use of the Pirate Sack.  Although a detailed description is included in the text, \"Jack Pumpkinhead of Oz\" includes no illustrations of the Red Jinn aside from a gruesome color plate that did not appear outside the first edition, in which he has massive piercings.  He was reintroduced, drawn, and given the name Jinnicky in \"The Purple Prince of Oz\"; he also appeared in the follow-up, \"The Silver Princess in Oz\".  (He makes a cameo appearance in \"The Wishing Horse of Oz\", and he is the principal pre-existing character in Thompson's sub-canonical penultimate Oz book, \"Yankee in Oz\").  Jack Snow apparently thought the Red Jinn was a separate character, for he considered \"The Purple Prince of Oz\" Jinnicky's first appearance in \"Who's Who in Oz\", though he did not include a separate Red Jinn entry.",
+      "A Lion in the Night | A Lion in the Night is a 1985 children's picture book written and illustrated by Pamela Allen.  It is about a baby who makes a wish, transforms her toy lion into a real one for one night, and goes on an adventure."
+    ],
+    "hop1_titles": [
+      "Wish Way",
+      "Felicity Wishes",
+      "I Wish That I Had Duck Feet",
+      "The Wishing Horse of Oz",
+      "Keeping the Night Watch",
+      "Jinnicky the Red Jinn",
+      "A Lion in the Night"
+    ],
+    "summary_1": "- Fact (passage [1]): \"A Wish Way is a device that appears in three of the Oz books\" — specifically named: The Royal Book of Oz; The Hungry Tiger of Oz; The Lost King of Oz.  \n- Fact (passage [4]): The Thompson Oz book The Wishing Horse of Oz \"was Illustrated by John R. Neill\" (example that Thompson-era Oz books have credited illustrators in their pages).  \n- Bridge entities / ambiguity: The question asks about \"a book\" but Wish Way appears in three distinct books (listed above) — the target book is ambiguous; the illustrator for each of these three books is not provided in the supplied passages.  \n- Missing facts to resolve: For each candidate book, we need the named illustrator(s) (the \"Illustrated by\" credit or equivalent).  \n- Prioritized next-hop retrievals to resolve ambiguity (fetch these pages/sections and extract the illustrator credit or infobox \"Illustrator\" / publication details):\n  1. Fetch page \"The Royal Book of Oz\" — extract infobox/lead line or \"Illustrator(s)\" credit (name and edition/year).  \n  2. Fetch page \"The Hungry Tiger of Oz\" — extract infobox/lead line or \"Illustrator(s)\" credit.  \n  3. Fetch page \"The Lost King of Oz\" — extract infobox/lead line or \"Illustrator(s)\" credit.  \n  4. If any of the above pages are missing or ambiguous, fetch \"Ruth Plumly Thompson\" page and its \"Works\" or bibliography section to find illustrator credits for those specific titles (look for per-book illustrator names).  \n- Note: The supplied \"Wish Way\" passage ([1]) itself does not include illustrator information, so do not answer until the illustrator credits for the specific book(s) above are retrieved.",
+    "hop2_query": "Who illustrated The Royal Book of Oz?",
+    "hop2_docs": [
+      "The Runaway in Oz | The Runaway in Oz is an Oz book by long-time Oz illustrator John R. Neill.  It was written originally during 1943 and was meant to be the thirty-seventh book in the Oz series.  However, Neill died before he could edit or illustrate the book.  Oz publisher Reilly & Lee decided not to publish the book due to shortages caused by World War II.  The text remained a possession of Neill's family.",
+      "Dorothy and the Wizard in Oz | Dorothy and the Wizard in Oz is the fourth book set in the Land of Oz written by L. Frank Baum and illustrated by John R. Neill.  It was published on June 18, 1908 and reunites Dorothy with the humbug Wizard from \"The Wonderful Wizard of Oz\" (1900).  This is one of only two of the original fourteen Oz books (the other being \"The Emerald City of Oz\" (1910), to be illustrated with watercolor paintings.",
+      "List of Oz books | The Oz books form a book series that begins with \"The Wonderful Wizard of Oz\" (1900) and relate the fictional history of the Land of Oz.  Oz was created by author L. Frank Baum, who went on to write fourteen full-length Oz books.  All of the Baum written books are in the public domain in the United States.  Even while he was alive, Baum was styled as \"the Royal Historian of Oz\" to emphasize the concept that Oz is an actual place.  The illusion created was that characters such as Dorothy and Princess Ozma related their adventures in Oz to Baum themselves, by means of wireless telegraph.",
+      "Lucky Bucky in Oz | Lucky Bucky in Oz (1942) is the thirty-sixth in the series of Oz books created by L. Frank Baum and his successors, and the third and last written and illustrated solely by John R. Neill.  (He wrote a fourth, \"The Runaway in Oz\", but died before illustrating it.)",
+      "Jack Pumpkinhead of Oz | Jack Pumpkinhead of Oz (1929) is the twenty-third of the series of Oz books created by L. Frank Baum and continued by other writers; it is the ninth Oz book written by Ruth Plumly Thompson.  It was Illustrated by John R. Neill.",
+      "Yankee in Oz | Yankee in Oz is a 1972 Oz novel by Ruth Plumly Thompson.  It was the first published by The International Wizard of Oz Club.  A letter from the Henry Regnery Company, which bought Reilly & Lee, is reproduced in the front indicating the publisher's blessing for the new Oz book to appear.  It was originally written in 1959, but because the Oz books were not selling, it was not published.  The first two editions of the book were published in 8½ x 11 inch format and running only 94 pages.  This was done at the request of illustrator Dick Martin to reduce the number of required illustrations and to show them closer to the actual size they were drawn.  The second printing (1986) featured a new cover, with the first edition artwork reprinted preceding the title page.  The third printing (2007) is standard Oz book size.  Its cover is a gaudier redesign of the second edition cover.  The book also features maps by James E. Haff, and as such, Thompson correctly places the Winkie Country in the west of Oz.",
+      "Kabumpo in Oz | Kabumpo in Oz (1922) is the sixteenth Oz book, and the second written by Ruth Plumly Thompson.  It was the first Oz book fully credited to her.  (Her first, \"The Royal Book of Oz\", was credited to L. Frank Baum on the cover.)  This is the last Oz book to enter in the public domain by means of automatic copyright expiration.  There are, however, other later Oz books in the public domain, due to their copyrights not being renewed."
+    ],
+    "hop2_titles": [
+      "The Runaway in Oz",
+      "Dorothy and the Wizard in Oz",
+      "List of Oz books",
+      "Lucky Bucky in Oz",
+      "Jack Pumpkinhead of Oz",
+      "Yankee in Oz",
+      "Kabumpo in Oz"
+    ],
+    "summary_2": "A Wish Way is a device that appears in three Oz books: The Royal Book of Oz; The Hungry Tiger of Oz; and The Lost King of Oz.",
+    "answer": "The question is ambiguous: a Wish Way appears in The Royal Book of Oz; The Hungry Tiger of Oz; and The Lost King of Oz. The provided summaries do not give the illustrators for those books. Please specify which book you mean or allow me to fetch the illustrator information for each title.",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "The Lost King of Oz"
+    ],
+    "hit_titles_hop1": [
+      "Wish Way"
+    ],
+    "hit_titles_total": [
+      "Wish Way"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

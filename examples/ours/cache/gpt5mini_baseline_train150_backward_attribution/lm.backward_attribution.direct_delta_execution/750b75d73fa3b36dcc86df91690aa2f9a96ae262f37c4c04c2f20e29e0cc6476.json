@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "750b75d73fa3b36dcc86df91690aa2f9a96ae262f37c4c04c2f20e29e0cc6476",
+  "created_at": "2026-07-14T13:37:17.123623+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If both summary_1 and summary_2 are identical and consist of a multi-token personal name (e.g., given name + family name), and the question asks for a person (e.g., begins with \"Who\" or contains phrasing like \"Who besides ...\"), apply the change below.",
+            "preserve_rule": "Keep using the provided summaries as evidence and preserve all other existing answer-generation behavior (formatting, faithfulness to summaries, and the requirement to emit the minimal answer string). Do not change when to produce an answer vs. when to abstain.",
+            "change_rule": "When the trigger fires, transform the full personal name from the summaries to its surname by taking the final token of the identical multi-token name in the summaries and emit that token as the answer instead of the full name.",
+            "drop_or_avoid_rule": "Do not emit given names, honorifics, titles, explanatory text, punctuation around the name, or any extra words. Do not add qualifiers or copy long spans beyond the surname. If the summaries are not identical multi-token names, do not apply this rule.",
+            "output_contract": "Produce exactly one string as the answer: the single-token surname (the final token from the matching multi-token name in the summaries). This string must be the sole content of the answer field and the only content inside the [[ ## answer ## ]] block.",
+            "why_local_transition": "The source produced a full two-token name while the minimal-answer convention expects the shortest supported identifier. When both summaries agree on the same full name, emitting the surname only yields a shorter, still-evidenced answer while preserving faithfulness to the visible summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who besides Marceau founded Ballroom Theater’s Dancing Classrooms program that was featured in a 2005 American documentary?",
+        "summary_1": "Pierre Dulaine",
+        "summary_2": "Pierre Dulaine",
+        "current_output": "Pierre Dulaine"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If both summary_1 and summary_2 are identical and consist of a multi-token personal name (e.g., given name + family name), and the question asks for a person (e.g., begins with \\\"Who\\\" or contains phrasing like \\\"Who besides ...\\\"), apply the change below.\",\n      \"preserve_rule\": \"Keep using the provided summaries as evidence and preserve all other existing answer-generation behavior (formatting, faithfulness to summaries, and the requirement to emit the minimal answer string). Do not change when to produce an answer vs. when to abstain.\",\n      \"change_rule\": \"When the trigger fires, transform the full personal name from the summaries to its surname by taking the final token of the identical multi-token name in the summaries and emit that token as the answer instead of the full name.\",\n      \"drop_or_avoid_rule\": \"Do not emit given names, honorifics, titles, explanatory text, punctuation around the name, or any extra words. Do not add qualifiers or copy long spans beyond the surname. If the summaries are not identical multi-token names, do not apply this rule.\",\n      \"output_contract\": \"Produce exactly one string as the answer: the single-token surname (the final token from the matching multi-token name in the summaries). This string must be the sole content of the answer field and the only content inside the [[ ## answer ## ]] block.\",\n      \"why_local_transition\": \"The source produced a full two-token name while the minimal-answer convention expects the shortest supported identifier. When both summaries agree on the same full name, emitting the surname only yields a shorter, still-evidenced answer while preserving faithfulness to the visible summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who besides Marceau founded Ballroom Theater’s Dancing Classrooms program that was featured in a 2005 American documentary?\",\n  \"summary_1\": \"Pierre Dulaine\",\n  \"summary_2\": \"Pierre Dulaine\",\n  \"current_output\": \"Pierre Dulaine\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Dulaine\",\n  \"rationale\": \"Both summaries were the identical multi-token name 'Pierre Dulaine', so the ordered delta required returning the final token (surname) as the minimal answer.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 7,
+    "row_index": 7,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

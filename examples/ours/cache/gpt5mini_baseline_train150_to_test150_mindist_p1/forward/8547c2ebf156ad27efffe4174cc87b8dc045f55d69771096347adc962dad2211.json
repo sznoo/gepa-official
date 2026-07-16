@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "8547c2ebf156ad27efffe4174cc87b8dc045f55d69771096347adc962dad2211",
+  "created_at": "2026-07-14T15:06:10.166436+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Are Brunnera and Codonanthe from the same locations?",
+    "answer": "no",
+    "context": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sentences": [
+        [
+          "Brunnera is a genus of flowering plants in the family Boraginaceae.",
+          " They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.",
+          " They have hairy leaves and sprays of blue flowers in spring.",
+          " Numerous cultivars are available, which are valued as groundcover in dappled shade.",
+          " Some possess variegated foliage.",
+          " The best known species is \"Brunnera macrophylla\", known as Siberian bugloss."
+        ],
+        [
+          "Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.",
+          " In its own habitat, the plant usually grows in association with tree ant nests.",
+          " The botanical name comes from the \"Greek\" for bellflower.",
+          " Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.",
+          " Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.",
+          " Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.",
+          " These delightful waxy flowers are strongly scented.",
+          " Colorful berry-like fruits appear after flowering.",
+          " Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.",
+          " Seeds that germinate outside a nest tend to grow more slowly."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nProduce a single, concise, structured first-hop evidence report as the `summary`. The summary must do all of the following and only include content that helps determine what to fetch next:\n\n- Enumerate concrete facts found in the provided passages. For each fact include the passage source label and either a very short quoted fragment (up to about 15 words) when a decisive short fact appears or a brief paraphrase otherwise. Keep each fact to one short line.\n\n- Explicitly identify the bridge entity(ies) and any missing or ambiguous fact(s) that prevent answering the question from the given passages. If a name or identifier in the question corresponds to multiple candidate pages present in `passages`, list every candidate variant and mark the name as ambiguous; do not choose between them.\n\n- Prescribe concrete, prioritized next-hop retrieval targets to resolve each missing or ambiguous element. For each target, specify which page(s) or disambiguation page to fetch and what exact section, keyword, or datum to extract (for example: specific field such as birth year, office held, list membership, dates, or the section heading to check). Prioritize targets (1, 2, 3...) when helpful.\n\n- Only produce a final answer in `summary` if every required fact for every entity is present and unambiguous in the supplied passages; otherwise do not produce a final answer and focus on retrieval guidance.\n\nFormatting and content constraints:\n- Keep the summary concise (a short paragraph or a few short bullet-like lines).\n- Produce only the single output field `summary` and nothing else.\n- Preserve source-linked evidence; do not assert facts without a passage label.\n- Do not invent facts or assume which ambiguous candidate is intended.\n- Avoid copying long verbatim spans; use short quoted fragments when decisive and paraphrase otherwise.\n- When an expected authoritative page is missing from `passages`, note that absence and include that page title as a next-hop retrieval target.\n\nInput: fields `question` and `passages`. Output: one field `summary` meeting the requirements above.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nYou are to produce exactly one compact second-hop retrieval query that targets the missing bridge or supporting evidence referenced by summary_1. Follow these operational rules when constructing the single `query` string:\n\n- Use visible anchor tokens from `question` or `summary_1` (named works, titles, artist names, years or other identifiers only if present) and append a short retrieval cue naming the bridge sought (e.g., artist, album, recording, genre, season count, passage, supporting quote).\n- Emit one concise line (one string assigned to `query`), roughly ≤ 10–12 words, formatted either as a short interrogative that names the anchors or as a compact keyword string (anchors + bridge keywords).\n- If summary_1 explicitly requests a missing attribute or passage, emit the focused retrieval query rather than asking for clarification.\n- Do not include answers, conclusions, enumerations, provenance notes, speculative language, or user-facing explanations; do not invent entities or add tokens that are not present in the inputs.\n- Include year or other identifier tokens only if they appear in the provided inputs and help disambiguate.\n- Keep wording retrieval-oriented and terse. Preserve the fallback that if retrieval using this query later fails, downstream steps may request clarification.\n\nOutput contract: produce exactly one field `query` whose value is the single compact retrieval query line described above.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nInstructions for producing `summary` (single field only):\n1. Merge the first-hop `context` and the second-hop `passages` into one compact integrated `summary` that preserves the primary answer name(s) and only includes passage-supported facts needed to justify or disambiguate that answer.\n2. If `context` already contains a concise answer (a short sentence or a name), keep that content as the first sentence of `summary` when it is consistent with facts in `passages`. If `context` lacks a concise answer, create a concise first sentence that names the primary answer(s), using the canonical labels from `context` when available and otherwise from `passages`.\n3. Expand the summary only when `passages` provide explicit, matching second-hop evidence about one or more named entities referenced in `context`. When expansion is appropriate, append at most one short supporting sentence per named entity. Each supporting sentence must begin with the entity's full name as shown in the inputs and paraphrase up to a few core attributes that are directly present in the `passages` (examples: nationality, a notable award/status, a current affiliation/team, a birth date, membership/partnership relation, or an explicit founding/formation fact).\n4. Keep `summary` concise: typically 1–2 sentences for a single entity; allow up to 3 sentences only when multiple distinct named entities each require one supporting sentence. Prioritize the facts most directly necessary to answer the `question`.\n5. Only assert facts that are directly supported by the provided `passages` or `context`. Do not introduce new entities, dates, awards, affiliations, roles, or causal claims that are not present in the inputs.\n6. Prefer paraphrase over long verbatim copying. Use short quoted phrases only when the exact short phrase (roughly ≤10 words) appears in the `passages` and quoting preserves clarity.\n7. If `context` and `passages` conflict, prefer facts that are explicitly present in the `passages`: update the concise answer to match passage-supported content rather than preserving a contradicted `context`.\n8. If the retrieved `passages` do not supply explicit supporting evidence for named entities in `context`, keep the `summary` concise and do not expand or speculate.\n9. Output exactly one field named `summary` whose value is the integrated post-retrieval summary text. Do not output additional fields, metadata, or commentary.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nFollow these operational rules when producing `answer`:\n- Use only the content of `question`, `summary_1`, and `summary_2` as your evidential basis. Do not introduce new facts or external information.\n- If both `summary_1` and `summary_2` clearly and unambiguously support the same binary (yes/no) conclusion to the question, set `answer` to exactly one lowercase token: yes or no. The `answer` field must contain nothing else (no punctuation, capitalization, quotes, explanation, or additional text).\n- Decide which token to emit by aggregating the visible summaries only. Treat `summary_2` as the later integrated evidence; do not let unresolved language in `summary_1` alone prevent emitting the single-token result if both summaries now unambiguously agree.\n- If the summaries conflict, are ambiguous, incomplete, hedged such that the relation is unresolved, or if the question is non-binary, do not apply the single-token rule; instead follow the agent's existing final-answer fallback behavior for unresolved or non-binary cases (which may produce a fuller response or an uncertainty signal).\n\nProduce only the `answer` field as specified."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "822bbea7ca75",
+    "rerun_from": null,
+    "question": "Are Brunnera and Codonanthe from the same locations?",
+    "gold_answer": "no",
+    "context": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sentences": [
+        [
+          "Brunnera is a genus of flowering plants in the family Boraginaceae.",
+          " They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.",
+          " They have hairy leaves and sprays of blue flowers in spring.",
+          " Numerous cultivars are available, which are valued as groundcover in dappled shade.",
+          " Some possess variegated foliage.",
+          " The best known species is \"Brunnera macrophylla\", known as Siberian bugloss."
+        ],
+        [
+          "Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.",
+          " In its own habitat, the plant usually grows in association with tree ant nests.",
+          " The botanical name comes from the \"Greek\" for bellflower.",
+          " Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.",
+          " Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.",
+          " Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.",
+          " These delightful waxy flowers are strongly scented.",
+          " Colorful berry-like fruits appear after flowering.",
+          " Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.",
+          " Seeds that germinate outside a nest tend to grow more slowly."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Brunnera",
+        "Codonanthe"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Brunnera",
+      "Codonanthe"
+    ],
+    "hop1_query": "Are Brunnera and Codonanthe from the same locations?",
+    "hop1_docs": [
+      "Codonanthe elegans | Codonanthe elegans is a plant species in the genus \"Codonanthe\".  It is found in Belize.",
+      "Coptosia brunnerae | Coptosia brunnerae is a species of beetle in the family Cerambycidae.  It was described by Sama in 2000.  It is known from Jordan.",
+      "Brunnera macrophylla | Brunnera macrophylla, the Siberian bugloss, great forget-me-not, largeleaf brunnera or heartleaf, is a species of flowering plant in the family Boraginaceae, native to the Caucasus.  It is a hardy, rhizomatous, herbaceous perennial, that can reach from 12 to 18 inches (30 to 45 cm) in height, and carries basal, simple cordate leaves on slender stems.  Sprays of small blue flowers, similar to those seen in the related forget-me-nots, are borne from mid-Spring, and bloom for eight to ten weeks.",
+      "Brunnera | Brunnera is a genus of flowering plants in the family Boraginaceae.  They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.  They have hairy leaves and sprays of blue flowers in spring.  Numerous cultivars are available, which are valued as groundcover in dappled shade.  Some possess variegated foliage.  The best known species is \"Brunnera macrophylla\", known as Siberian bugloss.",
+      "Codonanthe | Codonanthe is a New World genus, consists of a dozen or more species of evergreen epiphytic compact creeping vines with rooting along their stems, and scandent herbs or subshrubs with woody, upright stems from Brazil, Guiana, Central America and West Indies.  In its own habitat, the plant usually grows in association with tree ant nests.  The botanical name comes from the \"Greek\" for bellflower.  Small red stems held flat or hanging, about 30cm long, with pairs of relatively succulent, hard-surfaced and small round dark foliage.  Delicate, pale-pink to white, bell-shaped flowers grow from the leaf axil, either single or in group and always produce in a large number.  Flower tube has 2 lips, each with 2 and 3 lobes; which may be white, pink, lilac to deep purple with yellow throat.  These delightful waxy flowers are strongly scented.  Colorful berry-like fruits appear after flowering.  Seeds look like ant eggs or larvae, which are carried to the nest by ants and inserted into the fertile nest wall where they germinate.  Seeds that germinate outside a nest tend to grow more slowly.",
+      "Organ transplantation | Organ transplantation is a medical procedure in which an organ is removed from one body and placed in the body of a recipient, to replace a damaged or missing organ.  The donor and recipient may be at the same location, or organs may be transported from a donor site to another location.  Organs and/or tissues that are transplanted within the same person's body are called autografts. Transplants that are recently performed between two subjects of the same species are called allografts.  Allografts can either be from a living or cadaveric source.",
+      "Echo Bay Marine Provincial Park | Echo Bay Marine Provincial Park is a provincial park in British Columbia, Canada, established in 1971 and containing 4.66 acre .  It is located at the bay of the same name, offshore from the community of the same name, which is the location of the Simoom Sound post office and is on the west side of Gilford Island."
+    ],
+    "hop1_titles": [
+      "Codonanthe elegans",
+      "Coptosia brunnerae",
+      "Brunnera macrophylla",
+      "Brunnera",
+      "Codonanthe",
+      "Organ transplantation",
+      "Echo Bay Marine Provincial Park"
+    ],
+    "summary_1": "Facts:\n- [4] Brunnera (genus): \"native to the woodlands of Eastern Europe and North West Asia.\"\n- [3] Brunnera macrophylla (species): \"native to the Caucasus.\"\n- [5] Codonanthe (genus): paraphrase — New World genus from \"Brazil, Guiana, Central America and West Indies.\"\n- [1] Codonanthe elegans (species): \"found in Belize.\"\n\nBridge entities and ambiguity:\n- Bridge entities: Brunnera (genus) — supported by [4]/[3]; Codonanthe (genus) — supported by [5]/[1]. No ambiguous name variants present in the passages.\n- No missing or ambiguous location facts remain for these genera in the provided passages.\n\nConclusion / Next step:\n- Final answer: No — Brunnera is native to Eastern Europe/North West Asia (including the Caucasus) while Codonanthe is New World (Brazil, Guiana, Central America, West Indies; e.g., Belize) — sources [4],[3] vs [5],[1]. No additional retrieval needed.",
+    "hop2_query": "Brunnera Codonanthe native ranges supporting sources",
+    "hop2_docs": [
+      "Brunnera | Brunnera is a genus of flowering plants in the family Boraginaceae.  They are rhizomatous perennials, native to the woodlands of Eastern Europe and North West Asia.  They have hairy leaves and sprays of blue flowers in spring.  Numerous cultivars are available, which are valued as groundcover in dappled shade.  Some possess variegated foliage.  The best known species is \"Brunnera macrophylla\", known as Siberian bugloss.",
+      "Brunnera macrophylla | Brunnera macrophylla, the Siberian bugloss, great forget-me-not, largeleaf brunnera or heartleaf, is a species of flowering plant in the family Boraginaceae, native to the Caucasus.  It is a hardy, rhizomatous, herbaceous perennial, that can reach from 12 to 18 inches (30 to 45 cm) in height, and carries basal, simple cordate leaves on slender stems.  Sprays of small blue flowers, similar to those seen in the related forget-me-nots, are borne from mid-Spring, and bloom for eight to ten weeks.",
+      "Codonanthe elegans | Codonanthe elegans is a plant species in the genus \"Codonanthe\".  It is found in Belize.",
+      "Coptosia brunnerae | Coptosia brunnerae is a species of beetle in the family Cerambycidae.  It was described by Sama in 2000.  It is known from Jordan.",
+      "Kubernetes | Kubernetes (commonly referred to as \"K8s\") is an open-source system for automating deployment, scaling and management of containerized applications that was originally designed by Google and donated to the Cloud Native Computing Foundation.  It aims to provide a \"platform for automating deployment, scaling, and operations of application containers across clusters of hosts\".  It supports a range of container tools, including Docker.",
+      "LambdaNative | LambdaNative is an open-source cross-platform development environment written on top of the Gambit-C Scheme implementation of the Scheme programming language, supporting the creation of native applications on a range of mobile, desktop and embedded platforms.  The underlying Scheme programming language has a long tradition of use in theoretical computer science, artificial intelligence and rapid program development.",
+      "Free and open-source graphics device driver | A free and open-source graphics device driver is a software stack that controls computer graphics hardware and supports graphics rendering APIs and is released under a free and open-source software license.  Graphics device drivers are written for specific hardware to work within the context of a specific operating system kernel and to support a range of APIs used by applications to access the graphics hardware.  They may also control output to the display, if the display driver is part of the graphics hardware.  Most free and open-source graphics device drivers are developed via the Mesa project."
+    ],
+    "hop2_titles": [
+      "Brunnera",
+      "Brunnera macrophylla",
+      "Codonanthe elegans",
+      "Coptosia brunnerae",
+      "Kubernetes",
+      "LambdaNative",
+      "Free and open-source graphics device driver"
+    ],
+    "summary_2": "No — Brunnera is native to Eastern Europe and North West Asia (including the Caucasus), while Codonanthe is New World (e.g., found in Belize). Brunnera is a genus of rhizomatous perennials native to the woodlands of Eastern Europe and North West Asia. Codonanthe elegans is a species in the genus Codonanthe and is found in Belize.",
+    "answer": "no",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Brunnera",
+      "Codonanthe"
+    ],
+    "hit_titles_total": [
+      "Brunnera",
+      "Codonanthe"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

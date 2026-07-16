@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a8caa8fc34e5e77eef2d849ab10ee73d280aa82b2acc861d9a139e311df3ec21",
+  "created_at": "2026-07-14T13:42:27.171140+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "summary_2": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "current_output": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "messages, newspapers, and mail.",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"summary_2\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"current_output\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"messages, newspapers, and mail.\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the visible summaries mention 'letters' (including variants such as 'hybrid/printed e‑mail letters', 'postal packets', or similar parenthetical elaborations) and the current answer repeats a verbose parenthetical expansion, apply this delta.\",\n    \"preserve_rule\": \"Keep the factual items already asserted by the summaries (e.g., the presence of mail/letters and any specific subtypes that are explicitly named). Preserve the agent's requirement to produce a minimal final answer string and to not add unsupported claims.\",\n    \"change_rule\": \"Replace verbose parenthetical elaboration with a single, concise general label that covers those letter-like deliverables. Produce a short comma-separated noun list of the supported delivery categories (use one common-word label to collapse synonyms such as 'letters' and related variants). Prefer brevity and normalize synonymous phrases into that single label rather than repeating all subtypes.\",\n    \"drop_or_avoid_rule\": \"Do not emit the original parenthetical expansion or extra explanatory text. Do not invent or add any delivery item that is not explicitly or plausibly supported by the visible summaries. Avoid full-sentence explanations; produce only the minimal noun list.\",\n    \"output_contract\": \"Return only the minimal answer string (no surrounding explanation), composed of the supported delivery category names as a comma-separated list (optionally with 'and' before the last item). Do not include parenthetical details, extra qualifiers, or unsupported items. Preserve the existing final-answer interface (the [[ ## answer ## ]] block must contain only that minimal string).\",\n    \"why_local_transition\": \"This small edit compresses verbose, overlapping letter subtypes into a single general label and yields a compact noun-list answer. It preserves the evidence already present (mail/letters) while enforcing the minimal-answer output shape required by the final agent role.\"\n  },\n  \"rationale\": \"The source output repeats detailed parenthetical expansions of letter-like deliverables; the smallest coherent behavioral change is to normalize those variants into one concise category and present results as a short noun list. This keeps supported content, prevents over-verbosity, and does not add unsupported items. This targeted prompt rule nudges the agent toward the compact, enumerated final-answer format without changing the input/output interface or inventing new facts.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "227ac90cbac5c245164c98b7a11aaac4b100c3b5fd0dea835bfd5a6e62e33aee",
+  "created_at": "2026-07-14T19:29:40.631756+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 108,
+        "stable_id": "108",
+        "question": "Ex Mach Tina was the 8th episode of the series created by whom?",
+        "summary_1": "Loren Bouchard",
+        "hop2_query": "Ex Mach Tina episode \"created by\" - which series is \"Ex Mach Tina\" 8th episode of and who created the series? search (e.g., \"Ex Mach Tina Bob's Burgers created by\" or \"Ex Mach Tina Wikipedia\")",
+        "summary_2": "Loren Bouchard",
+        "answer": "Loren Bouchard",
+        "gold_support_titles": [
+          "Ex Mach Tina",
+          "Bob's Burgers"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 14,
+          "w_stable_id": "14",
+          "agent": "summary2",
+          "w_question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Rip Taylor",
+            "score": 0.0,
+            "answer": "Rip Taylor"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his habit of showering himself (and others) with confetti.",
+            "score": 0.0,
+            "answer": "Rip Taylor (Charles Elmer \"Rip\" Taylor, Jr.)"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question mentions Anthony Toby \"Tony\" Hiller (or \"Tony Hiller\") and asks which artist liked showering himself (or others) with confetti (keywords: \"shower\", \"confetti\"), or if the `context` field names an artist and passages contain a Tony Hiller passage, apply this rule.",
+                "preserve_rule": "Keep the agent's existing behavior of using the `context` field as the first-hop entity and extracting factual lines from `passages`. Preserve concise, factual phrasing and only use facts that appear verbatim or are directly supported in the provided passages.",
+                "change_rule": "When triggered, produce a short integrated summary (1–2 sentences) that (a) links Tony Hiller (or The Hiller Brothers) to the artist named in `context` by stating that Tony Hiller/The Hiller Brothers appeared with that artist, and (b) states the artist's notable habit of showering himself (and others) with confetti if that habit is described in the passages for that artist. Use the names and descriptions as they appear in the inputs and do not introduce new entities or claims.",
+                "drop_or_avoid_rule": "Do not add unrelated passage content (e.g., meteor showers, baby showers), do not invent additional collaborators or biographical details not present in the passages, and avoid long verbatim copying of full biography paragraphs. Do not output the final answer as a separate label or directive — only produce the `summary` field content per the original interface.",
+                "output_contract": "Return the `summary` field as a concise (one or two sentence) integrated statement that: (1) names Tony Hiller (or The Hiller Brothers) and affirms they appeared with the artist named in `context`, and (2) names that artist and notes the confetti-showering habit described in the passages. All claims must be directly supported by the provided `passages` or `context`.",
+                "why_local_transition": "The current output only gives the artist name from the context. The task requires integrating second-hop evidence about Tony Hiller with the first-hop context so the summary connects Tony Hiller's appearances to the context artist and preserves the confetti habit fact needed to answer the question."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Loren Bouchard",
+            "score": 1.0,
+            "answer": "Loren Bouchard"
+          }
+        },
+        {
+          "w_sample_index": 48,
+          "w_stable_id": "48",
+          "agent": "summary2",
+          "w_question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nico Hülkenberg",
+            "score": 0.0,
+            "answer": "Nico Hülkenberg"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+            "score": 0.0,
+            "answer": "Nico Hülkenberg"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),",
+                "preserve_rule": "Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.",
+                "change_rule": "When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.",
+                "drop_or_avoid_rule": "Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.",
+                "output_contract": "Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.",
+                "why_local_transition": "This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Loren Bouchard",
+            "score": 1.0,
+            "answer": "Loren Bouchard"
+          }
+        },
+        {
+          "w_sample_index": 119,
+          "w_stable_id": "119",
+          "agent": "summary2",
+          "w_question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Nikita Katsalapov",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.",
+            "score": 0.0,
+            "answer": "Nikita Katsalapov"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks who won the 2016 Russian national silver medal 'with' another person and the passages include the context person plus a different passage that contains the partner's name and the birth date '29 April 1995'.",
+                "preserve_rule": "Keep the agent's existing concise-answer behavior and retain any facts already used from `context` and `passages` (e.g., the context person's identity). Continue to produce the `summary` field as the output.",
+                "change_rule": "Also integrate the second-hop passage that names the partner: produce a short 1–2 sentence summary that (a) names both people (use the full names as given in the passages), (b) includes birth dates when they appear in the passages, and (c) explicitly states that the two skaters were the 2016 Russian national silver medalists together. Stay concise and factual; do not add new facts beyond the passages.",
+                "drop_or_avoid_rule": "Do not output only a single name (avoid the current one-word output). Do not invent or infer facts not present in the provided passages. Avoid long verbatim quotations of passage text and avoid unrelated passage content.",
+                "output_contract": "Return the field `summary` as a short (1–2 sentence) integrated statement that mentions both partners' full names, includes birth dates if present in the passages, and states they jointly won the 2016 Russian national silver medal. Keep the language factual and minimal.",
+                "why_local_transition": "The current output only repeats the context person. This minimal change forces the agent to incorporate the partner information (including the 29 April 1995 birth date when present) from the passages so the summary directly links both skaters and the 2016 silver-medal partnership required to answer the question."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Loren Bouchard",
+            "score": 1.0,
+            "answer": "Loren Bouchard"
+          }
+        },
+        {
+          "w_sample_index": 84,
+          "w_stable_id": "84",
+          "agent": "summary2",
+          "w_question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Niʻihau (also known as The Makaha Sons)."
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Israel Kaʻanoʻi Kamakawiwoʻole, also called \"Braddah Iz\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \"Moon\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.",
+            "score": 0.0,
+            "answer": "The Mākaha Sons of Niʻihau (Makaha Sons of Niʻihau)"
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks which group the musician known as \"Braddah Iz\" belongs to AND the provided passages include both the musician's page (showing the alias) and a passage describing a musical group (e.g., Mākaha/Makaha Sons of Niʻihau).",
+                "preserve_rule": "Keep the agent's current concise-answer style and preserve any accurate identification already extracted from the musician passage (e.g., that the musician is Israel Kamakawiwoʻole, aka \"Braddah Iz\"). Do not remove or contradict facts already present in the source passages.",
+                "change_rule": "Merge the two relevant passages into a 1–2 sentence summary that (a) names the musician using the canonical name found in the passages, (b) states their membership relationship to the group and—only if the passages explicitly state it—notes that they were a founding member, and (c) supplies one brief descriptive fact about the group (for example: that it is a Hawaiian musical group and the year/place of formation if given). Paraphrase the source text rather than reproducing long verbatim spans. Use the group name shown in the 'context' field as the primary label.",
+                "drop_or_avoid_rule": "Do not add unrelated album details, chart information, or biographical digressions. Avoid listing every band member unless required by the passages. Do not copy long literal spans verbatim from the passages. Do not invent dates, roles, or membership beyond what the visible passages support.",
+                "output_contract": "Produce the field 'summary' as 1–2 concise sentences that (1) identify the musician (using the canonical name from the passages), (2) state the group they are a member of (using the context/group name), and (3) include at most one short clause giving the group's basic descriptor (e.g., 'a Hawaiian musical group formed in 1976 on Oahu') if that fact appears in the passages. Keep language factual, paraphrased, and directly supported by the provided passages.",
+                "why_local_transition": "The current output only names the group; this transition instructs the agent to integrate the musician page with the group passage so the summary also captures membership context (and founding-member/formation details when explicitly present), increasing completeness while keeping the response concise."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Loren Bouchard",
+            "score": 1.0,
+            "answer": "Loren Bouchard"
+          }
+        },
+        {
+          "w_sample_index": 130,
+          "w_stable_id": "130",
+          "agent": "summary2",
+          "w_question": "What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Current Science",
+            "score": 0.0,
+            "answer": "Current Science"
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "C. V. Raman (the 1930 Nobel Prize in Physics laureate) founded the Indian Academy of Sciences, which established the journal Current Science (and the Proceedings of the Indian Academy of Sciences). Separately, C. V. Raman established the Indian Journal of Physics in 1926; the Indian Journal of Physics is a monthly peer-reviewed scientific journal published by Springer Science+Business Media on behalf of the Indian Association for the Cultivation of Science.",
+            "score": 0.0,
+            "answer": "C. V. Raman — the journals: Current Science (via the Indian Academy of Sciences) and the Indian Journal of Physics (established by Raman in 1926)."
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the question asks about a journal or institution tied to a named person (the context or question names a specific individual, e.g., 'C. V. Raman') and the passages contain one or more journal titles or founding/establishment facts related to that person.",
+                "preserve_rule": "Preserve the agent's current concise-answer habit: continue to return a short factual `summary` rather than long exposition. Keep any direct, supported phrase from the provided `context` that already links the named person to a journal (e.g., the mention of 'Current Science').",
+                "change_rule": "Also extract and include the person's name and the explicit relationships present in the supplied inputs: state that the named physicist (as given in context) is connected to the journal(s) in the passages (for example, that they founded the Indian Academy of Sciences which established Current Science, and that they established the Indian Journal of Physics in 1926) in one or two concise sentences. Only assert relationships and dates that appear in `context` or `passages`.",
+                "drop_or_avoid_rule": "Do not add any facts that are not present in the visible `context` or `passages` (no new dates, publishers, honors beyond what's given). Avoid long verbatim copies of any single target sentence; avoid speculative language or extra commentary. Do not transform this rule into producing the final answer elsewhere—stay within the `summary` field and only use supported facts.",
+                "output_contract": "Produce the `summary` field as 1–2 concise sentences that: (a) name the individual as given in inputs, (b) state their 1930 Nobel connection only if it is present in the inputs, and (c) link that individual to the relevant journal(s) using only relationships present in `context`/`passages` (e.g., founder of the Academy that established Current Science; founder of the Indian Journal of Physics, with the year if provided). No unsupported claims, no expanded analysis.",
+                "why_local_transition": "The base behavior returned only a journal title; to answer the question robustly later agents need the integrated second-hop fact that ties the journal(s) back to the named Nobel laureate. This delta minimally instructs the agent to retain the concise output style while adding the specific person→journal relationships that are already present in the inputs."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Loren Bouchard",
+            "score": 1.0,
+            "answer": "Loren Bouchard"
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 108,\n  \"stable_id\": \"108\",\n  \"question\": \"Ex Mach Tina was the 8th episode of the series created by whom?\",\n  \"summary_1\": \"Loren Bouchard\",\n  \"hop2_query\": \"Ex Mach Tina episode \\\"created by\\\" - which series is \\\"Ex Mach Tina\\\" 8th episode of and who created the series? search (e.g., \\\"Ex Mach Tina Bob's Burgers created by\\\" or \\\"Ex Mach Tina Wikipedia\\\")\",\n  \"summary_2\": \"Loren Bouchard\",\n  \"answer\": \"Loren Bouchard\",\n  \"gold_support_titles\": [\n    \"Ex Mach Tina\",\n    \"Bob's Burgers\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 14,\n    \"w_stable_id\": \"14\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Rip Taylor\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his habit of showering himself (and others) with confetti.\",\n      \"score\": 0.0,\n      \"answer\": \"Rip Taylor (Charles Elmer \\\"Rip\\\" Taylor, Jr.)\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question mentions Anthony Toby \\\"Tony\\\" Hiller (or \\\"Tony Hiller\\\") and asks which artist liked showering himself (or others) with confetti (keywords: \\\"shower\\\", \\\"confetti\\\"), or if the `context` field names an artist and passages contain a Tony Hiller passage, apply this rule.\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of using the `context` field as the first-hop entity and extracting factual lines from `passages`. Preserve concise, factual phrasing and only use facts that appear verbatim or are directly supported in the provided passages.\",\n          \"change_rule\": \"When triggered, produce a short integrated summary (1–2 sentences) that (a) links Tony Hiller (or The Hiller Brothers) to the artist named in `context` by stating that Tony Hiller/The Hiller Brothers appeared with that artist, and (b) states the artist's notable habit of showering himself (and others) with confetti if that habit is described in the passages for that artist. Use the names and descriptions as they appear in the inputs and do not introduce new entities or claims.\",\n          \"drop_or_avoid_rule\": \"Do not add unrelated passage content (e.g., meteor showers, baby showers), do not invent additional collaborators or biographical details not present in the passages, and avoid long verbatim copying of full biography paragraphs. Do not output the final answer as a separate label or directive — only produce the `summary` field content per the original interface.\",\n          \"output_contract\": \"Return the `summary` field as a concise (one or two sentence) integrated statement that: (1) names Tony Hiller (or The Hiller Brothers) and affirms they appeared with the artist named in `context`, and (2) names that artist and notes the confetti-showering habit described in the passages. All claims must be directly supported by the provided `passages` or `context`.\",\n          \"why_local_transition\": \"The current output only gives the artist name from the context. The task requires integrating second-hop evidence about Tony Hiller with the first-hop context so the summary connects Tony Hiller's appearances to the context artist and preserves the confetti habit fact needed to answer the question.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Loren Bouchard\",\n      \"score\": 1.0,\n      \"answer\": \"Loren Bouchard\"\n    }\n  },\n  {\n    \"w_sample_index\": 48,\n    \"w_stable_id\": \"48\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nico Hülkenberg\",\n      \"score\": 0.0,\n      \"answer\": \"Nico Hülkenberg\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n      \"score\": 0.0,\n      \"answer\": \"Nico Hülkenberg\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),\",\n          \"preserve_rule\": \"Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.\",\n          \"change_rule\": \"When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.\",\n          \"drop_or_avoid_rule\": \"Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.\",\n          \"output_contract\": \"Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.\",\n          \"why_local_transition\": \"This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Loren Bouchard\",\n      \"score\": 1.0,\n      \"answer\": \"Loren Bouchard\"\n    }\n  },\n  {\n    \"w_sample_index\": 119,\n    \"w_stable_id\": \"119\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Nikita Katsalapov\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.\",\n      \"score\": 0.0,\n      \"answer\": \"Nikita Katsalapov\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks who won the 2016 Russian national silver medal 'with' another person and the passages include the context person plus a different passage that contains the partner's name and the birth date '29 April 1995'.\",\n          \"preserve_rule\": \"Keep the agent's existing concise-answer behavior and retain any facts already used from `context` and `passages` (e.g., the context person's identity). Continue to produce the `summary` field as the output.\",\n          \"change_rule\": \"Also integrate the second-hop passage that names the partner: produce a short 1–2 sentence summary that (a) names both people (use the full names as given in the passages), (b) includes birth dates when they appear in the passages, and (c) explicitly states that the two skaters were the 2016 Russian national silver medalists together. Stay concise and factual; do not add new facts beyond the passages.\",\n          \"drop_or_avoid_rule\": \"Do not output only a single name (avoid the current one-word output). Do not invent or infer facts not present in the provided passages. Avoid long verbatim quotations of passage text and avoid unrelated passage content.\",\n          \"output_contract\": \"Return the field `summary` as a short (1–2 sentence) integrated statement that mentions both partners' full names, includes birth dates if present in the passages, and states they jointly won the 2016 Russian national silver medal. Keep the language factual and minimal.\",\n          \"why_local_transition\": \"The current output only repeats the context person. This minimal change forces the agent to incorporate the partner information (including the 29 April 1995 birth date when present) from the passages so the summary directly links both skaters and the 2016 silver-medal partnership required to answer the question.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Loren Bouchard\",\n      \"score\": 1.0,\n      \"answer\": \"Loren Bouchard\"\n    }\n  },\n  {\n    \"w_sample_index\": 84,\n    \"w_stable_id\": \"84\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"He was a member of The Mākaha Sons of Niʻihau (The Makaha Sons).\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Niʻihau (also known as The Makaha Sons).\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Israel Kaʻanoʻi Kamakawiwoʻole, also called \\\"Braddah Iz\\\", is identified in the sources as one of the founding members of The Mākaha Sons of Ni'ihau. The Mākaha Sons of Ni'ihau are described as a Hawaiian musical group formed in 1976 on the island of Oahu by Jerome Koko, Louis \\\"Moon\\\" Kauakahi, Skippy Kamakawiwo'ole, Israel Kamakawiwoʻole, and Sam Gray.\",\n      \"score\": 0.0,\n      \"answer\": \"The Mākaha Sons of Niʻihau (Makaha Sons of Niʻihau)\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks which group the musician known as \\\"Braddah Iz\\\" belongs to AND the provided passages include both the musician's page (showing the alias) and a passage describing a musical group (e.g., Mākaha/Makaha Sons of Niʻihau).\",\n          \"preserve_rule\": \"Keep the agent's current concise-answer style and preserve any accurate identification already extracted from the musician passage (e.g., that the musician is Israel Kamakawiwoʻole, aka \\\"Braddah Iz\\\"). Do not remove or contradict facts already present in the source passages.\",\n          \"change_rule\": \"Merge the two relevant passages into a 1–2 sentence summary that (a) names the musician using the canonical name found in the passages, (b) states their membership relationship to the group and—only if the passages explicitly state it—notes that they were a founding member, and (c) supplies one brief descriptive fact about the group (for example: that it is a Hawaiian musical group and the year/place of formation if given). Paraphrase the source text rather than reproducing long verbatim spans. Use the group name shown in the 'context' field as the primary label.\",\n          \"drop_or_avoid_rule\": \"Do not add unrelated album details, chart information, or biographical digressions. Avoid listing every band member unless required by the passages. Do not copy long literal spans verbatim from the passages. Do not invent dates, roles, or membership beyond what the visible passages support.\",\n          \"output_contract\": \"Produce the field 'summary' as 1–2 concise sentences that (1) identify the musician (using the canonical name from the passages), (2) state the group they are a member of (using the context/group name), and (3) include at most one short clause giving the group's basic descriptor (e.g., 'a Hawaiian musical group formed in 1976 on Oahu') if that fact appears in the passages. Keep language factual, paraphrased, and directly supported by the provided passages.\",\n          \"why_local_transition\": \"The current output only names the group; this transition instructs the agent to integrate the musician page with the group passage so the summary also captures membership context (and founding-member/formation details when explicitly present), increasing completeness while keeping the response concise.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Loren Bouchard\",\n      \"score\": 1.0,\n      \"answer\": \"Loren Bouchard\"\n    }\n  },\n  {\n    \"w_sample_index\": 130,\n    \"w_stable_id\": \"130\",\n    \"agent\": \"summary2\",\n    \"w_question\": \"What is the name of the scientific journal established by the Indian Physicist who earned the 1930 Nobel Prize for Physics\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Current Science\",\n      \"score\": 0.0,\n      \"answer\": \"Current Science\"\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"C. V. Raman (the 1930 Nobel Prize in Physics laureate) founded the Indian Academy of Sciences, which established the journal Current Science (and the Proceedings of the Indian Academy of Sciences). Separately, C. V. Raman established the Indian Journal of Physics in 1926; the Indian Journal of Physics is a monthly peer-reviewed scientific journal published by Springer Science+Business Media on behalf of the Indian Association for the Cultivation of Science.\",\n      \"score\": 0.0,\n      \"answer\": \"C. V. Raman — the journals: Current Science (via the Indian Academy of Sciences) and the Indian Journal of Physics (established by Raman in 1926).\"\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the question asks about a journal or institution tied to a named person (the context or question names a specific individual, e.g., 'C. V. Raman') and the passages contain one or more journal titles or founding/establishment facts related to that person.\",\n          \"preserve_rule\": \"Preserve the agent's current concise-answer habit: continue to return a short factual `summary` rather than long exposition. Keep any direct, supported phrase from the provided `context` that already links the named person to a journal (e.g., the mention of 'Current Science').\",\n          \"change_rule\": \"Also extract and include the person's name and the explicit relationships present in the supplied inputs: state that the named physicist (as given in context) is connected to the journal(s) in the passages (for example, that they founded the Indian Academy of Sciences which established Current Science, and that they established the Indian Journal of Physics in 1926) in one or two concise sentences. Only assert relationships and dates that appear in `context` or `passages`.\",\n          \"drop_or_avoid_rule\": \"Do not add any facts that are not present in the visible `context` or `passages` (no new dates, publishers, honors beyond what's given). Avoid long verbatim copies of any single target sentence; avoid speculative language or extra commentary. Do not transform this rule into producing the final answer elsewhere—stay within the `summary` field and only use supported facts.\",\n          \"output_contract\": \"Produce the `summary` field as 1–2 concise sentences that: (a) name the individual as given in inputs, (b) state their 1930 Nobel connection only if it is present in the inputs, and (c) link that individual to the relevant journal(s) using only relationships present in `context`/`passages` (e.g., founder of the Academy that established Current Science; founder of the Indian Journal of Physics, with the year if provided). No unsupported claims, no expanded analysis.\",\n          \"why_local_transition\": \"The base behavior returned only a journal title; to answer the question robustly later agents need the integrated second-hop fact that ties the journal(s) back to the named Nobel laureate. This delta minimally instructs the agent to retain the concise output style while adding the specific person→journal relationships that are already present in the inputs.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Loren Bouchard\",\n      \"score\": 1.0,\n      \"answer\": \"Loren Bouchard\"\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 48,\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"The agent will fail to integrate the episode page (first hop) with the series page (second hop) and will instead emit only the series title or a bare name rather than a concise statement linking the episode to the series' creator.\",\n  \"expected_damaged_behavior\": \"At the summary2 boundary the model returns just the series label (or a one-word/bare-name output) extracted from the episode page instead of producing a 1–2 sentence integrated summary that names the series and states who created it.\",\n  \"rationale\": \"Sample 48's transition addresses the same structural need as this target: bridge a first-hop page that lists a related entity (episode→series) with a second-hop page that provides the attributive fact (series→creator). The W repair enforces producing a short integrated 1–2 sentence summary combining both hops; the W failure (baseline) is precisely the omission of that bridge, yielding a bare-name output. That failure pattern (not integrating first- and second-hop passages into a single factual summary) maps directly to the Ex Mach Tina → Bob's Burgers → creator chain and can be transported locally to produce the same collapsed output-shape and evidence-aggregation error at the C agent boundary.\",\n  \"confidence\": 0.82\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 108,
+    "c_stable_id": "108",
+    "candidate_w_sample_indices": [
+      14,
+      48,
+      84,
+      119,
+      130
+    ],
+    "match_fingerprint": "0dd49e0c6884287f6cba62606d274877fac1d6ae7571d090bb3d7f94f4c9af3c"
+  }
+}

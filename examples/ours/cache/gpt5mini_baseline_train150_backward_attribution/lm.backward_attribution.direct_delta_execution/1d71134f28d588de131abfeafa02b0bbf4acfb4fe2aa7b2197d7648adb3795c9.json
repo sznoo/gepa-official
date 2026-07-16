@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "1d71134f28d588de131abfeafa02b0bbf4acfb4fe2aa7b2197d7648adb3795c9",
+  "created_at": "2026-07-14T13:39:09.076238+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply when both summary_1 and summary_2 state the same geographic association (they mention the same place or say the two items are associated with the same location, e.g. both reference 'Gold Coast, Queensland').",
+            "preserve_rule": "Keep the existing final-answer format and the requirement that the final output appears only in the [[ ## answer ## ]] block. Preserve reliance on the provided summaries as the only evidence.",
+            "change_rule": "Replace the current free-form final sentence behavior with a concise mapping step: if the summaries indicate a shared place, output the name of the country that contains that shared place (i.e., the country for the named location mentioned in the summaries). Produce only that country name as the entire content of the [[ ## answer ## ]] block, with no extra words, punctuation, or explanation.",
+            "drop_or_avoid_rule": "Do not restate the summaries, give explanations, include extra qualifiers, or produce multi-word phrases beyond the country name. Do not invent additional facts not present in the summaries. Do not copy long literal spans from the summaries beyond using the place name to determine its country.",
+            "output_contract": "The [[ ## answer ## ]] block must contain exactly one minimal token sequence: the country name corresponding to the shared location mentioned in the summaries (no punctuation, sentence fragments, or surrounding text).",
+            "why_local_transition": "The source output is a short explanatory sentence linking both items to a place; the target is the minimal categorical label (the country) implied by that shared place. This delta enforces extracting the country of the shared location and emitting only that minimal label, which moves the agent from explanatory phrasing to the required terse final answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What does Sam Weir and Gold Coast, Queensland have in common?",
+        "summary_1": "Both are associated with the Gold Coast, Queensland — Sam Weir was born there.",
+        "summary_2": "Both are associated with the Gold Coast, Queensland — Sam Weir was born there.",
+        "current_output": "They’re both associated with the Gold Coast, Queensland — Sam Weir was born there."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply when both summary_1 and summary_2 state the same geographic association (they mention the same place or say the two items are associated with the same location, e.g. both reference 'Gold Coast, Queensland').\",\n      \"preserve_rule\": \"Keep the existing final-answer format and the requirement that the final output appears only in the [[ ## answer ## ]] block. Preserve reliance on the provided summaries as the only evidence.\",\n      \"change_rule\": \"Replace the current free-form final sentence behavior with a concise mapping step: if the summaries indicate a shared place, output the name of the country that contains that shared place (i.e., the country for the named location mentioned in the summaries). Produce only that country name as the entire content of the [[ ## answer ## ]] block, with no extra words, punctuation, or explanation.\",\n      \"drop_or_avoid_rule\": \"Do not restate the summaries, give explanations, include extra qualifiers, or produce multi-word phrases beyond the country name. Do not invent additional facts not present in the summaries. Do not copy long literal spans from the summaries beyond using the place name to determine its country.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain exactly one minimal token sequence: the country name corresponding to the shared location mentioned in the summaries (no punctuation, sentence fragments, or surrounding text).\",\n      \"why_local_transition\": \"The source output is a short explanatory sentence linking both items to a place; the target is the minimal categorical label (the country) implied by that shared place. This delta enforces extracting the country of the shared location and emitting only that minimal label, which moves the agent from explanatory phrasing to the required terse final answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What does Sam Weir and Gold Coast, Queensland have in common?\",\n  \"summary_1\": \"Both are associated with the Gold Coast, Queensland — Sam Weir was born there.\",\n  \"summary_2\": \"Both are associated with the Gold Coast, Queensland — Sam Weir was born there.\",\n  \"current_output\": \"They’re both associated with the Gold Coast, Queensland — Sam Weir was born there.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Australia\",\n  \"rationale\": \"Both summaries state the shared location Gold Coast, Queensland; the ordered rule maps that shared place to its country, Australia.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 103,
+    "row_index": 103,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

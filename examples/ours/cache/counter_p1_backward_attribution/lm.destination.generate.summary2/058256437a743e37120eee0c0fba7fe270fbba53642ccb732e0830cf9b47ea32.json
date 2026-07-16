@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "058256437a743e37120eee0c0fba7fe270fbba53642ccb732e0830cf9b47ea32",
+  "created_at": "2026-07-15T22:06:07.165495+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+      "current_output": "Nikita Katsalapov",
+      "upstream_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "summary_1": "Nikita Katsalapov — partner of Victoria Sinitsina (born 29 April 1995); they were the 2016 Russian national silver medalists (source: Victoria Sinitsina).",
+        "hop2_query": "2016 Russian Figure Skating Championships ice dance silver Sinitsina Katsalapov",
+        "hop2_titles": [
+          "Victoria Sinitsina",
+          "Nikita Katsalapov",
+          "2016 Russian Figure Skating Championships",
+          "2017 Russian Figure Skating Championships",
+          "1995 Russian Figure Skating Championships",
+          "1993 Russian Figure Skating Championships",
+          "1997 Russian Figure Skating Championships"
+        ],
+        "hop2_docs": [
+          "Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.",
+          "Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.",
+          "2016 Russian Figure Skating Championships | The 2016 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 2016 ) were held from 23 to 27 December 2015 in Yekaterinburg, Sverdlovsk Oblast.  Medals were awarded in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results were among the criteria used to select Russia's teams sent to the 2016 European Championships and 2016 World Championships.",
+          "2017 Russian Figure Skating Championships | The 2017 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 2017 ) were held from 20 to 26 December 2016 in Chelyabinsk, Chelyabinsk Oblast.  Medals were awarded in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results were among the criteria used to select Russia's teams to the 2017 European Championships and 2017 World Championships.",
+          "1995 Russian Figure Skating Championships | The 1995 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1995 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results of the 1995 Nationals were one of the criteria used to pick the Russian teams to the 1995 European Figure Skating Championships and the 1995 World Figure Skating Championships.",
+          "1993 Russian Figure Skating Championships | The 1993 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1993 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results of the 1993 Nationals were one of the criteria used to pick the Russian teams to the 1993 European Figure Skating Championships and the 1993 World Figure Skating Championships.",
+          "1997 Russian Figure Skating Championships | The 1997 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1997 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies singles, pair skating, and ice dancing.  The results of the 1997 Nationals were one of the criteria used to pick the Russian teams to the 1997 European Figure Skating Championships and the 1997 World Figure Skating Championships."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Victoria Sinitsina",
+          "sent_id": 0,
+          "sentence": "Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 0,
+          "sentence": "Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer."
+        },
+        {
+          "title": "Nikita Katsalapov",
+          "sent_id": 1,
+          "sentence": "With Victoria Sinitsina, he is the 2016 Russian national silver medalist."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWho won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\n\nCurrent agent output:\n\"Nikita Katsalapov\"\n\nActual upstream context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"summary_1\": \"Nikita Katsalapov — partner of Victoria Sinitsina (born 29 April 1995); they were the 2016 Russian national silver medalists (source: Victoria Sinitsina).\",\n  \"hop2_query\": \"2016 Russian Figure Skating Championships ice dance silver Sinitsina Katsalapov\",\n  \"hop2_titles\": [\n    \"Victoria Sinitsina\",\n    \"Nikita Katsalapov\",\n    \"2016 Russian Figure Skating Championships\",\n    \"2017 Russian Figure Skating Championships\",\n    \"1995 Russian Figure Skating Championships\",\n    \"1993 Russian Figure Skating Championships\",\n    \"1997 Russian Figure Skating Championships\"\n  ],\n  \"hop2_docs\": [\n    \"Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\",\n    \"Nikita Katsalapov | Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.  With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\",\n    \"2016 Russian Figure Skating Championships | The 2016 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 2016 ) were held from 23 to 27 December 2015 in Yekaterinburg, Sverdlovsk Oblast.  Medals were awarded in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results were among the criteria used to select Russia's teams sent to the 2016 European Championships and 2016 World Championships.\",\n    \"2017 Russian Figure Skating Championships | The 2017 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 2017 ) were held from 20 to 26 December 2016 in Chelyabinsk, Chelyabinsk Oblast.  Medals were awarded in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results were among the criteria used to select Russia's teams to the 2017 European Championships and 2017 World Championships.\",\n    \"1995 Russian Figure Skating Championships | The 1995 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1995 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results of the 1995 Nationals were one of the criteria used to pick the Russian teams to the 1995 European Figure Skating Championships and the 1995 World Figure Skating Championships.\",\n    \"1993 Russian Figure Skating Championships | The 1993 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1993 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies' singles, pair skating, and ice dancing.  The results of the 1993 Nationals were one of the criteria used to pick the Russian teams to the 1993 European Figure Skating Championships and the 1993 World Figure Skating Championships.\",\n    \"1997 Russian Figure Skating Championships | The 1997 Russian Figure Skating Championships (Russian: Чемпионат России по фигурному катанию на коньках 1997 ) is held annually to determine the Russian national champions.  Skaters compete in the disciplines of men's singles, ladies singles, pair skating, and ice dancing.  The results of the 1997 Nationals were one of the criteria used to pick the Russian teams to the 1997 European Figure Skating Championships and the 1997 World Figure Skating Championships.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Victoria Sinitsina\",\n    \"sent_id\": 0,\n    \"sentence\": \"Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 0,\n    \"sentence\": \"Nikita Gennadyevich Katsalapov (Russian: Никита Геннадьевич Кацалапов ; born 10 July 1991) is a Russian ice dancer.\"\n  },\n  {\n    \"title\": \"Nikita Katsalapov\",\n    \"sent_id\": 1,\n    \"sentence\": \"With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Victoria Alexandrovna Sinitsina (born 29 April 1995) is a Russian ice dancer. Nikita Gennadyevich Katsalapov (born 10 July 1991) is a Russian ice dancer; with Victoria Sinitsina he is the 2016 Russian national silver medalist.\",\n  \"rationale\": \"Integrated summary_1 with visible second-hop evidence: Sinitsina's identity and birth date (\\\"Victoria Alexandrovna Sinitsina ... born 29 April 1995\\\") and Katsalapov's identity plus the explicit statement that \\\"With Victoria Sinitsina, he is the 2016 Russian national silver medalist.\\\" These sentences preserve the facts needed to identify who partnered the skater born 29 April 1995 and their 2016 national result.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 119,
+    "row_index": 119
+  }
+}

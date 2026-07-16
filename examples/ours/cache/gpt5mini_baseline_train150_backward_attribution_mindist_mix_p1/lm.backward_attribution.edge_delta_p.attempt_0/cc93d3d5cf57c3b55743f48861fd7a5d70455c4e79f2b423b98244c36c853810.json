@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "cc93d3d5cf57c3b55743f48861fd7a5d70455c4e79f2b423b98244c36c853810",
+  "created_at": "2026-07-14T19:01:53.484242+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?",
+        "summary_1": "They were both mathematicians.",
+        "summary_2": "They were both mathematicians.",
+        "current_output": "They were both mathematicians."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They were both mathematicians.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "mathematician",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Aleksandr Lyapunov and Israel Gelfand, share which mutual occupation?\",\n  \"summary_1\": \"They were both mathematicians.\",\n  \"summary_2\": \"They were both mathematicians.\",\n  \"current_output\": \"They were both mathematicians.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They were both mathematicians.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"mathematician\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 and summary_2 both assert the same occupation (i.e., they contain the same short occupation phrase or equivalent wording).\",\n    \"preserve_rule\": \"Keep using the two visible summaries as the only evidence and preserve the base prompt's interface and output contract (produce the field `answer` / the [[ ## answer ## ]] block). Retain any existing behavior that prefers direct extraction from the summaries.\",\n    \"change_rule\": \"Replace any full-sentence or explanatory answer with a single canonical occupation token derived from the summaries: extract the occupation word/phrase present in the summaries, normalize it to a single noun in singular form and lowercase, and output only that token as the entire content of the `answer` field / [[ ## answer ## ]] block.\",\n    \"drop_or_avoid_rule\": \"Do not output full sentences, explanatory phrases, determiners, qualifiers (e.g., 'they were both', 'both', 'yes —'), punctuation, or additional context. Do not output multiple occupations or additional tokens; do not quote the summaries verbatim beyond extracting and normalizing the occupation token.\",\n    \"output_contract\": \"The `answer` (the [[ ## answer ## ]] block) must contain exactly one token: the normalized occupation noun (singular, lowercase), with no surrounding text, punctuation, or explanation.\",\n    \"why_local_transition\": \"The current output is a full-sentence response derived from the same summaries; convert it to the required minimal single-token occupation form while still relying only on the visible summaries as evidence.\"\n  },\n  \"rationale\": \"This is the smallest coherent change: when both summaries agree on an occupation, convert the existing sentence-form answer into the minimal canonical occupation token required by the final-answer contract. It preserves evidence usage and the agent interface, avoids introducing new behaviors, enforces singular normalization and minimality, and prevents extra explanatory text.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 100,
+    "row_index": 100,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

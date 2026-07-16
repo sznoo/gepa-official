@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2233113866a6c5928ea0b27d0e97d0a5d259b17af0a0b42fd8d568989735d8f2",
+  "created_at": "2026-07-14T13:39:20.770990+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 names a single artist or album and the current query repeats that artist/album (i.e., the query is anchored on a first-hop candidate).",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as inputs and continue to produce exactly one compact retrieval query string. Preserve inclusion of the year and chart terms from the question (e.g., \"1976\", \"Billboard Hot 100\") and any depressive/mental-state keywords already present in the current output.",
+            "change_rule": "Do not anchor the query on the artist/album named in summary_1. Instead generate one concise second-hop query that searches for albums or musicians described as reflecting a depressive/melancholic state AND that are connected to any song, single, band, or collaborator that charted on the Billboard Hot 100 in 1976. Construct the query as a compact, search-ready phrase using keywords such as: depressed / depressive / melancholic / reflects, 1976, \"Billboard Hot 100\", album, single, band, session musicians, worked on, released. Avoid full sentences, long quoted spans, or song titles from the first-hop.",
+            "drop_or_avoid_rule": "Do not include the first-hop artist name or its song/album titles (from summary_1 or the current query). Avoid long verbatim quotes, multi-clause natural-language questions, and adding explanatory text. Do not add instructions or any extra fields; output only the retrieval query string.",
+            "output_contract": "The agent must output exactly one single-line retrieval query (the `query` field) and nothing else. The query must be compact (search-ready, under ~15–20 words), use only allowed keywords/terms, and be formulated to retrieve album/artist pages or collaborator/band pages that mention a melancholic/depressed album and a 1976 Billboard Hot 100 charting single.",
+            "why_local_transition": "The current behavior over-committed to a single first-hop artist, which misses alternative candidate albums/bands that fit the clue. This small prompt change prevents re-anchoring on that first-hop name and instead directs the query to find albums described as reflecting depression plus any associated act/single that appeared on the 1976 Billboard Hot 100, improving chances of retrieving the missing bridge pages (bands, collaborator lists, or album pages) needed for the second hop."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? ",
+        "summary_1": "Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \"Show Me the Way\") had a song that reached the Billboard Hot 100.",
+        "current_output": {
+          "query": "Peter Frampton \"Frampton Comes Alive!\" \"Show Me the Way\" Billboard Hot 100 1976 \"depress\" \"depressive\" \"reflects on his depressive state\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 names a single artist or album and the current query repeats that artist/album (i.e., the query is anchored on a first-hop candidate).\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as inputs and continue to produce exactly one compact retrieval query string. Preserve inclusion of the year and chart terms from the question (e.g., \\\"1976\\\", \\\"Billboard Hot 100\\\") and any depressive/mental-state keywords already present in the current output.\",\n      \"change_rule\": \"Do not anchor the query on the artist/album named in summary_1. Instead generate one concise second-hop query that searches for albums or musicians described as reflecting a depressive/melancholic state AND that are connected to any song, single, band, or collaborator that charted on the Billboard Hot 100 in 1976. Construct the query as a compact, search-ready phrase using keywords such as: depressed / depressive / melancholic / reflects, 1976, \\\"Billboard Hot 100\\\", album, single, band, session musicians, worked on, released. Avoid full sentences, long quoted spans, or song titles from the first-hop.\",\n      \"drop_or_avoid_rule\": \"Do not include the first-hop artist name or its song/album titles (from summary_1 or the current query). Avoid long verbatim quotes, multi-clause natural-language questions, and adding explanatory text. Do not add instructions or any extra fields; output only the retrieval query string.\",\n      \"output_contract\": \"The agent must output exactly one single-line retrieval query (the `query` field) and nothing else. The query must be compact (search-ready, under ~15–20 words), use only allowed keywords/terms, and be formulated to retrieve album/artist pages or collaborator/band pages that mention a melancholic/depressed album and a 1976 Billboard Hot 100 charting single.\",\n      \"why_local_transition\": \"The current behavior over-committed to a single first-hop artist, which misses alternative candidate albums/bands that fit the clue. This small prompt change prevents re-anchoring on that first-hop name and instead directs the query to find albums described as reflecting depression plus any associated act/single that appeared on the 1976 Billboard Hot 100, improving chances of retrieving the missing bridge pages (bands, collaborator lists, or album pages) needed for the second hop.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? \",\n  \"summary_1\": \"Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \\\"Show Me the Way\\\") had a song that reached the Billboard Hot 100.\",\n  \"current_output\": {\n    \"query\": \"Peter Frampton \\\"Frampton Comes Alive!\\\" \\\"Show Me the Way\\\" Billboard Hot 100 1976 \\\"depress\\\" \\\"depressive\\\" \\\"reflects on his depressive state\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"depressive melancholic album reflects linked to 1976 \\\"Billboard Hot 100\\\" single band collaborator\"\n  },\n  \"rationale\": \"Removed the first-hop artist/album, preserved depressive + 1976 + \\\"Billboard Hot 100\\\" terms, and focused the query on albums/artists/collaborators connected to a 1976 Hot 100 single.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 96,
+    "row_index": 96,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

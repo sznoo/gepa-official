@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "247fb1133909a5c083cbe42faabe253a12f10b211ccf8a8a0190c0491196d5ef",
+  "created_at": "2026-07-14T21:08:09.380185+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Between Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?",
+      "source_summary": "Jason Bateman is an American actor, director, and producer who also founded Aggregate Films, while Jan Troell is a Swedish film director who writes his own scripts and serves as his own director of photography; based on these passages, Jason Bateman has had the more diverse career.",
+      "target_summary": "Integrated evidence summary:\n\n- Jan Troell: Jan Gustaf Troell (born 23 July 1931) is a Swedish film director. First-hop evidence also states that Troell usually writes his own scripts and serves as his own director of photography, and that several films are directed by him (e.g., The New Land, Everlasting Moments, Hurricane, Zandy's Bride).\n\n- Jason Bateman: Jason Kent Bateman (born January 14, 1969) is an American actor, director, and producer. First-hop evidence notes he began acting on television in the early 1980s, has had starring roles in films, and directed the documentary film \"Jason Bateman Thinks I'm Dead.\"",
+      "candidate_summary": "Integrated evidence summary:\n\n- Jan Troell: Jan Gustaf Troell (born 23 July 1931) is a Swedish film director. First-hop evidence also states that Troell usually writes his own scripts and serves as his own director of photography, and that several films are directed by him (e.g., The New Land, Everlasting Moments, Hurricane, Zandy's Bride).\n\n- Jason Bateman: Jason Kent Bateman (born January 14, 1969) is an American actor, director, and producer. First-hop evidence notes he began acting on television in the early 1980s, has had starring roles in films, and directed the documentary film \"Jason Bateman Thinks I'm Dead.\""
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nBetween Jason Bateman and Jan Troell, which filmmaker has had a more diverse career?\n\nSource summary2:\nJason Bateman is an American actor, director, and producer who also founded Aggregate Films, while Jan Troell is a Swedish film director who writes his own scripts and serves as his own director of photography; based on these passages, Jason Bateman has had the more diverse career.\n\nTarget summary2:\nIntegrated evidence summary:\n\n- Jan Troell: Jan Gustaf Troell (born 23 July 1931) is a Swedish film director. First-hop evidence also states that Troell usually writes his own scripts and serves as his own director of photography, and that several films are directed by him (e.g., The New Land, Everlasting Moments, Hurricane, Zandy's Bride).\n\n- Jason Bateman: Jason Kent Bateman (born January 14, 1969) is an American actor, director, and producer. First-hop evidence notes he began acting on television in the early 1980s, has had starring roles in films, and directed the documentary film \"Jason Bateman Thinks I'm Dead.\"\n\nCandidate summary2:\nIntegrated evidence summary:\n\n- Jan Troell: Jan Gustaf Troell (born 23 July 1931) is a Swedish film director. First-hop evidence also states that Troell usually writes his own scripts and serves as his own director of photography, and that several films are directed by him (e.g., The New Land, Everlasting Moments, Hurricane, Zandy's Bride).\n\n- Jason Bateman: Jason Kent Bateman (born January 14, 1969) is an American actor, director, and producer. First-hop evidence notes he began acting on television in the early 1980s, has had starring roles in films, and directed the documentary film \"Jason Bateman Thinks I'm Dead.\"\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": false,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target summary's task-relevant facts (birthdates, Troell's roles, Bateman's acting/directing/producing career, early TV start, films and documentary), so the target is reconstructed. However, it omits a useful source fact (that Bateman founded Aggregate Films), so it does not fully preserve the source. It does add target-specific details not in the source (birthdates, specific film examples, Bateman's early TV work and documentary), hence there is a meaningful gain.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 8,
+    "row_index": 8,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

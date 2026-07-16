@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "2048e2a4bb0baa16fab5769c009f97d0d6dadd1b44654a3642dd12c83c847ad1",
+  "created_at": "2026-07-14T13:38:38.086630+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?",
+        "summary_1": "The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.",
+        "summary_2": "He was 29 years old during the 1891 season.",
+        "current_output": "29"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "29",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "30",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man who coached the the Kansas Jayhawks during their second season ever in 1891?\",\n  \"summary_1\": \"The coach in 1891 was Edwin Mortimer Hopkins (per passage [1]), but the provided passages do not state his age. Additional biographical information (his birth date) is needed to determine how old he was in 1891.\",\n  \"summary_2\": \"He was 29 years old during the 1891 season.\",\n  \"current_output\": \"29\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"29\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"30\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the provided summaries conflict about a person's age (one summary explicitly states an age while another says the passages do not state the age) for the same named person (e.g., 'Edwin Mortimer Hopkins'), apply the following small policy change.\",\n    \"preserve_rule\": \"Keep the existing behavior of producing a single minimal answer string in [[ ## answer ## ]] and continue to rely only on the visible summaries and question. Preserve any computed ages that are explicitly justified in the summaries.\",\n    \"change_rule\": \"When a numeric age is asserted by a summary but another summary indicates the age is not stated, do not accept the asserted age uncritically. First, look for any birth year or birth date mentioned in any visible summary or the question. If a birth year or date is available, compute the person's age for the season year (1891) by subtracting the birth year from 1891 and adjusting only when a birth month/day in relation to the season date is explicitly provided. If this computed integer age differs from an asserted age that lacks supporting arithmetic or a birth year, prefer the computed age (because it is derived from explicit data) and use that as the answer. If no birth year/date is available in any visible input and the asserted age has no supporting calculation, treat the age as unsupported and indicate that the age cannot be determined from the provided summaries (following the base prompt's minimal-answer output contract).\",\n    \"drop_or_avoid_rule\": \"Do not accept a claimed numeric age that has no supporting birth-year/date or explicit arithmetic in the visible summaries. Do not invent or fetch external facts beyond the visible summaries and question. Do not change the final-answer formatting contract.\",\n    \"output_contract\": \"Produce the single minimal answer string in the [[ ## answer ## ]] block (no extra explanation). The answer should be the integer age supported by either: (a) an explicit arithmetic derivation from a birth year/date present in the visible summaries, or (b) an asserted age that itself contains an explicit supporting calculation. If neither exists, produce the minimal 'cannot be determined' response consistent with the base prompt.\",\n    \"why_local_transition\": \"This small rule resolves conflicts where a numeric age is asserted without supporting birth-date evidence by requiring explicit arithmetic from any available birth year/date. That makes the decision rule stricter and avoids accepting unexplained numeric claims, while preserving existing output format and any legitimately justified ages.\"\n  },\n  \"rationale\": \"The current output accepted an asserted age without verifying whether it was derived from a birth year. The smallest coherent change is to require computation from an explicit birth year/date when summaries conflict, preferring computed ages over unexplained assertions. This is a localized policy tweak (conflict-resolution/arithmetic verification) that preserves other behavior and the final-answer contract, and it directly addresses the disagreement seen in the visible summaries without adding external information or broad behavioral changes.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 99,
+    "row_index": 99,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

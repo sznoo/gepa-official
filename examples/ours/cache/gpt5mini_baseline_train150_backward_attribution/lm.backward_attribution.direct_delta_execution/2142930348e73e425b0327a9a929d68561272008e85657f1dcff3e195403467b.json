@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "2142930348e73e425b0327a9a929d68561272008e85657f1dcff3e195403467b",
+  "created_at": "2026-07-14T13:38:23.342235+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When producing the second-hop retrieval query and the question contains a specific season-year token (e.g., '1991-92') and you have a first-hop summary about the team's season count.",
+            "preserve_rule": "Keep using the given `question` and `summary_1` as inputs and retain the agent's role of producing exactly one compact second-hop retrieval query.",
+            "change_rule": "Instead of a long, team-season list query, emit a short focused query that (1) injects the year token from the question, (2) includes the league identifier ('NHL' or 'National Hockey League') and (3) adds a concise phrase requesting the league's regular-season entry or count (e.g., 'regular season' or 'season count'). Do not enumerate season ranges or include long lists of team seasons.",
+            "drop_or_avoid_rule": "Avoid copying long literal enumerations (like 'seasons list 1979–80 through 1991–92'), avoid pasting full page titles from the target, and do not include hidden/oracle labels or the full gold title phrase. Keep the query compact and generic.",
+            "output_contract": "Return a single short query string (one line, ≤ ~10 tokens) that contains the year token from the question and at least one of: 'NHL' or 'National Hockey League' plus a short cue such as 'regular season' or 'season count'. The query should be targeted to retrieve the league-season page for that year.",
+            "why_local_transition": "This changes only the retrieval focus: from a team-centric chronology query to a league-year query that is more likely to fetch the league's season page (which contains the ordinal count of regular seasons). It is the minimal behavioral adjustment needed to recover the missing bridge."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How many regular seasons did the National Hokey League have up til the 1991-92 Edmonton Oilers season?",
+        "summary_1": "13 regular seasons",
+        "current_output": {
+          "query": "\"Edmonton Oilers seasons list 1979–80 through 1991–92 number of NHL regular seasons\""
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When producing the second-hop retrieval query and the question contains a specific season-year token (e.g., '1991-92') and you have a first-hop summary about the team's season count.\",\n      \"preserve_rule\": \"Keep using the given `question` and `summary_1` as inputs and retain the agent's role of producing exactly one compact second-hop retrieval query.\",\n      \"change_rule\": \"Instead of a long, team-season list query, emit a short focused query that (1) injects the year token from the question, (2) includes the league identifier ('NHL' or 'National Hockey League') and (3) adds a concise phrase requesting the league's regular-season entry or count (e.g., 'regular season' or 'season count'). Do not enumerate season ranges or include long lists of team seasons.\",\n      \"drop_or_avoid_rule\": \"Avoid copying long literal enumerations (like 'seasons list 1979–80 through 1991–92'), avoid pasting full page titles from the target, and do not include hidden/oracle labels or the full gold title phrase. Keep the query compact and generic.\",\n      \"output_contract\": \"Return a single short query string (one line, ≤ ~10 tokens) that contains the year token from the question and at least one of: 'NHL' or 'National Hockey League' plus a short cue such as 'regular season' or 'season count'. The query should be targeted to retrieve the league-season page for that year.\",\n      \"why_local_transition\": \"This changes only the retrieval focus: from a team-centric chronology query to a league-year query that is more likely to fetch the league's season page (which contains the ordinal count of regular seasons). It is the minimal behavioral adjustment needed to recover the missing bridge.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How many regular seasons did the National Hokey League have up til the 1991-92 Edmonton Oilers season?\",\n  \"summary_1\": \"13 regular seasons\",\n  \"current_output\": {\n    \"query\": \"\\\"Edmonton Oilers seasons list 1979–80 through 1991–92 number of NHL regular seasons\\\"\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\"output\":{\"query\":\"1991-92 NHL regular season\"},\"rationale\":\"Applied deltas: used the question's year token, included 'NHL' plus 'regular season', kept the query short and non-enumerative.\"}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 58,
+    "row_index": 58,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

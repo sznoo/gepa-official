@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "7a924c0d0c269d90d5d6946fe1e6facc7a442fee3daefa46f1e6d5e53f1fc2d3",
+  "created_at": "2026-07-14T19:01:50.404676+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are Vincenzo Bellini and Nikolai Rimsky-Korsakov both composers?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are Vincenzo Bellini and Nikolai Rimsky-Korsakov both composers?",
+        "summary_1": "Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908). Both are well-known composers with major works in the operatic and orchestral repertoire.",
+        "summary_2": "Yes. Vincenzo Bellini (1801–1835) was an Italian opera composer, and Nikolai Rimsky-Korsakov (1844–1908) was a Russian composer.",
+        "current_output": "Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are Vincenzo Bellini and Nikolai Rimsky-Korsakov both composers?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are Vincenzo Bellini and Nikolai Rimsky-Korsakov both composers?\",\n  \"summary_1\": \"Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908). Both are well-known composers with major works in the operatic and orchestral repertoire.\",\n  \"summary_2\": \"Yes. Vincenzo Bellini (1801–1835) was an Italian opera composer, and Nikolai Rimsky-Korsakov (1844–1908) was a Russian composer.\",\n  \"current_output\": \"Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes. Vincenzo Bellini was an Italian opera composer (1801–1835), and Nikolai Rimsky-Korsakov was a Russian composer (1844–1908).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 and summary_2 both unambiguously assert that the two named persons are composers (here: both summaries state that Vincenzo Bellini and Nikolai Rimsky-Korsakov are composers).\",\n    \"preserve_rule\": \"Keep using summary_1 and summary_2 as the evidential inputs and preserve all other base-prompt behavior for composing the `answer` field.\",\n    \"change_rule\": \"Replace the full-sentence final output with a single lowercase token that conveys affirmation or negation only. Produce exactly one lowercase word (no punctuation, no surrounding explanation) in the `answer` field / [[ ## answer ## ]] block, chosen according to whether the summaries both support an affirmative or negative answer. If the summaries do not both unambiguously agree, revert to the base prompt's normal concise grounded output behavior.\",\n    \"drop_or_avoid_rule\": \"Do not include any explanatory text, dates, titles, names, or extra sentences in the answer field; do not capitalize the token; do not add punctuation or qualifiers.\",\n    \"output_contract\": \"The final `answer` must contain exactly one lowercase token (the minimal affirmative or negative word) and nothing else, and that token must be directly supported by the visible summaries.\",\n    \"why_local_transition\": \"The current behavior produces a full explanatory sentence. This local edit forces the minimal canonical answer form (one lowercase token) when both summaries clearly support the same binary answer, achieving the required minimal output while leaving evidence usage unchanged.\"\n  },\n  \"rationale\": \"The source output is a full sentence; the target is the minimal canonical token. This delta makes the smallest focused change: when both summaries unambiguously agree, switch only the formatting/content to a single lowercase affirmative/negative token and otherwise preserve the base prompt's evidence use and fallback behavior. It avoids adding new logic beyond the simple trigger and keeps other behaviors intact.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 72,
+    "row_index": 72,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "45f468dd4eddb0df1708bdebb1c86c95360ad6e78d43a9637315c4618a322361",
+  "created_at": "2026-07-16T04:46:11.634826+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Matt Lucena and Fabio Fognini, have which mutual occupation?",
+    "answer": "professional tennis player",
+    "context": {
+      "title": [
+        "Matt Lucena",
+        "2013 International German Open",
+        "2011 AON Open Challenger – Singles",
+        "2017 ATP Shenzhen Open – Doubles",
+        "Fabio Fognini",
+        "2009 Sporting Challenger – Singles",
+        "2010 Carisap Tennis Cup – Singles",
+        "2009 AON Open Challenger – Singles",
+        "2011 Movistar Open – Singles",
+        "2014 MercedesCup – Singles"
+      ],
+      "sentences": [
+        [
+          "Matt Lucena (born August 4, 1969) is a former professional tennis player from the United States.",
+          " He won the mixed doubles title at the 1995 US Open."
+        ],
+        [
+          "The 2013 International German Open (also known as the bet–at–home Open – German Tennis Championships 2013 for sponsorship reasons) was a men's tennis tournament played on outdoor red clay courts.",
+          " It was the 107th edition of the event known that year as the International German Open and was part of the ATP World Tour 500 series of the 2013 ATP World Tour.",
+          " It took place at the Am Rothenbaum in Hamburg, Germany, from 14 July through 22 July 2013.",
+          " Twelfth-seeded Fabio Fognini won the singles title."
+        ],
+        [
+          "Fabio Fognini was the defending champion but decided not to participate.",
+          "<br>"
+        ],
+        [
+          "Fabio Fognini and Robert Lindstedt were the defending champions, but chose not to participate this year."
+        ],
+        [
+          "Fabio Fognini (] ; born 24 May 1987) is an Italian professional tennis player who is currently ranked world No. 29 in men's singles by the Association of Tennis Professionals (ATP) and the current Italian No. 1.",
+          " His career-high singles ranking is world No. 13, achieved in March 2014, and world No. 7 in doubles, achieved in July 2015.",
+          " Fognini's most successful surface is red clay, upon which he won his four ATP singles titles in Stuttgart, Hamburg, Viña del Mar and Umag, reached the quarterfinals of the 2011 French Open and the semifinals of the 2013 Monte-Carlo Masters.",
+          " Together with Simone Bolelli, Fognini won the 2015 Australian Open doubles event, becoming the first all Italian men's pair to win a Grand Slam title in the Open era."
+        ],
+        [
+          "Fabio Fognini was the defender of title; however, he chose to not participate this year."
+        ],
+        [
+          "Fabio Fognini was the defending champion, but chose not to play."
+        ],
+        [
+          "Fabio Fognini chose to not defend his 2009 title."
+        ],
+        [
+          "Thomaz Bellucci was the defending champion, but lost to Fabio Fognini in the quarterfinals."
+        ],
+        [
+          "Fabio Fognini was the defending champion, but lost in the semifinals to Roberto Bautista Agut.",
+          "<br>"
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Matt Lucena",
+        "Fabio Fognini"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "Matt Lucena and Fabio Fognini, have which mutual occupation?",
+    "gold_answer": "professional tennis player",
+    "context": {
+      "title": [
+        "Matt Lucena",
+        "2013 International German Open",
+        "2011 AON Open Challenger – Singles",
+        "2017 ATP Shenzhen Open – Doubles",
+        "Fabio Fognini",
+        "2009 Sporting Challenger – Singles",
+        "2010 Carisap Tennis Cup – Singles",
+        "2009 AON Open Challenger – Singles",
+        "2011 Movistar Open – Singles",
+        "2014 MercedesCup – Singles"
+      ],
+      "sentences": [
+        [
+          "Matt Lucena (born August 4, 1969) is a former professional tennis player from the United States.",
+          " He won the mixed doubles title at the 1995 US Open."
+        ],
+        [
+          "The 2013 International German Open (also known as the bet–at–home Open – German Tennis Championships 2013 for sponsorship reasons) was a men's tennis tournament played on outdoor red clay courts.",
+          " It was the 107th edition of the event known that year as the International German Open and was part of the ATP World Tour 500 series of the 2013 ATP World Tour.",
+          " It took place at the Am Rothenbaum in Hamburg, Germany, from 14 July through 22 July 2013.",
+          " Twelfth-seeded Fabio Fognini won the singles title."
+        ],
+        [
+          "Fabio Fognini was the defending champion but decided not to participate.",
+          "<br>"
+        ],
+        [
+          "Fabio Fognini and Robert Lindstedt were the defending champions, but chose not to participate this year."
+        ],
+        [
+          "Fabio Fognini (] ; born 24 May 1987) is an Italian professional tennis player who is currently ranked world No. 29 in men's singles by the Association of Tennis Professionals (ATP) and the current Italian No. 1.",
+          " His career-high singles ranking is world No. 13, achieved in March 2014, and world No. 7 in doubles, achieved in July 2015.",
+          " Fognini's most successful surface is red clay, upon which he won his four ATP singles titles in Stuttgart, Hamburg, Viña del Mar and Umag, reached the quarterfinals of the 2011 French Open and the semifinals of the 2013 Monte-Carlo Masters.",
+          " Together with Simone Bolelli, Fognini won the 2015 Australian Open doubles event, becoming the first all Italian men's pair to win a Grand Slam title in the Open era."
+        ],
+        [
+          "Fabio Fognini was the defender of title; however, he chose to not participate this year."
+        ],
+        [
+          "Fabio Fognini was the defending champion, but chose not to play."
+        ],
+        [
+          "Fabio Fognini chose to not defend his 2009 title."
+        ],
+        [
+          "Thomaz Bellucci was the defending champion, but lost to Fabio Fognini in the quarterfinals."
+        ],
+        [
+          "Fabio Fognini was the defending champion, but lost in the semifinals to Roberto Bautista Agut.",
+          "<br>"
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Matt Lucena",
+        "Fabio Fognini"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Matt Lucena",
+      "Fabio Fognini"
+    ],
+    "hop1_query": "Matt Lucena and Fabio Fognini, have which mutual occupation?",
+    "hop1_docs": [
+      "Fabio Fognini | Fabio Fognini (] ; born 24 May 1987) is an Italian professional tennis player who is currently ranked world No. 29 in men's singles by the Association of Tennis Professionals (ATP) and the current Italian No. 1.  His career-high singles ranking is world No. 13, achieved in March 2014, and world No. 7 in doubles, achieved in July 2015.  Fognini's most successful surface is red clay, upon which he won his four ATP singles titles in Stuttgart, Hamburg, Viña del Mar and Umag, reached the quarterfinals of the 2011 French Open and the semifinals of the 2013 Monte-Carlo Masters.  Together with Simone Bolelli, Fognini won the 2015 Australian Open doubles event, becoming the first all Italian men's pair to win a Grand Slam title in the Open era.",
+      "2011 Tennislife Cup – Singles | Fabio Fognini was the defending champion but decided not to participate.",
+      "2010 Carisap Tennis Cup – Singles | Fabio Fognini was the defending champion, but chose not to play.",
+      "2009 AON Open Challenger – Singles | Fabio Fognini chose to not defend his 2009 title.",
+      "2011 Movistar Open – Singles | Thomaz Bellucci was the defending champion, but lost to Fabio Fognini in the quarterfinals.",
+      "2011 AON Open Challenger – Singles | Fabio Fognini was the defending champion but decided not to participate. <br>",
+      "2009 Sporting Challenger – Singles | Fabio Fognini was the defender of title; however, he chose to not participate this year."
+    ],
+    "hop1_titles": [
+      "Fabio Fognini",
+      "2011 Tennislife Cup – Singles",
+      "2010 Carisap Tennis Cup – Singles",
+      "2009 AON Open Challenger – Singles",
+      "2011 Movistar Open – Singles",
+      "2011 AON Open Challenger – Singles",
+      "2009 Sporting Challenger – Singles"
+    ],
+    "summary_1": "Passage evidence: \"Fabio Fognini ... is an Italian professional tennis player (born May 24, 1987)\" and describes his ATP rankings and titles. Missing/bridge: Matt Lucena's occupation/biographical page is not present. Next hop: retrieve Matt Lucena's biography (e.g., his Wikipedia page or sports bio) to get his occupation (search for \"Matt Lucena occupation\" or \"Matt Lucena tennis\").",
+    "hop2_query": "Matt Lucena occupation",
+    "hop2_docs": [
+      "Matt Lucena | Matt Lucena (born August 4, 1969) is a former professional tennis player from the United States.  He won the mixed doubles title at the 1995 US Open.",
+      "1996 US Open – Mixed Doubles | Meredith McGrath and Matt Lucena were the defending champions but only Lucena competed that year with Kimberly Po.",
+      "DWVM | Spirit FM 103.9 (DWVM - FM 103.9 MHz Lucena City) is a music FM station owned and operated by the Roman Catholic Bishop Of Lucena in the Philippines.  The station's studio is located at the Lucena Bishop's Residence, Isabang, Lucena City.",
+      "Lucena CF | Lucena Club de Fútbol, S.A.D. is a Spanish football team based in Lucena, Córdoba, in the autonomous community of Andalusia.  Founded in 1968 it plays in Tercera División – Group 10, holding home games at \"Ciudad Deportiva de Lucena\", with a capacity of 6,000 seats.",
+      "Diocese of Lucena | The Roman Catholic Diocese of Lucena () is a diocese of the Roman Catholic Church in the Philippines with the seat in Lucena City.  The Roman Rite Latin Church diocese was erected in 1950 from the Archdiocese of Lipa to become a suffragan diocese of the Archdiocese.  In 1977, the Diocese of Boac, which covers the parishes in the island-province of Marinduque, was created and separated from Lucena.  In 1984, the Diocese of Lucena was further divided with the creation of the Diocese of Gumaca, which covers the municipalities of Quezon province east of Gumaca, Quezon.",
+      "Lucena City National High School | Lucena City National High School (LCNHS) is a public secondary school located at Brgy.  Ibabang Dupay, Lucena City, Philippines with more than 3,000 enrolleess from first year to fourth year.  This is the first public secondary school in the Division of Lucena.",
+      "Countship of Lucena | The Countship of Lucena (\"Condado de Lucena\") is a Spanish hereditary comital title conferred on General Leopoldo O'Donnell y Joris by Queen Isabella II of Spain, on 25 July 1847.  It was granted to him after defeating carlist General Ramón Cabrera in Lucena del Cid in the province of Valencia, as a victory title."
+    ],
+    "hop2_titles": [
+      "Matt Lucena",
+      "1996 US Open – Mixed Doubles",
+      "DWVM",
+      "Lucena CF",
+      "Diocese of Lucena",
+      "Lucena City National High School",
+      "Countship of Lucena"
+    ],
+    "summary_2": "They are both professional tennis players; Matt Lucena is a former professional player while Fabio Fognini is an active Italian professional tennis player.",
+    "answer": "professional tennis players",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [
+      "Matt Lucena"
+    ],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Fabio Fognini"
+    ],
+    "hit_titles_total": [
+      "Fabio Fognini",
+      "Matt Lucena"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

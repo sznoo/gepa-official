@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a670772637e55201b61109dc431eacad70e161677e97c1cdab35489321934f73",
+  "created_at": "2026-07-14T19:01:53.976573+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the provided summaries jointly state a concise phrase (a short noun phrase) that directly answers the question (e.g., they name the group, place, or community involved), apply this update.",
+            "preserve_rule": "Keep the existing input/output interface and the requirement that the final output must appear in the [[ ## answer ## ]] block. Preserve any correct information already present in the summaries and do not invent new facts.",
+            "change_rule": "Instead of outputting a full sentence or parenthetical clarification, extract the shortest noun phrase from the visible summaries that directly answers the question and emit that phrase verbatim (do not paraphrase). If the phrase in the summaries includes a leading indefinite or definite article, reproduce that article; otherwise output the noun phrase alone. Ensure the output is a single short phrase with no trailing punctuation.",
+            "drop_or_avoid_rule": "Do not include framing words (e.g., 'He lived with', 'The answer is', etc.), parenthetical explanations, extra qualifiers, or full-sentence commentary. Do not add new synonyms or expand abbreviations beyond what appears verbatim in the summaries.",
+            "output_contract": "Produce exactly one minimal answer string (a short noun phrase) in the [[ ## answer ## ]] block and nothing else. The string must be taken verbatim from one of the visible summaries and contain no additional words, punctuation, or sentence framing.",
+            "why_local_transition": "The base prompt already yields a correct factual sentence; this small rule trims framing and parenthetical material so the final output conforms to the final-agent contract requiring a minimal answer phrase. It is a minimal, targeted change: select the shortest supported noun phrase from the summaries and output it alone."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "The man who the novel \"Strandloper\" is based on lived with what community after being given up for dead?",
+        "summary_1": "He lived with an Aboriginal community.",
+        "summary_2": "He lived with an Aboriginal community (Indigenous Australians).",
+        "current_output": "He lived with an Aboriginal community (Indigenous Australians)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the provided summaries jointly state a concise phrase (a short noun phrase) that directly answers the question (e.g., they name the group, place, or community involved), apply this update.\",\n      \"preserve_rule\": \"Keep the existing input/output interface and the requirement that the final output must appear in the [[ ## answer ## ]] block. Preserve any correct information already present in the summaries and do not invent new facts.\",\n      \"change_rule\": \"Instead of outputting a full sentence or parenthetical clarification, extract the shortest noun phrase from the visible summaries that directly answers the question and emit that phrase verbatim (do not paraphrase). If the phrase in the summaries includes a leading indefinite or definite article, reproduce that article; otherwise output the noun phrase alone. Ensure the output is a single short phrase with no trailing punctuation.\",\n      \"drop_or_avoid_rule\": \"Do not include framing words (e.g., 'He lived with', 'The answer is', etc.), parenthetical explanations, extra qualifiers, or full-sentence commentary. Do not add new synonyms or expand abbreviations beyond what appears verbatim in the summaries.\",\n      \"output_contract\": \"Produce exactly one minimal answer string (a short noun phrase) in the [[ ## answer ## ]] block and nothing else. The string must be taken verbatim from one of the visible summaries and contain no additional words, punctuation, or sentence framing.\",\n      \"why_local_transition\": \"The base prompt already yields a correct factual sentence; this small rule trims framing and parenthetical material so the final output conforms to the final-agent contract requiring a minimal answer phrase. It is a minimal, targeted change: select the shortest supported noun phrase from the summaries and output it alone.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"The man who the novel \\\"Strandloper\\\" is based on lived with what community after being given up for dead?\",\n  \"summary_1\": \"He lived with an Aboriginal community.\",\n  \"summary_2\": \"He lived with an Aboriginal community (Indigenous Australians).\",\n  \"current_output\": \"He lived with an Aboriginal community (Indigenous Australians).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\nan Aboriginal community\\n[[ ## answer ## ]]\",\n  \"rationale\": \"Applied the delta: extracted the shortest noun phrase from the summaries verbatim and placed it alone in the required answer block.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 112,
+    "row_index": 112,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

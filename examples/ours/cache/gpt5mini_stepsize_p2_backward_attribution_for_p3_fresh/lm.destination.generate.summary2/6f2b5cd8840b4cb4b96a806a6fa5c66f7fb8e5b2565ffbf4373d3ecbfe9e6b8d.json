@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "6f2b5cd8840b4cb4b96a806a6fa5c66f7fb8e5b2565ffbf4373d3ecbfe9e6b8d",
+  "created_at": "2026-07-16T06:03:04.616731+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Who was a Greek film director Andrew Lau or Yannis Smaragdis? ",
+      "current_output": "Yannis (Iannis) Smaragdis is the Greek film director; Andrew Lau is a Hong Kong film director.",
+      "upstream_context": {
+        "question": "Who was a Greek film director Andrew Lau or Yannis Smaragdis? ",
+        "summary_1": "Passage 1 states \"Iannis Smaragdis ... is a Greek film director.\" Passage 6 states \"Andrew Lau ... is a Hong Kong film director, producer, and cinematographer.\" The passages therefore identify Yannis/Iannis Smaragdis as the Greek film director (no further retrieval required).",
+        "hop2_query": "Yannis Smaragdis Iannis Smaragdis Greek film director",
+        "hop2_titles": [
+          "Yannis Smaragdis",
+          "El Greco (soundtrack)",
+          "Homecoming Song",
+          "God Loves Caviar",
+          "Nikolaos Smaragdis",
+          "Smaragdis",
+          "Alaloum"
+        ],
+        "hop2_docs": [
+          "Yannis Smaragdis | Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director.",
+          "El Greco (soundtrack) | El Greco Original Motion Picture Soundtrack is a soundtrack album featuring the music score for the 2007 film \"El Greco\", by Greek electronic composer Vangelis, released in Greece and Cyprus by Universal Music Greece.  The film, directed by Yannis Smaragdis, follows the life of Greek painter, Doménicos Theotokópoulos, as he travels to Italy and Spain where he becomes known as El Greco (The Greek).  Vangelis previously worked with Yannis Smaragdis on his 1996 movie about the Greek poet Kavafis (a.k.a. Cavafy).  It won the award for best music score at the 48th Greek State Film Awards in 2007.",
+          "Homecoming Song | Homecoming Song (Greek: Το Τραγούδι της Επιστροφής , translit.  To tragoudi tis epistrofis) is a 1983 Greek drama film directed by Yannis Smaragdis.  It was entered into the 13th Moscow International Film Festival.",
+          "God Loves Caviar | God Loves Caviar (Greek: Ο Θεός αγαπάει το χαβιάρι , translit.  O Theós agapáei to chaviári; in Russia known as Pirates of the Aegean Sea) is a 2012 Russo-Greek drama film directed by Yannis Smaragdis.",
+          "Nikolaos Smaragdis | Nikolaos Smaragdis (born (1982--)12 1982 ) is a Greek male volleyball player.  He was part of the Greece men's national volleyball team at the 2006 FIVB Volleyball Men's World Championship in Japan. . Smaragdis has won 9 times the Greek Championship.  He is also the only Greek Volleyball player who achieved it, with four different clubs.",
+          "Smaragdis | Smaragdis is a Greek surname.  Notable persons with this name include:",
+          "Alaloum | Alaloum (Greek: Greek: Αλαλούμ ) is a 1982 Greek comedy film directed by Giorgos Apostolidis, Giannis Smaragdis and Giannis Typaldos, starring Harry Klynn, Manos Destounis and Joly Garbi."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Yannis Smaragdis",
+          "sent_id": 0,
+          "sentence": "Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWho was a Greek film director Andrew Lau or Yannis Smaragdis? \n\nCurrent agent output:\n\"Yannis (Iannis) Smaragdis is the Greek film director; Andrew Lau is a Hong Kong film director.\"\n\nActual upstream context:\n{\n  \"question\": \"Who was a Greek film director Andrew Lau or Yannis Smaragdis? \",\n  \"summary_1\": \"Passage 1 states \\\"Iannis Smaragdis ... is a Greek film director.\\\" Passage 6 states \\\"Andrew Lau ... is a Hong Kong film director, producer, and cinematographer.\\\" The passages therefore identify Yannis/Iannis Smaragdis as the Greek film director (no further retrieval required).\",\n  \"hop2_query\": \"Yannis Smaragdis Iannis Smaragdis Greek film director\",\n  \"hop2_titles\": [\n    \"Yannis Smaragdis\",\n    \"El Greco (soundtrack)\",\n    \"Homecoming Song\",\n    \"God Loves Caviar\",\n    \"Nikolaos Smaragdis\",\n    \"Smaragdis\",\n    \"Alaloum\"\n  ],\n  \"hop2_docs\": [\n    \"Yannis Smaragdis | Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director.\",\n    \"El Greco (soundtrack) | El Greco Original Motion Picture Soundtrack is a soundtrack album featuring the music score for the 2007 film \\\"El Greco\\\", by Greek electronic composer Vangelis, released in Greece and Cyprus by Universal Music Greece.  The film, directed by Yannis Smaragdis, follows the life of Greek painter, Doménicos Theotokópoulos, as he travels to Italy and Spain where he becomes known as El Greco (The Greek).  Vangelis previously worked with Yannis Smaragdis on his 1996 movie about the Greek poet Kavafis (a.k.a. Cavafy).  It won the award for best music score at the 48th Greek State Film Awards in 2007.\",\n    \"Homecoming Song | Homecoming Song (Greek: Το Τραγούδι της Επιστροφής , translit.  To tragoudi tis epistrofis) is a 1983 Greek drama film directed by Yannis Smaragdis.  It was entered into the 13th Moscow International Film Festival.\",\n    \"God Loves Caviar | God Loves Caviar (Greek: Ο Θεός αγαπάει το χαβιάρι , translit.  O Theós agapáei to chaviári; in Russia known as Pirates of the Aegean Sea) is a 2012 Russo-Greek drama film directed by Yannis Smaragdis.\",\n    \"Nikolaos Smaragdis | Nikolaos Smaragdis (born (1982--)12 1982 ) is a Greek male volleyball player.  He was part of the Greece men's national volleyball team at the 2006 FIVB Volleyball Men's World Championship in Japan. . Smaragdis has won 9 times the Greek Championship.  He is also the only Greek Volleyball player who achieved it, with four different clubs.\",\n    \"Smaragdis | Smaragdis is a Greek surname.  Notable persons with this name include:\",\n    \"Alaloum | Alaloum (Greek: Greek: Αλαλούμ ) is a 1982 Greek comedy film directed by Giorgos Apostolidis, Giannis Smaragdis and Giannis Typaldos, starring Harry Klynn, Manos Destounis and Joly Garbi.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Yannis Smaragdis\",\n    \"sent_id\": 0,\n    \"sentence\": \"Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Evidence summary: The first-hop context identifies Iannis/Yannis Smaragdis and Andrew Lau. Visible second-hop support confirms: \\\"Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director.\\\" Retain also the first-hop fact that Andrew Lau is a Hong Kong film director, producer, and cinematographer. These two facts are preserved for the final-answer agent.\",\n  \"rationale\": \"The supplied gold sentence from the Yannis Smaragdis article explicitly states he \\\"is a Greek film director,\\\" which directly supports the first-hop identification; the first-hop context already provides the Andrew Lau description (Hong Kong film director, producer, and cinematographer).\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 66,
+    "row_index": 66
+  }
+}

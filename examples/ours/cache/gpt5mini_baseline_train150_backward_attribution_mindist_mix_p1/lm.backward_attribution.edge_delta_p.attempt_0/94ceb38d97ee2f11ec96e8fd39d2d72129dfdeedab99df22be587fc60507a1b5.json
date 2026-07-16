@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "94ceb38d97ee2f11ec96e8fd39d2d72129dfdeedab99df22be587fc60507a1b5",
+  "created_at": "2026-07-14T19:01:52.750103+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Who else did the author of The Power Broker write a biography of?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Who else did the author of The Power Broker write a biography of?",
+        "summary_1": "He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson).",
+        "summary_2": "He wrote a biography of Lyndon B. Johnson (The Years of Lyndon Johnson).",
+        "current_output": "He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Lyndon B. Johnson",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Who else did the author of The Power Broker write a biography of?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who else did the author of The Power Broker write a biography of?\",\n  \"summary_1\": \"He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson).\",\n  \"summary_2\": \"He wrote a biography of Lyndon B. Johnson (The Years of Lyndon Johnson).\",\n  \"current_output\": \"He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"He wrote a multi-volume biography of Lyndon B. Johnson (The Years of Lyndon Johnson).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Lyndon B. Johnson\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question asks who someone wrote a biography of, and at least one of the provided summaries contains a phrase like \\\"wrote ... biography of <Person>\\\" (i.e., identifies the biographee), activate this rule.\",\n    \"preserve_rule\": \"Keep using the visible summaries as the sole evidence source and preserve the agent's current decision about which person is identified in the summaries. Retain capitalization and spelling exactly as they appear in the summaries.\",\n    \"change_rule\": \"Replace any full-sentence, parenthetical, or descriptive output with only the bare named-entity string that denotes the person identified by the summaries. Concretely: extract the person name mentioned in the summary phrase 'wrote ... biography of <Person>' and emit only that name as the answer text; do not add surrounding words, explanatory clauses, or book titles.\",\n    \"drop_or_avoid_rule\": \"Do not include pronouns, verbs, article phrases, parenthetical book titles, publication details, or full-sentence wrappers (e.g., avoid 'He wrote a ...' or parentheses). Do not append extra punctuation or commentary. Do not invent or add any additional entities not present in the summaries.\",\n    \"output_contract\": \"The final [[ ## answer ## ]] block must contain exactly one minimal answer string: the person name as it appears in the summaries (no extra words, no punctuation beyond what's part of the name). Maintain original spelling and capitalization from the summaries.\",\n    \"why_local_transition\": \"The base behavior correctly identifies the correct biographee but emits a verbose sentence with extra book/title details. This local edit narrows the output format only (not evidence selection), converting the existing correct selection into the minimal string required by the final-answer contract.\"\n  },\n  \"rationale\": \"This delta is the smallest necessary change: it preserves the agent's existing evidence use and chosen entity while enforcing the required minimal-answer formatting. The trigger ensures the rule applies only when a biography relationship is present in the summaries. The change avoids adding new inference or external knowledge and only trims formatting/verbosity, preventing regression of correct content.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 76,
+    "row_index": 76,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

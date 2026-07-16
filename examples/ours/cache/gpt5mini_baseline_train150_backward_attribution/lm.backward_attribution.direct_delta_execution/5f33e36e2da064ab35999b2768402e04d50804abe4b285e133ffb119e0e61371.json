@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "5f33e36e2da064ab35999b2768402e04d50804abe4b285e133ffb119e0e61371",
+  "created_at": "2026-07-14T13:43:12.553570+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question asks what items were delivered to Trout Creek, Utah and summary_1 identifies the answer as mail/letters.",
+            "preserve_rule": "Keep the agent's existing focus on postal items: preserve keywords such as 'mail', 'letters', 'postal', and keep the place name ('Trout Creek' and 'Utah') verbatim. Maintain the requirement to produce one compact retrieval query.",
+            "change_rule": "Replace/augment the current query with a single short query that pairs the place name with historical-mail/service phrasing. Use the pattern: 'Trout Creek Utah' + one or two of {historic mail, mail service, messages, newspapers, delivered}. Keep the query concise (≈<12 words), noun-focused, and retrieval-ready (not a full sentence).",
+            "drop_or_avoid_rule": "Avoid adding modern commercial delivery services, brand names, long lists of synonyms, or verbose phrasing (no full question text or explanatory clauses). Do not introduce sample-specific anchors that are not already present in the visible inputs.",
+            "output_contract": "Return exactly one compact query string for retrieval. The query must include 'Trout Creek' and 'Utah' together and at least one keyword from {historic mail, mail service, messages, newspapers, delivered}. No additional commentary, punctuation, or explanation.",
+            "why_local_transition": "The source query is broadly about mail and pulls modern/distracting delivery results. Narrowing the query toward historical mail/service phrasing will target documents that describe historical carriers/routes serving Trout Creek and the types of items they delivered, improving retrieval of the missing historical evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "summary_1": "Mail (letters).",
+        "current_output": {
+          "query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question asks what items were delivered to Trout Creek, Utah and summary_1 identifies the answer as mail/letters.\",\n      \"preserve_rule\": \"Keep the agent's existing focus on postal items: preserve keywords such as 'mail', 'letters', 'postal', and keep the place name ('Trout Creek' and 'Utah') verbatim. Maintain the requirement to produce one compact retrieval query.\",\n      \"change_rule\": \"Replace/augment the current query with a single short query that pairs the place name with historical-mail/service phrasing. Use the pattern: 'Trout Creek Utah' + one or two of {historic mail, mail service, messages, newspapers, delivered}. Keep the query concise (≈<12 words), noun-focused, and retrieval-ready (not a full sentence).\",\n      \"drop_or_avoid_rule\": \"Avoid adding modern commercial delivery services, brand names, long lists of synonyms, or verbose phrasing (no full question text or explanatory clauses). Do not introduce sample-specific anchors that are not already present in the visible inputs.\",\n      \"output_contract\": \"Return exactly one compact query string for retrieval. The query must include 'Trout Creek' and 'Utah' together and at least one keyword from {historic mail, mail service, messages, newspapers, delivered}. No additional commentary, punctuation, or explanation.\",\n      \"why_local_transition\": \"The source query is broadly about mail and pulls modern/distracting delivery results. Narrowing the query toward historical mail/service phrasing will target documents that describe historical carriers/routes serving Trout Creek and the types of items they delivered, improving retrieval of the missing historical evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"summary_1\": \"Mail (letters).\",\n  \"current_output\": {\n    \"query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Trout Creek Utah historic mail\"\n  },\n  \"rationale\": \"Kept 'Trout Creek' and 'Utah' verbatim and included the required historic-mail keyword to produce one compact retrieval query per the ordered rules.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

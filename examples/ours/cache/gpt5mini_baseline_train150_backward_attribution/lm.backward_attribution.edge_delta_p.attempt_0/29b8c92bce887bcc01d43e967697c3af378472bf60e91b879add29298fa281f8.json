@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "29b8c92bce887bcc01d43e967697c3af378472bf60e91b879add29298fa281f8",
+  "created_at": "2026-07-14T13:40:44.537937+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What 2012 South Korean action thriller film was turned into the 2014 Indian-Malay thriller Angels?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "What 2012 South Korean action thriller film was turned into the 2014 Indian-Malay thriller Angels?",
+        "summary_1": "Confession of Murder (2012)",
+        "summary_2": "Confession of Murder (2012)",
+        "current_output": "Confession of Murder (2012)"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Confession of Murder (2012)",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Confession of Murder",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What 2012 South Korean action thriller film was turned into the 2014 Indian-Malay thriller Angels?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What 2012 South Korean action thriller film was turned into the 2014 Indian-Malay thriller Angels?\",\n  \"summary_1\": \"Confession of Murder (2012)\",\n  \"summary_2\": \"Confession of Murder (2012)\",\n  \"current_output\": \"Confession of Murder (2012)\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Confession of Murder (2012)\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Confession of Murder\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If one or both summaries contain a film title that ends with a parenthetical four-digit year (pattern: space + '(' + 4 digits + ')'), or when the two summaries are identical except for such a parenthetical year.\",\n    \"preserve_rule\": \"Keep the existing behavior of producing only the minimal answer string in the [[ ## answer ## ]] block, and continue to derive the answer from the provided summaries. Do not add explanations, qualifiers, or extra output fields.\",\n    \"change_rule\": \"When the selected title ends with a parenthetical four-digit year, strip the entire trailing parenthetical (including the leading space) before emitting the answer. For example, convert 'Title (2012)' -> 'Title'. If no such trailing parenthetical is present, leave the title unchanged. Trim any leading/trailing whitespace and emit no additional punctuation.\",\n    \"drop_or_avoid_rule\": \"Do not include the year, parentheses, release date, or any extra descriptive text in the final answer. Avoid inserting quotations, full sentences, or added context; do not attempt to expand or alter the title beyond removing the trailing year parenthetical.\",\n    \"output_contract\": \"Output exactly the film title string (with any trailing ' (YYYY)' removed) and nothing else inside the [[ ## answer ## ]] block. Preserve the minimal-answer-only contract.\",\n    \"why_local_transition\": \"This is a minimal, deterministic normalization that removes an extraneous parenthetical year when present, producing the concise film title required by the final-answer contract while preserving evidence from the summaries.\"\n  },\n  \"rationale\": \"The current output includes a trailing year in parentheses. The smallest coherent behavioral change is to normalize titles by removing a trailing ' (YYYY)' when present. This preserves all other prompt behavior and still sources the title from the visible summaries, ensuring the agent emits the minimal title string expected by the final-answer contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 115,
+    "row_index": 115,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

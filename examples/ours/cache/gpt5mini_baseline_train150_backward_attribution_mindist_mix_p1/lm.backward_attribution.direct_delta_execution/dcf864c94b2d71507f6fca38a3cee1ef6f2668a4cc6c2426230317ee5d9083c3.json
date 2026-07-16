@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "dcf864c94b2d71507f6fca38a3cee1ef6f2668a4cc6c2426230317ee5d9083c3",
+  "created_at": "2026-07-14T19:01:55.868953+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When generating the second-hop retrieval query for the given question and a non-empty summary_1 (here: 'Scrivener's Moon'), and the current query is a full-sentence question rather than a compact search string.",
+            "preserve_rule": "Keep using the fields `question` and `summary_1` as inputs and preserve the identified candidate bridge named in summary_1.",
+            "change_rule": "Replace the verbose, natural-language question with a single-line, compact keyword-style retrieval query that includes the visible anchors 'Traction City' (from the question) and the candidate 'Scrivener's Moon' (from summary_1), plus an ordering intent token such as 'series order' or 'third book'. Example structure (do not add extra words): Traction City Scrivener's Moon series order third book.",
+            "drop_or_avoid_rule": "Do not produce a full-sentence question, avoid extra explanatory words or punctuation, do not include answers or instructions to the retriever, and do not introduce sample-specific terms not already present in the visible inputs.",
+            "output_contract": "Emit a single short retrieval query string (one line, <= ~12 words) containing both 'Traction City' and 'Scrivener's Moon' and an ordering indicator ('series order' or 'third book'). No additional text or fields.",
+            "why_local_transition": "The source output is a verbose natural-language question; converting it to a concise keyword query focused on the visible anchors and ordering intent increases likelihood of retrieving the missing series-order page (the bridge) without changing other agent behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when 'summary_1' is present and the current 'query' is a keyword-style fragment (ungrammatical, lacks a clear question phrase).",
+            "preserve_rule": "Keep useful tokens already present (e.g., 'Traction City', any author name from `question`, and the phrase indicating ordinal position such as 'third book' or 'third'). Preserve brevity and the intent to retrieve supporting evidence.",
+            "change_rule": "Replace the keyword-bag with a single concise retrieval query (natural-language or short question, ≤20 words) that explicitly links Traction City as a prequel to Philip Reeve's work and asks which work is the third when counting that prequel. Do not assert the answer; frame as a request for series/order information.",
+            "drop_or_avoid_rule": "Do not introduce any new sample-specific entities that are not already in the visible inputs. Do not include an answer, gold labels, long quoted spans, or multi-item lists. Avoid verbose keyword lists, advanced operators, or instructions to the retriever.",
+            "output_contract": "Return exactly one short retrieval query (one line, ≤20 words) focused on finding the series/order evidence that ties 'Traction City' (prequel) to the third book counting that prequel. Include 'Traction City' and an ordinal indicator (e.g., 'third') or equivalent phrasing; do not state the answer.",
+            "why_local_transition": "Transforms a noisy keyword fragment into a clear, focused second-hop query that explicitly asks for series ordering relative to the prequel; this increases chance of retrieving bridging documents (series pages, book lists) without leaking the answer."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+        "summary_1": "Scrivener's Moon",
+        "current_output": {
+          "query": "What is the series order (counting the prequel \"Traction City\") for the Philip Reeve novella/series — is \"Scrivener's Moon\" the third book?"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When generating the second-hop retrieval query for the given question and a non-empty summary_1 (here: 'Scrivener's Moon'), and the current query is a full-sentence question rather than a compact search string.\",\n      \"preserve_rule\": \"Keep using the fields `question` and `summary_1` as inputs and preserve the identified candidate bridge named in summary_1.\",\n      \"change_rule\": \"Replace the verbose, natural-language question with a single-line, compact keyword-style retrieval query that includes the visible anchors 'Traction City' (from the question) and the candidate 'Scrivener's Moon' (from summary_1), plus an ordering intent token such as 'series order' or 'third book'. Example structure (do not add extra words): Traction City Scrivener's Moon series order third book.\",\n      \"drop_or_avoid_rule\": \"Do not produce a full-sentence question, avoid extra explanatory words or punctuation, do not include answers or instructions to the retriever, and do not introduce sample-specific terms not already present in the visible inputs.\",\n      \"output_contract\": \"Emit a single short retrieval query string (one line, <= ~12 words) containing both 'Traction City' and 'Scrivener's Moon' and an ordering indicator ('series order' or 'third book'). No additional text or fields.\",\n      \"why_local_transition\": \"The source output is a verbose natural-language question; converting it to a concise keyword query focused on the visible anchors and ordering intent increases likelihood of retrieving the missing series-order page (the bridge) without changing other agent behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when 'summary_1' is present and the current 'query' is a keyword-style fragment (ungrammatical, lacks a clear question phrase).\",\n      \"preserve_rule\": \"Keep useful tokens already present (e.g., 'Traction City', any author name from `question`, and the phrase indicating ordinal position such as 'third book' or 'third'). Preserve brevity and the intent to retrieve supporting evidence.\",\n      \"change_rule\": \"Replace the keyword-bag with a single concise retrieval query (natural-language or short question, ≤20 words) that explicitly links Traction City as a prequel to Philip Reeve's work and asks which work is the third when counting that prequel. Do not assert the answer; frame as a request for series/order information.\",\n      \"drop_or_avoid_rule\": \"Do not introduce any new sample-specific entities that are not already in the visible inputs. Do not include an answer, gold labels, long quoted spans, or multi-item lists. Avoid verbose keyword lists, advanced operators, or instructions to the retriever.\",\n      \"output_contract\": \"Return exactly one short retrieval query (one line, ≤20 words) focused on finding the series/order evidence that ties 'Traction City' (prequel) to the third book counting that prequel. Include 'Traction City' and an ordinal indicator (e.g., 'third') or equivalent phrasing; do not state the answer.\",\n      \"why_local_transition\": \"Transforms a noisy keyword fragment into a clear, focused second-hop query that explicitly asks for series ordering relative to the prequel; this increases chance of retrieving bridging documents (series pages, book lists) without leaking the answer.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?\",\n  \"summary_1\": \"Scrivener's Moon\",\n  \"current_output\": {\n    \"query\": \"What is the series order (counting the prequel \\\"Traction City\\\") for the Philip Reeve novella/series — is \\\"Scrivener's Moon\\\" the third book?\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Which is the third book counting the prequel Traction City in Philip Reeve series Scrivener's Moon\"\n  },\n  \"rationale\": \"Delta 0 converted the verbose question to a compact query including 'Traction City', 'Scrivener's Moon', and an ordering intent; Delta 1 refined it into a concise short question linking Traction City as the prequel and asking which is third.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 136,
+    "row_index": 136,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

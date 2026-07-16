@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "96a9e090c6f31841ff414b2fe0db0e0f5562c0ce25a79932e6231c3f5d1b7b7f",
+  "created_at": "2026-07-15T23:46:02.308682+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Which Liberian politician was the granddaugher of a market woman?",
+    "answer": "Ellen Johnson Sirleaf",
+    "context": {
+      "title": [
+        "Joseph Korto",
+        "Alex J. Tyler",
+        "Jackson Doe",
+        "Roland Massaquoi",
+        "Sirleaf Market Women's Fund",
+        "Ruth Perry",
+        "Ellen Johnson Sirleaf",
+        "Nathaniel Barnes",
+        "Charles Brumskine",
+        "Samuel George Harmon"
+      ],
+      "sentences": [
+        [
+          "Joseph Korto is a Liberian politician and member of the Liberia Equal Rights Party (LERP).",
+          " Joseph Korto was born in Barpa, Nimba County, Liberia.",
+          " He was Minister of Education in Liberia from 2006-2010 and was replaced by E. Othello Gongar, formal Minister of Education during the regime of late president Samuel Kanyon Doe.",
+          " He is also the Executive Director of the Liberian Development Foundation."
+        ],
+        [
+          "Alex Jenekai Tyler (born 15 December 1963) is a Liberian politician who has been Speaker of the House of Representatives of Liberia since 2007.",
+          " He was first elected as the Representative for the 1st District of Bomi County in 2005.",
+          " Tyler is a member of the Unity Party, having joined in 2009 following its merger with his Liberian Action Party."
+        ],
+        [
+          "Jackson Doe was a Liberian politician in the late twentieth century and a native of Nimba County.",
+          " Immediately before the 1980 military coup d'état, Doe served as Nimba County's senior senator, but when the government was overthrown, he lost his office, was tried for treason, and imprisoned at the Barclay Training Center.",
+          " Rebel leader Samuel Doe (no relation) released him from prison at the end of June 1980 but forbade him to leave the country.",
+          " In the country's 1985 elections, he ran for president as the candidate of the Liberian Action Party against Samuel Doe, who had been the country's head of state since the coup.",
+          " According to official results, Samuel received a tiny majority of votes in the election.",
+          " However, many foreign observers alleged fraud and suggested that Jackson was the true victor; according to organizations such as the BBC, Jackson had won an absolute majority of votes cast nationwide.",
+          " Jackson's running mate was Emmanuel S. Kroma."
+        ],
+        [
+          "Roland Massaquoi is a Liberian politician and, as of 2006, leader of the National Patriotic Party (NPP).",
+          " In 2009, Massaquoi was the President of the Liberian Produce Marketing Corporation."
+        ],
+        [
+          "During 14 years of savage civil war, Liberia’s market women kept food and supplies flowing against terrible odds.",
+          " As the conflict worsened, they gathered together praying for peace, then protesting and finally politicking in the international arena.",
+          " After peace took hold, in 2005 they turned their hard-won organizational skills to get out the vote for Ellen Johnson Sirleaf, Africa’s first woman to be elected president—the granddaughter of a market woman."
+        ],
+        [
+          "Ruth Sando Fahnbulleh Perry (July 16, 1939 – January 8, 2017) was a Liberian politician.",
+          " She served as the interim Chairwoman of the Council of State of Liberia from 3 September 1996 until 2 August 1997, following the First Liberian Civil War.",
+          " After eleven international peace attempts between 1990 and 1995 to end the civil war in Liberia, the attempts appeared to succeed.",
+          " The interim Council of State consisted of a civilian chair, as well as members of warring factions: Charles Taylor, United Liberation Movement of Liberia for Democracy-K leader Alhaji Kromah, Liberia Peace Council leader George Boley, and two other civilians."
+        ],
+        [
+          "Ellen Johnson Sirleaf (born 29 October 1938) is a Liberian politician who serves as the 24th and current President of Liberia since 2006.",
+          " Sirleaf is the first elected female head of state in Africa."
+        ],
+        [
+          "Milton Nathaniel Barnes (born 6 April 1954) is a Liberian politician and member of the Liberian Destiny Party (LDP)."
+        ],
+        [
+          "Charles Walker Brumskine (born 27 April 1951) is a Liberian politician and attorney.",
+          " He is the Political Leader of the Liberty Party and came third in the 2005 presidential election.",
+          " He is considered the most popular opposition politician in Liberia, and he challenged Ellen Johnson-Sirleaf for the Presidency in 2011.",
+          " He is also the senior partner of Brumskine & Associates, a leading Liberian law firm."
+        ],
+        [
+          "Samuel George Harmon (born 1861 died 1925) was a Liberian politician.",
+          " Harmon was the Vice President of Liberia from January 1, 1912 to January 5, 1920 under President Daniel Edward Howard.",
+          " He was a member of the True Whig Party which dominated Liberian politics from 1878 to 1980."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Sirleaf Market Women's Fund",
+        "Ellen Johnson Sirleaf"
+      ],
+      "sent_id": [
+        2,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question` and `passages`, produce the single field `summary`.\n\nGoal: compress the grounded first-hop evidence into a short intermediate state that makes it easy for the next-hop agent to (a) see what facts are present per candidate/entity, (b) see what is ambiguous or missing, and (c) know 1–4 prioritized next-hop retrieval targets or concise queries. This module does not produce the final answer unless the provided passages already unambiguously contain every fact required to resolve the question's relation for every argument.\n\nProcedure:\n1) Decide whether the question's relation is semantically complete given the supplied passages. Treat the hop as INCOMPLETE if any of the following hold: a) the relation requires combining or comparing facts across pages (e.g., comparing birth dates, publication/founding years, ordinal ranks, confirming a named director among candidates) and the passages do not supply each required fact unambiguously for all relevant arguments; b) any relation argument is ambiguous or has multiple candidate pages or mentions in the passages; c) an expected candidate page or explicit fact for an argument is missing (e.g., only one side of a comparison is present). Do not trigger INCOMPLETE solely from surface tokens (years, digits) — base the decision on whether the relation's arguments are unambiguously resolved.\n\n2) If the hop is COMPLETE (all required facts to resolve the relation for every argument are present unambiguously in the passages): produce a concise derived result in `summary`. This may be a short phrase or sentence that states the necessary fact(s) needed by the pipeline. Keep it minimal and grounded in the passages; you may include a 1–2 token citation (passage title) if helpful.\n\n3) If the hop is INCOMPLETE or AMBIGUOUS: do NOT assert a final answer or perform the final comparison/selection. Instead emit a short structured report in `summary` containing these labeled elements (prefer bullets or a compact paragraph with explicit labels). Keep all text neutral and non-assertive.\n\n  - evidence: For each named candidate/argument mentioned in the question or passages, list the candidate label and the exact passage title(s) that mention it plus a very short quoted snippet or explicit fact token found there (1–12 words). If a candidate named in the question has no grounded mention in any provided passage, explicitly mark it as NOT present under evidence.\n\n  - ambiguities_or_missing: Explicitly name any ambiguities (e.g., multiple candidates for the same name, multiple pages that could be the intended entity) and any missing expected pages or facts.\n\n  - missing_facts_or_bridge / bridge_entity_or_missing_fact: State exactly which fact(s) or disambiguation is needed to complete the relation. Use a slight conditional labeling here:\n      * If the question names an entity that has no grounded mention in the provided passages and the unresolved gap is identity/disambiguation (you cannot map the question token to a single canonical entity needed to ground later facts), label the gap as `bridge_entity_or_missing_fact` and specify that the canonical/biography page for that named entity is required to resolve identity.\n      * Otherwise (the missing premise is a concrete attribute/property such as a date, developer, layout engine, filmography item, opening-order token, etc.), use `missing_facts_or_bridge` and describe the exact attribute(s) required (e.g., \"birth date for Person A\", \"developer of Product X\"). Do not request the canonical biography page by default in this case; prefer an attribute-targeted retrieval first.\n\n  - retrieval_direction: Provide 1–4 prioritized next-hop targets or concise queries to resolve the missing facts/ambiguities. Order targets by priority and keep them short. Apply this retrieval-priority conditional:\n      * If the missing gap is identity/disambiguation (see bridge_entity_or_missing_fact above), put the candidate's canonical/biography page title as retrieval_direction #1 (exact title if known) and include 1–2 biography-style fallback queries (e.g., \"<Name> biography\", \"<Name> official page\") as subsequent targets.\n      * If the missing gap is a specific attribute/property, put 1–2 concise attribute-focused queries first (e.g., \"<Item> developer\", \"<Item> layout engine\", \"<Work B> publication year\"). Include the canonical/biography page as a secondary target only if it might reasonably contain the attribute and identity resolution could still be needed.\n\nFormatting and style constraints (apply to both COMPLETE and INCOMPLETE cases):\n- The output must be a single `summary` field only. Do not emit other fields.\n- In INCOMPLETE reports, use neutral, non-assertive phrasing. Do not produce final comparisons, numeric answers, or definitive selections (e.g., avoid \"X is the oldest\" or \"Answer: 3\").\n- Keep the report compact and actionable (short labeled bullets or one concise paragraph). Avoid long prose.\n- It is allowed and encouraged to quote short factual snippets from passages and cite passage titles to show grounding.\n- Do not defer or mark INCOMPLETE when the passages already unambiguously provide all facts for the relation and its arguments.\n\nProduce the `summary` content that follows these rules.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the single field `query`.\n\nGoal\n- Produce exactly one compact, retrieval-intent query suitable for a second-hop search that will recover the missing bridging evidence needed to answer the question. Do not produce the final answer in `query`.\n\nSemantic decision rule (when to emit a retrieval-intent query)\n- If summary_1 does NOT assert a confirmed linking entity or verified bridging fact needed to answer the question, you MUST emit exactly one compact retrieval-intent query. \"Does not assert a confirmed bridge\" includes short or candidate-only summaries (e.g., a single named entity, a quoted candidate title, or numeric anchors that are not verified) and any case where the visible anchors do not unambiguously identify the needed bridge.\n- Narrowed applicability for birth-date disambiguation: If summary_1 lacks a confirmed bridge AND the question explicitly requires a birth-date comparison (e.g., asks who was born earlier or requests birth years) AND the visible inputs (question or summary_1) show ambiguous name candidates AND a suitable disambiguator token (occupation, band, institution, or a parenthetical label) is present or clearly implied in the visible inputs, then emit one compact query that combines: the ambiguous name anchor, the disambiguator copied verbatim from the visible inputs, and a concise birth-term (\"born\" or \"birth year\"). In all other cases (including birth-name mappings, page-title targets, non-temporal bridges, or when no usable disambiguator is available), do not append birth/date relation words or invent disambiguators; instead prefer the minimal visible-anchor form (page-title, name-pair, or person+institution) appropriate to the missing bridge.\n- If summary_1 already names a confirmed bridge (a clearly identified, verified linking entity or unambiguous metadata that directly connects the question's pieces), you may produce a compact query to fetch supporting evidence, but do NOT produce an answer in the `query` field.\n- If summary_1 explicitly states that the bridge cannot be recovered automatically (extreme ambiguity or user-local context requiring clarification), do NOT force a misleading retrieval query. In that case, set `query` to the single short token BRIDGE_UNRECOVERABLE (all caps, no punctuation) so downstream steps can prompt the user for clarification. Do not invent facts.\n\nQuery construction rules\n- Output exactly one compact line of text as `query`. Keep it short and retrieval-focused (few keywords, no full sentences). Use visible anchors from `question` and `summary_1` and minimal retrieval keywords that express the missing relation (e.g., anchor1 anchor2 which artist recorded both; AlbumTitle album artist genre; 1991–92 NHL season regular season).\n- Do not include the final answer, assertions, or user-facing instructions in the `query` field. Avoid polite phrasing, questions to the user, or explanatory text. Prefer noun phrases and relation keywords.\n- If the conditional birth-date disambiguation rule above applies, build the query by concatenating: the ambiguous person name, the disambiguator token copied verbatim from the visible inputs (occupation, band, institution, parenthetical), and a single concise birth-term (\"born\" or \"birth year\"). Use only the visible disambiguator wording; do not invent or normalize parentheticals.\n- Relation-token selection rule: choose a single concise relation token that matches the question's relation (e.g., \"born\" or \"birth year\" only for temporal birth queries). Do not append relation tokens when the canonical retrieval strategy is to use a page-title, exact name-pair, or person+institution anchor.\n- Do not include the final answer or explanatory text. If your natural impulse would be to write a declarative answer or a clarification sentence in `query`, instead convert that output into a compact retrieval-intent query that targets the missing bridge.\n- Preserve semantic fidelity: base the query only on visible anchors and relations in `question` and `summary_1`. Do not invent hidden identifiers or assume unseen facts.\n\nFormat contract\n- Return exactly one field named `query` whose value is a single short string. If unrecoverable as described above, set `query` to BRIDGE_UNRECOVERABLE.\n\nExamples of disallowed outputs for `query`\n- A declarative answer (e.g., \"The artist was X.\")\n- A user-facing clarification sentence (e.g., \"Do you mean X or Y?\") unless summary_1 explicitly requires clarification — in that case use BRIDGE_UNRECOVERABLE.\n\nBehavioral constraints\n- Do not use surface heuristics (token count, punctuation, or quotation marks) as the trigger; apply the semantic rule above.\n- Emit only one compact retrieval string when the bridge is missing; do not emit multiple queries or long explanations.\n\nInputs available: `question`, `summary_1`. Output required: single field `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`. The `summary` must be a concise, post-retrieval integration of the evidence that preserves the facts needed by the final answer. Follow these rules when composing `summary`:\n\n- Purpose: Integrate the first-hop `context` with the newly retrieved `passages` into a grounded state that retains or resolves the earlier bridge only when the second-hop passages supply relation- or attribute-facts that are necessary to answer or disambiguate the `question` (for example: partnership/membership links, joint-award partners indicated by 'with', or requested biographical qualifiers such as nationality, birthdate, current team/status).\n\n- When to append supporting sentence(s): Append the primary canonical label/token from `context` and at most one short passage-grounded supporting sentence only when a passage contains an explicit, directly stated predicate that links the same entity token from `context` (or a clearly corroborated alias/role/date) to the partner or attribute the question cites. Examples of acceptable explicit predicates include clear statements like 'X with Y', 'X is a member of Y', 'X was born DATE', 'X is a recipient of AWARD', 'X is also called Z', or 'X began tenure in YEAR'. The trigger requires that the passage (a) names the same entity token as in `context` or an alias/role/date that is corroborated by other attributes in `context`, and (b) explicitly asserts the relation or attribute needed by the question. Do not append when the passage only contains the attribute string without an explicit predicate, a nearby mention, an indirect implication, or when the link refers to a different named entity.\n\n- Transitive alias/composition: Do not assert transitive equivalence unless every hop in the chain is explicitly stated as an equivalence in the supplied passages and each hop clearly refers to the same entity. If only a mediated or inferred chain exists (i.e., intermediate links are not explicit equivalences and identity-aligned), suppress the appended support and preserve uncertainty.\n\n- When not to append: Do not append supporting sentences and instead return only the canonical label/token when any of the following apply: the question expects a normalized identifier or single token (examples: binary/multiple-choice label selection between named options, identification-only questions, or explicit token-extraction such as 'middle name'); or the `context` already contains a full, passage-consistent, multi-clause integrated answer. Permit an exception for identification/single-token/binary cases only when the question's semantics truly demand the relation/attribute (for example, determining an era boundary or tenure date) and a passage explicitly provides the necessary predicate linking the context entity to that temporal relation or attribute.\n\n- Identity alignment and verification: Before appending, confirm that the fact in `passages` refers to the same entity referenced in `context` by matching names, corroborating aliases, roles, dates, or other attributes. If identity is ambiguous or unsupported, refrain from appending and preserve uncertainty instead. Avoid naive substring or proximity matches as sufficient evidence.\n\n- Style and content constraints: Keep output concise. If appending, limit `summary` to 1–3 sentences total (the primary concise answer plus at most one short supporting sentence per relevant entity or one joint supporting sentence). Preserve the exact canonical label/token selected from `context`. Use a compact paraphrase grounded in passage language, avoid inventing facts or long verbatim quotations, and avoid misattributing attributes from different entities.\n\n- If there is insufficient information in `context` and `passages` to resolve the needed relation/attribute, summarize the uncertainty succinctly rather than asserting unsupported facts.\n\nProduce only the `summary` field as the integrated output string.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\nWhen multiple co-referent surface strings for the same entity appear in summary_2, you may prefer a shorter canonical label only if that exact shorter string appears verbatim in summary_2 either as an independent label or as an explicit parenthetical alternate, AND emitting that shorter string alone would not drop administrative or category qualifiers, required punctuation/abbreviations, or other disambiguating tokens that the question requires; otherwise emit the minimal multi-token or formatted string exactly as supported by summary_2. Preserve multi-token formatted place names, parenthetical acronyms or alternates when they are present or when the question's intent relies on them.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "b9971a087180",
+    "rerun_from": null,
+    "question": "Which Liberian politician was the granddaugher of a market woman?",
+    "gold_answer": "Ellen Johnson Sirleaf",
+    "context": {
+      "title": [
+        "Joseph Korto",
+        "Alex J. Tyler",
+        "Jackson Doe",
+        "Roland Massaquoi",
+        "Sirleaf Market Women's Fund",
+        "Ruth Perry",
+        "Ellen Johnson Sirleaf",
+        "Nathaniel Barnes",
+        "Charles Brumskine",
+        "Samuel George Harmon"
+      ],
+      "sentences": [
+        [
+          "Joseph Korto is a Liberian politician and member of the Liberia Equal Rights Party (LERP).",
+          " Joseph Korto was born in Barpa, Nimba County, Liberia.",
+          " He was Minister of Education in Liberia from 2006-2010 and was replaced by E. Othello Gongar, formal Minister of Education during the regime of late president Samuel Kanyon Doe.",
+          " He is also the Executive Director of the Liberian Development Foundation."
+        ],
+        [
+          "Alex Jenekai Tyler (born 15 December 1963) is a Liberian politician who has been Speaker of the House of Representatives of Liberia since 2007.",
+          " He was first elected as the Representative for the 1st District of Bomi County in 2005.",
+          " Tyler is a member of the Unity Party, having joined in 2009 following its merger with his Liberian Action Party."
+        ],
+        [
+          "Jackson Doe was a Liberian politician in the late twentieth century and a native of Nimba County.",
+          " Immediately before the 1980 military coup d'état, Doe served as Nimba County's senior senator, but when the government was overthrown, he lost his office, was tried for treason, and imprisoned at the Barclay Training Center.",
+          " Rebel leader Samuel Doe (no relation) released him from prison at the end of June 1980 but forbade him to leave the country.",
+          " In the country's 1985 elections, he ran for president as the candidate of the Liberian Action Party against Samuel Doe, who had been the country's head of state since the coup.",
+          " According to official results, Samuel received a tiny majority of votes in the election.",
+          " However, many foreign observers alleged fraud and suggested that Jackson was the true victor; according to organizations such as the BBC, Jackson had won an absolute majority of votes cast nationwide.",
+          " Jackson's running mate was Emmanuel S. Kroma."
+        ],
+        [
+          "Roland Massaquoi is a Liberian politician and, as of 2006, leader of the National Patriotic Party (NPP).",
+          " In 2009, Massaquoi was the President of the Liberian Produce Marketing Corporation."
+        ],
+        [
+          "During 14 years of savage civil war, Liberia’s market women kept food and supplies flowing against terrible odds.",
+          " As the conflict worsened, they gathered together praying for peace, then protesting and finally politicking in the international arena.",
+          " After peace took hold, in 2005 they turned their hard-won organizational skills to get out the vote for Ellen Johnson Sirleaf, Africa’s first woman to be elected president—the granddaughter of a market woman."
+        ],
+        [
+          "Ruth Sando Fahnbulleh Perry (July 16, 1939 – January 8, 2017) was a Liberian politician.",
+          " She served as the interim Chairwoman of the Council of State of Liberia from 3 September 1996 until 2 August 1997, following the First Liberian Civil War.",
+          " After eleven international peace attempts between 1990 and 1995 to end the civil war in Liberia, the attempts appeared to succeed.",
+          " The interim Council of State consisted of a civilian chair, as well as members of warring factions: Charles Taylor, United Liberation Movement of Liberia for Democracy-K leader Alhaji Kromah, Liberia Peace Council leader George Boley, and two other civilians."
+        ],
+        [
+          "Ellen Johnson Sirleaf (born 29 October 1938) is a Liberian politician who serves as the 24th and current President of Liberia since 2006.",
+          " Sirleaf is the first elected female head of state in Africa."
+        ],
+        [
+          "Milton Nathaniel Barnes (born 6 April 1954) is a Liberian politician and member of the Liberian Destiny Party (LDP)."
+        ],
+        [
+          "Charles Walker Brumskine (born 27 April 1951) is a Liberian politician and attorney.",
+          " He is the Political Leader of the Liberty Party and came third in the 2005 presidential election.",
+          " He is considered the most popular opposition politician in Liberia, and he challenged Ellen Johnson-Sirleaf for the Presidency in 2011.",
+          " He is also the senior partner of Brumskine & Associates, a leading Liberian law firm."
+        ],
+        [
+          "Samuel George Harmon (born 1861 died 1925) was a Liberian politician.",
+          " Harmon was the Vice President of Liberia from January 1, 1912 to January 5, 1920 under President Daniel Edward Howard.",
+          " He was a member of the True Whig Party which dominated Liberian politics from 1878 to 1980."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Sirleaf Market Women's Fund",
+        "Ellen Johnson Sirleaf"
+      ],
+      "sent_id": [
+        2,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Sirleaf Market Women's Fund",
+      "Ellen Johnson Sirleaf"
+    ],
+    "hop1_query": "Which Liberian politician was the granddaugher of a market woman?",
+    "hop1_docs": [
+      "Roland Massaquoi | Roland Massaquoi is a Liberian politician and, as of 2006, leader of the National Patriotic Party (NPP).  In 2009, Massaquoi was the President of the Liberian Produce Marketing Corporation.",
+      "List of Liberian politicians | The following is a list of Liberian politicians, both past and present.",
+      "Samuel Kofi Woods | Samuel Kofi Woods (born January 5, 1964) is a Liberian human rights activist, journalist, politician and academic.  In 1994, he founded the Forefront Organization, which documented human rights abuses during the Second Liberian Civil War.",
+      "Samuel George Harmon | Samuel George Harmon (born 1861 died 1925) was a Liberian politician.  Harmon was the Vice President of Liberia from January 1, 1912 to January 5, 1920 under President Daniel Edward Howard.  He was a member of the True Whig Party which dominated Liberian politics from 1878 to 1980.",
+      "Charles D. B. King | Charles Dunbar Burgess King (12 March 1875 – 4 September 1961) was a politician in Liberia of Americo-Liberian and Freetown Creole descent (his mother was an Americo-Liberian).  He was a member of the True Whig Party, which ruled the country from 1878 until 1980.  He served as the 17th President of Liberia from 1920 until 1930.",
+      "Robert Kpoto | Robert Kpoto is a Liberian orthopedic surgeon, politician, and member of the Union of Liberian Democrats (ULD).",
+      "Charles Taylor (Liberian politician) | Charles McArthur Ghankay Taylor (born 28 January 1948) is a former Liberian politician who was the 22nd President of Liberia, serving from 2 August 1997 until his resignation on 11 August 2003."
+    ],
+    "hop1_titles": [
+      "Roland Massaquoi",
+      "List of Liberian politicians",
+      "Samuel Kofi Woods",
+      "Samuel George Harmon",
+      "Charles D. B. King",
+      "Robert Kpoto",
+      "Charles Taylor (Liberian politician)"
+    ],
+    "summary_1": "- evidence:\n  - Roland Massaquoi — passage [1]: \"leader of the National Patriotic Party (NPP).\" (no family/granddaughter mention)\n  - List of Liberian politicians — passage [2]: \"The following is a list of Liberian politicians\" (index page; no family detail)\n  - Samuel Kofi Woods — passage [3]: \"is a Liberian human rights activist, journalist, politician\" (no family/granddaughter mention)\n  - Samuel George Harmon — passage [4]: \"Vice President of Liberia ... born 1861\" (no family/granddaughter mention)\n  - Charles D. B. King — passage [5]: \"was a politician in Liberia ... his mother was an Americo-Liberian\" (mother noted, no granddaughter/market woman)\n  - Robert Kpoto — passage [6]: \"is a Liberian orthopedic surgeon, politician\" (no family/granddaughter mention)\n  - Charles Taylor — passage [7]: \"is a former Liberian politician ... 22nd President\" (no family/granddaughter mention)\n\n- ambiguities_or_missing:\n  - None of the provided passages contain the phrase or fact \"granddaughter\" or \"market woman.\"\n  - The specific politician referenced by the question is not present/identified in the supplied passages.\n\n- bridge_entity_or_missing_fact:\n  - Need the identity (name) and a biography/fact stating that a given Liberian politician was \"the granddaughter of a market woman.\" In short: the canonical biography or a reliable source that records that family detail is required.\n\n- retrieval_direction (priority):\n  1. Search: \"Liberian politician 'granddaughter of a market woman'\" (exact-phrase search)\n  2. Search: \"which Liberian politician was the granddaughter of a market woman\"\n  3. Search: \"Liberian politician family background 'market woman' granddaughter\"\n  4. If above fails, retrieve likely biography pages or news profiles of prominent Liberian politicians (e.g., \"<Name> biography\") to check family background.",
+    "hop2_query": "Liberian politician \"granddaughter of a market woman\"",
+    "hop2_docs": [
+      "Roland Massaquoi | Roland Massaquoi is a Liberian politician and, as of 2006, leader of the National Patriotic Party (NPP).  In 2009, Massaquoi was the President of the Liberian Produce Marketing Corporation.",
+      "Sirleaf Market Women's Fund | During 14 years of savage civil war, Liberia’s market women kept food and supplies flowing against terrible odds.  As the conflict worsened, they gathered together praying for peace, then protesting and finally politicking in the international arena.  After peace took hold, in 2005 they turned their hard-won organizational skills to get out the vote for Ellen Johnson Sirleaf, Africa’s first woman to be elected president—the granddaughter of a market woman.",
+      "Olubanke King Akerele | Olubanke King Akerele (born May 11, 1946) is a Liberian politician and diplomat who served as the Minister of Foreign Affairs in the cabinet of Ellen Johnson Sirleaf from October 2007 until her resignation on 3 November 2010.  She is the granddaughter of Liberia's 17th president, Charles D. B. King.",
+      "List of Liberian politicians | The following is a list of Liberian politicians, both past and present.",
+      "Robert Kpoto | Robert Kpoto is a Liberian orthopedic surgeon, politician, and member of the Union of Liberian Democrats (ULD).",
+      "Charles Taylor (Liberian politician) | Charles McArthur Ghankay Taylor (born 28 January 1948) is a former Liberian politician who was the 22nd President of Liberia, serving from 2 August 1997 until his resignation on 11 August 2003.",
+      "Nathaniel Barnes | Milton Nathaniel Barnes (born 6 April 1954) is a Liberian politician and member of the Liberian Destiny Party (LDP)."
+    ],
+    "hop2_titles": [
+      "Roland Massaquoi",
+      "Sirleaf Market Women's Fund",
+      "Olubanke King Akerele",
+      "List of Liberian politicians",
+      "Robert Kpoto",
+      "Charles Taylor (Liberian politician)",
+      "Nathaniel Barnes"
+    ],
+    "summary_2": "Ellen Johnson Sirleaf",
+    "answer": "Ellen Johnson Sirleaf",
+    "score": 1.0,
+    "support_recall_hop1": 0.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [
+      "Sirleaf Market Women's Fund"
+    ],
+    "missing_titles_after_hop2": [
+      "Ellen Johnson Sirleaf"
+    ],
+    "hit_titles_hop1": [],
+    "hit_titles_total": [
+      "Sirleaf Market Women's Fund"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

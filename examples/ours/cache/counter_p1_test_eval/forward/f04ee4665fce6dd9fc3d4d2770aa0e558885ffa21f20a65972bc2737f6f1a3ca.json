@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "f04ee4665fce6dd9fc3d4d2770aa0e558885ffa21f20a65972bc2737f6f1a3ca",
+  "created_at": "2026-07-15T21:43:32.842405+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+    "answer": "University of Glasgow",
+    "context": {
+      "title": [
+        "Thomas Lee (academic)",
+        "Simon Morrison",
+        "Orientalism",
+        "Tista Bagchi",
+        "Brazilian academic art",
+        "Peter Trippi",
+        "House of Vuk's Foundation",
+        "Portsmouth Academy building",
+        "Nigel Leask",
+        "Jacques-Antoine Beaufort"
+      ],
+      "sentences": [
+        [
+          "Rev. Thomas Lee D.D. was a 19th-century academic administrator at the University of Oxford and clergyman."
+        ],
+        [
+          "Simon Morrison is a music historian specializing in 20th-century music, particularly Russian and Soviet music, with special interests in dance, film, and historically informed performance based on extensive archival research.",
+          " He is a leading authority on composer Sergey Prokofiev and has received unprecedented access to the composer's papers, housed in Moscow at RGALI.",
+          " Morrison received his B.Mus.",
+          " from the University of Toronto (1987), a Master's in Musicology from McGill University (1993), and Ph.D. from Princeton University (1997), where he is Professor of Music.",
+          " His distinctions include the Alfred Einstein Award of the American Musicological Society (1999), an American Council of Learned Societies Fellowship (2001), a Phi Beta Kappa Society Teacher Award (2006), and a Guggenheim Fellowship (2011)."
+        ],
+        [
+          "Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures).",
+          " These depictions are usually done by writers, designers and artists from the West.",
+          " In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a similar interest in Oriental themes."
+        ],
+        [
+          "Tista Bagchi (born ), Professor of Linguistics in the University of Delhi, is a distinguished Indian linguist and ethicist.",
+          " Bagchi trained in Sanskrit College, Kolkata, the University of Delhi, and the University of Chicago, from where she obtained her PhD in Linguistics, her work spans issues of semantics and syntax in languages in general and South Asian languages in particular, questions of ethics in the application of medical technology and social interaction, and translations of iconic texts in Bangla literature and comparative philology.",
+          " Bagchi has also been active in the area of cognitive sciences with special interests in the relationships amongst sentence structure, computation, linguistic meaning, and human cognition.",
+          " Bagchi was the Robert F. & Margaret S. Goheen Fellow for the academic year 2001–2002 at the National Humanities Center, Research Triangle Park, North Carolina, and a scientist under the CSIR Mobility Scheme at the National Institute of Science, Technology, and Development Studies, New Delhi, for two years during 2010–2012."
+        ],
+        [
+          "Brazilian Academic art was a major art style in Brazil from the early 19th century to the early 20th century, based on European academic art and produced on official institutions of professional art education."
+        ],
+        [
+          "Peter Trippi is editor-in-chief of \"Fine Art Connoisseur\", a bimonthly magazine for collectors of representational painting, sculpture, drawings and prints—both historical and contemporary.",
+          " From 2003 until 2006, Trippi was director of New York City's Dahesh Museum of Art, the only institution in the United States devoted to 19th- and early 20th-century European academic art."
+        ],
+        [
+          "The House of Vuk's Foundation is the name of a historical building in Belgrade, built in 1879, that serves as the headquarters of the Vuk's Foundation.",
+          " Located on the Теrazije at 2 Kralja Milana Street, it is one of the oldest structures in that part of Belgrade.",
+          " Аleksandar Bugarski, a prominent 19th-century Serbian architect, designed the original building as a two-story house in the Academic Art style of the day."
+        ],
+        [
+          "The Portsmouth Academy building is a historic academic and civic building at 8 Islington Street in Portsmouth, New Hampshire.",
+          " Built in 1809, it is one of the finest surviving examples of an early 19th-century academic building in northern New England, and is attributed to James Nutter, one of the finest local builders of the period.",
+          " In addition to housing the Portsmouth Academy, it later housed the city's public library, and presently houses Discover Portsmouth, a local tourism marketing organization.",
+          " It was listed on the National Register of Historic Places in 1973 as \"Portsmouth Public Library\"."
+        ],
+        [
+          "Nigel Leask (born 1958) is a British academic publishing on Romantic, Scottish, and Anglo-Indian literature, with special interest on British Empire, Orientalism, and Travel writing.",
+          " He has been Regius Professor of English language and literature at the University of Glasgow, since 2004."
+        ],
+        [
+          "Jacques Antoine Beaufort (1721 in Paris – 1784 in Rueil), was an 18th-century academic French painter.",
+          " Little is known of his early life but he had his first public exhibition at the Marseille Academy in 1756, where he taught drawing, and later at the Paris Salon (1767–83).",
+          " He was accepted into the Academie Royale in 1766."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Nigel Leask",
+        "Orientalism"
+      ],
+      "sent_id": [
+        1,
+        2
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question` and `passages`, produce the single field `summary`.\n\nGoal: compress the grounded first-hop evidence into a short intermediate state that makes it easy for the next-hop agent to (a) see what facts are present per candidate/entity, (b) see what is ambiguous or missing, and (c) know 1–4 prioritized next-hop retrieval targets or concise queries. This module does not produce the final answer unless the provided passages already unambiguously contain every fact required to resolve the question's relation for every argument.\n\nProcedure:\n1) Decide whether the question's relation is semantically complete given the supplied passages. Treat the hop as INCOMPLETE if any of the following hold: a) the relation requires combining or comparing facts across pages (e.g., comparing birth dates, publication/founding years, ordinal ranks, confirming a named director among candidates) and the passages do not supply each required fact unambiguously for all relevant arguments; b) any relation argument is ambiguous or has multiple candidate pages or mentions in the passages; c) an expected candidate page or explicit fact for an argument is missing (e.g., only one side of a comparison is present). Do not trigger INCOMPLETE solely from surface tokens (years, digits) — base the decision on whether the relation's arguments are unambiguously resolved.\n\n2) If the hop is COMPLETE (all required facts to resolve the relation for every argument are present unambiguously in the passages): produce a concise derived result in `summary`. This may be a short phrase or sentence that states the necessary fact(s) needed by the pipeline. Keep it minimal and grounded in the passages; you may include a 1–2 token citation (passage title) if helpful.\n\n3) If the hop is INCOMPLETE or AMBIGUOUS: do NOT assert a final answer or perform the final comparison/selection. Instead emit a short structured report in `summary` containing these labeled elements (prefer bullets or a compact paragraph with explicit labels). Keep all text neutral and non-assertive.\n\n  - evidence: For each named candidate/argument mentioned in the question or passages, list the candidate label and the exact passage title(s) that mention it plus a very short quoted snippet or explicit fact token found there (1–12 words). If a candidate is not mentioned, say so briefly.\n\n  - ambiguities_or_missing: Explicitly name any ambiguities (e.g., multiple candidates for the same name, multiple pages that could be the intended entity) and any missing expected pages or facts.\n\n  - missing_facts_or_bridge: State exactly which fact(s) or disambiguation is needed to complete the relation (e.g., \"birth date for Person A\", \"publication year of Work B\", \"director credit for Film C\"). Be as specific and minimal as possible.\n\n  - retrieval_direction: Provide 1–4 prioritized next-hop targets or concise queries to resolve the missing facts/ambiguities. Prefer explicit page titles when available (exact if known), otherwise provide short search-style queries (few words) or a clear description of the document to retrieve. Order targets by priority.\n\nFormatting and style constraints (apply to both COMPLETE and INCOMPLETE cases):\n- The output must be a single `summary` field only. Do not emit other fields.\n- In INCOMPLETE reports, use neutral, non-assertive phrasing. Do not produce final comparisons, numeric answers, or definitive selections (e.g., avoid \"X is the oldest\" or \"Answer: 3\").\n- Keep the report compact and actionable (short labeled bullets or one concise paragraph). Avoid long prose.\n- It is allowed and encouraged to quote short factual snippets from passages and cite passage titles to show grounding.\n- Do not defer or mark INCOMPLETE when the passages already unambiguously provide all facts for the relation and its arguments.\n\nProduce the `summary` content that follows these rules.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the single field `query`.\n\nGoal\n- Produce exactly one compact, retrieval-intent query suitable for a second-hop search that will recover the missing bridging evidence needed to answer the question. Do not produce the final answer in `query`.\n\nSemantic decision rule (when to emit a retrieval-intent query)\n- If summary_1 does NOT assert a confirmed linking entity or verified bridging fact needed to answer the question, you MUST emit exactly one compact retrieval-intent query. \"Does not assert a confirmed bridge\" includes short or candidate-only summaries (e.g., a single named entity, a quoted candidate title, or numeric anchors that are not verified) and any case where the visible anchors do not unambiguously identify the needed bridge.\n- If summary_1 already names a confirmed bridge (a clearly identified, verified linking entity or unambiguous metadata that directly connects the question's pieces), you may produce a compact query to fetch supporting evidence, but do NOT produce an answer in the `query` field.\n- If summary_1 explicitly states that the bridge cannot be recovered automatically (extreme ambiguity or user-local context requiring clarification), do NOT force a misleading retrieval query. In that case, set `query` to the single short token BRIDGE_UNRECOVERABLE (all caps, no punctuation) so downstream steps can prompt the user for clarification. Do not invent facts.\n\nQuery construction rules\n- Output exactly one compact line of text as `query`. Keep it short and retrieval-focused (few keywords, no full sentences). Use visible anchors from `question` and `summary_1` and minimal retrieval keywords that express the missing relation (e.g., anchor1 anchor2 which artist recorded both; AlbumTitle album artist genre; 1991–92 NHL season regular season).\n- Do not include the final answer, assertions, or user-facing instructions in the `query` field. Avoid polite phrasing, questions to the user, or explanatory text. Prefer noun phrases and relation keywords.\n- If your natural impulse would be to write a declarative answer or a clarification sentence in `query`, instead convert that output into a compact retrieval-intent query that targets the missing bridge.\n- Preserve semantic fidelity: base the query only on visible anchors and relations in `question` and `summary_1`. Do not invent hidden identifiers or assume unseen facts.\n\nFormat contract\n- Return exactly one field named `query` whose value is a single short string. If unrecoverable as described above, set `query` to BRIDGE_UNRECOVERABLE.\n\nExamples of disallowed outputs for `query`\n- A declarative answer (e.g., \"The artist was X.\")\n- A user-facing clarification sentence (e.g., \"Do you mean X or Y?\") unless summary_1 explicitly requires clarification — in that case use BRIDGE_UNRECOVERABLE.\n\nBehavioral constraints\n- Do not use surface heuristics (token count, punctuation, or quotation marks) as the trigger; apply the semantic rule above.\n- Emit only one compact retrieval string when the bridge is missing; do not emit multiple queries or long explanations.\n\nInputs available: `question`, `summary_1`. Output required: single field `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`. The `summary` must be a concise, post-retrieval integration of the evidence that preserves the facts needed by the final answer. Follow these rules when composing `summary`:\n\n- Purpose: Integrate the first-hop `context` with the newly retrieved `passages` into a grounded state that retains or resolves the earlier bridge only when the second-hop passages supply relation- or attribute-facts that are necessary to answer or disambiguate the `question` (for example: partnership/membership links, joint-award partners indicated by 'with', or requested biographical qualifiers such as nationality, birthdate, current team/status).\n\n- When to append supporting sentence(s): Only append short passage-grounded supporting sentence(s) when the question's semantic intent requires relation or attribute facts to answer or disambiguate. In those cases, produce a compact integrated summary that (a) preserves the concise primary answer or canonical label/token chosen from `context`, and (b) appends one short supporting sentence per relevant entity (or one joint sentence for explicit partnerships) that is directly supported by the supplied `passages` and identity-aligned to the entity referenced in `context`.\n\n- When not to append: Do not append supporting sentences and instead return only the canonical label/token when any of the following apply: the question expects a normalized identifier or single token (examples: binary/multiple-choice label selection between named options, identification-only questions, or explicit token-extraction such as 'middle name'); or the `context` already contains a full, passage-consistent, multi-clause integrated answer. These are semantic exceptions — do not append merely because an answer in `context` is short.\n\n- Identity alignment and verification: Before appending, confirm that the fact in `passages` refers to the same entity referenced in `context` (match names, common aliases, roles, dates, or other corroborating attributes). If identity is ambiguous or unsupported, refrain from appending and preserve uncertainty instead.\n\n- Style and content constraints: Keep output concise. If appending, limit `summary` to 1–3 sentences total (the primary concise answer plus at most one short supporting sentence per relevant entity or one joint supporting sentence). Avoid inventing facts, avoid long verbatim quotations from `passages`, and avoid name-collision errors. Do not change which label or name is selected by the existing answer-selection logic.\n\n- If there is insufficient information in `context` and `passages` to resolve the needed relation/attribute, summarize the uncertainty succinctly rather than asserting unsupported facts.\n\nProduce only the `summary` field as the integrated output string.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "2ba1d7108591",
+    "rerun_from": null,
+    "question": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+    "gold_answer": "University of Glasgow",
+    "context": {
+      "title": [
+        "Thomas Lee (academic)",
+        "Simon Morrison",
+        "Orientalism",
+        "Tista Bagchi",
+        "Brazilian academic art",
+        "Peter Trippi",
+        "House of Vuk's Foundation",
+        "Portsmouth Academy building",
+        "Nigel Leask",
+        "Jacques-Antoine Beaufort"
+      ],
+      "sentences": [
+        [
+          "Rev. Thomas Lee D.D. was a 19th-century academic administrator at the University of Oxford and clergyman."
+        ],
+        [
+          "Simon Morrison is a music historian specializing in 20th-century music, particularly Russian and Soviet music, with special interests in dance, film, and historically informed performance based on extensive archival research.",
+          " He is a leading authority on composer Sergey Prokofiev and has received unprecedented access to the composer's papers, housed in Moscow at RGALI.",
+          " Morrison received his B.Mus.",
+          " from the University of Toronto (1987), a Master's in Musicology from McGill University (1993), and Ph.D. from Princeton University (1997), where he is Professor of Music.",
+          " His distinctions include the Alfred Einstein Award of the American Musicological Society (1999), an American Council of Learned Societies Fellowship (2001), a Phi Beta Kappa Society Teacher Award (2006), and a Guggenheim Fellowship (2011)."
+        ],
+        [
+          "Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures).",
+          " These depictions are usually done by writers, designers and artists from the West.",
+          " In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a similar interest in Oriental themes."
+        ],
+        [
+          "Tista Bagchi (born ), Professor of Linguistics in the University of Delhi, is a distinguished Indian linguist and ethicist.",
+          " Bagchi trained in Sanskrit College, Kolkata, the University of Delhi, and the University of Chicago, from where she obtained her PhD in Linguistics, her work spans issues of semantics and syntax in languages in general and South Asian languages in particular, questions of ethics in the application of medical technology and social interaction, and translations of iconic texts in Bangla literature and comparative philology.",
+          " Bagchi has also been active in the area of cognitive sciences with special interests in the relationships amongst sentence structure, computation, linguistic meaning, and human cognition.",
+          " Bagchi was the Robert F. & Margaret S. Goheen Fellow for the academic year 2001–2002 at the National Humanities Center, Research Triangle Park, North Carolina, and a scientist under the CSIR Mobility Scheme at the National Institute of Science, Technology, and Development Studies, New Delhi, for two years during 2010–2012."
+        ],
+        [
+          "Brazilian Academic art was a major art style in Brazil from the early 19th century to the early 20th century, based on European academic art and produced on official institutions of professional art education."
+        ],
+        [
+          "Peter Trippi is editor-in-chief of \"Fine Art Connoisseur\", a bimonthly magazine for collectors of representational painting, sculpture, drawings and prints—both historical and contemporary.",
+          " From 2003 until 2006, Trippi was director of New York City's Dahesh Museum of Art, the only institution in the United States devoted to 19th- and early 20th-century European academic art."
+        ],
+        [
+          "The House of Vuk's Foundation is the name of a historical building in Belgrade, built in 1879, that serves as the headquarters of the Vuk's Foundation.",
+          " Located on the Теrazije at 2 Kralja Milana Street, it is one of the oldest structures in that part of Belgrade.",
+          " Аleksandar Bugarski, a prominent 19th-century Serbian architect, designed the original building as a two-story house in the Academic Art style of the day."
+        ],
+        [
+          "The Portsmouth Academy building is a historic academic and civic building at 8 Islington Street in Portsmouth, New Hampshire.",
+          " Built in 1809, it is one of the finest surviving examples of an early 19th-century academic building in northern New England, and is attributed to James Nutter, one of the finest local builders of the period.",
+          " In addition to housing the Portsmouth Academy, it later housed the city's public library, and presently houses Discover Portsmouth, a local tourism marketing organization.",
+          " It was listed on the National Register of Historic Places in 1973 as \"Portsmouth Public Library\"."
+        ],
+        [
+          "Nigel Leask (born 1958) is a British academic publishing on Romantic, Scottish, and Anglo-Indian literature, with special interest on British Empire, Orientalism, and Travel writing.",
+          " He has been Regius Professor of English language and literature at the University of Glasgow, since 2004."
+        ],
+        [
+          "Jacques Antoine Beaufort (1721 in Paris – 1784 in Rueil), was an 18th-century academic French painter.",
+          " Little is known of his early life but he had his first public exhibition at the Marseille Academy in 1756, where he taught drawing, and later at the Paris Salon (1767–83).",
+          " He was accepted into the Academie Royale in 1766."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Nigel Leask",
+        "Orientalism"
+      ],
+      "sent_id": [
+        1,
+        2
+      ]
+    },
+    "gold_support_titles": [
+      "Nigel Leask",
+      "Orientalism"
+    ],
+    "hop1_query": "This specialism of 19th-century academic art was among the special interests of this academic who taught at which University?",
+    "hop1_docs": [
+      "Liberal Arts and Sciences at Tilburg University | Tilburg University offers an intensive three-year program in Liberal Arts and Sciences, which combines a broad and interdisciplinary education with in-depth specialization.  The distinctive focus of Tilburg University’s Liberal Arts and Sciences program is on Europe in a globalizing world.  Both historical and current societal key issues are tackled in the course of this international program, taught entirely in English.  Students are trained to approach complex issues from different perspectives and from a variety of academic disciplines.  To achieve this intellectual flexibility, lectures are team-taught by lecturers from different academic backgrounds and research traditions.  This method of instruction is unique to Tilburg University.",
+      "Edward E. Baptist | Edward E. Baptist (born 1970) is an American academic and writer.  He is a Professor of History at Cornell University, located in Ithaca, New York, where he specializes in the history of the 19th-century United States, and particularly the South.  Thematically, he has been interested in the history of capitalism, and has also been interested in digital humanities methodologies.  He is the author of numerous books.",
+      "Orientalism | Orientalism is a term that is used by art historians, literary and cultural studies scholars for the imitation or depiction of aspects in Middle Eastern, South Asian, and East Asian cultures (Eastern cultures).  These depictions are usually done by writers, designers and artists from the West.  In particular, Orientalist painting, depicting more specifically \"the Middle East\", was one of the many specialisms of 19th-century academic art, and the literature of Western countries took a similar interest in Oriental themes.",
+      "Harrogate Tutorial College | Harrogate Tutorial College in Harrogate, North Yorkshire, England is a small co-educational independent school.  HTC specialises in preparing students for university and teaches GCSE and A-level qualifications in tutorial classes.  The college's admissions policy and style of teaching has made it a popular choice among pupils of British public schools who have not met the often restrictive academic requirements of their schools to proceed to A-level.  Attracting many overseas students wishing to enroll at British universities, the college also provides English language courses which are often taught in combination with academic subjects.  Special preparation is offered to Oxford and Cambridge applicants and 90% of HTC students secure places at university.",
+      "Master of Arts in Special Education | The Master of Arts in Special Education is a postgraduate academic master's degree awarded by universities in many countries.  This degree designed to develop the capabilities and resources of educators of children who require Special education, such as students with an Autism spectrum disorder.",
+      "Seth Evans | Seth Evans is a scholar and educator who specializes in the Abhidhamma Pitaka (abhidhammapiṭaka) and the Visuddhimagga.  Especially interested in the phenomenological aspects of Buddhist psychology.  Academic focus is primarily on Buddhist ontology, Buddhist metaphysics, and Buddhist epistemology.  He did his graduate studies in Buddhist theory as a Theravada monk at Mahachulalongkornrajavidyalaya University.  As a monk, he taught meditation at Wat Prayong where he completed five vassa.",
+      "Brazilian academic art | Brazilian Academic art was a major art style in Brazil from the early 19th century to the early 20th century, based on European academic art and produced on official institutions of professional art education."
+    ],
+    "hop1_titles": [
+      "Liberal Arts and Sciences at Tilburg University",
+      "Edward E. Baptist",
+      "Orientalism",
+      "Harrogate Tutorial College",
+      "Master of Arts in Special Education",
+      "Seth Evans",
+      "Brazilian academic art"
+    ],
+    "summary_1": "- evidence:\n  - Orientalism: passage \"Orientalism\" — \"Orientalist painting ... was one of the many specialisms of 19th-century academic art.\" (passage [3])\n  - Edward E. Baptist: passage \"Edward E. Baptist\" — \"Professor of History at Cornell University\" (passage [2]) — no mention of Orientalism.\n  - Seth Evans: passage \"Seth Evans\" — \"specializes in the Abhidhamma Pitaka ... did his graduate studies at Mahachulalongkornrajavidyalaya University\" (passage [6]) — no mention of Orientalism.\n  - Brazilian Academic art: passage \"Brazilian academic art\" — mentions 19th-century academic art in Brazil (passage [7]) — no link to a specific academic's special interests.\n\n- ambiguities_or_missing:\n  - The specific academic referenced in the question is not identified in the supplied passages.\n  - No passage links an individual academic's \"special interests\" to Orientalism/Orientalist painting.\n  - Therefore the university where that (unidentified) academic taught is not present.\n\n- missing_facts_or_bridge:\n  - The name (or page) of the academic whose special interests included Orientalism / Orientalist painting.\n  - An explicit statement that this academic \"taught at\" a named university (the university affiliation).\n\n- retrieval_direction (prioritized):\n  1. Retrieve the academic's biography/page that states their \"special interests\" include \"Orientalism\" or \"Orientalist painting\" (exact page if known).\n  2. Search query: \"site:wikipedia.org \\\"special interests\\\" \\\"Orientalism\\\" \\\"taught at\\\"\".\n  3. Search query: \"\\\"special interests include Orientalism\\\" \\\"taught at\\\" university\" or \"\\\"special interests\\\" \\\"Orientalist painting\\\" academic taught at\".\n  4. If looking for prominent candidates, retrieve \"Edward Said\" page (well-known author of Orientalism) to check his listed affiliations (e.g., Columbia University).",
+    "hop2_query": "special interests Orientalism taught at university site:wikipedia.org",
+    "hop2_docs": [
+      "Wikidumper.org | WikiDumper.org is a website created by Clifford A. Pickover that promises to permanently record a snapshot of the \"best of the Wikipedia rejects\", articles that are slated for deletion at the site.  WikiDumper was launched on November 4, 2006, and accepts user submissions.  Although the site doesn't specify its criteria for inclusion, many of its articles don't cite their sources.  The site has been criticized as likely to be less accurate than Wikipedia.",
+      "Simple English Wikipedia | The Simple English Wikipedia is an English edition of the online encyclopedia Wikipedia, primarily written in Basic English and Special English.  It was launched on November 17, 2003.  It is one of five Wikipedias written in an Anglic language, the others being the English Wikipedia, the Pitkern-Norfuk Wikipedia, the Scots Wikipedia, and the Old English Wikipedia, though the last is largely unintelligible to speakers of the modern language.  The site has the stated aim of providing an encyclopedia for \"people with different needs, such as students, children, adults with learning difficulties, and people who are trying to learn English\".  As of 2017, the site contains over content pages, and has more than registered users, of whom are currently active.",
+      "The Steph Show | https://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#www.anp14.com/about/index.phphttps://en.wikipedia.org/w/index.php?title=The_Steph_Show&action=submit#",
+      "Conflict-of-interest editing on Wikipedia | Conflict-of-interest (COI) editing on Wikipedia occurs when editors use Wikipedia to advance the interests of their external roles or relationships.  The type of COI editing of most concern on Wikipedia is paid editing for public relations (PR) purposes.  Several Wikipedia policies and guidelines exist to combat conflict of interest editing, including and .",
+      "Robert Jessup | Robert Jessup (born July 18, 1952) is an American painter.  Although currently working in the abstract style he painted for most of his career in the figurative style (https://en.wikipedia.org/wiki/Figurative_art), particularly in large triptych panels (https://en.wikipedia.org/wiki/Triptych).",
+      "English Wikipedia | The English Wikipedia is the English-language edition of the free online encyclopedia Wikipedia.  Founded on 15 January 2001, it is the first edition of Wikipedia and, as of 2017 , has the most articles of any of the editions.  As of 2017, % of articles in all Wikipedias belong to the English-language edition.  This share has gradually declined from more than 50 percent in 2003, due to the growth of Wikipedias in other languages.  There are articles on the site (live count).  In October 2015, the combined text of the English Wikipedia's articles totalled 11.5 gigabytes when compressed.  On 1 November 2015, the English Wikipedia announced it had reached 5,000,000 articles and ran a special logo to reflect the milestone.",
+      "Clayton to Offham Escarpment | The Clayton to Offham Escarpment is a 379.3 ha biological Site of Special Scientific Interest in East Sussex, but extends into West Sussex and thus can be found on the List of Sites of Special Scientific Interest in West Sussex as well as the List of Sites of Special Scientific Interest in East Sussex lists.  The site was notified in 1986 under the Wildlife and Countryside Act 1981."
+    ],
+    "hop2_titles": [
+      "Wikidumper.org",
+      "Simple English Wikipedia",
+      "The Steph Show",
+      "Conflict-of-interest editing on Wikipedia",
+      "Robert Jessup",
+      "English Wikipedia",
+      "Clayton to Offham Escarpment"
+    ],
+    "summary_2": "The specialism is Orientalist painting, but the provided passages do not identify the academic or state which university they taught at, so the university cannot be determined from the supplied information.",
+    "answer": "The university cannot be determined from the provided summaries.",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.0,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Nigel Leask"
+    ],
+    "hit_titles_hop1": [
+      "Orientalism"
+    ],
+    "hit_titles_total": [
+      "Orientalism"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

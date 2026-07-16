@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "51bad54c8c73607c791ee323d71c14e7b7362ae34b0ba3c2fcc977c631a49e72",
+  "created_at": "2026-07-14T13:37:43.139762+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the question text contains the phrase 'how old' (case-insensitive) AND at least one of the provided summaries contains a numeric age token (a contiguous sequence of digits, optionally followed by words like 'year', 'years', or 'years old').",
+            "preserve_rule": "Continue using the existing summaries as the evidence source. If both summaries contain the same numeric token, treat that token as the agreed value. If summaries contain different numeric tokens, prefer the majority numeric value; if there is a tie, prefer the numeric token that appears first in summary_1 then summary_2. Do not invent or infer any new numeric value beyond what the summaries provide.",
+            "change_rule": "Replace verbose-age wording with a minimal digits-only answer: extract the agreed numeric token from the selected summary and set the answer field to that digits-only string (strip any surrounding words, units, punctuation, and explanatory text). If multiple digits appear in the selected summary, choose the token that appears in a phrase indicating age (e.g., adjacent to 'year', 'years', or 'old'); if none is clearly indicated, choose the first digit-token. If no numeric token is found, do not apply this change and fall back to the base prompt behavior.",
+            "drop_or_avoid_rule": "Do not include units ('years', 'old', etc.), explanatory words, punctuation, or a full-sentence answer. Do not add any extra context, qualifiers, or new information. Do not output the summaries themselves or repeat long spans from them—only the chosen digits. Do not request clarification when a numeric token is present.",
+            "output_contract": "Produce the answer field as a single, minimal digits-only string (e.g., only characters 0-9), placed per the base prompt's final-answer interface. The [[ ## answer ## ]] block must contain exactly that digits-only string and nothing else. If the trigger conditions are not met, preserve the base prompt's original output rules.",
+            "why_local_transition": "This change only normalizes format: it converts an already-supported age value present in the summaries from a verbose sentence into the minimal numeric string required by the final-answer contract. It preserves the factual content and evidence selection logic while enforcing the required minimal output formatting."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?",
+        "summary_1": "He was 23 years old.",
+        "summary_2": "23 years old.",
+        "current_output": "He was 23 years old."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the question text contains the phrase 'how old' (case-insensitive) AND at least one of the provided summaries contains a numeric age token (a contiguous sequence of digits, optionally followed by words like 'year', 'years', or 'years old').\",\n      \"preserve_rule\": \"Continue using the existing summaries as the evidence source. If both summaries contain the same numeric token, treat that token as the agreed value. If summaries contain different numeric tokens, prefer the majority numeric value; if there is a tie, prefer the numeric token that appears first in summary_1 then summary_2. Do not invent or infer any new numeric value beyond what the summaries provide.\",\n      \"change_rule\": \"Replace verbose-age wording with a minimal digits-only answer: extract the agreed numeric token from the selected summary and set the answer field to that digits-only string (strip any surrounding words, units, punctuation, and explanatory text). If multiple digits appear in the selected summary, choose the token that appears in a phrase indicating age (e.g., adjacent to 'year', 'years', or 'old'); if none is clearly indicated, choose the first digit-token. If no numeric token is found, do not apply this change and fall back to the base prompt behavior.\",\n      \"drop_or_avoid_rule\": \"Do not include units ('years', 'old', etc.), explanatory words, punctuation, or a full-sentence answer. Do not add any extra context, qualifiers, or new information. Do not output the summaries themselves or repeat long spans from them—only the chosen digits. Do not request clarification when a numeric token is present.\",\n      \"output_contract\": \"Produce the answer field as a single, minimal digits-only string (e.g., only characters 0-9), placed per the base prompt's final-answer interface. The [[ ## answer ## ]] block must contain exactly that digits-only string and nothing else. If the trigger conditions are not met, preserve the base prompt's original output rules.\",\n      \"why_local_transition\": \"This change only normalizes format: it converts an already-supported age value present in the summaries from a verbose sentence into the minimal numeric string required by the final-answer contract. It preserves the factual content and evidence selection logic while enforcing the required minimal output formatting.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"How old was the man for whom Āryabhaṭa numeration is named when he wrote Āryabhaṭīya?\",\n  \"summary_1\": \"He was 23 years old.\",\n  \"summary_2\": \"23 years old.\",\n  \"current_output\": \"He was 23 years old.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"[[ ## answer ## ]]\\n23\\n[[ ## /answer ## ]]\",\n  \"rationale\": \"Trigger matched ('how old'); both summaries contain the numeric token 23, so per the ordered rule the agreed digits-only value '23' is returned.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 74,
+    "row_index": 74,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

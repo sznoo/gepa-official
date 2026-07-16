@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "1da039f1d13038836536f4118bc9805c989927743896ba38923a0fc1016fa6bc",
+  "created_at": "2026-07-14T19:01:54.908153+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "In what year were the pioneers of managed care in the United States established?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "In what year were the pioneers of managed care in the United States established?",
+        "passages": [
+          "Medical facilities of Seattle | This is the main article on the medical facilities of Seattle, Washington.  Seattle, USA is well served medically.  The University of Washington is consistently ranked among the country's dozen leading institutions in medical research; Group Health Cooperative was one of the pioneers of managed care in the United States; and Seattle was a pioneer in the development of modern paramedic services with the establishment of Medic One in 1970.",
+          "List of former Texas state parks | This is a list of former state parks in Texas, United States, the year they were established and what they reverted to.",
+          "Fossil Butte National Monument | Fossil Butte National Monument is a United States National Monument managed by the National Park Service, located 15 mi west of Kemmerer, Wyoming, United States.  It centers on an extraordinary assemblage of Eocene Epoch (56 to 34 million years ago) animal and plant fossils associated with Fossil Lake—the smallest lake of the three great lakes which were then present in what are now Wyoming, Utah, and Colorado.  The other two lakes were Lake Gosiute and Lake Uinta.  Fossil Butte National Monument was established as a national monument on October 23, 1972.",
+          "Consent management | Consent management is a system, process or set of policies for allowing consumers and patients to determine what health information they are willing to permit their various care providers to access.  It enables patients and consumers to affirm their participation in e-health initiatives and to establish consent directives to determine who will have access to their protected health information (PHI), for what purpose and under what circumstances.  Consent management supports the dynamic creation, management and enforcement of consumer, organizational and jurisdictional privacy policies.",
+          "Nurse-managed health center | A nurse-managed health center provides health care services in medically underserved rural and urban areas in the United States where there is limited access to health care.  Nurse-managed health centers provide health care to thousands of uninsured and underinsured people every year.  Nurse-managed health centers are usually affiliated with nursing schools, universities, and/or independent non-profit organizations. Managed by advanced practice nurses, nurse-managed health centers provide health care to vulnerable communities using a nursing model.",
+          "Caritas Christi Health Care | Caritas Christi Health Care was a non-profit Roman Catholic healthcare system in the New England region of the United States.  It was established in 1985 and was the second largest healthcare system in New England.  In 2010, Caritas Christi was sold to the private equity firm Cerberus Capital Management which converted it to a for-profit company and renamed it Steward Health Care System.  Cain Brothers acted as Caritas Christi's advisor for this transaction and received Deal of the Year honors from Investment Dealer's Digest due to their work on the deal.",
+          "Worcestershire Health and Care NHS Trust | Worcestershire Health and Care NHS Trust was established in Worcestershire, England, on 1 July 2011 to manage services previously managed by Worcestershire Primary Care NHS Trust's Provider Arm, as well as the mental health services that were managed by Worcestershire Mental Health Partnership NHS Trust."
+        ],
+        "current_output": "1947"
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "1947",
+        "score": 0.0,
+        "generated_query": "\"pioneers of managed care\" \"established 1947\" United States",
+        "retrieved_titles": [
+          "Medical facilities of Seattle",
+          "Enhanced Primary Care Case Management Program",
+          "Medicaid managed care",
+          "Diversified Pharmaceutical Services",
+          "Managed care",
+          "Case management (US health system)",
+          "Vermont health care reform"
+        ],
+        "summary_2": "1947",
+        "answer": "1947",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Group Health Cooperative"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop source (Medical facilities of Seattle) identifies Group Health Cooperative as “one of the pioneers of managed care in the United States.” Bridge entity: Group Health Cooperative. Missing fact needed for the final answer: the year Group Health Cooperative was founded/established. Next hop direction: retrieve the Group Health Cooperative page (check the lede/infobox or history/organization sections) to find the founding/establishment year.",
+        "score": null,
+        "generated_query": null,
+        "retrieved_titles": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"In what year were the pioneers of managed care in the United States established?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"In what year were the pioneers of managed care in the United States established?\",\n  \"passages\": [\n    \"Medical facilities of Seattle | This is the main article on the medical facilities of Seattle, Washington.  Seattle, USA is well served medically.  The University of Washington is consistently ranked among the country's dozen leading institutions in medical research; Group Health Cooperative was one of the pioneers of managed care in the United States; and Seattle was a pioneer in the development of modern paramedic services with the establishment of Medic One in 1970.\",\n    \"List of former Texas state parks | This is a list of former state parks in Texas, United States, the year they were established and what they reverted to.\",\n    \"Fossil Butte National Monument | Fossil Butte National Monument is a United States National Monument managed by the National Park Service, located 15 mi west of Kemmerer, Wyoming, United States.  It centers on an extraordinary assemblage of Eocene Epoch (56 to 34 million years ago) animal and plant fossils associated with Fossil Lake—the smallest lake of the three great lakes which were then present in what are now Wyoming, Utah, and Colorado.  The other two lakes were Lake Gosiute and Lake Uinta.  Fossil Butte National Monument was established as a national monument on October 23, 1972.\",\n    \"Consent management | Consent management is a system, process or set of policies for allowing consumers and patients to determine what health information they are willing to permit their various care providers to access.  It enables patients and consumers to affirm their participation in e-health initiatives and to establish consent directives to determine who will have access to their protected health information (PHI), for what purpose and under what circumstances.  Consent management supports the dynamic creation, management and enforcement of consumer, organizational and jurisdictional privacy policies.\",\n    \"Nurse-managed health center | A nurse-managed health center provides health care services in medically underserved rural and urban areas in the United States where there is limited access to health care.  Nurse-managed health centers provide health care to thousands of uninsured and underinsured people every year.  Nurse-managed health centers are usually affiliated with nursing schools, universities, and/or independent non-profit organizations. Managed by advanced practice nurses, nurse-managed health centers provide health care to vulnerable communities using a nursing model.\",\n    \"Caritas Christi Health Care | Caritas Christi Health Care was a non-profit Roman Catholic healthcare system in the New England region of the United States.  It was established in 1985 and was the second largest healthcare system in New England.  In 2010, Caritas Christi was sold to the private equity firm Cerberus Capital Management which converted it to a for-profit company and renamed it Steward Health Care System.  Cain Brothers acted as Caritas Christi's advisor for this transaction and received Deal of the Year honors from Investment Dealer's Digest due to their work on the deal.\",\n    \"Worcestershire Health and Care NHS Trust | Worcestershire Health and Care NHS Trust was established in Worcestershire, England, on 1 July 2011 to manage services previously managed by Worcestershire Primary Care NHS Trust's Provider Arm, as well as the mental health services that were managed by Worcestershire Mental Health Partnership NHS Trust.\"\n  ],\n  \"current_output\": \"1947\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"1947\",\n  \"score\": 0.0,\n  \"generated_query\": \"\\\"pioneers of managed care\\\" \\\"established 1947\\\" United States\",\n  \"retrieved_titles\": [\n    \"Medical facilities of Seattle\",\n    \"Enhanced Primary Care Case Management Program\",\n    \"Medicaid managed care\",\n    \"Diversified Pharmaceutical Services\",\n    \"Managed care\",\n    \"Case management (US health system)\",\n    \"Vermont health care reform\"\n  ],\n  \"summary_2\": \"1947\",\n  \"answer\": \"1947\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Group Health Cooperative\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop source (Medical facilities of Seattle) identifies Group Health Cooperative as “one of the pioneers of managed care in the United States.” Bridge entity: Group Health Cooperative. Missing fact needed for the final answer: the year Group Health Cooperative was founded/established. Next hop direction: retrieve the Group Health Cooperative page (check the lede/infobox or history/organization sections) to find the founding/establishment year.\",\n  \"score\": null,\n  \"generated_query\": null,\n  \"retrieved_titles\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If any input passage contains the substring \\\"pioneer\\\" or \\\"pioneers\\\" (case-insensitive) AND the question requests a year/founding/establishment, apply this delta.\",\n    \"preserve_rule\": \"Keep extracting and citing the supporting passage/title and preserve the exact entity token(s) as they appear in the passages (e.g., 'Group Health Cooperative'). Keep concise, factual language summarizing what the first-hop passage states.\",\n    \"change_rule\": \"Do not attempt to produce a final numeric answer. Instead, produce a concise first-hop summary that: (1) names the supporting passage/title or quotes the short phrase from it (use at most a short quoted phrase already present in the passages, e.g. \\\"one of the pioneers of managed care\\\"); (2) explicitly identifies the bridge entity exactly as it appears in the passages; (3) states the single missing fact needed for the next hop (the founding/establishment year); and (4) gives a clear next-hop retrieval direction: retrieve the bridge entity's page and check the lede/infobox or history/organization sections for the founding/establishment year. Do not include the founding year or other facts not present in the given passages.\",\n    \"drop_or_avoid_rule\": \"Avoid outputting any numeric year, any invented facts, long verbatim spans that are not already visible in the passages, or step-by-step query strings. Avoid turning the summary into a final answer; avoid adding unrelated retrieval suggestions.\",\n    \"output_contract\": \"Produce only the 'summary' text. The summary must be 1–3 short sentences (or a 2–4 line bullet-style list) containing: supporting source/title or a short quote present in the passages, the bridge entity name verbatim, the missing fact needed (phrased as 'founding/establishment year'), and the precise next-hop direction (retrieve the bridge entity page; check lede/infobox/history). Do not include a numeric year or extra speculative details.\",\n    \"why_local_transition\": \"The agent currently outputs a final numeric year instead of exposing the bridge entity and the missing fact/direction needed for the next hop. This delta enforces the agent role (summarize first-hop evidence and expose the bridge/missing fact) so the pipeline proceeds to the correct retrieval.\"\n  },\n  \"rationale\": \"The smallest effective change is to prevent premature final-answering and require a structured first-hop summary that names the bridge entity and the exact missing fact to retrieve. This preserves the agent's existing extraction behavior (it already identified the supporting passage and the entity) while redirecting output from a final answer to an intermediate retrieval cue. The trigger is specific (presence of 'pioneer' and a year-related question) so the rule only activates when this edge is relevant. The output contract keeps the agent's interface unchanged and limits verbosity and hallucination risk.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 97,
+    "row_index": 97,
+    "bisection_round": 1,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

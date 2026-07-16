@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "b3aaa3e11f5d2c1d74b65e262099ed5474650e104ca169137bba8872fe0dea21",
+  "created_at": "2026-07-14T13:38:32.777747+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "The question asks for an artist whose album both (a) reflects on his depressive state and (b) had a song on the Billboard Hot 100 in 1976.",
+            "preserve_rule": "Keep using only the provided fields (`question`, `summary_1`, `summary_2`) as evidence and preserve the base prompt's output format and final-answer contract.",
+            "change_rule": "Only output a person's name if the visible summaries explicitly support both required claims: that the album \"reflects on his depressive state\" (or an equivalent phrase) and that a song from that album appeared on the Billboard Hot 100 in 1976. If the summaries do not explicitly supply both claims, do not infer or guess an artist; instead return the exact string \"Insufficient information\".",
+            "drop_or_avoid_rule": "Do not combine or infer unstated facts from vague or unrelated summary lines. Avoid answering based on a Hot 100 mention alone (or a depressive-state mention alone). Do not introduce or repeat long unseen spans or external facts not present in the given summaries.",
+            "output_contract": "The [[ ## answer ## ]] block must contain only a single minimal string: either a single artist name (only when both claims are explicitly supported by the visible summaries) or the exact string \"Insufficient information\".",
+            "why_local_transition": "The existing summaries mention a 1976 Hot 100 song but do not state that the album reflects the artist's depressive state; this rule prevents returning an artist based on the Hot 100 fact alone and forces answers to be strictly supported by the provided summaries."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? ",
+        "summary_1": "Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \"Show Me the Way\") had a song that reached the Billboard Hot 100.",
+        "summary_2": "Peter Frampton",
+        "current_output": "Peter Frampton"
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"The question asks for an artist whose album both (a) reflects on his depressive state and (b) had a song on the Billboard Hot 100 in 1976.\",\n      \"preserve_rule\": \"Keep using only the provided fields (`question`, `summary_1`, `summary_2`) as evidence and preserve the base prompt's output format and final-answer contract.\",\n      \"change_rule\": \"Only output a person's name if the visible summaries explicitly support both required claims: that the album \\\"reflects on his depressive state\\\" (or an equivalent phrase) and that a song from that album appeared on the Billboard Hot 100 in 1976. If the summaries do not explicitly supply both claims, do not infer or guess an artist; instead return the exact string \\\"Insufficient information\\\".\",\n      \"drop_or_avoid_rule\": \"Do not combine or infer unstated facts from vague or unrelated summary lines. Avoid answering based on a Hot 100 mention alone (or a depressive-state mention alone). Do not introduce or repeat long unseen spans or external facts not present in the given summaries.\",\n      \"output_contract\": \"The [[ ## answer ## ]] block must contain only a single minimal string: either a single artist name (only when both claims are explicitly supported by the visible summaries) or the exact string \\\"Insufficient information\\\".\",\n      \"why_local_transition\": \"The existing summaries mention a 1976 Hot 100 song but do not state that the album reflects the artist's depressive state; this rule prevents returning an artist based on the Hot 100 fact alone and forces answers to be strictly supported by the provided summaries.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who's album which reflects on his depressive state, had a song on the Billboard Hot 100 in 1976? \",\n  \"summary_1\": \"Peter Frampton. The 1976 live album Frampton Comes Alive! (featuring \\\"Show Me the Way\\\") had a song that reached the Billboard Hot 100.\",\n  \"summary_2\": \"Peter Frampton\",\n  \"current_output\": \"Peter Frampton\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Insufficient information\",\n  \"rationale\": \"Summary_1 confirms a 1976 Hot 100 song but neither summary explicitly states the album reflects the artist's depressive state, so both required claims are not supported.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 96,
+    "row_index": 96,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

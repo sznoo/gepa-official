@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "bb88fcd8bb4276f16dc474bcb449b432d0fdcf1918a215cffbf29c07f5780c15",
+  "created_at": "2026-07-16T06:00:58.946504+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+      "current_output": "Both bands have four other/named band members. Civil Twilight's four are explicitly male — \"the brothers Andrew and Steven McKellar, plus Richard Wouters, and Kevin Dailey\" (passage 2) — while the provided passage listing Juliette and the Licks' four members does not explicitly state those members' genders (passage 1).",
+      "upstream_context": {
+        "question": "What number of male band members do both Juliette and the Licks and Civil Twilight have?",
+        "summary_1": "Evidence: Juliette and the Licks — \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\" Civil Twilight — \"Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKellar, plus Richard Wouters, and Kevin Dailey.\" Bridge/missing fact: passages show each band has four additional/named members, but do not explicitly state the sex of each named member or give an explicit \"male members\" count. Next retrieval direction: fetch sources (band pages, member bios) that confirm the gender of Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis, Andrew McKellar, Steven McKellar, Richard Wouters, and Kevin Dailey — or locate an explicit statement/count that each band has four male members.",
+        "hop2_query": "Craig Fairbaugh Emilio Cueto Jason Womack Ed Davis Andrew McKellar Steven McKellar Richard Wouters Kevin Dailey gender male",
+        "hop2_titles": [
+          "Juliette and the Licks",
+          "Civil Twilight (band)",
+          "Craig McKellar",
+          "Andrew McKellar",
+          "Danica McKellar",
+          "McKellar (Manitouwabing) Water Aerodrome",
+          "Heatstroke (film)"
+        ],
+        "hop2_docs": [
+          "Juliette and the Licks | Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.  Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.  Their popular songs include \"You're Speaking My Language\" and \"Hot Kiss\".  The band broke up in 2009.  In 2015, Lewis announced the band would be reunited on July 23rd for a show in Los Angeles.  The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.  In June of 2016, Juliette Lewis announced a solo tour leaving the future of The Licks undetermined.",
+          "Civil Twilight (band) | Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKeller, plus Richard Wouters, and Kevin Dailey.  They are signed to Wind-up Records, and have released three studio albums — their self-titled debut album, \"Civil Twilight\" (2010), \"Holy Weather\" (2012), and \"Story of an Immigrant\" on July 10th 2015.",
+          "Craig McKellar | Craig McKellar (born 8 December 1949) is a former Australian rules footballer who played with Richmond and Melbourne in the Victorian Football League (VFL) during the 1970s.",
+          "Andrew McKellar | Dr. Andrew McKellar (February 2, 1910–May 6, 1960) was a Canadian astronomer.",
+          "Danica McKellar | Danica Mae McKellar (born January 3, 1975) is an American actress, mathematics writer, and education advocate.  She played Kevin Arnold's on-off girlfriend Winnie Cooper in the television series \"The Wonder Years\", and later wrote five non-fiction books: \"Math Doesn't Suck\", \"Kiss My Math\", \"Hot X: Algebra Exposed\", \"Girls Get Curves: Geometry Takes Shape\", which encourage middle-school and high-school girls to have confidence and succeed in mathematics, and \"Goodnight, numbers\".  From 2010-2012 and 2018–present, McKellar voiced Miss Martian in the animated superhero series Young Justice.  In 2015 Mckellar was cast in the Netflix original series \"Project Mc\".",
+          "McKellar (Manitouwabing) Water Aerodrome | McKellar (Manitouwabing) Water Aerodrome, (TC LID: CMK2) , is located on Lake Manitouwabing, adjacent to McKellar, Ontario, Canada.",
+          "Heatstroke (film) | Heatstroke is a Sci Fi Channel original movie.  The film stars D. B. Sweeney and Danica McKellar.  It was made by the team that made \"Farscape\".  The film was written by Richard Manning and David Kemper, produced by David Kemper, and directed by Andrew Prowse."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 0,
+          "sentence": "Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis."
+        },
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 1,
+          "sentence": "Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis."
+        },
+        {
+          "title": "Juliette and the Licks",
+          "sent_id": 5,
+          "sentence": "The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016."
+        },
+        {
+          "title": "Civil Twilight (band)",
+          "sent_id": 0,
+          "sentence": "Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKeller, plus Richard Wouters, and Kevin Dailey."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhat number of male band members do both Juliette and the Licks and Civil Twilight have?\n\nCurrent agent output:\n\"Both bands have four other/named band members. Civil Twilight's four are explicitly male — \\\"the brothers Andrew and Steven McKellar, plus Richard Wouters, and Kevin Dailey\\\" (passage 2) — while the provided passage listing Juliette and the Licks' four members does not explicitly state those members' genders (passage 1).\"\n\nActual upstream context:\n{\n  \"question\": \"What number of male band members do both Juliette and the Licks and Civil Twilight have?\",\n  \"summary_1\": \"Evidence: Juliette and the Licks — \\\"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\\\" Civil Twilight — \\\"Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKellar, plus Richard Wouters, and Kevin Dailey.\\\" Bridge/missing fact: passages show each band has four additional/named members, but do not explicitly state the sex of each named member or give an explicit \\\"male members\\\" count. Next retrieval direction: fetch sources (band pages, member bios) that confirm the gender of Craig Fairbaugh, Emilio Cueto, Jason Womack, Ed Davis, Andrew McKellar, Steven McKellar, Richard Wouters, and Kevin Dailey — or locate an explicit statement/count that each band has four male members.\",\n  \"hop2_query\": \"Craig Fairbaugh Emilio Cueto Jason Womack Ed Davis Andrew McKellar Steven McKellar Richard Wouters Kevin Dailey gender male\",\n  \"hop2_titles\": [\n    \"Juliette and the Licks\",\n    \"Civil Twilight (band)\",\n    \"Craig McKellar\",\n    \"Andrew McKellar\",\n    \"Danica McKellar\",\n    \"McKellar (Manitouwabing) Water Aerodrome\",\n    \"Heatstroke (film)\"\n  ],\n  \"hop2_docs\": [\n    \"Juliette and the Licks | Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.  Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.  Their popular songs include \\\"You're Speaking My Language\\\" and \\\"Hot Kiss\\\".  The band broke up in 2009.  In 2015, Lewis announced the band would be reunited on July 23rd for a show in Los Angeles.  The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.  In June of 2016, Juliette Lewis announced a solo tour leaving the future of The Licks undetermined.\",\n    \"Civil Twilight (band) | Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKeller, plus Richard Wouters, and Kevin Dailey.  They are signed to Wind-up Records, and have released three studio albums — their self-titled debut album, \\\"Civil Twilight\\\" (2010), \\\"Holy Weather\\\" (2012), and \\\"Story of an Immigrant\\\" on July 10th 2015.\",\n    \"Craig McKellar | Craig McKellar (born 8 December 1949) is a former Australian rules footballer who played with Richmond and Melbourne in the Victorian Football League (VFL) during the 1970s.\",\n    \"Andrew McKellar | Dr. Andrew McKellar (February 2, 1910–May 6, 1960) was a Canadian astronomer.\",\n    \"Danica McKellar | Danica Mae McKellar (born January 3, 1975) is an American actress, mathematics writer, and education advocate.  She played Kevin Arnold's on-off girlfriend Winnie Cooper in the television series \\\"The Wonder Years\\\", and later wrote five non-fiction books: \\\"Math Doesn't Suck\\\", \\\"Kiss My Math\\\", \\\"Hot X: Algebra Exposed\\\", \\\"Girls Get Curves: Geometry Takes Shape\\\", which encourage middle-school and high-school girls to have confidence and succeed in mathematics, and \\\"Goodnight, numbers\\\".  From 2010-2012 and 2018–present, McKellar voiced Miss Martian in the animated superhero series Young Justice.  In 2015 Mckellar was cast in the Netflix original series \\\"Project Mc\\\".\",\n    \"McKellar (Manitouwabing) Water Aerodrome | McKellar (Manitouwabing) Water Aerodrome, (TC LID: CMK2) , is located on Lake Manitouwabing, adjacent to McKellar, Ontario, Canada.\",\n    \"Heatstroke (film) | Heatstroke is a Sci Fi Channel original movie.  The film stars D. B. Sweeney and Danica McKellar.  It was made by the team that made \\\"Farscape\\\".  The film was written by Richard Manning and David Kemper, produced by David Kemper, and directed by Andrew Prowse.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 0,\n    \"sentence\": \"Juliette & The Licks is an American rock band led by actress and singer Juliette Lewis.\"\n  },\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 1,\n    \"sentence\": \"Other band members have included guitarist Craig Fairbaugh and guitarist Emilio Cueto, bassist Jason Womack and drummer Ed Davis.\"\n  },\n  {\n    \"title\": \"Juliette and the Licks\",\n    \"sent_id\": 5,\n    \"sentence\": \"The future of the band past this show was unknown until Juliette announced, via her Facebook account on Feb 1st 2016, that the band will play a gig in London's Heaven on May 4th 2016.\"\n  },\n  {\n    \"title\": \"Civil Twilight (band)\",\n    \"sent_id\": 0,\n    \"sentence\": \"Civil Twilight is a four-piece rock band from Cape Town, South Africa, consisting of the brothers Andrew and Steven McKeller, plus Richard Wouters, and Kevin Dailey.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Evidence summary: Juliette & The Licks — the page lists four other band members: guitarist Craig Fairbaugh, guitarist Emilio Cueto, bassist Jason Womack, and drummer Ed Davis. Civil Twilight — the page describes the group as a \\\"four-piece\\\" rock band consisting of the brothers Andrew and Steven McKellar, plus Richard Wouters and Kevin Dailey. Both sources therefore provide four named members for each band (Civil Twilight is explicitly called a four-piece; the Juliette & The Licks page names four other members).\",\n  \"rationale\": \"I used only the supplied visible sentences: the Juliette & The Licks sentence that names Craig Fairbaugh, Emilio Cueto, Jason Womack, and Ed Davis, and the Civil Twilight sentence that calls the band a four-piece consisting of Andrew and Steven McKellar, Richard Wouters, and Kevin Dailey. This preserves the exact named-member facts needed for determining member counts/genders without introducing any additional information.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 16,
+    "row_index": 16
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "872d5c6ff9c6d129e9a796347adc64831ffab8c5e25cea8cca9908bfad5f3173",
+  "created_at": "2026-07-16T04:49:41.931773+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+      "current_output": "Tony Hiller (as part of The Hiller Brothers) appeared with Rip Taylor; Rip Taylor is the performer known for showering himself (and others) with confetti, and passage [1] lists Rip Taylor among artists The Hiller Brothers appeared with.",
+      "upstream_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "summary_1": "Passage 1: The Hiller Brothers (Tony Hiller) \"appeared with many artists of the time including ... Rip Taylor.\" Passage 2: Rip Taylor \"is known for his exuberance ... including his habit of showering himself (and others) with confetti.\" Bridge entity: Rip Taylor — next hop can verify the performance/appearance link between Tony Hiller (The Hiller Brothers) and Rip Taylor in independent sources if needed.",
+        "hop2_query": "Tony Hiller The Hiller Brothers Rip Taylor appeared with",
+        "hop2_titles": [
+          "Tony Hiller",
+          "Bernard Hiller",
+          "Hiller Aircraft",
+          "Hiller Ten99",
+          "Max Hiller",
+          "Lejaren Hiller, Sr.",
+          "Hiller Aviation Museum"
+        ],
+        "hop2_docs": [
+          "Tony Hiller | Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.",
+          "Bernard Hiller | Bernard Hiller, aka \"Bernardo\" born April 18, 1962 is an Actor, Singer, Dancer, Hollywood acting teacher, Producer, Writer, and Success coach.  Hiller was a Broadway performer in many musicals including \"West Side Story\" and Fiddler on the Roof\".  He appeared in several TV shows and films such as Jean Paul in Raising Helen, and Max Lansky in Lansky.  He also appeared in over 200 TV commercials.",
+          "Hiller Aircraft | Hiller Aircraft Company was founded in 1942 as Hiller Industries by Stanley Hiller to develop helicopters.",
+          "Hiller Ten99 | The Hiller Ten99 (also known as the Hiller 1099) was an American 1961 experimental helicopter, created by Hiller Aircraft.",
+          "Max Hiller | Max Hiller (?  - 18 December 1948) was a German actor.  He appeared in more than twenty films from 1917 to 1948.",
+          "Lejaren Hiller, Sr. | Lejaren Hiller, Sr. / Lejaren à Hiller / John Hiller (3 July 1880 – 23 May 1969) was an accomplished American illustrator and photographer.",
+          "Hiller Aviation Museum | The Hiller Aviation Museum is an aircraft history museum located at the San Carlos Airport in San Carlos, California.  The museum was founded by Stanley Hiller in June 1998.  and is endowed by members of the Hiller family, owners of the Hiller Aircraft Corporation.  It specializes in Northern California aircraft history and helicopter history.  The museum is also an affiliate within the Smithsonian Affiliations program."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Tony Hiller",
+          "sent_id": 0,
+          "sentence": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter."
+        },
+        {
+          "title": "Tony Hiller",
+          "sent_id": 2,
+          "sentence": "The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhich artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?\n\nCurrent agent output:\n\"Tony Hiller (as part of The Hiller Brothers) appeared with Rip Taylor; Rip Taylor is the performer known for showering himself (and others) with confetti, and passage [1] lists Rip Taylor among artists The Hiller Brothers appeared with.\"\n\nActual upstream context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"summary_1\": \"Passage 1: The Hiller Brothers (Tony Hiller) \\\"appeared with many artists of the time including ... Rip Taylor.\\\" Passage 2: Rip Taylor \\\"is known for his exuberance ... including his habit of showering himself (and others) with confetti.\\\" Bridge entity: Rip Taylor — next hop can verify the performance/appearance link between Tony Hiller (The Hiller Brothers) and Rip Taylor in independent sources if needed.\",\n  \"hop2_query\": \"Tony Hiller The Hiller Brothers Rip Taylor appeared with\",\n  \"hop2_titles\": [\n    \"Tony Hiller\",\n    \"Bernard Hiller\",\n    \"Hiller Aircraft\",\n    \"Hiller Ten99\",\n    \"Max Hiller\",\n    \"Lejaren Hiller, Sr.\",\n    \"Hiller Aviation Museum\"\n  ],\n  \"hop2_docs\": [\n    \"Tony Hiller | Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\",\n    \"Bernard Hiller | Bernard Hiller, aka \\\"Bernardo\\\" born April 18, 1962 is an Actor, Singer, Dancer, Hollywood acting teacher, Producer, Writer, and Success coach.  Hiller was a Broadway performer in many musicals including \\\"West Side Story\\\" and Fiddler on the Roof\\\".  He appeared in several TV shows and films such as Jean Paul in Raising Helen, and Max Lansky in Lansky.  He also appeared in over 200 TV commercials.\",\n    \"Hiller Aircraft | Hiller Aircraft Company was founded in 1942 as Hiller Industries by Stanley Hiller to develop helicopters.\",\n    \"Hiller Ten99 | The Hiller Ten99 (also known as the Hiller 1099) was an American 1961 experimental helicopter, created by Hiller Aircraft.\",\n    \"Max Hiller | Max Hiller (?  - 18 December 1948) was a German actor.  He appeared in more than twenty films from 1917 to 1948.\",\n    \"Lejaren Hiller, Sr. | Lejaren Hiller, Sr. / Lejaren à Hiller / John Hiller (3 July 1880 – 23 May 1969) was an accomplished American illustrator and photographer.\",\n    \"Hiller Aviation Museum | The Hiller Aviation Museum is an aircraft history museum located at the San Carlos Airport in San Carlos, California.  The museum was founded by Stanley Hiller in June 1998.  and is endowed by members of the Hiller family, owners of the Hiller Aircraft Corporation.  It specializes in Northern California aircraft history and helicopter history.  The museum is also an affiliate within the Smithsonian Affiliations program.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 0,\n    \"sentence\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.\"\n  },\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 2,\n    \"sentence\": \"The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) began his musical career as a member of the song-and-dance duo The Hiller Brothers. The Hiller Brothers \\\"appeared with many artists of the time including ... Rip Taylor.\\\" From the upstream context, Rip Taylor \\\"is known for his exuberance ... including his habit of showering himself (and others) with confetti.\\\" Retain these linked facts: Tony Hiller/The Hiller Brothers performed with Rip Taylor, and Rip Taylor is described as the performer who showered himself and others with confetti.\",\n  \"rationale\": \"Integrated the Tony Hiller second-hop evidence that lists Rip Taylor among artists The Hiller Brothers appeared with (visible Tony Hiller sentences) with the earlier passage describing Rip Taylor's confetti habit (summary_1 Passage 2). These combined facts are preserved for the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 14,
+    "row_index": 14
+  }
+}

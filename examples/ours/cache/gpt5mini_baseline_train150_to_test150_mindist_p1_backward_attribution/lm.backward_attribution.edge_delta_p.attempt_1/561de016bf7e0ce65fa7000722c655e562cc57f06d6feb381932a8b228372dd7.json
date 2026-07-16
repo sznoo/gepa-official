@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_1",
+  "key": "561de016bf7e0ce65fa7000722c655e562cc57f06d6feb381932a8b228372dd7",
+  "created_at": "2026-07-14T16:19:14.751790+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "task_context": {
+        "question": "In what year did the star of \"Flesh and the Devil\" receive an Academy Honorary Award?",
+        "agent": "query",
+        "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence."
+      },
+      "visible_agent_inputs": {
+        "question": "In what year did the star of \"Flesh and the Devil\" receive an Academy Honorary Award?",
+        "summary_1": "Topic: Academy Honorary Award; missing link to the film \"Flesh and the Devil\"\n\n- From passages: the Academy Honorary Award was \"instituted in 1948 for the 21st Academy Awards.\"  \n- From passages: examples of recipients include \"Lillian Gish, Barbara Stanwyck, Kirk Douglas, and Lauren Bacall.\"  \n- From passages: Ernest Lehman \"At the 73rd Academy Awards in 2001, he received an Honorary Academy Award.\"  \n- Missing / blocking fact: the passages do NOT identify the star of \"Flesh and the Devil\" nor any Academy Honorary Award year for that person — bridge entity needed: \"Flesh and the Devil\" (film) -> its star(s).\n- Next-hop retrieval (priority order):  \n  1) Fetch \"Flesh and the Devil (1926 film)\" (lede/infobox and \"Cast\" section) to identify the film's star(s).  \n  2) Fetch the identified star's page (inspect lede/infobox and \"Awards\" or \"Honors\" sections) to locate any Academy Honorary Award and the year.  \n  3) Fetch \"Academy Honorary Award\" -> \"Recipients\" list or chronological table to confirm the year for that named recipient.  \n  4) If multiple film versions exist, fetch \"Flesh and the Devil (disambiguation)\" and the specific film page(s).",
+        "current_output": {
+          "query": "Flesh and the Devil 1926 cast stars"
+        }
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact, retrieval-focused second-hop query in the field `query`. Use only the provided `question` and `summary_1` as inputs. Do not include any explanation, answer, fallback text, lists, or additional fields — the output must be a single one-line query string.\n\nDecision templates (choose the single template that matches the missing evidence implied by summary_1):\n- Connector between two named items: emit a short interrogative naming both items and requesting the linking evidence (e.g., artist album recording) in one line. Retain the visible item tokens from the inputs.\n- Metadata for a single anchor title: emit a compact keyword-style query consisting of the anchor plus brief attribute keywords (for example: artist genre).\n- Temporal or aggregate fact: include the year or season token plus the entity type and a short cue such as season count.\n\nStrict formatting rules:\n- Emit exactly one line and exactly one string in `query` containing only the query text.\n- Keep the query compact (aim for ≤ 10–12 words/tokens) and free of punctuation or explanatory clauses.\n- Preserve visible tokens from `question` and `summary_1` (title words, years, or entity names) to anchor retrieval.\n- Do not answer, conclude, enumerate candidates, assert hidden facts, or include user-facing instructions.\n\nProduce the `query` field now.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": {
+          "query": "Flesh and the Devil 1926 cast stars"
+        },
+        "score": 0.0,
+        "retrieved_titles": [
+          "Flesh and the Devil",
+          "Devil in the Flesh 2",
+          "Devil in the Flesh (1998 film)",
+          "Love (1927 American film)",
+          "Devil in the Flesh (1947 film)",
+          "The World, the Flesh, the Devil",
+          "The Devil's Disciple (1926 film)"
+        ],
+        "retrieved_doc_snippets": [
+          "Flesh and the Devil | Flesh and the Devil (1926) is a romantic drama silent film released by Metro-Goldwyn-Mayer and stars Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent, directed by Clarence Brown, and based on the novel \"The Undying Past\" by Hermann Sudermann.",
+          "Devil in the Flesh 2 | Devil in the Flesh 2 is the 2000 sequel to \"Devil in the Flesh\" which starred Rose McGowan.",
+          "Devil in the Flesh (1998 film) | Devil in the Flesh is a 1998 American thriller film starring Rose McGowan. The film was also released under the title \"Dearly Devoted\". It was co-scripted by Kelly Carlin-McCall but is not based on the twice-filmed Raymond Radiguet novel \"Le Diable au corps\" (\"The Devil in the Flesh\").",
+          "Love (1927 American film) | Love (1927) is a silent film directed by Edmund Goulding and released by Metro-Goldwyn-Mayer. MGM made the film in order to capitalize on its winning romantic team of Greta Garbo and John Gilbert who had starred in the 1926 blockbuster, \"Flesh and the Devil\".",
+          "Devil in the Flesh (1947 film) | Devil in the Flesh (French: Le diable au corps ) is a 1947 French movie directed by Claude Autant-Lara starring Micheline Presle and Gérard Philipe. It is based on a novel by Raymond Radiguet.",
+          "The World, the Flesh, the Devil | The World, the Flesh, the Devil is a 1932 British crime film directed by George A. Cooper and starring Harold Huth, Isla Bevan and Victor Stanley. It was based on a play by Laurence Cowen. A lawyer plans to murder an aristocrat and steal his inheritance.",
+          "The Devil's Disciple (1926 film) | The Devil's Disciple (1926) is an American melodramatic silent film with a primarily African American cast, written and directed by Oscar Micheaux, on the subject of white slavery in New York City."
+        ],
+        "summary_2": "Flesh and the Devil (1926) starred Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent. The provided passages do not state whether any of these performers—including Greta Garbo—received an Academy Honorary Award or give a year, so Garbo’s awards page or the Academy Honorary Award recipients list must be consulted to find the year.",
+        "answer": "I cannot determine the year from the provided summaries; additional source information (e.g., the star’s awards page or the Academy Honorary Award recipients list) is required.",
+        "missing_recovery_rate": 0.5,
+        "recovered_missing_titles": [
+          "Flesh and the Devil"
+        ],
+        "missing_titles_after_hop2": [
+          "Greta Garbo"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": {
+          "query": "Greta Garbo Flesh and the Devil Academy Honorary Award year"
+        },
+        "score": null,
+        "retrieved_titles": [],
+        "retrieved_doc_snippets": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {
+        "rejected": true,
+        "reason": "literal leakage",
+        "leaked_literals": [
+          "Greta Garbo"
+        ],
+        "instruction": "Rewrite the delta as abstract behavior and remove all listed literals."
+      }
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nTask context:\n{\n  \"question\": \"In what year did the star of \\\"Flesh and the Devil\\\" receive an Academy Honorary Award?\",\n  \"agent\": \"query\",\n  \"agent_role\": \"Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"In what year did the star of \\\"Flesh and the Devil\\\" receive an Academy Honorary Award?\",\n  \"summary_1\": \"Topic: Academy Honorary Award; missing link to the film \\\"Flesh and the Devil\\\"\\n\\n- From passages: the Academy Honorary Award was \\\"instituted in 1948 for the 21st Academy Awards.\\\"  \\n- From passages: examples of recipients include \\\"Lillian Gish, Barbara Stanwyck, Kirk Douglas, and Lauren Bacall.\\\"  \\n- From passages: Ernest Lehman \\\"At the 73rd Academy Awards in 2001, he received an Honorary Academy Award.\\\"  \\n- Missing / blocking fact: the passages do NOT identify the star of \\\"Flesh and the Devil\\\" nor any Academy Honorary Award year for that person — bridge entity needed: \\\"Flesh and the Devil\\\" (film) -> its star(s).\\n- Next-hop retrieval (priority order):  \\n  1) Fetch \\\"Flesh and the Devil (1926 film)\\\" (lede/infobox and \\\"Cast\\\" section) to identify the film's star(s).  \\n  2) Fetch the identified star's page (inspect lede/infobox and \\\"Awards\\\" or \\\"Honors\\\" sections) to locate any Academy Honorary Award and the year.  \\n  3) Fetch \\\"Academy Honorary Award\\\" -> \\\"Recipients\\\" list or chronological table to confirm the year for that named recipient.  \\n  4) If multiple film versions exist, fetch \\\"Flesh and the Devil (disambiguation)\\\" and the specific film page(s).\",\n  \"current_output\": {\n    \"query\": \"Flesh and the Devil 1926 cast stars\"\n  }\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact, retrieval-focused second-hop query in the field `query`. Use only the provided `question` and `summary_1` as inputs. Do not include any explanation, answer, fallback text, lists, or additional fields — the output must be a single one-line query string.\n\nDecision templates (choose the single template that matches the missing evidence implied by summary_1):\n- Connector between two named items: emit a short interrogative naming both items and requesting the linking evidence (e.g., artist album recording) in one line. Retain the visible item tokens from the inputs.\n- Metadata for a single anchor title: emit a compact keyword-style query consisting of the anchor plus brief attribute keywords (for example: artist genre).\n- Temporal or aggregate fact: include the year or season token plus the entity type and a short cue such as season count.\n\nStrict formatting rules:\n- Emit exactly one line and exactly one string in `query` containing only the query text.\n- Keep the query compact (aim for ≤ 10–12 words/tokens) and free of punctuation or explanatory clauses.\n- Preserve visible tokens from `question` and `summary_1` (title words, years, or entity names) to anchor retrieval.\n- Do not answer, conclude, enumerate candidates, assert hidden facts, or include user-facing instructions.\n\nProduce the `query` field now.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": {\n    \"query\": \"Flesh and the Devil 1926 cast stars\"\n  },\n  \"score\": 0.0,\n  \"retrieved_titles\": [\n    \"Flesh and the Devil\",\n    \"Devil in the Flesh 2\",\n    \"Devil in the Flesh (1998 film)\",\n    \"Love (1927 American film)\",\n    \"Devil in the Flesh (1947 film)\",\n    \"The World, the Flesh, the Devil\",\n    \"The Devil's Disciple (1926 film)\"\n  ],\n  \"retrieved_doc_snippets\": [\n    \"Flesh and the Devil | Flesh and the Devil (1926) is a romantic drama silent film released by Metro-Goldwyn-Mayer and stars Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent, directed by Clarence Brown, and based on the novel \\\"The Undying Past\\\" by Hermann Sudermann.\",\n    \"Devil in the Flesh 2 | Devil in the Flesh 2 is the 2000 sequel to \\\"Devil in the Flesh\\\" which starred Rose McGowan.\",\n    \"Devil in the Flesh (1998 film) | Devil in the Flesh is a 1998 American thriller film starring Rose McGowan. The film was also released under the title \\\"Dearly Devoted\\\". It was co-scripted by Kelly Carlin-McCall but is not based on the twice-filmed Raymond Radiguet novel \\\"Le Diable au corps\\\" (\\\"The Devil in the Flesh\\\").\",\n    \"Love (1927 American film) | Love (1927) is a silent film directed by Edmund Goulding and released by Metro-Goldwyn-Mayer. MGM made the film in order to capitalize on its winning romantic team of Greta Garbo and John Gilbert who had starred in the 1926 blockbuster, \\\"Flesh and the Devil\\\".\",\n    \"Devil in the Flesh (1947 film) | Devil in the Flesh (French: Le diable au corps ) is a 1947 French movie directed by Claude Autant-Lara starring Micheline Presle and Gérard Philipe. It is based on a novel by Raymond Radiguet.\",\n    \"The World, the Flesh, the Devil | The World, the Flesh, the Devil is a 1932 British crime film directed by George A. Cooper and starring Harold Huth, Isla Bevan and Victor Stanley. It was based on a play by Laurence Cowen. A lawyer plans to murder an aristocrat and steal his inheritance.\",\n    \"The Devil's Disciple (1926 film) | The Devil's Disciple (1926) is an American melodramatic silent film with a primarily African American cast, written and directed by Oscar Micheaux, on the subject of white slavery in New York City.\"\n  ],\n  \"summary_2\": \"Flesh and the Devil (1926) starred Greta Garbo, John Gilbert, Lars Hanson, and Barbara Kent. The provided passages do not state whether any of these performers—including Greta Garbo—received an Academy Honorary Award or give a year, so Garbo’s awards page or the Academy Honorary Award recipients list must be consulted to find the year.\",\n  \"answer\": \"I cannot determine the year from the provided summaries; additional source information (e.g., the star’s awards page or the Academy Honorary Award recipients list) is required.\",\n  \"missing_recovery_rate\": 0.5,\n  \"recovered_missing_titles\": [\n    \"Flesh and the Devil\"\n  ],\n  \"missing_titles_after_hop2\": [\n    \"Greta Garbo\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": {\n    \"query\": \"Greta Garbo Flesh and the Devil Academy Honorary Award year\"\n  },\n  \"score\": null,\n  \"retrieved_titles\": [],\n  \"retrieved_doc_snippets\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{\n  \"rejected\": true,\n  \"reason\": \"literal leakage\",\n  \"leaked_literals\": [\n    \"Greta Garbo\"\n  ],\n  \"instruction\": \"Rewrite the delta as abstract behavior and remove all listed literals.\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when summary_1 explicitly names a performer from the film (e.g., contains a 'stars' or 'Cast' entry with a proper name token).\",\n    \"preserve_rule\": \"Keep the base instruction to emit exactly one compact one-line retrieval query using only the provided question and summary_1, and preserve the decision templates and strict formatting rules.\",\n    \"change_rule\": \"If summary_1 contains a visible named performer, switch the query target from the film to that performer by emitting a metadata-style query that combines the visible performer token(s) with award keywords, formatted like: '<PERFORMER> Academy Honorary Award year'. If summary_1 does not name a performer, keep the original film-anchor query decision (e.g., query the film title plus 'cast' or 'stars'). Always use only tokens already present in question or summary_1 and keep the query compact and punctuation-free.\",\n    \"drop_or_avoid_rule\": \"Do not invent or insert any performer names or facts not present in question or summary_1. Do not output explanations, answers, lists, or multi-line text. Avoid long literal spans, target-only entities, or any gold/oracle labels. Do not change the output interface or add fields.\",\n    \"output_contract\": \"Produce exactly one one-line query string (≤ ~12 tokens preferred), containing only visible tokens from question or summary_1, aimed at retrieving the named performer's Academy Honorary Award year if a performer is named, otherwise aimed at the film's cast. No punctuation, no extra text.\",\n    \"why_local_transition\": \"When the film's star is already identified in summary_1, the most direct next-hop is the star's awards metadata (to find the Honorary Award year); this delta redirects the query to that performer-specific award-year lookup while preserving the original one-line retrieval format.\"\n  },\n  \"rationale\": \"The base prompt currently focuses on fetching the film cast, which is appropriate when the star is unknown. Once a performer name appears in summary_1, the minimal useful change is to target that performer's awards metadata instead of re-querying the film. This delta is small and local: it only alters which decision template is used and how the single-line query is composed, preserves all formatting and interface constraints, and forbids introducing any new sample-specific literals. It therefore helps the agent produce a compact, retrieval-focused second-hop query for the missing award-year evidence without leaking or inventing hidden answers.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_1",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 32,
+    "row_index": 32,
+    "bisection_round": 1,
+    "agent": "query",
+    "edge_index": 0,
+    "delta_attempt": 1
+  }
+}

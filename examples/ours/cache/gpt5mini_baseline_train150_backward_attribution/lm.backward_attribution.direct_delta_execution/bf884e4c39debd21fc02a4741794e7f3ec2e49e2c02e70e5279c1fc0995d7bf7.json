@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "bf884e4c39debd21fc02a4741794e7f3ec2e49e2c02e70e5279c1fc0995d7bf7",
+  "created_at": "2026-07-14T13:37:19.377272+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When the question asks which of two people was born earlier (phrases like \"Who was born earlier...\", \"Who is older...\", or a direct two-person birth-year comparison).",
+            "preserve_rule": "Continue to rely only on the provided `summary_1`, `summary_2`, and the `question` as evidence. Preserve any explicit birth-year information or clear agreement between summaries when choosing which person was born earlier.",
+            "change_rule": "Instead of a full sentence or adding birth dates, produce exactly one minimal answer token: the single name (one of the two compared names as shown in the inputs) that the summaries support as being born earlier. If the summaries do not clearly agree or provide insufficient information to decide, output the single token \"Insufficient information\".",
+            "drop_or_avoid_rule": "Do not include birth dates, parenthetical years, explanatory text, comparative phrases, sentences, extra punctuation, or any other supporting details. Do not introduce facts not present in the summaries. Avoid listing both names or multiple qualifiers.",
+            "output_contract": "The `answer` (the [[ ## answer ## ]] block) must contain only one minimal string: either the single person's name (matching one of the two names in the question/summaries) who is supported as born earlier, or the single token \"Insufficient information\" if the summaries disagree or lack a clear comparison. Nothing else may appear in the block.",
+            "why_local_transition": "The agent's current output is a full sentence including birth dates. This local change narrows behavior to the base prompt's required minimal-name output, removing dates and explanatory text while preserving use of the provided summaries as evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "summary_1": "Dallas Green was born earlier (1934) than Brian Johnson (1948).",
+        "summary_2": "Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)",
+        "current_output": "Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947)."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When the question asks which of two people was born earlier (phrases like \\\"Who was born earlier...\\\", \\\"Who is older...\\\", or a direct two-person birth-year comparison).\",\n      \"preserve_rule\": \"Continue to rely only on the provided `summary_1`, `summary_2`, and the `question` as evidence. Preserve any explicit birth-year information or clear agreement between summaries when choosing which person was born earlier.\",\n      \"change_rule\": \"Instead of a full sentence or adding birth dates, produce exactly one minimal answer token: the single name (one of the two compared names as shown in the inputs) that the summaries support as being born earlier. If the summaries do not clearly agree or provide insufficient information to decide, output the single token \\\"Insufficient information\\\".\",\n      \"drop_or_avoid_rule\": \"Do not include birth dates, parenthetical years, explanatory text, comparative phrases, sentences, extra punctuation, or any other supporting details. Do not introduce facts not present in the summaries. Avoid listing both names or multiple qualifiers.\",\n      \"output_contract\": \"The `answer` (the [[ ## answer ## ]] block) must contain only one minimal string: either the single person's name (matching one of the two names in the question/summaries) who is supported as born earlier, or the single token \\\"Insufficient information\\\" if the summaries disagree or lack a clear comparison. Nothing else may appear in the block.\",\n      \"why_local_transition\": \"The agent's current output is a full sentence including birth dates. This local change narrows behavior to the base prompt's required minimal-name output, removing dates and explanatory text while preserving use of the provided summaries as evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"summary_1\": \"Dallas Green was born earlier (1934) than Brian Johnson (1948).\",\n  \"summary_2\": \"Dallas Green was born earlier than Brian Johnson. (Dallas Green: 1934; Brian Johnson: 1947/1948.)\",\n  \"current_output\": \"Dallas Green was born earlier (March 4, 1934) than Brian Johnson (October 5, 1947).\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"Dallas Green\",\n  \"rationale\": \"Both summaries state Dallas Green was born earlier; applied the delta to output only the single supported name.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 43,
+    "row_index": 43,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

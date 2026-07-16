@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "d4cee446e30f5f5fc7830f35f60ad4c357ff0f343ca7b4a9a5113e7effef1cb3",
+  "created_at": "2026-07-15T23:47:06.236338+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "\"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross, the best-known version of the song, recorded by Tony Bennett with which Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards?",
+    "answer": "Percy Faith",
+    "context": {
+      "title": [
+        "Everybody Loves a Lover",
+        "Dance with Me (Debelah Morgan song)",
+        "I'm Not at All in Love",
+        "Jerry Ross (composer)",
+        "Rags to Riches (song)",
+        "Steam Heat",
+        "Hernando's Hideaway",
+        "John Murray Anderson's Almanac",
+        "Whatever Lola Wants",
+        "Percy Faith"
+      ],
+      "sentences": [
+        [
+          "\"Everybody Loves a Lover\" is a popular song which was a hit single for Doris Day in 1958.",
+          " Its lyricist, Richard Adler, and its composer, Robert Allen, were both best known for collaborations with other partners.",
+          " The music Allen composed, aside from this song, was usually for collaborations with Al Stillman, and Adler wrote the lyrics after the 1955 death of his usual composing partner, Jerry Ross."
+        ],
+        [
+          "\"Dance with Me\" is a song by American R&B singer Debelah Morgan, composed by Morgan and music producer Giloh Morgan.",
+          " Released in the year 2000, it was the first single produced from Morgan's third studio album of the same name.",
+          " Its protagonist declares that she only wants to dance with her lover that night.",
+          " \"Dance with Me\" peaked at <nowiki>#</nowiki>8 on the \"Billboard\" Singles Chart on December 26, 2000 (after reaching the Top 40 on October 3), and has been added to many hit compilation albums.",
+          " \"Dance with Me\" received international acclaim and has been performed in different versions, including a special Walt Disney version and a Spanish version \"Baila Conmigo.\"",
+          " Morgan's \"Dance With Me\" was based on \"Hernando's Hideaway\" written by Richard Adler and Jerry Ross, who are given credit on the song."
+        ],
+        [
+          "\"I'm Not at All in Love\" is a popular song written by Richard Adler and Jerry Ross, published in 1954.",
+          " It was first presented in the musical \"The Pajama Game\" by Janis Paige."
+        ],
+        [
+          "Jerry Ross (born Jerold Rosenberg; March 9, 1926 – November 11, 1955) was an American lyricist and composer whose works with Richard Adler for the musical theater include \"The Pajama Game\" and \"Damn Yankees\", winners of Tony Awards in 1955 and 1956, respectively, in both the \"Best Musical\" and \"Best Composer and Lyricist\" categories."
+        ],
+        [
+          "\"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross.",
+          " The best-known version of the song, recorded by Tony Bennett with Percy Faith and his orchestra, was number one for eight weeks on the Billboard chart in 1953 and became a gold record.",
+          " In the same year, a version by David Whitfield reached number three in the British charts and one by Billy Ward and his Dominoes with Jackie Wilson singing lead made number two on Billboard's R&B chart.",
+          " Later recordings by Sunny & the Sunliners (#45 in 1963) and Elvis Presley (#33 in 1971) also made the Billboard charts."
+        ],
+        [
+          "\"Steam Heat\" is a show tune from the 1954 Broadway musical \"The Pajama Game\", written by Richard Adler and Jerry Ross."
+        ],
+        [
+          "\"Hernando's Hideaway\" is a tango show tune, largely in long metre, from the musical \"The Pajama Game\", written by Jerry Ross and Richard Adler and published in 1954.",
+          " It was sung in the stage and film versions of the musical by Carol Haney."
+        ],
+        [
+          "John Murray Anderson's Almanac is a musical revue, featuring the music of the songwriting team of Richard Adler and Jerry Ross, as well as other composers.",
+          " It was conceived by John Murray Anderson."
+        ],
+        [
+          "\"Whatever Lola Wants\" is a popular song, sometimes rendered as \"Whatever Lola Wants, Lola Gets\".",
+          " The music and words were written by Richard Adler and Jerry Ross for the 1955 musical play \"Damn Yankees\".",
+          " The song is sung by Lola, the Devil's assistant, a part originated by Gwen Verdon, who reprised the role in the film.",
+          " The saying was inspired by Lola Montez, an Irish-born \"Spanish dancer\" and mistress of King Ludwig I of Bavaria, who later became a San Francisco Gold Rush vamp."
+        ],
+        [
+          "Percy Faith (April 7, 1908 – February 9, 1976) was a Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards.",
+          " He is often credited with popularizing the \"easy listening\" or \"mood music\" format.",
+          " Faith became a staple of American popular music in the 1950s and continued well into the 1960s.",
+          " Though his professional orchestra-leading career began at the height of the swing era, Faith refined and rethought orchestration techniques, including use of large string sections, to soften and fill out the brass-dominated popular music of the 1940s."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Rags to Riches (song)",
+        "Percy Faith"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question` and `passages`, produce the single field `summary`.\n\nGoal: compress the grounded first-hop evidence into a short intermediate state that makes it easy for the next-hop agent to (a) see what facts are present per candidate/entity, (b) see what is ambiguous or missing, and (c) know 1–4 prioritized next-hop retrieval targets or concise queries. This module does not produce the final answer unless the provided passages already unambiguously contain every fact required to resolve the question's relation for every argument.\n\nProcedure:\n1) Decide whether the question's relation is semantically complete given the supplied passages. Treat the hop as INCOMPLETE if any of the following hold: a) the relation requires combining or comparing facts across pages (e.g., comparing birth dates, publication/founding years, ordinal ranks, confirming a named director among candidates) and the passages do not supply each required fact unambiguously for all relevant arguments; b) any relation argument is ambiguous or has multiple candidate pages or mentions in the passages; c) an expected candidate page or explicit fact for an argument is missing (e.g., only one side of a comparison is present). Do not trigger INCOMPLETE solely from surface tokens (years, digits) — base the decision on whether the relation's arguments are unambiguously resolved.\n\n2) If the hop is COMPLETE (all required facts to resolve the relation for every argument are present unambiguously in the passages): produce a concise derived result in `summary`. This may be a short phrase or sentence that states the necessary fact(s) needed by the pipeline. Keep it minimal and grounded in the passages; you may include a 1–2 token citation (passage title) if helpful.\n\n3) If the hop is INCOMPLETE or AMBIGUOUS: do NOT assert a final answer or perform the final comparison/selection. Instead emit a short structured report in `summary` containing these labeled elements (prefer bullets or a compact paragraph with explicit labels). Keep all text neutral and non-assertive.\n\n  - evidence: For each named candidate/argument mentioned in the question or passages, list the candidate label and the exact passage title(s) that mention it plus a very short quoted snippet or explicit fact token found there (1–12 words). If a candidate named in the question has no grounded mention in any provided passage, explicitly mark it as NOT present under evidence.\n\n  - ambiguities_or_missing: Explicitly name any ambiguities (e.g., multiple candidates for the same name, multiple pages that could be the intended entity) and any missing expected pages or facts.\n\n  - missing_facts_or_bridge / bridge_entity_or_missing_fact: State exactly which fact(s) or disambiguation is needed to complete the relation. Use a slight conditional labeling here:\n      * If the question names an entity that has no grounded mention in the provided passages and the unresolved gap is identity/disambiguation (you cannot map the question token to a single canonical entity needed to ground later facts), label the gap as `bridge_entity_or_missing_fact` and specify that the canonical/biography page for that named entity is required to resolve identity.\n      * Otherwise (the missing premise is a concrete attribute/property such as a date, developer, layout engine, filmography item, opening-order token, etc.), use `missing_facts_or_bridge` and describe the exact attribute(s) required (e.g., \"birth date for Person A\", \"developer of Product X\"). Do not request the canonical biography page by default in this case; prefer an attribute-targeted retrieval first.\n\n  - retrieval_direction: Provide 1–4 prioritized next-hop targets or concise queries to resolve the missing facts/ambiguities. Order targets by priority and keep them short. Apply this retrieval-priority conditional:\n      * If the missing gap is identity/disambiguation (see bridge_entity_or_missing_fact above), put the candidate's canonical/biography page title as retrieval_direction #1 (exact title if known) and include 1–2 biography-style fallback queries (e.g., \"<Name> biography\", \"<Name> official page\") as subsequent targets.\n      * If the missing gap is a specific attribute/property, put 1–2 concise attribute-focused queries first (e.g., \"<Item> developer\", \"<Item> layout engine\", \"<Work B> publication year\"). Include the canonical/biography page as a secondary target only if it might reasonably contain the attribute and identity resolution could still be needed.\n\nFormatting and style constraints (apply to both COMPLETE and INCOMPLETE cases):\n- The output must be a single `summary` field only. Do not emit other fields.\n- In INCOMPLETE reports, use neutral, non-assertive phrasing. Do not produce final comparisons, numeric answers, or definitive selections (e.g., avoid \"X is the oldest\" or \"Answer: 3\").\n- Keep the report compact and actionable (short labeled bullets or one concise paragraph). Avoid long prose.\n- It is allowed and encouraged to quote short factual snippets from passages and cite passage titles to show grounding.\n- Do not defer or mark INCOMPLETE when the passages already unambiguously provide all facts for the relation and its arguments.\n\nProduce the `summary` content that follows these rules.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the single field `query`.\n\nGoal\n- Produce exactly one compact, retrieval-intent query suitable for a second-hop search that will recover the missing bridging evidence needed to answer the question. Do not produce the final answer in `query`.\n\nSemantic decision rule (when to emit a retrieval-intent query)\n- If summary_1 does NOT assert a confirmed linking entity or verified bridging fact needed to answer the question, you MUST emit exactly one compact retrieval-intent query. \"Does not assert a confirmed bridge\" includes short or candidate-only summaries (e.g., a single named entity, a quoted candidate title, or numeric anchors that are not verified) and any case where the visible anchors do not unambiguously identify the needed bridge.\n- Narrowed applicability for birth-date disambiguation: If summary_1 lacks a confirmed bridge AND the question explicitly requires a birth-date comparison (e.g., asks who was born earlier or requests birth years) AND the visible inputs (question or summary_1) show ambiguous name candidates AND a suitable disambiguator token (occupation, band, institution, or a parenthetical label) is present or clearly implied in the visible inputs, then emit one compact query that combines: the ambiguous name anchor, the disambiguator copied verbatim from the visible inputs, and a concise birth-term (\"born\" or \"birth year\"). In all other cases (including birth-name mappings, page-title targets, non-temporal bridges, or when no usable disambiguator is available), do not append birth/date relation words or invent disambiguators; instead prefer the minimal visible-anchor form (page-title, name-pair, or person+institution) appropriate to the missing bridge.\n- If summary_1 already names a confirmed bridge (a clearly identified, verified linking entity or unambiguous metadata that directly connects the question's pieces), you may produce a compact query to fetch supporting evidence, but do NOT produce an answer in the `query` field.\n- If summary_1 explicitly states that the bridge cannot be recovered automatically (extreme ambiguity or user-local context requiring clarification), do NOT force a misleading retrieval query. In that case, set `query` to the single short token BRIDGE_UNRECOVERABLE (all caps, no punctuation) so downstream steps can prompt the user for clarification. Do not invent facts.\n\nQuery construction rules\n- Output exactly one compact line of text as `query`. Keep it short and retrieval-focused (few keywords, no full sentences). Use visible anchors from `question` and `summary_1` and minimal retrieval keywords that express the missing relation (e.g., anchor1 anchor2 which artist recorded both; AlbumTitle album artist genre; 1991–92 NHL season regular season).\n- Do not include the final answer, assertions, or user-facing instructions in the `query` field. Avoid polite phrasing, questions to the user, or explanatory text. Prefer noun phrases and relation keywords.\n- If the conditional birth-date disambiguation rule above applies, build the query by concatenating: the ambiguous person name, the disambiguator token copied verbatim from the visible inputs (occupation, band, institution, parenthetical), and a single concise birth-term (\"born\" or \"birth year\"). Use only the visible disambiguator wording; do not invent or normalize parentheticals.\n- Relation-token selection rule: choose a single concise relation token that matches the question's relation (e.g., \"born\" or \"birth year\" only for temporal birth queries). Do not append relation tokens when the canonical retrieval strategy is to use a page-title, exact name-pair, or person+institution anchor.\n- Do not include the final answer or explanatory text. If your natural impulse would be to write a declarative answer or a clarification sentence in `query`, instead convert that output into a compact retrieval-intent query that targets the missing bridge.\n- Preserve semantic fidelity: base the query only on visible anchors and relations in `question` and `summary_1`. Do not invent hidden identifiers or assume unseen facts.\n\nFormat contract\n- Return exactly one field named `query` whose value is a single short string. If unrecoverable as described above, set `query` to BRIDGE_UNRECOVERABLE.\n\nExamples of disallowed outputs for `query`\n- A declarative answer (e.g., \"The artist was X.\")\n- A user-facing clarification sentence (e.g., \"Do you mean X or Y?\") unless summary_1 explicitly requires clarification — in that case use BRIDGE_UNRECOVERABLE.\n\nBehavioral constraints\n- Do not use surface heuristics (token count, punctuation, or quotation marks) as the trigger; apply the semantic rule above.\n- Emit only one compact retrieval string when the bridge is missing; do not emit multiple queries or long explanations.\n\nInputs available: `question`, `summary_1`. Output required: single field `query`.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the fields `summary`. The `summary` must be a concise, post-retrieval integration of the evidence that preserves the facts needed by the final answer. Follow these rules when composing `summary`:\n\n- Purpose: Integrate the first-hop `context` with the newly retrieved `passages` into a grounded state that retains or resolves the earlier bridge only when the second-hop passages supply relation- or attribute-facts that are necessary to answer or disambiguate the `question` (for example: partnership/membership links, joint-award partners indicated by 'with', or requested biographical qualifiers such as nationality, birthdate, current team/status).\n\n- When to append supporting sentence(s): Append the primary canonical label/token from `context` and at most one short passage-grounded supporting sentence only when a passage contains an explicit, directly stated predicate that links the same entity token from `context` (or a clearly corroborated alias/role/date) to the partner or attribute the question cites. Examples of acceptable explicit predicates include clear statements like 'X with Y', 'X is a member of Y', 'X was born DATE', 'X is a recipient of AWARD', 'X is also called Z', or 'X began tenure in YEAR'. The trigger requires that the passage (a) names the same entity token as in `context` or an alias/role/date that is corroborated by other attributes in `context`, and (b) explicitly asserts the relation or attribute needed by the question. Do not append when the passage only contains the attribute string without an explicit predicate, a nearby mention, an indirect implication, or when the link refers to a different named entity.\n\n- Transitive alias/composition: Do not assert transitive equivalence unless every hop in the chain is explicitly stated as an equivalence in the supplied passages and each hop clearly refers to the same entity. If only a mediated or inferred chain exists (i.e., intermediate links are not explicit equivalences and identity-aligned), suppress the appended support and preserve uncertainty.\n\n- When not to append: Do not append supporting sentences and instead return only the canonical label/token when any of the following apply: the question expects a normalized identifier or single token (examples: binary/multiple-choice label selection between named options, identification-only questions, or explicit token-extraction such as 'middle name'); or the `context` already contains a full, passage-consistent, multi-clause integrated answer. Permit an exception for identification/single-token/binary cases only when the question's semantics truly demand the relation/attribute (for example, determining an era boundary or tenure date) and a passage explicitly provides the necessary predicate linking the context entity to that temporal relation or attribute.\n\n- Identity alignment and verification: Before appending, confirm that the fact in `passages` refers to the same entity referenced in `context` by matching names, corroborating aliases, roles, dates, or other attributes. If identity is ambiguous or unsupported, refrain from appending and preserve uncertainty instead. Avoid naive substring or proximity matches as sufficient evidence.\n\n- Style and content constraints: Keep output concise. If appending, limit `summary` to 1–3 sentences total (the primary concise answer plus at most one short supporting sentence per relevant entity or one joint supporting sentence). Preserve the exact canonical label/token selected from `context`. Use a compact paraphrase grounded in passage language, avoid inventing facts or long verbatim quotations, and avoid misattributing attributes from different entities.\n\n- If there is insufficient information in `context` and `passages` to resolve the needed relation/attribute, summarize the uncertainty succinctly rather than asserting unsupported facts.\n\nProduce only the `summary` field as the integrated output string.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nUse only summary_1 and summary_2 as evidence. Treat summary_2 as the later, integrated evidence and prioritize it when reconciling information; use summary_1 only as the earlier, pre-second-hop context. Do not assume the final state is unresolved solely because summary_1 contains bridging or retrieval-oriented language.\n\nProduce exactly one field, answer, whose value is the minimal final answer string that is fully supported by the visible summaries. The answer field must contain only that minimal plain-text string and nothing else (no explanation, no surrounding quotes, no JSON wrappers, no debugging or transport artifacts).\n\nDecide whether the question's intent is binary (a truth-value / yes-no question) or non-binary (asking for a name, title, date, place, numeric count, selection, or other factual value). Make this decision semantically (based on the question's meaning), not by surface heuristics like token counts or punctuation.\n\nWhen multiple co-referent surface strings for the same entity appear in summary_2, you may prefer a shorter canonical label only if that exact shorter string appears verbatim in summary_2 either as an independent label or as an explicit parenthetical alternate, AND emitting that shorter string alone would not drop administrative or category qualifiers, required punctuation/abbreviations, or other disambiguating tokens that the question requires; otherwise emit the minimal multi-token or formatted string exactly as supported by summary_2. Preserve multi-token formatted place names, parenthetical acronyms or alternates when they are present or when the question's intent relies on them.\n\n- If the question's intent is binary AND both summary_1 and summary_2 unambiguously agree on the same truth-value, emit exactly one lowercase token: either yes or no (and nothing else) as the answer value.\n\n- For all other question intents (non-binary), emit the minimal factual string supported by the summaries exactly as needed: preserve multi-token values, necessary punctuation, full date formats, and place formats (for example, full names, \"City, State\", or \"Month Day, Year\"), and do not truncate these to a single token.\n\nIf the summaries conflict, are ambiguous, or do not jointly support an unambiguous minimal answer, do not fabricate or over-assert; follow the system's established fallback behavior for ambiguous or unsupported questions.\n\nAlways forbid emitting serialized queries, JSON/dict-like structures, internal-debug wrappers, or other transport artifacts as the final answer. The answer must be plain text only.\n\nMake all judgments about minimality and agreement based on the semantic content of summary_1 and summary_2, with priority to summary_2 when they differ.\n\nProduce the answer value exactly as specified above in the answer field."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "b9971a087180",
+    "rerun_from": null,
+    "question": "\"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross, the best-known version of the song, recorded by Tony Bennett with which Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards?",
+    "gold_answer": "Percy Faith",
+    "context": {
+      "title": [
+        "Everybody Loves a Lover",
+        "Dance with Me (Debelah Morgan song)",
+        "I'm Not at All in Love",
+        "Jerry Ross (composer)",
+        "Rags to Riches (song)",
+        "Steam Heat",
+        "Hernando's Hideaway",
+        "John Murray Anderson's Almanac",
+        "Whatever Lola Wants",
+        "Percy Faith"
+      ],
+      "sentences": [
+        [
+          "\"Everybody Loves a Lover\" is a popular song which was a hit single for Doris Day in 1958.",
+          " Its lyricist, Richard Adler, and its composer, Robert Allen, were both best known for collaborations with other partners.",
+          " The music Allen composed, aside from this song, was usually for collaborations with Al Stillman, and Adler wrote the lyrics after the 1955 death of his usual composing partner, Jerry Ross."
+        ],
+        [
+          "\"Dance with Me\" is a song by American R&B singer Debelah Morgan, composed by Morgan and music producer Giloh Morgan.",
+          " Released in the year 2000, it was the first single produced from Morgan's third studio album of the same name.",
+          " Its protagonist declares that she only wants to dance with her lover that night.",
+          " \"Dance with Me\" peaked at <nowiki>#</nowiki>8 on the \"Billboard\" Singles Chart on December 26, 2000 (after reaching the Top 40 on October 3), and has been added to many hit compilation albums.",
+          " \"Dance with Me\" received international acclaim and has been performed in different versions, including a special Walt Disney version and a Spanish version \"Baila Conmigo.\"",
+          " Morgan's \"Dance With Me\" was based on \"Hernando's Hideaway\" written by Richard Adler and Jerry Ross, who are given credit on the song."
+        ],
+        [
+          "\"I'm Not at All in Love\" is a popular song written by Richard Adler and Jerry Ross, published in 1954.",
+          " It was first presented in the musical \"The Pajama Game\" by Janis Paige."
+        ],
+        [
+          "Jerry Ross (born Jerold Rosenberg; March 9, 1926 – November 11, 1955) was an American lyricist and composer whose works with Richard Adler for the musical theater include \"The Pajama Game\" and \"Damn Yankees\", winners of Tony Awards in 1955 and 1956, respectively, in both the \"Best Musical\" and \"Best Composer and Lyricist\" categories."
+        ],
+        [
+          "\"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross.",
+          " The best-known version of the song, recorded by Tony Bennett with Percy Faith and his orchestra, was number one for eight weeks on the Billboard chart in 1953 and became a gold record.",
+          " In the same year, a version by David Whitfield reached number three in the British charts and one by Billy Ward and his Dominoes with Jackie Wilson singing lead made number two on Billboard's R&B chart.",
+          " Later recordings by Sunny & the Sunliners (#45 in 1963) and Elvis Presley (#33 in 1971) also made the Billboard charts."
+        ],
+        [
+          "\"Steam Heat\" is a show tune from the 1954 Broadway musical \"The Pajama Game\", written by Richard Adler and Jerry Ross."
+        ],
+        [
+          "\"Hernando's Hideaway\" is a tango show tune, largely in long metre, from the musical \"The Pajama Game\", written by Jerry Ross and Richard Adler and published in 1954.",
+          " It was sung in the stage and film versions of the musical by Carol Haney."
+        ],
+        [
+          "John Murray Anderson's Almanac is a musical revue, featuring the music of the songwriting team of Richard Adler and Jerry Ross, as well as other composers.",
+          " It was conceived by John Murray Anderson."
+        ],
+        [
+          "\"Whatever Lola Wants\" is a popular song, sometimes rendered as \"Whatever Lola Wants, Lola Gets\".",
+          " The music and words were written by Richard Adler and Jerry Ross for the 1955 musical play \"Damn Yankees\".",
+          " The song is sung by Lola, the Devil's assistant, a part originated by Gwen Verdon, who reprised the role in the film.",
+          " The saying was inspired by Lola Montez, an Irish-born \"Spanish dancer\" and mistress of King Ludwig I of Bavaria, who later became a San Francisco Gold Rush vamp."
+        ],
+        [
+          "Percy Faith (April 7, 1908 – February 9, 1976) was a Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards.",
+          " He is often credited with popularizing the \"easy listening\" or \"mood music\" format.",
+          " Faith became a staple of American popular music in the 1950s and continued well into the 1960s.",
+          " Though his professional orchestra-leading career began at the height of the swing era, Faith refined and rethought orchestration techniques, including use of large string sections, to soften and fill out the brass-dominated popular music of the 1940s."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Rags to Riches (song)",
+        "Percy Faith"
+      ],
+      "sent_id": [
+        1,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Rags to Riches (song)",
+      "Percy Faith"
+    ],
+    "hop1_query": "\"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross, the best-known version of the song, recorded by Tony Bennett with which Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards?",
+    "hop1_docs": [
+      "Rags to Riches (song) | \"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross.  The best-known version of the song, recorded by Tony Bennett with Percy Faith and his orchestra, was number one for eight weeks on the Billboard chart in 1953 and became a gold record.  In the same year, a version by David Whitfield reached number three in the British charts and one by Billy Ward and his Dominoes with Jackie Wilson singing lead made number two on Billboard's R&B chart.  Later recordings by Sunny & the Sunliners (#45 in 1963) and Elvis Presley (#33 in 1971) also made the Billboard charts.",
+      "Percy Faith | Percy Faith (April 7, 1908 – February 9, 1976) was a Canadian bandleader, orchestrator, composer and conductor, known for his lush arrangements of pop and Christmas standards.  He is often credited with popularizing the \"easy listening\" or \"mood music\" format.  Faith became a staple of American popular music in the 1950s and continued well into the 1960s.  Though his professional orchestra-leading career began at the height of the swing era, Faith refined and rethought orchestration techniques, including use of large string sections, to soften and fill out the brass-dominated popular music of the 1940s.",
+      "Everybody Loves a Lover | \"Everybody Loves a Lover\" is a popular song which was a hit single for Doris Day in 1958.  Its lyricist, Richard Adler, and its composer, Robert Allen, were both best known for collaborations with other partners.  The music Allen composed, aside from this song, was usually for collaborations with Al Stillman, and Adler wrote the lyrics after the 1955 death of his usual composing partner, Jerry Ross.",
+      "Sleigh Ride | \"Sleigh Ride\" is a popular light orchestral Christmas music standard composed by Leroy Anderson.  The composer had the original idea for the piece during a heat wave in July 1946 and finished the work in February 1948.  It was originally an instrumental piece; the lyrics, about someone asking another to join them for a ride in a sleigh, were written by Mitchell Parish in 1950.  The orchestral version was first recorded in 1949 by Arthur Fiedler and the Boston Pops Orchestra.  Sleigh Ride was a hit record on RCA Victor Red Seal 49-0515 (45 rpm) / 10-1484 (78 rpm), and has become a signature song for the orchestra.  The 45 rpm version was originally issued on red vinyl.  The Pops has also recorded the song with John Williams, their conductor from 1979 to 1995, and Keith Lockhart, their current conductor.",
+      "Robert Russell Bennett | Robert Russell Bennett (June 15, 1894 – August 18, 1981) was an American composer and arranger, best known for his orchestration of many well-known Broadway and Hollywood musicals by other composers such as Irving Berlin, George Gershwin, Jerome Kern, Cole Porter, and Richard Rodgers.  In 1957 and 2008, Bennett received Tony Awards recognizing his orchestrations for Broadway shows.  Early in his career he was often billed as Russell Bennett.",
+      "Norrie Paramor | Norman William \"Norrie\" Paramor (15 May 1914 – 9 September 1979) was a British record producer, composer, arranger, pianist, bandleader, and orchestral conductor.  He is best known for his work with Cliff Richard and the Shadows, both together and separately, steering their early careers and producing and arranging most of their material from the late 1950s to the early 1970s.  Paramor was a composer of studio albums, theatrical productions, and film scores.",
+      "My Heart Tells Me | \"My Heart Tells Me\" is a song written by Harry Warren with lyrics by Mack Gordon.  It is the theme to the 1943 American musical film \"Sweet Rosie O'Grady\", in which it is sung by lead actress Betty Grable.  A 1940s standard, the song has been recorded by numerous artists, including Frank Sinatra, Tony Bennett, Nat King Cole, and Etta Jones.  The film's popularity contributed to the commercial success of the version of the song recorded by bandleader Glen Gray and his Casa Loma Orchestra with vocals by singer Eugenie Baird; titled \"My Heart Tells Me (Should I Believe My Heart?)\" , it topped \"The Billboard\"<nowiki>'s</nowiki> National Best Selling Retail Records chart for five weeks in 1944."
+    ],
+    "hop1_titles": [
+      "Rags to Riches (song)",
+      "Percy Faith",
+      "Everybody Loves a Lover",
+      "Sleigh Ride",
+      "Robert Russell Bennett",
+      "Norrie Paramor",
+      "My Heart Tells Me"
+    ],
+    "summary_1": "Percy Faith (Rags to Riches (song); Percy Faith)",
+    "hop2_query": "Tony Bennett \"Rags to Riches\" Percy Faith",
+    "hop2_docs": [
+      "Rags to Riches (song) | \"Rags to Riches\" is a 1953 popular song by Richard Adler and Jerry Ross.  The best-known version of the song, recorded by Tony Bennett with Percy Faith and his orchestra, was number one for eight weeks on the Billboard chart in 1953 and became a gold record.  In the same year, a version by David Whitfield reached number three in the British charts and one by Billy Ward and his Dominoes with Jackie Wilson singing lead made number two on Billboard's R&B chart.  Later recordings by Sunny & the Sunliners (#45 in 1963) and Elvis Presley (#33 in 1971) also made the Billboard charts.",
+      "Al Caiola | Alexander Emil Caiola (September 7, 1920 – November 9, 2016) was a guitarist, composer and arranger who spanned a variety of music genres including jazz, country, rock, and pop.  He recorded over fifty albums and worked with some of the biggest names in music during the 20th century, including Elvis Presley, Ferrante & Teicher, Frank Sinatra, Percy Faith, Buddy Holly, Mitch Miller, and Tony Bennett.  During World War II Caiola played with the United States Marine Corps 5th Marine Division Band that also included Bob Crosby.  Caiola served in the Battle of Iwo Jima as a stretcher bearer.",
+      "Rags to riches (disambiguation) | Rags to riches refers to a rise from poverty to wealth.",
+      "Andrew Percy Bennett | Andrew Percy Bennett (30 July 1866 – 3 November 1943) was a British diplomat.",
+      "Tony Bennett: The Playground | Tony Bennett: The Playground is an album by Tony Bennett, released in 1998.",
+      "Tony Bennett's &quot;Something&quot; | Tony Bennett's \"Something\" is a 1970 studio album by Tony Bennett.  As with Bennett's previous album, \"Tony Sings the Great Hits of Today! \", it contains renditions of contemporary pop songs, including \"Something\", which had appeared on the earlier release.",
+      "From Riches to Rags | From Riches to Rags is a 1980 Hong Kong film written and directed by John Woo starring Ricky Hui and Johnny Koo."
+    ],
+    "hop2_titles": [
+      "Rags to Riches (song)",
+      "Al Caiola",
+      "Rags to riches (disambiguation)",
+      "Andrew Percy Bennett",
+      "Tony Bennett: The Playground",
+      "Tony Bennett's &quot;Something&quot;",
+      "From Riches to Rags"
+    ],
+    "summary_2": "Percy Faith. The best-known version was recorded by Tony Bennett with Percy Faith and his orchestra.",
+    "answer": "Percy Faith",
+    "score": 1.0,
+    "support_recall_hop1": 1.0,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 1.0,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [],
+    "hit_titles_hop1": [
+      "Percy Faith",
+      "Rags to Riches (song)"
+    ],
+    "hit_titles_total": [
+      "Percy Faith",
+      "Rags to Riches (song)"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "8af1c3f3725fc3c81affb7ab3b6c3360177864e0e536ef474cf47055bd1fd5eb",
+  "created_at": "2026-07-14T13:47:36.929003+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "task_context": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "agent": "summary1",
+        "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop."
+      },
+      "visible_agent_inputs": {
+        "question": "What items could you find delivered to Trout Creek, Utah?",
+        "passages": [
+          "Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah).  The creek contains wild brown trout and hatchery rainbow trout.",
+          "Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States.  It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao.  It is named after the creek that flows from the west off of the Deep Creek Mountains.  It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .",
+          "Ibapah Peak | Ibapah Peak is a 12018 ft summit in Juab County, Utah in the United States.  It is the highest point of the Deep Creek Range and is located less than 5 mi east of the Utah-Nevada border, and about 10 mi northwest of the town of Trout Creek, Utah.  With a topographic prominence of 5247 ft it is the fifth-most prominent summit in Utah.",
+          "Find What You Love and Let It Kill You | \"Find What You Love and Let It Kill You\" may refer to:",
+          "Find What You Love and Let It Kill You (Jonny Craig EP) | Find What You Love and Let It Kill You (Jonny Craig EP)",
+          "Letters to Judy: What Kids Wish They Could Tell You | Letters to Judy: What Kids Wish They Could Tell You",
+          "Navajo Lake (Utah) | Navajo Lake is a small lake in northwestern Kane County in southern Utah.  It is shallow, reaching depths of only 25 feet.  Recreation includes fishing, boating, swimming, and lodging facilities.  Species of trout in Navajo Lake are brook trout, splake trout (hybrid), and rainbow trout.  Trout survival for winter is very poor with only the splake and brook trout overwintering.  There is also a dense population of Utah chub."
+        ],
+        "current_output": "Mail (letters)."
+      },
+      "current_prompt": "Given the fields `question`, `passages`, produce the fields `summary`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Mail (letters).",
+        "score": 0.0,
+        "generated_query": "Trout Creek Utah mail letters postal delivery \"Trout Creek, UT\" delivered items",
+        "retrieved_titles": [
+          "Mammoth Creek",
+          "Trout Creek, Utah",
+          "U.S. Special Delivery (postal service)",
+          "Golden trout",
+          "Hybrid mail",
+          "Sheepheaven Creek redband trout",
+          "Trout Creek, Montana"
+        ],
+        "summary_2": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "answer": "Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).",
+        "missing_recovery_rate": 0.0,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": [
+          "Pony Express"
+        ]
+      },
+      "target_state": {
+        "state_kind": "intermediate",
+        "state_origin": "generated_midpoint",
+        "output": "First-hop evidence: Trout Creek, Utah is a small unincorporated farming community located along the Pony Express/Overland route. Provisional summary: the immediate class of items is mail/letters. Bridge / missing fact for next hop: which delivery service(s) (Pony Express/Overland Mail or later U.S. postal/special‑delivery services) actually served Trout Creek and what specific items they carried (messages/letters, newspapers, postal packets). Retrieval direction: fetch Pony Express and Overland Mail and local postal history pages to confirm whether Trout Creek was on the route/station list and to list the items those services delivered.",
+        "score": null,
+        "generated_query": null,
+        "retrieved_titles": [],
+        "summary_2": "",
+        "answer": null,
+        "missing_recovery_rate": null,
+        "recovered_missing_titles": [],
+        "missing_titles_after_hop2": []
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nTask context:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"agent\": \"summary1\",\n  \"agent_role\": \"Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What items could you find delivered to Trout Creek, Utah?\",\n  \"passages\": [\n    \"Mammoth Creek | Mammoth Creek is a Utah creek which flows for over 20 miles through mountains and forests from Mammoth Summit (near Brian Head, Utah), through the Mammoth Valley, to its confluence with the Sevier River (near Hatch, Utah).  The creek contains wild brown trout and hatchery rainbow trout.\",\n    \"Trout Creek, Utah | Trout Creek is a small farming unincorporated community, in western Juab County, Utah, United States.  It is located along the Pony Express/Overland route in northern Snake Valley, north of Partoun and south of Callao.  It is named after the creek that flows from the west off of the Deep Creek Mountains.  It has one of the most remote Mormon chapels in Utah, with a short section of paved road, the only paved road for over 50 mi .\",\n    \"Ibapah Peak | Ibapah Peak is a 12018 ft summit in Juab County, Utah in the United States.  It is the highest point of the Deep Creek Range and is located less than 5 mi east of the Utah-Nevada border, and about 10 mi northwest of the town of Trout Creek, Utah.  With a topographic prominence of 5247 ft it is the fifth-most prominent summit in Utah.\",\n    \"Find What You Love and Let It Kill You | \\\"Find What You Love and Let It Kill You\\\" may refer to:\",\n    \"Find What You Love and Let It Kill You (Jonny Craig EP) | Find What You Love and Let It Kill You (Jonny Craig EP)\",\n    \"Letters to Judy: What Kids Wish They Could Tell You | Letters to Judy: What Kids Wish They Could Tell You\",\n    \"Navajo Lake (Utah) | Navajo Lake is a small lake in northwestern Kane County in southern Utah.  It is shallow, reaching depths of only 25 feet.  Recreation includes fishing, boating, swimming, and lodging facilities.  Species of trout in Navajo Lake are brook trout, splake trout (hybrid), and rainbow trout.  Trout survival for winter is very poor with only the splake and brook trout overwintering.  There is also a dense population of Utah chub.\"\n  ],\n  \"current_output\": \"Mail (letters).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `passages`, produce the fields `summary`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Mail (letters).\",\n  \"score\": 0.0,\n  \"generated_query\": \"Trout Creek Utah mail letters postal delivery \\\"Trout Creek, UT\\\" delivered items\",\n  \"retrieved_titles\": [\n    \"Mammoth Creek\",\n    \"Trout Creek, Utah\",\n    \"U.S. Special Delivery (postal service)\",\n    \"Golden trout\",\n    \"Hybrid mail\",\n    \"Sheepheaven Creek redband trout\",\n    \"Trout Creek, Montana\"\n  ],\n  \"summary_2\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"answer\": \"Mail — letters (including postal packets, special‑delivery items, and hybrid/printed e‑mail letters).\",\n  \"missing_recovery_rate\": 0.0,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": [\n    \"Pony Express\"\n  ]\n}\n\nTarget state:\n{\n  \"state_kind\": \"intermediate\",\n  \"state_origin\": \"generated_midpoint\",\n  \"output\": \"First-hop evidence: Trout Creek, Utah is a small unincorporated farming community located along the Pony Express/Overland route. Provisional summary: the immediate class of items is mail/letters. Bridge / missing fact for next hop: which delivery service(s) (Pony Express/Overland Mail or later U.S. postal/special‑delivery services) actually served Trout Creek and what specific items they carried (messages/letters, newspapers, postal packets). Retrieval direction: fetch Pony Express and Overland Mail and local postal history pages to confirm whether Trout Creek was on the route/station list and to list the items those services delivered.\",\n  \"score\": null,\n  \"generated_query\": null,\n  \"retrieved_titles\": [],\n  \"summary_2\": \"\",\n  \"answer\": null,\n  \"missing_recovery_rate\": null,\n  \"recovered_missing_titles\": [],\n  \"missing_titles_after_hop2\": []\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the agent's current summary is a terse item-class (e.g. 'Mail (letters).') AND at least one passage mentions a historical route or delivery term present in the visible inputs (for example the phrase 'Pony Express' or 'Overland').\",\n    \"preserve_rule\": \"Preserve the agent's existing behavior of identifying the immediate class of items (e.g. 'mail/letters') and any accurate short answer wording already produced. Keep quoting or paraphrasing only brief evidence strings that already appear in the visible passages.\",\n    \"change_rule\": \"When triggered, require the agent to expand the single-line class into a concise structured summary that includes all four components: (1) First-hop evidence — a one‑sentence paraphrase or short quote (≤15 words) citing the passage title that supports the item class or mentions a route; (2) Provisional summary — a one‑sentence statement of the immediate item class (retain prior wording where accurate); (3) Bridge / missing fact — a single explicit question or short statement of what must be confirmed next (for example: whether Pony Express/Overland Mail or later U.S. postal services actually served Trout Creek, and which item types they carried); (4) Retrieval direction — 2–4 concrete short queries or target pages to fetch next (e.g. 'Pony Express route stations', 'Overland Mail history', 'Trout Creek Utah postal history', 'local post office service list'). Keep each component to at most two sentences or a short list of 2–4 query phrases.\",\n    \"drop_or_avoid_rule\": \"Do not assert that any service actually served Trout Creek unless supported by the visible passages. Do not invent or list specific delivered items beyond high‑level categories (e.g. letters, newspapers, postal packets) unless present in passages. Avoid long verbatim spans from the target or from any source not already visible in the passages. Do not change the agent I/O schema — return only the 'summary' field as before.\",\n    \"output_contract\": \"The agent's produced 'summary' string must contain labeled, compact parts: 'First-hop evidence:', 'Provisional summary:', 'Bridge / missing fact:', and 'Retrieval direction:'. Each label must be followed by the required content (evidence citation or short quote, one-sentence provisional class, one explicit missing-fact question, and 2–4 short retrieval queries). Overall length should remain concise (approximately one short paragraph or ≤6 short lines).\",\n    \"why_local_transition\": \"This small prompt edit moves the agent from a bare one‑word class answer to a minimal structured first-hop summary that highlights the supporting passage (the Pony Express/Overland mention) and explicitly tells the next hop what unknown to resolve and which sources/queries to try.\"\n  },\n  \"rationale\": \"The base prompt already produces the correct immediate class ('mail/letters') but omits the bridging evidence and retrieval direction needed by the next agent. The delta is intentionally minimal: it preserves the existing item-class behavior while adding a tight, repeatable structure forcing (1) a short evidence citation from the visible passages and (2) an explicit, actionable missing-fact and 2–4 concrete queries for the next retrieval hop. This change avoids inventing facts, keeps outputs brief, and directly enables the pipeline's next agent to search Pony Express / Overland Mail and local postal history pages to confirm which services served Trout Creek and what items they carried.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "bisection_round": 1,
+    "agent": "summary1",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "5de75fd8d4d6d9b2a7654efefb08a8f2c3557d341ab6905d56c2405a54488386",
+  "created_at": "2026-07-14T16:19:18.229061+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Who was a Greek film director Andrew Lau or Yannis Smaragdis? ",
+      "source_summary": "Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Yannis Smaragdis directed the 1983 Greek drama Homecoming Song and the 2007 biographical film El Greco.",
+      "target_summary": "Integrated evidence summary:\n\n- Yannis Smaragdis: Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Additional context from the first-hop summary: he directed the 1983 Greek drama Homecoming Song, the 2007 biographical film El Greco, and the 2012 Russo-Greek drama God Loves Caviar.\n\n- Andrew Lau: Andrew Lau Wai-Keung (born 4 April 1960) is a Hong Kong film director, producer, and cinematographer. (From first-hop context.)\n\nThis summary preserves the visible supporting sentence identifying Smaragdis as a Greek film director and the first-hop facts about both directors for use by the final-answer agent.",
+      "candidate_summary": "Integrated evidence summary:\n\n- Yannis Smaragdis: Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Additional context from the first-hop summary: he directed the 1983 Greek drama Homecoming Song, the 2007 biographical film El Greco, and the 2012 Russo-Greek drama God Loves Caviar.\n\n- Andrew Lau: Andrew Lau Wai-Keung (born 4 April 1960) is a Hong Kong film director, producer, and cinematographer. (From first-hop context.)\n\nThis summary preserves the visible supporting sentence identifying Smaragdis as a Greek film director and the first-hop facts about both directors for use by the final-answer agent."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWho was a Greek film director Andrew Lau or Yannis Smaragdis? \n\nSource summary2:\nIannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Yannis Smaragdis directed the 1983 Greek drama Homecoming Song and the 2007 biographical film El Greco.\n\nTarget summary2:\nIntegrated evidence summary:\n\n- Yannis Smaragdis: Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Additional context from the first-hop summary: he directed the 1983 Greek drama Homecoming Song, the 2007 biographical film El Greco, and the 2012 Russo-Greek drama God Loves Caviar.\n\n- Andrew Lau: Andrew Lau Wai-Keung (born 4 April 1960) is a Hong Kong film director, producer, and cinematographer. (From first-hop context.)\n\nThis summary preserves the visible supporting sentence identifying Smaragdis as a Greek film director and the first-hop facts about both directors for use by the final-answer agent.\n\nCandidate summary2:\nIntegrated evidence summary:\n\n- Yannis Smaragdis: Iannis Smaragdis (Greek: Γιάννης Σμαραγδής ) is a Greek film director. Additional context from the first-hop summary: he directed the 1983 Greek drama Homecoming Song, the 2007 biographical film El Greco, and the 2012 Russo-Greek drama God Loves Caviar.\n\n- Andrew Lau: Andrew Lau Wai-Keung (born 4 April 1960) is a Hong Kong film director, producer, and cinematographer. (From first-hop context.)\n\nThis summary preserves the visible supporting sentence identifying Smaragdis as a Greek film director and the first-hop facts about both directors for use by the final-answer agent.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target exactly: it retains the source's statement that Iannis/Yannis Smaragdis is a Greek film director and the 1983 and 2007 films, and it adds the target's extra facts (Smargdis's 2012 film and Andrew Lau's Hong Kong director/producer/cinematographer bio). No source information is removed or contradicted.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 66,
+    "row_index": 66,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

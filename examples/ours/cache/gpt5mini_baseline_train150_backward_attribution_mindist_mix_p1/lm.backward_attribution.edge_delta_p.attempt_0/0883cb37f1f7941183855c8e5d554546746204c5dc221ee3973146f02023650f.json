@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "0883cb37f1f7941183855c8e5d554546746204c5dc221ee3973146f02023650f",
+  "created_at": "2026-07-14T19:01:54.532885+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "summary_1": "Nikita Katsalapov",
+        "summary_2": "Nikita Katsalapov",
+        "current_output": "Nikita Katsalapov"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nikita Katsalapov",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Nikita Gennadyevich Katsalapov",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"summary_1\": \"Nikita Katsalapov\",\n  \"summary_2\": \"Nikita Katsalapov\",\n  \"current_output\": \"Nikita Katsalapov\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nikita Katsalapov\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Nikita Gennadyevich Katsalapov\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the question and summaries concern a person's name and at least one summary contains a longer name form that includes all tokens of a shorter form present elsewhere in the visible inputs (i.e., one name string is a superset of another), activate this delta.\",\n    \"preserve_rule\": \"Keep existing behavior for producing a single minimal answer string from the visible summaries; continue to rely only on the provided summaries and question as evidence.\",\n    \"change_rule\": \"When the trigger condition holds, prefer the longest name variant that is fully supported by tokens appearing verbatim in the visible summaries. Concretely, if one summary's name string contains every token of the other summary's name plus additional name tokens (for example, a middle name or patronymic), output that longer, supported name string as the answer.\",\n    \"drop_or_avoid_rule\": \"Do not invent or add name tokens that do not appear in any visible summary or the question. Do not copy content from outside the provided inputs, and do not merge tokens from different distinct entities unless they form a single supported superset in the visible inputs.\",\n    \"output_contract\": \"As before, place only the minimal answer string in the [[ ## answer ## ]] block. If a longer name form is selected per the change_rule, output that exact verbatim string (no extra explanation). If no longer supported variant exists, fall back to the original minimal-string behavior.\",\n    \"why_local_transition\": \"This targeted tweak causes the agent to prefer a fuller person-name variant when that fuller variant is explicitly present in the visible summaries, producing a more complete name while still relying only on available evidence.\"\n  },\n  \"rationale\": \"The current output chooses a short name form. The smallest coherent behavioral change is to prefer a longer name variant when it is explicitly supported by the visible summaries (i.e., one summary is a superset of another). This preserves existing minimal-answer behavior and avoids inventing information, while enabling the agent to return a fuller legal name when that fuller form appears in the inputs. The delta is narrowly scoped (only triggers on name-superset cases) so it won't affect other answers.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 119,
+    "row_index": 119,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

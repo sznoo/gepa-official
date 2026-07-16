@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "90a8f3aa529855b69fa825dcd03a9f9927d381908ec42694e9fe9ab6efe5d3ad",
+  "created_at": "2026-07-15T22:02:37.422101+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+      "current_output": "Both were film directors and actors. Bertrand Tavernier is described as a French director, screenwriter, actor and producer. Charles Giblyn was an American film director and actor of the silent era.",
+      "upstream_context": {
+        "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+        "summary_1": "- evidence:\n  - Bertrand Tavernier — passage [1]: \"French director, screenwriter, actor and producer.\"\n  - Charles Giblyn — not mentioned in the supplied passages.\n\n- ambiguities_or_missing:\n  - No passage for Charles Giblyn is present; cannot confirm which occupations he held.\n  - Possible name ambiguity if multiple \"Charles Giblyn\" entries exist (no disambiguation provided).\n\n- missing_facts_or_bridge:\n  - The occupations (e.g., director, screenwriter, actor, producer, etc.) credited to Charles Giblyn are needed to identify the mutual occupations with Bertrand Tavernier.\n\n- retrieval_direction (priority order):\n  1. Retrieve the \"Charles Giblyn\" Wikipedia page (or main biography page).\n  2. Search query: \"Charles Giblyn occupations\" or \"Charles Giblyn film director actor producer biography\".\n  3. Retrieve an authoritative filmography/biography source (e.g., BFI, AllMovie) for Charles Giblyn if Wikipedia is absent or ambiguous.",
+        "hop2_query": "Charles Giblyn occupations",
+        "hop2_titles": [
+          "Charles Giblyn",
+          "The Oubliette",
+          "The Price of a Party",
+          "Just for Tonight (film)",
+          "The Higher Law (1914 film)",
+          "Know Your Men",
+          "Sunshine Nan"
+        ],
+        "hop2_docs": [
+          "Charles Giblyn | Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.  He directed 96 films between 1912 and 1927.  He also appeared in 23 films between 1914 and 1934.  He was one of the founders of the Motion Picture Directors Association.  Founded Albion Productions, a film production company, in 1922.  He was born in Watertown, New York and died in Los Angeles, California.",
+          "The Oubliette | The Oubliette is a 1914 American silent drama film directed by Charles Giblyn, featuring Murdock MacQuarrie, Pauline Bush, and Lon Chaney.  It is part of a four-film series directed by Giblyn called the \"The Adventures of François Villon\".  \"The Oubliette\" is based on a short story of the same name by George Bronson Howard published in \"The Century Magazine\".  This film and \"By the Sun's Rays\" are two of Lon Chaney's earliest surviving films.",
+          "The Price of a Party | The Price of a Party is a 1924 American silent melodrama film produced by Howard Estabrook and distributed by Associated Exhibitors.  The film is based on a short story of the same name by William Briggs MacHarg with the film's scenario written by Charles F. Roebuck.  It was directed by Charles Giblyn and stars Hope Hampton and Harrison Ford.",
+          "Just for Tonight (film) | Just for Tonight is a surviving 1918 silent film comedy-drama directed by Charles Giblyn and starring Tom Moore.  It was produced and distributed by Goldwyn Pictures, one of the predecessors of MGM.",
+          "The Higher Law (1914 film) | The Higher Law is a 1914 American silent drama film directed by Charles Giblyn and featuring Murdock MacQuarrie, Pauline Bush and Lon Chaney.  The film is now considered to be lost.",
+          "Know Your Men | Know Your Men is a 1921 American silent melodrama film produced and distributed by Fox Film Corporation, directed by Charles Giblyn, and starring Pearl White.  It is now considered to be a lost film.",
+          "Sunshine Nan | Sunshine Nan is a surviving 1918 American silent comedy drama film starring Ann Pennington and directed by Charles Giblyn.  It is based on the novel \"Calvary Alley\" by Alice Hegan Rice.  It was produced by Famous Players-Lasky and distributed by Paramount Pictures."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Charles Giblyn",
+          "sent_id": 0,
+          "sentence": "Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nBertrand Tavernier and Charles Giblyn, have which mutual occupations?\n\nCurrent agent output:\n\"Both were film directors and actors. Bertrand Tavernier is described as a French director, screenwriter, actor and producer. Charles Giblyn was an American film director and actor of the silent era.\"\n\nActual upstream context:\n{\n  \"question\": \"Bertrand Tavernier and Charles Giblyn, have which mutual occupations?\",\n  \"summary_1\": \"- evidence:\\n  - Bertrand Tavernier — passage [1]: \\\"French director, screenwriter, actor and producer.\\\"\\n  - Charles Giblyn — not mentioned in the supplied passages.\\n\\n- ambiguities_or_missing:\\n  - No passage for Charles Giblyn is present; cannot confirm which occupations he held.\\n  - Possible name ambiguity if multiple \\\"Charles Giblyn\\\" entries exist (no disambiguation provided).\\n\\n- missing_facts_or_bridge:\\n  - The occupations (e.g., director, screenwriter, actor, producer, etc.) credited to Charles Giblyn are needed to identify the mutual occupations with Bertrand Tavernier.\\n\\n- retrieval_direction (priority order):\\n  1. Retrieve the \\\"Charles Giblyn\\\" Wikipedia page (or main biography page).\\n  2. Search query: \\\"Charles Giblyn occupations\\\" or \\\"Charles Giblyn film director actor producer biography\\\".\\n  3. Retrieve an authoritative filmography/biography source (e.g., BFI, AllMovie) for Charles Giblyn if Wikipedia is absent or ambiguous.\",\n  \"hop2_query\": \"Charles Giblyn occupations\",\n  \"hop2_titles\": [\n    \"Charles Giblyn\",\n    \"The Oubliette\",\n    \"The Price of a Party\",\n    \"Just for Tonight (film)\",\n    \"The Higher Law (1914 film)\",\n    \"Know Your Men\",\n    \"Sunshine Nan\"\n  ],\n  \"hop2_docs\": [\n    \"Charles Giblyn | Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.  He directed 96 films between 1912 and 1927.  He also appeared in 23 films between 1914 and 1934.  He was one of the founders of the Motion Picture Directors Association.  Founded Albion Productions, a film production company, in 1922.  He was born in Watertown, New York and died in Los Angeles, California.\",\n    \"The Oubliette | The Oubliette is a 1914 American silent drama film directed by Charles Giblyn, featuring Murdock MacQuarrie, Pauline Bush, and Lon Chaney.  It is part of a four-film series directed by Giblyn called the \\\"The Adventures of François Villon\\\".  \\\"The Oubliette\\\" is based on a short story of the same name by George Bronson Howard published in \\\"The Century Magazine\\\".  This film and \\\"By the Sun's Rays\\\" are two of Lon Chaney's earliest surviving films.\",\n    \"The Price of a Party | The Price of a Party is a 1924 American silent melodrama film produced by Howard Estabrook and distributed by Associated Exhibitors.  The film is based on a short story of the same name by William Briggs MacHarg with the film's scenario written by Charles F. Roebuck.  It was directed by Charles Giblyn and stars Hope Hampton and Harrison Ford.\",\n    \"Just for Tonight (film) | Just for Tonight is a surviving 1918 silent film comedy-drama directed by Charles Giblyn and starring Tom Moore.  It was produced and distributed by Goldwyn Pictures, one of the predecessors of MGM.\",\n    \"The Higher Law (1914 film) | The Higher Law is a 1914 American silent drama film directed by Charles Giblyn and featuring Murdock MacQuarrie, Pauline Bush and Lon Chaney.  The film is now considered to be lost.\",\n    \"Know Your Men | Know Your Men is a 1921 American silent melodrama film produced and distributed by Fox Film Corporation, directed by Charles Giblyn, and starring Pearl White.  It is now considered to be a lost film.\",\n    \"Sunshine Nan | Sunshine Nan is a surviving 1918 American silent comedy drama film starring Ann Pennington and directed by Charles Giblyn.  It is based on the novel \\\"Calvary Alley\\\" by Alice Hegan Rice.  It was produced by Famous Players-Lasky and distributed by Paramount Pictures.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Charles Giblyn\",\n    \"sent_id\": 0,\n    \"sentence\": \"Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Integrated evidence summary:\\n- Bertrand Tavernier: described in the provided first-hop passage as a \\\"French director, screenwriter, actor and producer.\\\" \\n- Charles Giblyn: from the retrieved second-hop document, \\\"Charles Giblyn (September 6, 1871 – March 14, 1934) was an American film director and actor of the silent era.\\\" \\nRetained facts: the listed occupations for each individual (Tavernier's occupations and Giblyn's occupations) are preserved for the final-answer agent to determine which occupations they share.\",\n  \"rationale\": \"This summary combines the first-hop passage for Bertrand Tavernier (occupations: director, screenwriter, actor, producer) with the visible second-hop sentence for Charles Giblyn (occupation: film director and actor of the silent era). It preserves the exact occupation facts for each person so the final-answer agent can identify their mutual occupations.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 47,
+    "row_index": 47
+  }
+}

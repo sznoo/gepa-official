@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "7a1f97d4c71842711b605bee286d8aa4954a5cdfa2ceb6ec34d15c5256e5ad31",
+  "created_at": "2026-07-16T04:52:03.682193+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+      "source_summary": "Both Carlo Emilio Gadda and Katharine Kerr were novelists. The passages corroborate that Gadda was an Italian writer and author of novels (see passages 1 and 3), while the context identifies Kerr as an American science fiction and fantasy novelist.",
+      "target_summary": "First-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step.",
+      "candidate_summary": "First-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nCarlo Emilio Gadda and Katharine Kerr both were considered what?\n\nSource summary2:\nBoth Carlo Emilio Gadda and Katharine Kerr were novelists. The passages corroborate that Gadda was an Italian writer and author of novels (see passages 1 and 3), while the context identifies Kerr as an American science fiction and fantasy novelist.\n\nTarget summary2:\nFirst-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step.\n\nCandidate summary2:\nFirst-hop evidence: That Awful Mess on Via Merulana is an Italian novel by Carlo Emilio Gadda; Katharine Kerr is described as an American science fiction and fantasy novelist. Second-hop (gold) evidence: Carlo Emilio Gadda (November 14, 1893 – May 21, 1973) was an Italian writer and poet, and belongs to the tradition of language innovators. Integrated summary for the final-answer agent: retain that Gadda is an Italian writer/poet and the author of novels (e.g., That Awful Mess on Via Merulana), and that Kerr is an American science fiction and fantasy novelist. These facts together enable determining the shared occupational label in the final step.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target exactly, including first-hop (That Awful Mess novel, Kerr as American SF/fantasy novelist) and second-hop details (Gadda as Italian writer/poet, dates, language innovator). It does not contradict the source and adds task-relevant facts (poet, language-innovator, novel title, dates) beyond the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 68,
+    "row_index": 68,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

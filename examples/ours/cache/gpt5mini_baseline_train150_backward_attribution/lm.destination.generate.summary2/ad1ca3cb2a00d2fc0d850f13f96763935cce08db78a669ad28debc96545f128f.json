@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary2",
+  "key": "ad1ca3cb2a00d2fc0d850f13f96763935cce08db78a669ad28debc96545f128f",
+  "created_at": "2026-07-14T13:37:17.228967+00:00",
+  "request": {
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "destination_requirements": "Produce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.",
+      "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+      "current_output": "Rip Taylor",
+      "upstream_context": {
+        "question": "Which artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?",
+        "summary_1": "Rip Taylor",
+        "hop2_query": "\"Tony Hiller\" Rip Taylor confetti \"showering himself\" \"showering others\"",
+        "hop2_titles": [
+          "Rip Taylor",
+          "Tony Hiller",
+          "Shower the People",
+          "Quadrantids",
+          "Baby shower",
+          "Navy shower",
+          "Geminids"
+        ],
+        "hop2_docs": [
+          "Rip Taylor | Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.",
+          "Tony Hiller | Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.",
+          "Shower the People | \"Shower the People\" is the opening track on James Taylor's 1976 album \"In the Pocket\".  The song features Carly Simon on backing vocals.",
+          "Quadrantids | The Quadrantids (QUA) are a January meteor shower.  The zenithal hourly rate (ZHR) of this shower can be as high as that of two other reliably rich meteor showers, the Perseids in August and the Geminids in December, yet Quadrantid meteors are not seen as often as meteors in these other two showers, because the peak intensity is exceedingly sharp, sometimes lasting only hours.",
+          "Baby shower | A baby shower is a way to celebrate the expected or delivered birth of a child by presenting gifts to the mother at a party, whereas other cultures host a baby shower to celebrate the transformation of a woman into a mother.  The event has different names in different cultures.",
+          "Navy shower | A navy shower (also known as a \"combat shower\", \"military shower\", \"sea shower\", \"staggered shower\", or \"G.I. bath\") is a method of showering that allows for significant conservation of water and energy by turning off the flow of water in the middle portion of the shower while lathering.  Soldiers are sometimes trained to keep the total time of the water flow to under two minutes – using an initial thirty seconds or so to get wet, followed by shutting off the water, using soap and lathering, then rinsing for a minute or less.",
+          "Geminids | The Geminids are a meteor shower caused by the object 3200 Phaethon, which is thought to be a Palladian asteroid with a \"rock comet\" orbit.  This would make the Geminids, together with the Quadrantids, the only major meteor showers not originating from a comet.  The meteors from this shower are slow moving, can be seen in December and usually peak around December 13–14, with the date of highest intensity being the morning of December 14.  The shower is thought to be intensifying every year and recent showers have seen 120–160 meteors per hour under optimal conditions, generally around 02:00 to 03:00 local time.  Geminids were first observed in 1862, much more recently than other showers such as the Perseids (36 AD) and Leonids (902 AD)."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Tony Hiller",
+          "sent_id": 0,
+          "sentence": "Anthony Toby \"Tony\" Hiller (born 30 July 1927) is a British songwriter."
+        },
+        {
+          "title": "Tony Hiller",
+          "sent_id": 2,
+          "sentence": "The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns."
+        },
+        {
+          "title": "Rip Taylor",
+          "sent_id": 0,
+          "sentence": "Charles Elmer \"Rip\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian."
+        },
+        {
+          "title": "Rip Taylor",
+          "sent_id": 1,
+          "sentence": "He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti."
+        }
+      ],
+      "missing_support_targets": []
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nDestination requirements:\nProduce an ideal summary2 output using only information available at the\nsummary2 boundary.\n\nThe output should:\n- integrate the actual summary1 context with gold supporting evidence that\n  is genuinely present in the second-hop retrieval;\n- retain the exact visible facts needed by the final-answer agent;\n- make the answer derivable when the supplied evidence supports it;\n- remain an evidence summary rather than a final-answer response;\n- not add facts from gold documents that are absent from the actual inputs;\n- not use or mention the gold answer.\n\nQuestion:\nWhich artist did Anthony Toby \"Tony\" Hiller appear with that liked showering himself (and others) with confetti?\n\nCurrent agent output:\n\"Rip Taylor\"\n\nActual upstream context:\n{\n  \"question\": \"Which artist did Anthony Toby \\\"Tony\\\" Hiller appear with that liked showering himself (and others) with confetti?\",\n  \"summary_1\": \"Rip Taylor\",\n  \"hop2_query\": \"\\\"Tony Hiller\\\" Rip Taylor confetti \\\"showering himself\\\" \\\"showering others\\\"\",\n  \"hop2_titles\": [\n    \"Rip Taylor\",\n    \"Tony Hiller\",\n    \"Shower the People\",\n    \"Quadrantids\",\n    \"Baby shower\",\n    \"Navy shower\",\n    \"Geminids\"\n  ],\n  \"hop2_docs\": [\n    \"Rip Taylor | Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.  He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\",\n    \"Tony Hiller | Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.  He began his musical career as a member of the song and dance duo The Hiller Brothers, sharing the stage with his brother Irving.  The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\",\n    \"Shower the People | \\\"Shower the People\\\" is the opening track on James Taylor's 1976 album \\\"In the Pocket\\\".  The song features Carly Simon on backing vocals.\",\n    \"Quadrantids | The Quadrantids (QUA) are a January meteor shower.  The zenithal hourly rate (ZHR) of this shower can be as high as that of two other reliably rich meteor showers, the Perseids in August and the Geminids in December, yet Quadrantid meteors are not seen as often as meteors in these other two showers, because the peak intensity is exceedingly sharp, sometimes lasting only hours.\",\n    \"Baby shower | A baby shower is a way to celebrate the expected or delivered birth of a child by presenting gifts to the mother at a party, whereas other cultures host a baby shower to celebrate the transformation of a woman into a mother.  The event has different names in different cultures.\",\n    \"Navy shower | A navy shower (also known as a \\\"combat shower\\\", \\\"military shower\\\", \\\"sea shower\\\", \\\"staggered shower\\\", or \\\"G.I. bath\\\") is a method of showering that allows for significant conservation of water and energy by turning off the flow of water in the middle portion of the shower while lathering.  Soldiers are sometimes trained to keep the total time of the water flow to under two minutes – using an initial thirty seconds or so to get wet, followed by shutting off the water, using soap and lathering, then rinsing for a minute or less.\",\n    \"Geminids | The Geminids are a meteor shower caused by the object 3200 Phaethon, which is thought to be a Palladian asteroid with a \\\"rock comet\\\" orbit.  This would make the Geminids, together with the Quadrantids, the only major meteor showers not originating from a comet.  The meteors from this shower are slow moving, can be seen in December and usually peak around December 13–14, with the date of highest intensity being the morning of December 14.  The shower is thought to be intensifying every year and recent showers have seen 120–160 meteors per hour under optimal conditions, generally around 02:00 to 03:00 local time.  Geminids were first observed in 1862, much more recently than other showers such as the Perseids (36 AD) and Leonids (902 AD).\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 0,\n    \"sentence\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter.\"\n  },\n  {\n    \"title\": \"Tony Hiller\",\n    \"sent_id\": 2,\n    \"sentence\": \"The Hiller Brothers appeared with many artists of the time including Alma Cogan, Tommy Cooper, Val Doonican, Matt Monro, The Shadows, Bernard Manning, Kathy Kirby, Roger Whittaker, Rip Taylor, Gene Vincent, Lance Percival, Tessie O'Shea, Frank Ifield, Deep River Boys, The Dallas Boys, Clark Brothers, Paul Melba and Ray Burns.\"\n  },\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 0,\n    \"sentence\": \"Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian.\"\n  },\n  {\n    \"title\": \"Rip Taylor\",\n    \"sent_id\": 1,\n    \"sentence\": \"He is known for his exuberance and flamboyant personality, including his wild moustache and his habit of showering himself (and others) with confetti.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Anthony Toby \\\"Tony\\\" Hiller (born 30 July 1927) is a British songwriter. The Hiller Brothers appeared with many artists of the time, including Rip Taylor. Charles Elmer \\\"Rip\\\" Taylor, Jr. (born January 13, 1935) is an American actor and comedian known for his exuberance and flamboyant personality, including his habit of showering himself (and others) with confetti.\",\n  \"rationale\": \"Combines the summary1 context (Rip Taylor) with second-hop evidence: the Tony Hiller page lists the Hiller Brothers as having appeared with Rip Taylor, and the Rip Taylor page states he was known for showering himself and others with confetti. These exact facts are preserved to support the final-answer agent.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary2",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary2",
+    "sample_index": 14,
+    "row_index": 14
+  }
+}

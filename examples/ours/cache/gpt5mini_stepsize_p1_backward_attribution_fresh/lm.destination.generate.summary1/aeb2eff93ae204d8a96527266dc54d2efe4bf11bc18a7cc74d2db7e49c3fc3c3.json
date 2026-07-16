@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "aeb2eff93ae204d8a96527266dc54d2efe4bf11bc18a7cc74d2db7e49c3fc3c3",
+  "created_at": "2026-07-16T04:50:13.719562+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "While Michel Foucault  was a French philosopher, what was Kenneth Grahame?",
+      "current_output": "Passages state that \"Paul-Michel Foucault (October 15, 1926 – June 25, 1984) ... was a French philosopher, historian of ideas, social theorist, and literary critic\" (passage 2) and refer to Foucault as \"the French philosopher\" (passage 1). They contain no information about Kenneth Grahame. Missing fact: Kenneth Grahame's profession/identity (i.e., \"Kenneth Grahame was a ___\"). Next hop: retrieve Kenneth Grahame's biography/Wikipedia page or run queries such as \"Kenneth Grahame occupation\" or \"Kenneth Grahame biography 'Wind in the Willows'\" to find his role.",
+      "upstream_context": {
+        "question": "While Michel Foucault  was a French philosopher, what was Kenneth Grahame?",
+        "hop1_query": "While Michel Foucault  was a French philosopher, what was Kenneth Grahame?",
+        "hop1_titles": [
+          "The Passion of Michel Foucault",
+          "Michel Foucault",
+          "What Is an Author?",
+          "The Hermeneutics of the Subject",
+          "Michel Foucault bibliography",
+          "Joseph Tanke",
+          "Power-knowledge"
+        ],
+        "hop1_docs": [
+          "The Passion of Michel Foucault | The Passion of Michel Foucault is a biography of the French philosopher Michel Foucault authored by the American philosopher James Miller.  It was first published in the United States by Simon & Schuster in 1993.",
+          "Michel Foucault | Paul-Michel Foucault (15 October 1926 – 25 June 1984), generally known as Michel Foucault (] ), was a French philosopher, historian of ideas, social theorist, and literary critic.",
+          "What Is an Author? | \"What Is an Author?\"  (French: \"Qu’est-ce qu’un auteur?\")  is a lecture on literary theory given at the Collège de France on 22 February 1969 by French philosopher, sociologist and historian Michel Foucault.",
+          "The Hermeneutics of the Subject | The Hermeneutics of the Subject is a lecture course originally given by the French philosopher and historian Michel Foucault at the Collège de France in the years 1981-1982.  The course details Foucault's elaboration of such concepts as \"practices of the self\" and the \"\", as manifested in what Foucault refers to as their \"golden age\" in Hellenistic Greece and early Rome.  Foucault argues that this period put much more emphasis on taking \"care\" of oneself (\"prendre soin de soi-même\") than knowing oneself, whereas the converse is true today.  \"The Hermeneutics of the Subject\" has been influential in terms of understanding the late Foucault's \"ethical turn\", and has increasingly been attracting more general philosophical attention.",
+          "Michel Foucault bibliography | Michel Foucault (1926–1984) was a prominent twentieth-century French philosopher, who wrote prolifically.  Many of his works were translated into English.  Works from his later years remain unpublished.",
+          "Joseph Tanke | Joseph Tanke (Ph.D. , Boston College; born 1978) is an American philosopher and Associate Professor of Philosophy at the University of Hawaii at Manoa.  His work focuses on Continental philosophy, the history of philosophy, aesthetics, art theory, and historical ontology.  Tanke is known for his analysis of major figures in the French philosophical tradition, such as Michel Foucault and Jacques Rancière.  His book Foucault's Philosophy of Art: A Genealogy of Modernity is one of the first systematic presentations of Michel Foucault's writings on visual art.  Tanke is the first scholar to publish a comprehensive critical introduction to the thought of Jacques Rancière.",
+          "Power-knowledge | Power-knowledge (French: \"le savoir-pouvoir\" ) is a concept coined by the French philosopher Michel Foucault."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Michel Foucault",
+          "sent_id": 0,
+          "sentence": "Paul-Michel Foucault (15 October 1926 – 25 June 1984), generally known as Michel Foucault (] ), was a French philosopher, historian of ideas, social theorist, and literary critic."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Kenneth Grahame"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWhile Michel Foucault  was a French philosopher, what was Kenneth Grahame?\n\nCurrent agent output:\n\"Passages state that \\\"Paul-Michel Foucault (October 15, 1926 – June 25, 1984) ... was a French philosopher, historian of ideas, social theorist, and literary critic\\\" (passage 2) and refer to Foucault as \\\"the French philosopher\\\" (passage 1). They contain no information about Kenneth Grahame. Missing fact: Kenneth Grahame's profession/identity (i.e., \\\"Kenneth Grahame was a ___\\\"). Next hop: retrieve Kenneth Grahame's biography/Wikipedia page or run queries such as \\\"Kenneth Grahame occupation\\\" or \\\"Kenneth Grahame biography 'Wind in the Willows'\\\" to find his role.\"\n\nActual upstream context:\n{\n  \"question\": \"While Michel Foucault  was a French philosopher, what was Kenneth Grahame?\",\n  \"hop1_query\": \"While Michel Foucault  was a French philosopher, what was Kenneth Grahame?\",\n  \"hop1_titles\": [\n    \"The Passion of Michel Foucault\",\n    \"Michel Foucault\",\n    \"What Is an Author?\",\n    \"The Hermeneutics of the Subject\",\n    \"Michel Foucault bibliography\",\n    \"Joseph Tanke\",\n    \"Power-knowledge\"\n  ],\n  \"hop1_docs\": [\n    \"The Passion of Michel Foucault | The Passion of Michel Foucault is a biography of the French philosopher Michel Foucault authored by the American philosopher James Miller.  It was first published in the United States by Simon & Schuster in 1993.\",\n    \"Michel Foucault | Paul-Michel Foucault (15 October 1926 – 25 June 1984), generally known as Michel Foucault (] ), was a French philosopher, historian of ideas, social theorist, and literary critic.\",\n    \"What Is an Author? | \\\"What Is an Author?\\\"  (French: \\\"Qu’est-ce qu’un auteur?\\\")  is a lecture on literary theory given at the Collège de France on 22 February 1969 by French philosopher, sociologist and historian Michel Foucault.\",\n    \"The Hermeneutics of the Subject | The Hermeneutics of the Subject is a lecture course originally given by the French philosopher and historian Michel Foucault at the Collège de France in the years 1981-1982.  The course details Foucault's elaboration of such concepts as \\\"practices of the self\\\" and the \\\"\\\", as manifested in what Foucault refers to as their \\\"golden age\\\" in Hellenistic Greece and early Rome.  Foucault argues that this period put much more emphasis on taking \\\"care\\\" of oneself (\\\"prendre soin de soi-même\\\") than knowing oneself, whereas the converse is true today.  \\\"The Hermeneutics of the Subject\\\" has been influential in terms of understanding the late Foucault's \\\"ethical turn\\\", and has increasingly been attracting more general philosophical attention.\",\n    \"Michel Foucault bibliography | Michel Foucault (1926–1984) was a prominent twentieth-century French philosopher, who wrote prolifically.  Many of his works were translated into English.  Works from his later years remain unpublished.\",\n    \"Joseph Tanke | Joseph Tanke (Ph.D. , Boston College; born 1978) is an American philosopher and Associate Professor of Philosophy at the University of Hawaii at Manoa.  His work focuses on Continental philosophy, the history of philosophy, aesthetics, art theory, and historical ontology.  Tanke is known for his analysis of major figures in the French philosophical tradition, such as Michel Foucault and Jacques Rancière.  His book Foucault's Philosophy of Art: A Genealogy of Modernity is one of the first systematic presentations of Michel Foucault's writings on visual art.  Tanke is the first scholar to publish a comprehensive critical introduction to the thought of Jacques Rancière.\",\n    \"Power-knowledge | Power-knowledge (French: \\\"le savoir-pouvoir\\\" ) is a concept coined by the French philosopher Michel Foucault.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Michel Foucault\",\n    \"sent_id\": 0,\n    \"sentence\": \"Paul-Michel Foucault (15 October 1926 – 25 June 1984), generally known as Michel Foucault (] ), was a French philosopher, historian of ideas, social theorist, and literary critic.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Kenneth Grahame\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence: the retrieved passage states that \\\"Paul-Michel Foucault (15 October 1926 – 25 June 1984) ... was a French philosopher, historian of ideas, social theorist, and literary critic.\\\" This confirms Michel Foucault's identity but provides no information about Kenneth Grahame. Bridge / missing fact needed: Kenneth Grahame's occupation/identity (i.e., \\\"Kenneth Grahame was a ___\\\"). Retrieval direction for next hop: fetch the Kenneth Grahame biography page (title: \\\"Kenneth Grahame\\\") or run targeted queries such as \\\"Kenneth Grahame occupation\\\" or \\\"Kenneth Grahame biography\\\" to obtain his profession.\",\n  \"rationale\": \"The only visible supporting sentence identifies Michel Foucault as a French philosopher et al.; it does not mention Kenneth Grahame. Therefore the next retrieval must target the Kenneth Grahame page (listed as a missing support title) to obtain his occupation.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 12,
+    "row_index": 12
+  }
+}

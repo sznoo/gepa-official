@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "f2dcd4066b1e867aa5de2b94f8f887af5a1026d356145bb656f334c17c2f0d95",
+  "created_at": "2026-07-15T22:03:06.275226+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+      "current_output": "- evidence:\n  - Bertrand Tavernier — passage [1]: \"French director, screenwriter, actor and producer.\"\n  - Charles Giblyn — not mentioned in the supplied passages.\n\n- ambiguities_or_missing:\n  - No passage for Charles Giblyn is present; cannot confirm which occupations he held.\n  - Possible name ambiguity if multiple \"Charles Giblyn\" entries exist (no disambiguation provided).\n\n- missing_facts_or_bridge:\n  - The occupations (e.g., director, screenwriter, actor, producer, etc.) credited to Charles Giblyn are needed to identify the mutual occupations with Bertrand Tavernier.\n\n- retrieval_direction (priority order):\n  1. Retrieve the \"Charles Giblyn\" Wikipedia page (or main biography page).\n  2. Search query: \"Charles Giblyn occupations\" or \"Charles Giblyn film director actor producer biography\".\n  3. Retrieve an authoritative filmography/biography source (e.g., BFI, AllMovie) for Charles Giblyn if Wikipedia is absent or ambiguous.",
+      "upstream_context": {
+        "question": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+        "hop1_query": "Bertrand Tavernier and Charles Giblyn, have which mutual occupations?",
+        "hop1_titles": [
+          "Bertrand Tavernier",
+          "Safe Conduct",
+          "Holy Lola",
+          "Beatrice (film)",
+          "Dans la Nuit (Louis Sclavis album)",
+          "Nils Tavernier",
+          "Round Midnight (film)"
+        ],
+        "hop1_docs": [
+          "Bertrand Tavernier | Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.",
+          "Safe Conduct | Safe Conduct (French: Laissez-passer ) is a 2002 French historical drama film directed by Bertrand Tavernier and written by Tavernier and Jean Cosmos.",
+          "Holy Lola | Holy Lola is a 2004 French drama film that is directed by Bertrand Tavernier.  Tavernier said that the film was very, very moving, very exciting to do, and it made him fall in love with Cambodia.",
+          "Beatrice (film) | Beatrice (French:La passion Béatrice, Italian:Quarto comandamento) is a 1987 French-Italian historical drama film directed by Bertrand Tavernier and starring Bernard-Pierre Donnadieu, Julie Delpy and Nils Tavernier.",
+          "Dans la Nuit (Louis Sclavis album) | Dans la Nuit is an album by French clarinetist Louis Sclavis recorded in 2000 and released on the ECM label.  The album was initialised through an invitation of French director Bertrand Tavernier to Sclavis, he agreed and wrote this music to Charles Vanel’s 1929 film “Dans la nuit”.",
+          "Nils Tavernier | Nils Tavernier (born 1 September 1965) is a French actor and director.  He is best known for his film appearances in \"Beatrice\" (1987), \"Valmont\" (1988), and \"Revenge of the Musketeers\" (1993), and for his directorial efforts \"The Other Side of the Tracks\" (1997), \"Etoiles: Dancers of the Paris Opera Ballet\" (2001), and \"Les enfants de Thiès\" (2001).  He is the son of film director Bertrand Tavernier.",
+          "Round Midnight (film) | Round Midnight is a 1986 American-French musical drama film directed by Bertrand Tavernier and written by Tavernier and David Rayfiel.  It stars Dexter Gordon, François Cluzet and Herbie Hancock.  Martin Scorsese, Philippe Noiret and Wayne Shorter appear in cameos."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Bertrand Tavernier",
+          "sent_id": 0,
+          "sentence": "Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Charles Giblyn"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nBertrand Tavernier and Charles Giblyn, have which mutual occupations?\n\nCurrent agent output:\n\"- evidence:\\n  - Bertrand Tavernier — passage [1]: \\\"French director, screenwriter, actor and producer.\\\"\\n  - Charles Giblyn — not mentioned in the supplied passages.\\n\\n- ambiguities_or_missing:\\n  - No passage for Charles Giblyn is present; cannot confirm which occupations he held.\\n  - Possible name ambiguity if multiple \\\"Charles Giblyn\\\" entries exist (no disambiguation provided).\\n\\n- missing_facts_or_bridge:\\n  - The occupations (e.g., director, screenwriter, actor, producer, etc.) credited to Charles Giblyn are needed to identify the mutual occupations with Bertrand Tavernier.\\n\\n- retrieval_direction (priority order):\\n  1. Retrieve the \\\"Charles Giblyn\\\" Wikipedia page (or main biography page).\\n  2. Search query: \\\"Charles Giblyn occupations\\\" or \\\"Charles Giblyn film director actor producer biography\\\".\\n  3. Retrieve an authoritative filmography/biography source (e.g., BFI, AllMovie) for Charles Giblyn if Wikipedia is absent or ambiguous.\"\n\nActual upstream context:\n{\n  \"question\": \"Bertrand Tavernier and Charles Giblyn, have which mutual occupations?\",\n  \"hop1_query\": \"Bertrand Tavernier and Charles Giblyn, have which mutual occupations?\",\n  \"hop1_titles\": [\n    \"Bertrand Tavernier\",\n    \"Safe Conduct\",\n    \"Holy Lola\",\n    \"Beatrice (film)\",\n    \"Dans la Nuit (Louis Sclavis album)\",\n    \"Nils Tavernier\",\n    \"Round Midnight (film)\"\n  ],\n  \"hop1_docs\": [\n    \"Bertrand Tavernier | Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.\",\n    \"Safe Conduct | Safe Conduct (French: Laissez-passer ) is a 2002 French historical drama film directed by Bertrand Tavernier and written by Tavernier and Jean Cosmos.\",\n    \"Holy Lola | Holy Lola is a 2004 French drama film that is directed by Bertrand Tavernier.  Tavernier said that the film was very, very moving, very exciting to do, and it made him fall in love with Cambodia.\",\n    \"Beatrice (film) | Beatrice (French:La passion Béatrice, Italian:Quarto comandamento) is a 1987 French-Italian historical drama film directed by Bertrand Tavernier and starring Bernard-Pierre Donnadieu, Julie Delpy and Nils Tavernier.\",\n    \"Dans la Nuit (Louis Sclavis album) | Dans la Nuit is an album by French clarinetist Louis Sclavis recorded in 2000 and released on the ECM label.  The album was initialised through an invitation of French director Bertrand Tavernier to Sclavis, he agreed and wrote this music to Charles Vanel’s 1929 film “Dans la nuit”.\",\n    \"Nils Tavernier | Nils Tavernier (born 1 September 1965) is a French actor and director.  He is best known for his film appearances in \\\"Beatrice\\\" (1987), \\\"Valmont\\\" (1988), and \\\"Revenge of the Musketeers\\\" (1993), and for his directorial efforts \\\"The Other Side of the Tracks\\\" (1997), \\\"Etoiles: Dancers of the Paris Opera Ballet\\\" (2001), and \\\"Les enfants de Thiès\\\" (2001).  He is the son of film director Bertrand Tavernier.\",\n    \"Round Midnight (film) | Round Midnight is a 1986 American-French musical drama film directed by Bertrand Tavernier and written by Tavernier and David Rayfiel.  It stars Dexter Gordon, François Cluzet and Herbie Hancock.  Martin Scorsese, Philippe Noiret and Wayne Shorter appear in cameos.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Bertrand Tavernier\",\n    \"sent_id\": 0,\n    \"sentence\": \"Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Charles Giblyn\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"- evidence:\\n  - Bertrand Tavernier — \\\"Bertrand Tavernier (born 25 April 1941) is a French director, screenwriter, actor and producer.\\\" (first-hop document)\\n  - Charles Giblyn — no first-hop document provided for Charles Giblyn in the retrieved set.\\n\\n- ambiguities_or_missing:\\n  - No information about Charles Giblyn's occupations is present in the first-hop results, so mutual occupations cannot be determined yet.\\n  - Possible name ambiguity for Charles Giblyn (no disambiguation provided) should be considered when retrieving.\\n\\n- missing_facts_or_bridge:\\n  - The occupations credited to Charles Giblyn (e.g., whether he was a director, screenwriter, actor, producer, etc.) are the required missing facts to identify which occupations he shares with Bertrand Tavernier.\\n\\n- retrieval_direction (priority order):\\n  1. Retrieve the \\\"Charles Giblyn\\\" main biography/Wikipedia page.\\n  2. Search queries: \\\"Charles Giblyn occupations\\\", \\\"Charles Giblyn biography\\\", or \\\"Charles Giblyn film director actor producer\\\".\\n  3. If Wikipedia is unavailable or ambiguous, consult authoritative filmography/biography sources (e.g., BFI, AllMovie, IMDb) for Charles Giblyn's credited occupations.\\n\\n- output_role_note: This is a summary of first-hop evidence and the bridge (Charles Giblyn occupations) needed for the next retrieval hop; not a final answer.\",\n  \"rationale\": \"The only confirmed first-hop evidence is the Bertrand Tavernier entry stating he is a French director, screenwriter, actor and producer. No first-hop document for Charles Giblyn was provided, so the occupations attributed to Giblyn are the missing bridge fact required to determine mutual occupations.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 47,
+    "row_index": 47
+  }
+}

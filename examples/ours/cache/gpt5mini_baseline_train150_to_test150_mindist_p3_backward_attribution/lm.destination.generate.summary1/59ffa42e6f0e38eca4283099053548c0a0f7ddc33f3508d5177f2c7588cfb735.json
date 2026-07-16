@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "59ffa42e6f0e38eca4283099053548c0a0f7ddc33f3508d5177f2c7588cfb735",
+  "created_at": "2026-07-14T18:02:12.533688+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+      "current_output": "Victoria Sinitsina (ice dancer) — 2016 Russian national silver\n- Fact: Victoria Alexandrovna Sinitsina — born 29 April 1995 (Russian ice dancer).\n- Fact: \"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\"\n- Missing bridge fact: none — the passages explicitly state the partner relation (no additional retrieval needed).\n- Next retrieval (optional verification): Victoria Sinitsina article — lede/infobox or \"Career\" section; otherwise no further retrieval.",
+      "upstream_context": {
+        "question": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "hop1_query": "Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?",
+        "hop1_titles": [
+          "Victoria Sinitsina",
+          "Pavel Drozd",
+          "Alexandra Stepanova",
+          "Kirill Aleshin",
+          "Valeria Zenkova",
+          "Egor Bazin",
+          "Lyudmila Yurlova"
+        ],
+        "hop1_docs": [
+          "Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.",
+          "Pavel Drozd | Pavel Igorevich Drozd (Russian: Павел Игоревич Дрозд ; born 14 December 1995) is a Russian ice dancer.  With his skating partner, Alla Loboda, he is a two-time World Junior medalist (silver in 2017, bronze in 2016), a three-time JGP Final silver medalist (2014–15, 2015–16, 2016–17), and the 2016 Russian junior national champion.",
+          "Alexandra Stepanova | Alexandra Nikolayevna Stepanova (Russian: Александра Николаевна Степанова ; born 19 August 1995) is a Russian ice dancer.  With partner Ivan Bukin, she is the 2015 European bronze medalist, a three-time medalist on the Grand Prix series, a two-time Finlandia Trophy champion (2014, 2016), and a three-time Russian national medalist (2017 silver, 2015 and 2016 bronze).  On the junior level, they won the 2013 World Junior Championships, 2012–13 JGP Final, and 2014 Russian Junior Championships.",
+          "Kirill Aleshin | Kirill Pavlovich Aleshin (Russian: Кирилл Павлович Алёшин ; born 24 April 1997) is a Russian ice dancer.  With partner Anastasia Skoptsova, he won two medals at the 2016 Winter Youth Olympics – bronze in ice dancing and gold in the team event.",
+          "Valeria Zenkova | Valeria Maximovna Zenkova (Russian: Валерия Максимовна Зенкова ; born 7 April 1995) is a Russian ice dancer.  With partner Valerie Sinitsin, she won five ISU Junior Grand Prix medals, including one gold, and placed fourth at the 2013 World Junior Championships.  They are the 2013 Russian junior champions.",
+          "Egor Bazin | Egor Yuryevich Bazin (Russian: Егор Юрьевич Базин , born 13 September 1995) is a Russian ice dancer.  With partner Sofia Evdokimova, he is the 2017 Winter Universiade silver medalist and 2016 Ice Star bronze medalist.",
+          "Lyudmila Yurlova | Lyudmila Petrovna Yurlova (Russian: Людмила Петровна Юрлова , 1 April 1972 – 28 November 2016) was a Russian ice hockey forward.  She was part of the national teams that won a silver medal at the 1996 European Championships and a bronze at the 2001 World Championships."
+        ]
+      },
+      "visible_gold_support": [
+        {
+          "title": "Victoria Sinitsina",
+          "sent_id": 0,
+          "sentence": "Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer."
+        }
+      ],
+      "missing_support_targets": [
+        {
+          "title": "Nikita Katsalapov"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWho won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\n\nCurrent agent output:\n\"Victoria Sinitsina (ice dancer) — 2016 Russian national silver\\n- Fact: Victoria Alexandrovna Sinitsina — born 29 April 1995 (Russian ice dancer).\\n- Fact: \\\"With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\\\"\\n- Missing bridge fact: none — the passages explicitly state the partner relation (no additional retrieval needed).\\n- Next retrieval (optional verification): Victoria Sinitsina article — lede/infobox or \\\"Career\\\" section; otherwise no further retrieval.\"\n\nActual upstream context:\n{\n  \"question\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"hop1_query\": \"Who won the 2016 Russian national silver medal with another Russian ice dancer born 29 April 1995?\",\n  \"hop1_titles\": [\n    \"Victoria Sinitsina\",\n    \"Pavel Drozd\",\n    \"Alexandra Stepanova\",\n    \"Kirill Aleshin\",\n    \"Valeria Zenkova\",\n    \"Egor Bazin\",\n    \"Lyudmila Yurlova\"\n  ],\n  \"hop1_docs\": [\n    \"Victoria Sinitsina | Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.  With Nikita Katsalapov, she is the 2016 Russian national silver medalist.\",\n    \"Pavel Drozd | Pavel Igorevich Drozd (Russian: Павел Игоревич Дрозд ; born 14 December 1995) is a Russian ice dancer.  With his skating partner, Alla Loboda, he is a two-time World Junior medalist (silver in 2017, bronze in 2016), a three-time JGP Final silver medalist (2014–15, 2015–16, 2016–17), and the 2016 Russian junior national champion.\",\n    \"Alexandra Stepanova | Alexandra Nikolayevna Stepanova (Russian: Александра Николаевна Степанова ; born 19 August 1995) is a Russian ice dancer.  With partner Ivan Bukin, she is the 2015 European bronze medalist, a three-time medalist on the Grand Prix series, a two-time Finlandia Trophy champion (2014, 2016), and a three-time Russian national medalist (2017 silver, 2015 and 2016 bronze).  On the junior level, they won the 2013 World Junior Championships, 2012–13 JGP Final, and 2014 Russian Junior Championships.\",\n    \"Kirill Aleshin | Kirill Pavlovich Aleshin (Russian: Кирилл Павлович Алёшин ; born 24 April 1997) is a Russian ice dancer.  With partner Anastasia Skoptsova, he won two medals at the 2016 Winter Youth Olympics – bronze in ice dancing and gold in the team event.\",\n    \"Valeria Zenkova | Valeria Maximovna Zenkova (Russian: Валерия Максимовна Зенкова ; born 7 April 1995) is a Russian ice dancer.  With partner Valerie Sinitsin, she won five ISU Junior Grand Prix medals, including one gold, and placed fourth at the 2013 World Junior Championships.  They are the 2013 Russian junior champions.\",\n    \"Egor Bazin | Egor Yuryevich Bazin (Russian: Егор Юрьевич Базин , born 13 September 1995) is a Russian ice dancer.  With partner Sofia Evdokimova, he is the 2017 Winter Universiade silver medalist and 2016 Ice Star bronze medalist.\",\n    \"Lyudmila Yurlova | Lyudmila Petrovna Yurlova (Russian: Людмила Петровна Юрлова , 1 April 1972 – 28 November 2016) was a Russian ice hockey forward.  She was part of the national teams that won a silver medal at the 1996 European Championships and a bronze at the 2001 World Championships.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[\n  {\n    \"title\": \"Victoria Sinitsina\",\n    \"sent_id\": 0,\n    \"sentence\": \"Victoria Alexandrovna Sinitsina (Russian: Виктория Александровна Синицина ; born 29 April 1995) is a Russian ice dancer.\"\n  }\n]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Nikita Katsalapov\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"Summary of first-hop evidence:\\n- Victoria Alexandrovna Sinitsina — born 29 April 1995 — Russian ice dancer (matches the query’s 29 April 1995 birthdate criterion).\\nBridge / missing fact needed for next hop:\\n- The identity and competitive record of Sinitsina’s skating partner (i.e., whether that partner won the 2016 Russian national silver with her).\\nCompact retrieval direction for the next agent:\\n- Retrieve the Nikita Katsalapov page (lede/infobox and \\\"Career\\\" / \\\"Competitive highlights\\\") to confirm partner relationship and whether that pairing won the 2016 Russian national silver. As an alternative/verification, retrieve Victoria Sinitsina’s \\\"Career\\\" or \\\"Competitive highlights\\\" sections to confirm partner and the 2016 Russian Nationals result.\\nNote: This is a summary of first-hop evidence and a retrieval plan; it does not assert any unseen second-hop facts.\",\n  \"rationale\": \"Visible first-hop evidence only establishes that Victoria Sinitsina is a Russian ice dancer born 29 April 1995. The query asks who won the 2016 Russian national silver with a Russian ice dancer born that date, so the next necessary fact is Sinitsina’s partner and that partner’s 2016 Nationals result. The missing-support title 'Nikita Katsalapov' is a direct retrieval target to confirm the partnership and the 2016 silver result.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 119,
+    "row_index": 119
+  }
+}

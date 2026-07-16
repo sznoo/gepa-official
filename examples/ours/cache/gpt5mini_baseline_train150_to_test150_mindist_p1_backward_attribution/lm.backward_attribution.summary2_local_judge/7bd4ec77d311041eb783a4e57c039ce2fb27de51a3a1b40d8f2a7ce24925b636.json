@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "7bd4ec77d311041eb783a4e57c039ce2fb27de51a3a1b40d8f2a7ce24925b636",
+  "created_at": "2026-07-14T16:18:46.058563+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+      "source_summary": "{\"summary\":\"Both Ronnie Dunn and Jenna Sanz-Agero are identified as singers/vocalists. Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer-songwriter who served as a vocalist in the duo Brooks & Dunn.\"}",
+      "target_summary": "Integrated evidence summary:\n\n- Jenna Sanz-Agero: Jenna Sanz-Agero is described in the retrieved material as \"the former lead singer of the female rock group Vixen.\" (visible support)\n\n- Ronnie Dunn: The retrieved material identifies Ronnie Gene Dunn as \"an American country music singer-songwriter.\" (visible support) Summary_1 additionally notes that the duo Brooks & Dunn consisted of Kix Brooks and Ronnie Dunn, described there as \"both vocalists and songwriters.\" (summary_1)\n\nThese retained facts (Jenna explicitly labeled a former lead singer; Ronnie identified as a singer-songwriter and described in summary_1 as one of Brooks & Dunn's vocalists/songwriters) provide the evidence needed for the final-answer agent to determine the roles each performed in their bands.",
+      "candidate_summary": "Integrated evidence summary:\n\n- Jenna Sanz-Agero: Jenna Sanz-Agero is described in the retrieved material as \"the former lead singer of the female rock group Vixen.\" (visible support)\n\n- Ronnie Dunn: The retrieved material identifies Ronnie Gene Dunn as \"an American country music singer-songwriter.\" (visible support) Summary_1 additionally notes that the duo Brooks & Dunn consisted of Kix Brooks and Ronnie Dunn, described there as \"both vocalists and songwriters.\" (summary_1)\n\nThese retained facts (Jenna explicitly labeled a former lead singer; Ronnie identified as a singer-songwriter and described in summary_1 as one of Brooks & Dunn's vocalists/songwriters) provide the evidence needed for the final-answer agent to determine the roles each performed in their bands."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nRonnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\n\nSource summary2:\n{\"summary\":\"Both Ronnie Dunn and Jenna Sanz-Agero are identified as singers/vocalists. Jenna Sanz-Agero is the former lead singer of the female rock group Vixen. Ronnie Dunn is an American country music singer-songwriter who served as a vocalist in the duo Brooks & Dunn.\"}\n\nTarget summary2:\nIntegrated evidence summary:\n\n- Jenna Sanz-Agero: Jenna Sanz-Agero is described in the retrieved material as \"the former lead singer of the female rock group Vixen.\" (visible support)\n\n- Ronnie Dunn: The retrieved material identifies Ronnie Gene Dunn as \"an American country music singer-songwriter.\" (visible support) Summary_1 additionally notes that the duo Brooks & Dunn consisted of Kix Brooks and Ronnie Dunn, described there as \"both vocalists and songwriters.\" (summary_1)\n\nThese retained facts (Jenna explicitly labeled a former lead singer; Ronnie identified as a singer-songwriter and described in summary_1 as one of Brooks & Dunn's vocalists/songwriters) provide the evidence needed for the final-answer agent to determine the roles each performed in their bands.\n\nCandidate summary2:\nIntegrated evidence summary:\n\n- Jenna Sanz-Agero: Jenna Sanz-Agero is described in the retrieved material as \"the former lead singer of the female rock group Vixen.\" (visible support)\n\n- Ronnie Dunn: The retrieved material identifies Ronnie Gene Dunn as \"an American country music singer-songwriter.\" (visible support) Summary_1 additionally notes that the duo Brooks & Dunn consisted of Kix Brooks and Ronnie Dunn, described there as \"both vocalists and songwriters.\" (summary_1)\n\nThese retained facts (Jenna explicitly labeled a former lead singer; Ronnie identified as a singer-songwriter and described in summary_1 as one of Brooks & Dunn's vocalists/songwriters) provide the evidence needed for the final-answer agent to determine the roles each performed in their bands.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate matches the target's facts: Jenna is the former lead singer of Vixen and Ronnie is an American singer-songwriter; it also includes the summary_1 detail that Brooks & Dunn (Kix Brooks and Ronnie Dunn) were both vocalists and songwriters. This does not contradict the source and adds the duo-membership/vocalist-songwriter detail beyond the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 57,
+    "row_index": 57,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

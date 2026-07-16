@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a6ef3c9def2f76d18d8b7926b093c76ba4da1b3562cfc06a93329cecc1959c8d",
+  "created_at": "2026-07-14T19:01:50.308023+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Are the Films Nitrate Kisses and Italy in a Day documentaries?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Are the Films Nitrate Kisses and Italy in a Day documentaries?",
+        "summary_1": "Yes. Nitrate Kisses is an experimental documentary (1992) and Italy in a Day is a 2014 Italian-British documentary.",
+        "summary_2": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.",
+        "current_output": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "yes",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Are the Films Nitrate Kisses and Italy in a Day documentaries?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Are the Films Nitrate Kisses and Italy in a Day documentaries?\",\n  \"summary_1\": \"Yes. Nitrate Kisses is an experimental documentary (1992) and Italy in a Day is a 2014 Italian-British documentary.\",\n  \"summary_2\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\",\n  \"current_output\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Yes. Nitrate Kisses is an experimental documentary (1992), and Italy in a Day is a 2014 Italian–British documentary.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"yes\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If both summary_1 and summary_2 explicitly state that each named film is a documentary (i.e., the summaries contain the token 'documentary' applied to the films in question), apply this update.\",\n    \"preserve_rule\": \"Keep using the provided summaries as the sole evidence source and retain the agent's obligation to answer concisely and truthfully according to that evidence and the base prompt's final-answer interface.\",\n    \"change_rule\": \"When the trigger is met, replace any verbose sentence-level answer with exactly one lowercase single-token answer that conveys affirmation or negation. Determine which token to emit by aggregating the visible summaries: if they consistently assert the films are documentaries, emit the single affirmative token; if they consistently assert they are not, emit the single negative token; if summaries conflict or do not clearly support either, follow the base prompt's default (e.g., abstain or indicate uncertainty) using the minimal single-token form. Do not add any other words, punctuation, explanation, or copy of summary text.\",\n    \"drop_or_avoid_rule\": \"Avoid including film titles, dates, explanatory clauses, capitalization, punctuation, quotes, or any extra text outside the single token. Do not reproduce long spans from the summaries or produce multi-word answers.\",\n    \"output_contract\": \"The produced field 'answer' must consist of exactly one lowercase token (an affirmative or negative token) and nothing else. Ensure this token is the only content in the final-answer block.\",\n    \"why_local_transition\": \"The current output is a full sentence repeating summary details; the final-answer contract requires a minimal answer token. This small behavior change maps the existing correct judgment (supported by both summaries) to the required minimal output format without altering evidence use.\"\n  },\n  \"rationale\": \"This delta is the smallest coherent behavioral change: it preserves the agent's reliance on the provided summaries and only tightens the output format to a single lowercase token when the evidence is clearly affirmative or negative. It avoids introducing new reasoning steps or changing how evidence is used, and it prevents leakage of summary text or extra explanation while satisfying the final-answer interface.\"  \n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 65,
+    "row_index": 65,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

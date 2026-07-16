@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "0bba4224aa9df1c30ccca46c3f9f41653d6becdc2c5b796839261264dd8eeee8",
+  "created_at": "2026-07-14T13:42:30.475672+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When both summary_1 and summary_2 present the same unambiguous binary conclusion about the question (for example, both state the two genera are not from the same country).",
+            "preserve_rule": "Continue to use the provided summaries as the authoritative evidence for deciding the binary answer. Retain internal consideration of the summaries' facts, but do not echo those facts in the final answer.",
+            "change_rule": "If the summaries agree on a clear yes/no conclusion, emit only a single lowercase word corresponding to that binary conclusion (no additional words, punctuation, or explanation) as the answer field.",
+            "drop_or_avoid_rule": "Do not produce full sentences, explanatory clauses, or repeat summary details in the answer. Avoid capitalization, trailing punctuation, or any extra tokens beyond the single word answer.",
+            "output_contract": "Populate [[ ## answer ## ]] with exactly one lowercase word that represents the consensus binary answer indicated by the summaries, and nothing else (no punctuation, no surrounding text).",
+            "why_local_transition": "The source output gives a full-sentence explanation despite both summaries agreeing on the same binary conclusion. This small behavioral change compresses that agreed conclusion into the minimal single-word answer required by the final-answer contract while preserving reliance on the same summary evidence."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Are Leucogenes and Stylophorum from the same country?",
+        "summary_1": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China.",
+        "summary_2": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.",
+        "current_output": "No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When both summary_1 and summary_2 present the same unambiguous binary conclusion about the question (for example, both state the two genera are not from the same country).\",\n      \"preserve_rule\": \"Continue to use the provided summaries as the authoritative evidence for deciding the binary answer. Retain internal consideration of the summaries' facts, but do not echo those facts in the final answer.\",\n      \"change_rule\": \"If the summaries agree on a clear yes/no conclusion, emit only a single lowercase word corresponding to that binary conclusion (no additional words, punctuation, or explanation) as the answer field.\",\n      \"drop_or_avoid_rule\": \"Do not produce full sentences, explanatory clauses, or repeat summary details in the answer. Avoid capitalization, trailing punctuation, or any extra tokens beyond the single word answer.\",\n      \"output_contract\": \"Populate [[ ## answer ## ]] with exactly one lowercase word that represents the consensus binary answer indicated by the summaries, and nothing else (no punctuation, no surrounding text).\",\n      \"why_local_transition\": \"The source output gives a full-sentence explanation despite both summaries agreeing on the same binary conclusion. This small behavioral change compresses that agreed conclusion into the minimal single-word answer required by the final-answer contract while preserving reliance on the same summary evidence.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Are Leucogenes and Stylophorum from the same country?\",\n  \"summary_1\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China.\",\n  \"summary_2\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.\",\n  \"current_output\": \"No. Leucogenes is native to New Zealand, while Stylophorum is native to eastern North America and China, so they are not from the same country.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"no\",\n  \"rationale\": \"Both summaries present the same binary conclusion (no); applied the ordered rule to emit the single lowercase consensus word.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 131,
+    "row_index": 131,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

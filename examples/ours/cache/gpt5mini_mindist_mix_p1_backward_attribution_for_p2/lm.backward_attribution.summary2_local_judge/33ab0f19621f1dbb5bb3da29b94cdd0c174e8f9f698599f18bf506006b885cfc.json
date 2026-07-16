@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "33ab0f19621f1dbb5bb3da29b94cdd0c174e8f9f698599f18bf506006b885cfc",
+  "created_at": "2026-07-14T21:08:55.714887+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "What do the Lost McLeod Mine and the Colomac Mine have in common?",
+      "source_summary": "Lost McLeod Mine and Colomac Mine are both mines located in the Northwest Territories of Canada.",
+      "target_summary": "Integrated evidence summary:\n- Lost McLeod Mine: \"Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.\"\n- Colomac Mine: \"The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .\"\nThese retrieved sentences explicitly place each mine in the Northwest Territories of Canada; those location facts are the key evidence for determining what the two entries have in common.",
+      "candidate_summary": "Integrated evidence summary:\n- Lost McLeod Mine: \"Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.\"\n- Colomac Mine: \"The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .\"\nThese retrieved sentences explicitly place each mine in the Northwest Territories of Canada; those location facts are the key evidence for determining what the two entries have in common."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhat do the Lost McLeod Mine and the Colomac Mine have in common?\n\nSource summary2:\nLost McLeod Mine and Colomac Mine are both mines located in the Northwest Territories of Canada.\n\nTarget summary2:\nIntegrated evidence summary:\n- Lost McLeod Mine: \"Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.\"\n- Colomac Mine: \"The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .\"\nThese retrieved sentences explicitly place each mine in the Northwest Territories of Canada; those location facts are the key evidence for determining what the two entries have in common.\n\nCandidate summary2:\nIntegrated evidence summary:\n- Lost McLeod Mine: \"Lost McLeod Mine is a legend of a lost mine in the Northwest Territories of Canada.\"\n- Colomac Mine: \"The Colomac Mine was a privately owned and operated open pit gold mine located 220 km northwest of Yellowknife in the Northwest Territories in Canada .\"\nThese retrieved sentences explicitly place each mine in the Northwest Territories of Canada; those location facts are the key evidence for determining what the two entries have in common.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate reproduces the target's evidence verbatim: both entries are placed in the Northwest Territories, with added specifics (Lost McLeod as a legend; Colomac as an open-pit gold mine 220 km NW of Yellowknife). This does not contradict the source (which states both are mines in the NWT) and adds task-relevant details beyond the source.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 56,
+    "row_index": 56,
+    "judge_phase": "destination_gate",
+    "agent": "summary2"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "2994d88e962ac434b438ea0073797db55b9b59581738561bc181c793c94cf66d",
+  "created_at": "2026-07-14T13:37:17.210839+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Which building near Convention Center station used to be the home of the St. Louis Rams?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Which building near Convention Center station used to be the home of the St. Louis Rams?",
+        "summary_1": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome) was the home of the St. Louis Rams.",
+        "summary_2": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).",
+        "current_output": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "The Dome at America's Center",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Which building near Convention Center station used to be the home of the St. Louis Rams?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Which building near Convention Center station used to be the home of the St. Louis Rams?\",\n  \"summary_1\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome) was the home of the St. Louis Rams.\",\n  \"summary_2\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).\",\n  \"current_output\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"The Dome at America's Center (formerly the Edward Jones Dome / Trans World Dome).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"The Dome at America's Center\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When any visible summary or the agent's current_output contains parenthetical aliases, 'formerly', or slash-separated alternate names (e.g., text with '(' or 'formerly' or '/').\",\n    \"preserve_rule\": \"Keep using the provided summaries as the evidence source and preserve the agent's existing final-answer format and minimal-answer intent. Do not add new facts or external information.\",\n    \"change_rule\": \"If triggered, produce the canonical name by removing parenthetical phrases and obvious alternate-name fragments: take the substring of the cited phrase up to (but not including) the first parenthesis '(', the first ' / ' slash separator, or an explicit 'formerly' marker; also remove trailing periods and redundant whitespace. Emit only that cleaned core name as the answer.\",\n    \"drop_or_avoid_rule\": \"Do not include former names, parenthetical qualifiers, slash-separated aliases, explanatory clauses, or trailing punctuation in the final answer. Avoid adding context, qualifiers, or any text not present in the minimal cleaned core name extracted from the visible summaries.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the single minimal canonical name string (the cleaned core name as produced by change_rule). No parentheses, no aliases, no trailing period, and no extra commentary or labels.\",\n    \"why_local_transition\": \"This edge narrows formatting from a verbose string (which included parenthetical former names) to the concise canonical building name required by the endpoint, without changing evidence or adding facts.\"\n  },\n  \"rationale\": \"The current output includes parenthetical former names and punctuation; the target requires a minimal canonical name. The smallest safe behavioral change is a deterministic cleaning rule that strips parenthetical aliases and slash-separated alternatives while preserving the original evidence and the agent's minimal-answer contract. This preserves existing selection logic and only alters output formatting to match the expected concise form.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 18,
+    "row_index": 18,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

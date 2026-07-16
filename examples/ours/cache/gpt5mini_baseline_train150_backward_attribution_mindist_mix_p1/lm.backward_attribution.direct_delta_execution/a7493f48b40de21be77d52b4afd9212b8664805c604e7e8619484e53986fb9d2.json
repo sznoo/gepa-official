@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "a7493f48b40de21be77d52b4afd9212b8664805c604e7e8619484e53986fb9d2",
+  "created_at": "2026-07-14T19:01:53.311265+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If summary_1 contains language like \"I can't tell which came first\" or \"do not include information about\" for the titles mentioned in `question`, and the current output is a multi-option clarification asking the user to provide passages or permit a search.",
+            "preserve_rule": "Keep the agent's role (produce a single second-hop retrieval query) and retain any useful title text that already appears in the visible inputs (the `question` field). Do not change how the agent receives inputs or returns the `query` field.",
+            "change_rule": "Instead of emitting a multi-option clarification, generate one compact, search-oriented query line that lists the two titles as they appear in the question followed by the core comparison phrasing. Do not ask the user for permission, do not offer choices, and do not include additional explanatory text. Example form (use exact visible-title strings, avoid adding new disambiguators): \"Mala Mala Train Life Did Mala Mala or Train Life come first?\"",
+            "drop_or_avoid_rule": "Avoid user-facing options, permission requests, multi-step prompts, explanatory sentences, or added disambiguation labels not present in the visible inputs (no parentheses or editorial tags). Do not output answers or summaries—only the single retrieval query string.",
+            "output_contract": "Produce exactly one short, single-line query string for the `query` field that (a) contains both item names as in the question, and (b) includes the concise comparative question text. No extra lines, no commentary, and no additional fields.",
+            "why_local_transition": "The first hop lacked the titles' release information; replacing the multi-option clarification with a compact query directly targets second-hop retrieval for both items, increasing the chance of retrieving the missing support without changing other agent behaviors."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Did Mala Mala or Train Life come first?",
+        "summary_1": "I can't tell which came first because the provided passages do not include information about either \"Mala Mala\" or \"Train Life.\" Please provide passages or context (e.g., whether these are films, songs, albums, or games) or allow a web search so I can compare their release dates.",
+        "current_output": {
+          "query": "Which do you prefer: provide the passages or release details for each title, confirm the exact type/titles, or let me perform a web search to find and compare their release dates? If you choose to provide details, paste them here; if web search is OK, I will look up both items and report which came first."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If summary_1 contains language like \\\"I can't tell which came first\\\" or \\\"do not include information about\\\" for the titles mentioned in `question`, and the current output is a multi-option clarification asking the user to provide passages or permit a search.\",\n      \"preserve_rule\": \"Keep the agent's role (produce a single second-hop retrieval query) and retain any useful title text that already appears in the visible inputs (the `question` field). Do not change how the agent receives inputs or returns the `query` field.\",\n      \"change_rule\": \"Instead of emitting a multi-option clarification, generate one compact, search-oriented query line that lists the two titles as they appear in the question followed by the core comparison phrasing. Do not ask the user for permission, do not offer choices, and do not include additional explanatory text. Example form (use exact visible-title strings, avoid adding new disambiguators): \\\"Mala Mala Train Life Did Mala Mala or Train Life come first?\\\"\",\n      \"drop_or_avoid_rule\": \"Avoid user-facing options, permission requests, multi-step prompts, explanatory sentences, or added disambiguation labels not present in the visible inputs (no parentheses or editorial tags). Do not output answers or summaries—only the single retrieval query string.\",\n      \"output_contract\": \"Produce exactly one short, single-line query string for the `query` field that (a) contains both item names as in the question, and (b) includes the concise comparative question text. No extra lines, no commentary, and no additional fields.\",\n      \"why_local_transition\": \"The first hop lacked the titles' release information; replacing the multi-option clarification with a compact query directly targets second-hop retrieval for both items, increasing the chance of retrieving the missing support without changing other agent behaviors.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Did Mala Mala or Train Life come first?\",\n  \"summary_1\": \"I can't tell which came first because the provided passages do not include information about either \\\"Mala Mala\\\" or \\\"Train Life.\\\" Please provide passages or context (e.g., whether these are films, songs, albums, or games) or allow a web search so I can compare their release dates.\",\n  \"current_output\": {\n    \"query\": \"Which do you prefer: provide the passages or release details for each title, confirm the exact type/titles, or let me perform a web search to find and compare their release dates? If you choose to provide details, paste them here; if web search is OK, I will look up both items and report which came first.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Mala Mala Train Life Did Mala Mala or Train Life come first?\"\n  },\n  \"rationale\": \"Replaced the multi-option clarification with a single compact retrieval query that lists both exact titles and the concise comparative phrasing as required by the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 75,
+    "row_index": 75,
+    "bisection_round": 0,
+    "agent": "query",
+    "n_edges": 1
+  }
+}

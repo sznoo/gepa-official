@@ -1,0 +1,242 @@
+{
+  "schema_version": 1,
+  "namespace": "forward",
+  "key": "1a2ee9206a2bec2c52eb79b61a5e199fb021933848a956a1e0b7b5e96564b95d",
+  "created_at": "2026-07-16T02:49:51.039609+00:00",
+  "request": {
+    "sample_id": null,
+    "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+    "answer": "Predator's Gold",
+    "context": {
+      "title": [
+        "Larklight",
+        "Here Lies Arthur",
+        "Mortal Engines Quartet",
+        "Starcross (novel)",
+        "A Web of Air",
+        "Traction City (novella)",
+        "Fever Crumb Series",
+        "Mortal Engines",
+        "Infernal Devices (Philip Reeve novel)",
+        "Mothstorm"
+      ],
+      "sentences": [
+        [
+          "Larklight, or the Revenge of the White Spiders!",
+          " or to Saturn's Rings and Back!",
+          " is a young adult novel by author Philip Reeve.",
+          " Illustrated by David Wyatt, it is the first book in the Larklight Trilogy."
+        ],
+        [
+          "Here Lies Arthur is a young-adult novel by Philip Reeve, published by Scholastic in 2007.",
+          " Set in fifth or sixth century Britain and the Anglo-Saxon invasion, it features a girl who participates in the deliberate construction of legendary King Arthur during the man's lifetime, orchestrated by a bard.",
+          " Reeve calls it a back-creation: not a genuine historical novel as it is not based on actual specific events; rather it is \"back-created\" from the legends, giving them a \"realistic\" origin."
+        ],
+        [
+          "The Mortal Engines Quartet is a tetralogy consisting of four novels written by the British author Philip Reeve: \"Mortal Engines\" (2001), \"Predator's Gold\" (2003), \"Infernal Devices\" (2005), and \"A Darkling Plain\" (2006).",
+          " It has also been referred to as the Predator Cities Quartet or the Hungry City Chronicles, although the author has objected to those names."
+        ],
+        [
+          "Starcross, or the Coming of the Moobs!",
+          " or Our Adventures in the Fourth Dimension!",
+          " is a young adult novel by Philip Reeve, released in October 2007.",
+          " Illustrated by David Wyatt, it is the second book in the \"Larklight\" trilogy, sequel to the 2006 novel \"Larklight\"."
+        ],
+        [
+          "A Web of Air is a young adult post-apocalyptic science fiction novel by Philip Reeve.",
+          " The sequel to \"Fever Crumb\", it is the second book in the Mortal Engines Quartet prequel series.",
+          " It was published in April 2010."
+        ],
+        [
+          "Traction City is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet it was released as a flip book alongside Chris Priestlys' teachers tales of terror for World Book Day."
+        ],
+        [
+          "The Fever Crumb Series is the title of a series of novels written by British author, Philip Reeve, and is the prequel series to his critically acclaimed \"Mortal Engines Quartet\".",
+          " As of 2015 the series consists of three books: \"Fever Crumb\" (2009), \"A Web of Air\" (2010), and \"Scrivener's Moon\" (2011).",
+          " The books follow a young woman known as Fever Crumb, and her adventures set around the time of the creation of the first traction cities that become so prevalent in the Mortal Engines series.",
+          " Reeve stated in 2011 that he had always envisaged a quartet for the series, assuring readers of a fourth installment."
+        ],
+        [
+          "Mortal Engines is the first of four novels in Philip Reeve's quartet of the same name.",
+          " The book focuses on a futuristic, steampunk version of London, now a giant machine striving to survive on a world running out of resources.",
+          " The book has won a Nestlé Smarties Book Prize and was shortlisted for the 2002 Whitbread Award."
+        ],
+        [
+          "Infernal Devices is the third of four novels in Philip Reeve's children's series, the \"Mortal Engines Quartet\"."
+        ],
+        [
+          "Mothstorm, or the Horror from Beyond Uranus Georgium Sidus!",
+          " or a Tale of Two Shapers is a young adult novel by Philip Reeve, released in October 2008.",
+          " Illustrated by David Wyatt, it is the third book in the Larklight Trilogy, sequel to the 2007 novel \"Starcross\"."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Traction City (novella)",
+        "Mortal Engines Quartet"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "candidate": {
+      "summarize1.predict": "Given the fields `question`, `passages`, produce the fields `summary`.\n\nRole and goal: Summarize the first-hop evidence so the next agent can find the missing second-hop information. Produce a single short, factual `summary` that: (1) compresses the grounded facts in the provided passages; (2) exposes the bridge entity, the specific missing fact, or the retrieval direction needed for the next hop; and (3) gives concrete evidence anchors (quoted or clearly paraphrased phrases) that a retriever can use.\n\nContent rules:\n- Keep the summary concise and fact-focused. Do not attempt to produce the final answer; describe only what the passages support and what is still needed.\n- Preserve the same passage facts and phrasing as you would otherwise (you may quote or paraphrase). Do not change which facts are exposed; only condense them.\n- You may combine multiple explicit, identity-aligned facts from the passages to state a bridge or to justify a next-hop direction. Do not invent facts, infer new temporal facts, or treat composition as unsupported when the necessary premises are present.\n- If the passages lack a required premise, or contain conflicting identity links, explicitly state which premise or identity link is missing or ambiguous so the next agent can retrieve or disambiguate it.\n\nDate-format rule (narrow formatting change):\n- When the summary includes a date token that appears in the passages (any calendar date or parenthetical date taken from the text), render that date using the canonical form FullMonthName day, year (for example, \"September 27, 2017\") inside the evidence description. This normalization only changes the string form of the date token; it must not add, infer, or imply any additional temporal facts, nor be used as a reason to produce a final answer.\n- Otherwise, leave all other wording and evidence presentation unchanged. Preserve quotations or clear paraphrases of the same passage text; only adjust the date token's string format.\n\nOutput contract:\n- Return exactly one field `summary` containing the compressed first-hop evidence, the bridge/missing-fact signal, and any retrieval direction needed for the next hop. Do not output final answers, extra metadata, or new fields.",
+      "create_query_hop2.predict": "Given the fields `question`, `summary_1`, produce the fields `query`.\n\nProduce exactly one compact retrieval query string (single line) in the `query` field and nothing else. The query should be a concise keyword-style search targeted to recover the missing bridge or supporting evidence needed by downstream agents.\n\nGeneral behavior:\n- Use the visible facts in summary_1 as anchors (album titles, artist names, dates, relation terms) and compose a focused query that is likely to retrieve passages supporting the needed relation. Prefer concrete anchors and relation keywords over full sentences.\n- Do not include explanatory text, user-facing prompts, or requests-for-clarification in the `query` field. Do not invent or assert missing facts (for example, do not supply an artist name that is not present in summary_1).\n- Preserve the single-query output contract: emit exactly one string and no other fields or commentary.\n\nSpecial-case for missing album artist or genre (narrow semantic boundary):\n- If summary_1 shows an album title but does not include the album's artist or genre, or if summary_1 explicitly signals inability to determine genre or explicitly asks for the artist/passage (phrases such as \"can't determine\" or \"please provide the artist\"), then emit exactly one compact search phrase formatted as:\n  <AlbumTitle> album artist genre\n  Use only the visible album title as it appears in summary_1 followed by the three keywords: album artist genre. Do not add punctuation, explanatory words, alternate tokens, or candidate artist names.\n- Do not apply this special-case if summary_1 already contains the artist or genre, or if the album anchor is an ambiguous short token that requires human clarification.\n\nFallback and downstream behavior:\n- If retrieval using the emitted query returns no useful passages, the downstream agent may then ask the user for clarification or additional context. Do not ask the user inside the `query` field.",
+      "summarize2.predict": "Given the fields `question`, `context`, `passages`, produce the field `summary`.\n\nTask: Integrate the first-hop `context` with the newly retrieved `passages` and produce a single concise `summary` that preserves the facts needed by the final answer. Resolve the earlier bridge when the supplied passages support doing so; retain uncertainty only when the post-retrieval evidence is genuinely insufficient, ambiguous, or conflicting.\n\nGuidelines:\n- Treat a concise answer in `context` as the primary claim. Do not replace that concise context answer unless the `passages` contain a direct, identity-aligned contradiction.\n- Before attributing any fact from a passage to the entity or relation named in `context`, confirm identity alignment (clear aliasing or explicit linking). Do not assume two similarly named mentions are the same without such alignment.\n- If the `passages` consistently corroborate the context claim and are identity-aligned, append one brief paraphrased supporting sentence that cites the corroboration (keep the summary compact).\n- If the `passages` are weak, ambiguous, or conflict with each other or with the context claim (but do not provide an explicit, identity-aligned contradiction), preserve the context claim and append a single short clause that flags the uncertainty or contradiction. When flagging, you may optionally include a verbatim quoted phrase from a passage of up to 10 words to show the source wording. Do not invent resolutions beyond what the `passages` show.\n- If the `passages` contain an explicit, identity-aligned contradiction to the context claim, state that the passages contradict the context claim and briefly note the conflicting passage fact (optionally with a ≤10-word quote). Only in this case may the summary stop asserting the context claim as definitive.\n- Keep the `summary` compact (aim for 1–3 sentences). Use uncertainty language only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting. Do not default to uncertainty when composition across context and passages licenses a conclusion.\n- You may combine multiple explicit, identity-aligned facts from `context` and `passages` to form a licensed multi-hop conclusion; the supporting facts need not all appear in a single passage.\n- Do not include long verbatim quotes, do not invent facts, and do not attempt to resolve contradictions beyond reporting them as present in the `passages`.\n\nOutput: a single `summary` string that follows the rules above.",
+      "final_answer.predict": "Given the fields `question`, `summary_1`, `summary_2`, produce the field `answer`.\n\nUse only the information in the provided summaries as evidence. summary_2 is the later, integrated evidence state and should be the primary source for deciding the minimal answer; summary_1 may contain useful first-hop compression or retrieval-oriented language and may be used to supply premises that, together with summary_2, license a conclusion. Do not invent facts or use outside knowledge.\n\nEmit only the minimal answer string supported by the visible summaries in the `answer` field. Do not include explanations, justification, or any additional text.\n\nPreserve multi-hop composition: you may combine multiple explicit, identity-aligned facts across the summaries to form a licensed conclusion even when no single sentence states the whole relation. Distinguish licensed composition from unsupported inference; emit uncertainty only when a required premise, identity link, or relation is genuinely missing, ambiguous, or conflicting in the summaries.\n\nMinimal-answer formatting rule (explicit):\n- If the summaries jointly support one minimal literal and that literal appears verbatim in the summaries and consists of multiple contiguous tokens (for example: a full personal name, a full date, or a place name), emit that full literal exactly as it appears in the summaries (verbatim, unchanged). Do not truncate or coerce it to a single token.\n- If the jointly supported minimal answer is itself a single-token label, emit exactly that single token (in lowercase) and nothing else.\n\nWhen in doubt about whether the summaries license a single definitive literal, prefer to emit uncertainty only if the required supporting premise or identity link is actually missing, ambiguous, or conflicting. Do not make uncertainty the default when composition or transitive reasoning is required and the necessary premises are present.\n\nEnsure the `answer` field contains only the minimal answer string supported by the summaries (subject to the formatting rule above)."
+    },
+    "runtime_config": {
+      "task_model": "openai/gpt-5-mini",
+      "task_api_base": "https://api.openai.com/v1",
+      "task_temperature": 1.0,
+      "task_max_tokens": 16000,
+      "retriever_dir": "/home/jinwoo/gepa-official/examples/ours",
+      "k": 7
+    }
+  },
+  "response": {
+    "sample_id": null,
+    "candidate_hash": "be6863e1c58b",
+    "rerun_from": null,
+    "question": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+    "gold_answer": "Predator's Gold",
+    "context": {
+      "title": [
+        "Larklight",
+        "Here Lies Arthur",
+        "Mortal Engines Quartet",
+        "Starcross (novel)",
+        "A Web of Air",
+        "Traction City (novella)",
+        "Fever Crumb Series",
+        "Mortal Engines",
+        "Infernal Devices (Philip Reeve novel)",
+        "Mothstorm"
+      ],
+      "sentences": [
+        [
+          "Larklight, or the Revenge of the White Spiders!",
+          " or to Saturn's Rings and Back!",
+          " is a young adult novel by author Philip Reeve.",
+          " Illustrated by David Wyatt, it is the first book in the Larklight Trilogy."
+        ],
+        [
+          "Here Lies Arthur is a young-adult novel by Philip Reeve, published by Scholastic in 2007.",
+          " Set in fifth or sixth century Britain and the Anglo-Saxon invasion, it features a girl who participates in the deliberate construction of legendary King Arthur during the man's lifetime, orchestrated by a bard.",
+          " Reeve calls it a back-creation: not a genuine historical novel as it is not based on actual specific events; rather it is \"back-created\" from the legends, giving them a \"realistic\" origin."
+        ],
+        [
+          "The Mortal Engines Quartet is a tetralogy consisting of four novels written by the British author Philip Reeve: \"Mortal Engines\" (2001), \"Predator's Gold\" (2003), \"Infernal Devices\" (2005), and \"A Darkling Plain\" (2006).",
+          " It has also been referred to as the Predator Cities Quartet or the Hungry City Chronicles, although the author has objected to those names."
+        ],
+        [
+          "Starcross, or the Coming of the Moobs!",
+          " or Our Adventures in the Fourth Dimension!",
+          " is a young adult novel by Philip Reeve, released in October 2007.",
+          " Illustrated by David Wyatt, it is the second book in the \"Larklight\" trilogy, sequel to the 2006 novel \"Larklight\"."
+        ],
+        [
+          "A Web of Air is a young adult post-apocalyptic science fiction novel by Philip Reeve.",
+          " The sequel to \"Fever Crumb\", it is the second book in the Mortal Engines Quartet prequel series.",
+          " It was published in April 2010."
+        ],
+        [
+          "Traction City is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet it was released as a flip book alongside Chris Priestlys' teachers tales of terror for World Book Day."
+        ],
+        [
+          "The Fever Crumb Series is the title of a series of novels written by British author, Philip Reeve, and is the prequel series to his critically acclaimed \"Mortal Engines Quartet\".",
+          " As of 2015 the series consists of three books: \"Fever Crumb\" (2009), \"A Web of Air\" (2010), and \"Scrivener's Moon\" (2011).",
+          " The books follow a young woman known as Fever Crumb, and her adventures set around the time of the creation of the first traction cities that become so prevalent in the Mortal Engines series.",
+          " Reeve stated in 2011 that he had always envisaged a quartet for the series, assuring readers of a fourth installment."
+        ],
+        [
+          "Mortal Engines is the first of four novels in Philip Reeve's quartet of the same name.",
+          " The book focuses on a futuristic, steampunk version of London, now a giant machine striving to survive on a world running out of resources.",
+          " The book has won a Nestlé Smarties Book Prize and was shortlisted for the 2002 Whitbread Award."
+        ],
+        [
+          "Infernal Devices is the third of four novels in Philip Reeve's children's series, the \"Mortal Engines Quartet\"."
+        ],
+        [
+          "Mothstorm, or the Horror from Beyond Uranus Georgium Sidus!",
+          " or a Tale of Two Shapers is a young adult novel by Philip Reeve, released in October 2008.",
+          " Illustrated by David Wyatt, it is the third book in the Larklight Trilogy, sequel to the 2007 novel \"Starcross\"."
+        ]
+      ]
+    },
+    "supporting_facts": {
+      "title": [
+        "Traction City (novella)",
+        "Mortal Engines Quartet"
+      ],
+      "sent_id": [
+        0,
+        0
+      ]
+    },
+    "gold_support_titles": [
+      "Traction City (novella)",
+      "Mortal Engines Quartet"
+    ],
+    "hop1_query": "Traction city is a prequel to a novella by Philip Reeve, what is the third book including the prequel?",
+    "hop1_docs": [
+      "Traction City (novella) | Traction City is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet it was released as a flip book alongside Chris Priestlys' teachers tales of terror for World Book Day.",
+      "Fever Crumb Series | The Fever Crumb Series is the title of a series of novels written by British author, Philip Reeve, and is the prequel series to his critically acclaimed \"Mortal Engines Quartet\".  As of 2015 the series consists of three books: \"Fever Crumb\" (2009), \"A Web of Air\" (2010), and \"Scrivener's Moon\" (2011).  The books follow a young woman known as Fever Crumb, and her adventures set around the time of the creation of the first traction cities that become so prevalent in the Mortal Engines series.  Reeve stated in 2011 that he had always envisaged a quartet for the series, assuring readers of a fourth installment.",
+      "A Web of Air | A Web of Air is a young adult post-apocalyptic science fiction novel by Philip Reeve.  The sequel to \"Fever Crumb\", it is the second book in the Mortal Engines Quartet prequel series.  It was published in April 2010.",
+      "Fever Crumb | Fever Crumb is a young adult post-apocalyptic science fiction novel by Philip Reeve, published in 2009.  Sequels called \"A Web of Air\" (2010) and \"Scrivener's Moon\" (2011) follow.  The books of the Fever Crumb Series are prequels to the Mortal Engines Quartet series of novels by the same author.",
+      "Hard Choices (graphic novella) | Hard Choices 'What happened on Algol?'  is a 32-page graphic novella prequel to \"\" written by Dan Abnett, released as part of the Special Edition DVD on 29 November 2010.",
+      "Alice series | The \"Alice\" series is a young adult book series written by Phyllis Reynolds Naylor.  There are three prequels to this series.  The first one, \"Starting with Alice\", describes Alice in third grade.  \"Alice in Blunderland\" is Alice in fourth grade.  The final prequel, \"Lovingly Alice\", follows Alice through the troubles of fifth grade.  The first book (after the prequels) is \"The Agony of Alice\".",
+      "Once Upon a Time in the North | Once Upon a Time in the North, a fantasy novella by Philip Pullman (first published on 3 April 2008 in the United Kingdom) functions as a prequel to Pullman's \"His Dark Materials\" trilogy.  The premise of the story involves the meeting of Iorek Byrnison and Lee Scoresby:"
+    ],
+    "hop1_titles": [
+      "Traction City (novella)",
+      "Fever Crumb Series",
+      "A Web of Air",
+      "Fever Crumb",
+      "Hard Choices (graphic novella)",
+      "Alice series",
+      "Once Upon a Time in the North"
+    ],
+    "summary_1": "Evidence: \"Traction City ... is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet\" (passage 1). The Fever Crumb prequel series to the Mortal Engines Quartet \"consists of three books: 'Fever Crumb', 'A Web of Air', and 'Scrivener's Moon'\" (passages 2 and 4). Missing/ambiguous link: none of the passages say that Traction City is part of the Fever Crumb series or that it should be counted as the first entry of that three-book sequence. Next-hop retrieval needed: find a bibliographic or series-order source that explicitly (a) places Traction City within the same counting/series as the Fever Crumb books or (b) provides the ordered list that \"includes the prequel\" so the third work can be identified. Use as anchors/search queries: \"Traction City placement in Philip Reeve bibliography\", \"Traction City list order including Fever Crumb A Web of Air Scrivener's Moon\", or the Traction City/Wikipedia page and the Fever Crumb series bibliography pages.",
+    "hop2_query": "Traction City placement Philip Reeve bibliography \"Traction City\" \"Fever Crumb\" series order",
+    "hop2_docs": [
+      "Fever Crumb Series | The Fever Crumb Series is the title of a series of novels written by British author, Philip Reeve, and is the prequel series to his critically acclaimed \"Mortal Engines Quartet\".  As of 2015 the series consists of three books: \"Fever Crumb\" (2009), \"A Web of Air\" (2010), and \"Scrivener's Moon\" (2011).  The books follow a young woman known as Fever Crumb, and her adventures set around the time of the creation of the first traction cities that become so prevalent in the Mortal Engines series.  Reeve stated in 2011 that he had always envisaged a quartet for the series, assuring readers of a fourth installment.",
+      "Traction City (novella) | Traction City is a novella by Philip Reeve and is a prequel to the Mortal Engines Quartet it was released as a flip book alongside Chris Priestlys' teachers tales of terror for World Book Day.",
+      "Fever Crumb | Fever Crumb is a young adult post-apocalyptic science fiction novel by Philip Reeve, published in 2009.  Sequels called \"A Web of Air\" (2010) and \"Scrivener's Moon\" (2011) follow.  The books of the Fever Crumb Series are prequels to the Mortal Engines Quartet series of novels by the same author.",
+      "A Web of Air | A Web of Air is a young adult post-apocalyptic science fiction novel by Philip Reeve.  The sequel to \"Fever Crumb\", it is the second book in the Mortal Engines Quartet prequel series.  It was published in April 2010.",
+      "Twin City Railroad | The Twin City Railroad Company was organized in 1912 as successor to the Twin City Light and Traction Company and acquired its subsidiaries, the Chehalis Electric and Traction Company and the Centralia Electric and Traction Company.  The company operated the 6.6 mile electric line extending from Chehalis, Washington (the “Rose City”) to Centralia, Washington (the “Hub City”) until 1936.",
+      "Exeter Traction Maintenance Depot | Exeter Traction Maintenance Depot (or Exeter TMD) is a railway Traction Maintenance Depot situated in Exeter, Devon, United Kingdom and is next to the city's main St Davids station.  The depot is operated by Great Western Railway.",
+      "British Electric Traction Company (Mumbai) | The British Electric Traction Company was a company in Mumbai that generated electricity for the city.  It was established in 1882."
+    ],
+    "hop2_titles": [
+      "Fever Crumb Series",
+      "Traction City (novella)",
+      "Fever Crumb",
+      "A Web of Air",
+      "Twin City Railroad",
+      "Exeter Traction Maintenance Depot",
+      "British Electric Traction Company (Mumbai)"
+    ],
+    "summary_2": "Traction City is a prequel novella to the Mortal Engines Quartet. The Fever Crumb prequel series' third book is Scrivener's Moon; however, the passages do not state that Traction City is part of the Fever Crumb series, so including Traction City in that count is unsupported by the sources.",
+    "answer": "Unsupported by the provided summaries",
+    "score": 0.0,
+    "support_recall_hop1": 0.5,
+    "support_recall_hop2_only": 0.5,
+    "support_recall_total": 0.5,
+    "new_support_titles_hop2": [],
+    "missing_titles_after_hop2": [
+      "Mortal Engines Quartet"
+    ],
+    "hit_titles_hop1": [
+      "Traction City (novella)"
+    ],
+    "hit_titles_total": [
+      "Traction City (novella)"
+    ]
+  },
+  "metadata": {
+    "call_type": "forward"
+  }
+}

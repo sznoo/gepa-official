@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "499fb4accdbaef6abcca57496f47870711bdf388637ef791c37d32220916ba61",
+  "created_at": "2026-07-14T19:01:54.316780+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "base_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "Apply this edit when either summary_1 or summary_2 contains an explicit, short genre statement about the album Levitate or about its artist. Concretely trigger if a summary (case-insensitive) matches patterns such as: 'genre[:\\s]+<GENRE>', 'is a(n)? <GENRE> album', 'the album .* is <GENRE>', or 'genre is <GENRE>'.",
+            "preserve_rule": "If the trigger is NOT satisfied, preserve the current behavior: do not guess the genre and reply asking for the artist or a passage that mentions the album, year, or label.",
+            "change_rule": "When triggered, extract the shortest contiguous genre phrase captured by the matched pattern (the <GENRE> capture). Normalize by stripping surrounding punctuation and whitespace and return only that normalized genre phrase as the agent's final answer. If multiple explicit genre mentions appear, prefer the one that explicitly refers to the album title 'Levitate' or the named artist; if still ambiguous, prefer the first explicit genre mention in the summaries.",
+            "drop_or_avoid_rule": "Do not infer or hallucinate a genre from the album title alone. Do not output artist names, explanations, supporting text, or multiple genres. Do not paste long spans from the summaries—only the short genre phrase matched. If extraction is uncertain or no explicit genre is found, fall back to preserved behavior (ask for more info).",
+            "output_contract": "The answer field must contain only the minimal genre string (one short word or short phrase) supported by the visible summaries, with no surrounding explanation or punctuation. Conform to the base prompt's final-answer interface so the [[ ## answer ## ]] block holds only that string.",
+            "why_local_transition": "This minimal edit enables the final agent to switch from asking for more information to emitting a concise genre label when the supplied summaries already state the genre. It preserves the original conservative behavior when no explicit genre evidence is present and prevents hallucination by requiring an explicit pattern match."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What genre does the album \"Levitate\" come from?",
+        "summary_1": "I can't determine the genre of the album \"Levitate\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.",
+        "summary_2": "I can't determine the genre of the album \"Levitate\" from the provided passages. Please tell me the artist (or give a passage that mentions the album, release year, or label) and I will identify its genre.",
+        "current_output": "I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre."
+      },
+      "output_requirement": "Return only the minimal final answer string derivable from the visible summaries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"Apply this edit when either summary_1 or summary_2 contains an explicit, short genre statement about the album Levitate or about its artist. Concretely trigger if a summary (case-insensitive) matches patterns such as: 'genre[:\\\\s]+<GENRE>', 'is a(n)? <GENRE> album', 'the album .* is <GENRE>', or 'genre is <GENRE>'.\",\n      \"preserve_rule\": \"If the trigger is NOT satisfied, preserve the current behavior: do not guess the genre and reply asking for the artist or a passage that mentions the album, year, or label.\",\n      \"change_rule\": \"When triggered, extract the shortest contiguous genre phrase captured by the matched pattern (the <GENRE> capture). Normalize by stripping surrounding punctuation and whitespace and return only that normalized genre phrase as the agent's final answer. If multiple explicit genre mentions appear, prefer the one that explicitly refers to the album title 'Levitate' or the named artist; if still ambiguous, prefer the first explicit genre mention in the summaries.\",\n      \"drop_or_avoid_rule\": \"Do not infer or hallucinate a genre from the album title alone. Do not output artist names, explanations, supporting text, or multiple genres. Do not paste long spans from the summaries—only the short genre phrase matched. If extraction is uncertain or no explicit genre is found, fall back to preserved behavior (ask for more info).\",\n      \"output_contract\": \"The answer field must contain only the minimal genre string (one short word or short phrase) supported by the visible summaries, with no surrounding explanation or punctuation. Conform to the base prompt's final-answer interface so the [[ ## answer ## ]] block holds only that string.\",\n      \"why_local_transition\": \"This minimal edit enables the final agent to switch from asking for more information to emitting a concise genre label when the supplied summaries already state the genre. It preserves the original conservative behavior when no explicit genre evidence is present and prevents hallucination by requiring an explicit pattern match.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What genre does the album \\\"Levitate\\\" come from?\",\n  \"summary_1\": \"I can't determine the genre of the album \\\"Levitate\\\" from the supplied passages. Please provide the artist name or a passage that mentions the album so I can identify its genre.\",\n  \"summary_2\": \"I can't determine the genre of the album \\\"Levitate\\\" from the provided passages. Please tell me the artist (or give a passage that mentions the album, release year, or label) and I will identify its genre.\",\n  \"current_output\": \"I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre.\"\n}\n\nRequired parsed output:\nReturn only the minimal final answer string derivable from the visible summaries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": \"I can't determine the genre without more info. Please tell me the artist (or provide a passage mentioning the album, year, or label) and I'll identify the genre.\",\n  \"rationale\": \"No explicit genre pattern matched in either summary, so the preservation rule applied: ask for the artist or a passage containing album/year/label.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 117,
+    "row_index": 117,
+    "bisection_round": 0,
+    "agent": "final",
+    "n_edges": 1
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.destination.generate.summary1",
+  "key": "ff52b98281cda29b78e1eaee550c6cac493c2bf2e6df5e72318a6dfcde5df019",
+  "created_at": "2026-07-16T04:50:35.204663+00:00",
+  "request": {
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "input_dict": {
+      "agent": "summary1",
+      "agent_role": "Summarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.",
+      "destination_requirements": "Produce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.",
+      "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+      "current_output": "Passages list several individuals named Brian Johnson with explicit birthdates: \"Brian Joseph Johnson (born October 29, 1948)\" (footballer) [passage 1]; \"Brian Johnson (born October 21, 1955)\" (footballer) [passage 3]; \"Brian Johnson (born April 1, 1960 in Montreal, Quebec)\" (ice hockey) [passage 4]; \"Brian 'Horse' Johnson (born April 6, 1979)\" (fullback) [passage 5]; and \"Brian Johnson (born March 5, 1980 in Iowa, Louisiana)\" (athlete) [passage 7]. None of the provided passages mention Dallas Green or give any birthdate for him. Missing bridge / next hop needed: retrieve Dallas Green's birth date (and disambiguate which Dallas Green is meant, if multiple) — and if the question intends a specific Brian Johnson not in these passages (e.g., AC/DC singer Brian Johnson), retrieve that Brian Johnson's birth date too — so the two birthdates can be compared. Use the quoted birthdate phrases above as anchors for comparison.",
+      "upstream_context": {
+        "question": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "hop1_query": "Who was born earlier, Dallas Green or Brian Johnson?",
+        "hop1_titles": [
+          "Brian Johnson (footballer, born 1948)",
+          "Brian Price (American football, born 1994)",
+          "Brian Johnson (footballer, born 1955)",
+          "Brian Johnson (ice hockey)",
+          "Brian Johnson (fullback)",
+          "Brian Rogers (baseball)",
+          "Brian Johnson (athlete)"
+        ],
+        "hop1_docs": [
+          "Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.",
+          "Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL).  He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.",
+          "Brian Johnson (footballer, born 1955) | Brian Johnson (born 21 October 1955) is an English retired footballer who played as a winger.  He made 197 appearances in the Football League for Plymouth Argyle, scoring 40 goals, and a further seven while on loan at Torquay United.",
+          "Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.",
+          "Brian Johnson (fullback) | Brian \"Horse\" Johnson (born April 6, 1979) is a former American football fullback who played five seasons with the San Jose SaberCats of the Arena Football League (AFL).  He played college football at the University of New Mexico.",
+          "Brian Rogers (baseball) | Brian Alan Rogers (born July 17, 1982 in Dallas, Texas) is a former relief pitcher in Major League Baseball who played for the Pittsburgh Pirates in 2006 and 2007.",
+          "Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper."
+        ]
+      },
+      "visible_gold_support": [],
+      "missing_support_targets": [
+        {
+          "title": "Dallas Green (musician)"
+        },
+        {
+          "title": "Brian Johnson"
+        }
+      ]
+    },
+    "rendered_prompt": "You are generating a gold-conditioned destination output for one agent\ninside a multi-agent question-answering pipeline.\n\nThe destination is not a prompt update. It is an ideal output that remains\npossible from the selected agent's actual input boundary.\n\nUse only:\n- the supplied task and upstream context;\n- gold supporting sentences explicitly listed as visible_gold_support;\n- missing support titles only as retrieval targets.\n\nDo not infer or state the hidden contents of a missing support document.\nDo not use or guess the gold answer. Preserve the functional role of the\nselected agent.\n\nAgent:\nsummary1\n\nAgent role:\nSummarize first-hop evidence and expose the bridge entity, missing fact, or retrieval direction needed for the next hop.\n\nDestination requirements:\nProduce an ideal summary1 output using only information available at the\nsummary1 boundary.\n\nThe output should:\n- summarize useful evidence from the actual first-hop retrieval;\n- identify the bridge entity, relation, or missing evidence needed next;\n- expose a compact retrieval direction for the query agent;\n- remain a summary1 output rather than a final answer;\n- not state hidden second-hop facts or the gold answer;\n- treat missing support titles only as retrieval targets, not as evidence\n  that their unseen documents contain a particular answer fact.\n\nQuestion:\nWho was born earlier, Dallas Green or Brian Johnson?\n\nCurrent agent output:\n\"Passages list several individuals named Brian Johnson with explicit birthdates: \\\"Brian Joseph Johnson (born October 29, 1948)\\\" (footballer) [passage 1]; \\\"Brian Johnson (born October 21, 1955)\\\" (footballer) [passage 3]; \\\"Brian Johnson (born April 1, 1960 in Montreal, Quebec)\\\" (ice hockey) [passage 4]; \\\"Brian 'Horse' Johnson (born April 6, 1979)\\\" (fullback) [passage 5]; and \\\"Brian Johnson (born March 5, 1980 in Iowa, Louisiana)\\\" (athlete) [passage 7]. None of the provided passages mention Dallas Green or give any birthdate for him. Missing bridge / next hop needed: retrieve Dallas Green's birth date (and disambiguate which Dallas Green is meant, if multiple) — and if the question intends a specific Brian Johnson not in these passages (e.g., AC/DC singer Brian Johnson), retrieve that Brian Johnson's birth date too — so the two birthdates can be compared. Use the quoted birthdate phrases above as anchors for comparison.\"\n\nActual upstream context:\n{\n  \"question\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"hop1_query\": \"Who was born earlier, Dallas Green or Brian Johnson?\",\n  \"hop1_titles\": [\n    \"Brian Johnson (footballer, born 1948)\",\n    \"Brian Price (American football, born 1994)\",\n    \"Brian Johnson (footballer, born 1955)\",\n    \"Brian Johnson (ice hockey)\",\n    \"Brian Johnson (fullback)\",\n    \"Brian Rogers (baseball)\",\n    \"Brian Johnson (athlete)\"\n  ],\n  \"hop1_docs\": [\n    \"Brian Johnson (footballer, born 1948) | Brian Joseph Johnson (born 29 October 1948) is an English footballer, who played as a midfielder in the Football League for Tranmere Rovers.\",\n    \"Brian Price (American football, born 1994) | Brian Keith Price (born June 24, 1994) is an American football defensive tackle for the Dallas Cowboys of the National Football League (NFL).  He played college football at Texas-San Antonio, and was signed by the Green Bay Packers as an undrafted free agent in 2016.\",\n    \"Brian Johnson (footballer, born 1955) | Brian Johnson (born 21 October 1955) is an English retired footballer who played as a winger.  He made 197 appearances in the Football League for Plymouth Argyle, scoring 40 goals, and a further seven while on loan at Torquay United.\",\n    \"Brian Johnson (ice hockey) | Brian Johnson (born April 1, 1960 in Montreal, Quebec) is a retired Canadian professional ice hockey right winger who played one season in the National Hockey League for the Detroit Red Wings.\",\n    \"Brian Johnson (fullback) | Brian \\\"Horse\\\" Johnson (born April 6, 1979) is a former American football fullback who played five seasons with the San Jose SaberCats of the Arena Football League (AFL).  He played college football at the University of New Mexico.\",\n    \"Brian Rogers (baseball) | Brian Alan Rogers (born July 17, 1982 in Dallas, Texas) is a former relief pitcher in Major League Baseball who played for the Pittsburgh Pirates in 2006 and 2007.\",\n    \"Brian Johnson (athlete) | Brian Johnson (born March 5, 1980 in Iowa, Louisiana) is an American long jumper.\"\n  ]\n}\n\nGold supporting evidence visible at this agent boundary:\n[]\n\nMissing support titles that may be named only as retrieval targets:\n[\n  {\n    \"title\": \"Dallas Green (musician)\"\n  },\n  {\n    \"title\": \"Brian Johnson\"\n  }\n]\n\nReturn strict JSON only:\n{\n  \"destination_output\": \"<ideal agent output>\",\n  \"rationale\": \"<brief explanation grounded only in the supplied visible evidence>\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"destination_output\": \"First-hop evidence: the retrieved passages list several individuals named Brian Johnson with explicit birthdates: Brian Joseph Johnson (born 29 October 1948); Brian Johnson (born 21 October 1955); Brian Johnson (born April 1, 1960); Brian \\\"Horse\\\" Johnson (born April 6, 1979); and Brian Johnson (born March 5, 1980). None of the first-hop documents mention Dallas Green or give any birthdate for him. Bridge / missing evidence needed: Dallas Green's birth date (and confirmation of which Dallas Green is meant, if multiple). Also confirm which Brian Johnson the question intends (if it refers to a Brian Johnson not in the retrieved set, e.g., the AC/DC singer). Compact retrieval direction for next hop: fetch the Dallas Green page (e.g., \\\"Dallas Green (musician)\\\") to obtain his birth date, and fetch the general \\\"Brian Johnson\\\" or the specific Brian Johnson page for the intended Brian Johnson if the first-hop list does not include the target. After obtaining those birthdates, compare them to determine who was born earlier. This is a summary for the next-hop retriever, not a final answer.\",\n  \"rationale\": \"The hop1 documents provide multiple Brian Johnson birthdates (1948, 1955, 1960, 1979, 1980) but contain no information about Dallas Green. Therefore the next required fact is Dallas Green's birthdate (and disambiguation of which Brian Johnson is meant), so retrieving the \\\"Dallas Green (musician)\\\" page and the relevant \\\"Brian Johnson\\\" page is the appropriate next step.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "destination.generate.summary1",
+    "signature": "ours.utils.destination.GenerateGoldDestinationSignature",
+    "agent": "summary1",
+    "sample_index": 43,
+    "row_index": 43
+  }
+}

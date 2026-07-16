@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "96847db951f7c9d15c76b6041464ecb5a1f45c38e5172555939f4aa87f4f47c5",
+  "created_at": "2026-07-14T19:01:52.709587+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When producing the single second-hop retrieval query for a question that names a location and distance (e.g., contains a phrase like \"4 mi\" or \"4 miles\" and a nearby town such as Congleton) and a short candidate summary (summary_1) already names one building, apply this rule.",
+            "preserve_rule": "Keep producing one compact, single-line retrieval query. Keep using exact-phrase quoting for multiword anchors (e.g., \"National Heritage List for England\") and retain any useful place phrases already present in the inputs (the distance phrase and the place name from the question).",
+            "change_rule": "Do not include the already-named building from summary_1 in the new query. Instead, compose a concise query that targets recorded listed-building entries near the specified location: include the distance + place phrase from the question (e.g. \"4 miles southwest of Congleton\" or \"4 mi southwest of Congleton\"), the phrase \"listed building\" (or \"listed\"), and \"National Heritage List for England\"; optionally add generic building-type keywords likely to surface non-church landmarks (e.g. \"hall\", \"manor\"). Example structure to produce: [location-distance phrase] + listed/listed building + \"National Heritage List for England\" + (optional short type word like hall).",
+            "drop_or_avoid_rule": "Avoid queries that repeat the exact name from summary_1 (do not search for \"St James' and St Paul's Church, Marton\"), and avoid long multi-field searches combining many quoted fragments that keep returning the same church. Keep the query focused and brief.",
+            "output_contract": "Return exactly one compact query string designed to retrieve National Heritage List for England entries for listed buildings matching the specified distance/place. The query must not include the summary_1 building name and must fit on one line.",
+            "why_local_transition": "The previous query re-searched for the same named church and kept returning that result. This minimal change directs the second-hop to search the National Heritage List for listed buildings at the given distance/place (and to include building-type keywords), increasing chance of retrieving other top candidates (e.g., notable halls) without changing the agent's interface or overall behavior."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "Apply when the question requests the 'most important' (or 'major') building and mentions a specific location (including relative distance/direction, e.g. '4 mi southwest of Congleton').",
+            "preserve_rule": "Keep producing a single, compact retrieval query that includes key tokens from the question (place names, 'listed', or 'National Heritage List for England') and remains focused and short.",
+            "change_rule": "When triggered, prefer forming a parish- or locality-level listing query. Construct the query in the form 'Listed buildings in <place>' or 'most important listed building in <place>' (or fallback: '<place> listed buildings National Heritage List for England'), where <place> is the named place or the locality referenced in the question (use the nearest identifiable village/parish name or the town mentioned with the distance/direction).",
+            "drop_or_avoid_rule": "Avoid past behavior that concatenates many entity tokens or reproduces the full question as the query. Do not insert candidate building names unless they already appear in the visible inputs. Avoid long quoted spans, multi-clause question text, or OR/AND chains that dilute focus.",
+            "output_contract": "Produce one compact, single-line search query (aim for under ~12 words) targeting a parish/local 'Listed buildings' page or a phrase like 'most important listed building in <place>'. The field returned must be 'query' and nothing else.",
+            "why_local_transition": "Parish-level 'Listed buildings' pages commonly state which building is the most important (e.g., the Grade I building). Steering queries to 'Listed buildings in <place>' is the minimal change needed to reliably retrieve that bridging evidence for the second hop."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "What is the most important building in the National Heritage for England located 4 mi southwest of Congleton in Cheshire?",
+        "summary_1": "St James' and St Paul's Church, Marton",
+        "current_output": {
+          "query": "Marton Cheshire \"listed buildings\" \"St James and St Paul's Church\" \"National Heritage List for England\" \"most important building\" 4 miles southwest of Congleton"
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When producing the single second-hop retrieval query for a question that names a location and distance (e.g., contains a phrase like \\\"4 mi\\\" or \\\"4 miles\\\" and a nearby town such as Congleton) and a short candidate summary (summary_1) already names one building, apply this rule.\",\n      \"preserve_rule\": \"Keep producing one compact, single-line retrieval query. Keep using exact-phrase quoting for multiword anchors (e.g., \\\"National Heritage List for England\\\") and retain any useful place phrases already present in the inputs (the distance phrase and the place name from the question).\",\n      \"change_rule\": \"Do not include the already-named building from summary_1 in the new query. Instead, compose a concise query that targets recorded listed-building entries near the specified location: include the distance + place phrase from the question (e.g. \\\"4 miles southwest of Congleton\\\" or \\\"4 mi southwest of Congleton\\\"), the phrase \\\"listed building\\\" (or \\\"listed\\\"), and \\\"National Heritage List for England\\\"; optionally add generic building-type keywords likely to surface non-church landmarks (e.g. \\\"hall\\\", \\\"manor\\\"). Example structure to produce: [location-distance phrase] + listed/listed building + \\\"National Heritage List for England\\\" + (optional short type word like hall).\",\n      \"drop_or_avoid_rule\": \"Avoid queries that repeat the exact name from summary_1 (do not search for \\\"St James' and St Paul's Church, Marton\\\"), and avoid long multi-field searches combining many quoted fragments that keep returning the same church. Keep the query focused and brief.\",\n      \"output_contract\": \"Return exactly one compact query string designed to retrieve National Heritage List for England entries for listed buildings matching the specified distance/place. The query must not include the summary_1 building name and must fit on one line.\",\n      \"why_local_transition\": \"The previous query re-searched for the same named church and kept returning that result. This minimal change directs the second-hop to search the National Heritage List for listed buildings at the given distance/place (and to include building-type keywords), increasing chance of retrieving other top candidates (e.g., notable halls) without changing the agent's interface or overall behavior.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"Apply when the question requests the 'most important' (or 'major') building and mentions a specific location (including relative distance/direction, e.g. '4 mi southwest of Congleton').\",\n      \"preserve_rule\": \"Keep producing a single, compact retrieval query that includes key tokens from the question (place names, 'listed', or 'National Heritage List for England') and remains focused and short.\",\n      \"change_rule\": \"When triggered, prefer forming a parish- or locality-level listing query. Construct the query in the form 'Listed buildings in <place>' or 'most important listed building in <place>' (or fallback: '<place> listed buildings National Heritage List for England'), where <place> is the named place or the locality referenced in the question (use the nearest identifiable village/parish name or the town mentioned with the distance/direction).\",\n      \"drop_or_avoid_rule\": \"Avoid past behavior that concatenates many entity tokens or reproduces the full question as the query. Do not insert candidate building names unless they already appear in the visible inputs. Avoid long quoted spans, multi-clause question text, or OR/AND chains that dilute focus.\",\n      \"output_contract\": \"Produce one compact, single-line search query (aim for under ~12 words) targeting a parish/local 'Listed buildings' page or a phrase like 'most important listed building in <place>'. The field returned must be 'query' and nothing else.\",\n      \"why_local_transition\": \"Parish-level 'Listed buildings' pages commonly state which building is the most important (e.g., the Grade I building). Steering queries to 'Listed buildings in <place>' is the minimal change needed to reliably retrieve that bridging evidence for the second hop.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"What is the most important building in the National Heritage for England located 4 mi southwest of Congleton in Cheshire?\",\n  \"summary_1\": \"St James' and St Paul's Church, Marton\",\n  \"current_output\": {\n    \"query\": \"Marton Cheshire \\\"listed buildings\\\" \\\"St James and St Paul's Church\\\" \\\"National Heritage List for England\\\" \\\"most important building\\\" 4 miles southwest of Congleton\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"4 mi southwest of Congleton Cheshire listed buildings \\\"National Heritage List for England\\\"\"\n  },\n  \"rationale\": \"Delta 0 was applied to retain the distance/place phrase and include 'listed' plus the exact phrase \\\"National Heritage List for England\\\" while excluding the named church; delta 1 guided the query toward locality-level 'listed buildings'.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 31,
+    "row_index": 31,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "c155e74446225387f492a4aa1d3c8f95f74a21cf019ad20a745c251dcb21a1fa",
+  "created_at": "2026-07-15T06:40:28.368859+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 140,
+        "stable_id": "140",
+        "question": "Which plant grows further North, Zamia or Vallea?",
+        "summary_1": "Evidence found:\n- Zamia variegata — [1] «native to Belize, Guatemala, Honduras, and Mexico.»\n- Zamia dressleri — [2] «endemic to Panama»\n- Zamia purpurea — [3] «Oaxaca and Veracruz.»\n- Zamia acuminata — [4] «found in Costa Rica, Nicaragua, and Panama.»\n- Zamia encephalartoides — [5] «endemic to Colombia.»\n- Zamia gentryi — [6] «endemic to Ecuador.»\n- Macrozamia riedlei — [7] «commonly known as zamia or zamia palm»\n\nAmbiguities:\n- \"Zamia\" appears as many species (variegata, dressleri, purpurea, etc.); genus-level northernmost limit not given.\n- The common name \"zamia\" is also used for Macrozamia riedlei (different genus).\n- \"Vallea\" does not appear in the provided passages (no candidate pages returned).\n\nBridge / missing fact:\n- Missing Vallea native range / northernmost occurrence (country or latitude).\n- Missing genus-level northernmost range for Zamia (e.g., whether any Zamia species occur north of Mexico, such as in the United States).\n- Therefore cannot determine which genus grows further north from the given passages.\n\nRetrieval direction:\n1) Open page \"Vallea\" or \"Vallea (plant)\" — check species list and \"Distribution\" / native range.\n2) Open page \"Vallea stipularis\" — check countries and northernmost occurrences.\n3) Open page \"Zamia\" (genus) — check \"Distribution\" and northernmost native range (list of species and their countries).\n4) Search query \"Zamia distribution northernmost\" or \"Zamia United States distribution\" to confirm any U.S. occurrences (e.g., \"Zamia integrifolia distribution Florida\").\nFinal answer deferred pending retrieval of the targets above.",
+        "hop2_query": "Vallea Zamia northernmost",
+        "summary_2": "Zamia has a species, Zamia pumila, that occurs in Florida (United States), while Vallea is native to the Andes mountains in South America; therefore Zamia grows further north.",
+        "answer": "Zamia",
+        "gold_support_titles": [
+          "Zamia",
+          "Vallea"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 25,
+          "w_stable_id": "25",
+          "agent": "final",
+          "w_question": "Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Waimānalo, Hawaii",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Waimānalo",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question explicitly requests a city/hometown (the question text contains words like \"city\", \"hometown\", or the phrase \"from what\" in a location sense) AND the prioritized summary candidate for the answer appears as a comma-separated place token of the form \"X, Y\" (for example the visible summary contains \"Waimānalo, Hawaii\"),",
+                "preserve_rule": "Keep all existing base-prompt constraints: use only the provided summaries as evidence; preserve the verbatim-emission requirement that the final answer must be a minimal string taken from the prioritized summary; emit only the single minimal token string with no extra punctuation or explanation; prefer summary_2 when present.",
+                "change_rule": "When the trigger conditions hold, normalize a comma-separated geographic candidate by extracting the substring before the first comma (the token sequence 'X' in 'X, Y'), trimming surrounding whitespace, and emit that substring as the single minimal answer token. Only perform this extraction when the extracted substring appears verbatim in the prioritized summary (i.e., it is a contiguous substring of the candidate) and when the question is asking for a city/hometown.",
+                "drop_or_avoid_rule": "Do NOT apply this normalization if the question asks for a state/country/region rather than a city, or if the comma-separated form is not a geographic 'city, region' pattern (for example 'Lastname, Firstname' or 'Title, Year'). Do NOT invent or substitute any tokens; do not remove qualifiers unless the question specifically requests the smaller geographic unit. If the substring-before-comma is empty or would violate the base-prompt verbatim-emission constraint, do not apply this rule.",
+                "output_contract": "After this normalization, produce the final answer exactly as a single minimal string equal to the extracted city token (no punctuation, explanation, or extra tokens), still following the base prompt's output formatting rules.",
+                "why_local_transition": "The source output included a city plus higher-level region ('Waimānalo, Hawaii'); the question specifically requests the city. This local rule minimally trims the region portion while preserving the original verbatim city token from the summaries so the emitted answer matches the query's requested granularity without introducing outside facts or changing other base behaviors."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Zamia",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 56,
+          "w_stable_id": "56",
+          "agent": "final",
+          "w_question": "What do the Lost McLeod Mine and the Colomac Mine have in common?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "in the Northwest Territories of Canada",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "the Northwest Territories of Canada",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the question asks what two items have in common and the prioritized summary (summary_2) contains a geographic/place name embedded in a prepositional phrase (e.g. appears as 'in the <Place>' or 'located in the <Place>'), and both summaries support the same place.",
+                "preserve_rule": "Keep all existing base-prompt behavior: use summary_1 and summary_2 as the sole evidence, give priority to summary_2, obey the permitted normalizations, and produce exactly one field `answer` containing a single minimal string.",
+                "change_rule": "Instead of emitting the full prepositional phrase, extract and emit the minimal place-name noun phrase exactly as it appears in summary_2 (including an initial definite article 'the' only if that exact token sequence appears there). Concretely: if summary_2 contains 'in the <Place>' or 'located in the <Place>', set `answer` to the verbatim substring '<Place>' (including any leading 'the' token that is part of that substring in summary_2), trimmed of surrounding whitespace or wrapper punctuation but with no added or rearranged words.",
+                "drop_or_avoid_rule": "Do not emit leading prepositions or wrapper tokens such as 'in', 'located in', or similar phrases as part of the `answer`. Do not add explanatory words, punctuation, or context; do not invent synonyms or paraphrases. Avoid emitting multi-word answers that include extra role-descriptors or prepositions.",
+                "output_contract": "Produce the single `answer` field whose value is exactly the minimal place-name substring drawn verbatim from summary_2 (subject only to the allowed trimming of surrounding punctuation/whitespace). The output must remain a single minimal string and must not include additional text.",
+                "why_local_transition": "The agent previously emitted the supported place phrase with a leading preposition ('in ...'), which violates the base-prompt requirement to emit the minimal label verbatim. This delta instructs extracting the core noun phrase from the supported prepositional phrase so the final `answer` matches the prioritized-summary-supported minimal label."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Zamia",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 84,
+          "w_stable_id": "84",
+          "agent": "final",
+          "w_question": "The musician also known as \"Braddah Iz\"  is a member of what Hawaiian musical group?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "The Mākaha Sons of Ni'ihau",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Mākaha Sons",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the prioritized summary (summary_2) contains a band name phrase of the form \"The <Core> of <Place>\" (for example the phrase present verbatim in the inputs: \"The Mākaha Sons of Ni'ihau\").",
+                "preserve_rule": "Continue to treat summary_2 as the highest-priority evidential source and preserve all existing trimming/quoting rules (trim surrounding whitespace and strip only surrounding punctuation or wrapper syntax). Keep the requirement that the final output be the single minimal string supported by the summaries and nothing else.",
+                "change_rule": "When the trigger matches, extract the core proper-name substring <Core> that appears verbatim inside the matched phrase (i.e., the contiguous words between the leading definite article and the trailing geographic \"of <Place>\"). Emit that <Core> alone as the single minimal answer token. Only remove at most a leading definite article \"The\" and a single trailing token sequence of the form \"of <Place>\"; do not remove or alter any other tokens and do not invent alternate names.",
+                "drop_or_avoid_rule": "Do not apply this extraction unless the exact core substring appears verbatim in the prioritized summary. Do not shorten multiword names further, do not drop internal words of the core, and do not apply this rule to phrases that are not explicitly in the form \"The <Core> of <Place>\". Avoid producing tokens that are not directly supported by the visible summaries.",
+                "output_contract": "Maintain the base final-answer contract: produce exactly one field `answer` whose value is a single minimal string (no extra text). After applying this core-extraction normalization, emit that core string verbatim and nothing else.",
+                "why_local_transition": "This small normalization removes a leading definite article and a trailing geographic qualifier from a band-name phrase already present in the prioritized summary, producing the shorter canonical band-name core that better matches the minimal-label emission rules while still being verbatim-supported by the visible evidence."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Zamia",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 147,
+          "w_stable_id": "147",
+          "agent": "final",
+          "w_question": "What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Tactical Studies Rules, Inc. (TSR)",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Tactical Studies Rules",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the prioritized summary (summary_2, or summary_1 only if summary_2 is silent for the answer) contains a company name that includes a common corporate suffix token such as \"Inc.\", \"LLC\", \"Corp.\", etc., or contains a parenthetical acronym or abbreviation (for example \"(TSR)\"), then apply the following local normalization before emitting the final answer.",
+                "preserve_rule": "Keep all existing output constraints: continue to treat summary_2 as the prioritized evidence, emit exactly one minimal-string `answer`, follow the strict verbatim-emission rule, and do not introduce facts not present in the summaries. Preserve any other useful content or label forms already supported by the summaries.",
+                "change_rule": "When the trigger condition holds, remove only (a) trailing corporate suffix tokens and their immediate punctuation (for example \", Inc.\", \", LLC\", \" Corp.\") and (b) any parenthetical acronym or abbreviation and its surrounding parentheses (for example \"(TSR)\"). After removal, trim any leftover surrounding punctuation and whitespace so the remaining core name appears exactly as it did verbatim in the prioritized summary. Do not alter word order, capitalization, or any other tokens of the remaining core name.",
+                "drop_or_avoid_rule": "Do not remove or alter any other words from the candidate label beyond the specific corporate suffixes or parenthetical acronyms. Do not expand, substitute, or invent alternative names, nor remove generic tokens that are not single trailing corporate suffixes or parenthetical acronyms. Do not apply this normalization unless the exact suffix or parenthetical text appears verbatim in the prioritized summary.",
+                "output_contract": "After applying the above normalization (only when triggered), emit the single minimal answer string as required by the base prompt. The emitted string must be the core company name verbatim as it appears in the prioritized summary after only the allowed removals (for example: \"Tactical Studies Rules\"). Continue to output exactly one field `answer` with that single minimal string and nothing else.",
+                "why_local_transition": "This small rule implements the permitted 'parenthetical/core-name stripping' normalization from the base prompt: it removes the explicit corporate suffix and parenthetical acronym present in the summary so the final emitted label is the core company name without extraneous suffixes or parentheses."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Zamia",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 103,
+          "w_stable_id": "103",
+          "agent": "final",
+          "w_question": "What does Sam Weir and Gold Coast, Queensland have in common?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "the Gold Coast, Queensland, Australia",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Australia",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when summary_1 and summary_2 both point to the same geographic association and the prioritized summary (summary_2) contains a place phrase that includes a country name token verbatim (i.e., the place phrase ends with a country token present in summary_2).",
+                "preserve_rule": "Keep all existing base-prompt constraints: use summary_2 as the prioritized evidence source, do not introduce facts outside the visible summaries, obey the verbatim-emission and permitted-normalizations rules, and preserve the requirement to produce exactly one `answer` field whose value is a single minimal string.",
+                "change_rule": "When the trigger applies, prefer the country-name token (the exact country word as it appears verbatim in summary_2) as the minimal concise answer. Emit that country token alone as the `answer` value, applying only the base-prompt's permitted normalizations (no additions or paraphrases).",
+                "drop_or_avoid_rule": "Avoid emitting the longer multi-token locality string (city/region + state + country) when the country token appears verbatim in summary_2 and both summaries support the same shared geographic property. Do not add articles, qualifiers, punctuation, or explanatory text to the selected country token.",
+                "output_contract": "Maintain the original output contract: produce exactly one field `answer` whose value is a single minimal string. The final answer block ([[ ## answer ## ]], if used by the interface) must contain only that minimal string and nothing else. Do not introduce any additional fields or wrapper text.",
+                "why_local_transition": "This is a minimal, targeted normalization: when both summaries support the same nested place and the country name appears verbatim in the prioritized summary, emitting the country alone yields a strictly smaller, still-verbatim minimal label while preserving evidence provenance and the base prompt's strict emission rules."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "Zamia",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 140,\n  \"stable_id\": \"140\",\n  \"question\": \"Which plant grows further North, Zamia or Vallea?\",\n  \"summary_1\": \"Evidence found:\\n- Zamia variegata — [1] «native to Belize, Guatemala, Honduras, and Mexico.»\\n- Zamia dressleri — [2] «endemic to Panama»\\n- Zamia purpurea — [3] «Oaxaca and Veracruz.»\\n- Zamia acuminata — [4] «found in Costa Rica, Nicaragua, and Panama.»\\n- Zamia encephalartoides — [5] «endemic to Colombia.»\\n- Zamia gentryi — [6] «endemic to Ecuador.»\\n- Macrozamia riedlei — [7] «commonly known as zamia or zamia palm»\\n\\nAmbiguities:\\n- \\\"Zamia\\\" appears as many species (variegata, dressleri, purpurea, etc.); genus-level northernmost limit not given.\\n- The common name \\\"zamia\\\" is also used for Macrozamia riedlei (different genus).\\n- \\\"Vallea\\\" does not appear in the provided passages (no candidate pages returned).\\n\\nBridge / missing fact:\\n- Missing Vallea native range / northernmost occurrence (country or latitude).\\n- Missing genus-level northernmost range for Zamia (e.g., whether any Zamia species occur north of Mexico, such as in the United States).\\n- Therefore cannot determine which genus grows further north from the given passages.\\n\\nRetrieval direction:\\n1) Open page \\\"Vallea\\\" or \\\"Vallea (plant)\\\" — check species list and \\\"Distribution\\\" / native range.\\n2) Open page \\\"Vallea stipularis\\\" — check countries and northernmost occurrences.\\n3) Open page \\\"Zamia\\\" (genus) — check \\\"Distribution\\\" and northernmost native range (list of species and their countries).\\n4) Search query \\\"Zamia distribution northernmost\\\" or \\\"Zamia United States distribution\\\" to confirm any U.S. occurrences (e.g., \\\"Zamia integrifolia distribution Florida\\\").\\nFinal answer deferred pending retrieval of the targets above.\",\n  \"hop2_query\": \"Vallea Zamia northernmost\",\n  \"summary_2\": \"Zamia has a species, Zamia pumila, that occurs in Florida (United States), while Vallea is native to the Andes mountains in South America; therefore Zamia grows further north.\",\n  \"answer\": \"Zamia\",\n  \"gold_support_titles\": [\n    \"Zamia\",\n    \"Vallea\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 25,\n    \"w_stable_id\": \"25\",\n    \"agent\": \"final\",\n    \"w_question\": \"Invasion Attack included title matches by the Japanese sumo wrestler from what Hawaiian city?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Waimānalo, Hawaii\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Waimānalo\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question explicitly requests a city/hometown (the question text contains words like \\\"city\\\", \\\"hometown\\\", or the phrase \\\"from what\\\" in a location sense) AND the prioritized summary candidate for the answer appears as a comma-separated place token of the form \\\"X, Y\\\" (for example the visible summary contains \\\"Waimānalo, Hawaii\\\"),\",\n          \"preserve_rule\": \"Keep all existing base-prompt constraints: use only the provided summaries as evidence; preserve the verbatim-emission requirement that the final answer must be a minimal string taken from the prioritized summary; emit only the single minimal token string with no extra punctuation or explanation; prefer summary_2 when present.\",\n          \"change_rule\": \"When the trigger conditions hold, normalize a comma-separated geographic candidate by extracting the substring before the first comma (the token sequence 'X' in 'X, Y'), trimming surrounding whitespace, and emit that substring as the single minimal answer token. Only perform this extraction when the extracted substring appears verbatim in the prioritized summary (i.e., it is a contiguous substring of the candidate) and when the question is asking for a city/hometown.\",\n          \"drop_or_avoid_rule\": \"Do NOT apply this normalization if the question asks for a state/country/region rather than a city, or if the comma-separated form is not a geographic 'city, region' pattern (for example 'Lastname, Firstname' or 'Title, Year'). Do NOT invent or substitute any tokens; do not remove qualifiers unless the question specifically requests the smaller geographic unit. If the substring-before-comma is empty or would violate the base-prompt verbatim-emission constraint, do not apply this rule.\",\n          \"output_contract\": \"After this normalization, produce the final answer exactly as a single minimal string equal to the extracted city token (no punctuation, explanation, or extra tokens), still following the base prompt's output formatting rules.\",\n          \"why_local_transition\": \"The source output included a city plus higher-level region ('Waimānalo, Hawaii'); the question specifically requests the city. This local rule minimally trims the region portion while preserving the original verbatim city token from the summaries so the emitted answer matches the query's requested granularity without introducing outside facts or changing other base behaviors.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Zamia\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 56,\n    \"w_stable_id\": \"56\",\n    \"agent\": \"final\",\n    \"w_question\": \"What do the Lost McLeod Mine and the Colomac Mine have in common?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"in the Northwest Territories of Canada\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"the Northwest Territories of Canada\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the question asks what two items have in common and the prioritized summary (summary_2) contains a geographic/place name embedded in a prepositional phrase (e.g. appears as 'in the <Place>' or 'located in the <Place>'), and both summaries support the same place.\",\n          \"preserve_rule\": \"Keep all existing base-prompt behavior: use summary_1 and summary_2 as the sole evidence, give priority to summary_2, obey the permitted normalizations, and produce exactly one field `answer` containing a single minimal string.\",\n          \"change_rule\": \"Instead of emitting the full prepositional phrase, extract and emit the minimal place-name noun phrase exactly as it appears in summary_2 (including an initial definite article 'the' only if that exact token sequence appears there). Concretely: if summary_2 contains 'in the <Place>' or 'located in the <Place>', set `answer` to the verbatim substring '<Place>' (including any leading 'the' token that is part of that substring in summary_2), trimmed of surrounding whitespace or wrapper punctuation but with no added or rearranged words.\",\n          \"drop_or_avoid_rule\": \"Do not emit leading prepositions or wrapper tokens such as 'in', 'located in', or similar phrases as part of the `answer`. Do not add explanatory words, punctuation, or context; do not invent synonyms or paraphrases. Avoid emitting multi-word answers that include extra role-descriptors or prepositions.\",\n          \"output_contract\": \"Produce the single `answer` field whose value is exactly the minimal place-name substring drawn verbatim from summary_2 (subject only to the allowed trimming of surrounding punctuation/whitespace). The output must remain a single minimal string and must not include additional text.\",\n          \"why_local_transition\": \"The agent previously emitted the supported place phrase with a leading preposition ('in ...'), which violates the base-prompt requirement to emit the minimal label verbatim. This delta instructs extracting the core noun phrase from the supported prepositional phrase so the final `answer` matches the prioritized-summary-supported minimal label.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Zamia\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 84,\n    \"w_stable_id\": \"84\",\n    \"agent\": \"final\",\n    \"w_question\": \"The musician also known as \\\"Braddah Iz\\\"  is a member of what Hawaiian musical group?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"The Mākaha Sons of Ni'ihau\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Mākaha Sons\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the prioritized summary (summary_2) contains a band name phrase of the form \\\"The <Core> of <Place>\\\" (for example the phrase present verbatim in the inputs: \\\"The Mākaha Sons of Ni'ihau\\\").\",\n          \"preserve_rule\": \"Continue to treat summary_2 as the highest-priority evidential source and preserve all existing trimming/quoting rules (trim surrounding whitespace and strip only surrounding punctuation or wrapper syntax). Keep the requirement that the final output be the single minimal string supported by the summaries and nothing else.\",\n          \"change_rule\": \"When the trigger matches, extract the core proper-name substring <Core> that appears verbatim inside the matched phrase (i.e., the contiguous words between the leading definite article and the trailing geographic \\\"of <Place>\\\"). Emit that <Core> alone as the single minimal answer token. Only remove at most a leading definite article \\\"The\\\" and a single trailing token sequence of the form \\\"of <Place>\\\"; do not remove or alter any other tokens and do not invent alternate names.\",\n          \"drop_or_avoid_rule\": \"Do not apply this extraction unless the exact core substring appears verbatim in the prioritized summary. Do not shorten multiword names further, do not drop internal words of the core, and do not apply this rule to phrases that are not explicitly in the form \\\"The <Core> of <Place>\\\". Avoid producing tokens that are not directly supported by the visible summaries.\",\n          \"output_contract\": \"Maintain the base final-answer contract: produce exactly one field `answer` whose value is a single minimal string (no extra text). After applying this core-extraction normalization, emit that core string verbatim and nothing else.\",\n          \"why_local_transition\": \"This small normalization removes a leading definite article and a trailing geographic qualifier from a band-name phrase already present in the prioritized summary, producing the shorter canonical band-name core that better matches the minimal-label emission rules while still being verbatim-supported by the visible evidence.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Zamia\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 147,\n    \"w_stable_id\": \"147\",\n    \"agent\": \"final\",\n    \"w_question\": \"What company published a fantasy tabletop role-playing game originally designed by Gary Gygax and Dave Arneson that has a book of rules that lack the complete set of rules for the game, and only includes rules for use by players of the game?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Tactical Studies Rules, Inc. (TSR)\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Tactical Studies Rules\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the prioritized summary (summary_2, or summary_1 only if summary_2 is silent for the answer) contains a company name that includes a common corporate suffix token such as \\\"Inc.\\\", \\\"LLC\\\", \\\"Corp.\\\", etc., or contains a parenthetical acronym or abbreviation (for example \\\"(TSR)\\\"), then apply the following local normalization before emitting the final answer.\",\n          \"preserve_rule\": \"Keep all existing output constraints: continue to treat summary_2 as the prioritized evidence, emit exactly one minimal-string `answer`, follow the strict verbatim-emission rule, and do not introduce facts not present in the summaries. Preserve any other useful content or label forms already supported by the summaries.\",\n          \"change_rule\": \"When the trigger condition holds, remove only (a) trailing corporate suffix tokens and their immediate punctuation (for example \\\", Inc.\\\", \\\", LLC\\\", \\\" Corp.\\\") and (b) any parenthetical acronym or abbreviation and its surrounding parentheses (for example \\\"(TSR)\\\"). After removal, trim any leftover surrounding punctuation and whitespace so the remaining core name appears exactly as it did verbatim in the prioritized summary. Do not alter word order, capitalization, or any other tokens of the remaining core name.\",\n          \"drop_or_avoid_rule\": \"Do not remove or alter any other words from the candidate label beyond the specific corporate suffixes or parenthetical acronyms. Do not expand, substitute, or invent alternative names, nor remove generic tokens that are not single trailing corporate suffixes or parenthetical acronyms. Do not apply this normalization unless the exact suffix or parenthetical text appears verbatim in the prioritized summary.\",\n          \"output_contract\": \"After applying the above normalization (only when triggered), emit the single minimal answer string as required by the base prompt. The emitted string must be the core company name verbatim as it appears in the prioritized summary after only the allowed removals (for example: \\\"Tactical Studies Rules\\\"). Continue to output exactly one field `answer` with that single minimal string and nothing else.\",\n          \"why_local_transition\": \"This small rule implements the permitted 'parenthetical/core-name stripping' normalization from the base prompt: it removes the explicit corporate suffix and parenthetical acronym present in the summary so the final emitted label is the core company name without extraneous suffixes or parentheses.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Zamia\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 103,\n    \"w_stable_id\": \"103\",\n    \"agent\": \"final\",\n    \"w_question\": \"What does Sam Weir and Gold Coast, Queensland have in common?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"the Gold Coast, Queensland, Australia\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Australia\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when summary_1 and summary_2 both point to the same geographic association and the prioritized summary (summary_2) contains a place phrase that includes a country name token verbatim (i.e., the place phrase ends with a country token present in summary_2).\",\n          \"preserve_rule\": \"Keep all existing base-prompt constraints: use summary_2 as the prioritized evidence source, do not introduce facts outside the visible summaries, obey the verbatim-emission and permitted-normalizations rules, and preserve the requirement to produce exactly one `answer` field whose value is a single minimal string.\",\n          \"change_rule\": \"When the trigger applies, prefer the country-name token (the exact country word as it appears verbatim in summary_2) as the minimal concise answer. Emit that country token alone as the `answer` value, applying only the base-prompt's permitted normalizations (no additions or paraphrases).\",\n          \"drop_or_avoid_rule\": \"Avoid emitting the longer multi-token locality string (city/region + state + country) when the country token appears verbatim in summary_2 and both summaries support the same shared geographic property. Do not add articles, qualifiers, punctuation, or explanatory text to the selected country token.\",\n          \"output_contract\": \"Maintain the original output contract: produce exactly one field `answer` whose value is a single minimal string. The final answer block ([[ ## answer ## ]], if used by the interface) must contain only that minimal string and nothing else. Do not introduce any additional fields or wrapper text.\",\n          \"why_local_transition\": \"This is a minimal, targeted normalization: when both summaries support the same nested place and the country name appears verbatim in the prioritized summary, emitting the country alone yields a strictly smaller, still-verbatim minimal label while preserving evidence provenance and the base prompt's strict emission rules.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"Zamia\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 25,\n  \"dominant_gap_type\": \"missing_qualifier\",\n  \"transported_damage_hypothesis\": \"The reverse of the local normalization will append a comma-separated geographic qualifier from the retrieved passages to the genus label, causing the agent to emit 'Zamia, <country/region>' instead of the minimal token 'Zamia'.\",\n  \"expected_damaged_behavior\": \"The final answer token at the agent boundary will include a trailing ', <country/region>' taken verbatim from the summaries (e.g. 'Zamia, <country>') rather than emitting the bare genus name.\",\n  \"rationale\": \"W sample 25 encodes a small, local normalization that strips a comma-separated region when the question requests a city-level label. That same failure mode (adding or preserving a trailing comma + region) transfers cleanly to this HotpotQA case because the visible evidence lists species with country/region tokens (comma-separated place fragments). A reverse application would not introduce new facts or change the answer choice, only the emitted label granularity — a plausible local agent-boundary mistake when the system treats a genus token as part of a 'X, Y' place string. This preserves locality, transfers the qualifier-handling failure (not W-side entities), and creates a near-neighbor C_minus of C_plus without requiring an answer flip.\",\n  \"confidence\": 0.75\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 140,
+    "c_stable_id": "140",
+    "candidate_w_sample_indices": [
+      25,
+      56,
+      84,
+      103,
+      147
+    ],
+    "match_fingerprint": "633fe17bd989c24da1a20454bdae95525b5fb4e393fcdb13d06d82712dfac755"
+  }
+}

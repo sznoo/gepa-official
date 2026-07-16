@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "f03242d27e5541458387059dde43b11fd7602b23602f0b5ed34ffe1ecf17172f",
+  "created_at": "2026-07-14T19:01:52.995363+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "How long was the revolution period existed which strongly influenced Ottomanism?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "How long was the revolution period existed which strongly influenced Ottomanism?",
+        "summary_1": "The French Revolution lasted about 10 years (1789–1799).",
+        "summary_2": "About 10 years (1789–1799).",
+        "current_output": "About 10 years (1789–1799)."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "About 10 years (1789–1799).",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "1789 until 1799",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"How long was the revolution period existed which strongly influenced Ottomanism?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"How long was the revolution period existed which strongly influenced Ottomanism?\",\n  \"summary_1\": \"The French Revolution lasted about 10 years (1789–1799).\",\n  \"summary_2\": \"About 10 years (1789–1799).\",\n  \"current_output\": \"About 10 years (1789–1799).\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"About 10 years (1789–1799).\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"1789 until 1799\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Apply when the question asks for a time span/length and at least one summary contains an explicit four-digit year range (e.g., '1789–1799').\",\n    \"preserve_rule\": \"Keep the agent's existing behavior of answering concisely and using only facts supported by the provided summaries; continue to place the result in the answer field and respect the base prompt's minimal-answer contract.\",\n    \"change_rule\": \"Instead of answering with a duration phrase plus parenthetical years (e.g., 'About 10 years (1789–1799).'), extract the explicit year range present in the summaries and output that range as a minimal string formatted with the word 'until' between the years (YYYY until YYYY). Do not add qualifiers like 'about' or extra punctuation.\",\n    \"drop_or_avoid_rule\": \"Do not output duration phrasing ('about X years', '≈10 years'), parentheses, explanatory text, or other commentary; avoid any additional tokens beyond the two years and the word 'until'.\",\n    \"output_contract\": \"The [[ ## answer ## ]] block must contain only the minimal year-range string supported by the summaries, formatted exactly as 'YYYY until YYYY' (using the years found in the summaries). No extra characters, punctuation, or explanatory text may appear.\",\n    \"why_local_transition\": \"The current output mixes a duration and parenthetical years; the question asks for how long the period existed, and the summaries contain an explicit year range. This small rule shifts the output to the explicit year-range format (minimal, unambiguous) while preserving the evidence used.\"\n  },\n  \"rationale\": \"This delta is a small, targeted behavioral change: it leaves the agent's concise-answer behavior intact but prefers the explicit year-range already present in the inputs and enforces a strict minimal format. It avoids adding new information or commentary and prevents the previous mixed-format answer (duration + parentheses), producing a single minimal string directly supported by the visible summaries.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 86,
+    "row_index": 86,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

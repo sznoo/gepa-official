@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_damage.attempt_0",
+  "key": "6ae22e6b48f7498ad062a2aac0699687e3ff654531802ac84b2d91a473e4ba31",
+  "created_at": "2026-07-15T21:13:32.883190+00:00",
+  "request": {
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "input_dict": {
+      "agent": "summary2",
+      "agent_role": "Integrate second-hop evidence with first-hop context and retain the facts needed to answer the question.",
+      "base_prompt": "Given the fields `question`, `context`, `passages`, produce the fields `summary`.",
+      "visible_c_inputs": {
+        "question": "Which game can be played by more than 2 players at a time, Game of the Generals or Ludo?",
+        "context": "Ludo can be played by more than two players.",
+        "passages": [
+          "Ludo (Ludo album) | Ludo is the first album to be released by St. Louisian pop punk band Ludo on indie label Redbird Records.  It was released April 6, 2004 and was re-released on September 29, 2009.",
+          "Ludo Vika | Ludo Vika (born July 7, 1955), sometimes credited as Ludo Vica, is a Dominican-born actress and comedian.",
+          "Ludo (board game) | Ludo , (from Latin \"ludo\", \"I play\") is a strategy board game for two to four players, in which the players race their four tokens from start to finish according to the rolls of a single die.  Like other cross and circle games, Ludo is derived from the Indian game Pachisi, but simpler.  The game and its variations are popular in many countries and under various names.",
+          "De Ludo Globi | De Ludo Globi is a book by Nicholas Cusanus.",
+          "Isac Ludo | Isac Ludo (1894–1973) was a Romanian writer and political figure.",
+          "Ludo Graham | Ludo Graham (born 26 May 1961) is a British television producer and director.",
+          "François Ludo | François Ludo (4 March 1930 – 29 June 1992) was a French football player."
+        ],
+        "current_output": "Ludo — it supports 2 to 4 players, so it can be played by more than two people."
+      },
+      "c_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "Ludo — it supports 2 to 4 players, so it can be played by more than two people.",
+        "score": 1.0,
+        "answer": "Ludo"
+      },
+      "w_minus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nico Hülkenberg",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_plus_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.",
+        "score": 0.0,
+        "answer": "Nico Hülkenberg"
+      },
+      "w_ordered_repair_delta_p": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),",
+            "preserve_rule": "Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.",
+            "change_rule": "When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.",
+            "drop_or_avoid_rule": "Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.",
+            "output_contract": "Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.",
+            "why_local_transition": "This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior."
+          }
+        }
+      ],
+      "match": {
+        "row_type": "positive_match",
+        "script_version": "2026-07-15-v3-decoupled-c-budget",
+        "c_eval_position": 2,
+        "c_stable_id": "2",
+        "selected_candidate_position": 0,
+        "selected_w_sample_index": 48,
+        "selected_w_stable_id": "48",
+        "agent": "summary2",
+        "dominant_gap_type": "bridge_relation",
+        "transported_damage_hypothesis": "When the passages include a game page that names the game and a second passage that gives the player-count detail, the agent's summary-synthesis behavior can be reversed so it drops the integrated supporting clause and returns only the bare answer name (e.g., output 'Ludo' without 'it supports 2 to 4 players').",
+        "expected_damaged_behavior": "The summary2 agent will revert from a short integrated explanation to a terse, bare-answer endpoint: it will still output the correct game name but omit the qualifying evidence about player counts.",
+        "rationale": "The W transition describes a generic bridge: integrating first-hop (entity page listing) and second-hop (biographic/detail) passages into a concise 1–2 sentence summary. That same bridging need exists for the target (game page + player-count detail). Transporting the reverse of this repair (i.e., removing the integration) yields a local neighbour of the correct C_plus — the answer remains 'Ludo' but loses the supporting qualifier. This meets the constraints: it transfers the failure pattern (failure to present the bridged evidence) without moving any W-side entities, keeps the damaged output close to C_plus, and does not require an answer flip.",
+        "confidence": 0.78
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are constructing a target-specific transported damaged output C_minus\nfor one agent in a fixed HotpotQA multi-agent pipeline.\n\nInputs:\n- C_plus is a correct current output/state for the target sample.\n- W_minus -> W_plus is a matched W-side repair transition.\n- The ordered W delta-p trace describes the repair behavior.\n\nTask:\nInfer the reverse W failure pattern and apply only that failure pattern to\nthe target sample's own visible inputs, producing a plausible LOCAL neighbor\nC_minus of C_plus.\n\nStrict rules:\n- Produce an actual output for the selected agent boundary, not a prompt.\n- Preserve the agent's native input/output contract.\n- Use only visible_c_inputs as factual content.\n- Never copy W-side entities, answers, titles, or sample-specific literals\n  unless they independently occur in visible_c_inputs.\n- Do not create unrelated corruption. Preserve enough useful C context for\n  the result to remain a local neighbor.\n- Damage one coherent behavior: weaken, remove, or blur an anchor, relation,\n  qualifier, candidate distinction, evidence integration, output selection,\n  or another matched failure pattern.\n- An answer flip is not required and must not be claimed.\n- Do not mention gold labels, oracle targets, evaluation metrics, source or\n  target states, transport, prompt updates, or optimization in damaged_output.\n- Do not wrap damaged_output in explanatory prose.\n\nAgent:\nsummary2\n\nAgent role:\nIntegrate second-hop evidence with first-hop context and retain the facts needed to answer the question.\n\nBase prompt:\nGiven the fields `question`, `context`, `passages`, produce the fields `summary`.\n\nVisible C inputs:\n{\n  \"question\": \"Which game can be played by more than 2 players at a time, Game of the Generals or Ludo?\",\n  \"context\": \"Ludo can be played by more than two players.\",\n  \"passages\": [\n    \"Ludo (Ludo album) | Ludo is the first album to be released by St. Louisian pop punk band Ludo on indie label Redbird Records.  It was released April 6, 2004 and was re-released on September 29, 2009.\",\n    \"Ludo Vika | Ludo Vika (born July 7, 1955), sometimes credited as Ludo Vica, is a Dominican-born actress and comedian.\",\n    \"Ludo (board game) | Ludo , (from Latin \\\"ludo\\\", \\\"I play\\\") is a strategy board game for two to four players, in which the players race their four tokens from start to finish according to the rolls of a single die.  Like other cross and circle games, Ludo is derived from the Indian game Pachisi, but simpler.  The game and its variations are popular in many countries and under various names.\",\n    \"De Ludo Globi | De Ludo Globi is a book by Nicholas Cusanus.\",\n    \"Isac Ludo | Isac Ludo (1894–1973) was a Romanian writer and political figure.\",\n    \"Ludo Graham | Ludo Graham (born 26 May 1961) is a British television producer and director.\",\n    \"François Ludo | François Ludo (4 March 1930 – 29 June 1992) was a French football player.\"\n  ],\n  \"current_output\": \"Ludo — it supports 2 to 4 players, so it can be played by more than two people.\"\n}\n\nC_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"Ludo — it supports 2 to 4 players, so it can be played by more than two people.\",\n  \"score\": 1.0,\n  \"answer\": \"Ludo\"\n}\n\nMatched W_minus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nico Hülkenberg\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nMatched W_plus state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"The Force India VJM09 (2016) was driven by Le Mans winner Nico Hülkenberg and Sergio Pérez. Nicolas Hülkenberg (born 19 August 1987) is a German professional racing driver currently racing for the Renault Sport F1 Team.\",\n  \"score\": 0.0,\n  \"answer\": \"Nico Hülkenberg\"\n}\n\nOrdered W repair delta-p:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"If the passages include a car-page that lists the car's drivers and also include a separate biographical passage for one of those named drivers (for this example: a passage about Nico Hülkenberg),\",\n      \"preserve_rule\": \"Keep the agent's existing behavior of returning the correct primary name(s) from the passages (do not change the answer-selection logic). Preserve concise output style and do not discard any facts already present in the source output.\",\n      \"change_rule\": \"When triggered, expand the single-name output into a short integrated summary of 1–2 sentences: (a) first sentence: name the driver(s) explicitly listed on the car passage (e.g., 'driven by X and Y'); (b) second sentence (single short clause): paraphrase key biographical facts available in the driver's passage — at minimum nationality, Le Mans winner status if stated, and current team if stated. Paraphrase these facts rather than copying large verbatim spans. Keep wording compact and factual.\",\n      \"drop_or_avoid_rule\": \"Do not invent new drivers, dates, statistics, or affiliations that are not present in the supplied passages. Avoid long verbatim quotations from the passages; avoid adding unrelated biography details or extra commentary. Do not attempt to produce a full biography—limit to the specified short factual clause.\",\n      \"output_contract\": \"Produce the field `summary` consisting of 1–2 concise sentences: one naming the car's driver(s) as listed in the car passage, and one brief paraphrased clause giving the driver's nationality, Le Mans win status, and current team if those facts appear in the passages. Ensure the primary answer name remains present.\",\n      \"why_local_transition\": \"This change guides the agent to integrate first-hop (car page) and second-hop (driver bio) evidence into a compact summary. That fills the gap between a bare-name endpoint and the richer, answerable summary the pipeline expects, while minimizing changes to other behavior.\"\n    }\n  }\n]\n\nMatch explanation:\n{\n  \"row_type\": \"positive_match\",\n  \"script_version\": \"2026-07-15-v3-decoupled-c-budget\",\n  \"c_eval_position\": 2,\n  \"c_stable_id\": \"2\",\n  \"selected_candidate_position\": 0,\n  \"selected_w_sample_index\": 48,\n  \"selected_w_stable_id\": \"48\",\n  \"agent\": \"summary2\",\n  \"dominant_gap_type\": \"bridge_relation\",\n  \"transported_damage_hypothesis\": \"When the passages include a game page that names the game and a second passage that gives the player-count detail, the agent's summary-synthesis behavior can be reversed so it drops the integrated supporting clause and returns only the bare answer name (e.g., output 'Ludo' without 'it supports 2 to 4 players').\",\n  \"expected_damaged_behavior\": \"The summary2 agent will revert from a short integrated explanation to a terse, bare-answer endpoint: it will still output the correct game name but omit the qualifying evidence about player counts.\",\n  \"rationale\": \"The W transition describes a generic bridge: integrating first-hop (entity page listing) and second-hop (biographic/detail) passages into a concise 1–2 sentence summary. That same bridging need exists for the target (game page + player-count detail). Transporting the reverse of this repair (i.e., removing the integration) yields a local neighbour of the correct C_plus — the answer remains 'Ludo' but loses the supporting qualifier. This meets the constraints: it transfers the failure pattern (failure to present the bridged evidence) without moving any W-side entities, keeps the damaged output close to C_plus, and does not require an answer flip.\",\n  \"confidence\": 0.78\n}\n\nRepair feedback from a rejected attempt:\n{}\n\nReturn strict JSON only:\n{\n  \"damaged_output\": <native agent output; query must be {\"query\": \"...\"}, other agents use a string>,\n  \"transported_failure_pattern\": \"short abstract failure pattern\",\n  \"expected_damage\": \"short target-specific behavioral effect\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\"short preserved cue\"],\n    \"why_not_unrelated\": \"brief reason\"\n  },\n  \"confidence\": 0.0,\n  \"rationale\": \"brief explanation without hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"damaged_output\": {\n    \"summary\": \"Ludo\"\n  },\n  \"transported_failure_pattern\": \"Omit the integrated second-hop supporting clause and return only the primary entity name without the qualifying evidence.\",\n  \"expected_damage\": \"The summary will no longer mention the player-count detail; it will output only the game name 'Ludo', removing the clause that it supports 2 to 4 players.\",\n  \"locality_check\": {\n    \"is_local_neighbor_of_c_plus\": true,\n    \"preserved_context\": [\n      \"Ludo\"\n    ],\n    \"why_not_unrelated\": \"Only the explanatory clause about player count was removed from the original concise summary; the answer and concise style are preserved.\"\n  },\n  \"confidence\": 0.78,\n  \"rationale\": \"To mirror the reverse repair, I removed the integrated supporting clause that linked the game page and the player-count detail, producing a terse name-only summary while retaining the correct game name from the visible inputs.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_damage.attempt_0",
+    "signature": "ours.utils.positive_update.GenerateTransportedDamageSignature",
+    "c_eval_position": 2,
+    "c_stable_id": "2",
+    "w_sample_index": 48,
+    "w_stable_id": "48",
+    "agent": "summary2",
+    "damage_attempt": 0,
+    "match_fingerprint": "80f9a7ca5ab75bcfdb51c440027ab6125b0ca7a74fbcdd9f707735520f24600f"
+  }
+}

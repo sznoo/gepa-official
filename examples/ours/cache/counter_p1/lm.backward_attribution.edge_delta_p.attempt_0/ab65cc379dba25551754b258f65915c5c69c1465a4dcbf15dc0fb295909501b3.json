@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ab65cc379dba25551754b258f65915c5c69c1465a4dcbf15dc0fb295909501b3",
+  "created_at": "2026-07-15T21:08:50.039463+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "What is the premier date of this South Korean television drama airing every Wednesday and Thursday, in which Jung Hae-in appears?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+        "direction": "C_plus_to_C_minus_avoid"
+      },
+      "visible_agent_inputs": {
+        "question": "What is the premier date of this South Korean television drama airing every Wednesday and Thursday, in which Jung Hae-in appears?",
+        "summary_1": "September 27, 2017",
+        "summary_2": "September 27, 2017",
+        "current_output": "September 27, 2017"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_correct",
+        "output": "September 27, 2017",
+        "score": 1.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "transported_damage",
+        "output": "2017",
+        "score": 0.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"What is the premier date of this South Korean television drama airing every Wednesday and Thursday, in which Jung Hae-in appears?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\",\n  \"direction\": \"C_plus_to_C_minus_avoid\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"What is the premier date of this South Korean television drama airing every Wednesday and Thursday, in which Jung Hae-in appears?\",\n  \"summary_1\": \"September 27, 2017\",\n  \"summary_2\": \"September 27, 2017\",\n  \"current_output\": \"September 27, 2017\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_correct\",\n  \"output\": \"September 27, 2017\",\n  \"score\": 1.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"transported_damage\",\n  \"output\": \"2017\",\n  \"score\": 0.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"When both visible inputs summary_1 and summary_2 present the same explicit calendar date in a 'Month Day, Year' form (a named month followed by a day and a four-digit year), or when the current_output already equals such a full-date string.\",\n    \"preserve_rule\": \"Keep the base contract that the final [[ ## answer ## ]] block must contain only the minimal answer string supported by the visible summaries. Preserve existing behavior for choosing minimal supported content and for not adding commentary.\",\n    \"change_rule\": \"If the trigger fires, prefer the most specific date string exactly as given in the summaries (preserve the month name, day, and year punctuation/spacing). Emit that full date as the minimal answer. If summaries are consistent at day resolution, do not shorten or truncate to a less specific form (for example, do not output only the year or only the month and year). If summaries disagree or do not contain a day-level date, fall back to the most specific common information supported by both summaries.\",\n    \"drop_or_avoid_rule\": \"Avoid producing a truncated date (such as only the year) or any shorter form when the summaries support a full 'Month Day, Year' string. Do not add explanatory text, do not invent additional date details, and do not change the date format unless the summaries differ in format and a conservative common form is required.\",\n    \"output_contract\": \"The agent must place exactly the minimal answer string (the full supported date when triggered) and nothing else inside the [[ ## answer ## ]] block. No extra tokens, explanations, or formatting changes beyond the exact supported string.\",\n    \"why_local_transition\": \"This targeted prompt edit prevents an unwanted regression that shortens a fully supported date to an overly brief year-only answer. It is the smallest behavior change: enforce selecting the most specific supported date when both summaries agree, while preserving all other base-prompt behaviors.\"\n  },\n  \"rationale\": \"The source state produced a correct full date while the target shows a damaged shortened form (year-only). The minimal, local fix is to add a narrowly scoped rule that, when both summaries give the same explicit 'Month Day, Year', forces the agent to output that full string and forbids truncation to only the year. This preserves existing minimal-answer behavior and avoids broader changes to the agent's interface or reasoning.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "ours.analyze_attribute.GuardedEdgeDeltaPSignature",
+    "sample_index": 4,
+    "row_index": 4,
+    "material_role": "C_signed_avoid",
+    "matched_w_sample_index": 28,
+    "matched_w_stable_id": "28",
+    "bisection_round": 0,
+    "material_fingerprint": "84d7161825c04b476bc517b33074650c694e75e08fb9b0c3c3c8b1eb65deefdd",
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

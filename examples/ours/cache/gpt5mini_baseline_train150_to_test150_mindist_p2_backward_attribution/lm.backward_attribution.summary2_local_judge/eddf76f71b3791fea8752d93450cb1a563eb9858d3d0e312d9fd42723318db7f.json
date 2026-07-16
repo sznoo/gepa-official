@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.summary2_local_judge",
+  "key": "eddf76f71b3791fea8752d93450cb1a563eb9858d3d0e312d9fd42723318db7f",
+  "created_at": "2026-07-14T17:03:23.757211+00:00",
+  "request": {
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "input_dict": {
+      "question": "What items could you find delivered to Trout Creek, Utah?",
+      "source_summary": "Trout Creek, Utah received mail deliveries — specifically messages and newspapers — via the Pony Express/Overland route. Pony Express was a mail service that delivered messages and newspapers (operating April 1860–October 1861).",
+      "target_summary": "Integrated evidence summary: Trout Creek, Utah is located along the Pony Express/Overland route in northern Snake Valley. The Pony Express was a mail service delivering messages, newspapers, and mail. These two facts are the relevant evidence for determining what items could have been delivered to Trout Creek via the Pony Express/Overland route.",
+      "candidate_summary": "Trout Creek is \"located along the Pony Express/Overland route in northern Snake Valley.\" Pony Express was a mail service that carried messages and newspapers. These facts are the relevant evidence for what items could have been delivered to Trout Creek."
+    },
+    "rendered_prompt": "You are evaluating the LOCAL output quality of the summary2 agent in a\nmulti-agent HotpotQA pipeline.\n\nDo not evaluate the downstream final answerer and do not use final-answer\nexact match. Compare semantic information states, not lexical overlap.\n\nDefinitions:\n- target_reconstructed: the candidate summary preserves the target\n  summary's task-relevant evidence, entities, relations, and conclusions\n  needed for the question. Paraphrases are allowed. Incidental details in\n  the target need not be copied.\n- preserves_source: the candidate does not remove or contradict useful\n  task-relevant information already present in the source summary.\n- meaningful_gain: relative to the source summary, the candidate adds at\n  least one task-relevant fact, relation, disambiguation, or answer-bearing\n  detail represented in the target summary.\n\nJudge only the summaries shown below. Do not reward verbosity. Additional\nfacts are acceptable only when they do not contradict the source or target.\n\nQuestion:\nWhat items could you find delivered to Trout Creek, Utah?\n\nSource summary2:\nTrout Creek, Utah received mail deliveries — specifically messages and newspapers — via the Pony Express/Overland route. Pony Express was a mail service that delivered messages and newspapers (operating April 1860–October 1861).\n\nTarget summary2:\nIntegrated evidence summary: Trout Creek, Utah is located along the Pony Express/Overland route in northern Snake Valley. The Pony Express was a mail service delivering messages, newspapers, and mail. These two facts are the relevant evidence for determining what items could have been delivered to Trout Creek via the Pony Express/Overland route.\n\nCandidate summary2:\nTrout Creek is \"located along the Pony Express/Overland route in northern Snake Valley.\" Pony Express was a mail service that carried messages and newspapers. These facts are the relevant evidence for what items could have been delivered to Trout Creek.\n\nReturn strict JSON only:\n{\n  \"target_reconstructed\": true or false,\n  \"preserves_source\": true or false,\n  \"meaningful_gain\": true or false,\n  \"rationale\": \"brief evidence-based explanation\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"target_reconstructed\": true,\n  \"preserves_source\": true,\n  \"meaningful_gain\": true,\n  \"rationale\": \"The candidate states Trout Creek is along the Pony Express/Overland route in northern Snake Valley and that the Pony Express carried messages and newspapers — it therefore preserves the source's claims (mail/messages/newspapers via Pony Express) and includes the target's added location detail (northern Snake Valley). No useful source information is removed or contradicted.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.summary2_local_judge",
+    "signature": "__main__.Summary2LocalJudgeSignature",
+    "sample_index": 128,
+    "row_index": 128,
+    "judge_phase": "endpoint_probe",
+    "bisection_round": 0,
+    "agent": "summary2"
+  }
+}

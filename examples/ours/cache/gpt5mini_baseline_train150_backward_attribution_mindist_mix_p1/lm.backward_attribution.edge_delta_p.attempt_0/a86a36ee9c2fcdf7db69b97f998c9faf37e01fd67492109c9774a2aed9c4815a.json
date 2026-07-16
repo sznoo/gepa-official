@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "a86a36ee9c2fcdf7db69b97f998c9faf37e01fd67492109c9774a2aed9c4815a",
+  "created_at": "2026-07-14T19:01:34.231499+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "Heavyweights and The Santa Clause 2, share which genres?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "Heavyweights and The Santa Clause 2, share which genres?",
+        "summary_1": "They are both comedies and are commonly classed as family films.",
+        "summary_2": "They are both comedy films and family films.",
+        "current_output": "They are both comedies and family films."
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "They are both comedies and family films.",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "comedy-drama",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"Heavyweights and The Santa Clause 2, share which genres?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"Heavyweights and The Santa Clause 2, share which genres?\",\n  \"summary_1\": \"They are both comedies and are commonly classed as family films.\",\n  \"summary_2\": \"They are both comedy films and family films.\",\n  \"current_output\": \"They are both comedies and family films.\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"They are both comedies and family films.\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"comedy-drama\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"Both summary_1 and summary_2 list one or more genres (i.e., contain genre words or short genre phrases).\",\n    \"preserve_rule\": \"Keep using the visible summaries as the only evidence source and preserve the requirement to produce the final answer in the agent's existing answer field.\",\n    \"change_rule\": \"When forming the final answer, extract genre tokens from summary_1 and summary_2, normalize them to lowercased singular form (remove plural endings like trailing 's' and drop generic words like 'film(s)' or 'movie(s)'). Compute the intersection of the two normalized genre sets. If the intersection contains exactly one token, output that token. If it contains multiple tokens, output a single token formed by joining those tokens in alphabetical order with a single hyphen (e.g., 'romantic-comedy'). If the intersection is empty but both summaries list genres, form a single hyphenated token by taking the first normalized genre from each summary (deduplicate if identical) and joining them with a hyphen. Always output only that single token (no surrounding words).\",\n    \"drop_or_avoid_rule\": \"Do not produce full sentences, explanations, or supporting text; do not invent or add genres that do not appear in either summary; avoid plural or verbose phrasing like 'They are both ...' or 'both films are ...'.\",\n    \"output_contract\": \"Place only the minimal, normalized genre token (lowercased, singularized, hyphenated only if combining multiple tokens) in the [[ ## answer ## ]] block. No extra punctuation, sentence fragments, or commentary.\",\n    \"why_local_transition\": \"This is a small, targeted change from a verbose sentence to a compact, normalized genre token. It preserves the use of the visible summaries while forcing a single minimal answer format and a deterministic rule for combining multiple shared genres.\"\n  },\n  \"rationale\": \"The source output is a full-sentence description. The smallest coherent behavioral change is to normalize and compress the evidence into a single minimal answer token reflecting the shared genre(s). The delta defines a deterministic extraction, normalization, and hyphenation procedure so the agent stops producing verbose sentences and instead emits a compact genre string derived only from the visible summaries; it neither copies any gold label nor introduces unsupported genres.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 13,
+    "row_index": 13,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

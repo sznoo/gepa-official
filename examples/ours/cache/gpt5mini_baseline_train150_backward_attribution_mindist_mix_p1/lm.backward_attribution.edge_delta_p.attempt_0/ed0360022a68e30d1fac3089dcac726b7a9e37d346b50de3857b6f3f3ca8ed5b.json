@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.edge_delta_p.attempt_0",
+  "key": "ed0360022a68e30d1fac3089dcac726b7a9e37d346b50de3857b6f3f3ca8ed5b",
+  "created_at": "2026-07-14T19:01:36.755667+00:00",
+  "request": {
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "input_dict": {
+      "agent": "final",
+      "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.",
+      "task_context": {
+        "question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+        "agent": "final",
+        "agent_role": "Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries."
+      },
+      "visible_agent_inputs": {
+        "question": "The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?",
+        "summary_1": "Nico Hülkenberg",
+        "summary_2": "Nico Hülkenberg",
+        "current_output": "Nico Hülkenberg"
+      },
+      "current_prompt": "Given the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.",
+      "edge_index": 0,
+      "source_state": {
+        "state_kind": "endpoint",
+        "state_origin": "baseline_rollout",
+        "output": "Nico Hülkenberg",
+        "score": 0.0
+      },
+      "target_state": {
+        "state_kind": "endpoint",
+        "state_origin": "gold_destination",
+        "output": "Nicolas Hülkenberg",
+        "score": 1.0
+      },
+      "repair_feedback": {}
+    },
+    "rendered_prompt": "You are deriving one LOCAL PROMPT DELTA Δp_i for an agent in a fixed\nmulti-agent HotpotQA pipeline.\n\nThe source and target states describe one local functional transition.\nProduce a prompt-update rule that helps the unchanged base prompt move\nthrough this edge. The delta will later be placed in an ORDERED list with\nall other edge deltas and executed directly as supplemental context.\n\nReturn JSON only:\n{\n  \"delta_p\": {\n    \"trigger\": \"...\",\n    \"preserve_rule\": \"...\",\n    \"change_rule\": \"...\",\n    \"drop_or_avoid_rule\": \"...\",\n    \"output_contract\": \"...\",\n    \"why_local_transition\": \"...\"\n  },\n  \"rationale\": \"...\"\n}\n\nStrict anti-cheating rules:\n- Δp_i is a PROMPT EDIT / behavior rule, never the target output.\n- Do not output a candidate answer, summary, or query as Δp_i.\n- Do not instruct the agent to copy the target state.\n- Do not copy the gold answer, hidden support title, target-only entity,\n  or a long literal span that appears only in the target state.\n- Sample-specific anchors may appear only when they already occur in the\n  visible agent inputs below.\n- Do not mention gold labels, oracle labels, evaluation metrics, missing\n  support, target state, source state, or endpoint reconstruction.\n- Preserve the agent's original input/output interface.\n- Express the smallest coherent behavioral change for this edge.\n- Preserve useful behavior and evidence already present at the source.\n- Each edge is inverted independently from the same current prompt.\n\nAgent:\nfinal\n\nAgent role:\nFollow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\n\nTask context:\n{\n  \"question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n  \"agent\": \"final\",\n  \"agent_role\": \"Follow the base prompt's native final-answer output contract. Ensure the [[ ## answer ## ]] block contains only the minimal answer string supported by the visible summaries.\"\n}\n\nVisible agent inputs:\n{\n  \"question\": \"The Force India VJM09 is a Formula One racing car designed by Force India, to compete in the 2016 Formula One season, the car was driven by which Le Mans winner, a German professional racing driver currently racing for the Renault Sport F1 Team?\",\n  \"summary_1\": \"Nico Hülkenberg\",\n  \"summary_2\": \"Nico Hülkenberg\",\n  \"current_output\": \"Nico Hülkenberg\"\n}\n\nCurrent/base prompt p:\nGiven the fields `question`, `summary_1`, `summary_2`, produce the fields `answer`.\n\nEdge index:\n0\n\nSource state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"baseline_rollout\",\n  \"output\": \"Nico Hülkenberg\",\n  \"score\": 0.0\n}\n\nTarget state:\n{\n  \"state_kind\": \"endpoint\",\n  \"state_origin\": \"gold_destination\",\n  \"output\": \"Nicolas Hülkenberg\",\n  \"score\": 1.0\n}\n\nRepair feedback from a rejected previous attempt:\n{}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"delta_p\": {\n    \"trigger\": \"If the minimal final answer to produce is a person's name (one or two tokens) and the visible summaries or current output use a shortened or familiar first name form (a nickname or abbreviation) while the surname is consistent across summaries.\",\n    \"preserve_rule\": \"Keep the surname exactly as it appears in the summaries (including diacritics) and prefer wording already present in the visible summaries for all tokens unless a safe canonicalization is applied to the first name as described below.\",\n    \"change_rule\": \"If the first name is a common short form or nickname and you can unambiguously identify the canonical/full given name for that public figure from general knowledge, replace only the first name with its canonical/full form while leaving the surname unchanged. Apply this only when the identity is unambiguous from the summaries (no conflicting names or multiple possible people with the same surname).\",\n    \"drop_or_avoid_rule\": \"Do not append titles, qualifiers, explanations, or extra tokens. Do not introduce alternate surnames, dates, teams, or any content not directly required to produce the canonical minimal name. Avoid making an expansion when the identity would be ambiguous.\",\n    \"output_contract\": \"Produce only the minimal answer string (the canonical person's name) in the final answer block [[ ## answer ## ]] and nothing else. The output must be supported by the visible summaries and follow the preserve/change rules above.\",\n    \"why_local_transition\": \"This change standardizes shortened first names to their canonical/full forms when unambiguous, so the final minimal name is in a canonical form while preserving evidence from the summaries (surname and diacritics).\"\n  },\n  \"rationale\": \"The source output used a shortened given name present in the summaries. The smallest coherent behavior change is to expand an unambiguous nickname to its canonical/full given name while preserving the surname and diacritics. This moves the agent toward the canonical target form without adding extra information or violating the final-answer contract.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.edge_delta_p.attempt_0",
+    "signature": "__main__.GuardedEdgeDeltaPSignature",
+    "sample_index": 48,
+    "row_index": 48,
+    "bisection_round": 0,
+    "agent": "final",
+    "edge_index": 0,
+    "delta_attempt": 0
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.backward_attribution.direct_delta_execution",
+  "key": "81b23f174078d51ada7dc14ed1b2d9b2df162a9ff1c593ee38f4415533fab799",
+  "created_at": "2026-07-14T19:01:52.916773+00:00",
+  "request": {
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "input_dict": {
+      "agent": "query",
+      "agent_role": "Produce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.",
+      "base_prompt": "Given the fields `question`, `summary_1`, produce the fields `query`.",
+      "ordered_delta_p_trace": [
+        {
+          "edge_index": 0,
+          "delta_p": {
+            "trigger": "When asked to produce a second-hop retrieval query and the current query is a long, conditional full-sentence (e.g. contains phrases like \"If none\" or \"list the full principal cast\").",
+            "preserve_rule": "Keep the agent's objective to locate cast/supporting evidence for the film title 'Baby' with respect to the birthdate 'October 20, 1971' and the nationality 'American'. Preserve producing exactly one retrieval query as the agent's output.",
+            "change_rule": "Replace verbose conditional phrasing with a single compact, keyword-style query. Construct the query as a short sequence of tokens including the film title 'Baby', a role keyword ('cast' or 'actor'), the literal date 'October 20, 1971', and 'American' (in any natural order). Produce the query as one single-line string (no sentences, no fallback instructions).",
+            "drop_or_avoid_rule": "Do not emit full-sentence questions, conditional fallbacks like 'If none, list...', or instructions to enumerate the entire cast. Do not introduce new sample-specific anchors (years, subtitles, or parentheses not already in visible inputs) or extra explanatory text.",
+            "output_contract": "Output exactly one single-line retrieval query string (the field 'query'). The string must be concise (keyword-style), include the tokens: Baby, cast or actor, October 20, 1971, and American. No additional sentences, lists, or instructions.",
+            "why_local_transition": "The current long conditional query invites broad, noisy retrievals and distracts the retriever. A minimal change to a concise keyword query focuses retrieval on cast listings and birthdate fields, increasing chance of finding the missing supporting page while preserving the agent's intent to verify an American actor born on October 20, 1971."
+          }
+        },
+        {
+          "edge_index": 1,
+          "delta_p": {
+            "trigger": "When summary_1 indicates the target actor was not recovered (mentions 'None' or otherwise reports no matching cast member) and the question asks for an actor by a specific birthdate and nationality.",
+            "preserve_rule": "Keep using the provided `question` and `summary_1` as the only context for composing the retrieval query; preserve the intent to find a single supporting cast member matching the given date and nationality.",
+            "change_rule": "Instead of broad fallback instructions, produce one single, compact retrieval query that: (a) references the title exactly as it appears in the question (no added parenthetical year/disambiguator), (b) includes the birthdate token 'October 20, 1971' and the nationality token 'American actor', and (c) asks which cast member meets those constraints. Make the query concise (one short sentence or phrase).",
+            "drop_or_avoid_rule": "Do not add parenthetical disambiguators (e.g., year in parentheses), do not list or request the entire cast as a fallback, and do not introduce person names or long spans not already present in the visible inputs. Avoid verbose conditional clauses like 'If none, list...'.",
+            "output_contract": "Return exactly one string in the `query` field: a short retrieval query phrased to find which cast member of 'Baby' is an American actor born October 20, 1971. Keep it concise (one line, ~5–12 words) and focused on the title, date, and nationality.",
+            "why_local_transition": "The prior behavior produced an over-specific or parenthetically disambiguated query that leaked a target literal; this edit restricts the agent to a compact, title-as-given query that explicitly includes the date and nationality filters while avoiding disambiguating literals and broad fallback instructions."
+          }
+        }
+      ],
+      "visible_agent_inputs": {
+        "question": "Baby stars which American actor born on October 20, 1971?",
+        "summary_1": "None. The only actor in the passages born October 20, 1971 is Matthew Godfrey, who is Canadian; \"Baby\" stars Feodor Chin (born August 18, 1974) per the passages.",
+        "current_output": {
+          "query": "Which actor in the cast of the film or TV title \"Baby\" was born on October 20, 1971 and is American? If none, list the full principal cast of \"Baby\" with their birthdates and nationalities for verification."
+        }
+      },
+      "output_requirement": "Return exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries."
+    },
+    "rendered_prompt": "You are executing one agent in a fixed HotpotQA multi-agent pipeline.\n\nUse the unchanged base instruction p together with the complete ORDERED\nlist of local prompt deltas. The deltas are supplemental behavior guidance\nfor this sample; they are not outputs and must not be quoted mechanically.\n\nThis is a direct delta-context execution probe:\n- Do not rewrite, aggregate, or synthesize a new prompt p'.\n- Apply every delta in order to the visible inputs.\n- Judge success only by producing the endpoint agent output.\n- Do not attempt to reproduce or discuss intermediate states.\n- Do not infer hidden information from the existence of the deltas.\n- Use only the visible agent inputs as factual evidence.\n- Never output gold/oracle labels, evaluation metrics, or hidden support.\n- Preserve the agent's normal input/output contract.\n\nAgent:\nquery\n\nAgent role:\nProduce one compact second-hop retrieval query targeting the missing bridge or supporting evidence.\n\nBase prompt p:\nGiven the fields `question`, `summary_1`, produce the fields `query`.\n\nOrdered local prompt deltas:\n[\n  {\n    \"edge_index\": 0,\n    \"delta_p\": {\n      \"trigger\": \"When asked to produce a second-hop retrieval query and the current query is a long, conditional full-sentence (e.g. contains phrases like \\\"If none\\\" or \\\"list the full principal cast\\\").\",\n      \"preserve_rule\": \"Keep the agent's objective to locate cast/supporting evidence for the film title 'Baby' with respect to the birthdate 'October 20, 1971' and the nationality 'American'. Preserve producing exactly one retrieval query as the agent's output.\",\n      \"change_rule\": \"Replace verbose conditional phrasing with a single compact, keyword-style query. Construct the query as a short sequence of tokens including the film title 'Baby', a role keyword ('cast' or 'actor'), the literal date 'October 20, 1971', and 'American' (in any natural order). Produce the query as one single-line string (no sentences, no fallback instructions).\",\n      \"drop_or_avoid_rule\": \"Do not emit full-sentence questions, conditional fallbacks like 'If none, list...', or instructions to enumerate the entire cast. Do not introduce new sample-specific anchors (years, subtitles, or parentheses not already in visible inputs) or extra explanatory text.\",\n      \"output_contract\": \"Output exactly one single-line retrieval query string (the field 'query'). The string must be concise (keyword-style), include the tokens: Baby, cast or actor, October 20, 1971, and American. No additional sentences, lists, or instructions.\",\n      \"why_local_transition\": \"The current long conditional query invites broad, noisy retrievals and distracts the retriever. A minimal change to a concise keyword query focuses retrieval on cast listings and birthdate fields, increasing chance of finding the missing supporting page while preserving the agent's intent to verify an American actor born on October 20, 1971.\"\n    }\n  },\n  {\n    \"edge_index\": 1,\n    \"delta_p\": {\n      \"trigger\": \"When summary_1 indicates the target actor was not recovered (mentions 'None' or otherwise reports no matching cast member) and the question asks for an actor by a specific birthdate and nationality.\",\n      \"preserve_rule\": \"Keep using the provided `question` and `summary_1` as the only context for composing the retrieval query; preserve the intent to find a single supporting cast member matching the given date and nationality.\",\n      \"change_rule\": \"Instead of broad fallback instructions, produce one single, compact retrieval query that: (a) references the title exactly as it appears in the question (no added parenthetical year/disambiguator), (b) includes the birthdate token 'October 20, 1971' and the nationality token 'American actor', and (c) asks which cast member meets those constraints. Make the query concise (one short sentence or phrase).\",\n      \"drop_or_avoid_rule\": \"Do not add parenthetical disambiguators (e.g., year in parentheses), do not list or request the entire cast as a fallback, and do not introduce person names or long spans not already present in the visible inputs. Avoid verbose conditional clauses like 'If none, list...'.\",\n      \"output_contract\": \"Return exactly one string in the `query` field: a short retrieval query phrased to find which cast member of 'Baby' is an American actor born October 20, 1971. Keep it concise (one line, ~5–12 words) and focused on the title, date, and nationality.\",\n      \"why_local_transition\": \"The prior behavior produced an over-specific or parenthetically disambiguated query that leaked a target literal; this edit restricts the agent to a compact, title-as-given query that explicitly includes the date and nationality filters while avoiding disambiguating literals and broad fallback instructions.\"\n    }\n  }\n]\n\nVisible agent inputs:\n{\n  \"question\": \"Baby stars which American actor born on October 20, 1971?\",\n  \"summary_1\": \"None. The only actor in the passages born October 20, 1971 is Matthew Godfrey, who is Canadian; \\\"Baby\\\" stars Feodor Chin (born August 18, 1974) per the passages.\",\n  \"current_output\": {\n    \"query\": \"Which actor in the cast of the film or TV title \\\"Baby\\\" was born on October 20, 1971 and is American? If none, list the full principal cast of \\\"Baby\\\" with their birthdates and nationalities for verification.\"\n  }\n}\n\nRequired parsed output:\nReturn exactly {\"query\": \"<one compact second-hop BM25 query>\"}. Do not return explanations or multiple queries.\n\nReturn strict JSON only:\n{\n  \"output\": <the parsed agent output in the required form>,\n  \"rationale\": \"brief statement of how the ordered rules were applied; do not reveal hidden reasoning\"\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"output\": {\n    \"query\": \"Baby American actor October 20, 1971 cast\"\n  },\n  \"rationale\": \"Replaced the verbose conditional with a single-line keyword query containing the title 'Baby', the nationality token 'American actor', the exact date 'October 20, 1971', and a cast/actor keyword per the ordered deltas.\"\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "backward_attribution.direct_delta_execution",
+    "signature": "__main__.DirectDeltaExecutionSignature",
+    "sample_index": 64,
+    "row_index": 64,
+    "bisection_round": 1,
+    "agent": "query",
+    "n_edges": 2
+  }
+}
