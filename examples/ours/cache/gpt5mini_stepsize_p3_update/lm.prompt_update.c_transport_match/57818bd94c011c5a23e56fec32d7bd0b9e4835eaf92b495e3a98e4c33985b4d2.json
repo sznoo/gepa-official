@@ -1,0 +1,235 @@
+{
+  "schema_version": 1,
+  "namespace": "lm.prompt_update.c_transport_match",
+  "key": "57818bd94c011c5a23e56fec32d7bd0b9e4835eaf92b495e3a98e4c33985b4d2",
+  "created_at": "2026-07-16T06:55:56.227378+00:00",
+  "request": {
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "input_dict": {
+      "target_case": {
+        "eval_position": 62,
+        "stable_id": "62",
+        "question": "Which mountain range, found in eastern North America, was seen as the western frontier prior to about 1800?",
+        "summary_1": "Passage [1] states \"the crest of the Appalachian Mountains was seen as the western frontier\" (this supports the Appalachian Mountains as the frontier). Missing/needed verification: confirm that the Appalachian Mountains are a mountain range \"found in eastern North America.\" Retrieval direction/anchors: fetch an authoritative article on \"Appalachian Mountains\" (search: \"Appalachian Mountains eastern North America\" or the \"Appalachian Mountains\" Wikipedia page) that explicitly says the range is in eastern North America.",
+        "hop2_query": "Appalachian Mountains eastern North America",
+        "summary_2": "The Appalachian Mountains were seen as the western frontier prior to about 1800. The Appalachian Mountains are a system of mountains in eastern North America (passage [2]).",
+        "answer": "The Appalachian Mountains",
+        "gold_support_titles": [
+          "Western United States",
+          "Appalachian Mountains"
+        ]
+      },
+      "candidate_transitions": [
+        {
+          "w_sample_index": 57,
+          "w_stable_id": "57",
+          "agent": "final",
+          "w_question": "Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "vocalist",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "singer",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "Apply when the provided summaries indicate both subjects performed vocal duties (for example, when phrases such as \"lead singer\", \"vocalist\", or similar vocal-role language appear in summary_1 or summary_2).",
+                "preserve_rule": "Keep all base-prompt constraints: treat summary_2 as the primary evidence, allow composition with summary_1 only as supporting premises, emit only the minimal answer string supported by the summaries, and do not add explanations or extra text.",
+                "change_rule": "When the trigger conditions hold, normalize role-descriptions that denote performing vocals (e.g., 'lead singer', 'vocalist', 'lead vocals') to the concise single-token common noun that denotes a person who sings. Select that single-token common noun as the final minimal answer when it is supported by the summaries; do not output multi-word role phrases if a single-token label is licensed.",
+                "drop_or_avoid_rule": "Do not emit the occupational adjective 'vocalist' or multi-word phrases like 'lead singer' as the final minimal string when a single-token common noun equivalent is supported. Avoid adding modifiers, extra words, punctuation, or explanatory text beyond that single token. Do not invent new labels not present or implied by the summaries.",
+                "output_contract": "The agent's 'answer' must be exactly one token: the single-token common noun denoting a person who performs vocals (as supported by the summaries). Emit no surrounding text, justification, or formatting—only that minimal token.",
+                "why_local_transition": "The base prompt already requires a minimal literal answer but allowed producing the term 'vocalist'. This local edit makes the behavior prefer the concise single-token common-noun label for a person who performs vocals when the summaries provide vocal-role evidence, aligning the final output with the minimal-label formatting expectations."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "The Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 148,
+          "w_stable_id": "148",
+          "agent": "final",
+          "w_question": "Matt Lucena and Fabio Fognini, have which mutual occupation?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "professional tennis players",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "professional tennis player",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "The question requests the mutual/shared occupation of two or more named individuals (e.g., names joined by 'and' or an explicit 'mutual'/'shared' phrasing) and the provided summaries supply an occupational phrase (possibly in plural form in one summary and in singular form in another).",
+                "preserve_rule": "Keep all base-prompt constraints: use only the provided summaries as evidence, emit only the minimal answer string (no explanation), preserve multi-hop composition rules, and adhere to the minimal-answer formatting rules.",
+                "change_rule": "When the requested minimal answer is an occupation shared by multiple people, normalize the occupational label to its canonical singular noun-phrase form. Concretely: if any provided summary contains the occupation as a contiguous singular noun phrase, emit that singular phrase exactly (and only) as the minimal answer. If summaries only show a plural form but clearly identify the occupation, emit the corresponding singular noun-phrase form rather than a pluralized phrase.",
+                "drop_or_avoid_rule": "Do not emit pluralized occupational phrases, do not prepend quantifiers or pronouns (e.g., 'both', 'they are'), and do not output full sentences or explanations—avoid any additional words beyond the singular occupational noun-phrase supported by the summaries.",
+                "output_contract": "The answer field must contain exactly the minimal singular occupational noun-phrase supported by the summaries (no surrounding text, punctuation, or explanation), consistent with the base minimal-answer formatting rules.",
+                "why_local_transition": "This change fixes a surface-form plurality mismatch for shared-occupation questions while leaving evidence-use and minimal-answer policies intact: it prefers the singular occupational literal that already appears in the summaries so the output is the smallest, evidence-aligned noun phrase."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "The Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 9,
+          "w_stable_id": "9",
+          "agent": "final",
+          "w_question": "Mindless Self Indulgence and Tappi Tíkarrass are both what?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "bands",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "band",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If the question asks about a shared category for multiple named entities (e.g. contains the word \"both\" or lists two or more entity names joined with \"and\"), and the summaries jointly support a categorical noun for those entities (they state the entities are X/Xs).",
+                "preserve_rule": "Keep all existing base-prompt behaviors: treat summary_2 as the primary evidence source, combine summary_1 only as supporting premises, emit only the minimal answer string with no explanation, and do not invent facts.",
+                "change_rule": "When the trigger fires and the summaries license a categorical noun, prefer emitting the singular head-noun form of that category (the canonical singular label for the type) as the minimal answer token, rather than a plural inflection. Produce that singular noun only if the summaries clearly identify the shared type; otherwise follow the base uncertainty rules.",
+                "drop_or_avoid_rule": "Avoid emitting a plural-inflected label (an -s plural or other plural form) for a shared-category minimal answer in these multi-entity 'both' questions. Also avoid adding extra words, explanations, or full-sentence forms; do not attempt to pluralize or expand the noun when a singular head-noun is the appropriate minimal label.",
+                "output_contract": "Emit exactly one minimal answer token (lowercase) supported by the summaries. When the trigger conditions apply and the summaries support a categorical noun, emit the canonical singular head-noun form of that category and nothing else.",
+                "why_local_transition": "This small normalization fixes incorrect plurality for multi-entity category questions while preserving evidence usage and the base minimal-answer constraint, making the final answer a single canonical category token."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "The Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 68,
+          "w_stable_id": "68",
+          "agent": "final",
+          "w_question": "Carlo Emilio Gadda and Katharine Kerr both were considered what?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "novelists",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "writers",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "If summary_2 asserts both people are described with the narrower occupational term 'novelists' AND summary_1 explicitly supplies the broader occupational token 'writer' (or an explicit phrase including 'writer'), and the question concerns both individuals (plural form).",
+                "preserve_rule": "Keep the base behavior of using summary_2 as the primary evidence source and of emitting only the minimal answer string with no explanation. Continue to allow summary_1 to supply supplementary premises or broader category labels.",
+                "change_rule": "When the trigger condition holds, prefer the broader occupational label token taken from summary_1 ('writer') instead of the literal narrower token from summary_2. Adjust number (pluralize) to match the question (e.g., output the plural form if the question asks about both people). Emit exactly that single-token label in lowercase as the entire answer.",
+                "drop_or_avoid_rule": "Do not output the literal narrower token from summary_2 ('novelists') in this case, and do not invent any other occupational label that does not appear in the summaries. Avoid adding explanations, qualifiers, or extra tokens.",
+                "output_contract": "The agent must emit only the minimal single-token occupational label drawn from summary_1 (lowercase), pluralized only if the question asks about multiple people. No extra text, punctuation, or commentary may be included.",
+                "why_local_transition": "This edge implements the minimal behavioral change needed to prefer an explicitly-proposed broader category from the available premises: summary_1 supplies 'writer' as a valid superset label for the roles that summary_2 describes as 'novelists'. Choosing the broader label preserves correctness while following the base prompt's rule that summary_1 may supply composition premises."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "The Appalachian Mountains",
+            "score": 1.0
+          }
+        },
+        {
+          "w_sample_index": 7,
+          "w_stable_id": "7",
+          "agent": "final",
+          "w_question": "Who besides Marceau founded Ballroom Theater’s Dancing Classrooms program that was featured in a 2005 American documentary?",
+          "w_minus": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_rollout",
+            "output": "Pierre Dulaine.",
+            "score": 0.0
+          },
+          "w_plus": {
+            "state_kind": "endpoint",
+            "state_origin": "gold_destination",
+            "output": "Dulaine",
+            "score": 1.0
+          },
+          "w_ordered_delta_p": [
+            {
+              "edge_index": 0,
+              "delta_p": {
+                "trigger": "When the provided summaries together contain (a) a multi-token full name literal in summary_2 and (b) a single-token alias (surname or short name) in summary_1, and the summaries present an explicit identity link tying that alias to the full name (for example: summary_2 has 'Pierre Dulaine' while summary_1 refers to the same person as 'Dulaine').",
+                "preserve_rule": "Keep the base behavior of using only the provided summaries as evidence, of composing explicit identity-aligned facts across summaries, and of emitting only the minimal answer string supported by those summaries. Do not add outside knowledge or new facts.",
+                "change_rule": "If the trigger condition holds, prefer emitting the single-token alias literal (the exact token as it appears in the summaries) instead of the multi-token full-name literal. Emit that single token verbatim (case-sensitive) with no additional words, punctuation, or explanation. Continue to respect the base minimal-answer formatting rules otherwise.",
+                "drop_or_avoid_rule": "Do not emit the multi-token full name form in this triggered case. Avoid adding periods, qualifiers, or any extra text; avoid using outside information or reformulating the alias. Do not produce multi-token answers or sentences when a single-token alias is the jointly supported minimal literal.",
+                "output_contract": "Place exactly the single-token alias (verbatim from the summaries) in the answer field and nothing else. The answer must contain that token only, with no surrounding punctuation, commentary, or extra whitespace.",
+                "why_local_transition": "The source behavior emitted the multi-token full name; the desired minimal change is to prefer the already-present single-token alias when the summaries themselves provide both forms and explicitly link them. This is a focused preference change (shorter, literal answer selection) that preserves evidence use and the base minimal-answer requirements."
+              }
+            }
+          ],
+          "target_c_plus_for_agent": {
+            "state_kind": "endpoint",
+            "state_origin": "baseline_correct",
+            "output": "The Appalachian Mountains",
+            "score": 1.0
+          }
+        }
+      ]
+    },
+    "rendered_prompt": "You are matching one correct HotpotQA target case C to exactly one W-side\nagent-repair transition whose FAILURE PATTERN can be transported locally.\n\nThe W transition is represented in repair direction W_minus -> W_plus.\nA later damage generator will use the reverse failure pattern to construct\nC_plus -> C_minus. Select based on semantic transferability, not lexical or\nentity overlap.\n\nCriteria:\n- the same kind of anchor, bridge relation, entity disambiguation, qualifier,\n  noisy entity, candidate-set, evidence-family, output-shape, or answer-\n  selection failure can plausibly occur at the target agent boundary;\n- transfer only the failure pattern, never W-side entities, titles, answers,\n  or sample-specific literals;\n- the resulting damage should remain a local neighbor of C_plus;\n- no answer flip is required;\n- choose exactly one listed candidate and do not invent an ID.\n\nTarget C case:\n{\n  \"eval_position\": 62,\n  \"stable_id\": \"62\",\n  \"question\": \"Which mountain range, found in eastern North America, was seen as the western frontier prior to about 1800?\",\n  \"summary_1\": \"Passage [1] states \\\"the crest of the Appalachian Mountains was seen as the western frontier\\\" (this supports the Appalachian Mountains as the frontier). Missing/needed verification: confirm that the Appalachian Mountains are a mountain range \\\"found in eastern North America.\\\" Retrieval direction/anchors: fetch an authoritative article on \\\"Appalachian Mountains\\\" (search: \\\"Appalachian Mountains eastern North America\\\" or the \\\"Appalachian Mountains\\\" Wikipedia page) that explicitly says the range is in eastern North America.\",\n  \"hop2_query\": \"Appalachian Mountains eastern North America\",\n  \"summary_2\": \"The Appalachian Mountains were seen as the western frontier prior to about 1800. The Appalachian Mountains are a system of mountains in eastern North America (passage [2]).\",\n  \"answer\": \"The Appalachian Mountains\",\n  \"gold_support_titles\": [\n    \"Western United States\",\n    \"Appalachian Mountains\"\n  ]\n}\n\nCandidate W repair transitions:\n[\n  {\n    \"w_sample_index\": 57,\n    \"w_stable_id\": \"57\",\n    \"agent\": \"final\",\n    \"w_question\": \"Ronnie Dunn and Jenna Sanz-Agero were both formerly part of bands in which they each acted in what role?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"vocalist\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"singer\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"Apply when the provided summaries indicate both subjects performed vocal duties (for example, when phrases such as \\\"lead singer\\\", \\\"vocalist\\\", or similar vocal-role language appear in summary_1 or summary_2).\",\n          \"preserve_rule\": \"Keep all base-prompt constraints: treat summary_2 as the primary evidence, allow composition with summary_1 only as supporting premises, emit only the minimal answer string supported by the summaries, and do not add explanations or extra text.\",\n          \"change_rule\": \"When the trigger conditions hold, normalize role-descriptions that denote performing vocals (e.g., 'lead singer', 'vocalist', 'lead vocals') to the concise single-token common noun that denotes a person who sings. Select that single-token common noun as the final minimal answer when it is supported by the summaries; do not output multi-word role phrases if a single-token label is licensed.\",\n          \"drop_or_avoid_rule\": \"Do not emit the occupational adjective 'vocalist' or multi-word phrases like 'lead singer' as the final minimal string when a single-token common noun equivalent is supported. Avoid adding modifiers, extra words, punctuation, or explanatory text beyond that single token. Do not invent new labels not present or implied by the summaries.\",\n          \"output_contract\": \"The agent's 'answer' must be exactly one token: the single-token common noun denoting a person who performs vocals (as supported by the summaries). Emit no surrounding text, justification, or formatting—only that minimal token.\",\n          \"why_local_transition\": \"The base prompt already requires a minimal literal answer but allowed producing the term 'vocalist'. This local edit makes the behavior prefer the concise single-token common-noun label for a person who performs vocals when the summaries provide vocal-role evidence, aligning the final output with the minimal-label formatting expectations.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"The Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 148,\n    \"w_stable_id\": \"148\",\n    \"agent\": \"final\",\n    \"w_question\": \"Matt Lucena and Fabio Fognini, have which mutual occupation?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"professional tennis players\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"professional tennis player\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"The question requests the mutual/shared occupation of two or more named individuals (e.g., names joined by 'and' or an explicit 'mutual'/'shared' phrasing) and the provided summaries supply an occupational phrase (possibly in plural form in one summary and in singular form in another).\",\n          \"preserve_rule\": \"Keep all base-prompt constraints: use only the provided summaries as evidence, emit only the minimal answer string (no explanation), preserve multi-hop composition rules, and adhere to the minimal-answer formatting rules.\",\n          \"change_rule\": \"When the requested minimal answer is an occupation shared by multiple people, normalize the occupational label to its canonical singular noun-phrase form. Concretely: if any provided summary contains the occupation as a contiguous singular noun phrase, emit that singular phrase exactly (and only) as the minimal answer. If summaries only show a plural form but clearly identify the occupation, emit the corresponding singular noun-phrase form rather than a pluralized phrase.\",\n          \"drop_or_avoid_rule\": \"Do not emit pluralized occupational phrases, do not prepend quantifiers or pronouns (e.g., 'both', 'they are'), and do not output full sentences or explanations—avoid any additional words beyond the singular occupational noun-phrase supported by the summaries.\",\n          \"output_contract\": \"The answer field must contain exactly the minimal singular occupational noun-phrase supported by the summaries (no surrounding text, punctuation, or explanation), consistent with the base minimal-answer formatting rules.\",\n          \"why_local_transition\": \"This change fixes a surface-form plurality mismatch for shared-occupation questions while leaving evidence-use and minimal-answer policies intact: it prefers the singular occupational literal that already appears in the summaries so the output is the smallest, evidence-aligned noun phrase.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"The Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 9,\n    \"w_stable_id\": \"9\",\n    \"agent\": \"final\",\n    \"w_question\": \"Mindless Self Indulgence and Tappi Tíkarrass are both what?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"bands\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"band\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If the question asks about a shared category for multiple named entities (e.g. contains the word \\\"both\\\" or lists two or more entity names joined with \\\"and\\\"), and the summaries jointly support a categorical noun for those entities (they state the entities are X/Xs).\",\n          \"preserve_rule\": \"Keep all existing base-prompt behaviors: treat summary_2 as the primary evidence source, combine summary_1 only as supporting premises, emit only the minimal answer string with no explanation, and do not invent facts.\",\n          \"change_rule\": \"When the trigger fires and the summaries license a categorical noun, prefer emitting the singular head-noun form of that category (the canonical singular label for the type) as the minimal answer token, rather than a plural inflection. Produce that singular noun only if the summaries clearly identify the shared type; otherwise follow the base uncertainty rules.\",\n          \"drop_or_avoid_rule\": \"Avoid emitting a plural-inflected label (an -s plural or other plural form) for a shared-category minimal answer in these multi-entity 'both' questions. Also avoid adding extra words, explanations, or full-sentence forms; do not attempt to pluralize or expand the noun when a singular head-noun is the appropriate minimal label.\",\n          \"output_contract\": \"Emit exactly one minimal answer token (lowercase) supported by the summaries. When the trigger conditions apply and the summaries support a categorical noun, emit the canonical singular head-noun form of that category and nothing else.\",\n          \"why_local_transition\": \"This small normalization fixes incorrect plurality for multi-entity category questions while preserving evidence usage and the base minimal-answer constraint, making the final answer a single canonical category token.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"The Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 68,\n    \"w_stable_id\": \"68\",\n    \"agent\": \"final\",\n    \"w_question\": \"Carlo Emilio Gadda and Katharine Kerr both were considered what?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"novelists\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"writers\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"If summary_2 asserts both people are described with the narrower occupational term 'novelists' AND summary_1 explicitly supplies the broader occupational token 'writer' (or an explicit phrase including 'writer'), and the question concerns both individuals (plural form).\",\n          \"preserve_rule\": \"Keep the base behavior of using summary_2 as the primary evidence source and of emitting only the minimal answer string with no explanation. Continue to allow summary_1 to supply supplementary premises or broader category labels.\",\n          \"change_rule\": \"When the trigger condition holds, prefer the broader occupational label token taken from summary_1 ('writer') instead of the literal narrower token from summary_2. Adjust number (pluralize) to match the question (e.g., output the plural form if the question asks about both people). Emit exactly that single-token label in lowercase as the entire answer.\",\n          \"drop_or_avoid_rule\": \"Do not output the literal narrower token from summary_2 ('novelists') in this case, and do not invent any other occupational label that does not appear in the summaries. Avoid adding explanations, qualifiers, or extra tokens.\",\n          \"output_contract\": \"The agent must emit only the minimal single-token occupational label drawn from summary_1 (lowercase), pluralized only if the question asks about multiple people. No extra text, punctuation, or commentary may be included.\",\n          \"why_local_transition\": \"This edge implements the minimal behavioral change needed to prefer an explicitly-proposed broader category from the available premises: summary_1 supplies 'writer' as a valid superset label for the roles that summary_2 describes as 'novelists'. Choosing the broader label preserves correctness while following the base prompt's rule that summary_1 may supply composition premises.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"The Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  },\n  {\n    \"w_sample_index\": 7,\n    \"w_stable_id\": \"7\",\n    \"agent\": \"final\",\n    \"w_question\": \"Who besides Marceau founded Ballroom Theater’s Dancing Classrooms program that was featured in a 2005 American documentary?\",\n    \"w_minus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_rollout\",\n      \"output\": \"Pierre Dulaine.\",\n      \"score\": 0.0\n    },\n    \"w_plus\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"gold_destination\",\n      \"output\": \"Dulaine\",\n      \"score\": 1.0\n    },\n    \"w_ordered_delta_p\": [\n      {\n        \"edge_index\": 0,\n        \"delta_p\": {\n          \"trigger\": \"When the provided summaries together contain (a) a multi-token full name literal in summary_2 and (b) a single-token alias (surname or short name) in summary_1, and the summaries present an explicit identity link tying that alias to the full name (for example: summary_2 has 'Pierre Dulaine' while summary_1 refers to the same person as 'Dulaine').\",\n          \"preserve_rule\": \"Keep the base behavior of using only the provided summaries as evidence, of composing explicit identity-aligned facts across summaries, and of emitting only the minimal answer string supported by those summaries. Do not add outside knowledge or new facts.\",\n          \"change_rule\": \"If the trigger condition holds, prefer emitting the single-token alias literal (the exact token as it appears in the summaries) instead of the multi-token full-name literal. Emit that single token verbatim (case-sensitive) with no additional words, punctuation, or explanation. Continue to respect the base minimal-answer formatting rules otherwise.\",\n          \"drop_or_avoid_rule\": \"Do not emit the multi-token full name form in this triggered case. Avoid adding periods, qualifiers, or any extra text; avoid using outside information or reformulating the alias. Do not produce multi-token answers or sentences when a single-token alias is the jointly supported minimal literal.\",\n          \"output_contract\": \"Place exactly the single-token alias (verbatim from the summaries) in the answer field and nothing else. The answer must contain that token only, with no surrounding punctuation, commentary, or extra whitespace.\",\n          \"why_local_transition\": \"The source behavior emitted the multi-token full name; the desired minimal change is to prefer the already-present single-token alias when the summaries themselves provide both forms and explicitly link them. This is a focused preference change (shorter, literal answer selection) that preserves evidence use and the base minimal-answer requirements.\"\n        }\n      }\n    ],\n    \"target_c_plus_for_agent\": {\n      \"state_kind\": \"endpoint\",\n      \"state_origin\": \"baseline_correct\",\n      \"output\": \"The Appalachian Mountains\",\n      \"score\": 1.0\n    }\n  }\n]\n\nReturn strict JSON only:\n{\n  \"selected_w_sample_index\": 0,\n  \"dominant_gap_type\": \"anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed\",\n  \"transported_damage_hypothesis\": \"short target-specific hypothesis\",\n  \"expected_damaged_behavior\": \"short description at the selected agent boundary\",\n  \"rationale\": \"why this W failure pattern is the most transferable\",\n  \"confidence\": 0.0\n}",
+    "lm_config": {
+      "model": "openai/gpt-5-mini",
+      "api_base": "https://api.openai.com/v1",
+      "temperature": 1.0,
+      "max_tokens": 16000
+    }
+  },
+  "response": "{\n  \"selected_w_sample_index\": 57,\n  \"dominant_gap_type\": \"surface_form\",\n  \"transported_damage_hypothesis\": \"The agent will substitute a synonymous / normalized surface form for the mountain-range name (e.g., drop the definite article or emit a shorter synonym such as 'Appalachians' instead of the gold string).\",\n  \"expected_damaged_behavior\": \"At the answer-selection boundary, the correct string 'The Appalachian Mountains' is replaced by an alternate surface-form name (a shorter or normalized synonym) that is locally plausible but does not match the gold literal.\",\n  \"rationale\": \"W#57 implements a small, local normalization of role-label surface forms (preferring a concise synonym). That failure mode — preferring a different but semantically close surface form for an entity label — transfers naturally to the mountain-range answer: the model can plausibly substitute an alternative phras­ing (drop 'The', use 'Appalachians', etc.) without changing retrieval or evidence use. This keeps the damaged output a close local neighbor of the correct C_plus, requires no new world knowledge or cross-document composition, and fits the constraint of transporting only a failure pattern (surface-form normalization) not any W-side entities.\",\n  \"confidence\": 0.55\n}",
+  "metadata": {
+    "call_type": "signature_lm",
+    "operation": "prompt_update.c_transport_match",
+    "signature": "ours.utils.positive_update.MatchTransportableWSignature",
+    "c_eval_position": 62,
+    "c_stable_id": "62",
+    "candidate_w_sample_indices": [
+      7,
+      9,
+      57,
+      68,
+      148
+    ],
+    "match_fingerprint": "43cff1a5fbb994dbd3cdc50f3becc09cb26a2ba69f646d002a4c7df818fc314e"
+  }
+}

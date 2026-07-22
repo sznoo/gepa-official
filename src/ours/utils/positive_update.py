@@ -1,3 +1,4 @@
+# /home/jinwoo/gepa-official/src/ours/utils/positive_update.py
 from __future__ import annotations
 
 import hashlib
@@ -395,9 +396,18 @@ Target C case:
 Candidate W repair transitions:
 {_truncate(_json_dumps(input_dict["candidate_transitions"]), MAX_MATCH_CANDIDATES_CHARS)}
 
-Return strict JSON only:
+Allowed W sample indices:
+{_json_dumps([
+    int(candidate["w_sample_index"])
+    for candidate in input_dict["candidate_transitions"]
+])}
+
+Return strict JSON only.
+The selected_w_sample_index must be the exact w_sample_index value copied
+from one listed candidate. Do not return a zero-based or one-based list
+position and do not invent a new ID.
 {{
-  "selected_w_sample_index": 0,
+  "selected_w_sample_index": {int(input_dict["candidate_transitions"][0]["w_sample_index"])},
   "dominant_gap_type": "anchor|bridge_relation|entity_disambiguation|missing_qualifier|surface_form|noisy_entity|answer_type|query_shape|candidate_set|evidence_family|output_selection|mixed",
   "transported_damage_hypothesis": "short target-specific hypothesis",
   "expected_damaged_behavior": "short description at the selected agent boundary",
@@ -515,40 +525,85 @@ def match_c_to_w(
         lm_config=lm_config,
     )
 
-    parsed, prompt, raw, cache_hit = run_signature(
-        runtime=runtime,
-        operation="prompt_update.c_transport_match",
-        lm=lm,
-        signature_cls=MatchTransportableWSignature,
-        input_dict={
-            "target_case": {
-                "eval_position": int(c_position),
-                "stable_id": _stable_id(c_row, c_position),
-                "question": c_row.get("question"),
-                "summary_1": c_row.get("summary_1"),
-                "hop2_query": c_row.get("hop2_query"),
-                "summary_2": c_row.get("summary_2"),
-                "answer": c_row.get("answer"),
-                "gold_support_titles": c_row.get("gold_support_titles"),
-            },
-            "candidate_transitions": candidate_payload,
+    match_input = {
+        "target_case": {
+            "eval_position": int(c_position),
+            "stable_id": _stable_id(c_row, c_position),
+            "question": c_row.get("question"),
+            "summary_1": c_row.get("summary_1"),
+            "hop2_query": c_row.get("hop2_query"),
+            "summary_2": c_row.get("summary_2"),
+            "answer": c_row.get("answer"),
+            "gold_support_titles": c_row.get(
+                "gold_support_titles"
+            ),
         },
-        lm_config=lm_config,
-        metadata={
-            "c_eval_position": int(c_position),
-            "c_stable_id": _stable_id(c_row, c_position),
-            "candidate_w_sample_indices": sorted(allowed),
-            "match_fingerprint": fingerprint,
-        },
-        return_cache_hit=True,
-    )
+        "candidate_transitions": candidate_payload,
+    }
 
-    selected = int(parsed["selected_w_sample_index"])
-    if selected not in allowed:
-        raise ValueError(
-            f"Matcher selected unknown W sample {selected}; "
-            f"allowed={sorted(allowed)}."
+    match_metadata = {
+        "c_eval_position": int(c_position),
+        "c_stable_id": _stable_id(c_row, c_position),
+        "candidate_w_sample_indices": sorted(allowed),
+        "match_fingerprint": fingerprint,
+    }
+
+    last_error: Exception | None = None
+
+    for match_attempt in range(3):
+        operation = (
+            "prompt_update.c_transport_match"
+            if match_attempt == 0
+            else (
+                "prompt_update.c_transport_match."
+                f"retry_{match_attempt}"
+            )
         )
+
+        try:
+            parsed, prompt, raw, cache_hit = run_signature(
+                runtime=runtime,
+                operation=operation,
+                lm=lm,
+                signature_cls=MatchTransportableWSignature,
+                input_dict=match_input,
+                lm_config=lm_config,
+                metadata={
+                    **match_metadata,
+                    "match_attempt": int(match_attempt),
+                },
+                return_cache_hit=True,
+            )
+
+            selected = int(
+                parsed["selected_w_sample_index"]
+            )
+
+            if selected not in allowed:
+                raise ValueError(
+                    "Matcher selected unknown W sample "
+                    f"{selected}; allowed={sorted(allowed)}."
+                )
+
+            break
+
+        except (TypeError, ValueError) as exc:
+            last_error = exc
+
+            print(
+                "[positive_update] C-to-W match retry"
+                f" | c_position={c_position}"
+                f" attempt={match_attempt + 1}/3"
+                f" error={type(exc).__name__}: {exc}",
+                flush=True,
+            )
+
+    else:
+        assert last_error is not None
+        raise RuntimeError(
+            "Failed to match C to W after 3 schema/parser "
+            f"attempts: {last_error}"
+        ) from last_error
 
     selected_w = w_candidates[allowed[selected]]
     selected_agent = _validate_agent(selected_w["agent"])
@@ -1494,6 +1549,23 @@ def prepare_positive_materials(
                     "traceback": traceback.format_exc(),
                 }
                 _append_jsonl(match_path, error_row)
+
+                # A selected preservation case may fail to produce a
+                # schema-valid C-to-W transport match after all retries.
+                # Exclude only that C case rather than aborting the entire
+                # agent-level proposal.
+                if (
+                    "Failed to match C to W after"
+                    in str(exc)
+                ):
+                    print(
+                        "[positive_update] skipping unmatchable C"
+                        f" | c_position={c_position}"
+                        f" error={type(exc).__name__}: {exc}",
+                        flush=True,
+                    )
+                    continue
+
                 raise RuntimeError(
                     "Positive matching failed for C eval position "
                     f"{c_position}. Inspect {match_path}."
@@ -1563,6 +1635,14 @@ def prepare_positive_materials(
                     "traceback": traceback.format_exc(),
                 }
                 _append_jsonl(material_path, error_row)
+
+                # A matched preservation case is not necessarily
+                # transportable into a valid signed C_minus. Exclude only
+                # exhausted damage-generation cases; preserve hard failures
+                # for unrelated implementation/API errors.
+                if "Failed to generate C damage" in str(exc):
+                    continue
+
                 raise RuntimeError(
                     "Positive material generation failed for C eval "
                     f"position {c_position}. Inspect {material_path}."
@@ -1592,9 +1672,9 @@ def prepare_positive_materials(
 
         prepared.append(dict(material))
 
-    if len(prepared) != len(selected_c_rows):
+    if not prepared:
         raise RuntimeError(
-            "Positive material count mismatch after preparation."
+            "No positive material could be prepared from the selected C rows."
         )
 
     return prepared
